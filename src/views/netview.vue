@@ -951,27 +951,33 @@
         var mthis = this
         //单节点
         if (opt.ids.length == 1) {
-          mthis.$http.get('http://10.60.1.141:5000/person-infos/' + opt.id, {
-            "emulateJSON": true
+          let nodeIdsArry = opt.ids.map(item => {
+            return item.id;
+          });
+          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+            'nodeIds': nodeIdsArry
           }).then(response => {
-            this.dataexpand = response.data.data[0]
-            this.singlePerson = true
+            this.dataexpand = response.data.data[0].nodes
+            console.log('-------------')
+            console.log(this.dataexpand)
+            this.singlePerson = false
           })
         } else if (opt.ids.length > 1) {
           //多节点
           let nodeIdsArry = opt.ids.map(item => {
             return item.id;
           });
-          nodeIdsArry = ["Q370363", "Q1413"]
+          // nodeIdsArry = ["Q370363", "Q1413"]
           //  console.log(nodeIdsArry)
           // 调用接口,根据id查询信息
           // mthis.$http.post('http://10.60.1.141:5001/node-datas/',{'nodeIds': nodeIdsArry},{"emulateJSON":true}).then(response => {
-          mthis.$http.post('http://10.60.1.141:5000/person-overviews/', {
-            'nodeIds': JSON.stringify(nodeIdsArry)
-          }, {
-            "emulateJSON": true
+          // mthis.$http.post('http://10.60.1.141:5000/person-overviews/', {
+          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+            'nodeIds': nodeIdsArry
           }).then(response => {
-            this.dataexpand = response.data.data[0]
+            this.dataexpand = response.data.data[0].nodes
+             console.log('-------------')
+            console.log(this.dataexpand)
             this.singlePerson = false
           })
         }

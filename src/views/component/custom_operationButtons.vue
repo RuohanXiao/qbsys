@@ -12,7 +12,7 @@
             </select>
         </div>
         <div>
-            <div id='locationRoute_Map' style="display:block;"><div id='legendDiv'></div>
+            <div id='locationRoute_Map' :style="{display:'block',heiight:geoHeight}" ><div id='legendDiv'></div>
             <div id="main" style='margin-left: 0px;margin-top: 0px; position: fixed;z-index:9;bottom:0;width:100%;'>
                 <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
                     <ul class='slides'>
@@ -703,6 +703,7 @@ export default {
         }
 
     },
+    props: ['geoHeight', 'geoData'],
     components: {
       imgSlider
     }
