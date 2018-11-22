@@ -1,0 +1,75 @@
+{
+    "nodes":[
+        {"id":"node1",  "type":"person", "name":"普京","img": "https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=53e28aef2f2dd42a4b0409f9625230d0/4a36acaf2edda3ccf81167a60be93901203f92bb.jpg", "loaded":true},
+        {"id":"node2",  "type":"person", "name":"习近平","img": "https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=468864cdf0039245b5b8e95de6fdcfa7/54fbb2fb43166d22ca0c87944a2309f79052d2b3.jpg", "loaded":true},
+        {"id":"node3",  "type":"person", "name":"彭丽媛","img": "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=434d2d780cd79123f4ed9c26cc5d32e7/d788d43f8794a4c2f4d39a5b0ef41bd5ac6e39c9.jpg", "loaded":true},
+        {"id":"node4",  "type":"person", "name":"默尔克","img":"https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=5b13b4f4c4fcc3cea0cdc161f32cbded/279759ee3d6d55fbaef84ef061224f4a20a4dd2d.jpg","loaded":true},
+        {"id":"node5",  "type":"person", "name":"奥巴马","img":"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike180%2C5%2C5%2C180%2C60/sign=d2196c373efae6cd18b9a3336eda6441/f703738da9773912f6290861f3198618367ae2a7.jpg","loaded":true},
+        {"id":"node6",  "type":"person", "name":"安倍晋三", "img":"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike220%2C5%2C5%2C220%2C73/sign=5f9e4ba500f431ada8df4b6b2a5fc7ca/f2deb48f8c5494ee1d36a12e21f5e0fe99257ef5.jpg","loaded":true},
+        {"id":"node7",  "type":"person", "name":"小泉纯一郎", "img":"https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=179c227a4e10b912abccfeaca2949766/09fa513d269759eee7e0050abbfb43166c22dfbb.jpg", "loaded":true},
+        {"id":"node8",  "type":"person", "name":"金正恩","img":"https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=aebe0389cc5c10383073c690d378f876/9a504fc2d5628535a233d1b29aef76c6a6ef6355.jpg", "loaded":true},
+        {"id":"node9",  "type":"person", "name":"梅德韦杰夫", "img":"https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=472b782bd843ad4bb2234e92e36b31ca/359b033b5bb5c9ea8bd6866ddc39b6003af3b313.jpg","loaded":true},
+        {"id":"node10",  "type":"person", "name":"普京娜", "img":"https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=ed3b89f69358d109d0eea1e0b031a7da/377adab44aed2e73bbbb6ca48601a18b86d6faec.jpg","loaded":true},
+        {"id":"node11",  "type":"person", "name":"胡锦涛","img":"https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=6d88c0a5cd177f3e0439f45f11a650a2/0bd162d9f2d3572cad9fcecf8e13632762d0c3a0.jpg","loaded":true},
+
+        {"id":"country1",  "type":"country", "name":"美国", "img": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535718953068&di=5cbd5bfea037e548c4f6ceab019ada0c&imgtype=0&src=http%3A%2F%2Fphoto.quanmeishi.com%2Fuploads%2Fimage%2F131022%2F2561284_1016655_3a59726de3_o.jpg","loaded":true},
+        {"id":"country2",  "type":"country", "name":"日本", "img": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535718805386&di=7f7dc8152969474123c6da6ea2ba9a64&imgtype=0&src=http%3A%2F%2Fphoto.quanmeishi.com%2Fuploads%2Fimage%2F131023%2F2561973_1016655_c35c32bc94_o.jpg","loaded":true},
+        {"id":"country3",  "type":"country", "name":"朝鲜", "img": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535718773973&di=c3e3e1768e70ec219265bb989b0a968c&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Ff703738da9773912a1015f82ff198618367ae22a.jpg","loaded":true},
+        {"id":"country4",  "type":"country", "name":"韩国", "img": "http://www.cn-kr.net/upload/newsimg/20160414/1460601962201603.jpg","loaded":true},
+        {"id":"country5",  "type":"country", "name":"中国", "img": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535954333486&di=9206833a3b4d5ea8464497f04857c7ae&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F11%2F00%2F04%2F64T58PIC2Hi.jpg","loaded":true},
+        {"id":"country6",  "type":"country", "name":"德国", "img": "http://photo.quanmeishi.com/uploads/image/131023/2562220_1016655_7dd5b4e849_o.jpg","loaded":true},
+        
+        
+        
+        
+        {"id":"organization1",  "type":"organization", "name":"女权组织", "img": "https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=13f9d09b0b55b31988f48a2722c0e943/faf2b2119313b07e76bacc920dd7912397dd8c21.jpg","loaded":true},
+        {"id":"organization2",  "type":"organization", "name":"G20峰会", "img": "https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=b2d5b58c04f41bd5ce5ee0a630b3eaae/91529822720e0cf318011c5c0046f21fbf09aaa7.jpg","loaded":true},
+        {"id":"organization3",  "type":"organization", "name":"八国集团", "img": "https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike180%2C5%2C5%2C180%2C60/sign=73122d6b9a529822113e3191b6a310ae/c75c10385343fbf28720b78fba7eca8065388f09.jpg","loaded":true},
+        {"id":"organization4",  "type":"organization", "name":"上海合作组织", "img": "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=ea083711dd58ccbf0fb1bd6878b1d75b/377adab44aed2e73d202188f8b01a18b86d6faae.jpg","loaded":true}
+        
+   ],
+
+   "links":[
+    {"id":"link1", "from":"node1", "to":"node2", "img": "./src/dist/assets/images/ico/b1.ico" ,"num": null, "type":"朋友,同盟"},
+    {"id":"link2", "from":"node1", "to":"node2", "img": "./src/dist/assets/images/ico/b2.ico" ,"num": 20, "type":""},
+    {"id":"link3", "from":"node1", "to":"node4","num": 3,"type":""}, 
+    {"id":"link4", "from":"node1", "to":"country1","num": 30,"type":""}, 
+    {"id":"link5", "from":"node1", "to":"country2","num": 13,"type":""}, 
+    {"id":"link6", "from":"node1", "to":"node7","num": 9,"type":""}, 
+    {"id":"link7", "from":"node1", "to":"node7","num": null,"type":"中立"}, 
+    {"id":"link8", "from":"node1", "to":"country3","num": 7,"type":""}, 
+
+    {"id":"link9", "from":"node2", "to":"country5","num": null,"type":"领导人"}, 
+    {"id":"link10", "from":"node2", "to":"node3","num": 11,"type":""}, 
+    {"id":"link11", "from":"node2", "to":"node3","num": null,"type":"夫妻"}, 
+    {"id":"link12", "from":"node2", "to":"organization2","num": null,"type":"参与"}, 
+    {"id":"link13", "from":"node2", "to":"node4","num": null,"type":"中立"}, 
+    {"id":"link14", "from":"node2", "to":"node4","num": 5,"type":""}, 
+
+    {"id":"link15", "from":"node4", "to":"organization2","num": null,"type":"参与"}, 
+    {"id":"link16", "from":"node4", "to":"organization1","num": null,"type":"支持"}, 
+    {"id":"link17", "from":"node4", "to":"country6","num": null,"type":"领导人"}, 
+    {"id":"link18", "from":"node4", "to":"node5","num": null,"type":"同盟,朋友"}, 
+    {"id":"link19", "from":"node4", "to":"node5","num": 3,"type":""}, 
+
+    {"id":"link20", "from":"country1", "to":"country6","num": 3,"type":""}, 
+
+    {"id":"link21", "from":"node5", "to":"country1","num": null,"type":"领导人"}, 
+    {"id":"link22", "from":"node5", "to":"country1","num": 3,"type":""}, 
+    {"id":"link23", "from":"node5", "to":"node6","num": 12,"type":""}, 
+    {"id":"link24", "from":"node5", "to":"node6","num": null,"type":"同盟,朋友"}, 
+
+    {"id":"link25", "from":"node6", "to":"node7","num": null,"type":"朋友"}, 
+    {"id":"link26", "from":"node6", "to":"node7","num": 3,"type":""}, 
+
+    
+    {"id":"link26", "from":"node7", "to":"country2","num": null,"type":"领导人"}, 
+
+    {"id":"link27", "from":"country3", "to":"country5","num": 13,"type":"同盟"}, 
+    {"id":"link28", "from":"country3", "to":"country4","num": null,"type":"敌对"}, 
+    {"id":"link29", "from":"node8", "to":"country3","num": null,"type":"领导人"}, 
+    {"id":"link30", "from":"country3", "to":"organization3","num": null,"type":"参与"}, 
+
+    {"id":"link31", "from":"country2", "to":"organization3","num": null,"type":"参与"}
+    ]
+}

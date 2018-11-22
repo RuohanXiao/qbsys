@@ -1,0 +1,127 @@
+/* 文字常用色 */
+.color-white10 {
+  /* ⼤部分⽂字⾊／放⼤缩⼩图标⾊ */
+  color: rgb(204,255,255,1) !important;
+}
+.color-white05 {
+  /* 时间、数字、属性名称文字色／默认头像外2px描边色 */
+  color: rgb(204,255,255,0.5) !important;
+}
+.color-link {
+  /* 有超链接的文字颜色 */
+  color: rgb(0,153,153,1) !important;
+}
+.color-green10 {
+  /* 工具图标选中色／搜索图标激活色/网络、地图框选蚂蚁线色 */
+  color: rgb(51,255,255,1) !important;
+}
+.color-green06  {
+  /* 按钮背景悬浮色 */
+  color: rgb(51,255,255,0.6) !important;
+}
+.color-green04 {
+  /* 工具图标及下文字默认色/搜索图标默认色／网络分析中连线色及线上文字默认色／按钮背景默认色 */
+  color: rgb(51,255,255,0.4) !important;
+}
+.color-green03 {
+  /* 网络、地图、时间轴的框选色 */
+  color: rgb(24,255,255,0.3) !important;
+}
+.color-green02 {
+  /* 搜索框／tab选中背景/列表悬浮及选中样式 */
+  color: rgb(24,255,255,0.2) !important;
+}
+.color-green01 {
+  /* 列表默认背景色／工具栏底色／菜单栏底色 */
+  color: rgb(24,255,255,0.1) !important;
+}
+.box-shadow {
+  /* 弹出框阴影及下拉框右键框样式 */
+  /* shadow:0px 0px 18px #066; + #3cc的 1px描边+15px圆角 */
+  box-shadow: 0px 0px 18px #066 !important;
+  border: 1px solid #3cc !important;
+  border-radius: 15px !important;
+}
+.image-shadow {
+  /* 头像悬浮阴影 */
+  /* shadow:0px 0px18px #3ff;+ #cff的2px描边+50px圆形 */
+  box-shadow: 0px 0px 18px #3ff !important;
+  border: 2px solid #cff !important;
+  border-radius: 50% !important;
+  height: 50px !important;
+  width: 50px !important;
+}
+
+/* 其它颜色 */
+.color-line {
+  /* 板块描边色／列表上下描边色／分割线色／滚动轴色 */
+  color:rgb(54,102,102,1) !important;
+}
+.color-bar {
+  /* 小条色／下拉图标色／以及界面中比较绿的颜色 */
+  color: rgb(0,153,153,1) !important;
+}
+.color-yellow {
+  /* 地图坐标点色 */
+  color: rgb(255,153,0) !important;
+}
+/* — 字号 — */
+.font-f12 {
+  /* 时间、数字、头像下名字、连线上文字、地图中地名等 */
+  color:rgb(24,255,255,0.5) !important;
+  font-size: 12px !important;
+  font-family: MicrosoftYaHei !important;
+}
+.font-f14 {
+  /* 正⽂、列表、搜索框、按钮等⼤部分字号 */
+  color:rgb(24,255,255,0.5) !important;
+  font-size: 14px !important;
+  font-family: MicrosoftYaHei !important;
+}
+.font-f16 {
+  /* 列表标题、tab文字 */
+  color:rgb(24,255,255,0.5) !important;
+  font-size: 16px !important;
+  font-family: MicrosoftYaHei !important;
+}
+.font-f18 {
+  /* 选中多个人时小卡片名称字号 */
+  color:rgb(24,255,255,0.5) !important;
+  font-size: 18px !important;
+  font-family: MicrosoftYaHei !important;
+}
+.font-f20 {
+  /* ⽬标详情中名字 */
+  color:rgb(24,255,255,0.5) !important;
+  font-size: 20px !important;
+  font-family: MicrosoftYaHei !important;
+}
+.font-f24 {
+  /* ⽂章详情⼤标题／弹出框实体详情名字字号 */
+  color:rgb(24,255,255,0.5) !important;
+  font-size: 24px !important;
+  font-family: MicrosoftYaHei !important;
+}
+
+
+.scorll-bar:hover::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3) !important;
+  border-radius: 10px !important;
+  background-color: #F5F5F5 !important;
+}
+
+.scorll-bar:hover::-webkit-scrollbar
+{
+  width: 12px !important;
+  background-color: #F5F5F5 !important;
+}
+
+.scorll-bar:hover::-webkit-scrollbar-thumb
+{
+  border-radius: 10px !important;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3) !important;
+  background-color: #D62929 !important;
+}
+
+
