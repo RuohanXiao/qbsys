@@ -960,7 +960,7 @@
             this.dataexpand = response.data.data[0].nodes
             console.log('-------------')
             console.log(this.dataexpand)
-            this.singlePerson = false
+            this.singlePerson = true
           })
         } else if (opt.ids.length > 1) {
           //多节点

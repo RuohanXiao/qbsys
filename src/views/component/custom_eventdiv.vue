@@ -3,9 +3,9 @@
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0'}">
-        <Tabs type="card">
+        <Tabs type="card" :style="{overflowY:'scroll'}">
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:eventheight}">
-            <Collapse accordion v-model="show" :style="{border:'none',backgroundColor: 'rgba(0, 0, 0, 0.01)',overflowY:'scroll',height:eventheight}">
+            <Collapse accordion v-model="show" :style="{border:'none',backgroundColor: 'rgba(0, 0, 0, 0.01)',height:eventheight}">
               <div v-for="(object,index) in dataExpand">
                 <div>
                   <div :style="{borderBottom:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',}" style="cursor:default">
@@ -46,7 +46,7 @@
             </Collapse>
           </Tab-pane>
           <Tab-pane label="目标详情">
-            <div :style="{backgroundColor: 'rgba(0, 0, 0, 0.01)',overflowY:'scroll'}">
+            <div :style="{backgroundColor: 'rgba(0, 0, 0, 0.01)'}">
               <Row type="flex" justify="start" align="start" class="code-row-bg" :style="{margin:'0',padding:'0 10px'}" v-if="singlePerson">
                 <Col span="16">
                 <h1 class="infoName" style="padding-left: 10px;">{{dataExpand.name}}</h1>
@@ -54,7 +54,7 @@
                 <Col span="8" :style="{margin:'0'}">
                 <img :src="dataExpand.img" :style="{borderRadius:'20px',top:'0',right:'30px',maxHeight:'120px',position:'absolute'}">
                 </Col>
-                <Col span="3" class="infoKey">国家</Col>
+                <!-- <Col span="3" class="infoKey">国家</Col>
                 <Col span="10" class="infoValue">{{dataExpand.country}}</Col>
                 <Col span="11"></Col>
                 <Col span="3" class="infoKey">机构</Col>
@@ -65,38 +65,49 @@
                 <Col span="11"></Col>
                 <Col span="3" class="infoKey">学校</Col>
                 <Col span="10" class="infoValue">{{dataExpand.school}}</Col>
-                <Col span="11"></Col>
-                <Col span="3" class="infoKey">标签</Col>
-                <Col span="21" class="infoValue">{{dataExpand.tag}}</Col>
-                <Col span="3" class="infoKey">简介</Col>
-                <Col span="21" class="infoValue">{{dataExpand.introduction}}</Col>
+                <Col span="11"></Col> -->
+                <Col span="5" class="infoKey">标签</Col>
+                <Col span="19" class="infoValue">{{dataExpand.type}}</Col>
+                <!-- <Col span="3" class="infoKey">简介</Col>
+                <Col span="21" class="infoValue">{{dataExpand.introduction}}</Col> -->
                 <Col span="24">
-                <h2 class="infoTitle">倾向性分析</h2>
+                <!-- <h2 class="infoTitle">倾向性分析</h2> -->
+                 <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
+                  <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 倾向性分析
+                  
+                  <i class="icon iconfont icon-more" style="float:right"></i>
+                </p>
                 <Row type="flex" justify="space-around" align='middle' class="code-row-bg" :style="{ borderBottom:'solid 1px rgba(51, 255, 255, 0.2) !important;',margin:'0'}">
                   <Col span="5">
-                  <Circle :percent="80" :size='80'>
+                  <Circle :percent="80" :size='50'>
                     <span class="demo-Circle-inner" style="font-size:14px">80%<br>负面</span>
                   </Circle>
                   </Col>
                   <Col span="5">
-                  <Circle :percent="80" :size='80' stroke-color="#ff5500">
+                  <Circle :percent="80" :size='50' stroke-color="#ff5500">
                     <span class="demo-Circle-inner" style="font-size:14px">80%<br>中立</span>
                   </Circle>
                   </Col>
                   <Col span="5">
-                  <Circle :percent="80" :size='80'>
+                  <Circle :percent="80" :size='50'>
                     <span class="demo-Circle-inner" style="font-size:14px">80%<br>正面</span>
                   </Circle>
                   </Col>
                 </Row>
                 </Col>
                 <Col span="24" :style="{height:'10vh'}">
-                <Divider />
                 </Col>
               </Row>
-              <Row type="flex" justify="start" align="start" class="code-row-bg" :style="{margin:'0',padding:'0 10px'}" v-if="!singlePerson" v-for="data in dataExpand" >
-                <div class="p-collapse-modal" :style="{width:'100%'}" onclick="detail(data.id)">{{data.name}}
-                  <p class="p-collapse-modal-small">{{data.tags}}</p>
+              <Row type="flex" justify="start" align="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-if="!singlePerson">
+                <div :style="{borderBottom:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
+                  <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
+                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="dataExpand != null">{{dataExpand.length}}</span><span v-if="!dataExpand != null">0</span>)
+                    
+                    <i class="icon iconfont icon-more" style="float:right"></i>
+                  </p>
+                </div>
+                <div class="p-collapse-modal" :style="{width:'100%'}" onclick="detail(data.id)" v-for="data in dataExpand" @click="detail(data.id)">{{data.name}}
+                  <p class="p-collapse-modal-small">{{data.type}}</p>
                 </div>
               </Row>
             </div>
@@ -207,6 +218,15 @@
         // mthis.singlePerson = false
       },
       detail(id) {
+        let nodeIdsArry = []
+        nodeIdsArry.push(id)
+        this.$http.post('http://10.60.1.140:5001/node-datas/', {
+          'nodeIds': nodeIdsArry
+        }).then(response => {
+          console.log(response.body.data[0].nodes[0])
+          this.dataExpand = response.body.data[0].nodes[0]
+          this.singlePerson = true
+        })
         //查询详细信息
       }
     },

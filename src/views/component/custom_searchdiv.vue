@@ -31,7 +31,6 @@
     methods: {
       setOption (a,b) {
         var mthis = this;
-        // console.log(a)
         mthis.$http.post('http://10.60.1.141:5001/node-datas/',{'nodeIds': a.value},{"emulateJSON":true}).then(response => {
           mthis.$emit('initNodes',response.body.data[0]);
         })
@@ -40,15 +39,15 @@
       var mthis = this;
       if (query !== "") {
         this.loading1 = true;
-        let response = mthis.$http.get("http://10.60.1.141:5001/node-ids/?pattern=" + query, {
+        let response = mthis.$http.get("http://10.60.1.140:5001/fuzzy-matchs/?pattern=" + query, {
             emulateJSON: true
           })
           .then(response => {
+            console.log(response)
             let option = []
-            for(let i = 0 ;i<response.data.data[0].nodes.length;i++) {
-              option.push({"label":response.data.data[0].nodes[i].name,"value":response.data.data[0].nodes[i].nodeId})
+            for(let i = 0 ;i<response.body.length;i++) {
+              option.push({"label":response.body[i].Entity_name,"value":response.body[i]._id})
             }
-            // console.log(option)
             mthis.options1 = option;
             mthis.loading1 = false;
           });
