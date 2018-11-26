@@ -8,7 +8,7 @@ import {defaults as defaultControls, ScaleLine} from 'ol/control.js'
 
 var map = function(target){
 	var bounds = [75, 6,140, 55];//范围
-	var scaleLineControl = new ScaleLine();
+    var scaleLineControl = new ScaleLine();
 	//中国各省底图（面）
     var wmsTileLayer = new TileLayer({
 	    visible: true,
@@ -56,13 +56,14 @@ var map = function(target){
     	this.map.addLayer(layer);
     };
     
-    this.hidemap = function(target){
+    /* this.hidemap = function(target){
     	//this.map.addLayer(layer);
     	var map = document.getElementById(target);
     	map.style='display:none';
-    };
+    }; */
 
     //地图显示
     this.map.getView().fit(bounds, this.map.getSize());
+    //this.map.render();
 };
 export  {map}

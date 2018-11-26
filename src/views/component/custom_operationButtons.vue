@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class='operationButtonDiv'>
+            <!-- <div id='location_button' :class="locationClassObject" @click='init'>location</div> -->
             <div id='location_button' :class="locationClassObject" @click='location_cilck'>location</div>
             <div id='heatMap_button'  :class="heatMapClassObject" @click='heatMap_cilck'>heatMap</div>
             <div id='route_button'  :class="routeClassObject" @click='route_cilck'>route</div>
@@ -12,7 +13,7 @@
             </select>
         </div>
         <div>
-            <div id='locationRoute_Map' :style="{display:'block',heiight:geoHeight}" ><div id='legendDiv'></div>
+            <div id='locationRoute_Map' :style="{display:'block',height:'500px',width:'1300px'}" ><div id='legendDiv'></div>
             <div id="main" style='margin-left: 0px;margin-top: 0px; position: fixed;z-index:9;bottom:0;width:100%;'>
                 <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
                     <ul class='slides'>
@@ -22,14 +23,14 @@
                 
             </div>
         </div>
-            <div id='HeatMap_Map' style="display:none;"></div>
+            <div id='HeatMap_Map' style="display:none;height: 500px" ></div>
         </div>
     </div>
 </template>
 
 <style>
 .operationButtonDiv{
-    width:100%;
+    /* width:100%; */
 }
 .location_click{
     margin: 3px;
@@ -98,9 +99,9 @@ import EqualTo from 'ol/format/filter/EqualTo'
 import Or from 'ol/format/filter/Or'
 import WFS from 'ol/format/WFS'
 import GeoJSON from 'ol/format/GeoJSON'
-import $ from "jquery";
 
 import flexslider from 'flexslider'
+import 'ol/ol.css'
 import '../../dist/assets/styles/geo/flexslider.css'
 import '../../dist/assets/styles/geo/demo.css'
 import '../../dist/assets/styles/geo/mapInit.css'
@@ -112,6 +113,7 @@ export default {
     name: 'OperationButtons',
     data() {
       return {
+        a:null,
         test_Route:test_Route,
         test_HeatMap:test_HeatMap,
         routeMap:null,
@@ -122,11 +124,9 @@ export default {
         imgSelectedEntityPoints : [], //点击头像时选择的所有实体点
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
         draw:null,
-        //map:this.routeMap.map,
         locationClassObject:{
             location_Noclick: true,
             'location_click': true,
-            //IslocaltionClicked:false
         },
         heatMapClassObject:{
             heatMap_Noclick: true,
@@ -136,26 +136,16 @@ export default {
             route_Noclick:true,
             'route_click': true
         }
-        
       }
     },
-    mounted(){
-        this.init()
+    mounted() {
+        var mthis = this
+        mthis.location_cilck()
     },
     methods:{
-        init  () {
+        initFunction () {
             var mthis = this
             mthis.location_cilck()
-            mthis.routeMap = new map('locationRoute_Map')
-            mthis.provinTilSource = new TileWMS({
-                url: 'http://10.60.1.142:8082/geoserver/worldBaseMap/wms',
-                params: {
-                    'FORMAT': 'image/png',
-                    'VERSION': '1.1.1',
-                    tiled: true,
-                    LAYERS: 'worldBaseMap:World_states_provinces',
-                }
-            })
             mthis.setPointFeatures(test_Route)
             mthis.locationPoints()
         },
@@ -165,6 +155,24 @@ export default {
             mthis.locationClassObject.location_Noclick = false
             mthis.heatMapClassObject.heatMap_Noclick = true
             mthis.routeClassObject.route_Noclick = true
+            if(mthis.routeMap == null){
+                mthis.routeMap = new map('locationRoute_Map')
+                mthis.provinTilSource = new TileWMS({
+                    url: 'http://10.60.1.142:8082/geoserver/worldBaseMap/wms',
+                    params: {
+                        'FORMAT': 'image/png',
+                        'VERSION': '1.1.1',
+                        tiled: true,
+                        LAYERS: 'worldBaseMap:World_states_provinces',
+                    }
+                })
+                mthis.setPointFeatures(mthis.test_Route)
+                mthis.locationPoints()
+                //mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight])
+                //mthis.routeMap.map.setSize([0,100])
+                //setTimeout( function() {mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight]);}, 2);
+            }  
+            //location.reload()
         },
         heatMap_cilck(){
             var mthis = this
@@ -176,8 +184,9 @@ export default {
             if(mthis.heatMap == null){
                 mthis.heatMap = new map('HeatMap_Map')
                 mthis.click_heatMap()
-            }
-            
+            }  
+            //document.body.style.zoom = 1
+            setTimeout( function() {debugger; mthis.routeMap.map.updateSize();}, 2000);
             
         },
         route_cilck(){
@@ -292,12 +301,11 @@ export default {
                     mousewheel: true,
                     itemWidth: 50,
                     minItems: 1,
-                    maxItems: 2
+                    maxItems: 16
             });
         },
         imgClick(imgId){
             var mthis = this
-            debugger
             var obj = imgId
             var id = obj.id.split('_')[0]
             var entityPointstyle = new Style({
@@ -630,7 +638,6 @@ export default {
             });
             var filter = new Or(seachCondition[0],seachCondition[1],seachCondition[2],seachCondition[3]);
             mthis.getWfsData(filter);
-
             //查询条件的嵌套关系
         },
         getWfsData(filter) {
@@ -708,5 +715,4 @@ export default {
       imgSlider
     }
 }
-
 </script>

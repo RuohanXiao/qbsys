@@ -2,7 +2,7 @@
 </style>
 <template>
   <div class="layout" :style="{width: '100vw',height: '100vh', background:'black'}">
-    <Layout :style="{width: '98vw',height: '100vh'}">
+    <Layout id='fame' :style="layoutWH">  <!-- {width: '98vw',height: '100vh'} -->
       <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
         <Row type="flex" justify="space-between" class="code-row-bg" align="middle">
           <Col span="1" align="middle">
