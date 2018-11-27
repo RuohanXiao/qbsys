@@ -860,8 +860,7 @@
                   mthis.selectionId.push(event.selection[selectNum]);
                 }
                 // 触发右侧eventdiv改变
-                mthis.$emit('selectNodes1',{ids:mthis.selectionId});
-
+                mthis.$emit('selectNodes1',[{ids:mthis.selectionId},mthis.selectionId.length]);
               } else {
                 mthis.selectionId = [];
                 mthis.selectItem = null;

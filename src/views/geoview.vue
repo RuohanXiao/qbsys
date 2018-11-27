@@ -7,15 +7,15 @@
         <Row type="flex" justify="space-between" class="code-row-bg" align="middle">
           <Col span="1" align="middle">
           <router-link to="/">
-            <img src="../dist/assets/images/net.png" style="display: inline-block; vertical-align: middle; width:3em;" /></router-link>
+            <img src="../dist/assets/images/net.png" style="display: inline-block; vertical-align: middle; width:36px;" /></router-link>
           </Col>
           <Col span="1" align="middle">
           <router-link to="/geoView" target='_blank'>
-            <img src="../dist/assets/images/earth.png" style="display: inline-block; vertical-align: middle;width:3em" /></router-link>
+            <img src="../dist/assets/images/earth.png" style="display: inline-block; vertical-align: middle;width:36px" /></router-link>
           </Col>
           <Col span="1" align="middle">
           <router-link to="/contentView" target='_blank'>
-            <img src="../dist/assets/images/content.png" style="display: inline-block; vertical-align: middle;width:3em" /></router-link>
+            <img src="../dist/assets/images/content.png" style="display: inline-block; vertical-align: middle;width:36px" /></router-link>
           </Col>
           <Col span="4" offset="17">
           <!-- <i class="icon iconfont icon-search  process-img" style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i>
@@ -292,37 +292,37 @@
       },
       geopxdiv: function() {
         this.divheight = document.documentElement.clientHeight * 0.2 - 10 + 20 + 55 + 'px'
-      },
-      changHeightCount: function() {
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (this.changHeightCount % 2 === 0) {
-          this.timepx = "0px";
-          this.timepxdiv = "0px";
-          this.iconPosition = useHeight - 40 + "px";
-          this.geopxdiv = useHeight * 1 + "px";
-          this.geopx = useHeight * 1 - 55 + "px";
-          document.getElementById("timechartctrl").style.display = "none";
-          document.getElementById("barchart").style.display = "none";
-          document.getElementById("arrowDown").style.transform = "rotate(0deg)";
-        } else {
-          this.iconPosition = useHeight * 0.8 + "px";
-          this.timepx =
-            (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
-            30 +
-            "px";
-          this.timepxdiv =
-            (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-          this.geopxdiv = useHeight * 0.8 + "px";
-          this.geopx = useHeight * 0.8 - 55 + "px";
-          document.getElementById("timechartctrl").style.display = "block";
-          document.getElementById("barchart").style.display = "block";
-          document.getElementById("arrowDown").style.transform = "rotate(180deg)";
-        }
-        document.getElementById("arrowDown").style.position = "absolute";
-        document.getElementById("arrowDown").style.right = "20px";
-        document.getElementById("arrowDown").style.top = this.geopxdiv;
-        document.getElementById("arrowDown").style.zIndex = 30;
       }
+      // changHeightCount: function() {
+      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
+      //   if (this.changHeightCount % 2 === 0) {
+      //     this.timepx = "0px";
+      //     this.timepxdiv = "0px";
+      //     this.iconPosition = useHeight - 40 + "px";
+      //     this.geopxdiv = useHeight * 1 + "px";
+      //     this.geopx = useHeight * 1 - 55 + "px";
+      //     document.getElementById("timechartctrl").style.display = "none";
+      //     document.getElementById("barchart").style.display = "none";
+      //     document.getElementById("arrowDown").style.transform = "rotate(0deg)";
+      //   } else {
+      //     this.iconPosition = useHeight * 0.8 + "px";
+      //     this.timepx =
+      //       (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
+      //       30 +
+      //       "px";
+      //     this.timepxdiv =
+      //       (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+      //     this.geopxdiv = useHeight * 0.8 + "px";
+      //     this.geopx = useHeight * 0.8 - 55 + "px";
+      //     document.getElementById("timechartctrl").style.display = "block";
+      //     document.getElementById("barchart").style.display = "block";
+      //     document.getElementById("arrowDown").style.transform = "rotate(180deg)";
+      //   }
+      //   document.getElementById("arrowDown").style.position = "absolute";
+      //   document.getElementById("arrowDown").style.right = "20px";
+      //   document.getElementById("arrowDown").style.top = this.geopxdiv;
+      //   document.getElementById("arrowDown").style.zIndex = 30;
+      // }
     },
     mounted() {
       var mthis = this

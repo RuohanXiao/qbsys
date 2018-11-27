@@ -1,6 +1,8 @@
 <template>
   <div>
     <Modal v-model="flag" width="80%" footer-hide>
+      <span>{{testData}}</span>
+      <button @click="changeTestData">change</button>
       <Row type="flex" justify="space-between" class="code-row-bg" align="middle" :style="{margin:'0'}">
         <Col span="7" class="leftModal" type="flex" justify="space-between" align="middle" :style="{height:'80vh'}">
         <!-- 搜索框 -->
@@ -168,6 +170,8 @@
 <script>
   import mock from "../../mock/index.js";
   import searchDiv from "./custom_searchdiv";
+  import store from '../../store/index.js'
+  import { mapState, mapActions, mapMutations } from 'vuex'
   const axios = require('axios')
   const MockAdapter = require('axios-mock-adapter')
   mock.test = 1;
@@ -201,6 +205,19 @@
       searchDiv
     },
     methods: {
+      // ...mapMutations([
+      //   'set_testData'
+      // ]),
+      changeTestData () {
+        alert('changeTestData')
+        // store.commit('set_testData', {
+        //   testData: 'aaaaaaaa'
+        // })
+        // this.set_testData({
+        //   testData: 'aaaaaaaa'
+        // })
+        this.testData = 'bbb'
+      },
       showPersonInfo(id) {
         // console.log(id)
       },
@@ -226,6 +243,18 @@
             });
         } else {
           this.options1 = [];
+        }
+      }
+    },
+    computed: {
+      testData: {
+        get() {
+          return store.state.testData
+        },
+        set(value) {
+          store.commit('set_testData', {
+            testData: value
+          })
         }
       }
     }

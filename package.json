@@ -32,10 +32,10 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@dvsl/zoomcharts": "^1.18.8",
     "autoprefixer-loader": "^2.0.0",
     "axios-mock-adapter": "^1.15.0",
-    "babel": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-runtime": "^6.12.0",
