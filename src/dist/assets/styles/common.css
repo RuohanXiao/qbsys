@@ -29,7 +29,7 @@
 }
 .color-green02 {
   /* 搜索框／tab选中背景/列表悬浮及选中样式 */
-  color: rgb(24,255,255,0.2) !important;
+  color: rgba(24,255,255,0.2) !important;
 }
 .color-green01 {
   /* 列表默认背景色／工具栏底色／菜单栏底色 */
