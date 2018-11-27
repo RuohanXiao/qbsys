@@ -22,7 +22,6 @@ export default {
             debugger
             var mthis = this
             var obj = objEvent.currentTarget
-            //alert(obj);
             //var imgDom = obj.currentTarget;
             if(obj.children[0].style.borderColor == "rgba(204, 255, 255, 0)"){
                 obj.children[0].style.borderColor = 'rgb(204, 255, 255)';
