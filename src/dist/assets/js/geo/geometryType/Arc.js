@@ -47,3 +47,4 @@ function getThirdPoint(startPoint,endPoint){
 	}
 	return [xm,ym];
 }
+export {getThirdPoint}

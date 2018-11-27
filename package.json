@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-plugin-transform-remove-strict-mode": "0.0.2",
     "echarts": "^4.2.0-rc.2",
     "echarts-gl": "^1.1.1",
     "flexslider": "^2.7.1",

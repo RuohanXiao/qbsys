@@ -212,7 +212,6 @@
     },
     methods: {
       look() {
-        alert(this.dataExpand)
         // let mthis = this
         // mthis.singlePerson = false
       },

@@ -376,37 +376,8 @@
     line-height: 30px;
     color: #33ffff !important;
   }
-  .vertical-center-modal {
-    display: flex;
-    /* align-items: center; */
-    justify-content: center;
-  }
-  /* 弹出框样式 */
-  .ivu-modal-mask {
-    /* background-color:rgba(0,0,0,0.6) !important; */
-    background-color: rgba(0, 0, 0, 0.7) !important;
-  }
-  .ivu-modal-content {
-    background-color: rgba(0, 0, 0, 0.7) !important;
-    border-radius: 20px !important;
-    border: solid 1px rgba(51, 255, 255, 0.5) !important;
-  }
-  .ivu-modal-footer {
-    border: none !important;
-  }
-  .ivu-modal-body {
-    padding: 0 !important;
-  }
-  .leftModal {
-    background-image: linear-gradient( 8deg, rgba(102, 255, 153, 0.14) 0%, rgba(102, 128, 204, 0.14) 60%, rgba(102, 0, 255, 0.14) 100%), linear-gradient(#000000, #000000);
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-    border-right: solid 1px #336666;
-  }
-  .rightModal {
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-  }
+  
+  
   /* 分割线样式 */
   .ivu-split-trigger-vertical {
     width: 3px !important;
@@ -938,7 +909,6 @@
         // }
 
         // var mthis = this;
-        // alert('叮!我已经监听到你选中了节点,下面开始调用接口,更改右边数据透视的数据咯!(现在是假数据)')
         // mock.get("/getShujuTouShi").then(function(res) {
         //   // mthis.ref = !mthis.ref
         //   mthis.dataexpand = res.data.data;
@@ -1052,7 +1022,6 @@
         //   },
         //   events: {
         //     onClick: function(event) {
-        //       // alert('下面准备调用接口，时间：' + event.timeStart + "-------" + event.timeEnd)
         //       console.log(event)
         //     }
         //   },

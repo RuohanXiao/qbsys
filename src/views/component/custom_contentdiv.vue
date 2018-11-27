@@ -151,13 +151,11 @@
     mounted() {
       var mthis = this
       window.onresize = function() {
-        // // alert(document.documentElement.clientHeight)
         this.netheight = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
         this.netheightdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
       }
       this.netheight = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
       this.netheightdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
-      // // alert(this.netheight)
     }
   };
 </script>
