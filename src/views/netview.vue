@@ -500,16 +500,16 @@
   #barchart {
     width: 100%;
   }
-  .scorll-bar:hover::-webkit-scrollbar-track {
+  .scroll-bar:hover::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
     border-radius: 10px !important;
     background-color: #F5F5F5 !important;
   }
-  .scorll-bar:hover::-webkit-scrollbar {
+  .scroll-bar:hover::-webkit-scrollbar {
     width: 12px !important;
     background-color: #F5F5F5 !important;
   }
-  .scorll-bar:hover::-webkit-scrollbar-thumb {
+  .scroll-bar:hover::-webkit-scrollbar-thumb {
     border-radius: 10px !important;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3) !important;
     background-color: #D62929 !important;
@@ -550,7 +550,7 @@
               <time-chart-div :splitWidth="splitWidth" :split="split1" @changenetpx="changenetpx"></time-chart-div>
               
             </div>
-            <div slot="right" class="scorll-bar demo-split-pane paneRight" :style="{height:eventheightdiv,marginRight:'2.3vw',overflowY:scorll}">
+            <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:eventheightdiv,marginRight:'2.3vw',overflowY:'scroll'}">
               <event-chart-div :dataExpand="dataexpand"></event-chart-div>
             </div>
           </Split>
@@ -832,16 +832,27 @@
       topMenu
     },
     methods: {
-      changeNetHeight (flag) {
-        let useHeight = documentdocumentElement.clientHeight - 64 - 20;
-        if (flag) {
+      changenetpx () {
+        let useHeight = document.documentElement.clientHeight - 64 - 20;
+        if (this.flag) {
           this.netpxdiv = useHeight * 1 + "px";
           this.netpx = useHeight * 1 - 55 + "px";
         } else {
           this.netpxdiv = useHeight * 0.8 + "px";
           this.netpx = useHeight * 0.8 - 55 + "px";
         }
+        this.flag = !this.flag
       },
+      // changeNetHeight (flag) {
+      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
+      //   if (flag) {
+      //     this.netpxdiv = useHeight * 1 + "px";
+      //     this.netpx = useHeight * 1 - 55 + "px";
+      //   } else {
+      //     this.netpxdiv = useHeight * 0.8 + "px";
+      //     this.netpx = useHeight * 0.8 - 55 + "px";
+      //   }
+      // },
       initNode(opt) {
         this.netData = opt.nodes[0]
       },

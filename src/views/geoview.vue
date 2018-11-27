@@ -55,7 +55,7 @@
               <time-chart-div :splitWidth="splitWidth" :split="split1"></time-chart-div>
               
             </div>
-            <div slot="right" class="scorll-bar demo-split-pane paneRight" :style="{height:eventheightdiv,marginRight:'2.3vw'}">
+            <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:eventheightdiv,marginRight:'2.3vw'}">
               <event-chart-div :dataExpand="dataexpand"></event-chart-div>
             </div>
           </Split>
