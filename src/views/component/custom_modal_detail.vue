@@ -5,50 +5,7 @@
   
       <Row type="flex" justify="space-between" class="code-row-bg" align="middle" :style="{margin:'0'}">
   
-        <Col span="7" class="leftModal" type="flex" justify="space-between" align="middle" :style="{height:'80vh'}">
-  
-          <Row type="flex" justify="center" class="code-row-bg" align="middle" :style="{marginTop:'20px'}">
-    
-            <Col span="20">
-    
-              <div style="width:100%;height:40px">
-      
-                <search-div />
-      
-              </div>
-    
-            </Col>
-    
-          </Row>
-          
-      <Collapse class="collapseHover" :style="{textAlign:'left',marginTop:'10px',height:listHeight,maxHeight:listHeight}" accordion>
-        <Panel v-for="item in edata" :style="{overflowY:'hidden',overflowX:'hidden'}">
-            {{item.text}}
-            <div slot="content" :style="{overflowY:'hidden',overflowX:'hidden'}">
-              <div class="p-collapse-modal" v-for="it in item.chlidren" :style="{overflowY:'hidden',overflowX:'hidden'}">{{it.text}}
-                <p class="p-collapse-modal-small" :style="{overflowY:'hidden',overflowX:'hidden'}">{{it.info}}</p>
-              </div>
-            </div>
-        </Panel>
-    </Collapse>
-
-          <!-- <div class="hoverScroll" :style="{maxHeight:listHeight,textAlign:'left',margin:'10px 0'}">
-    
-            <div slot="content" class="p-collapse-title" v-for="item in edata"><i class="icon iconfont icon-triangle-right" style="color:rgba(51, 255, 255, .4);padding-right:6px;"></i>{{item.text}}
-    
-              <div class="p-collapse-modal" v-for="it in item.chlidren">{{it.text}}
-    
-                <p class="p-collapse-modal-small">{{it.info}}</p>
-    
-              </div>
-    
-            </div>
-    
-          </div> -->
-  
-        </Col>
-  
-        <Col span="17" align="middle" class="rightModal" :style="{height:'80vh'}">
+        <Col span="24" align="middle" class="rightModal" :style="{height:'80vh'}">
   
         <div class="closeBackground"></div>
   

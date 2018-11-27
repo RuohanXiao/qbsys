@@ -656,7 +656,15 @@
             // "mode": "focusnodes" ,
             expandOnClick: false
           },
-          legend: { enabled: true },
+          // legend: { enabled: true },
+          legend: {
+            enabled: true,
+            width:900,
+            panel:{
+                side:"top",
+                align:"center"
+            }
+        },
           interaction: {
             resizing: {
               enabled: false

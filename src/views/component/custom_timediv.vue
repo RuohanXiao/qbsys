@@ -193,6 +193,8 @@ export default {
         dataZoom: [
           {
             type: "slider",
+            start:0,
+            end:10,
             realtime: false, //是否实时加载
             show: true,
             textStyle:{
@@ -242,6 +244,8 @@ export default {
           },
           {
             type: "inside",
+            start:0,
+            end:10,
             show: true,
             xAxisIndex: [0],
             startValue:0,

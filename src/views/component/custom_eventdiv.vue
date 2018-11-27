@@ -113,46 +113,13 @@
           </Tab-pane>
         </Tabs>
       </div>
-      <Modal v-model="modal01" width="80%" footer-hide>
-        <Row type="flex" justify="space-between" class="code-row-bg" :style="{margin:'0'}">
-          <Col span="7" class="leftModal" type="flex" justify="space-between">
-          <!-- 搜索框 -->
-          <div style="width:80%" id="idNumber2">
-            <i class="icon iconfont icon-search" style="position: absolute;
-                      color: rgb(51, 255, 255);
-                      width:50px;
-                      left:10px;
-                      opacity: 0.4;"></i>
-            <input type="text" />
-          </div>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          </Col>
-          <Col span="17" class="rightModal">
-          <p class="p-collapse">9800</p>
-          </Col>
-        </Row>
-      </Modal>
+      <modal-chart-detail :flag="modal01" :edata="eventData"></modal-chart-detail>
     </div>
     </Col>
   </div>
 </template>
 <script>
+  import modalChartDetail from './custom_modal_detail'
   /* eslint-disable */
   export default {
     // props: {
@@ -205,6 +172,7 @@
         ]
       };
     },
+    components: {modalChartDetail},
     computed: {
       menuitemClasses: function() {
         return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];

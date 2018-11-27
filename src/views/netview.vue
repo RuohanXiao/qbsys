@@ -328,41 +328,31 @@
     overflow: hidden;
   }
   /* 滚动条样式 */
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-  ::-webkit-scrollbar-track,
-  ::-webkit-scrollbar-thumb {
-    /* border-radius: 999px; */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+
+::-webkit-scrollbar-thumb {
     border: 5px solid transparent;
     background-color: rgba(0, 0, 0, 0)
-  }
-  ::-webkit-scrollbar-track {
-    border-radius: 2.5px !important;
-    /* box-shadow: 1px 1px 5px rgba(24, 255, 255, 0.5) inset; */
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
-    /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3); */
-    /* background-color: rgba(0,0,0,.3); */
-  }
-  ::-webkit-scrollbar-track {
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
-    /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3); */
-    /* background-color: rgba(0,0,0,.3); */
-  }
-  :hover::-webkit-scrollbar-thumb {
+}
+
+::-webkit-scrollbar-thumb:hover {
     padding-right: 5px !important;
     border-radius: 10px;
     min-height: 20px;
-    /* background-color:rgba(24, 255, 255, 0.5);
-    box-shadow: 1px 1px 3px rgba(24, 255, 255, 0.5) inset;
-     */
-     background-color:#3cc;
+    background-color:#3cc;
     box-shadow: 1px 1px 3px #3cc inset;
-  }
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
+}
+
+
+::-webkit-scrollbar-track {
+    border-radius: 2.5px !important;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
+}
+
   .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab-active {
     border: 1px solid rgba(54, 102, 102, 0.1) !important;
     border-radius: 3px !important;
@@ -499,20 +489,6 @@
   }
   #barchart {
     width: 100%;
-  }
-  .scroll-bar:hover::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
-    border-radius: 10px !important;
-    background-color: #F5F5F5 !important;
-  }
-  .scroll-bar:hover::-webkit-scrollbar {
-    width: 12px !important;
-    background-color: #F5F5F5 !important;
-  }
-  .scroll-bar:hover::-webkit-scrollbar-thumb {
-    border-radius: 10px !important;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3) !important;
-    background-color: #D62929 !important;
   }
 </style>
 <template>
@@ -866,8 +842,6 @@
           'nodeIds': nodeIdsArry
         }).then(response => {
           mthis.dataexpand = response.data.data[0].nodes
-          console.log('-------------')
-          console.log(opt)
           mthis.singlePerson = (opt[1]>1)?false:true
         })
         //单节点
