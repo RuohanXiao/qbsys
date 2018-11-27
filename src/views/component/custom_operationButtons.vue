@@ -13,16 +13,20 @@
             </select>
         </div>
         <div>
-            <div id='locationRoute_Map' :style="{display:'block',height:'500px',width:'1300px'}" ><div id='legendDiv'></div>
-            <div id="main" style='margin-left: 0px;margin-top: 0px; position: fixed;z-index:9;bottom:0;width:100%;'>
-                <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
-                    <ul class='slides'>
-                        <img-slider :imgS='imgslider' @imgId='imgClick' v-for='imgslider in test_Route'></img-slider>
-                    </ul>
+            <div id='locationRoute_Map' :style="{display:'block',height:'500px',width:'1300px'}" >
+                <div id='legendDiv'>
+                    <table id="legendBodyTable" style='border-collapse:separate;border-spacing:5;'>
+                        <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
+                    </table>
                 </div>
-                
+                <div id="main" style='margin-left: 0px;margin-top: 0px; position: fixed;z-index:9;bottom:0;width:100%;'>
+                    <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
+                        <ul class='slides'>
+                            <img-slider :imgS='imgslider' @imgId='imgClick' v-for='imgslider in test_Route'></img-slider>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
             <div id='HeatMap_Map' style="display:none;height: 500px" ></div>
         </div>
     </div>
@@ -74,6 +78,12 @@
     height:30px;
     background-color: #064a4d;
 }
+#legendDiv {
+    position: absolute;
+    z-index: 9999;
+    top: 100%;
+    left: 10%;
+}
 
 </style>
 
@@ -82,6 +92,9 @@
 import {test_Route,test_HeatMap} from '../../dist/assets/js/geo/data.js'
 import {map} from '../../dist/assets/js/geo/ChinaMap.js' 
 import {getGradientColors} from '../../dist/assets/js/geo/GradientColors.js'
+import {BezierSinglePoint, BezierLinePoints} from '../../dist/assets/js/geo/geometryType/BezierLine.js'
+import {getThirdPoint} from '../../dist/assets/js/geo/geometryType/Arc.js'
+
 import VectorSource from 'ol/source/Vector'
 import VectorLayer from 'ol/layer/Vector'
 import CircleStyle from 'ol/style/Circle'
@@ -99,6 +112,8 @@ import EqualTo from 'ol/format/filter/EqualTo'
 import Or from 'ol/format/filter/Or'
 import WFS from 'ol/format/WFS'
 import GeoJSON from 'ol/format/GeoJSON'
+import LineString from'ol/geom/LineString'
+import Icon from 'ol/style/Icon'
 
 import flexslider from 'flexslider'
 import 'ol/ol.css'
@@ -106,7 +121,8 @@ import '../../dist/assets/styles/geo/flexslider.css'
 import '../../dist/assets/styles/geo/demo.css'
 import '../../dist/assets/styles/geo/mapInit.css'
 
-import imgSlider from "./custom_imgSlider";
+import imgSlider from "./custom_imgSlider"
+import routeLegend from './custom_routeLegend'
 
 
 export default {
@@ -124,6 +140,11 @@ export default {
         imgSelectedEntityPoints : [], //点击头像时选择的所有实体点
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
         draw:null,
+        legend:null,
+        BezierPointsObjsArr:[],
+        routeColors:['#616f39','#88A2AA','#509aaf'],
+        n :500,//曲线的粒度（曲线是由几个点组成）
+        mousePointCoordinate: null,
         locationClassObject:{
             location_Noclick: true,
             'location_click': true,
@@ -195,6 +216,10 @@ export default {
             mthis.locationClassObject.location_Noclick = true
             mthis.heatMapClassObject.heatMap_Noclick = true
             mthis.routeClassObject.route_Noclick = false
+            if(mthis.legend == null){
+                mthis.click_route()
+            }
+            
         },
         clickButtonOpenDiv(id){
             var locationRoute_Map = document.getElementById('locationRoute_Map')
@@ -615,16 +640,203 @@ export default {
         //==========================================================================
         //路径
         click_route(){
-            var mthis = this
-            if(document.getElementById('legendButtonDiv')){
-                return;
-            } else{
-                //生成图例
-                var legendTable = mthis.creatRouteLegendRoom();
-                test_Route.forEach(function(Item){
-                    mthis.creatLegendItem(legendTable,Item.name,Item.id);
+            var mthis = this;
+            debugger;
+            //mthis.legend = 
+            var legendD = [];
+            mthis.test_Route.forEach(function(item){
+                var Litem = {
+                    'id':item.id,
+                    'name':item.name
+                };
+                legendD.push(Litem);
+            });
+            mthis.legend = legendD;
+        },
+
+        legendItemClick(legendItemOpera){
+            //alert(legendItemOpera.onOroff);
+            debugger;
+            var mthis = this;
+            var map = mthis.routeMap.map;
+            var routeId = legendItemOpera.id
+            if(legendItemOpera.onOroff == 'on'){
+                var Route = mthis.test_Route.find(function(obj){
+			        return obj.id == routeId;
                 });
+                mthis.creatRouteLine(Route);
+            } else {
+                var layerArr = map.getLayers().getArray();
+                for(var i=layerArr.length-1; i>=0; i--){
+                    var item = layerArr[i];
+                    var point_animation_id = 'point_animation_' + routeId;
+                    if(item.getType() == "VECTOR" && (item.getSource().getFeatures()[0].getProperties().belongId == routeId)){
+                        map.removeLayer(item);
+                        if(mthis.BezierPointsObjsArr.length > 0){
+                            var a = mthis.BezierPointsObjsArr.find(function(obj,index,arr) {
+                                if(obj.belongRouteId == routeId){
+                                    arr.splice(index, 1); 
+                                }
+                            });
+                        }
+                        var overlayArr =map.getOverlays().getArray();
+                        for(var j=overlayArr.length-1; j>=0; j--){
+                            if(overlayArr[j].getId() == point_animation_id){
+                                map.removeOverlay(overlayArr[j]);
+                            }
+                        }
+                    }
+                }
             }
+            
+        },
+
+        creatRouteLine(Route){
+            var mthis = this;
+            var Route_source = new VectorSource({
+            });
+            var Route_layer = new VectorLayer({
+                source : Route_source,
+                style : new Style({
+                        stroke : new Stroke({
+                            color : mthis.routeColors[Route.id],
+                            width : 2
+                        })
+                    })
+            });
+            mthis.routeMap.map.addLayer(Route_layer);
+            var routes = mthis.routeOrder(Route.route);
+            var BezierPointsArr = [];//贝塞尔曲线路径
+            routes.forEach(function(item){
+                var A = item.coor[0];
+                var C = item.coor[1];
+                var B = getThirdPoint(A,C);  //使用策略根据AB两个点生成C点
+                var Bl = new BezierLinePoints(A.concat(B).concat(C));
+                var BezierPoints = Bl.getBezierPoints(mthis.n);
+                BezierPointsArr.push(BezierPoints);
+                mthis.createRouteFeatures(BezierPoints, item.mes, Route_source, Route.id);//生成路径
+            });
+            var BezierPointsObj = {
+                    'belongRouteId':Route.id,
+                    'BezierRoutePoints':BezierPointsArr};//贝塞尔曲线路径
+            if(mthis.BezierPointsObjsArr.length == 0){//判断BezierPointsObj是否已经存在
+                mthis.BezierPointsObjsArr.push(BezierPointsObj);
+            } else{
+                if(mthis.BezierPointsObjsArr.find(function(obj){return obj.belongRouteId === Route.id;})){
+                    
+                } else {
+                    mthis.BezierPointsObjsArr.push(BezierPointsObj);
+                }
+            }
+            //routeCharacPoints(Route,'point_animation_',routeColors[Route.id]);//路径特征点扩散效果
+            mthis.lastPointArrow(BezierPointsObj);//将每条贝赛尔曲线的最后一个点设置成箭头样式
+            //startAnimation(BezierPointsObj);//轨迹回放
+            mthis.mapPointerMove();//鼠标移动事件
+        },
+        routeOrder(dataJson){
+            var mthis = this
+            var routeOrderArr = dataJson.sort(mthis.compare);
+            var res = [];
+            for(var i = 0; i < routeOrderArr.length - 1; i++){
+                var fromCoord = routeOrderArr[i].coordinate;
+                var toCoord = routeOrderArr[i + 1].coordinate;
+                var message = 'From: ' + routeOrderArr[i].name + ' To: ' + routeOrderArr[i + 1].name;
+                res.push({'mes':message,coor:[fromCoord, toCoord]});
+            }
+            return res;
+        },
+        //添加路径曲线
+        createRouteFeatures(Routepoints, message, Route_source, routeId){
+            var RouteFeature = new Feature({
+                geometry:new LineString(Routepoints),
+                attributes:{mes:message},
+                belongId:routeId
+            });
+            Route_source.addFeature(RouteFeature);
+        },
+
+        /**
+         * @param 设置最后一个点为箭头样式
+         */
+        lastPointArrow(routePointsObj) {
+            var mthis = this;
+            var n = mthis.n;
+            var vectorSource = new VectorSource({
+            });
+
+            var vectorLayer = new VectorLayer({
+                source : vectorSource
+            });
+
+            routePointsObj.BezierRoutePoints.forEach(function(item) {
+                // var item = Item.BezierPoints;
+                var lastPointCoor = item[n - 1];
+                var dx = item[n - 1][0] - item[n - 2][0];
+                var dy = item[n - 1][1] - item[n - 2][1];
+                var rotation = -Math.atan2(dy, dx);
+                var iconFeature = new Feature({
+                    geometry : new Point(lastPointCoor),
+                    belongId : routePointsObj.belongRouteId,
+                    population : 4000,
+                    rainfall : 500
+                });
+
+                var iconStyle = new Style({
+                    image : new Icon(({
+                        src : require('../../dist/assets/images/geo/arrow.png'),
+                        rotation : rotation
+                    }))
+                });
+                iconFeature.setStyle(iconStyle);
+                vectorSource.addFeature(iconFeature);
+            });
+            mthis.routeMap.map.addLayer(vectorLayer);
+        },
+
+        /**
+ * @param 鼠标移动事件
+ */
+
+//鼠标移动事件
+        mapPointerMove() {
+            var mthis = this;
+            var map = mthis.routeMap.map;
+            var routeSusOverlay = document.createElement('div');
+            var lp = document.createElement('p');
+            lp.style = 'color:#ccffff;font-size:14px;margin:0px;';
+            routeSusOverlay.appendChild(lp);
+            map.on('pointermove',function(e) {
+                if(map.getOverlayById('route_Overlay')){
+                    map.removeOverlay(map.getOverlayById('route_Overlay'));
+                }
+                var features = map.getFeaturesAtPixel(e.pixel);
+                if (features != null) {
+                    mthis.mousePointCoordinate = e.coordinate;
+                    features.forEach(function(item) {
+                        if (item.getProperties().attributes != null && item.getProperties().attributes['mes'] != null) {
+                            lp.innerHTML = item.getProperties().attributes['mes'];
+                            var route_Overlay = mthis.setOverlay(mthis.mousePointCoordinate, routeSusOverlay, 'route_Overlay', 'bottom-center');
+                            map.addOverlay(route_Overlay);
+                        } else {
+                            map.removeOverlay(map.getOverlayById('route_Overlay'));
+                        }
+                    });
+                }else {
+                    map.removeOverlay(map.getOverlayById('route_Overlay'));
+                }
+            });
+        },
+
+        compare (obj1, obj2) {
+            var val1 = obj1.order;
+            var val2 = obj2.order;
+            if (val1 < val2) {
+                return -1;
+            } else if (val1 > val2) {
+                return 1;
+            } else {
+                return 0;
+            }            
         },
 
         //===========================================================================
@@ -712,7 +924,8 @@ export default {
     },
     props: ['geoHeight', 'geoData'],
     components: {
-      imgSlider
+      imgSlider,
+      routeLegend
     }
 }
 </script>
