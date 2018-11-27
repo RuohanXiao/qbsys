@@ -339,22 +339,6 @@
     align-items: center;
     justify-content: center;
   }
-  /* 弹出框样式 */
-  .ivu-modal-mask {
-    /* background-color:rgba(0,0,0,0.6) !important; */
-    background-color: rgba(0, 0, 0, 0.7) !important;
-  }
-  .ivu-modal-content {
-    background-color: rgba(0, 0, 0, 0.7) !important;
-    border-radius: 20px !important;
-    border: solid 1px rgba(51, 255, 255, 0.5) !important;
-  }
-  .ivu-modal-footer {
-    border: none !important;
-  }
-  .ivu-modal-body {
-    padding: 0 !important;
-  }
   /* 分割线样式 */
   .ivu-split-trigger-vertical {
     width: 1px !important;

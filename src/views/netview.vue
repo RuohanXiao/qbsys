@@ -321,6 +321,12 @@
   .ivu-tabs-bar {
     border-bottom: 1px solid rgba(51, 255, 255, 0.2) !important;
   }
+  .hoverScroll :hover {
+    overflow-y: scroll;
+  }
+  .p-collapse-modal {
+    overflow: hidden;
+  }
   /* 滚动条样式 */
   ::-webkit-scrollbar {
     width: 5px;
@@ -330,6 +336,7 @@
   ::-webkit-scrollbar-thumb {
     /* border-radius: 999px; */
     border: 5px solid transparent;
+    background-color: rgba(0, 0, 0, 0)
   }
   :hover::-webkit-scrollbar-track {
     border-radius: 2.5px !important;
@@ -462,28 +469,6 @@
   .ivu-tooltip-arrow {
     background-color: #003333 !important;
     color: #003333 !important;
-  }
-  .p-collapse-modal {
-    font-size: 16px;
-    line-height: 38px;
-    height: 75px;
-    color: #ccffff;
-    font-family: "微软雅黑";
-    background-color: rgba(51, 255, 255, 0.1);
-    border: solid 1px #336666;
-    margin-left: 5px;
-    margin-top: 5px;
-    padding: 0 10px;
-  }
-  .p-collapse-modal-small {
-    font-family: MicrosoftYaHei;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
-    color: #ccffff;
-    opacity: 0.5;
   }
   p span {
     font-family: MicrosoftYaHei !important;
