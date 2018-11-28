@@ -2,11 +2,24 @@
     <li>
         <!-- <div @click='img_click'>111</div> -->
         <div :id='imgS.id + "_imgslider"' @click='img_click'>
-            <img :src=this.imgS.imageURL style='width:50px;height:50px;border-radius:30px;border: 2px solid rgba(204, 255, 255, 0);margin: 6px;'>
+            <img class='imgStyle' :src=this.imgS.imageURL style='width:50px;height:50px;border-radius:30px;border: 2px solid rgba(204, 255, 255, 0);margin: 6px;'>  <!-- style='width:50px;height:50px;border-radius:30px;border: 2px solid rgba(204, 255, 255, 0);margin: 6px;' -->
             <p style='color:#525252'>{{imgS.name}}</p>
         </div>
     </li>
 </template>
+<style>
+.imgStyle{
+    /* width:50px !important;
+    height:50px !important;
+    border-radius:30px;
+    border: 2px solid rgba(204, 255, 255, 0);
+    margin: 6px; */
+}
+.imgStyle:hover{
+    box-shadow:rgb(204, 255, 255) 0px 0px 7px 3px;
+}
+</style>
+
 <script>
 export default {
     name:'imgslider',

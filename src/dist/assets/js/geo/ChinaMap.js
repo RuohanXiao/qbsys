@@ -56,12 +56,14 @@ var map = function(target){
     this.addlayer = function(layer){
     	this.map.addLayer(layer);
     };
-    
-    /* this.hidemap = function(target){
-    	//this.map.addLayer(layer);
-    	var map = document.getElementById(target);
-    	map.style='display:none';
-    }; */
+    this.map.on('movestart',function(evt){
+        //alert(34);
+        evt.map.getTargetElement().style.cursor = 'move';
+    });
+    this.map.on('moveend',function(evt){
+        //alert(34);
+        evt.map.getTargetElement().style.cursor = 'auto';
+    })
 
     //地图显示
     this.map.getView().fit(bounds, this.map.getSize());

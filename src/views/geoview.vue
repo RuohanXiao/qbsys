@@ -51,7 +51,7 @@
           <Split v-model="split1" :max="max" :min="min">
             <div slot="left" class="demo-split-pane" display='flex' :style="{height:contentHeight}">
               <!-- <h1>this is left</h1> -->
-              <geo-chart @selectNodes1="selectNodes" id="geo" :style="{height:geopxdiv}" :geoHeight="geopx" :geoData="geoData"></geo-chart>
+              <geo-chart @selectNodes1="selectNodes" id="geo" :style="{height:geopxdiv}" :geoHeight="geopx" :geoWidth='splitWidth' :geoData="geoData"></geo-chart>
               <time-chart-div :splitWidth="splitWidth" :split="split1"></time-chart-div>
               
             </div>
@@ -300,8 +300,8 @@
           this.timepxdiv = "0px";
           this.iconPosition = useHeight - 40 + "px";
           this.geopxdiv = useHeight * 1 + "px";
-          this.geopx = useHeight * 1 - 55 + "px";
-           
+          this.geopx = useHeight * 1 + "px";
+          //this.geopx = useHeight * 1 - 55 + "px";
           document.getElementById("timechartctrl").style.display = "none";
           document.getElementById("barchart").style.display = "none";
           document.getElementById("arrowDown").style.transform = "rotate(0deg)";
@@ -314,7 +314,8 @@
           this.timepxdiv =
             (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
           this.geopxdiv = useHeight * 0.8 + "px";
-          this.geopx = useHeight * 0.8 - 55 + "px";
+          this.geopx = useHeight * 0.8 + "px";
+          //this.geopx = useHeight * 0.8 - 55 + "px";
           
           document.getElementById("timechartctrl").style.display = "block";
           document.getElementById("barchart").style.display = "block";
@@ -368,7 +369,8 @@
           (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
         mthis.iconPosition = useHeight * 0.8 + "px";
         mthis.geopxdiv = useHeight * 0.8 + "px";
-        mthis.geopx = useHeight * 0.8 - 55 + "px";
+        mthis.geopx = useHeight * 0.8 + "px";
+          //mthis.geopx = useHeight * 0.8 - 55 + "px";
         
         mthis.eventheightdiv = document.documentElement.clientHeight * 1 - 64 - 10 + "px";
         mthis.eventpx = document.documentElement.clientHeight * 1 - 64 - 20 + "px";
@@ -384,7 +386,8 @@
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
       this.iconPosition = useHeight * 0.8 + "px";
       this.geopxdiv = useHeight * 0.8 + "px";
-      this.geopx = useHeight * 0.8 - 55 + "px";
+      this.geopx = useHeight * 0.8 + "px";
+      //this.geopx = useHeight * 0.8 - 55 + "px";
       this.eventheightdiv = document.documentElement.clientHeight * 1 - 64 - 10 + "px";
       this.splitWidth = document.documentElement.clientWidth * this.split1 - 20 + 'px'
       this.divheight = this.eventheightdiv - this.geopx + 'px'

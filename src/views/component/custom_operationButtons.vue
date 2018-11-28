@@ -1,6 +1,6 @@
 <template>
-    <div :style="{height:geoHeight,width:'1360px'}"><!-- :style={height:geoHeight;width:} -->
-        <div class='operationButtonDiv'>
+    <div :style="{height:geoHeight,width:geoWidth}" class='geoDiv'><!-- :style={height:geoHeight;width:} -->
+        <div class='operationButtonDiv' style='position: absolute;z-index: 9;padding-left: 50px;width:100%;padding-right: 50px;'>
             <div id='location_button' :class="locationClassObject" @click='location_cilck'>location</div>
             <div id='heatMap_button'  :class="heatMapClassObject" @click='heatMap_cilck'>heatMap</div>
             <div id='route_button'  :class="routeClassObject" @click='route_cilck'>route</div>
@@ -12,13 +12,13 @@
             </select>
         </div>
         <div id='mapDIV'>
-            <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%'}" >  <!-- ,height:'800px',width:'1300px' -->
+            <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%',backgroundColor:'black'}" >  <!-- ,height:'800px',width:'1300px' -->
                 <div id='legendDiv'>
                     <table id="legendBodyTable" style='border-collapse:separate;border-spacing:5;'>
                         <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
                     </table>
                 </div>
-                <div id="main" style='margin-left: 0px;margin-top: 0px; position: fixed;z-index:9;bottom:120px;width:100%;'>
+                <div id="main" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(geoHeight) - 80 + 'px'}">
                     <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
                         <ul class='slides'>
                             <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
@@ -26,14 +26,14 @@
                     </div>
                 </div>
             </div>
-            <div id='HeatMap_Map' style="display:none;height: 500px" ></div>
+            <div id='HeatMap_Map' :style="{display:'none',height:geoHeight,width:'100%',backgroundColor:'black'}" ></div>
         </div>
     </div>
 </template>
 
 <style>
-.operationButtonDiv{
-    /* width:100%; */
+.geoDiv{
+    margin-left: 10px
 }
 .location_click{
     margin: 3px;
@@ -129,6 +129,7 @@ export default {
     data() {
       return {
         a:null,
+        imgTopVules:'',
         test_Route:test_Route,
         test_HeatMap:test_HeatMap,
         routeMap:null,
@@ -176,6 +177,7 @@ export default {
             mthis.locationClassObject.location_Noclick = false
             mthis.heatMapClassObject.heatMap_Noclick = true
             mthis.routeClassObject.route_Noclick = true
+            mthis.legend = null
             if(mthis.routeMap == null){
                 mthis.routeMap = new map('locationRoute_Map')
                 mthis.provinTilSource = new TileWMS({
@@ -377,7 +379,7 @@ export default {
             var idImg = id + '_imgslider';
             var element = document.getElementById(idImg);
             element.children[0].style.borderColor = "rgba(204, 255, 255, 0)";
-            element.children[0].style.boxShadow = 'rgb(204, 255, 255) 0px 0px 0px 0px';
+            element.children[0].style.boxShadow = '';
             element.children[1].style.color = '#525252';
             var idN = 'pointAnimation_' + id;
             mthis.removeOverlays(idN);
@@ -638,8 +640,8 @@ export default {
                 mthis.removeSelectedPoints(mthis.frameSelectedColor, mthis.entityPointsColor);
             });
             draw.on('drawend', function(obj) {
-                //var vectorSource = new ol.source.Vector();
                 var feature = obj.feature;
+                debugger
                 var geometry = feature.getGeometry();
                 mthis.selectedEntityPoints(geometry);
                 mthis.routeMap.map.removeInteraction(draw);
@@ -769,7 +771,6 @@ export default {
         },
 
         legendItemClick(legendItemOpera){
-            debugger;
             var mthis = this;
             var map = mthis.routeMap.map;
             var routeId = legendItemOpera.id
@@ -1034,14 +1035,26 @@ export default {
                 deep:true//对象内部的属性监听，也叫深度监听
         },
         geoHeight:function(){
+            var mthis = this
+            //mthis.imgTopVules = parseInt(geoHeight) - 80 + 'px';
             this.$nextTick(function(){
                 var mthis = this
                 mthis.location_cilck()
             });
+        },
+        geoWidth:function(){
+            var mthis = this;
+            if(mthis.routeMap != null){
+                mthis.routeMap.map.updateSize();
+            };
+            if(mthis.heatMap != null){
+                mthis.heatMap.map.updateSize();
+            }
+            
         }
 
     },
-    props: ['geoHeight', 'geoData'],
+    props: ['geoHeight', 'geoData','geoWidth'],
     components: {
       imgSlider,
       routeLegend
