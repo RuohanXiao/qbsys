@@ -292,7 +292,6 @@
       },
       geopxdiv: function() {
         this.divheight = document.documentElement.clientHeight * 0.2 - 10 + 20 + 55 + 'px'
-<<<<<<< HEAD
       },
       changHeightCount: function() {
         let useHeight = document.documentElement.clientHeight - 64 - 20;
@@ -325,8 +324,6 @@
         document.getElementById("arrowDown").style.right = "20px";
         document.getElementById("arrowDown").style.top = this.geopxdiv;
         document.getElementById("arrowDown").style.zIndex = 30;
-=======
->>>>>>> 5dfc4a2e83037308677abfd3168f4e3d05914144
       }
       // changHeightCount: function() {
       //   let useHeight = document.documentElement.clientHeight - 64 - 20;
