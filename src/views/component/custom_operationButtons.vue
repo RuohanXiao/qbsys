@@ -769,7 +769,6 @@ export default {
         },
 
         legendItemClick(legendItemOpera){
-            //alert(legendItemOpera.onOroff);
             debugger;
             var mthis = this;
             var map = mthis.routeMap.map;

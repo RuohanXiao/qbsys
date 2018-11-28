@@ -3,7 +3,7 @@
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0'}">
-        <Tabs type="card" :style="{overflowY:'scroll'}">
+        <Tabs type="card">
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:eventheight}">
             <Collapse accordion v-model="show" :style="{border:'none',backgroundColor: 'rgba(0, 0, 0, 0.01)',height:eventheight}">
               <div v-for="(object,index) in dataExpand">
@@ -101,8 +101,7 @@
               <Row type="flex" justify="start" align="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-if="!singlePerson">
                 <div :style="{borderBottom:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
                   <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
-                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="dataExpand != null">{{dataExpand.length}}</span><span v-if="!dataExpand != null">0</span>)
-                    
+                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="dataExpand != null">{{dataExpand.length}}</span>)
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
@@ -114,46 +113,13 @@
           </Tab-pane>
         </Tabs>
       </div>
-      <Modal v-model="modal01" width="80%" footer-hide>
-        <Row type="flex" justify="space-between" class="code-row-bg" :style="{margin:'0'}">
-          <Col span="7" class="leftModal" type="flex" justify="space-between">
-          <!-- 搜索框 -->
-          <div style="width:80%" id="idNumber2">
-            <i class="icon iconfont icon-search" style="position: absolute;
-                      color: rgb(51, 255, 255);
-                      width:50px;
-                      left:10px;
-                      opacity: 0.4;"></i>
-            <input type="text" />
-          </div>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          <p class="p-collapse">政治</p>
-          </Col>
-          <Col span="17" class="rightModal">
-          <p class="p-collapse">9800</p>
-          </Col>
-        </Row>
-      </Modal>
+      <modal-chart-detail :flag="modal01" :edata="eventData"></modal-chart-detail>
     </div>
     </Col>
   </div>
 </template>
 <script>
+  import modalChartDetail from './custom_modal_detail'
   /* eslint-disable */
   export default {
     // props: {
@@ -206,6 +172,7 @@
         ]
       };
     },
+    components: {modalChartDetail},
     computed: {
       menuitemClasses: function() {
         return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
@@ -213,7 +180,6 @@
     },
     methods: {
       look() {
-        alert(this.dataExpand)
         // let mthis = this
         // mthis.singlePerson = false
       },

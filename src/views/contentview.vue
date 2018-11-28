@@ -339,29 +339,6 @@
     align-items: center;
     justify-content: center;
   }
-  /* 弹出框样式 */
-  .ivu-modal-mask {
-    /* background-color:rgba(0,0,0,0.6) !important; */
-    background-color: rgba(0, 0, 0, 0.7) !important;
-  }
-  .ivu-modal-content {
-    background-color: rgba(0, 0, 0, 0.7) !important;
-    border-radius: 20px !important;
-    border: solid 1px rgba(51, 255, 255, 0.5) !important;
-  }
-  .ivu-modal-footer {
-    border: none !important;
-  }
-  .ivu-modal-body {
-    padding: 0 !important;
-  }
-  .leftModal {
-    background-image: linear-gradient(8deg, rgba(102, 255, 153, 0.14) 0%, rgba(102, 128, 204, 0.14) 60%, rgba(102, 0, 255, 0.14) 100%), linear-gradient( #000000, #000000);
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-    border-right: solid 1px #336666;
-  }
-  .rightModal {}
   /* 分割线样式 */
   .ivu-split-trigger-vertical {
     width: 1px !important;
@@ -728,7 +705,6 @@
           },
           events: {
             onClick: function(event) {
-              // alert('下面准备调用接口，时间：' + event.timeStart + "-------" + event.timeEnd)
               // console.log(event)
             }
           },
@@ -768,7 +744,6 @@
     mounted() {
       window.onresize = function() {
         this.contentHeight = document.documentElement.clientHeight - 65 + "px";
-        // alert(document.documentElement.clientHeight)
         this.vhpx = document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20 + "px";
         this.timepxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.1 + 40 + "px";
         this.timepx =
@@ -778,7 +753,6 @@
           (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
         this.eventpx =
           document.documentElement.clientHeight * 1 - 64 - 20 + "px";
-        // alert(this.netpx)
       }
       this.contentHeight = document.documentElement.clientHeight - 65 + "px";
        this.vhpx = document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20 + "px";
@@ -790,7 +764,6 @@
           (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
         this.eventpx =
         document.documentElement.clientHeight * 1 - 64 - 20 + "px";
-      // alert(this.eventpx)
       // 弹出框样式
       // var infoElement = document.createElement("div");
       // infoElement.style.zIndex = 9999;
@@ -802,7 +775,6 @@
       // infoElement.style.pointerEvents = "none";
       // var infoElementVisible = false;
       this.initCharts();
-      // alert(this.netpx)
     }
   };
 </script>

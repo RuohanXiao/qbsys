@@ -138,7 +138,6 @@
             })
       });
       window.onresize = function() {
-        // alert(document.documentElement.clientHeight)
         this.vhpx = document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20 + "px";
         this.timepxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.065 + 40 + "px";
         this.timepx =
@@ -184,7 +183,6 @@
           },
           events: {
             onClick: function(event) {
-              // alert('下面准备调用接口，时间：' + event.timeStart + "-------" + event.timeEnd)
               // console.log(event)
             }
           },

@@ -394,17 +394,14 @@
           mthis.changeFlag();
           mthis.basicX = mthis.selectionId[0]['x']
           mthis.basicY = mthis.selectionId[0]['y']
-          // alert( mthis.basicX + '  ,  ' + mthis.basicY)
           let arr = []
           let arrLevel1 = []
-          // console.log('------------------11')
           for (let index = 0; index < mthis.selectionId.length; index++) {
             mthis.netchart.unlockNode(this.selectionId[index].id);
             mthis.selectionId[index]["x"] = index * 100 + mthis.basicX
             mthis.selectionId[index]["y"] = mthis.basicY
             mthis.netchart.lockNode(mthis.selectionId[index].id);
             arrLevel1.push(mthis.selectionId[index].id)
-            // console.log('------------------12')
             for (let num = 0; num < mthis.selectionId[index].dataLinks.length; num++) {
               if(mthis.selectionId[index].dataLinks[num].from === mthis.selectionId[index].id){
                 (arr.push(mthis.selectionId[index].dataLinks[num].to))
@@ -659,7 +656,15 @@
             // "mode": "focusnodes" ,
             expandOnClick: false
           },
-          legend: { enabled: true },
+          // legend: { enabled: true },
+          legend: {
+            enabled: true,
+            width:900,
+            panel:{
+                side:"top",
+                align:"center"
+            }
+        },
           interaction: {
             resizing: {
               enabled: false
@@ -800,10 +805,8 @@
                 mthis.selectionId = [];
                 mthis.selectItem = null;
               }
-              // // alert(mthis.selectionId);
               // event.preventDefault();
             },
-            // onLongPress: function(event) {// alert('long-press')},
             // onPointerMove: function(event) {
             // },
             onPointerDrag: function(event) {
@@ -811,14 +814,11 @@
             onDoubleClick: function(event) {
               //   if (event.clickNode) {
               //     mthis.selectionId = event.clickNode.id;
-              //     // alert('您已经点击了' + event.clickNode.id + '节点');
               //   } else if (event.clickLink) {
               //     mthis.selectionId = event.clickLink.id;
-              //     // alert('您已经点击了' + event.clickLink.id + '连线');
               //   } else {
               //     mthis.selectionId = null
               //   }
-              //   // alert(mthis.selectionId);
               //   // if (event.clickNode) { //test the click was on a node
               //   //   this.netchart.addData({
               //   //     nodes: [{
@@ -860,8 +860,7 @@
                   mthis.selectionId.push(event.selection[selectNum]);
                 }
                 // 触发右侧eventdiv改变
-                mthis.$emit('selectNodes1',{ids:mthis.selectionId});
-
+                mthis.$emit('selectNodes1',[{ids:mthis.selectionId},mthis.selectionId.length]);
               } else {
                 mthis.selectionId = [];
                 mthis.selectItem = null;
@@ -921,13 +920,11 @@
 
       });
       // window.onresize = function() {
-      //   // // alert(document.body.clientHeight)
       //   this.netheight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
       //   this.netheightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
       // }
       // this.netheight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
       // this.netheightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
-      // // alert(this.netheight)
     }
   };
 </script>

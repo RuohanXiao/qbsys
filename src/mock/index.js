@@ -268,7 +268,6 @@ if (isMock) {
     })
   })
   mock.onGet('/getContentInfo').reply(config => {
-    // alert(config.id)
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve([200, {

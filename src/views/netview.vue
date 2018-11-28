@@ -321,32 +321,38 @@
   .ivu-tabs-bar {
     border-bottom: 1px solid rgba(51, 255, 255, 0.2) !important;
   }
+  .hoverScroll :hover {
+    overflow-y: scroll;
+  }
+  .p-collapse-modal {
+    overflow: hidden;
+  }
   /* 滚动条样式 */
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-  ::-webkit-scrollbar-track,
-  ::-webkit-scrollbar-thumb {
-    /* border-radius: 999px; */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+
+::-webkit-scrollbar-thumb {
     border: 5px solid transparent;
-  }
-  :hover::-webkit-scrollbar-track {
-    border-radius: 2.5px !important;
-    box-shadow: 1px 1px 5px rgba(24, 255, 255, 0.5) inset;
-  }
-  ::-webkit-scrollbar-track {
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
-  }
-  ::-webkit-scrollbar-thumb {
-    border-radius: 2.5px !important;
+    background-color: rgba(0, 0, 0, 0)
+}
+
+::-webkit-scrollbar-thumb:hover {
+    padding-right: 5px !important;
+    border-radius: 10px;
     min-height: 20px;
-    background-clip: content-box;
-    box-shadow: 0 0 0 5px rgba(0, 0, 0, 0) inset;
-  }
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
+    background-color:#3cc;
+    box-shadow: 1px 1px 3px #3cc inset;
+}
+
+
+::-webkit-scrollbar-track {
+    border-radius: 2.5px !important;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
+}
+
   .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab-active {
     border: 1px solid rgba(54, 102, 102, 0.1) !important;
     border-radius: 3px !important;
@@ -367,37 +373,8 @@
     line-height: 30px;
     color: #33ffff !important;
   }
-  .vertical-center-modal {
-    display: flex;
-    /* align-items: center; */
-    justify-content: center;
-  }
-  /* 弹出框样式 */
-  .ivu-modal-mask {
-    /* background-color:rgba(0,0,0,0.6) !important; */
-    background-color: rgba(0, 0, 0, 0.7) !important;
-  }
-  .ivu-modal-content {
-    background-color: rgba(0, 0, 0, 0.7) !important;
-    border-radius: 20px !important;
-    border: solid 1px rgba(51, 255, 255, 0.5) !important;
-  }
-  .ivu-modal-footer {
-    border: none !important;
-  }
-  .ivu-modal-body {
-    padding: 0 !important;
-  }
-  .leftModal {
-    background-image: linear-gradient( 8deg, rgba(102, 255, 153, 0.14) 0%, rgba(102, 128, 204, 0.14) 60%, rgba(102, 0, 255, 0.14) 100%), linear-gradient(#000000, #000000);
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-    border-right: solid 1px #336666;
-  }
-  .rightModal {
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-  }
+  
+  
   /* 分割线样式 */
   .ivu-split-trigger-vertical {
     width: 3px !important;
@@ -434,6 +411,9 @@
   .ivu-select-dropdown {
     background-color: rgba(0, 0, 0, 0.8) !important;
     border: solid 1px rgba(51, 255, 255, 0.5) !important;
+    border-radius: 10px !important;
+    margin-top: 10px !important;
+    padding-top: 10px !important;
   }
   .ivu-select-item {
     border-bottom: solid 1px rgba(0, 0, 0, 0.8) !important;
@@ -492,28 +472,6 @@
     background-color: #003333 !important;
     color: #003333 !important;
   }
-  .p-collapse-modal {
-    font-size: 16px;
-    line-height: 38px;
-    height: 75px;
-    color: #ccffff;
-    font-family: "微软雅黑";
-    background-color: rgba(51, 255, 255, 0.1);
-    border: solid 1px #336666;
-    margin-left: 5px;
-    margin-top: 5px;
-    padding: 0 10px;
-  }
-  .p-collapse-modal-small {
-    font-family: MicrosoftYaHei;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
-    color: #ccffff;
-    opacity: 0.5;
-  }
   p span {
     font-family: MicrosoftYaHei !important;
   }
@@ -532,46 +490,12 @@
   #barchart {
     width: 100%;
   }
-  .scorll-bar:hover::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
-    border-radius: 10px !important;
-    background-color: #F5F5F5 !important;
-  }
-  .scorll-bar:hover::-webkit-scrollbar {
-    width: 12px !important;
-    background-color: #F5F5F5 !important;
-  }
-  .scorll-bar:hover::-webkit-scrollbar-thumb {
-    border-radius: 10px !important;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3) !important;
-    background-color: #D62929 !important;
-  }
 </style>
 <template>
   <div class="layout" :style="{width: '100vw',height: '100vh', background:'black'}">
     <Layout :style="{width: '98vw',height: '100vh'}">
       <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
-        <Row type="flex" justify="space-between" class="code-row-bg" align="middle">
-          <Col span="1" align="middle">
-          <router-link to="/">
-            <img src="../dist/assets/images/net.png" style="display: inline-block; vertical-align: middle; width:3em;" /></router-link>
-          </Col>
-          <Col span="1" align="middle">
-          <router-link to="/geoView" target='_blank'>
-            <img src="../dist/assets/images/earth.png" style="display: inline-block; vertical-align: middle;width:3em" /></router-link>
-          </Col>
-          <Col span="1" align="middle">
-          <router-link to="/contentView" target='_blank'>
-            <img src="../dist/assets/images/content.png" style="display: inline-block; vertical-align: middle;width:3em" /></router-link>
-          </Col>
-          <Col span="4" offset="17">
-          <!-- <i class="icon iconfont icon-search  process-img" style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i>
-            <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfo" filterable remote placeholder='' :remote-method="searchInfo" :loading="loading1" :label-in-value="true" @on-change="v=>{setOption(v,'type')}">
-              <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
-            </Select> -->
-          <search-div @initNodes="initNode" />
-          </Col>
-        </Row>
+        <top-menu />
       </Header>
       <Content :style="{marginTop:'64px', width: '100vw'}" id="content">
         <div class="rightNav" :style="{height:contentHeight,display:'flex'}">
@@ -599,10 +523,10 @@
             <div slot="left" class="demo-split-pane" display='flex' :style="{height:contentHeight}">
               <!-- <h1>this is left</h1> -->
               <net-chart-div @selectNodes1="selectNodes" id="net" :style="{height:netpxdiv}" :netHeight="netpx" :netData="netData"></net-chart-div>
-              <time-chart-div :splitWidth="splitWidth" :split="split1"></time-chart-div>
+              <time-chart-div :splitWidth="splitWidth" :split="split1" @changenetpx="changenetpx"></time-chart-div>
               
             </div>
-            <div slot="right" class="scorll-bar demo-split-pane paneRight" :style="{height:eventheightdiv,marginRight:'2.3vw'}">
+            <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:eventheightdiv,marginRight:'2.3vw',overflowY:'scroll'}">
               <event-chart-div :dataExpand="dataexpand"></event-chart-div>
             </div>
           </Split>
@@ -616,11 +540,12 @@
   import $ from "jquery";
   // import echarts from 'vue-echarts'
   // import timeDiv from './component/custom_timediv'
+  import topMenu from "./component/custom_topmenu";
   import netChartDiv from "./component/custom_netdiv";
   import timeChartDiv from "./component/custom_timediv";
   import eventChartDiv from "./component/custom_eventdiv";
   import navDiv from "./component/custom_nav";
-  import searchDiv from "./component/custom_searchdiv";
+  // import searchDiv from "./component/custom_searchdiv";
   import "../dist/assets/styles/navsytle.css";
   import nav from "../dist/assets/js/nav.js";
   import mock from "../mock/index.js";
@@ -723,7 +648,7 @@
             // min:-35,
             name: '占世界贸易额比重',
             axisLabel: {
-              formatter: '{value} %'
+              formatter: '{value}W'
             }
           },
           dataZoom: [{
@@ -871,68 +796,7 @@
         iconPosition: 0,
         timeWidth: 0,
         divheight: 0,
-        splitWidth: 0,
-        dataBySeries: {
-          num: [
-            1.63,
-            1.9,
-            2.16,
-            2.55,
-            2.7,
-            2.69,
-            2.65,
-            2.87,
-            2.9,
-            3.1,
-            3.47,
-            3.89,
-            4.54,
-            5.33,
-            5.95,
-            6.44,
-            6.94,
-            7.45,
-            7.61,
-            8.44,
-            9.35,
-            9.58,
-            10.06,
-            10.6,
-            10.94,
-            11.49,
-            11.03,
-            11.11
-          ],
-          date: [
-            1990,
-            1991,
-            1992,
-            1993,
-            1994,
-            1995,
-            1996,
-            1997,
-            1998,
-            1999,
-            2000,
-            2001,
-            2002,
-            2003,
-            2004,
-            2005,
-            2006,
-            2007,
-            2008,
-            2009,
-            2010,
-            2011,
-            2012,
-            2013,
-            2014,
-            2015,
-            2016
-          ]
-        }
+        splitWidth: 0
       };
     },
     components: {
@@ -940,49 +804,80 @@
       timeChartDiv,
       eventChartDiv,
       //  timeDiv,
-      searchDiv
+      // searchDiv,
+      topMenu
     },
     methods: {
+      changenetpx () {
+        let useHeight = document.documentElement.clientHeight - 64 - 20;
+        if (this.flag) {
+          this.netpxdiv = useHeight * 1 + "px";
+          this.netpx = useHeight * 1 - 55 + "px";
+        } else {
+          this.netpxdiv = useHeight * 0.8 + "px";
+          this.netpx = useHeight * 0.8 - 55 + "px";
+        }
+        this.flag = !this.flag
+      },
+      // changeNetHeight (flag) {
+      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
+      //   if (flag) {
+      //     this.netpxdiv = useHeight * 1 + "px";
+      //     this.netpx = useHeight * 1 - 55 + "px";
+      //   } else {
+      //     this.netpxdiv = useHeight * 0.8 + "px";
+      //     this.netpx = useHeight * 0.8 - 55 + "px";
+      //   }
+      // },
       initNode(opt) {
         this.netData = opt.nodes[0]
       },
       // netdiv 回传选中节点参数
       selectNodes(opt) {
         var mthis = this
+        let nodeIdsArry = opt[0].ids.map(item => {
+          return item.id;
+        });
+        mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+          'nodeIds': nodeIdsArry
+        }).then(response => {
+          mthis.dataexpand = response.data.data[0].nodes
+          mthis.singlePerson = (opt[1]>1)?false:true
+        })
         //单节点
-        if (opt.ids.length == 1) {
-          let nodeIdsArry = opt.ids.map(item => {
-            return item.id;
-          });
-          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
-            'nodeIds': nodeIdsArry
-          }).then(response => {
-            this.dataexpand = response.data.data[0].nodes
-            console.log('-------------')
-            console.log(this.dataexpand)
-            this.singlePerson = true
-          })
-        } else if (opt.ids.length > 1) {
-          //多节点
-          let nodeIdsArry = opt.ids.map(item => {
-            return item.id;
-          });
-          // nodeIdsArry = ["Q370363", "Q1413"]
-          //  console.log(nodeIdsArry)
-          // 调用接口,根据id查询信息
-          // mthis.$http.post('http://10.60.1.141:5001/node-datas/',{'nodeIds': nodeIdsArry},{"emulateJSON":true}).then(response => {
-          // mthis.$http.post('http://10.60.1.141:5000/person-overviews/', {
-          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
-            'nodeIds': nodeIdsArry
-          }).then(response => {
-            this.dataexpand = response.data.data[0].nodes
-             console.log('-------------')
-            console.log(this.dataexpand)
-            this.singlePerson = false
-          })
-        }
+        // if (opt[0].ids.length == 1) {
+        //   let nodeIdsArry = opt.ids.map(item => {
+        //     return item.id;
+        //   });
+        //   mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+        //     'nodeIds': nodeIdsArry
+        //   }).then(response => {
+        //     mthis.dataexpand = response.data.data[0].nodes
+        //     console.log('-------------')
+        //     console.log(mthis.dataexpand)
+        //     mthis.singlePerson = true
+        //   })
+        // } else if (opt.ids.length > 1) {
+        //   //多节点
+        //   let nodeIdsArry = opt.ids.map(item => {
+        //     return item.id;
+        //   });
+        //   // nodeIdsArry = ["Q370363", "Q1413"]
+        //   //  console.log(nodeIdsArry)
+        //   // 调用接口,根据id查询信息
+        //   // mthis.$http.post('http://10.60.1.141:5001/node-datas/',{'nodeIds': nodeIdsArry},{"emulateJSON":true}).then(response => {
+        //   // mthis.$http.post('http://10.60.1.141:5000/person-overviews/', {
+        //   mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+        //     'nodeIds': nodeIdsArry
+        //   }).then(response => {
+        //     mthis.dataexpand = response.data.data[0].nodes
+        //     console.log('-------------')
+        //     console.log(this.dataexpand)
+        //     mthis.singlePerson = false
+        //   })
+        // }
+
         // var mthis = this;
-        // alert('叮!我已经监听到你选中了节点,下面开始调用接口,更改右边数据透视的数据咯!(现在是假数据)')
         // mock.get("/getShujuTouShi").then(function(res) {
         //   // mthis.ref = !mthis.ref
         //   mthis.dataexpand = res.data.data;
@@ -1096,7 +991,6 @@
         //   },
         //   events: {
         //     onClick: function(event) {
-        //       // alert('下面准备调用接口，时间：' + event.timeStart + "-------" + event.timeEnd)
         //       console.log(event)
         //     }
         //   },
@@ -1144,37 +1038,37 @@
       },
       netpxdiv: function() {
         this.divheight = document.documentElement.clientHeight * 0.2 - 10 + 20 + 55 + 'px'
-      },
-      changHeightCount: function() {
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (this.changHeightCount % 2 === 0) {
-          this.timepx = "0px";
-          this.timepxdiv = "0px";
-          this.iconPosition = useHeight - 40 + "px";
-          this.netpxdiv = useHeight * 1 + "px";
-          this.netpx = useHeight * 1 - 55 + "px";
-          document.getElementById("timechartctrl").style.display = "none";
-          document.getElementById("barchart").style.display = "none";
-          document.getElementById("arrowDown").style.transform = "rotate(0deg)";
-        } else {
-          this.iconPosition = useHeight * 0.8 + "px";
-          this.timepx =
-            (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
-            30 +
-            "px";
-          this.timepxdiv =
-            (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-          this.netpxdiv = useHeight * 0.8 + "px";
-          this.netpx = useHeight * 0.8 - 55 + "px";
-          document.getElementById("timechartctrl").style.display = "block";
-          document.getElementById("barchart").style.display = "block";
-          document.getElementById("arrowDown").style.transform = "rotate(180deg)";
-        }
-        document.getElementById("arrowDown").style.position = "absolute";
-        document.getElementById("arrowDown").style.right = "20px";
-        document.getElementById("arrowDown").style.top = this.netpxdiv;
-        document.getElementById("arrowDown").style.zIndex = 30;
       }
+      // changHeightCount: function() {
+      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
+      //   if (this.changHeightCount % 2 === 0) {
+      //     this.timepx = "0px";
+      //     this.timepxdiv = "0px";
+      //     this.iconPosition = useHeight - 40 + "px";
+      //     this.netpxdiv = useHeight * 1 + "px";
+      //     this.netpx = useHeight * 1 - 55 + "px";
+      //     document.getElementById("timechartctrl").style.display = "none";
+      //     document.getElementById("barchart").style.display = "none";
+      //     document.getElementById("arrowDown").style.transform = "rotate(0deg)";
+      //   } else {
+      //     this.iconPosition = useHeight * 0.8 + "px";
+      //     this.timepx =
+      //       (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
+      //       30 +
+      //       "px";
+      //     this.timepxdiv =
+      //       (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+      //     this.netpxdiv = useHeight * 0.8 + "px";
+      //     this.netpx = useHeight * 0.8 - 55 + "px";
+      //     document.getElementById("timechartctrl").style.display = "block";
+      //     document.getElementById("barchart").style.display = "block";
+      //     document.getElementById("arrowDown").style.transform = "rotate(180deg)";
+      //   }
+      //   document.getElementById("arrowDown").style.position = "absolute";
+      //   document.getElementById("arrowDown").style.right = "20px";
+      //   document.getElementById("arrowDown").style.top = this.netpxdiv;
+      //   document.getElementById("arrowDown").style.zIndex = 30;
+      // }
     },
     mounted() {
       var mthis = this
