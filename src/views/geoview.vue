@@ -301,6 +301,7 @@
           this.iconPosition = useHeight - 40 + "px";
           this.geopxdiv = useHeight * 1 + "px";
           this.geopx = useHeight * 1 - 55 + "px";
+           
           document.getElementById("timechartctrl").style.display = "none";
           document.getElementById("barchart").style.display = "none";
           document.getElementById("arrowDown").style.transform = "rotate(0deg)";
@@ -314,6 +315,7 @@
             (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
           this.geopxdiv = useHeight * 0.8 + "px";
           this.geopx = useHeight * 0.8 - 55 + "px";
+          
           document.getElementById("timechartctrl").style.display = "block";
           document.getElementById("barchart").style.display = "block";
           document.getElementById("arrowDown").style.transform = "rotate(180deg)";
@@ -337,6 +339,7 @@
         mthis.iconPosition = useHeight * 0.8 + "px";
         mthis.geopxdiv = useHeight * 0.8 + "px";
         mthis.geopx = useHeight * 0.8 - 55 + "px";
+        
         mthis.eventheightdiv = document.documentElement.clientHeight * 1 - 64 - 10 + "px";
         mthis.eventpx = document.documentElement.clientHeight * 1 - 64 - 20 + "px";
         mthis.rightNav = document.documentElement.clientHeight * 1 - 64 + "px";

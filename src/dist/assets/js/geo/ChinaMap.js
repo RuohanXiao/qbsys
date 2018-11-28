@@ -34,7 +34,8 @@ var map = function(target){
             //设置投影
 			projection: projection,
 			minZoom : 3,
-		    maxZoom : 9
+            maxZoom : 9,
+            extent:[-180, -90, 180, 90]  
         });
     this.map = new Map({
         //地图中的比例尺等控制要素

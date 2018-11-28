@@ -1,7 +1,6 @@
 <template>
-    <div>
+    <div :style="{height:geoHeight,width:'1360px'}"><!-- :style={height:geoHeight;width:} -->
         <div class='operationButtonDiv'>
-            <!-- <div id='location_button' :class="locationClassObject" @click='init'>location</div> -->
             <div id='location_button' :class="locationClassObject" @click='location_cilck'>location</div>
             <div id='heatMap_button'  :class="heatMapClassObject" @click='heatMap_cilck'>heatMap</div>
             <div id='route_button'  :class="routeClassObject" @click='route_cilck'>route</div>
@@ -12,17 +11,17 @@
                 <option value="Circle">circle</option>                                   
             </select>
         </div>
-        <div>
-            <div id='locationRoute_Map' :style="{display:'block',height:'500px',width:'1300px'}" >
+        <div id='mapDIV'>
+            <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%'}" >  <!-- ,height:'800px',width:'1300px' -->
                 <div id='legendDiv'>
                     <table id="legendBodyTable" style='border-collapse:separate;border-spacing:5;'>
                         <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
                     </table>
                 </div>
-                <div id="main" style='margin-left: 0px;margin-top: 0px; position: fixed;z-index:9;bottom:0;width:100%;'>
+                <div id="main" style='margin-left: 0px;margin-top: 0px; position: fixed;z-index:9;bottom:120px;width:100%;'>
                     <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
                         <ul class='slides'>
-                            <img-slider :imgS='imgslider' @imgId='imgClick' v-for='imgslider in test_Route'></img-slider>
+                            <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
                         </ul>
                     </div>
                 </div>
@@ -145,6 +144,9 @@ export default {
         routeColors:['#616f39','#88A2AA','#509aaf'],
         n :500,//曲线的粒度（曲线是由几个点组成）
         mousePointCoordinate: null,
+        geoHeight:500,
+        isCtrl:false,
+        onImgIds:[],  //被点亮的img的id
         locationClassObject:{
             location_Noclick: true,
             'location_click': true,
@@ -160,8 +162,6 @@ export default {
       }
     },
     mounted() {
-        var mthis = this
-        mthis.location_cilck()
     },
     methods:{
         initFunction () {
@@ -207,7 +207,7 @@ export default {
                 mthis.click_heatMap()
             }  
             //document.body.style.zoom = 1
-            setTimeout( function() {debugger; mthis.routeMap.map.updateSize();}, 2000);
+            //setTimeout( function() {debugger; mthis.routeMap.map.updateSize();}, 2000);
             
         },
         route_cilck(){
@@ -329,10 +329,43 @@ export default {
                     maxItems: 16
             });
         },
-        imgClick(imgId){
+        imgClick(imgItemOpera){
+            var mthis = this;
+            window.document.onkeydown = function(){
+                if (window.event.ctrlKey) {
+                    mthis.isCtrl = true;
+                }
+            };
+            window.document.onkeyup = function(){
+                if (!window.event.ctrlKey) {
+                    mthis.isCtrl = false;
+                }
+            };
+            debugger
+            if(imgItemOpera.onOroff == 'on'){
+                if(mthis.isCtrl){
+                    mthis.onImgClick(imgItemOpera.id, mthis.imgSelectedEntityPoints);
+                    mthis.onImgIds.push(imgItemOpera.id);
+                } else {
+                    mthis.onImgIds.forEach(function(item){
+                        mthis.offImgClick(item,mthis.imgSelectedEntityPoints)
+                    });
+                    mthis.onImgIds = [];
+                    mthis.onImgClick(imgItemOpera.id, mthis.imgSelectedEntityPoints)
+                    mthis.onImgIds.push(imgItemOpera.id);
+                }
+                
+            } else {
+                mthis.offImgClick(imgItemOpera.id,mthis.imgSelectedEntityPoints);
+                var index = mthis.onImgIds.indexOf(imgItemOpera.id);
+                if (index > -1) {
+                    mthis.onImgIds.splice(index, 1);
+                }
+            }
+        },
+/* box-shadow: rgb(204, 255, 255) 0px 0px 7px 3px; */
+        offImgClick(id,imgSelectedEntityPoints){  
             var mthis = this
-            var obj = imgId
-            var id = obj.id.split('_')[0]
             var entityPointstyle = new Style({
                 image : new CircleStyle({
                     radius : 3,
@@ -341,6 +374,76 @@ export default {
                     })
                 })
             });
+            var idImg = id + '_imgslider';
+            var element = document.getElementById(idImg);
+            element.children[0].style.borderColor = "rgba(204, 255, 255, 0)";
+            element.children[0].style.boxShadow = 'rgb(204, 255, 255) 0px 0px 0px 0px';
+            element.children[1].style.color = '#525252';
+            var idN = 'pointAnimation_' + id;
+            mthis.removeOverlays(idN);
+            var layer = mthis.routeMap.map.getLayers().getArray();
+            for(var i = 0; i < layer.length; i++){
+                if(layer[i].getProperties().id == 'entityPointsLayer'){
+                    var features = layer[i].getSource().getFeatures();//.getProperties().properties.belongId
+                    features.forEach(function(ItemF){
+                        if(ItemF.getProperties().properties.belongId == id){
+                            ItemF.setStyle(entityPointstyle);
+                            mthis.deleteArrItem(imgSelectedEntityPoints,ItemF);
+                        }
+                    });
+                    break;
+                }
+            } 
+        },
+        onImgClick(id, imgSelectedEntityPoints){
+            var mthis = this;
+            var entityPoints = mthis.getLayerById("entityPointsLayer").getSource().getFeatures();
+            var returnId = [];
+            var idImg = id + '_imgslider';
+            var element = document.getElementById(idImg);
+            element.children[0].style.borderColor = 'rgb(204, 255, 255)';debugger
+            element.children[0].style.boxShadow = 'rgb(204, 255, 255) 0px 0px 7px 3px';
+            element.children[1].style.color = 'rgb(204, 255, 255)';
+            if(mthis.frameSelectedEntityPoints.length == 0){  //判断是否有过拉框选择
+                entityPoints.forEach(function(item) {
+                    if (item.getProperties().properties.belongId == id) {
+                        mthis.pointAnimation(item);
+                        returnId.push(item.getProperties().properties.name);
+                        imgSelectedEntityPoints.push(item);
+                    }
+                });
+                console.log(returnId);
+            } else {
+                entityPoints.forEach(function(item) {
+                    if (item.getProperties().properties.belongId == id) {  //判断实体点的id时候为我们需要点亮的点的id
+                        if(mthis.isPointInPointsArr(item,mthis.frameSelectedEntityPoints)){  //判断点是否在拉框选择的范围内
+                            mthis.setpointStyle(item,mthis.frameSelectedColor);
+                            mthis.pointAnimation(item);
+                            imgSelectedEntityPoints.push(item);
+                            returnId.push(item.getProperties().properties.name);
+                        } else {
+                            mthis.pointAnimation(item);
+                        }
+                    } else {
+                        if(mthis.isPointInPointsArr(item,mthis.frameSelectedEntityPoints)){
+                            if(!mthis.isPointAnimation(item)){
+                                item.setStyle(entityPointstyle);
+                            }
+                        }
+                    }
+                });
+                console.log(returnId);
+            }
+        },
+
+
+        imgClick1(imgItemOpera){
+            var mthis = this
+            debugger
+
+            var obj = imgId
+            var id = obj.id.split('_')[0]
+            
             if(obj.children[0].style.borderColor == "rgba(204, 255, 255, 0)"){  //点击关闭
                 var idN = 'pointAnimation_' + id;
                 mthis.removeOverlays(idN);
@@ -352,7 +455,7 @@ export default {
                         features.forEach(function(ItemF){
                             if(ItemF.getProperties().properties.belongId == id){
                                 ItemF.setStyle(entityPointstyle);
-                                deleteArrItem(this.imgSelectedEntityPoints,ItemF);
+                                mthis.deleteArrItem(mthis.imgSelectedEntityPoints,ItemF);
                             }
                         });
                         break;
@@ -361,6 +464,11 @@ export default {
             } else{  //点击开启
                 var entityPoints = mthis.getLayerById("entityPointsLayer").getSource().getFeatures();
                 var returnId = [];
+                /* if(mthis.isCtrl){
+                    console.log('yes')
+                } else {
+                    console.log('no')
+                } */
                 if(mthis.frameSelectedEntityPoints.length == 0){  //判断是否有过拉框选择
                     entityPoints.forEach(function(item) {
                         if (item.getProperties().properties.belongId == id) {
@@ -392,6 +500,12 @@ export default {
                     console.log(returnId);
                 }
                 
+            }
+        },
+        deleteArrItem(arr,item){
+            var index = arr.indexOf(item);
+            if(index > -1){
+                arr.splice(index, 1);
             }
         },
         isPointAnimation(point){
@@ -919,6 +1033,12 @@ export default {
                     }
                 },
                 deep:true//对象内部的属性监听，也叫深度监听
+        },
+        geoHeight:function(){
+            this.$nextTick(function(){
+                var mthis = this
+                mthis.location_cilck()
+            });
         }
 
     },
