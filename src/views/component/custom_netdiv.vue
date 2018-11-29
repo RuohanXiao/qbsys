@@ -110,6 +110,7 @@
   import axios from 'axios'
   import mock from '../../mock/index.js'
   import modalChart from './custom_modal.vue'
+  // import modalChart from './custom_modal_vue.vue'
   import util from '../../util/tools.js'
   mock.test = 1
   /* eslint-disable */

@@ -542,6 +542,7 @@
   // import timeDiv from './component/custom_timediv'
   import topMenu from "./component/custom_topmenu";
   import netChartDiv from "./component/custom_netdiv";
+  // import timeChartDiv from "./component/custom_timediv_vue";
   import timeChartDiv from "./component/custom_timediv";
   import eventChartDiv from "./component/custom_eventdiv";
   import navDiv from "./component/custom_nav";
@@ -1036,6 +1037,7 @@
     computed: {},
     watch: {
       split1: function() {
+        console.log(this.split1)
         this.splitWidth = document.documentElement.clientWidth * this.split1 - 20 + 'px'
       },
       netpxdiv: function() {
