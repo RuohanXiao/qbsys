@@ -172,7 +172,7 @@
           //     mthis.netchart.addData(response.body.data[0])
           //   })
           // }
-           mthis.$http.get('http://10.60.1.141:5001/neighbor-datas/?ClassName=knowledge&&nodeId='+mthis.selectionId[0].id).then(response => {
+           mthis.$http.post('http://10.60.1.140:5001/neighbor-datas',{"ClassName":"knowledge","nodeIds":mthis.selectionId[0].id},{"emulateJSON":true}).then(response => {
               console.log(response.body.data[0])
               mthis.netchart.addData(response.body.data[0])
             })
@@ -244,7 +244,7 @@
       // 显示路径
       showPathKnowledge() {
         // (this.selectionId.length === 1) ? (this.pathHoverFlag = true) : ((this.selectionId.length > 0) ? (this.$Message.error('请选择单一节点进行路径显示')) : (this.$Message.error('请选择一个节点进行路径显示')))
-        console.log(this.netchart)
+        this.netchart.selection(["911716",'1016826'])
       },
       showPathEvent() {
         (this.selectionId.length === 1) ? (this.pathHoverFlag = true) : ((this.selectionId.length > 0) ? (this.$Message.error('请选择单一节点进行路径显示')) : (this.$Message.error('请选择一个节点进行路径显示')))
@@ -292,18 +292,22 @@
         //     document.getElementById('c2img').src = canvas.toDataURL('image/png');
         // };
         // console.log(this.netchart)
-        this.netchart.exportData('png', {
-            mime: "image/png",
-            extension: "png",
-            image: !0,
-            transparent: !0
-          }, {
-            dpi: 1050,
-            unit: "px",
-            width: 100,
-            height: 200,
-            scale: 1
-          }, true)
+        this.netchart.exportAsString('png',(res)=>{
+          console.log(res)
+        })
+        // this.netchart.exportData('png', {
+        //     mime: "image/png",
+        //     extension: "png",
+        //     image: !0,
+        //     transparent: !0
+        //   }, {
+        //     dpi: 1050,
+        //     unit: "px",
+        //     width: 100,
+        //     height: 200,
+        //     scale: 1
+        //   }, true)
+
         // export('png', {
         //     mime: "image/png",
         //     extension: "png",
@@ -460,7 +464,9 @@
         // Canvas2Image.saveAsImage(canvasObj, width, height, type, fileName)
       },
       //保存工作集
-      save() {},
+      save() {
+        this.netchart.selection(["911716",'1016826'])
+      },
       //添加节点
       add() {
         this.eventData = [
@@ -612,6 +618,8 @@
 
       },
       reloadNetData (data) {
+        console.log('data--------')
+        console.log(data)
         let dataarr = []
         dataarr.push(data)
         this.netchart.replaceData({"nodes":dataarr,"links":[]})
@@ -687,6 +695,7 @@
           //   rowSpacing: 100 // vertical spacing between node rows in the hierarchy layout
           // },
           style: {
+            // NetChart.settings.style.dragSelection 通过该属性可以设置框选颜色和背景等属性
             nodeLabel: {
               // 节点名称边框
               backgroundStyle: {
@@ -889,8 +898,6 @@
     },
     watch: {
       netData: function() {
-        // this.netchart.data = this.netData
-        // this.netchart.reloadData()
         this.reloadNetData(this.netData)
       }
     },
@@ -907,18 +914,19 @@
       //   }
       // });
       
-      mthis.$http.post('http://10.60.1.141:5000/neighbor-datas/',{'type': [],'nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
-        // console.log(response.data);
-        mthis.initCharts();
-        mthis.netchart.addData(response.data.data[0]);
-        for (let i = 0;i<response.data.data[0].nodes.length;i++){
-          mthis.netchart.lockNode(response.data.data[0].nodes[i].id);
-        }
-      }, response => {
-          console.log("error");
-          this.$Message.error('getNodeData失败,请查看日志或稍后重试！')
+      // mthis.$http.post('http://10.60.1.141:5000/neighbor-datas/',{'type': [],'nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
+      // mthis.$http.post('http://10.60.1.140:5001/neighbor-datas/',{'ClassName': '','nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
+      //   // console.log(response.data);
+      //   mthis.initCharts();
+      //   mthis.netchart.addData(response.data.data[0]);
+      //   for (let i = 0;i<response.data.data[0].nodes.length;i++){
+      //     mthis.netchart.lockNode(response.data.data[0].nodes[i].id);
+      //   }
+      // }, response => {
+      //     console.log("error");
+      //     this.$Message.error('getNodeData失败,请查看日志或稍后重试！')
 
-      });
+      // });
       // window.onresize = function() {
       //   this.netheight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
       //   this.netheightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";

@@ -321,7 +321,7 @@
   .ivu-tabs-bar {
     border-bottom: 1px solid rgba(51, 255, 255, 0.2) !important;
   }
-  .hoverScroll :hover {
+  .hoverScroll:hover {
     overflow-y: scroll;
   }
   .p-collapse-modal {
@@ -495,7 +495,7 @@
   <div class="layout" :style="{width: '100vw',height: '100vh', background:'black'}">
     <Layout :style="{width: '98vw',height: '100vh'}">
       <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
-        <top-menu />
+        <top-menu @initNode='initNode'/>
       </Header>
       <Content :style="{marginTop:'64px', width: '100vw'}" id="content">
         <div class="rightNav" :style="{height:contentHeight,display:'flex'}">
@@ -808,6 +808,11 @@
       topMenu
     },
     methods: {
+      initNode(opt) {
+        console.log('opt---------')
+        console.log(opt)
+        this.netData = opt.nodes[0]
+      },
       changenetpx () {
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (this.flag) {
@@ -829,9 +834,6 @@
       //     this.netpx = useHeight * 0.8 - 55 + "px";
       //   }
       // },
-      initNode(opt) {
-        this.netData = opt.nodes[0]
-      },
       // netdiv 回传选中节点参数
       selectNodes(opt) {
         var mthis = this

@@ -449,6 +449,27 @@
   }
 </script>
 <style>
+/* 滚动条样式 */
+   ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+   ::-webkit-scrollbar-track,
+   ::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 5px solid transparent;
+  }
+   ::-webkit-scrollbar-track {
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2) inset;
+  }
+   ::-webkit-scrollbar-thumb {
+    min-height: 20px;
+    background-clip: content-box;
+    box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.2) inset;
+  }
+   ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
  .ivu-collapse{
     border-radius:0 !important;
     background-color: rgba(51, 255, 255, 0.1) !important;
@@ -730,7 +751,7 @@
   
   
   
-  /* .personCard :hover{
+  /* .personCard:hover{
   
         transition:All 0.4s ease-in-out;
   
@@ -834,7 +855,7 @@
   
   
   
-  .buttonModal :hover {
+  .buttonModal:hover {
   
     transition: All 0.4s ease-in-out;
   

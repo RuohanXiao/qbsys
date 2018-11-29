@@ -22,7 +22,7 @@
             <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfo" filterable remote placeholder='' :remote-method="searchInfo" :loading="loading1" :label-in-value="true" @on-change="v=>{setOption(v,'type')}">
               <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
             </Select> -->
-          <search-div @initNodes="initNode" />
+          <search-div @initNode="initNode" />
           </Col>
         </Row>
       </Header>

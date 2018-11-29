@@ -687,7 +687,7 @@
   
   
   
-  /* .personCard :hover{
+  /* .personCard:hover{
   
         transition:All 0.4s ease-in-out;
   
@@ -791,7 +791,7 @@
   
   
   
-  .buttonModal :hover {
+  .buttonModal:hover {
   
     transition: All 0.4s ease-in-out;
   

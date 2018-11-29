@@ -332,7 +332,7 @@
     overflow-Y: hidden;
     cursor: pointer;
   }
-  /* .personCard :hover{
+  /* .personCard:hover{
       transition:All 0.4s ease-in-out;
       -webkit-transition:All 0.4s ease-in-out;
       -moz-transition:All 0.4s ease-in-out;
@@ -376,7 +376,7 @@
     height: 100%;
     width: 80%;
   }
-  .buttonModal :hover {
+  .buttonModal:hover {
     transition:All 0.4s ease-in-out;
     -webkit-transition:All 0.4s ease-in-out;
     -moz-transition:All 0.4s ease-in-out;
