@@ -3,12 +3,12 @@ import TileWMS from 'ol/source/TileWMS'
 import Projection from 'ol/proj/Projection'
 import View from 'ol/View'
 import Map from 'ol/Map'
-import {defaults as defaultControls, ScaleLine} from 'ol/control.js'
+import {defaults as defaultControls, ScaleLine, FullScreen} from 'ol/control.js'
 
 
 var map = function(target){
 	var bounds = [75, 6,140, 55];//范围
-    var scaleLineControl = new ScaleLine();
+    //var scaleLineControl = new ScaleLine();
 	//中国各省底图（面）
     var wmsTileLayer = new TileLayer({
 	    visible: true,
@@ -40,7 +40,7 @@ var map = function(target){
     this.map = new Map({
         //地图中的比例尺等控制要素
 		controls: defaultControls().extend([
-			scaleLineControl
+			new ScaleLine(),new FullScreen()
 		  ]),
         //设置显示的容器
         target: target,
