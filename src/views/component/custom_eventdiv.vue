@@ -113,7 +113,7 @@
           </Tab-pane>
         </Tabs>
       </div>
-      <modal-chart-detail :flag="modal01" :edata="eventData"></modal-chart-detail>
+      <modal-chart-detail :flag="modal_detail" :detail="detail_data"></modal-chart-detail>
     </div>
     </Col>
   </div>
@@ -139,10 +139,11 @@
           '#33cccc',
           '#3399ff'
         ],
+        detail_data: null,
         show: [],
         eventheighttdiv: 0,
         eventheight: 0,
-        modal01: false,
+        modal_detail: false,
         closable: true,
         singlePerson: false,
         infos: [{

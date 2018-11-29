@@ -16,7 +16,7 @@
       <img src="../../dist/assets/images/content.png" style="display: inline-block; vertical-align: middle;width:33px" /></router-link>
     </Col>
     <Col span="4" offset="17">
-    <search-div @initNodes="initNode" />
+    <search-div @initNode="initNode" />
     </Col>
   </Row> -->
   <Row type="flex" justify="space-between" :style="{flexFlow:'row nowarp',marginTop:'7px'}"  class="code-row-bg" align="left" >
@@ -36,15 +36,28 @@
     </div>
     </Col>
     <Col span="4" align="right">
-    <search-div @initNodes="initNode" />
+    <search-div @initNode="initNode" />
     </Col>
   </Row>
 </template>
 <script>
 import searchDiv from "./custom_searchdiv";
 export default {
+    name: "App",
+    data() {
+      return {
+       netData: []
+      }
+    },
   components: {
     searchDiv
+  },
+  methods:{
+    initNode(opt) {
+      // this.netData = opt.nodes[0]
+      console.log(opt)
+      this.$emit('initNode',opt);
+    }
   }
 }
 </script>

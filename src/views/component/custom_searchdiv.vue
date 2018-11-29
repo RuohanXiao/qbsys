@@ -12,7 +12,17 @@
       <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}">
         <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfo" filterable
       remote placeholder='' :remote-method="searchInfo" :loading="loading1" :label-in-value="true" @on-change="v=>{setOption(v,'type')}">
-              <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
+              <!-- <OptionGroup label="文章检索">
+                <Option :value='搜索:+{{inputInfo}}' :key="index">搜索关于{{inputInfo}}的相关文档</Option>
+              </OptionGroup> -->
+              <OptionGroup :label="opt.title" v-for="(opt,ind) in options1">
+                <!-- <Option v-for="(option, index) in opt.data" :value="option.value" :key="index">
+                  <img :src="option.src" />
+                  <span style="float:right">{{option.label}}</span>
+                  {{option.label}} {{option.label}}
+                </Option> -->
+                <Option v-for="(option, index) in opt.data" :value="option.value" :key="index">{{option.label}}</Option>
+              </OptionGroup>
             </Select>
       </div>
     </div>
@@ -31,9 +41,17 @@
     methods: {
       setOption (a,b) {
         var mthis = this;
-        mthis.$http.post('http://10.60.1.141:5001/node-datas/',{'nodeIds': a.value},{"emulateJSON":true}).then(response => {
-          mthis.$emit('initNodes',response.body.data[0]);
-        })
+        console.log('---------')
+        console.log(a)
+        if(a.value.split('搜索:').length>1) {
+          alert(a.value.split('搜索:')[1])
+        } else {
+          // mthis.$http.post('http://10.60.1.141:5001/node-datas/',{'nodeIds': a.value},{"emulateJSON":true}).then(response => {
+            mthis.$http.post('http://10.60.1.140:5001/node-datas/',{'nodeIds': a.value},{"emulateJSON":true}).then(response => {
+            console.log(response)
+            mthis.$emit('initNode',response.body.data[0]);
+          })
+        }
       },
       searchInfo(query) {
       var mthis = this;
@@ -45,9 +63,21 @@
           .then(response => {
             console.log(response)
             let option = []
-            for(let i = 0 ;i<response.body.length;i++) {
-              option.push({"label":response.body[i].Entity_name,"value":response.body[i]._id})
+            let optionWord = {}
+            let optionWordArr = []
+            let optionList = {}
+            let optionListArr = []
+            optionWordArr.push({"label":'搜索关于'+query+'的相关文档',"value":'搜索:'+query,"img":''})
+            for(let i = 0 ;i<response.body.data.length;i++) {
+              optionListArr.push({"label":response.body.data[i].name,"value":response.body.data[i].id,"img":response.body.data[i].img})
             }
+            optionWord.title='文章检索'
+            optionWord.data=optionWordArr
+            optionList.title='实体检索'
+            optionList.data=optionListArr
+            option.push(optionList)
+            option.push(optionWord)
+            console.log(option)
             mthis.options1 = option;
             mthis.loading1 = false;
           });

@@ -278,7 +278,6 @@
 <script>
   import mock from "../../mock/index.js";
   
-  import searchDiv from "./custom_searchdiv";
   
   const axios = require('axios')
   
@@ -329,7 +328,7 @@
   
     },
   
-    props: ['flag', 'edata'],
+    props: ['flag', 'detail'],
   
     mounted() {
   
@@ -338,9 +337,6 @@
       this.buttonDivHeight = 69 + "px";
     },
     components: {
-  
-      searchDiv
-  
     },
   
     methods: {
@@ -687,7 +683,7 @@
   
   
   
-  /* .personCard :hover{
+  /* .personCard:hover{
   
         transition:All 0.4s ease-in-out;
   
