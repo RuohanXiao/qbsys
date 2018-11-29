@@ -1,6 +1,6 @@
 <template>
     <div :style="{height:geoHeight,width:geoWidth}" class='geoDiv'><!-- :style={height:geoHeight;width:} -->
-        <div class='operationButtonDiv' style='position: absolute;z-index: 9;padding-left: 50px;width:100%;padding-right: 50px;backgroundColor:rgba(51,255,255,0.1)'>
+        <div class='operationButtonDiv' style='position: absolute;z-index: 9;padding-left: 50px;width:100%;padding-right: 50px;backgroundColor:rgba(0,0,0,0.3)'>
             <div id='location_button' class="location_Noclick"  @click='location_cilck' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
             <div id='heatMap_button'  class="heatMap_Noclick" @click='heatMap_cilck' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
             <div id='route_button'  class="route_Noclick" @click='route_cilck' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
@@ -18,7 +18,7 @@
                         <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
                     </table>
                 </div>
-                <div id="main" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(geoHeight)  + 'px'}">
+                <div id="main" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(geoHeight) -30  + 'px'}">
                     <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
                         <ul class='slides'>
                             <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
@@ -136,6 +136,15 @@
     border-radius: 4px;
     padding: 2px;
     z-index: 99;
+}
+.ol-scale-line {
+    background: rgba(0,60,136,.3);
+    border-radius: 4px;
+    bottom: 8px;
+    left: 8px;
+    padding: 2px;
+    position: absolute;
+    bottom: 500px;
 }
 
 </style>
@@ -437,7 +446,7 @@ export default {
             var element = document.getElementById(idImg);
             element.children[0].style.borderColor = "rgba(204, 255, 255, 0)";
             element.children[0].style.boxShadow = '';
-            element.children[1].style.color = '#525252';
+            element.children[1].style.color = 'rgba(24,255,255,0.5)';
             var idN = 'pointAnimation_' + id;
             mthis.removeOverlays(idN);
             var layer = mthis.routeMap.map.getLayers().getArray();
@@ -468,8 +477,8 @@ export default {
             var returnId = [];
             var idImg = id + '_imgslider';
             var element = document.getElementById(idImg);
-            element.children[0].style.borderColor = 'rgb(204, 255, 255)';debugger
-            element.children[0].style.boxShadow = 'rgb(204, 255, 255) 0px 0px 7px 3px';
+            element.children[0].style.borderColor = 'rgb(204, 255, 255)';
+            element.children[0].style.boxShadow = ' #3ff 0px 0px 7px 3px';
             element.children[1].style.color = 'rgb(204, 255, 255)';
             if(mthis.frameSelectedEntityPoints.length == 0){  //判断是否有过拉框选择
                 entityPoints.forEach(function(item) {
