@@ -619,11 +619,12 @@
 
       },
       reloadNetData (data) {
-        console.log('data--------')
+        var mthis = this
+        console.log(mthis.netchart)
         console.log(data)
         let dataarr = []
         dataarr.push(data)
-        this.netchart.replaceData({"nodes":dataarr,"links":[]})
+        mthis.netchart.replaceData({"nodes":dataarr,"links":[]})
       },
       back() {
         let netChartLog = sessionStorage.getItem('netChartLog');
@@ -656,7 +657,7 @@
       },
       initCharts() {
         var mthis = this;
-        (this.netchart = new NetChart({
+        (mthis.netchart = new NetChart({
           navigation: {
             // 初始化展示层级
             focusNodeExpansionRadius: 1,
@@ -906,6 +907,7 @@
     mounted() {
       sessionStorage.setItem('netChartLog', JSON.stringify({data:[]}));
       var mthis = this
+      mthis.initCharts();
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();
       //   mthis.netchart.addData(res.data.data[0]);
