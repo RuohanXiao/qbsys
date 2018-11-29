@@ -106,7 +106,7 @@ import TileWMS from 'ol/source/TileWMS'
 import Overlay from 'ol/Overlay'
 import Collection from 'ol/Collection'
 import Stroke from 'ol/style/Stroke'
-import Draw from 'ol/interaction/Draw'
+import Draw, {createBox} from 'ol/interaction/Draw'
 import EqualTo from 'ol/format/filter/EqualTo'
 import Or from 'ol/format/filter/Or'
 import WFS from 'ol/format/WFS'
@@ -602,32 +602,20 @@ export default {
             map.addLayer(polygonLayer);
             var opt = object.target;
             var typeValue = object.target.value;
-            var geometryFunction, maxPoints;
+            var geometryFunction;
             if (opt.value != "None") {
                 if (opt.value == "rectangle") {
-                    typeValue = 'LineString'; // 设置绘制类型为LineString
-                    maxPoints = 2; // 设置最大点数为2
-                    geometryFunction = function(coordinates, geometry) {
-                        if (!geometry) {
-                            geometry = new Polygon(null); // 多边形
-                        }
-                        var start = coordinates[0];
-                        var end = coordinates[1];
-                        geometry.setCoordinates([ [ start, [ start[0], end[1] ], end,
-                                [ end[0], start[1] ], start ]
-
-                        ]);
-                        return geometry;
-                    };
+                    typeValue = 'Circle'; // 设置绘制类型为LineString
+                    geometryFunction = createBox();
                 }
                 // console.log(typeValue);
                 // 实例化图形绘制控件对象并添加到地图容器中
                 mthis.draw = new Draw({
                     source: Vecsource,
                     type: typeValue,                                // 几何图形类型
-                    geometryFunction: geometryFunction,             // 几何信息变更时的回调函数
-                    maxPoints: maxPoints                            //最大点数
+                    geometryFunction: geometryFunction              // 几何信息变更时的回调函数
                 });
+                debugger
                 mthis.draw_polygon(mthis.draw);
                 map.addInteraction(mthis.draw);
             } 
