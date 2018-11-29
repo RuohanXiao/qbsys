@@ -82,6 +82,7 @@
     name: "App",
     data() {
       return {
+        // routername: this.$route.params.routername,
         eventheightdiv: 0,
         eventheight:0,
         changHeightCount: 1,
@@ -359,6 +360,7 @@
     },
     mounted() {
       var mthis = this
+      // alert(this.routername)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       window.onresize = function() {
         mthis.contentHeight = document.documentElement.clientHeight - 65 + "px";

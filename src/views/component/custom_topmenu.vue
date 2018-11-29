@@ -55,7 +55,6 @@ export default {
   methods:{
     initNode(opt) {
       // this.netData = opt.nodes[0]
-      console.log(opt)
       this.$emit('initNode',opt);
     }
   }
