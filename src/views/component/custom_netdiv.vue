@@ -173,10 +173,16 @@
           //     mthis.netchart.addData(response.body.data[0])
           //   })
           // }
-           mthis.$http.post('http://10.60.1.140:5001/neighbor-datas',{"ClassName":"knowledge","nodeIds":mthis.selectionId[0].id},{"emulateJSON":true}).then(response => {
-              console.log(response.body.data[0])
-              mthis.netchart.addData(response.body.data[0])
-            })
+          let arr = []
+          for(let i = 0;i<mthis.selectionId.length;i++)
+          {
+            arr.push(mthis.selectionId[i].id)
+          }
+          console.log(arr)
+          mthis.$http.post('http://10.60.1.140:5001/neighbor-datas/',{'ClassName': 'knowledge','nodeIds': arr}).then(response => {
+            console.log(response.body.data[0])
+            mthis.netchart.addData(response.body.data[0])
+          })
           //访问数据库，拓展新数据
           // mock.get("/getNodeDataNew").then(function(res) {
           //   let ids = [];
@@ -251,6 +257,7 @@
         (this.selectionId.length === 1) ? (this.pathHoverFlag = true) : ((this.selectionId.length > 0) ? (this.$Message.error('请选择单一节点进行路径显示')) : (this.$Message.error('请选择一个节点进行路径显示')))
       },
       exportImg() {
+        console.log(this.netchart)
         // if (this.exportValue !== '') {
         //   this.netchart.export(this.exportValue, {
         //     mime: "image/png",
@@ -293,9 +300,13 @@
         //     document.getElementById('c2img').src = canvas.toDataURL('image/png');
         // };
         // console.log(this.netchart)
-        this.netchart.exportAsString('png',(res)=>{
-          console.log(res)
-        })
+
+
+        // this.netchart.exportAsString('png',(res)=>{
+        //   console.log(res)
+        // })
+
+        
         // this.netchart.exportData('png', {
         //     mime: "image/png",
         //     extension: "png",
@@ -358,33 +369,50 @@
       },
       //星型布局
       star() {
-        if (this.selectionId.length > 0) {
-          this.changeFlag();
+        var mthis = this;
+        if (mthis.selectionId.length > 27) {
+          mthis.changeFlag();
+          for (let index = 1; index < mthis.selectionId.length; index++) {
+            mthis.netchart.unlockNode(mthis.selectionId[index].id);
+            let circleNum = Math.floor(Math.log(index) / Math.log(3))
+            let avd = 360 / Math.pow(3, circleNum);
+            console.log(avd)
+            // let ahd = avd * Math.PI / 180;
+            let ahd = avd * Math.PI / 360;
+            console.log(circleNum)
+            let radius = 200 * circleNum + 200
+              //解锁位置
+              // this.selectionId[index]["x"] = 
+              //   Math.sin(ahd * index) * radius;
+              // this.selectionId[index]["y"] = 
+              //   Math.cos(ahd * index) * radius;
+              mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
+                Math.sin(ahd * index) * radius;
+              mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] +
+                Math.cos(ahd * index) * radius;
+              // 锁定位置
+              mthis.netchart.lockNode(mthis.selectionId[index].id);
+            }
+        } else if (mthis.selectionId.length > 0 && mthis.selectionId.length <27) {
           //半径
-          let radius = this.selectionId.length > 7 ? 200 : 100;
+          let radius = mthis.selectionId.length > 7 ? 200 : 100;
           //每一个BOX对应的角度;
-          let avd = 360 / this.selectionId.length;
+          let avd = 360 / mthis.selectionId.length;
           //每一个BOX对应的弧度;
           let ahd = avd * Math.PI / 180;
-          // let basePoint = this.selectionId[0];
-          var mthis = this;
-          for (let index = 0; index < this.selectionId.length; index++) {
+          for (let index = 0; index < mthis.selectionId.length; index++) {
             //解锁位置
-            mthis.netchart.unlockNode(this.selectionId[index].id);
-            // this.selectionId[index]["x"] = 
-            //   Math.sin(ahd * index) * radius;
-            // this.selectionId[index]["y"] = 
-            //   Math.cos(ahd * index) * radius;
-            this.selectionId[index]["x"] = this.selectionId[0]["x"] +
+            mthis.netchart.unlockNode(mthis.selectionId[index].id);
+            mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
               Math.sin(ahd * index) * radius;
-            this.selectionId[index]["y"] = this.selectionId[0]["y"] - radius +
+            mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] - radius +
               Math.cos(ahd * index) * radius;
             // 锁定位置
-            mthis.netchart.lockNode(this.selectionId[index].id);
+            mthis.netchart.lockNode(mthis.selectionId[index].id);
           }
-          // mthis.netchart.addFocusNode(this.selectionId[0].id);
+          mthis.netchart.addFocusNode(mthis.selectionId[0].id);
         } else {
-          this.$Message.error('请选择节点进行矩形排列操作！')
+          mthis.$Message.error('请选择节点进行矩形排列操作！')
         }
       },
       // 层级布局
