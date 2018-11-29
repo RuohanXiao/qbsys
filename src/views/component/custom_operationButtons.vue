@@ -1,24 +1,24 @@
 <template>
     <div :style="{height:geoHeight,width:geoWidth}" class='geoDiv'><!-- :style={height:geoHeight;width:} -->
-        <div class='operationButtonDiv' style='position: absolute;z-index: 9;padding-left: 50px;width:100%;padding-right: 50px;'>
-            <div id='location_button' :class="locationClassObject" @click='location_cilck'>location</div>
-            <div id='heatMap_button'  :class="heatMapClassObject" @click='heatMap_cilck'>heatMap</div>
-            <div id='route_button'  :class="routeClassObject" @click='route_cilck'>route</div>
-            <select id="draw_type"  @change="changedrawType" style="float: right;">                                        
-                <option value="None">No-Draw</option>
-                <option value="Polygon">polygon</option>
-                <option value="rectangle">rectangle</option>
-                <option value="Circle">circle</option>                                   
-            </select>
+        <div class='operationButtonDiv' style='position: absolute;z-index: 9;padding-left: 50px;width:100%;padding-right: 50px;backgroundColor:rgba(0,0,0,0.3)'>
+            <div id='location_button' class="location_Noclick"  @click='location_cilck' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
+            <div id='heatMap_button'  class="heatMap_Noclick" @click='heatMap_cilck' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
+            <div id='route_button'  class="route_Noclick" @click='route_cilck' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
+            <div class='separateDiv'>|</div>
+            <div id='rectangle_select' value='rectangle'  class="rectangle_Noclick" @click='changedrawType' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
+            <div id='Circle_select' value='Circle' class="Circle_Noclick" @click='changedrawType' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
+            <div id='Polygon_select' value='Polygon' class="Polygon_Noclick" @click='changedrawType' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
+            <div class='separateDiv'>|</div>
+            <!-- <div id='delete_button' class="delete_click"></div> -->
         </div>
         <div id='mapDIV'>
-            <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%',backgroundColor:'black'}" >  <!-- ,height:'800px',width:'1300px' -->
+            <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
                 <div id='legendDiv'>
                     <table id="legendBodyTable" style='border-collapse:separate;border-spacing:5;'>
                         <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
                     </table>
                 </div>
-                <div id="main" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(geoHeight) - 80 + 'px'}">
+                <div id="main" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(geoHeight) -30  + 'px'}">
                     <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
                         <ul class='slides'>
                             <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
@@ -32,56 +32,119 @@
 </template>
 
 <style>
+.separateDiv{
+    margin: 8px 15px;
+    float: left;
+}
 .geoDiv{
     margin-left: 10px
 }
-.location_click{
+.Polygon_Noclick:hover{
+    background-image: url('../../dist/assets/images/geo/custom_HL.png');
+    opacity: 1;
+}
+.Polygon_click{
+    background-image: url('../../dist/assets/images/geo/custom_HL.png');
+    opacity: 1;
+}
+.Polygon_Noclick{
+    background-image: url('../../dist/assets/images/geo/custom_HL.png');
+    opacity: 0.4;
+}
+.Circle_Noclick:hover{
+    background-image: url('../../dist/assets/images/geo/circleSelection_HL.png');
+    opacity: 1;
+}
+.Circle_Noclick{
+    background-image: url('../../dist/assets/images/geo/circleSelection_HL.png');
+    opacity: 1;
+}
+.Circle_Noclick{
+    background-image: url('../../dist/assets/images/geo/circleSelection_HL.png');
+    opacity: 0.4;
+}
+.rectangle_Noclick:hover{
+    background-image: url('../../dist/assets/images/geo/boxSelection_HL.png');
+    opacity: 1;
+}
+.rectangle_Noclick{
+    background-image: url('../../dist/assets/images/geo/boxSelection_HL.png');
+    opacity: 1;
+}
+.rectangle_Noclick{
+    background-image: url('../../dist/assets/images/geo/boxSelection_HL.png');
+    opacity: 0.4;
+}
+.delete_click{
     margin: 3px;
     float: left;
     width:30px;
     height:30px;
-    background: #a9ca13;
+    background-size:cover;
+    background-image: url('../../dist/assets/images/geo/delete_HL.png');
+}
+.delete_Noclick{
+    margin: 3px;
+    float: left;
+    width:30px;
+    height:30px;
+    background-size:cover;
+    background-image: url('../../dist/assets/images/geo/delete_HL.png');
+}
+.location_Noclick:hover{
+    background-image: url('../../dist/assets/images/geo/location_HL.png');
+    opacity: 1;
+}
+.location_click{
+    background-image: url('../../dist/assets/images/geo/location_HL.png');
 }
 .location_Noclick{
-    margin: 3px;
-    float: left;
-    width:30px;
-    height:30px;
-    background: #064a4d;
+    background-image: url('../../dist/assets/images/geo/location_HL.png');
+    opacity: 0.4;
+}
+.heatMap_Noclick:hover{
+    background-image: url('../../dist/assets/images/geo/heatMap_HL.png');
+    opacity: 1;
 }
 .heatMap_click{
-    margin: 3px;
-    float: left;
-    width:30px;
-    height:30px;
-    background-color: #a9ca13;
+    background-image: url('../../dist/assets/images/geo/heatMap_HL.png');
 }
 .heatMap_Noclick{
-    margin: 3px;
-    float: left;
-    width:30px;
-    height:30px;
-    background-color: #064a4d;
+    background-image: url('../../dist/assets/images/geo/heatMap_HL.png');
+    opacity: 0.4;
+}
+.route_Noclick:hover{
+    background-image: url('../../dist/assets/images/geo/route_HL.png');
+    opacity: 1;
 }
 .route_click{
-    margin: 3px;
-    float: left;
-    width:30px;
-    height:30px;
-    background-color: #a9ca13;
+    background-image: url('../../dist/assets/images/geo/route_HL.png');
 }
 .route_Noclick{
-    margin: 3px;
-    float: left;
-    width:30px;
-    height:30px;
-    background-color: #064a4d;
+    background-image: url('../../dist/assets/images/geo/route_HL.png');
+    opacity: 0.4;
 }
 #legendDiv {
     position: absolute;
     z-index: 9999;
     top: 100%;
     left: 10%;
+}
+.ol-control {
+    position: absolute;
+    background-color: hsla(0,0%,100%,.4);
+    border-radius: 4px;
+    padding: 2px;
+    z-index: 99;
+}
+.ol-scale-line {
+    background: rgba(0,60,136,.3);
+    border-radius: 4px;
+    bottom: 8px;
+    left: 8px;
+    padding: 2px;
+    position: absolute;
+    bottom: 500px;
 }
 
 </style>
@@ -129,6 +192,7 @@ export default {
     data() {
       return {
         a:null,
+        mapDivbuttonIds : ['location_button','heatMap_button','route_button'],
         imgTopVules:'',
         test_Route:test_Route,
         test_HeatMap:test_HeatMap,
@@ -165,18 +229,15 @@ export default {
     mounted() {
     },
     methods:{
-        initFunction () {
+        /* initFunction () {
             var mthis = this
             mthis.location_cilck()
             mthis.setPointFeatures(test_Route)
             mthis.locationPoints()
-        },
+        }, */
         location_cilck(){
             var mthis = this
-            mthis.clickButtonOpenDiv('locationRoute_Map')
-            mthis.locationClassObject.location_Noclick = false
-            mthis.heatMapClassObject.heatMap_Noclick = true
-            mthis.routeClassObject.route_Noclick = true
+            mthis.clickButtonOpenDiv('location_button')
             mthis.legend = null
             if(mthis.routeMap == null){
                 mthis.routeMap = new map('locationRoute_Map')
@@ -199,11 +260,7 @@ export default {
         },
         heatMap_cilck(){
             var mthis = this
-            mthis.clickButtonOpenDiv('HeatMap_Map')
-            mthis.locationClassObject.location_Noclick = true
-            mthis.heatMapClassObject.heatMap_Noclick = false
-            mthis.routeClassObject.route_Noclick = true
-            mthis.IslocaltionClicked = false
+            mthis.clickButtonOpenDiv('heatMap_button')
             if(mthis.heatMap == null){
                 mthis.heatMap = new map('HeatMap_Map')
                 mthis.click_heatMap()
@@ -214,24 +271,33 @@ export default {
         },
         route_cilck(){
             var mthis = this
-            mthis.clickButtonOpenDiv('locationRoute_Map')
-            mthis.locationClassObject.location_Noclick = true
-            mthis.heatMapClassObject.heatMap_Noclick = true
-            mthis.routeClassObject.route_Noclick = false
+            mthis.clickButtonOpenDiv('route_button')
             if(mthis.legend == null){
                 mthis.click_route()
             }
             
         },
         clickButtonOpenDiv(id){
+            var mthis = this
+            mthis.mapDivbuttonIds.forEach(function(item){
+                var button = document.getElementById(item)
+                var bottonName = item.split('_')[0]
+                var classname = ''
+                if(item == id){
+                    classname = bottonName + '_click'
+                } else {
+                    classname = bottonName + '_Noclick'
+                }
+                button.className = classname
+            })
             var locationRoute_Map = document.getElementById('locationRoute_Map')
             var HeatMap_Map = document.getElementById('HeatMap_Map')
-            if(id == 'locationRoute_Map'){
-                locationRoute_Map.style.display = 'block'
-                HeatMap_Map.style.display = 'none'
-            } else {
+            if(id == 'heatMap_button'){
                 locationRoute_Map.style.display = 'none'
                 HeatMap_Map.style.display = 'block'
+            } else {
+                locationRoute_Map.style.display = 'block'
+                HeatMap_Map.style.display = 'none'
             }
         },
         setPointFeatures(pointsData){
@@ -380,7 +446,7 @@ export default {
             var element = document.getElementById(idImg);
             element.children[0].style.borderColor = "rgba(204, 255, 255, 0)";
             element.children[0].style.boxShadow = '';
-            element.children[1].style.color = '#525252';
+            element.children[1].style.color = 'rgba(24,255,255,0.5)';
             var idN = 'pointAnimation_' + id;
             mthis.removeOverlays(idN);
             var layer = mthis.routeMap.map.getLayers().getArray();
@@ -399,12 +465,20 @@ export default {
         },
         onImgClick(id, imgSelectedEntityPoints){
             var mthis = this;
+            var entityPointstyle = new Style({
+                image : new CircleStyle({
+                    radius : 3,
+                    fill : new Fill({
+                        color : mthis.entityPointsColor
+                    })
+                })
+            });
             var entityPoints = mthis.getLayerById("entityPointsLayer").getSource().getFeatures();
             var returnId = [];
             var idImg = id + '_imgslider';
             var element = document.getElementById(idImg);
-            element.children[0].style.borderColor = 'rgb(204, 255, 255)';debugger
-            element.children[0].style.boxShadow = 'rgb(204, 255, 255) 0px 0px 7px 3px';
+            element.children[0].style.borderColor = 'rgb(204, 255, 255)';
+            element.children[0].style.boxShadow = ' #3ff 0px 0px 7px 3px';
             element.children[1].style.color = 'rgb(204, 255, 255)';
             if(mthis.frameSelectedEntityPoints.length == 0){  //判断是否有过拉框选择
                 entityPoints.forEach(function(item) {
@@ -601,10 +675,10 @@ export default {
             });
             map.addLayer(polygonLayer);
             var opt = object.target;
-            var typeValue = object.target.value;
+            var typeValue = opt.id.split('_')[0];
             var geometryFunction;
-            if (opt.value != "None") {
-                if (opt.value == "rectangle") {
+            if (typeValue != "None") {
+                if (typeValue == "rectangle") {
                     typeValue = 'Circle'; // 设置绘制类型为LineString
                     geometryFunction = createBox();
                 }
@@ -1027,7 +1101,7 @@ export default {
             //mthis.imgTopVules = parseInt(geoHeight) - 80 + 'px';
             this.$nextTick(function(){
                 var mthis = this
-                mthis.location_cilck()
+                mthis.location_cilck()  //初始化时开启location
             });
         },
         geoWidth:function(){
