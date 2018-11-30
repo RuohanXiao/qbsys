@@ -1,15 +1,16 @@
 <template>
     <div :style="{height:geoHeight,width:geoWidth}" class='geoDiv'><!-- :style={height:geoHeight;width:} -->
-        <div class='operationButtonDiv' style='position: absolute;z-index: 9;padding-left: 50px;width:100%;padding-right: 50px;backgroundColor:rgba(0,0,0,0.3)'>
-            <div id='location_button' class="location_Noclick"  @click='location_cilck' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
-            <div id='heatMap_button'  class="heatMap_Noclick" @click='heatMap_cilck' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
-            <div id='route_button'  class="route_Noclick" @click='route_cilck' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
-            <div class='separateDiv'>|</div>
-            <div id='rectangle_select' value='rectangle'  class="rectangle_Noclick" @click='changedrawType' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
-            <div id='Circle_select' value='Circle' class="Circle_Noclick" @click='changedrawType' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
-            <div id='Polygon_select' value='Polygon' class="Polygon_Noclick" @click='changedrawType' style='margin: 3px;float: left;width:30px;height:30px;background-size:cover;'></div>
-            <div class='separateDiv'>|</div>
-            <!-- <div id='delete_button' class="delete_click"></div> -->
+        <div class='operationButtonDiv'>
+            <div id='location_button' class="location_Noclick"  @click='location_cilck' ></div>
+            <div id='heatMap_button'  class="heatMap_Noclick" @click='heatMap_cilck'></div>
+            <div id='route_button'  class="route_Noclick" @click='route_cilck'></div>
+            <div class='separateDiv'></div>
+            <div id='rectangle_select' value='rectangle'  class="rectangle_Noclick" @click='changedrawType' ></div>
+            <div id='Circle_select' value='Circle' class="Circle_Noclick" @click='changedrawType'></div>
+            <div id='Polygon_select' value='Polygon' class="Polygon_Noclick" @click='changedrawType'></div>
+            <div class='separateDiv'></div>
+<!--             <div id='delete_opera' class="delete_Noclick" @click='deletSliderImg'></div>
+            <div id='invertSelection_opera' class="invertSelection_Noclick" @click='invertSelectionEntity'></div> -->
         </div>
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
@@ -32,9 +33,29 @@
 </template>
 
 <style>
-.separateDiv{
-    margin: 8px 15px;
+.operationButtonDiv{
+    position: absolute;
+    z-index: 9;
+    padding-left: 50px;
+    width:100%;
+    padding-right: 50px;
+    background-color:rgba(0,0,0,0.3);
+}
+.operationButtonDiv div{
+    margin: 3px;
     float: left;
+    width:30px;;
+
+
+    height:30px;
+    background-size:cover;
+}
+.separateDiv{
+    float: left;
+    background-image: url('../../dist/assets/images/geo/separateLine.png');
+    width: 30px;
+    height: 30px;
+    margin-top: 2px;
 }
 .geoDiv{
     margin-left: 10px
@@ -75,22 +96,31 @@
     background-image: url('../../dist/assets/images/geo/boxSelection_HL.png');
     opacity: 0.4;
 }
-.delete_click{
-    margin: 3px;
-    float: left;
-    width:30px;
-    height:30px;
-    background-size:cover;
+.invertSelection_Noclick:hover{
+    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
+    opacity: 1;
+}
+.invertSelection_Noclick{
+    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
+    opacity: 0.4;
+}
+.invertSelection_click{
+    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
+    opacity: 1;
+}
+.delete_Noclick:hover{
     background-image: url('../../dist/assets/images/geo/delete_HL.png');
+    opacity: 1;
+}
+.delete_click{
+    background-image: url('../../dist/assets/images/geo/delete_HL.png');
+    opacity: 1;
 }
 .delete_Noclick{
-    margin: 3px;
-    float: left;
-    width:30px;
-    height:30px;
-    background-size:cover;
     background-image: url('../../dist/assets/images/geo/delete_HL.png');
+    opacity: 0.4;
 }
+
 .location_Noclick:hover{
     background-image: url('../../dist/assets/images/geo/location_HL.png');
     opacity: 1;

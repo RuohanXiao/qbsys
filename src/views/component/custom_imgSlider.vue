@@ -9,11 +9,6 @@
 </template>
 <style>
 .imgStyle{
-    /* width:50px !important;
-    height:50px !important;
-    border-radius:30px;
-    border: 2px solid rgba(204, 255, 255, 0);
-    margin: 6px; */
 }
 .imgStyle:hover{
     box-shadow:#3cc  0px 0px 7px 3px;
