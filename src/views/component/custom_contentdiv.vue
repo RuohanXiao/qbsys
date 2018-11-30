@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 14px 0 14px'}" id="net">
+  <div :style="{height:netpxdiv}">
+    <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 14px 0 14px'}">
       <Row type="flex" justify="start" class="code-row-bg" align="middle" :style="{height:'70px',paddingLeft:'10px'}">
         <Col span="1" align="middle" class="bottom">
         <Tooltip content="分组" placement="bottom">
@@ -63,10 +63,11 @@
         </Col>
       </Row>
     </div>
-    <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 14px',backgroundColor:'rgba(0,0,0,0.5)'}">
-      <div id="contentchart" aria-autocomplete="true" :style="{minHeight:netheight,maxHeight:netheight,display:'flex',overflowY:'scroll'}">
+    <div :style="{height:netheight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 14px',backgroundColor:'rgba(0,0,0,0.5)'}">
+        <Scroll :on-reach-bottom="handleReachBottom">
+      <div id="contentchart" aria-autocomplete="true" :style="{height:netheight,display:'flex',overflowY:'scroll'}">
         <Row type="flex" justify="start" align="middle">
-        <Col span="4" align="middle"  v-for="item in items">
+        <Col span="3" align="middle"  v-for="item in items">
           <div class="contentDiv">
             <p class="contentTitle" @click="showContent(item.id)">{{item.title}}</p>
             <p class="contentText">{{item.text}}</p>
@@ -75,7 +76,8 @@
         </Col>
         </Row>
       </div>
-      <div id="contentInfo" :style="{minHeight:netheight,maxHeight:netheight,display:'none',overflowY:'scroll'}">
+      </Scroll>
+      <div id="contentInfo" :style="{height:netheight,display:'none',overflowY:'scroll'}">
         <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
         <h2 class="contentInfoTitle" id='contentsTitle'></h2>
         <p class="contentInfoTime" id='contentsTime'></p>
@@ -96,29 +98,34 @@
     name: "App",
     data() {
       return {
-        basicY: 0,
-        basicX: 0,
-        dataurl:'../../dist/data/netData.json',
         netheight: 0,
         netheightdiv: 0,
-        pathHoverFlag: false,
-        modal_loading: false,
-        selectionId: [],
-        netchart: null,
-        nextId: 4,
         flag: true,
-        netData: [],
-        selectItem: null,
-        saveNum: 0,
         modal01: false,
         eventData: null,
-        items: []
+        items: [],
+        page:1
       };
     },
     components: {
       modalChart
     },
+    props:['contentData'],
     methods: {
+       handleReachBottom () {
+         var mthis = this
+         mthis.page = mthis.page + 1
+                return new Promise(resolve => {
+                  alert('in promise')
+                  mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page='+this.page+'&query='+ mthis.$route.query.content).then(response => {
+                    console.log(response)
+                    mthis.items = response.body.data
+                    resolve();
+                    // mthis.dataexpand = response.body.data
+                    // mthis.singlePerson = (opt[1]>1)?false:true
+                  })
+                });
+        },
       toContentDiv(){
         document.getElementById('contentchart').style.display = 'block'
         document.getElementById('contentInfo').style.display = 'none'
@@ -128,33 +135,51 @@
       },
       showContent(id){
       var mthis = this
-       mock.get("/getContentInfo",{id:id}).then(function(res) {
-        // 获取文本数据
-        document.getElementById('contents').innerHTML = res.data.contents
-        document.getElementById('contentsTitle').innerHTML = res.data.title
-        document.getElementById('contentsTime').innerHTML = res.data.time
-      });
+      //  mock.get("/getContentInfo",{id:id}).then(function(res) {
+      //   // 获取文本数据
+      //   document.getElementById('contents').innerHTML = res.data.contents
+      //   document.getElementById('contentsTitle').innerHTML = res.data.title
+      //   document.getElementById('contentsTime').innerHTML = res.data.time
+      // });
+      mthis.$http.get('http://10.60.1.140:5001/context-by-id/?idValue='+ id).then(response => {
+          document.getElementById('contents').innerHTML = response.body.data[0].text
+          document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
+          document.getElementById('contentsTime').innerHTML = response.body.data[0].from + '|'+ response.body.data[0].time
+          // mthis.dataexpand = response.body.data
+          // mthis.singlePerson = (opt[1]>1)?false:true
+        })
         document.getElementById('contentchart').style.display = 'none'
         document.getElementById('contentInfo').style.display = 'block'
       }
     },
     created() {
-      var mthis = this
-       mock.get("/getContent").then(function(res) {
-        // 获取文本数据
-        mthis.items = res.data.data
-      });
+      // var mthis = this
+      //  mock.get("/getContent").then(function(res) {
+      //   // 获取文本数据
+      //   mthis.items = res.data.data
+      // });
     },
     computed: {
     },
     mounted() {
       var mthis = this
       window.onresize = function() {
-        this.netheight = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
-        this.netheightdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
+        mthis.netheight = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
+        mthis.netheightdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
       }
-      this.netheight = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
-      this.netheightdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
+      mthis.netheight = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
+      mthis.netheightdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
+      if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
+        // 跳转过来的
+        mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
+          console.log(response)
+          mthis.items = response.body.data
+          // mthis.dataexpand = response.body.data
+          // mthis.singlePerson = (opt[1]>1)?false:true
+        })
+
+      }
+      
     }
   };
 </script>
@@ -282,6 +307,16 @@
     font-weight: normal;
     letter-spacing: 0px;
     color: #cc6666;
+    opacity: 0.8;
+  }
+  #contents {
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 26px;
+    letter-spacing: 0px;
+    color: #ccffff;
     opacity: 0.8;
   }
 </style>

@@ -195,7 +195,8 @@ export default {
             type: "slider",
             start:0,
             end:10,
-            realtime: false, //是否实时加载
+            // realtime: false, //是否实时加载
+            realtime: true, //是否实时加载
             show: true,
             textStyle:{
               color: "#33ffff",

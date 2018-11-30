@@ -486,7 +486,7 @@
           <Split v-model="split1" :max="max" :min="min">
             <div slot="left" class="demo-split-pane" display='flex' :style="{height:contentHeight}">
               <!-- <h1>this is left</h1> -->
-              <content-chart-div @selectNodes1="selectNodes" id="net" :style="{height:netpxdiv}" :netHeight="netpx" :netData="netData"></content-chart-div>
+              <content-chart-div @selectNodes1="selectNodes" :style="{height:netpxdiv}" :netHeight="netpx" :contentData="contentData"></content-chart-div>
               <time-chart-div :splitWidth="splitWidth" :split="split1" @changenetpx="changenetpx"></time-chart-div>
               
             </div>
@@ -750,6 +750,7 @@
         barchart: null,
         netData: null,
         nextId: 4,
+        contentData: [],
         opacityImage: "40%",
         flag: true,
         selectItem: null,
@@ -1028,7 +1029,16 @@
     },
     mounted() {
       var mthis = this
-      console.log(mthis.$route.query.content)
+      if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
+        // 跳转过来的
+        mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
+          console.log(response)
+          mthis.contentData = response.body.data
+          // mthis.dataexpand = response.body.data
+          // mthis.singlePerson = (opt[1]>1)?false:true
+        })
+
+      }
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       window.onresize = function() {
         mthis.contentHeight = document.documentElement.clientHeight - 65 + "px";
