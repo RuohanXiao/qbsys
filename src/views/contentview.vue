@@ -817,8 +817,6 @@
         //     'nodeIds': nodeIdsArry
         //   }).then(response => {
         //     mthis.dataexpand = response.data.data[0].nodes
-        //     console.log('-------------')
-        //     console.log(mthis.dataexpand)
         //     mthis.singlePerson = true
         //   })
         // } else if (opt.ids.length > 1) {
@@ -827,7 +825,6 @@
         //     return item.id;
         //   });
         //   // nodeIdsArry = ["Q370363", "Q1413"]
-        //   //  console.log(nodeIdsArry)
         //   // 调用接口,根据id查询信息
         //   // mthis.$http.post('http://10.60.1.141:5001/node-datas/',{'nodeIds': nodeIdsArry},{"emulateJSON":true}).then(response => {
         //   // mthis.$http.post('http://10.60.1.141:5000/person-overviews/', {
@@ -835,8 +832,6 @@
         //     'nodeIds': nodeIdsArry
         //   }).then(response => {
         //     mthis.dataexpand = response.data.data[0].nodes
-        //     console.log('-------------')
-        //     console.log(this.dataexpand)
         //     mthis.singlePerson = false
         //   })
         // }
@@ -859,7 +854,6 @@
       //         for(let i = 0 ;i<response.data.data[0].nodes.length;i++) {
       //           option.push({"label":response.data.data[0].nodes[i].name,"value":response.data.data[0].nodes[i].nodeId})
       //         }
-      //         console.log(option)
       //         mthis.options1 = option;
       //         mthis.loading1 = false;
       //       });
@@ -883,7 +877,6 @@
       //       { emulateJSON: true }
       //     )
       //     .then(response => {
-      //       console.log(response);
       //     });
       // },
       exportImg() {
@@ -955,7 +948,6 @@
         //   },
         //   events: {
         //     onClick: function(event) {
-        //       console.log(event)
         //     }
         //   },
         //   toolbar: {
@@ -1036,6 +1028,7 @@
     },
     mounted() {
       var mthis = this
+      console.log(mthis.$route.query.content)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       window.onresize = function() {
         mthis.contentHeight = document.documentElement.clientHeight - 65 + "px";

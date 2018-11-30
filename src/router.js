@@ -11,13 +11,16 @@ const routers = [
     //     ]
     // },
     {
-        path: '/', component: netView, params: { routername: 'net' }
+        path: '/', component: netView
     },
     {
-        path: '/geoView', component: geoView, params: { routername: 'geo' }
+        path: '/netView', component: netView
     },
     {
-        path: '/contentView', component: contentView, params: { routername: 'content' }
+        path: '/geoView', component: geoView
+    },
+    {
+        path: '/contentView', component: contentView
     }   
 ];
 export default routers;

@@ -743,7 +743,6 @@
           events: {
             onClick: function(event) {
               alert('下面准备调用接口，时间：' + event.timeStart + "-------" + event.timeEnd)
-              // console.log(event)
             }
           },
           toolbar: {

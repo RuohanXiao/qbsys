@@ -488,7 +488,6 @@ export default {
                         imgSelectedEntityPoints.push(item);
                     }
                 });
-                console.log(returnId);
             } else {
                 entityPoints.forEach(function(item) {
                     if (item.getProperties().properties.belongId == id) {  //判断实体点的id时候为我们需要点亮的点的id
@@ -508,7 +507,6 @@ export default {
                         }
                     }
                 });
-                console.log(returnId);
             }
         },
 
@@ -541,9 +539,7 @@ export default {
                 var entityPoints = mthis.getLayerById("entityPointsLayer").getSource().getFeatures();
                 var returnId = [];
                 /* if(mthis.isCtrl){
-                    console.log('yes')
                 } else {
-                    console.log('no')
                 } */
                 if(mthis.frameSelectedEntityPoints.length == 0){  //判断是否有过拉框选择
                     entityPoints.forEach(function(item) {
@@ -553,7 +549,6 @@ export default {
                             mthis.imgSelectedEntityPoints.push(item);
                         }
                     });
-                    console.log(returnId);
                 } else {
                     entityPoints.forEach(function(item) {
                         if (item.getProperties().properties.belongId == id) {  //判断实体点的id时候为我们需要点亮的点的id
@@ -573,7 +568,6 @@ export default {
                             }
                         }
                     });
-                    console.log(returnId);
                 }
                 
             }
@@ -682,7 +676,6 @@ export default {
                     typeValue = 'Circle'; // 设置绘制类型为LineString
                     geometryFunction = createBox();
                 }
-                // console.log(typeValue);
                 // 实例化图形绘制控件对象并添加到地图容器中
                 mthis.draw = new Draw({
                     source: Vecsource,
@@ -773,7 +766,6 @@ export default {
                 });
             }
             mthis.frameSelectedEntityPoints = frameselectedpoints;
-            console.log(Returnid);
         },
         /**
          * @param 创建overlay

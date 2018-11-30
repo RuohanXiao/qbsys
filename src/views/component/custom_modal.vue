@@ -390,7 +390,6 @@
   
       showPersonInfo(id) {
   
-        // console.log(id)
   
       },
   
@@ -416,7 +415,6 @@
   
           this.loading1 = true;
   
-          // console.log(query)
   
           axios.get('/getPersonInfo', {
   

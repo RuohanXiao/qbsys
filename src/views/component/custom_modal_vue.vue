@@ -219,7 +219,6 @@
         this.testData = 'bbb'
       },
       showPersonInfo(id) {
-        // console.log(id)
       },
       showNodeInNet() {
         alert('追加网络分析')
@@ -233,7 +232,6 @@
         var mthis = this
         if (query !== '') {
           this.loading1 = true;
-          // console.log(query)
           axios.get('/getPersonInfo',{name:query})
             .then(function(response) {
               setTimeout(() => {

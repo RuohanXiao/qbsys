@@ -142,7 +142,6 @@
       var mthis = this
        mock.get("/getContent").then(function(res) {
         // 获取文本数据
-        // console.log(res.data.data)
         mthis.items = res.data.data
       });
     },

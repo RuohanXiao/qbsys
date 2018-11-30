@@ -6,7 +6,7 @@
       <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
         <Row type="flex" justify="space-between" class="code-row-bg" align="middle">
           <Col span="1" align="middle">
-          <router-link to="/">
+          <router-link to="/netView">
             <img src="../dist/assets/images/net.png" style="display: inline-block; vertical-align: middle; width:36px;" /></router-link>
           </Col>
           <Col span="1" align="middle">
@@ -220,7 +220,6 @@
       //         for(let i = 0 ;i<response.data.data[0].nodes.length;i++) {
       //           option.push({"label":response.data.data[0].nodes[i].name,"value":response.data.data[0].nodes[i].nodeId})
       //         }
-      //         console.log(option)
       //         mthis.options1 = option;
       //         mthis.loading1 = false;
       //       });
@@ -244,7 +243,6 @@
       //       { emulateJSON: true }
       //     )
       //     .then(response => {
-      //       console.log(response);
       //     });
       // },
       exportImg() {
@@ -360,7 +358,6 @@
     },
     mounted() {
       var mthis = this
-      // alert(this.routername)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       window.onresize = function() {
         mthis.contentHeight = document.documentElement.clientHeight - 65 + "px";
