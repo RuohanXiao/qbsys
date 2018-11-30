@@ -700,7 +700,6 @@ if (isMock) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         // var r = resultArr.filter(function (x) {return x.indexOf(config.name) > 0});
-        // console.log(r)
         resolve([200, {
           code: 0,
           // data:resultArr.filter(function (x) {return x.indexOf(config.name) > 0})

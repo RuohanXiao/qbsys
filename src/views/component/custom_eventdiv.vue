@@ -190,7 +190,6 @@
         this.$http.post('http://10.60.1.140:5001/node-datas/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
-          console.log(response.body.data[0].nodes[0])
           this.dataExpand = response.body.data[0].nodes[0]
           this.singlePerson = true
         })

@@ -22,16 +22,19 @@
   <Row type="flex" justify="space-between" :style="{flexFlow:'row nowarp',marginTop:'7px'}"  class="code-row-bg" align="left" >
     <Col span="12" align="left" :style="{display:'flex',flexFlow:'row nowarp'}">
     <div class="menu active">
-      <router-link to="/">
+      <!-- <router-link to="/"> -->
+      <router-link :to="{path:'/netView', query:{useRouter:'net'}}">
         <img class="menu_img" src="../../dist/assets/images/net.png" style="display: flex;align-items: center;" />
       </router-link>
     </div>
     <div class="menu" >
-    <router-link to="/geoView" target='_blank'>
+    <!-- <router-link to="/geoView" target='_blank'> -->
+    <router-link :to="{path:'/geoView', query:{useRouter:'geo'}}">
       <img class="menu_img" src="../../dist/assets/images/earth.png" style="display: flex;align-items: center;" /></router-link>
     </div>
     <div class="menu">
-      <router-link to="/contentView" target='_blank'>
+      <!-- <router-link to="/contentView" target='_blank'> -->
+      <router-link :to="{path:'/contentView', query:{useRouter:'content'}}">
       <img class="menu_img" src="../../dist/assets/images/content.png" style="display: flex;align-items: center;" /></router-link>
     </div>
     </Col>

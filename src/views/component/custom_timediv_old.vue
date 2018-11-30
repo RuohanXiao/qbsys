@@ -119,7 +119,6 @@
     mounted(){
       var mthis = this;
       mock.get("/getTimeList").then(function(res) {
-        // console.log(res.data.data);
         mthis.initCharts();
         // mthis.timechart.addData(res.data.data);
         mthis.timechart.addData({
@@ -183,7 +182,6 @@
           },
           events: {
             onClick: function(event) {
-              // console.log(event)
             }
           },
           toolbar: {

@@ -343,8 +343,6 @@
   
       showPersonInfo(id) {
   
-        // console.log(id)
-  
       },
   
       showNodeInNet() {
@@ -368,8 +366,6 @@
         if (query !== '') {
   
           this.loading1 = true;
-  
-          // console.log(query)
   
           axios.get('/getPersonInfo', {
   

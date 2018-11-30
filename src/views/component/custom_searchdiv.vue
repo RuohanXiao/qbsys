@@ -41,14 +41,12 @@
     methods: {
       setOption (a,b) {
         var mthis = this;
-        console.log('---------')
-        console.log(a)
         if(a.value.split('搜索:').length>1) {
+          mthis.inputInfo = a.value.split('搜索:')[1]
           alert(a.value.split('搜索:')[1])
+          mthis.$router.push({path:'/contentView', query:{useRouter:'content',content:a.value.split('搜索:')[1]}})
         } else {
-          // mthis.$http.post('http://10.60.1.141:5001/node-datas/',{'nodeIds': a.value},{"emulateJSON":true}).then(response => {
             mthis.$http.post('http://10.60.1.140:5001/node-datas/',{'nodeIds': a.value},{"emulateJSON":true}).then(response => {
-            console.log(response)
             mthis.$emit('initNode',response.body.data[0]);
           })
         }
@@ -61,7 +59,6 @@
             emulateJSON: true
           })
           .then(response => {
-            console.log(response)
             let option = []
             let optionWord = {}
             let optionWordArr = []
@@ -77,7 +74,6 @@
             optionList.data=optionListArr
             option.push(optionList)
             option.push(optionWord)
-            console.log(option)
             mthis.options1 = option;
             mthis.loading1 = false;
           });

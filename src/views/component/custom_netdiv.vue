@@ -150,7 +150,6 @@
         }, 2000);
       },
       longPress() {
-        console.log(this.netchart)
         this.netchart.startLongPress();
       },
       //强制重新渲染
@@ -169,7 +168,6 @@
           //   // mthis.netchart.expandNode(this.selectionId[i].id)
           //   // 未来应该是个数组
           //   mthis.$http.get('http://10.60.1.141:5001/neighbor-datas/?ClassName=knowledge&&nodeId='+mthis.selectionId[i].id).then(response => {
-          //     console.log(response.body.data[0])
           //     mthis.netchart.addData(response.body.data[0])
           //   })
           // }
@@ -178,9 +176,7 @@
           {
             arr.push(mthis.selectionId[i].id)
           }
-          console.log(arr)
           mthis.$http.post('http://10.60.1.140:5001/neighbor-datas/',{'ClassName': 'knowledge','nodeIds': arr}).then(response => {
-            console.log(response.body.data[0])
             mthis.netchart.addData(response.body.data[0])
           })
           //访问数据库，拓展新数据
@@ -257,7 +253,6 @@
         (this.selectionId.length === 1) ? (this.pathHoverFlag = true) : ((this.selectionId.length > 0) ? (this.$Message.error('请选择单一节点进行路径显示')) : (this.$Message.error('请选择一个节点进行路径显示')))
       },
       exportImg() {
-        console.log(this.netchart)
         // if (this.exportValue !== '') {
         //   this.netchart.export(this.exportValue, {
         //     mime: "image/png",
@@ -276,7 +271,6 @@
         // var image = new Image();
         // image.src = document.getElementById('netchart').toDataURL("image/png");  //把canvas转换成base64图像保存
         // var mycanvas = document.getElementById('netchart').getElementsByTagName('canvas')[0];  
-        // // console.log(mycanvas.toDataURL("image/png"))
         // // var image    = mycanvas.toDataURL("image/png");  
         // // img.setAttribute('crossOrigin', 'anonymous');
         // var image = new Image();
@@ -289,7 +283,6 @@
 
 
         // var canvas = document.getElementById('netchart').getElementsByTagName('canvas')[0];
-        // console.log(canvas.toDataURL('image/png'))
         // var w=window.open('about:blank','image from canvas');  
         // w.document.write("<img id='c2img' alt='from canvas'/>");  
         // var ctx = canvas.getContext('2d');
@@ -299,11 +292,9 @@
         //     ctx.drawImage(image, 0, 0);
         //     document.getElementById('c2img').src = canvas.toDataURL('image/png');
         // };
-        // console.log(this.netchart)
 
 
         // this.netchart.exportAsString('png',(res)=>{
-        //   console.log(res)
         // })
 
         
@@ -335,16 +326,13 @@
         //   this.exportValue = ''
         // this.netchart.exportData
         // image.src = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3497300994,2503543630&fm=27&gp=0.jpg';
-        // console.log(document.getElementsByClassName('知识'))
         // this.netchart.dataLinks.selection
       },
       //矩形布局
       square() {
-        // console.log('------------------8')
         if (this.selectionId.length > 0) {
           this.changeFlag();
           var mthis = this;
-          // console.log('------------------9')
           if (this.selectionId.length > 0) {
             let rowNum = Math.ceil(Math.sqrt(this.selectionId.length));
             let basePoint = this.selectionId[0];
@@ -376,10 +364,8 @@
             mthis.netchart.unlockNode(mthis.selectionId[index].id);
             let circleNum = Math.floor(Math.log(index) / Math.log(3))
             let avd = 360 / Math.pow(3, circleNum);
-            console.log(avd)
             // let ahd = avd * Math.PI / 180;
             let ahd = avd * Math.PI / 360;
-            console.log(circleNum)
             let radius = 200 * circleNum + 200
               //解锁位置
               // this.selectionId[index]["x"] = 
@@ -422,7 +408,6 @@
         // nodeSpacing: 60, // horizontal spacing between nodes
         // rowSpacing: 200 // vertical spacing between node rows in the hierarchy layou
         // var mthis = this
-        // console.log('------------------10')
         if (mthis.selectionId.length > 0) {
           mthis.changeFlag();
           mthis.basicX = mthis.selectionId[0]['x']
@@ -444,7 +429,6 @@
             }
           }
           arr = util.unique(arr)
-          // console.log('------------------13')
           if(mthis.selectionId.length >1){
             arr = util.diff(arr,arrLevel1)
           }
@@ -455,7 +439,6 @@
             mthis.netchart.getNode(arr[nn])["y"] = mthis.basicY + 200
             mthis.netchart.lockNode(arr[nn]);
           }
-          // console.log('---------------2222222222222-')
           mthis.netchart._impl.autoZoom.scene.autoZoomMode = 'overview'
           mthis.netchart.scrollIntoView();
         //     //解锁位置
@@ -580,7 +563,6 @@
               )
           // netChartLog = JSON.stringify(netChartLogJson);
           sessionStorage.setItem('netChartLog', JSON.stringify({data:netChartLogJson}));
-          // console.log(sessionStorage.getItem('netChartLog'))
           //隐藏节点
           // for (let num = 0; num < this.selectionId.length; num++) {
           //   if (this.selectionId[num].isNode) {
@@ -599,10 +581,8 @@
       removeOther() {
         var mthis = this;
         // 获取当前选中节点
-        // console.log('------------------25')
         if (this.selectionId.length > 0) {
           // 获取全部节点
-          // console.log(this.netchart.nodes())
           let selectNodes = this.selectionId;
           let allNodes =  this.netchart.nodes();
           let temp01 = [];
@@ -648,8 +628,6 @@
       },
       reloadNetData (data) {
         var mthis = this
-        console.log(mthis.netchart)
-        console.log(data)
         let dataarr = []
         dataarr.push(data)
         mthis.netchart.replaceData({"nodes":dataarr,"links":[]})
@@ -660,7 +638,6 @@
         if(netChartLogJson.length>0) {
           // 删除节点的后退操作 或 反选删除节点的后退操作
           if(netChartLogJson[netChartLogJson.length-1].action === 'remove') {
-            console.log(netChartLogJson[netChartLogJson.length-1].id)
             // for(let i = 0; i < netChartLogJson[netChartLogJson.length-1].id.length; i++) {
             // }
             // 模拟接口，getNodeObjByIds   netChartLogJson[netChartLogJson.length-1].id
@@ -776,8 +753,6 @@
             linkStyleFunction: function(link) {
               link.cursor = "pointer";
               link.label = link.data.type === "" ? link.data.num : link.data.type;
-              // console.log('-------------')
-              // console.log(link)
               // if(link.data.className === '知识扩展关系') //要改
               if(link.data.className === '知识')
               {
@@ -940,21 +915,18 @@
       //   mthis.initCharts();
       //   mthis.netchart.addData(res.data.data[0]);
       //   for (let i = 0;i<res.data.data[0].nodes.length;i++){
-      //     console.log()
       //     mthis.netchart.lockNode(res.data.data[0].nodes[i].id);
       //   }
       // });
       
       // mthis.$http.post('http://10.60.1.141:5000/neighbor-datas/',{'type': [],'nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
       // mthis.$http.post('http://10.60.1.140:5001/neighbor-datas/',{'ClassName': '','nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
-      //   // console.log(response.data);
       //   mthis.initCharts();
       //   mthis.netchart.addData(response.data.data[0]);
       //   for (let i = 0;i<response.data.data[0].nodes.length;i++){
       //     mthis.netchart.lockNode(response.data.data[0].nodes[i].id);
       //   }
       // }, response => {
-      //     console.log("error");
       //     this.$Message.error('getNodeData失败,请查看日志或稍后重试！')
 
       // });
