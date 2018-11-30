@@ -27,7 +27,6 @@ export default {
     },
     methods:{
         img_click(objEvent){
-            debugger
             var mthis = this
             var obj = objEvent.currentTarget
             //var imgDom = obj.currentTarget;
