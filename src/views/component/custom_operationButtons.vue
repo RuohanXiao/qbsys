@@ -9,8 +9,8 @@
             <div id='Circle_select' value='Circle' class="Circle_Noclick" @click='changedrawType'></div>
             <div id='Polygon_select' value='Polygon' class="Polygon_Noclick" @click='changedrawType'></div>
             <div class='separateDiv'></div>
-<!--             <div id='delete_opera' class="delete_Noclick" @click='deletSliderImg'></div>
-            <div id='invertSelection_opera' class="invertSelection_Noclick" @click='invertSelectionEntity'></div> -->
+            <div id='delete_opera' class='delete_Noclick' @click='deleteSliderImgs'></div>
+            <div id='invertSelection_opera' class='invertSelection_Noclick' @click='invertSelectionSliderImgs'></div>
         </div>
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
@@ -21,7 +21,7 @@
                 </div>
                 <div id="main" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(geoHeight) -30  + 'px'}">
                     <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
-                        <ul class='slides'>
+                        <ul class='slides' id='sliderUL'>
                             <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
                         </ul>
                     </div>
@@ -33,6 +33,30 @@
 </template>
 
 <style>
+.delete_Noclick:hover{
+    background-image: url('../../dist/assets/images/geo/delete_HL.png');
+    opacity: 1;
+}
+.delete_click{
+    background-image: url('../../dist/assets/images/geo/delete_HL.png');
+    opacity: 1;
+}
+.delete_Noclick{
+    background-image: url('../../dist/assets/images/geo/delete_HL.png');
+    opacity: 0.4;
+}
+.invertSelection_Noclick:hover{
+    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
+    opacity: 1;
+}
+.invertSelection_click{
+    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
+    opacity: 1;
+}
+.invertSelection_Noclick{
+    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
+    opacity: 0.4;
+}
 .operationButtonDiv{
     position: absolute;
     z-index: 9;
@@ -45,8 +69,6 @@
     margin: 3px;
     float: left;
     width:30px;;
-
-
     height:30px;
     background-size:cover;
 }
@@ -231,7 +253,6 @@ export default {
         provinTilSource:null,
         entityPointsColor: '#33ffff',//初始化加载时的实体点颜色
         frameSelectedColor: '#ff9900',//拉框选中后的实体点颜色
-        imgSelectedEntityPoints : [], //点击头像时选择的所有实体点
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
         draw:null,
         legend:null,
@@ -410,7 +431,8 @@ export default {
                 conLabel.appendChild(Lp);
                 Lp.style = 'color:#ccffff;padding-left:10px;font-size:6px;margin:0px;';
                 Lp.innerHTML = provinName + ' - ' + contryName;
-                var localtion_Overlay = mthis.setOverlay(Coor,conLabel,'localtion_Overlay','center-left');
+                var Id = 'localtion_Overlay_'+ item.getProperties().properties.belongId;
+                var localtion_Overlay = mthis.setOverlay(Coor,conLabel,Id,'center-left');
                 map.addOverlay(localtion_Overlay);
                 map.render();
             });
@@ -439,30 +461,25 @@ export default {
                     mthis.isCtrl = false;
                 }
             };
-            debugger
             if(imgItemOpera.onOroff == 'on'){
                 if(mthis.isCtrl){
-                    mthis.onImgClick(imgItemOpera.id, mthis.imgSelectedEntityPoints);
+                    mthis.onImgClick(imgItemOpera.id);
                     mthis.onImgIds.push(imgItemOpera.id);
                 } else {
                     mthis.onImgIds.forEach(function(item){
-                        mthis.offImgClick(item,mthis.imgSelectedEntityPoints)
+                        mthis.offImgClick(item)
                     });
                     mthis.onImgIds = [];
-                    mthis.onImgClick(imgItemOpera.id, mthis.imgSelectedEntityPoints)
+                    mthis.onImgClick(imgItemOpera.id)
                     mthis.onImgIds.push(imgItemOpera.id);
                 }
                 
             } else {
-                mthis.offImgClick(imgItemOpera.id,mthis.imgSelectedEntityPoints);
-                var index = mthis.onImgIds.indexOf(imgItemOpera.id);
-                if (index > -1) {
-                    mthis.onImgIds.splice(index, 1);
-                }
+                mthis.offImgClick(imgItemOpera.id);
+                deleteArrItem(mthis.onImgIds,imgItemOpera.id);
             }
         },
-/* box-shadow: rgb(204, 255, 255) 0px 0px 7px 3px; */
-        offImgClick(id,imgSelectedEntityPoints){  
+        offImgClick(id){  
             var mthis = this
             var entityPointstyle = new Style({
                 image : new CircleStyle({
@@ -486,14 +503,14 @@ export default {
                     features.forEach(function(ItemF){
                         if(ItemF.getProperties().properties.belongId == id){
                             ItemF.setStyle(entityPointstyle);
-                            mthis.deleteArrItem(imgSelectedEntityPoints,ItemF);
+                            //mthis.deleteArrItem(imgSelectedEntityPoints,ItemF);
                         }
                     });
                     break;
                 }
             } 
         },
-        onImgClick(id, imgSelectedEntityPoints){
+        onImgClick(id){
             var mthis = this;
             var entityPointstyle = new Style({
                 image : new CircleStyle({
@@ -515,16 +532,17 @@ export default {
                     if (item.getProperties().properties.belongId == id) {
                         mthis.pointAnimation(item);
                         returnId.push(item.getProperties().properties.name);
-                        imgSelectedEntityPoints.push(item);
+                        //imgSelectedEntityPoints.push(item);
                     }
                 });
+                console.log(returnId);
             } else {
                 entityPoints.forEach(function(item) {
                     if (item.getProperties().properties.belongId == id) {  //判断实体点的id时候为我们需要点亮的点的id
                         if(mthis.isPointInPointsArr(item,mthis.frameSelectedEntityPoints)){  //判断点是否在拉框选择的范围内
                             mthis.setpointStyle(item,mthis.frameSelectedColor);
                             mthis.pointAnimation(item);
-                            imgSelectedEntityPoints.push(item);
+                            //imgSelectedEntityPoints.push(item);
                             returnId.push(item.getProperties().properties.name);
                         } else {
                             mthis.pointAnimation(item);
@@ -537,137 +555,7 @@ export default {
                         }
                     }
                 });
-            }
-        },
-
-
-        imgClick1(imgItemOpera){
-            var mthis = this
-            debugger
-
-            var obj = imgId
-            var id = obj.id.split('_')[0]
-            
-            if(obj.children[0].style.borderColor == "rgba(204, 255, 255, 0)"){  //点击关闭
-                var idN = 'pointAnimation_' + id;
-                mthis.removeOverlays(idN);
-                var layer = mthis.routeMap.map.getLayers().getArray();
-                
-                for(var i = 0; i < layer.length; i++){
-                    if(layer[i].getProperties().id == 'entityPointsLayer'){
-                        var features = layer[i].getSource().getFeatures();//.getProperties().properties.belongId
-                        features.forEach(function(ItemF){
-                            if(ItemF.getProperties().properties.belongId == id){
-                                ItemF.setStyle(entityPointstyle);
-                                mthis.deleteArrItem(mthis.imgSelectedEntityPoints,ItemF);
-                            }
-                        });
-                        break;
-                    }
-                }               
-            } else{  //点击开启
-                var entityPoints = mthis.getLayerById("entityPointsLayer").getSource().getFeatures();
-                var returnId = [];
-                /* if(mthis.isCtrl){
-                } else {
-                } */
-                if(mthis.frameSelectedEntityPoints.length == 0){  //判断是否有过拉框选择
-                    entityPoints.forEach(function(item) {
-                        if (item.getProperties().properties.belongId == id) {
-                            mthis.pointAnimation(item);
-                            returnId.push(item.getProperties().properties.name);
-                            mthis.imgSelectedEntityPoints.push(item);
-                        }
-                    });
-                } else {
-                    entityPoints.forEach(function(item) {
-                        if (item.getProperties().properties.belongId == id) {  //判断实体点的id时候为我们需要点亮的点的id
-                            if(mthis.isPointInPointsArr(item,mthis.frameSelectedEntityPoints)){  //判断点是否在拉框选择的范围内
-                                mthis.setpointStyle(item,mthis.frameSelectedColor);
-                                mthis.pointAnimation(item);
-                                mthis.imgSelectedEntityPoints.push(item);
-                                returnId.push(item.getProperties().properties.name);
-                            } else {
-                                mthis.pointAnimation(item);
-                            }
-                        } else {
-                            if(mthis.isPointInPointsArr(item,mthis.frameSelectedEntityPoints)){
-                                if(!mthis.isPointAnimation(item)){
-                                    item.setStyle(entityPointstyle);
-                                }
-                            }
-                        }
-                    });
-                }
-                
-            }
-        },
-        deleteArrItem(arr,item){
-            var index = arr.indexOf(item);
-            if(index > -1){
-                arr.splice(index, 1);
-            }
-        },
-        isPointAnimation(point){
-            var mthis = this
-            var overlayId = 'pointAnimation_' + point.getProperties().properties.belongId + 
-            '_' + point.getProperties().properties.id;
-            var overlays = mthis.routeMap.map.getOverlays().getArray();
-            if(overlays.length == 0){
-                return false;
-            } else{
-                for(var i = overlays.length - 1; i >= 0; i--){
-                    if(overlays[i].getId() == overlayId){
-                        return true;
-                    }
-                    if(i == 0){
-                        return false;
-                    }
-                }
-            }
-        },
-        setpointStyle(point,color){
-            var style = new Style({
-                image : new CircleStyle({
-                    radius : 3,
-                    fill : new Fill({
-                        color : color
-                    })
-                })
-            });
-            point.setStyle(style);
-        },
-
-        isPointInPointsArr(point,points){
-            for(var i = 0; i < points.length; i++){
-                if(point == points[i]){
-                    return true;
-                }
-                if(i == points.length-1){
-                    return false;
-                }
-            }
-        },
-
-        pointAnimation(point){
-            var mthis = this
-            var point_animation_BelongId = 'pointAnimation_' + point.getProperties().properties.belongId;
-            var point_animation = document.createElement('div');
-            point_animation.className = 'point_animation';
-            point_animation.style.background = point.getStyle().getImage().getFill().getColor();
-            var point_animation_id = point_animation_BelongId + '_' + point.getProperties().properties.id;
-            var point_overlay = mthis.setOverlay(point.getGeometry().getCoordinates(),point_animation,point_animation_id, 'center-center');
-            mthis.routeMap.map.addOverlay(point_overlay);
-            mthis.routeMap.map.render();
-        },
-        //根据id获取layer
-        getLayerById(layerId){
-            var mthis = this
-            var layers = mthis.routeMap.map.getLayers().getArray();
-            for(var i = 0; i<layers.length; i++){
-                if(layers[i].getProperties().id == layerId){
-                    return layers[i];
-                }
+                console.log(returnId);
             }
         },
         changedrawType(object){
@@ -706,13 +594,13 @@ export default {
                     typeValue = 'Circle'; // 设置绘制类型为LineString
                     geometryFunction = createBox();
                 }
+                // console.log(typeValue);
                 // 实例化图形绘制控件对象并添加到地图容器中
                 mthis.draw = new Draw({
                     source: Vecsource,
                     type: typeValue,                                // 几何图形类型
                     geometryFunction: geometryFunction              // 几何信息变更时的回调函数
                 });
-                debugger
                 mthis.draw_polygon(mthis.draw);
                 map.addInteraction(mthis.draw);
             } 
@@ -726,7 +614,6 @@ export default {
             });
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
-                debugger
                 var geometry = feature.getGeometry();
                 mthis.selectedEntityPoints(geometry);
                 mthis.routeMap.map.removeInteraction(draw);
@@ -747,6 +634,7 @@ export default {
             selectingPointSource.getFeatures().forEach(function(item){
                 if(item.getStyle() != null && item.getStyle().getImage().getFill().getColor() == RemovedColor){
                     item.setStyle(changePointstyle);
+                    mthis.pointAnimation(item);
                 }
             });
         },
@@ -764,9 +652,10 @@ export default {
                 })
             });
             var Returnid = [];
-            if (mthis.imgSelectedEntityPoints.length != 0) {
+            var imgSelectedEntityPoints = mthis.selectEntityPointsById(mthis.onImgIds);
+            if (imgSelectedEntityPoints.length != 0) {
                 selectingPointSource.getFeatures().forEach(function(item) {
-                    if (mthis.isPointInPointsArr(item,mthis.imgSelectedEntityPoints)) {
+                    if (mthis.isPointInPointsArr(item,imgSelectedEntityPoints)) {
                         var coord = item.getGeometry().getCoordinates();
                         var isIn = geometry.intersectsCoordinate(coord);
                         if (isIn) {
@@ -780,7 +669,7 @@ export default {
                             tarOverlayer.getElement().style.background = item.getStyle().getImage().getFill().getColor();
                             // 传回数据，展示点信息
                             Returnid.push(item.getProperties().properties.name);
-                        }
+                        } 
                     } 
                 });
             } else {
@@ -796,52 +685,12 @@ export default {
                 });
             }
             mthis.frameSelectedEntityPoints = frameselectedpoints;
+            console.log(Returnid);
         },
-        /**
-         * @param 创建overlay
-         *  coor：放置坐标, element：overlay中放置的节点, id：overlay的id, positioning：放置方式（bottom-left、bottom-center、bottom-right 、center-left、center-center、center-right、top-left、top-center、top-right，默认是 top-left，也就是 element 左上角与 position 重合r等）
-         */
-        setOverlay(coor, element, id, positioning){
-            var mthis = this
-            var overlay = new Overlay(({
-            element: element,
-            id:id,
-            stopEvent:false,
-            position:coor,
-            positioning:positioning,
-            autoPan: false,
-            autoPanAnimation: {
-                duration: 250
-            }
-            
-            }));
-            return overlay;
-        },
-
-        /**
-         * @param 删除map中所有此id的overlay  切记，overlay的移除只能从后往前移除
-         */
-
-        removeOverlays(id){
-            var mthis = this
-            var overlays = mthis.routeMap.map.getOverlays().getArray();
-            if(overlays.length == 0){
-                return;
-            } else{
-                for(var i = overlays.length - 1; i >= 0; i--){
-                    if(overlays[i].getId().indexOf(id) != -1){
-                        mthis.routeMap.map.removeOverlay(overlays[i]);
-                    }
-                }
-            }
-            
-        },
-
         //==========================================================================
         //路径
         click_route(){
             var mthis = this;
-            debugger;
             //mthis.legend = 
             var legendD = [];
             mthis.test_Route.forEach(function(item){
@@ -1105,6 +954,216 @@ export default {
                 item.setStyle(heatMapStyle);
                 heatMap_source.addFeature(item);
             });
+        },
+
+        /*
+        *
+        * @param图片轮播的删除
+        * 
+        */
+        deleteSliderImgs(){
+            var mthis = this;
+            mthis.onImgIds.forEach(function(item){
+                mthis.delteSliderImgById(item);
+            });
+        },
+        delteSliderImgById(id){
+            var mthis = this
+            mthis.deleteImageById(id);
+            mthis.deleteEntityPointsById(id);
+            mthis.deleteOverlayById(id);
+            mthis.deleteArrItem(mthis.onImgIds,id);
+        },
+        deleteImageById(id){
+            var Id = id + '_imgslider';
+            var imgslider = document.getElementById(Id);
+            var sliderLi = imgslider.parentNode
+            var sliderUL = document.getElementById('sliderUL'); 
+            sliderUL.removeChild(sliderLi);
+        },
+        deleteEntityPointsById(id){
+            var mthis = this;
+            var entityPointsLayer = mthis.getLayerById("entityPointsLayer");
+            var Source =  entityPointsLayer.getSource();
+            var features = Source.getFeatures();
+            features.forEach(function(item){
+                if(item.getProperties().properties.belongId == id){
+                    Source.removeFeature(item);
+                }
+            });  
+        },
+        deleteOverlayById(id){
+            debugger
+            var mthis = this;
+            var Id_Animation = 'pointAnimation_' + id;
+            var Id_localtion = 'localtion_Overlay_' + id;
+            mthis.removeOverlays(Id_Animation);
+            mthis.removeOverlays(Id_localtion);
+        },
+        /*
+        *
+        * @param图片轮播的反选
+        * 
+        */
+        invertSelectionSliderImgs(){
+            var mthis = this
+            var invertSelectIds = [];
+            mthis.test_Route.forEach(function(item){
+                for(var i = 0; i < mthis.onImgIds.length; i++){
+                    if(item.id == mthis.onImgIds[i]){
+                        mthis.offImgClick(item.id);
+                        break;
+                    }
+                    if(i == mthis.onImgIds.length - 1){
+                        mthis.onImgClick(item.id);
+                        invertSelectIds.push(item.id);
+                    }
+                }
+            });
+            mthis.onImgIds = invertSelectIds;
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //=======================================================================================
+        //通用函数
+        /**
+         * @param 创建overlay
+         *  coor：放置坐标, element：overlay中放置的节点, id：overlay的id, positioning：放置方式（bottom-left、bottom-center、bottom-right 、center-left、center-center、center-right、top-left、top-center、top-right，默认是 top-left，也就是 element 左上角与 position 重合r等）
+         */
+        setOverlay(coor, element, id, positioning){
+            var mthis = this
+            var overlay = new Overlay(({
+            element: element,
+            id:id,
+            stopEvent:false,
+            position:coor,
+            positioning:positioning,
+            autoPan: false,
+            autoPanAnimation: {
+                duration: 250
+            }
+            
+            }));
+            return overlay;
+        },
+
+        /**
+         * @param 删除map中所有此id的overlay  切记，overlay的移除只能从后往前移除
+         */
+
+        removeOverlays(id){
+            var mthis = this
+            var overlays = mthis.routeMap.map.getOverlays().getArray();
+            if(overlays.length == 0){
+                return;
+            } else{
+                for(var i = overlays.length - 1; i >= 0; i--){
+                    if(overlays[i].getId().indexOf(id) != -1){
+                        mthis.routeMap.map.removeOverlay(overlays[i]);
+                    }
+                }
+            }
+            
+        },
+        //根据id获取layer
+        getLayerById(layerId){
+            var mthis = this
+            var layers = mthis.routeMap.map.getLayers().getArray();
+            for(var i = 0; i<layers.length; i++){
+                if(layers[i].getProperties().id == layerId){
+                    return layers[i];
+                }
+            }
+        },
+        deleteArrItem(arr,item){
+            var index = arr.indexOf(item);
+            if(index > -1){
+                arr.splice(index, 1);
+            }
+        },
+        isPointAnimation(point){
+            var mthis = this
+            var overlayId = 'pointAnimation_' + point.getProperties().properties.belongId + 
+            '_' + point.getProperties().properties.id;
+            var overlays = mthis.routeMap.map.getOverlays().getArray();
+            if(overlays.length == 0){
+                return false;
+            } else{
+                for(var i = overlays.length - 1; i >= 0; i--){
+                    if(overlays[i].getId() == overlayId){
+                        return true;
+                    }
+                    if(i == 0){
+                        return false;
+                    }
+                }
+            }
+        },
+        setpointStyle(point,color){
+            var style = new Style({
+                image : new CircleStyle({
+                    radius : 3,
+                    fill : new Fill({
+                        color : color
+                    })
+                })
+            });
+            point.setStyle(style);
+        },
+
+        isPointInPointsArr(point,points){
+            for(var i = 0; i < points.length; i++){
+                if(point == points[i]){
+                    return true;
+                }
+                if(i == points.length-1){
+                    return false;
+                }
+            }
+        },
+
+        pointAnimation(point){
+            var mthis = this
+            var point_animation_BelongId = 'pointAnimation_' + point.getProperties().properties.belongId;
+            var point_animation = document.createElement('div');
+            point_animation.className = 'point_animation';
+            point_animation.style.background = point.getStyle().getImage().getFill().getColor();
+            var point_animation_id = point_animation_BelongId + '_' + point.getProperties().properties.id;
+            if(mthis.isPointAnimation(point)){
+                debugger
+                mthis.removeOverlays(point_animation_id);
+            }
+            var point_overlay = mthis.setOverlay(point.getGeometry().getCoordinates(),point_animation,point_animation_id, 'center-center');
+            mthis.routeMap.map.addOverlay(point_overlay);
+            mthis.routeMap.map.render();
+        },
+        selectEntityPointsById(belongIds){
+            var mthis = this;
+            var selectedFeatures = [];
+            var entityLayer = mthis.getLayerById('entityPointsLayer');
+            var features = entityLayer.getSource().getFeatures();
+            belongIds.forEach(function(belongId){
+                features.forEach(function(item){
+                    if(item.getProperties().properties.belongId == belongId){
+                        selectedFeatures.push(item);
+                    }
+                });
+            });
+            return selectedFeatures;
         }
 
     },
@@ -1135,7 +1194,10 @@ export default {
                 mthis.heatMap.map.updateSize();
             }
             
-        }
+        },
+        
+
+        
 
     },
     props: ['geoHeight', 'geoData','geoWidth'],
