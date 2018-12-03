@@ -1,17 +1,6 @@
 <template>
     <div :style="{height:geoHeight,width:geoWidth}" class='geoDiv'><!-- :style={height:geoHeight;width:} -->
-        <div class='operationButtonDiv'>
-            <div id='location_button' class="location_Noclick"  @click='location_cilck' ></div>
-            <div id='heatMap_button'  class="heatMap_Noclick" @click='heatMap_cilck'></div>
-            <div id='route_button'  class="route_Noclick" @click='route_cilck'></div>
-            <div class='separateDiv'></div>
-            <div id='rectangle_select' value='rectangle'  class="rectangle_Noclick" @click='changedrawType' ></div>
-            <div id='Circle_select' value='Circle' class="Circle_Noclick" @click='changedrawType'></div>
-            <div id='Polygon_select' value='Polygon' class="Polygon_Noclick" @click='changedrawType'></div>
-            <div class='separateDiv'></div>
-            <div id='delete_opera' class='delete_Noclick' @click='deleteSliderImgs'></div>
-            <div id='invertSelection_opera' class='invertSelection_Noclick' @click='invertSelectionSliderImgs'></div>
-        </div>
+        <imgItemOpera @mapOperation='mapOperationClick'></imgItemOpera>
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
                 <div id='legendDiv'>
@@ -33,148 +22,8 @@
 </template>
 
 <style>
-.delete_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/delete_HL.png');
-    opacity: 1;
-}
-.delete_click{
-    background-image: url('../../dist/assets/images/geo/delete_HL.png');
-    opacity: 1;
-}
-.delete_Noclick{
-    background-image: url('../../dist/assets/images/geo/delete_HL.png');
-    opacity: 0.4;
-}
-.invertSelection_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
-    opacity: 1;
-}
-.invertSelection_click{
-    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
-    opacity: 1;
-}
-.invertSelection_Noclick{
-    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
-    opacity: 0.4;
-}
-.operationButtonDiv{
-    position: absolute;
-    z-index: 9;
-    padding-left: 50px;
-    width:100%;
-    padding-right: 50px;
-    background-color:rgba(0,0,0,0.3);
-}
-.operationButtonDiv div{
-    margin: 3px;
-    float: left;
-    width:30px;;
-    height:30px;
-    background-size:cover;
-}
-.separateDiv{
-    float: left;
-    background-image: url('../../dist/assets/images/geo/separateLine.png');
-    width: 30px;
-    height: 30px;
-    margin-top: 2px;
-}
 .geoDiv{
     margin-left: 10px
-}
-.Polygon_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/custom_HL.png');
-    opacity: 1;
-}
-.Polygon_click{
-    background-image: url('../../dist/assets/images/geo/custom_HL.png');
-    opacity: 1;
-}
-.Polygon_Noclick{
-    background-image: url('../../dist/assets/images/geo/custom_HL.png');
-    opacity: 0.4;
-}
-.Circle_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/circleSelection_HL.png');
-    opacity: 1;
-}
-.Circle_Noclick{
-    background-image: url('../../dist/assets/images/geo/circleSelection_HL.png');
-    opacity: 1;
-}
-.Circle_Noclick{
-    background-image: url('../../dist/assets/images/geo/circleSelection_HL.png');
-    opacity: 0.4;
-}
-.rectangle_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/boxSelection_HL.png');
-    opacity: 1;
-}
-.rectangle_Noclick{
-    background-image: url('../../dist/assets/images/geo/boxSelection_HL.png');
-    opacity: 1;
-}
-.rectangle_Noclick{
-    background-image: url('../../dist/assets/images/geo/boxSelection_HL.png');
-    opacity: 0.4;
-}
-.invertSelection_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
-    opacity: 1;
-}
-.invertSelection_Noclick{
-    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
-    opacity: 0.4;
-}
-.invertSelection_click{
-    background-image: url('../../dist/assets/images/geo/invertSelection_HL.png');
-    opacity: 1;
-}
-.delete_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/delete_HL.png');
-    opacity: 1;
-}
-.delete_click{
-    background-image: url('../../dist/assets/images/geo/delete_HL.png');
-    opacity: 1;
-}
-.delete_Noclick{
-    background-image: url('../../dist/assets/images/geo/delete_HL.png');
-    opacity: 0.4;
-}
-
-.location_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/location_HL.png');
-    opacity: 1;
-}
-.location_click{
-    background-image: url('../../dist/assets/images/geo/location_HL.png');
-}
-.location_Noclick{
-    background-image: url('../../dist/assets/images/geo/location_HL.png');
-    opacity: 0.4;
-}
-.heatMap_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/heatMap_HL.png');
-    opacity: 1;
-}
-.heatMap_click{
-    background-image: url('../../dist/assets/images/geo/heatMap_HL.png');
-}
-.heatMap_Noclick{
-    background-image: url('../../dist/assets/images/geo/heatMap_HL.png');
-    opacity: 0.4;
-}
-.route_Noclick:hover{
-    background-image: url('../../dist/assets/images/geo/route_HL.png');
-    opacity: 1;
-}
-.route_click{
-    background-image: url('../../dist/assets/images/geo/route_HL.png');
-}
-.route_Noclick{
-    background-image: url('../../dist/assets/images/geo/route_HL.png');
-    opacity: 0.4;
 }
 #legendDiv {
     position: absolute;
@@ -237,6 +86,7 @@ import '../../dist/assets/styles/geo/mapInit.css'
 
 import imgSlider from "./custom_imgSlider"
 import routeLegend from './custom_routeLegend'
+import imgItemOpera from './custom_mapOperaButtons'
 
 
 export default {
@@ -263,6 +113,7 @@ export default {
         geoHeight:500,
         isCtrl:false,
         onImgIds:[],  //被点亮的img的id
+        allImgIds:[], //所有img的id
         locationClassObject:{
             location_Noclick: true,
             'location_click': true,
@@ -278,14 +129,94 @@ export default {
       }
     },
     mounted() {
+        var mthis = this;
+        mthis.test_Route.forEach(function(item){
+            mthis.allImgIds.push(item.id);
+        })
     },
     methods:{
-        /* initFunction () {
-            var mthis = this
-            mthis.location_cilck()
-            mthis.setPointFeatures(test_Route)
-            mthis.locationPoints()
-        }, */
+        mapOperationClick(mapOperation){
+            var mthis = this;
+            debugger;
+            var mapOperationId = mapOperation.currentTarget.id;
+            if(mapOperationId == 'location_button'){
+                mthis.location_cilck();
+            } else if(mapOperationId == 'heatMap_button'){
+                mthis.heatMap_cilck();
+            } else if(mapOperationId == 'route_button'){
+                mthis.route_cilck();
+            } else if(mapOperationId == 'Circle_select' || mapOperationId == 'Polygon_select' || mapOperationId == 'rectangle_select'){
+                mthis.changedrawType(mapOperation)
+            } else if(mapOperationId == 'delete_opera'){
+                mthis.deleteSliderImgs();
+            } else if(mapOperationId == 'invertSelection_opera'){
+                mthis.invertSelectionSliderImgs();
+            }
+        },
+        legendItemClick(legendItemOpera){
+            var mthis = this;
+            var map = mthis.routeMap.map;
+            var routeId = legendItemOpera.id
+            if(legendItemOpera.onOroff == 'on'){
+                var Route = mthis.test_Route.find(function(obj){
+			        return obj.id == routeId;
+                });
+                mthis.creatRouteLine(Route);
+            } else {
+                var layerArr = map.getLayers().getArray();
+                for(var i=layerArr.length-1; i>=0; i--){
+                    var item = layerArr[i];
+                    var point_animation_id = 'point_animation_' + routeId;
+                    if(item.getType() == "VECTOR" && (item.getSource().getFeatures()[0].getProperties().belongId == routeId)){
+                        map.removeLayer(item);
+                        if(mthis.BezierPointsObjsArr.length > 0){
+                            var a = mthis.BezierPointsObjsArr.find(function(obj,index,arr) {
+                                if(obj.belongRouteId == routeId){
+                                    arr.splice(index, 1); 
+                                }
+                            });
+                        }
+                        var overlayArr =map.getOverlays().getArray();
+                        for(var j=overlayArr.length-1; j>=0; j--){
+                            if(overlayArr[j].getId() == point_animation_id){
+                                map.removeOverlay(overlayArr[j]);
+                            }
+                        }
+                    }
+                }
+            }
+            
+        },
+        imgClick(imgItemOpera){
+            var mthis = this;
+            window.document.onkeydown = function(){
+                if (window.event.ctrlKey) {
+                    mthis.isCtrl = true;
+                }
+            };
+            window.document.onkeyup = function(){
+                if (!window.event.ctrlKey) {
+                    mthis.isCtrl = false;
+                }
+            };
+            if(imgItemOpera.onOroff == 'on'){
+                if(mthis.isCtrl){
+                    mthis.onImgClick(imgItemOpera.id);
+                    mthis.onImgIds.push(imgItemOpera.id);
+                } else {
+                    mthis.onImgIds.forEach(function(item){
+                        mthis.offImgClick(item)
+                    });
+                    mthis.onImgIds = [];
+                    mthis.onImgClick(imgItemOpera.id)
+                    mthis.onImgIds.push(imgItemOpera.id);
+                }
+                
+            } else {
+                mthis.offImgClick(imgItemOpera.id);
+                deleteArrItem(mthis.onImgIds,imgItemOpera.id);
+            }
+        },
         location_cilck(){
             var mthis = this
             mthis.clickButtonOpenDiv('location_button')
@@ -448,36 +379,6 @@ export default {
                     minItems: 1,
                     maxItems: 16
             });
-        },
-        imgClick(imgItemOpera){
-            var mthis = this;
-            window.document.onkeydown = function(){
-                if (window.event.ctrlKey) {
-                    mthis.isCtrl = true;
-                }
-            };
-            window.document.onkeyup = function(){
-                if (!window.event.ctrlKey) {
-                    mthis.isCtrl = false;
-                }
-            };
-            if(imgItemOpera.onOroff == 'on'){
-                if(mthis.isCtrl){
-                    mthis.onImgClick(imgItemOpera.id);
-                    mthis.onImgIds.push(imgItemOpera.id);
-                } else {
-                    mthis.onImgIds.forEach(function(item){
-                        mthis.offImgClick(item)
-                    });
-                    mthis.onImgIds = [];
-                    mthis.onImgClick(imgItemOpera.id)
-                    mthis.onImgIds.push(imgItemOpera.id);
-                }
-                
-            } else {
-                mthis.offImgClick(imgItemOpera.id);
-                deleteArrItem(mthis.onImgIds,imgItemOpera.id);
-            }
         },
         offImgClick(id){  
             var mthis = this
@@ -702,42 +603,6 @@ export default {
             });
             mthis.legend = legendD;
         },
-
-        legendItemClick(legendItemOpera){
-            var mthis = this;
-            var map = mthis.routeMap.map;
-            var routeId = legendItemOpera.id
-            if(legendItemOpera.onOroff == 'on'){
-                var Route = mthis.test_Route.find(function(obj){
-			        return obj.id == routeId;
-                });
-                mthis.creatRouteLine(Route);
-            } else {
-                var layerArr = map.getLayers().getArray();
-                for(var i=layerArr.length-1; i>=0; i--){
-                    var item = layerArr[i];
-                    var point_animation_id = 'point_animation_' + routeId;
-                    if(item.getType() == "VECTOR" && (item.getSource().getFeatures()[0].getProperties().belongId == routeId)){
-                        map.removeLayer(item);
-                        if(mthis.BezierPointsObjsArr.length > 0){
-                            var a = mthis.BezierPointsObjsArr.find(function(obj,index,arr) {
-                                if(obj.belongRouteId == routeId){
-                                    arr.splice(index, 1); 
-                                }
-                            });
-                        }
-                        var overlayArr =map.getOverlays().getArray();
-                        for(var j=overlayArr.length-1; j>=0; j--){
-                            if(overlayArr[j].getId() == point_animation_id){
-                                map.removeOverlay(overlayArr[j]);
-                            }
-                        }
-                    }
-                }
-            }
-            
-        },
-
         creatRouteLine(Route){
             var mthis = this;
             var Route_source = new VectorSource({
@@ -973,6 +838,7 @@ export default {
             mthis.deleteEntityPointsById(id);
             mthis.deleteOverlayById(id);
             mthis.deleteArrItem(mthis.onImgIds,id);
+            mthis.deleteArrItem(mthis.allImgIds,id);
         },
         deleteImageById(id){
             var Id = id + '_imgslider';
@@ -1007,16 +873,17 @@ export default {
         */
         invertSelectionSliderImgs(){
             var mthis = this
+            debugger;
             var invertSelectIds = [];
-            mthis.test_Route.forEach(function(item){
-                for(var i = 0; i < mthis.onImgIds.length; i++){
-                    if(item.id == mthis.onImgIds[i]){
-                        mthis.offImgClick(item.id);
+            mthis.allImgIds.forEach(function(item,index,arr){
+                for(var i = mthis.onImgIds.length - 1; i >= 0; i--){
+                    if(item == mthis.onImgIds[i]){
+                        mthis.offImgClick(item);
                         break;
                     }
-                    if(i == mthis.onImgIds.length - 1){
-                        mthis.onImgClick(item.id);
-                        invertSelectIds.push(item.id);
+                    if(i == 0){
+                        mthis.onImgClick(item);
+                        invertSelectIds.push(item);
                     }
                 }
             });
@@ -1203,7 +1070,8 @@ export default {
     props: ['geoHeight', 'geoData','geoWidth'],
     components: {
       imgSlider,
-      routeLegend
+      routeLegend,
+      imgItemOpera
     }
 }
 </script>
