@@ -57,7 +57,7 @@
         </Tooltip>
         </Col>
         <Col span="1" align="middle" class="bottom">
-        <Tooltip content="删除其余节点" placement="bottom">
+        <Tooltip content="反选节点" placement="bottom">
           <Icon class="icon iconfont icon-delete process-img DVSL-bar-btn DVSL-bar-btn-back" size="26"></Icon>
         </Tooltip>
         </Col>

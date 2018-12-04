@@ -68,8 +68,8 @@
         </Tooltip>
         </Col>
         <Col span="1" align="middle" class="bottom">
-        <Tooltip content="删除其余节点" placement="bottom">
-          <Icon class="icon iconfont icon-delete-fanxuan process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="removeOther"></Icon>
+        <Tooltip content="反选节点" placement="bottom">
+          <Icon class="icon iconfont icon-fanxuan process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="removeOther"></Icon>
         </Tooltip>
         </Col>
         <Col align="middle">
@@ -141,6 +141,13 @@
       modalChart
     },
     methods: {
+      // 调用统计接口
+      getStatistics () {
+        console.log("nodes:")
+        console.log(this.netchart._impl.data.default.nodes)
+        console.log("links:")
+        console.log(this.netchart._impl.data.default.links)
+      },
       del() {
         this.modal_loading = true;
         setTimeout(() => {
@@ -199,7 +206,7 @@
           //   // netChartLog = JSON.stringify(netChartLogJson);
           //   sessionStorage.setItem('netChartLog', JSON.stringify({data:netChartLogJson}));
           // });
-
+          mthis.getStatistics()
         } else {
           this.$Message.error('请至少选择一个节点进行拓展操作！')
         }
@@ -231,6 +238,7 @@
             )
             // netChartLog = JSON.stringify(netChartLogJson);
             sessionStorage.setItem('netChartLog', JSON.stringify({data:netChartLogJson}));
+            mthis.getStatistics()
           });
         } else {
           this.$Message.error('请至少选择一个节点进行拓展操作！')
@@ -570,14 +578,14 @@
           //     id: this.selectionId[num].id;
           //   }
           // }
-
+          mthis.getStatistics()
         } else {
           this.$Message.error('请选择节点进行矩形排列操作！')
         }
       },
       queryPerson() {
       },
-      //删除其余节点
+      //反选节点
       removeOther() {
         var mthis = this;
         // 获取当前选中节点
@@ -595,22 +603,23 @@
           }
           for (var k in allNodes){
             if (!temp01[allNodes[k].id]) {
-              // temp02.push(allNodes[k])
               if (allNodes[k].isNode) {
                 ids.push(allNodes[k].id);
-                mthis.netchart.removeData({
-                  nodes: [{
-                    id: allNodes[k].id
-                  }]
-                });
+                // mthis.netchart.removeData({
+                  //   nodes: [{
+                    //     id: allNodes[k].id
+                //   }]
+                // });
               } else if (allNodes[k].isLink) {
-                event.chart.removeData({
-                  links: [{
-                    id: allNodes[k].id
-                  }]
-                });
+                // ids.push(allNodes[k].id);
+                // event.chart.removeData({
+                  //   links: [{
+                    //     id: allNodes[k].id
+                //   }]
+                // });
               }
             }
+            mthis.netchart.selection(ids)
           }
           netChartLogJson.push(
             {
@@ -620,6 +629,7 @@
             }
           )
           sessionStorage.setItem('netChartLog', JSON.stringify({data:netChartLogJson}));
+          mthis.getStatistics()
           // 反选结果
         } else {
            this.$Message.error('您并未选中任何节点！')
@@ -631,6 +641,9 @@
         let dataarr = []
         dataarr.push(data)
         mthis.netchart.replaceData({"nodes":dataarr,"links":[]})
+        console.log('----------reloadNetData----------')
+        console.log(mthis.netchart)
+        mthis.getStatistics()
       },
       back() {
         let netChartLog = sessionStorage.getItem('netChartLog');
@@ -799,14 +812,16 @@
             // onPointerUp(event) - 调用指针的函数。
             // onSettingsChange(event) - 更改设置时调用的函数。
             // onTripleClick(event) - 当用户三次点击图表时调用的函数。用于自定义函数调用。
+            onChartUpdate: function(event) {
+            },
+            onSettingsChange: function(event) {
+            },
             onRightClick: function(event) {
               event.preventDefault();
             },
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
                 if (event.clickNode) {
-                  // mthis.changeTargetNode();
-                  // event.selection[0].expand();
                 }
                 mthis.selectItem = event;
                 mthis.selectionId = [];

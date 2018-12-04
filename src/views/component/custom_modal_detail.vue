@@ -1,7 +1,7 @@
 <template>
   <div>
   
-    <Modal v-model="flag" width="80%" footer-hide>
+    <Modal v-model="flag" width="80%" footer-hide mask-closable="false">
   
       <Row type="flex" justify="space-between" class="code-row-bg" align="middle" :style="{margin:'0'}">
   
@@ -400,8 +400,9 @@
 <style>
  .ivu-collapse{
     border-radius:0 !important;
-    background-color: rgba(51, 255, 255, 0.1) !important;
-    border: solid 1px rgba(51, 255, 255, 0.1) !important;
+    background-color: rgba(51, 255, 255, 0) !important;
+    border:none !important;
+    /* border: solid 1px rgba(51, 255, 255, 0.1) !important; */
   }
   .ivu-collapse-header {
     background-color: rgba(0, 0, 0, 0.1) !important;

@@ -41,15 +41,17 @@
     methods: {
       setOption (a,b) {
         var mthis = this;
-        if(a.value.split('搜索:').length>1) {
+        if(a !== undefined && a!== null && a!==''){
+          if(a.value.split('搜索:').length > 1) {
           mthis.inputInfo = a.value.split('搜索:')[1]
-          alert(a.value.split('搜索:')[1])
           mthis.$router.push({path:'/contentView', query:{useRouter:'content',content:a.value.split('搜索:')[1]}})
         } else {
             mthis.$http.post('http://10.60.1.140:5001/node-datas/',{'nodeIds': a.value},{"emulateJSON":true}).then(response => {
             mthis.$emit('initNode',response.body.data[0]);
           })
         }
+
+        } 
       },
       searchInfo(query) {
       var mthis = this;

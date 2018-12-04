@@ -1029,16 +1029,15 @@
     },
     mounted() {
       var mthis = this
-      if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
-        // 跳转过来的
-        mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
-          console.log(response)
-          mthis.contentData = response.body.data
-          // mthis.dataexpand = response.body.data
-          // mthis.singlePerson = (opt[1]>1)?false:true
-        })
+      // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
+      //   // 跳转过来的
+      //   mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
+      //     mthis.contentData = response.body.data
+      //     // mthis.dataexpand = response.body.data
+      //     // mthis.singlePerson = (opt[1]>1)?false:true
+      //   })
 
-      }
+      // }
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       window.onresize = function() {
         mthis.contentHeight = document.documentElement.clientHeight - 65 + "px";
