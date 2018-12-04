@@ -116,9 +116,7 @@
          var mthis = this
          mthis.page = mthis.page + 1
                 return new Promise(resolve => {
-                  alert('in promise')
                   mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page='+this.page+'&query='+ mthis.$route.query.content).then(response => {
-                    console.log(response)
                     mthis.items = response.body.data
                     resolve();
                     // mthis.dataexpand = response.body.data
@@ -172,7 +170,6 @@
       if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
         // 跳转过来的
         mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
-          console.log(response)
           mthis.items = response.body.data
           // mthis.dataexpand = response.body.data
           // mthis.singlePerson = (opt[1]>1)?false:true

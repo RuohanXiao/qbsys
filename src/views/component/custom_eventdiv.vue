@@ -5,10 +5,9 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs type="card">
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:eventheight}">
-            <Collapse accordion v-model="show" :style="{border:'none',backgroundColor: 'rgba(0, 0, 0, 0.01)',height:eventheight}">
+            <Collapse accordion v-model="show" :style="{border:'none',height:eventheight}">
               <div v-for="(object,index) in dataExpand">
-                <div>
-                  <div :style="{borderBottom:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',}" style="cursor:default">
+                  <div :style="{borderBottom:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',height:eheight,overflowY:'scroll'}" style="cursor:default">
                     <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
                       <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> {{object.title}}({{object.count}})
                       <i class="icon iconfont icon-more" style="float:right"></i>
@@ -41,79 +40,375 @@
                       </Row>
                     </div>
                   </Panel>
-                </div>
               </div>
             </Collapse>
           </Tab-pane>
           <Tab-pane label="目标详情">
-            <div :style="{backgroundColor: 'rgba(0, 0, 0, 0.01)'}">
-              <Row type="flex" justify="start" align="start" class="code-row-bg" :style="{margin:'0',padding:'0 10px'}" v-if="singlePerson">
-                <Col span="16">
-                <h1 class="infoName" style="padding-left: 10px;">{{dataExpand.name}}</h1>
-                </Col>
-                <Col span="8" :style="{margin:'0'}">
-                <img :src="dataExpand.img" :style="{borderRadius:'20px',top:'0',right:'30px',maxHeight:'120px',position:'absolute'}">
-                </Col>
-                <!-- <Col span="3" class="infoKey">国家</Col>
-                <Col span="10" class="infoValue">{{dataExpand.country}}</Col>
-                <Col span="11"></Col>
-                <Col span="3" class="infoKey">机构</Col>
-                <Col span="10" class="infoValue">{{dataExpandnd.org}}</Col>
-                <Col span="11"></Col>
-                <Col span="3" class="infoKey">配偶</Col>
-                <Col span="10" class="infoValue">{{dataExpand.spouse}}</Col>
-                <Col span="11"></Col>
-                <Col span="3" class="infoKey">学校</Col>
-                <Col span="10" class="infoValue">{{dataExpand.school}}</Col>
-                <Col span="11"></Col> -->
-                <Col span="5" class="infoKey">标签</Col>
-                <Col span="19" class="infoValue">{{dataExpand.type}}</Col>
-                <!-- <Col span="3" class="infoKey">简介</Col>
-                <Col span="21" class="infoValue">{{dataExpand.introduction}}</Col> -->
-                <Col span="24">
-                <!-- <h2 class="infoTitle">倾向性分析</h2> -->
-                 <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
-                  <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 倾向性分析
-                  
-                  <i class="icon iconfont icon-more" style="float:right"></i>
-                </p>
-                <Row type="flex" justify="space-around" align='middle' class="code-row-bg" :style="{ borderBottom:'solid 1px rgba(51, 255, 255, 0.2) !important;',margin:'0'}">
-                  <Col span="5">
-                  <Circle :percent="80" :size='50'>
-                    <span class="demo-Circle-inner" style="font-size:14px">80%<br>负面</span>
-                  </Circle>
-                  </Col>
-                  <Col span="5">
-                  <Circle :percent="80" :size='50' stroke-color="#ff5500">
-                    <span class="demo-Circle-inner" style="font-size:14px">80%<br>中立</span>
-                  </Circle>
-                  </Col>
-                  <Col span="5">
-                  <Circle :percent="80" :size='50'>
-                    <span class="demo-Circle-inner" style="font-size:14px">80%<br>正面</span>
-                  </Circle>
-                  </Col>
-                </Row>
-                </Col>
-                <Col span="24" :style="{height:'10vh'}">
-                </Col>
-              </Row>
-              <Row type="flex" justify="start" align="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-if="!singlePerson">
-                <div :style="{borderBottom:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
+            <div>
+              <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
+                <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
                   <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
                     <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="dataExpand != null">{{dataExpand.length}}</span>)
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
-                <div class="p-collapse-modal" :style="{width:'100%'}" onclick="detail(data.id)" v-for="data in dataExpand" @click="detail(data.id)">{{data.name}}
+                <div class="p-collapse-modal" :style="{width:'100%'}" onclick="detail(data.id)" v-for="data in evetdata" @click="detail(evetdata.id)">{{data.name}}
                   <p class="p-collapse-modal-small">{{data.type}}</p>
                 </div>
               </Row>
+
+              <Card   dis-hover style="width:100%,background-color:rgba(0,0,0,0);" :style="{overflowY:scroll,height:eventheight}" v-show="singlePerson" v-if="evetdata!== undefined && evetdata!==null">
+                <Row type="flex" justify="end">
+                  <Icon class="cardIcon icon iconfont icon-fangda process-img DVSL-bar-btn DVSL-bar-btn-back" size="20"  @click="detail(evetdata.id)"/>
+                </Row>
+                <div :style="{padding:'0 5px'}">
+                  <Row type="flex" justify="center">
+                    <span class="infoTitle">{{evetdata.name}}</span>
+                  </Row>
+                  <Row type="flex" justify="center" :style="{margin:'5px 0 '}">
+                    <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="evetdata.img==''"/>
+                    <Avatar class="circle-img" v-else :src="evetdata.img" :style="{width:'50px',height:'50px'}" />
+                  </Row>
+                  <Row type="flex" justify="center" >
+                    <Col order="1" span="8">
+                      <span class="content_header">中⽂名</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.name_in_chinese}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">类型</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.type}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">全名</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.birth_name}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">外⽂名</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.name_in_native_language}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">昵称</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.nickname}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">出⽣</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.date_of_birth}} - {{evetdata.date_of_death}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">失踪</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.date_of_disappearance}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">出⽣地</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.place_of_birth}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">国籍</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.country_of_citizenship}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">⺠族</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.ethic_group}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">信仰</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.religion}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">职业</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.occupation}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">军衔</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.military_rank}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">军种</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.military_branch}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">政党</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.member_of_political_party}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">组织</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.member_of}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">雇主</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.employer}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">荣誉</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.award_received}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">学习经历</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.educated_at}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="16" offset="8">
+                      <span class="content_value">{{evetdata.academic_degree}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">⼯作经历</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.position_held}}</span>
+                    </Col>
+                  </Row>
+
+
+
+                  <Row type="flex" justify="center" >
+                    <Col order="1" span="8">
+                      <span class="content_header">中⽂名</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.name_in_chinese}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">类型</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.type}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">全名</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.birth_name}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">外⽂名</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.name_in_native_language}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">昵称</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.nickname}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">出⽣</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.date_of_birth}} - {{evetdata.date_of_death}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">失踪</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.date_of_disappearance}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">出⽣地</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.place_of_birth}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">国籍</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.country_of_citizenship}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">⺠族</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.ethic_group}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">信仰</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.religion}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">职业</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.occupation}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">军衔</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.military_rank}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">军种</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.military_branch}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">政党</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.member_of_political_party}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">组织</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.member_of}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">雇主</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.employer}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">荣誉</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.award_received}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">学习经历</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.educated_at}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="16" offset="8">
+                      <span class="content_value">{{evetdata.academic_degree}}</span>
+                    </Col>
+                  </Row>
+                  <Row type="flex" justify="center">
+                    <Col order="1" span="8">
+                      <span class="content_header">⼯作经历</span>
+                    </Col>
+                    <Col order="2" span="16">
+                      <span class="content_value">{{evetdata.position_held}}</span>
+                    </Col>
+                  </Row>
+                </div>
+              </Card>
             </div>
           </Tab-pane>
         </Tabs>
       </div>
-      <modal-chart-detail :flag="modal_detail" :detail="detail_data"></modal-chart-detail>
+      <modal-chart-detail :flag="detailModalFlag" :detail="detail_data" ></modal-chart-detail>
     </div>
     </Col>
   </div>
@@ -122,7 +417,6 @@
   import modalChartDetail from './custom_modal_detail'
   /* eslint-disable */
   export default {
-    // props: {
     //   eventData: {
     //     type: Array,
     //     default: [0, 0, 0] //这样可以指定默认的值
@@ -134,6 +428,13 @@
     // },
     data() {
       return {
+        evetdata: null,
+        detailModalFlag: false,
+        myList: [{
+          name: 'aaaaa',
+          img: 'https://img3.doubanio.com/view/celebrity/s_ratio_celebrity/public/p230.webp',
+          url:'www.baidu.com'
+        }],
         colorMap: [
           '#33cc99',
           '#33cccc',
@@ -141,9 +442,9 @@
         ],
         detail_data: null,
         show: [],
+        eheight:0,
         eventheighttdiv: 0,
         eventheight: 0,
-        modal_detail: false,
         closable: true,
         singlePerson: false,
         infos: [{
@@ -174,13 +475,43 @@
       };
     },
     components: {modalChartDetail},
+    watch: {
+      eventheightdiv: function() {
+        this.eheight = this.eventheightdiv-32-16+'px'
+      },
+      dataExpand: function() {
+        this.evetdata = (this.singlePerson) ? this.dataExpand[0] : this.dataExpand
+      }
+    },
     computed: {
       menuitemClasses: function() {
         return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
       }
     },
     methods: {
+      changeLimit () {
+        // function getArrayItems(arr, num) {
+        //     const temp_array = [];
+        //     for (let index in arr) {
+        //         temp_array.push(arr[index]);
+        //     }
+        //     const return_array = [];
+        //     for (let i = 0; i<num; i++) {
+        //         if (temp_array.length>0) {
+        //             const arrIndex = Math.floor(Math.random()*temp_array.length);
+        //             return_array[i] = temp_array[arrIndex];
+        //             temp_array.splice(arrIndex, 1);
+        //         } else {
+        //             break;
+        //         }
+        //     }
+        //     return return_array;
+            return this.myList
+        // }
+        // this.randomMovieList = getArrayItems(this.myList, 5);
+      },
       look() {
+        console.log(this.dataExpand[0])
         // let mthis = this
         // mthis.singlePerson = false
       },
@@ -191,12 +522,12 @@
           'nodeIds': nodeIdsArry
         }).then(response => {
           this.dataExpand = response.body.data[0].nodes[0]
-          this.singlePerson = true
+          this.detailModalFlag = true
         })
         //查询详细信息
       }
     },
-    props: ['dataExpand','singlePerson'],
+    props: ['dataExpand','singlePerson','eventheightdiv'],
     mounted() {
       var mthis = this; 
       window.onresize = function() {
@@ -205,10 +536,64 @@
       };
       this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
       this.eventheighttdiv = document.documentElement.clientHeight - 64 - 10 + "px";
+      this.changeLimit()
     }
   };
 </script>
+<style scoped>
+.ivu-card{
+  background-color: rgba(0,0,0,0) !important;
+  background: rgba(0,0,0,0) !important;
+}
+.infoTitle{
+  font-family: MicrosoftYaHei;
+	font-size: 20px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 26px;
+	letter-spacing: 0px;
+	color: #ccffff;
+  margin-bottom: 10px;
+}
+.ivu-tabs-bar{
+  margin-bottom:5px !important;
+}
+</style>
+
 <style>
+  .content_header{
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 20px;
+    letter-spacing: 0px;
+    color: #ccffff;
+    opacity: 0.5;
+  }
+  .content_value{
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 20px;
+    letter-spacing: 0px;
+    color: #ccffff;
+    text-overflow:ellipsis;
+  }
+  .ivu-card-body >.ivu-row-flex-end{
+    float: right;
+  }
+  .ivu-avatar>*{
+    line-height: 50px !important;
+    width: 50px !important;
+  }
+  .ivu-card-head{
+    border-bottom-width: 0 !important;
+  }
+  .ivu-card-body{
+    padding: 0 5px 0 5px !important;
+  }
   .pfront {
     width: 36px;
     height: 17px;
@@ -261,6 +646,9 @@
     letter-spacing: 0px;
     color: #ccffff;
   }
+  .cardIcon{
+    float: right !important;
+  }
   /* 环内文字 */
   .demo-Circle-inner {
     font-family: PARaDOS !important;
@@ -271,5 +659,8 @@
     letter-spacing: 0px !important;
     color: #ccffff !important;
     opacity: 0.5;
+  }
+  .circle-img{
+    border-radius:50% !important;
   }
 </style>

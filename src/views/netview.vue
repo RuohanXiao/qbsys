@@ -11,7 +11,7 @@
     height: 100%;
     width: 100%;
   }
-  .info-list {
+  #right {
     background-image: linear-gradient( 8deg, rgba(102, 255, 153, 0.14) 0%, rgba(102, 128, 204, 0.14) 60%, rgba(102, 0, 255, 0.14) 100%), linear-gradient(#000000, #000000);
     background-blend-mode: normal, normal;
     border-radius: 0px 0px 0px 0px;
@@ -113,16 +113,6 @@
     height: 12px;
     background-color: #99ffff;
     border-radius: 3px;
-  }
-  #tab1 {
-    background: -webkit-linear-gradient( bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* Safari 5.1 - 6 */
-    background: -o-linear-gradient( bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* Opera 11.1 - 12*/
-    background: -moz-linear-gradient( bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* Firefox 3.6 - 15*/
-    background: linear-gradient( to bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* 标准的语法 */
   }
   .changeColor {
     opacity: 40%;
@@ -526,8 +516,8 @@
               <time-chart-div :splitWidth="splitWidth" :split="split1" @changenetpx="changenetpx"></time-chart-div>
               
             </div>
-            <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:eventheightdiv,marginRight:'2.3vw',overflowY:'scroll'}">
-              <event-chart-div :dataExpand="dataexpand"></event-chart-div>
+            <div slot="right" class="scroll-bar demo-split-pane paneRight"  :style="{height:eventheightdiv,maxHeight:eventheightdiv,marginRight:'2.3vw'}">
+              <event-chart-div id="right" :dataExpand="dataexpand" :singlePerson="singlePerson" :eventHeight="eventheightdiv"  :style="{height:eventheightdiv,maxHeight:eventheightdiv}"></event-chart-div>
             </div>
           </Split>
         </div>
@@ -704,8 +694,12 @@
         eventheightdiv: 0,
         eventheight:0,
         changHeightCount: 1,
-        dataexpand: null,
-        singlePerson: null,
+        dataexpand: [{
+          name:'',
+          img:'',
+          type:''
+        }],
+        singlePerson: true,
         msg: [],
         closeFlag: false,
         contentHeight: 0,
@@ -836,6 +830,8 @@
       // netdiv 回传选中节点参数
       selectNodes(opt) {
         var mthis = this
+        mthis.singlePerson = (opt[1]>1)?false:true
+        console.log(mthis.singlePerson)
         let nodeIdsArry = opt[0].ids.map(item => {
           return item.id;
         });
@@ -843,7 +839,6 @@
           'nodeIds': nodeIdsArry
         }).then(response => {
           mthis.dataexpand = response.data.data[0].nodes
-          mthis.singlePerson = (opt[1]>1)?false:true
         })
         //单节点
         // if (opt[0].ids.length == 1) {
