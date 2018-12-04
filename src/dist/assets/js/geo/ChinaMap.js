@@ -3,7 +3,7 @@ import TileWMS from 'ol/source/TileWMS'
 import Projection from 'ol/proj/Projection'
 import View from 'ol/View'
 import Map from 'ol/Map'
-import {defaults as defaultControls, ScaleLine, FullScreen} from 'ol/control.js'
+import {defaults as defaultControls, ScaleLine, FullScreen,ZoomSlider} from 'ol/control.js'
 
 
 var map = function(target){
@@ -40,7 +40,7 @@ var map = function(target){
     this.map = new Map({
         //地图中的比例尺等控制要素
 		controls: defaultControls().extend([
-			new ScaleLine(),new FullScreen()
+			/* new ScaleLine(), */new FullScreen(),new ZoomSlider()
 		  ]),
         //设置显示的容器
         target: target,
@@ -52,7 +52,7 @@ var map = function(target){
         //设置视图
         view: view
     });
-    
+    //this.map.addControl();
     this.addlayer = function(layer){
     	this.map.addLayer(layer);
     };

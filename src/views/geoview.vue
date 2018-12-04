@@ -4,7 +4,7 @@
   <div class="layout" :style="{width: '100vw',height: '100vh', background:'black'}">
     <Layout :style="{width: '98vw',height: '100vh'}">
       <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
-        <Row type="flex" justify="space-between" class="code-row-bg" align="middle">
+        <!-- <Row type="flex" justify="space-between" class="code-row-bg" align="middle">
           <Col span="1" align="middle">
           <router-link to="/netView">
             <img src="../dist/assets/images/net.png" style="display: inline-block; vertical-align: middle; width:36px;" /></router-link>
@@ -18,13 +18,10 @@
             <img src="../dist/assets/images/content.png" style="display: inline-block; vertical-align: middle;width:36px" /></router-link>
           </Col>
           <Col span="4" offset="17">
-          <!-- <i class="icon iconfont icon-search  process-img" style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i>
-            <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfo" filterable remote placeholder='' :remote-method="searchInfo" :loading="loading1" :label-in-value="true" @on-change="v=>{setOption(v,'type')}">
-              <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
-            </Select> -->
           <search-div @initNode="initNode" />
           </Col>
-        </Row>
+        </Row> -->
+        <top-menu @initNode='initNode' />
       </Header>
       <Content :style="{marginTop:'64px', width: '100vw'}" id="content">
         <div class="rightNav" :style="{height:contentHeight,display:'flex'}">
@@ -75,6 +72,7 @@
   import "../dist/assets/styles/navsytle.css";
   import nav from "../dist/assets/js/nav.js";
   import mock from "../mock/index.js";
+  import topMenu from "./component/custom_topmenu";
   const axios = require("axios");
   const MockAdapter = require("axios-mock-adapter");
   mock.test = 1;
@@ -201,10 +199,12 @@
       timeChartDiv,
       eventChartDiv,
       //  timeDiv,
-      searchDiv
+      searchDiv,
+      topMenu
     },
     methods: {
-      initNode(opt) {
+      initNode(initNode) {
+        alert(55);
       },
       // netdiv 回传选中节点参数
       selectNodes(opt) {},
