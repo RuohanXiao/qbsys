@@ -47,6 +47,70 @@
     position: absolute;
     bottom: 500px;
 }
+/**
+* The zoomslider in the second map shall be placed between the zoom-in and
+* zoom-out buttons.
+*/
+
+#locationRoute_Map .ol-zoom .ol-zoom-out {
+margin-top: 204px;
+top: 2.3em;
+}
+#locationRoute_Map .ol-zoomslider {
+background-color: transparent;
+top: 2.3em;
+}
+
+#locationRoute_Map .ol-touch .ol-zoom .ol-zoom-out {
+margin-top: 212px;
+top: 2.3em;
+}
+#locationRoute_Map .ol-touch .ol-zoomslider {
+top: 2.75em;
+}
+
+#locationRoute_Map .ol-zoom-in.ol-has-tooltip:hover [role=tooltip],
+#locationRoute_Map .ol-zoom-in.ol-has-tooltip:focus [role=tooltip] {
+top: 3px;
+}
+
+#locationRoute_Map .ol-zoom-out.ol-has-tooltip:hover [role=tooltip],
+#locationRoute_Map .ol-zoom-out.ol-has-tooltip:focus [role=tooltip] {
+top: 232px;
+}
+
+/**
+* The zoomslider in the third map shall be horizontal, placed in the top-right
+* corner, smaller and orange.
+*/
+
+/* #locationRoute_Map .ol-zoomslider {
+        top: 8px;
+        left: auto;
+        right: 8px;
+        background-color: rgba(255,69,0,0.2);
+        width: 200px;
+        height: 15px;
+        padding: 0;
+        box-shadow: 0 0 5px rgb(255,69,0);
+        border-radius: 20px;
+      }
+
+      #locationRoute_Map .ol-zoomslider:hover {
+        background-color: rgba(255,69,0,0.3);
+      }
+
+      #locationRoute_Map .ol-zoomslider-thumb {
+        height: 15px;
+        width: 15px;
+        margin: 0;
+        filter: none;
+        background-color: rgba(255,69,0,0.6);
+        border-radius: 20px;
+      }
+      #locationRoute_Map a.ol-zoomslider-handle:hover {
+        background-color: rgba(255,69,0,0.7);
+      } */
 
 </style>
 
@@ -77,6 +141,7 @@ import WFS from 'ol/format/WFS'
 import GeoJSON from 'ol/format/GeoJSON'
 import LineString from'ol/geom/LineString'
 import Icon from 'ol/style/Icon'
+
 
 import flexslider from 'flexslider'
 import 'ol/ol.css'
