@@ -3,37 +3,29 @@
     <Modal v-model="flag" width="80%" footer-hide>
       <Row type="flex" justify="space-between" class="code-row-bg" align="middle" :style="{margin:'0'}">
         <Col span="7" class="leftModal" type="flex" justify="space-between" align="middle" :style="{height:'80vh'}">
-        <!-- 搜索框 -->
-        <!-- <div style="width:80%" id="idNumber2">
-          <i class="icon iconfont icon-search" style="position: absolute;
-                      color: rgb(51, 255, 255);
-                      width:50px;
-                      left:10px;
-                      opacity: 0.4;"></i>
-          <Select id='ele' v-model="inputInfo" filterable remote placeholder='' :remote-method="searchInfo" :loading="loading1">
-                <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
-            </Select>
-        </div> -->
-        <Row type="flex" justify="center" class="code-row-bg" align="middle" :style="{marginTop:'2vh'}">
+        <Row type="flex" justify="center" class="code-row-bg" align="middle" :style="{marginTop:'20px'}">
           <Col span="20">
-         <div style="width:100%;height:40px">
-        <search-div />
-        </div>
-        </Col>
-        </Row>
-        <div :style="{maxHeight:listHeight,overflowY: 'scroll',textAlign:'left',margin:'0 2vh'}">
-          <div slot="content" class="p-collapse-title" v-for="item in edata"><i class="icon iconfont icon-triangle-right" style="color:rgba(51, 255, 255, .4);padding-right:6px;"></i>{{item.text}}
-            <div class="p-collapse-modal" v-for="it in item.chlidren">{{it.text}}
-              <p class="p-collapse-modal-small">{{it.info}}</p>
-            </div>
+          <div style="width:100%;height:40px">
+            <search-div />
           </div>
-        </div>
+          </Col>
+        </Row>
+        <Collapse class="collapseHover" :style="{textAlign:'left',marginTop:'10px',height:listHeight,maxHeight:listHeight}" accordion>
+          <Panel v-for="item in edata" :style="{overflowY:'hidden',overflowX:'hidden'}">
+            {{item.text}}
+            <div slot="content" :style="{overflowY:'hidden',overflowX:'hidden'}">
+              <div class="p-collapse-modal" v-for="it in item.chlidren" :style="{overflowY:'hidden',overflowX:'hidden'}">{{it.text}}
+                <p class="p-collapse-modal-small" :style="{overflowY:'hidden',overflowX:'hidden'}">{{it.info}}</p>
+              </div>
+            </div>
+          </Panel>
+        </Collapse>
         </Col>
         <Col span="17" align="middle" class="rightModal" :style="{height:'80vh'}">
         <div class="closeBackground"></div>
         <Card :bordered="false" style="padding:'0';border-top-right-radius: 18px;">
           <div :style="{width:'90%'}">
-            <Row type="flex" justify="start" class="code-row-bg" align="middle" :style="{margin:'0',maxHeight:listHeight,overflowY: 'scroll'}">
+            <Row type="flex" justify="start" class="code-row-bg" align="middle" :style="{margin:'0',height:InfoHeight,overflowY: 'scroll'}">
               <Col span="20" :style="{textAlign:'left'}">
               <tr>
                 <th class="modalTitle" colspan="2">弗拉基米尔·弗拉基米罗维奇·普京</th>
@@ -180,6 +172,7 @@
         list: ['习近平', '奥巴马', '特朗普', '普京', '安倍晋三', '小泉纯一郎', '彭丽媛', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming'],
         buttonDivHeight: 0,
         listHeight: 0,
+        InfoHeight: 0,
         items: [{
             text: "第一组"
           },
@@ -194,7 +187,8 @@
     },
     props: ['flag', 'edata'],
     mounted() {
-      this.listHeight = document.documentElement.clientHeight * 0.8 - 85 + "px";
+      this.listHeight = document.documentElement.clientHeight * 0.8 - 60 + "px";
+      this.InfoHeight = document.documentElement.clientHeight * 0.8 - 85 + "px";
       this.buttonDivHeight = 69 + "px";
     },
     components: {
@@ -209,13 +203,14 @@
       showNodeInNewNet() {
         alert('新建网络分析')
       },
-      queryPerson() {
-      },
+      queryPerson() {},
       searchInfo(query) {
         var mthis = this
         if (query !== '') {
           this.loading1 = true;
-          axios.get('/getPersonInfo',{name:query})
+          axios.get('/getPersonInfo', {
+              name: query
+            })
             .then(function(response) {
               setTimeout(() => {
                 mthis.options1 = response.data.data
@@ -230,6 +225,90 @@
   }
 </script>
 <style>
+  /* 滚动条样式 */
+   ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+   ::-webkit-scrollbar-track,
+   ::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 5px solid transparent;
+  }
+   ::-webkit-scrollbar-track {
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2) inset;
+  }
+   ::-webkit-scrollbar-thumb {
+    min-height: 20px;
+    background-clip: content-box;
+    box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.2) inset;
+  }
+   ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  .ivu-collapse {
+    border-radius: 0 !important;
+    background-color: rgba(51, 255, 255, 0.1) !important;
+    border: solid 1px rgba(51, 255, 255, 0.1) !important;
+  }
+  .ivu-collapse-header {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
+  .ivu-collapse-content {
+    background-color: rgba(51, 255, 255, 0.1) !important;
+  }
+  .ivu-collapse>.ivu-collapse-item>.ivu-collapse-header {
+    padding-left: 5px !important;
+  }
+  .collapseHover {
+    overflow: hidden;
+  }
+  .collapseHover:hover {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .ivu-collapse>.ivu-collapse-item {
+    border-top: 1px solid rgba(51, 255, 255, 0.1) !important;
+  }
+  .vertical-center-modal {
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+  }
+  /* 弹出框样式 */
+  .ivu-modal-mask {
+    /* background-color:rgba(0,0,0,0.6) !important; */
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+  .ivu-modal-content {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    border-radius: 20px !important;
+    box-shadow: 1px 1px 18px rgba(51, 255, 255, 0.5) !important;
+    border: solid 1px rgba(51, 255, 255, 0.5) !important;
+  }
+  .ivu-modal-footer {
+    border: none !important;
+  }
+  .ivu-modal-body {
+    padding: 0 !important;
+    border-radius: 20px !important;
+  }
+  .leftModal {
+    background-image: linear-gradient( 8deg, rgba(102, 255, 153, 0.14) 0%, rgba(102, 128, 204, 0.14) 60%, rgba(102, 0, 255, 0.14) 100%), linear-gradient(#000000, #000000);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-right: solid 1px #336666;
+    overflow: hidden;
+  }
+  .rightModal {
+    /*
+    
+        border-top-right-radius: 25px;
+    
+        border-bottom-right-radius: 25px;
+    
+        */
+  }
   .p-collapse-title {
     font-family: MicrosoftYaHei;
     font-size: 18px;
@@ -238,7 +317,6 @@
     line-height: 50px;
     letter-spacing: 0px;
     color: #ccffff;
-    padding: 0 10px;
   }
   .modalTitle {
     font-family: MicrosoftYaHei;
@@ -302,18 +380,30 @@
     cursor: pointer;
   }
   /* .personCard:hover{
-      transition:All 0.4s ease-in-out;
-      -webkit-transition:All 0.4s ease-in-out;
-      -moz-transition:All 0.4s ease-in-out;
-      -o-transition:All 0.4s ease-in-out;
-      transform:translateX(-2px);
-      -webkit-transform:translateX(-2px);
-      -moz-transform:translateX(-2px);
-      -o-transform:translateX(-2px);
-      -ms-transform:translateX(-2px);
-      box-shadow: 2px 2px 2px rgba(51, 255, 255, 0.5);
-      cursor: pointer;
-    } */
+    
+          transition:All 0.4s ease-in-out;
+    
+          -webkit-transition:All 0.4s ease-in-out;
+    
+          -moz-transition:All 0.4s ease-in-out;
+    
+          -o-transition:All 0.4s ease-in-out;
+    
+          transform:translateX(-2px);
+    
+          -webkit-transform:translateX(-2px);
+    
+          -moz-transform:translateX(-2px);
+    
+          -o-transform:translateX(-2px);
+    
+          -ms-transform:translateX(-2px);
+    
+          box-shadow: 2px 2px 2px rgba(51, 255, 255, 0.5);
+    
+          cursor: pointer;
+    
+        } */
   .ivu-modal-close {
     top: 3px !important;
     right: 3px !important;
@@ -328,7 +418,11 @@
     width: 1px;
     height: 0px;
     position: absolute;
-    border-top-right-radius: 18px;
+    /*
+    
+        border-top-right-radius: 18px;
+    
+        */
     border-left: 62px solid #000000;
     border-top: 62px solid #339999;
     background: #339999;
@@ -346,10 +440,10 @@
     width: 80%;
   }
   .buttonModal:hover {
-    transition:All 0.4s ease-in-out;
-    -webkit-transition:All 0.4s ease-in-out;
-    -moz-transition:All 0.4s ease-in-out;
-    -o-transition:All 0.4s ease-in-out;
+    transition: All 0.4s ease-in-out;
+    -webkit-transition: All 0.4s ease-in-out;
+    -moz-transition: All 0.4s ease-in-out;
+    -o-transition: All 0.4s ease-in-out;
     cursor: pointer;
     border-radius: 5px;
     height: 100%;
@@ -370,13 +464,11 @@
     line-height: 38px;
     height: 75px;
     color: #ccffff;
-    border-top: solid 1px #336666;
-    border-bottom: solid 1px #336666;
     font-family: "微软雅黑";
     background-color: rgba(51, 255, 255, 0.1);
-    /* border: solid 1px #336666; */
-    margin-left: 5px;
+    border: solid 1px #336666;
     margin-top: 5px;
+    margin-right: -5px;
     padding: 0 10px;
   }
   .p-collapse-modal-small {
@@ -389,13 +481,12 @@
     color: #ccffff;
     opacity: 0.5;
   }
-  #ele > .ivu-select-dropdown {
+  #ele>.ivu-select-dropdown {
     left: 30px !important;
     width: 80%;
     min-width: 200px;
   }
-
-  #ele .ivu-select-item-focus{
+  #ele .ivu-select-item-focus {
     background: rgba(51, 255, 255, 0.2) !important;
   }
 </style>

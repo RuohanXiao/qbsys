@@ -1,6 +1,6 @@
 <template>
-  <div :style="{height:netpxdiv}">
-    <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 14px 0 14px'}">
+  <div :style="{height:netheightdiv}">
+    <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px'}">
       <Row type="flex" justify="start" class="code-row-bg" align="middle" :style="{height:'70px',paddingLeft:'10px'}">
         <Col span="1" align="middle" class="bottom">
         <Tooltip content="分组" placement="bottom">
@@ -63,21 +63,21 @@
         </Col>
       </Row>
     </div>
-    <div :style="{height:netheight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 14px',backgroundColor:'rgba(0,0,0,0.5)'}">
-        <Scroll :on-reach-bottom="handleReachBottom">
-      <div id="contentchart" aria-autocomplete="true" :style="{height:netheight,display:'flex',overflowY:'scroll'}">
-        <Row type="flex" justify="start" align="middle">
-        <Col span="3" align="middle"  v-for="item in items">
-          <div class="contentDiv">
-            <p class="contentTitle" @click="showContent(item.id)">{{item.title}}</p>
-            <p class="contentText">{{item.text}}</p>
-            <p class="contentTime">{{item.time}}&nbsp;{{item.from}}</p>
-          </div>
-        </Col>
-        </Row>
-      </div>
+    <div :style="{height:netheight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
+      <Scroll :on-reach-bottom="handleReachBottom"  v-if='!ifInfo' :height=contentHeight>
+        <div id="contentchart" aria-autocomplete="true" :style="{height:contentHeight,display:'flex',overflowY:'scroll'}">
+          <Row type="flex" justify="start" align="middle">
+          <Col span="3" align="middle"  v-for="item in items">
+            <div class="contentDiv">
+              <p class="contentTitle" @click="showContent(item.id)">{{item.title}}</p>
+              <p class="contentText">{{item.text}}</p>
+              <p class="contentTime">{{item.time}}&nbsp;{{item.from}}</p>
+            </div>
+          </Col>
+          </Row>
+        </div>
       </Scroll>
-      <div id="contentInfo" :style="{height:netheight,display:'none',overflowY:'scroll'}">
+      <div id="contentInfo" v-if='ifInfo' :style="{height:contentHeight,overflowY:'scroll'}">
         <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
         <h2 class="contentInfoTitle" id='contentsTitle'></h2>
         <p class="contentInfoTime" id='contentsTime'></p>
@@ -98,6 +98,8 @@
     name: "App",
     data() {
       return {
+        ifInfo: false,
+        contentHeight: 0,
         netheight: 0,
         netheightdiv: 0,
         flag: true,
@@ -125,14 +127,14 @@
                 });
         },
       toContentDiv(){
-        document.getElementById('contentchart').style.display = 'block'
-        document.getElementById('contentInfo').style.display = 'none'
-        document.getElementById('contents').innerHTML = ''
-        document.getElementById('contentsTitle').innerHTML = ''
-        document.getElementById('contentsTime').innerHTML = ''
+        this.ifInfo = false 
+        // document.getElementById('contents').innerHTML = ''
+        // document.getElementById('contentsTitle').innerHTML = ''
+        // document.getElementById('contentsTime').innerHTML = ''
       },
       showContent(id){
-      var mthis = this
+        var mthis = this
+        mthis.ifInfo = true 
       //  mock.get("/getContentInfo",{id:id}).then(function(res) {
       //   // 获取文本数据
       //   document.getElementById('contents').innerHTML = res.data.contents
@@ -142,12 +144,11 @@
       mthis.$http.get('http://10.60.1.140:5001/context-by-id/?idValue='+ id).then(response => {
           document.getElementById('contents').innerHTML = response.body.data[0].text
           document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
-          document.getElementById('contentsTime').innerHTML = response.body.data[0].from + '|'+ response.body.data[0].time
+          document.getElementById('contentsTime').innerHTML = response.body.data[0].from + ((response.body.data[0].from!=='' && response.body.data[0].from !==undefined)?'  |  ':'')+ response.body.data[0].time
+          
           // mthis.dataexpand = response.body.data
           // mthis.singlePerson = (opt[1]>1)?false:true
         })
-        document.getElementById('contentchart').style.display = 'none'
-        document.getElementById('contentInfo').style.display = 'block'
       }
     },
     created() {
@@ -161,12 +162,10 @@
     },
     mounted() {
       var mthis = this
-      window.onresize = function() {
-        mthis.netheight = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
-        mthis.netheightdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
-      }
-      mthis.netheight = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
-      mthis.netheightdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
+      let useHeight = document.documentElement.clientHeight - 64 - 20;
+      mthis.netheight = useHeight * 0.8 - 55 + "px";
+      mthis.netheightdiv = useHeight * 0.8 + "px";
+      mthis.contentHeight = useHeight * 0.8 - 68 + "px";
       if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
         // 跳转过来的
         mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
@@ -181,6 +180,9 @@
   };
 </script>
 <style>
+.ivu-scroll-container{
+  height: auto !important;
+}
   .top,
   .bottom {
     text-align: center;

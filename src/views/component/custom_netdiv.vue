@@ -129,7 +129,6 @@
         netchart: null,
         nextId: 4,
         flag: true,
-        netData: [],
         selectItem: null,
         saveNum: 0,
         modal01: false,
@@ -641,8 +640,6 @@
         let dataarr = []
         dataarr.push(data)
         mthis.netchart.replaceData({"nodes":dataarr,"links":[]})
-        console.log('----------reloadNetData----------')
-        console.log(mthis.netchart)
         mthis.getStatistics()
       },
       back() {
@@ -734,8 +731,9 @@
                 //要改
                 // { className: "知识扩展关系", style: { fillColor: "rgba(51, 255, 255, 0.4)"} ,id: "know"},
                 // { className: "事件扩展关系", style: { fillColor: "rgba(102, 255, 153, 0.4)"},id: "event" }
-                { className: "知识", style: { fillColor: "rgba(51, 255, 255, 0.4)",direction: "D", lineDash: [3, 3] } },
-                { className: "事件", style: { fillColor: "rgba(51, 255, 255, 0.4)"} }
+                
+                // { className: "知识", style: { fillColor: "rgba(51, 255, 255, 0.4)",direction: "D", lineDash: [3, 3] } },
+                // { className: "事件", style: { fillColor: "rgba(51, 255, 255, 0.4)"} }
             ],
             node: {
               display: "image",

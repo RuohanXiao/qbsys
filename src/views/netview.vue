@@ -205,7 +205,7 @@
   }
   #queryInput .ivu-select-dropdown {
     left: 0px !important;
-    background: rgba(0, 0, 0, 0.5) !important;
+    background: rgba(0, 0, 0, 0.9) !important;
   }
   #queryInput .ivu-select-item-focus {
     background: rgba(51, 255, 255, 0.2) !important;
