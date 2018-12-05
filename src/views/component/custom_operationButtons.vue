@@ -457,9 +457,11 @@ export default {
             });
             var idImg = id + '_imgslider';
             var element = document.getElementById(idImg);
-            element.children[0].style.borderColor = "rgba(204, 255, 255, 0)";
+            element.children[0].style.border = '';
+            element.children[0].style.width = '46px';
+            element.children[0].style.height = '46px';
             element.children[0].style.boxShadow = '';
-            element.children[1].style.color = 'rgba(24,255,255,0.5)';
+            //element.children[1].style.color = 'rgba(24,255,255,0.5)';
             var idN = 'pointAnimation_' + id;
             mthis.removeOverlays(idN);
             var layer = mthis.routeMap.map.getLayers().getArray();
@@ -490,9 +492,11 @@ export default {
             var returnId = [];
             var idImg = id + '_imgslider';
             var element = document.getElementById(idImg);
-            element.children[0].style.borderColor = 'rgb(204, 255, 255)';
-            element.children[0].style.boxShadow = ' #3ff 0px 0px 7px 3px';
-            element.children[1].style.color = 'rgb(204, 255, 255)';
+            element.children[0].style.border = '2px solid rgba(204, 255, 255, 1)';
+            element.children[0].style.width = '50px';
+            element.children[0].style.height = '50px';
+            element.children[0].style.boxShadow = '#3ff 0px 0px 7px 3px';
+            //element.children[1].style.color = 'rgb(204, 255, 255)';
             if(mthis.frameSelectedEntityPoints.length == 0){  //判断是否有过拉框选择
                 entityPoints.forEach(function(item) {
                     if (item.getProperties().properties.belongId == id) {
