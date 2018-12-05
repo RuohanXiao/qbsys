@@ -19,7 +19,7 @@
     <search-div @initNode="initNode" />
     </Col>
   </Row> -->
-  <Row type="flex" justify="space-between" :style="{flexFlow:'row nowarp',marginTop:'7px'}"  class="code-row-bg" align="left" >
+  <Row type="flex" justify="space-between" :style="{flexFlow:'row nowarp',marginTop:'7px'}"  class="code-row-bg">
     <Col span="12" align="left" :style="{display:'flex',flexFlow:'row nowarp'}">
     <div class="menu active">
       <!-- <router-link to="/"> -->

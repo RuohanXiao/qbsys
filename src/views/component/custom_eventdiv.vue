@@ -57,7 +57,7 @@
                 </div>
               </Row>
 
-              <Card   dis-hover style="width:100%,background-color:rgba(0,0,0,0);" :style="{overflowY:scroll,height:eventheight}" v-show="singlePerson" v-if="evetdata!== undefined && evetdata!==null">
+              <Card   dis-hover style="width:100%,background-color:rgba(0,0,0,0);" :style="{overflowY:'scroll',height:eventheight}" v-show="singlePerson" v-if="evetdata!== undefined && evetdata!==null">
                 <Row type="flex" justify="end">
                   <Icon class="cardIcon icon iconfont icon-fangda process-img DVSL-bar-btn DVSL-bar-btn-back" size="20"  @click="detail(evetdata.id)"/>
                 </Row>
@@ -69,339 +69,379 @@
                     <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="evetdata.img==''"/>
                     <Avatar class="circle-img" v-else :src="evetdata.img" :style="{width:'50px',height:'50px'}" />
                   </Row>
-                  <Row type="flex" justify="center" >
-                    <Col order="1" span="8">
+                  <Row type="flex" justify="center" v-if="evetdata.type === 'human'">
+                    <Col span="8">
                       <span class="content_header">中⽂名</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.name_in_chinese}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">类型</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.type}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">全名</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.birth_name}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">外⽂名</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.name_in_native_language}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">昵称</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.nickname}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">出⽣</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.date_of_birth}} - {{evetdata.date_of_death}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">失踪</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.date_of_disappearance}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">出⽣地</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.place_of_birth}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">国籍</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.country_of_citizenship}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">⺠族</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.ethic_group}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">信仰</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.religion}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">职业</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.occupation}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">军衔</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.military_rank}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">军种</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.military_branch}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">政党</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.member_of_political_party}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">组织</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.member_of}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">雇主</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.employer}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">荣誉</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.award_received}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">学习经历</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.educated_at}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="16" offset="8">
+                    <Col span="16" offset="8">
                       <span class="content_value">{{evetdata.academic_degree}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">⼯作经历</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.position_held}}</span>
                     </Col>
+                    <Col span="8">
+                      <span class="content_header">⽗亲</span>
+                    </Col>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.father}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">⺟亲</span>
+                    </Col>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.mother}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">配偶</span>
+                    </Col>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.spouse}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">⼦⼥</span>
+                    </Col>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.child}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">兄弟姐妹</span>
+                    </Col>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.sibling}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">邮箱</span>
+                    </Col>
+                    <Col span="16">
+                      <span class="content_value">
+                        <a :href="evetdata.e_mail" slot="extra">{{evetdata.e_mail}}</a>
+                      </span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">博客</span>
+                    </Col>
+                    <Col span="16">
+                        <span class="content_value">
+                        <a :href="evetdata.official_blog" slot="extra">{{evetdata.official_blog}}</a>
+                      </span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">官⽹</span>
+                    </Col>
+                    <Col span="16">
+                        <span class="content_value">
+                        <a :href="evetdata.official_website" slot="extra">{{evetdata.official_website}}</a>
+                      </span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">简介</span>
+                    </Col>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.summary}}</span>
+                    </Col>
                   </Row>
-
-
-
-                  <Row type="flex" justify="center" >
-                    <Col order="1" span="8">
-                      <span class="content_header">中⽂名</span>
+                  <!-- 组织实体 -->
+                  <Row type="flex" justify="center" v-if="evetdata.type === 'organization'">
+                    <Col span="8">
+                      <span class="content_header">描述</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.name_in_chinese}}</span>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.description}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">外⽂名</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.native_label}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">简称</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.short_name}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">总部</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.headquarters_location}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">成⽴</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.inception}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">创办者</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.founded_by}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">领袖</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.chairperson}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">⾸席执⾏官</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.chief_executive_officer}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">成员</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.member_count}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">员⼯数</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.employees}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">意识形态</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.political_ideology}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">业务部⻔</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.business_division}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">上级部⻔</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.parent_organization}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">下级部⻔</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value">{{evetdata.subsidiary}}</span>
+                    </Col>
+                    <Col span="8">
+                      <span class="content_header">官⽹</span>
+                    </Col>
+                    <Col  span="16">
+                      <span class="content_value"><a :href="evetdata.official_website" slot="extra">{{evetdata.official_website}}</a></span>
                     </Col>
                   </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">类型</span>
+                  <!-- 国家实体 -->
+                  <Row type="flex" justify="center"  v-if="evetdata.type === 'administrative'">
+                    <Col span="8">
+                      <span class="content_header">描述</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.type}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.description}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">全名</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.birth_name}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.official_name}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
+                    <Col span="8">
                       <span class="content_header">外⽂名</span>
                     </Col>
-                    <Col order="2" span="16">
+                    <Col span="16">
                       <span class="content_value">{{evetdata.name_in_native_language}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">昵称</span>
+                    <Col span="8">
+                      <span class="content_header">简称</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.nickname}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.short_name}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">出⽣</span>
+                    <Col span="8">
+                      <span class="content_header">国家元⾸</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.date_of_birth}} - {{evetdata.date_of_death}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.head_of_state}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">失踪</span>
+                    <Col span="8">
+                      <span class="content_header">政府⾸脑</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.date_of_disappearance}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.head_of_government}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">出⽣地</span>
+                    <Col span="8">
+                      <span class="content_header">位于</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.place_of_birth}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.continent}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">国籍</span>
+                    <Col span="8">
+                      <span class="content_header">⾯积</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.country_of_citizenship}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.area}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">⺠族</span>
+                    <Col span="8">
+                      <span class="content_header">⼈⼝</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.ethic_group}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.population}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">信仰</span>
+                    <Col span="8">
+                      <span class="content_header">GDP</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.religion}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.GDP}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">职业</span>
+                    <Col span="8">
+                      <span class="content_header">基尼系数</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.occupation}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.gini_coefficient}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">军衔</span>
+                    <Col span="8">
+                      <span class="content_header">⼈类发展指数</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.military_rank}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.Human_Development_Index}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">军种</span>
+                    <Col span="8">
+                      <span class="content_header">接壤国家</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.military_branch}}</span>
+                    <Col span="16">
+                      <span class="content_value">{{evetdata.shares_border_with}}</span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">政党</span>
+                    <Col span="8">
+                      <span class="content_header">顶级域名</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.member_of_political_party}}</span>
+                    <Col span="16">
+                      <span class="content_value"><a :href="evetdata.top_level_Internet_domain" slot="extra">{{evetdata.top_level_Internet_domain}}</a></span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">组织</span>
+                    <Col span="8">
+                      <span class="content_header">官⽹</span>
                     </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.member_of}}</span>
+                    <Col span="16">
+                        <span class="content_value">
+                        <a :href="evetdata.official_website" slot="extra">{{evetdata.official_website}}</a>
+                      </span>
                     </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">雇主</span>
-                    </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.employer}}</span>
-                    </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">荣誉</span>
-                    </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.award_received}}</span>
-                    </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">学习经历</span>
-                    </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.educated_at}}</span>
-                    </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="16" offset="8">
-                      <span class="content_value">{{evetdata.academic_degree}}</span>
-                    </Col>
-                  </Row>
-                  <Row type="flex" justify="center">
-                    <Col order="1" span="8">
-                      <span class="content_header">⼯作经历</span>
-                    </Col>
-                    <Col order="2" span="16">
-                      <span class="content_value">{{evetdata.position_held}}</span>
-                    </Col>
-                  </Row>
+                    </Row>
                 </div>
               </Card>
             </div>
@@ -446,7 +486,6 @@
         eventheighttdiv: 0,
         eventheight: 0,
         closable: true,
-        singlePerson: false,
         infos: [{
             name: "普京",
             img: "https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=53e28aef2f2dd42a4b0409f9625230d0/4a36acaf2edda3ccf81167a60be93901203f92bb.jpg",
@@ -566,7 +605,7 @@
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 20px;
+    line-height: 26px;
     letter-spacing: 0px;
     color: #ccffff;
     opacity: 0.5;
@@ -592,7 +631,7 @@
     border-bottom-width: 0 !important;
   }
   .ivu-card-body{
-    padding: 0 5px 0 5px !important;
+    margin: 10px !important;
   }
   .pfront {
     width: 36px;

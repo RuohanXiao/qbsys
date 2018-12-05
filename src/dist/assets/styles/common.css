@@ -1,31 +1,31 @@
 /* 文字常用色 */
 .color-white10 {
   /* ⼤部分⽂字⾊／放⼤缩⼩图标⾊ */
-  color: rgb(204,255,255,1) !important;
+  color: rgba(204,255,255,1) !important;
 }
 .color-white05 {
   /* 时间、数字、属性名称文字色／默认头像外2px描边色 */
-  color: rgb(204,255,255,0.5) !important;
+  color: rgba(204,255,255,0.5) !important;
 }
 .color-link {
   /* 有超链接的文字颜色 */
-  color: rgb(0,153,153,1) !important;
+  color: rgba(0,153,153,1) !important;
 }
 .color-green10 {
   /* 工具图标选中色／搜索图标激活色/网络、地图框选蚂蚁线色 */
-  color: rgb(51,255,255,1) !important;
+  color: rgba(51,255,255,1) !important;
 }
 .color-green06  {
   /* 按钮背景悬浮色 */
-  color: rgb(51,255,255,0.6) !important;
+  color: rgba(51,255,255,0.6) !important;
 }
 .color-green04 {
   /* 工具图标及下文字默认色/搜索图标默认色／网络分析中连线色及线上文字默认色／按钮背景默认色 */
-  color: rgb(51,255,255,0.4) !important;
+  color: rgba(51,255,255,0.4) !important;
 }
 .color-green03 {
   /* 网络、地图、时间轴的框选色 */
-  color: rgb(24,255,255,0.3) !important;
+  color: rgba(24,255,255,0.3) !important;
 }
 .color-green02 {
   /* 搜索框／tab选中背景/列表悬浮及选中样式 */
@@ -33,7 +33,7 @@
 }
 .color-green01 {
   /* 列表默认背景色／工具栏底色／菜单栏底色 */
-  color: rgb(24,255,255,0.1) !important;
+  color: rgba(24,255,255,0.1) !important;
 }
 .box-shadow {
   /* 弹出框阴影及下拉框右键框样式 */
@@ -55,50 +55,50 @@
 /* 其它颜色 */
 .color-line {
   /* 板块描边色／列表上下描边色／分割线色／滚动轴色 */
-  color:rgb(54,102,102,1) !important;
+  color:rgba(54,102,102,1) !important;
 }
 .color-bar {
   /* 小条色／下拉图标色／以及界面中比较绿的颜色 */
-  color: rgb(0,153,153,1) !important;
+  color: rgba(0,153,153,1) !important;
 }
 .color-yellow {
   /* 地图坐标点色 */
-  color: rgb(255,153,0) !important;
+  color: rgba(255,153,0) !important;
 }
 /* — 字号 — */
 .font-f12 {
   /* 时间、数字、头像下名字、连线上文字、地图中地名等 */
-  color:rgb(24,255,255,0.5) !important;
+  color:rgba(24,255,255,0.5) !important;
   font-size: 12px !important;
   font-family: MicrosoftYaHei !important;
 }
 .font-f14 {
   /* 正⽂、列表、搜索框、按钮等⼤部分字号 */
-  color:rgb(24,255,255,0.5) !important;
+  color:rgba(24,255,255,0.5) !important;
   font-size: 14px !important;
   font-family: MicrosoftYaHei !important;
 }
 .font-f16 {
   /* 列表标题、tab文字 */
-  color:rgb(24,255,255,0.5) !important;
+  color:rgba(24,255,255,0.5) !important;
   font-size: 16px !important;
   font-family: MicrosoftYaHei !important;
 }
 .font-f18 {
   /* 选中多个人时小卡片名称字号 */
-  color:rgb(24,255,255,0.5) !important;
+  color:rgba(24,255,255,0.5) !important;
   font-size: 18px !important;
   font-family: MicrosoftYaHei !important;
 }
 .font-f20 {
   /* ⽬标详情中名字 */
-  color:rgb(24,255,255,0.5) !important;
+  color:rgba(24,255,255,0.5) !important;
   font-size: 20px !important;
   font-family: MicrosoftYaHei !important;
 }
 .font-f24 {
   /* ⽂章详情⼤标题／弹出框实体详情名字字号 */
-  color:rgb(24,255,255,0.5) !important;
+  color:rgba(24,255,255,0.5) !important;
   font-size: 24px !important;
   font-family: MicrosoftYaHei !important;
 }
@@ -124,4 +124,26 @@
   background-color: #D62929 !important;
 }
 
-
+/* 图标颜色 */
+.process-img {
+  color: rgba(51, 255, 255, 0.4);
+  size: 30px;
+}
+/* 分隔栏样式 */
+.demo-split {
+  height: 89vh;
+  border: 0px solid #dcdee2;
+}
+.demo-split-pane {
+}
+/* 主板块样式 */
+#content {
+  margin: 64px 0 0 0;
+  width: 100vw;
+  background: url(../images/bg.jpg);
+  height: auto;
+  overflow: hidden;
+  filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+  -moz-background-size: 100% 100%;
+  background-size: 100vw 100%;
+}

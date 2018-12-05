@@ -1,6 +1,7 @@
 import contentView from './views/contentView'
 import geoView from './views/geoview'
 import netView from './views/netview'
+import home from './views/home'
 const routers = [
     // {
     //     path: '/main', component: main
@@ -21,6 +22,9 @@ const routers = [
     },
     {
         path: '/contentView', component: contentView
-    }   
+    },
+    {
+        path: '/home', component: home
+    }
 ];
 export default routers;
