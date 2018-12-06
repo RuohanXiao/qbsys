@@ -52,7 +52,7 @@
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
-                <div class="p-collapse-modal" :style="{width:'100%'}" onclick="detail(data.id)" v-for="data in evetdata" @click="detail(evetdata.id)">{{data.name}}
+                <div class="p-collapse-modal" :style="{width:'100%'}"  v-for="data in evetdata" @click="detail(evetdata.id)">{{data.name}}<!-- onclick="detail(data.id)" -->
                   <p class="p-collapse-modal-small">{{data.type}}</p>
                 </div>
               </Row>
@@ -448,7 +448,7 @@
           </Tab-pane>
         </Tabs>
       </div>
-      <modal-chart-detail :flag="detailModalFlag" :detail="detail_data" ></modal-chart-detail>
+      <modal-chart-detail :detail="detail_data" :nodeId='id' v-if='detailModalFlag'></modal-chart-detail>
     </div>
     </Col>
   </div>
@@ -470,6 +470,7 @@
       return {
         evetdata: null,
         detailModalFlag: false,
+        id:'',
         myList: [{
           name: 'aaaaa',
           img: 'https://img3.doubanio.com/view/celebrity/s_ratio_celebrity/public/p230.webp',
@@ -561,6 +562,7 @@
           'nodeIds': nodeIdsArry
         }).then(response => {
           this.dataExpand = response.body.data[0].nodes[0]
+          this.id = id
           this.detailModalFlag = true
         })
         //查询详细信息

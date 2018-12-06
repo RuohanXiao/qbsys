@@ -55,16 +55,17 @@
 #locationRoute_Map .ol-zoom .ol-zoom-out {
 margin-top: 204px;
 top: 2.3em;
+right:6px;
 }
 #locationRoute_Map .ol-zoomslider {
 background-color: transparent;
 top: 2.3em;
 }
 
-#locationRoute_Map .ol-touch .ol-zoom .ol-zoom-out {
+/* #locationRoute_Map .ol-touch .ol-zoom .ol-zoom-out {
 margin-top: 212px;
 top: 2.3em;
-}
+} */
 #locationRoute_Map .ol-touch .ol-zoomslider {
 top: 2.75em;
 }

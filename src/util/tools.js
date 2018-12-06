@@ -26,5 +26,13 @@ export default {
     }
     newArr = arr3.concat(arr4);
     return newArr;
+  },
+  //判断某对象属性是否存在且为非空字符串，若是则返回true，否为返回false
+  ishasValue(pro){
+    if(pro == ''){
+      return false;
+    } else {
+      return true;
+    }
   }
 }
