@@ -512,12 +512,12 @@
           <Split v-model="split1" :max="max" :min="min">
             <div slot="left" class="demo-split-pane" display='flex' :style="{height:contentHeight}">
               <!-- <h1>this is left</h1> -->
-              <net-chart-div @selectNodes1="selectNodes" id="net" :style="{height:netpxdiv}" :netHeight="netpx" :netData="netData"></net-chart-div>
+              <net-chart-div @dataStatistics="dataStatistics" @selectNodes1="selectNodes" id="net" :style="{height:netpxdiv}" :netHeight="netpx" :netData="netData"></net-chart-div>
               <time-chart-div :splitWidth="splitWidth" :split="split1" @changenetpx="changenetpx"></time-chart-div>
               
             </div>
             <div slot="right" class="scroll-bar demo-split-pane paneRight"  :style="{height:eventheightdiv,maxHeight:eventheightdiv,marginRight:'2.3vw'}">
-              <event-chart-div id="right" :dataExpand="dataexpand" :singlePerson="singlePerson" :eventHeight="eventheightdiv"  :style="{height:eventheightdiv,maxHeight:eventheightdiv}"></event-chart-div>
+              <event-chart-div id="right" :dataStatisticsEvent="dataStatisticsEvent" :dataExpand="dataexpand" :singlePerson="singlePerson" :eventHeight="eventheightdiv"  :style="{height:eventheightdiv,maxHeight:eventheightdiv}"></event-chart-div>
             </div>
           </Split>
         </div>
@@ -791,7 +791,8 @@
         iconPosition: 0,
         timeWidth: 0,
         divheight: 0,
-        splitWidth: 0
+        splitWidth: 0,
+        dataStatisticsEvent: null
       };
     },
     components: {
@@ -805,6 +806,10 @@
     methods: {
       initNode(opt) {
         this.netData = opt.nodes[0]
+      },
+      dataStatistics(opt) {
+        this.dataStatisticsEvent = opt.data
+        console.log(this.dataStatisticsEvent)
       },
       changenetpx () {
         let useHeight = document.documentElement.clientHeight - 64 - 20;
@@ -831,7 +836,6 @@
       selectNodes(opt) {
         var mthis = this
         mthis.singlePerson = (opt[1]>1)?false:true
-        console.log(mthis.singlePerson)
         let nodeIdsArry = opt[0].ids.map(item => {
           return item.id;
         });
@@ -1060,7 +1064,7 @@
     },
     mounted() {
       var mthis = this
-      console.log(mthis.$route.query)
+      // console.log(mthis.$route.query)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       window.onresize = function() {
         mthis.contentHeight = document.documentElement.clientHeight - 65 + "px";

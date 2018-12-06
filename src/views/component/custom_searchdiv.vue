@@ -8,7 +8,7 @@
   </div> -->
   <div>
     <div>
-      <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}"><i class="icon iconfont icon-search  process-img" style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i></div>
+      <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}"><i class="icon iconfont icon-search  process-img" id='searchImg' style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i></div>
       <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}">
         <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfo" filterable
       remote placeholder='' :remote-method="searchInfo" :loading="loading1" :label-in-value="true" @on-change="v=>{setOption(v,'type')}">
@@ -66,7 +66,8 @@
             let optionWordArr = []
             let optionList = {}
             let optionListArr = []
-            optionWordArr.push({"label":'搜索关于‘'+query+'’的相关文档',"value":'搜索:'+query,"img":''})
+            optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":''})
+            // optionWordArr.push({"label":'搜索关于‘'+query+'’的相关文档',"value":'搜索:'+query,"img":''})
             for(let i = 0 ;i<response.body.data.length;i++) {
               optionListArr.push({"label":response.body.data[i].name,"value":response.body.data[i].id,"img":response.body.data[i].img})
             }
@@ -94,5 +95,4 @@
   }
 </script>
 <style>
-
 </style>

@@ -16,9 +16,10 @@
 </template>
 <script>
   import "../dist/assets/styles/net_main.css";
-  import netChartDiv from "./component/custom_netdiv";
+  import netChartDiv from "./components/custom_netdiv";
   import timeChartDiv from "./component/custom_timediv";
   import eventChartDiv from "./component/custom_eventdiv";
+  import { mapState,mapMutations } from 'vuex'
   export default {
     name: "App",
     data() {
@@ -54,7 +55,9 @@
         mthis.flag = !mthis.flag
       }
     },
-    computed: {},
+    computed:mapState ([
+      'customDivHeight','customCanvasHeight','netDataObj'
+    ]),
     mounted(){
       var mthis = this
       mthis.useHeight = document.documentElement.clientHeight - 65 - 20;
@@ -63,6 +66,8 @@
       mthis.netpx = mthis.useHeight * 0.8 - 55 + "px";
       mthis.eventheightdiv = document.documentElement.clientHeight * 1 - 65 - 10 + "px";
       mthis.divheight = mthis.eventheightdiv - mthis.netpx + 'px'
+
+      mthis.netHeight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
     }
   }
 </script>

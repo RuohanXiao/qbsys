@@ -11,12 +11,11 @@
     <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
       <top-menu @initNode='initNode' />
     </Header>
-    <Layout>
+    <Layout :style="{width: '100vw', overflowY:'hidden'}">
       <Content id="content">
         <net-main v-if="(tag === 'net')"></net-main>
         <geo-main v-if="(tag === 'geo')"></geo-main>
         <content-main v-if="(tag === 'content')"></content-main>
-        <nav-div></nav-div>
       </Content>
     </Layout>
     <Footer :style="{backgroundColor:'black',height:'0px',padding:'0'}">
@@ -34,8 +33,6 @@
   import "../dist/assets/styles/common.css"
   import nav from "../dist/assets/js/nav.js";
   import mock from "../mock/index.js";
-  import store from '../store/index.js'
-  import { mapState, mapActions, mapMutations } from 'vuex'
   const axios = require("axios");
   const MockAdapter = require("axios-mock-adapter");
   export default {
@@ -57,16 +54,6 @@
       }
     },
     computed: {
-      tag: {
-        get() {
-          return store.state.tag
-        },
-        set(value) {
-          store.commit('set_tag', {
-            tag: value
-          })
-        }
-      }
     },
     mounted(){
       var mthis = this

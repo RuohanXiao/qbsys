@@ -204,9 +204,7 @@
 <style>
   .ivu-collapse {
     border-radius: 0 !important;
-    background-color: rgba(51, 255, 255, 0) !important;
     border: none !important;
-    /* border: solid 1px rgba(51, 255, 255, 0.1) !important; */
   }
   .ivu-collapse-header {
     background-color: rgba(0, 0, 0, 0.1) !important;
@@ -223,9 +221,6 @@
   .collapseHover:hover {
     overflow-y: scroll;
     overflow-x: hidden;
-  }
-  .ivu-collapse>.ivu-collapse-item {
-    border-top: 1px solid rgba(51, 255, 255, 0.1) !important;
   }
   .vertical-center-modal {
     display: flex;
