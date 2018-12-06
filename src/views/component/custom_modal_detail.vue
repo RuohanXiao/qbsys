@@ -1,10 +1,11 @@
 <template>
   <div>
-    <Modal v-model="a"  width="80%">
+    <Modal v-model="a" width='80'  footer-hide>
       <div style="margin: 20px;">
         <div>
-          <p class="modalTitle" v-if="ishasValue(Entitydetail.birth_name)">{{Entitydetail.birth_name}}</p>
+          <span class="modalTitle" v-if="ishasValue(Entitydetail.name)">{{Entitydetail.name}}</span>
           <img :src="Entitydetail.image" v-if="ishasValue(Entitydetail.image)">
+          <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px',left:'80%'}" v-else/>
         </div>
         <div class='entity_detail'>
         <table>
@@ -42,80 +43,80 @@
           </tr>
           <tr v-if=" ishasValue(Entitydetail.occupation)">
             <td class="modalContentLabel">职业</td>
-             <td class="modalContentLabel">{{Entitydetail.occupation}}</td>
+             <td class="modalContent">{{Entitydetail.occupation}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.military_rank)">
             <td class="modalContentLabel">军衔</td>
-             <td class="modalContentLabel">{{Entitydetail.military_rank}}</td>
+             <td class="modalContent">{{Entitydetail.military_rank}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.member_of_political_party)">
             <td class="modalContentLabel">政党</td>
-             <td class="modalContentLabel">{{Entitydetail.member_of_political_party}}</td>
+             <td class="modalContent">{{Entitydetail.member_of_political_party}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.member_of)">
             <td class="modalContentLabel">组织</td>
-             <td class="modalContentLabel">{{Entitydetail.member_of}}</td>
+             <td class="modalContent">{{Entitydetail.member_of}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.employer)">
             <td class="modalContentLabel">雇主</td>
-             <td class="modalContentLabel">{{Entitydetail.employer}}</td>
+             <td class="modalContent">{{Entitydetail.employer}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.award_received)">
             <td class="modalContentLabel">荣誉</td>
-             <td class="modalContentLabel">{{Entitydetail.award_received}}</td>
+             <td class="modalContent">{{Entitydetail.award_received}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.educated_at)">
             <td class="modalContentLabel">就读学校</td>
-             <td class="modalContentLabel">{{Entitydetail.educated_at}}</td>
+             <td class="modalContent">{{Entitydetail.educated_at}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.academic_degree)">
             <td class="modalContentLabel">学历</td>
-             <td class="modalContentLabel">{{Entitydetail.academic_degree}}</td>
+             <td class="modalContent">{{Entitydetail.academic_degree}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.position_held)">
             <td class="modalContentLabel">工作经历</td>
-             <td class="modalContentLabel">{{Entitydetail.position_held}}</td>
+             <td class="modalContent">{{Entitydetail.position_held}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.father)">
             <td class="modalContentLabel">父亲</td>
-             <td class="modalContentLabel">{{Entitydetail.father}}</td>
+             <td class="modalContent">{{Entitydetail.father}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.mother)">
             <td class="modalContentLabel">母亲</td>
-            <td class="modalContentLabel">{{Entitydetail.mother}}</td>
+            <td class="modalContent">{{Entitydetail.mother}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.spouse)">
             <td class="modalContentLabel">配偶</td>
-            <td class="modalContentLabel">{{Entitydetail.spouse}}</td>
+            <td class="modalContent">{{Entitydetail.spouse}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.child)">
             <td class="modalContentLabel">子女</td>
-             <td class="modalContentLabel">{{Entitydetail.child}}</td>
+             <td class="modalContent">{{Entitydetail.child}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.sibling)">
             <td class="modalContentLabel">兄弟姐妹</td>
-             <td class="modalContentLabel">{{Entitydetail.sibling}}</td>
+             <td class="modalContent">{{Entitydetail.sibling}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.e_mail)">
             <td class="modalContentLabel">邮箱</td>
-             <td class="modalContentLabel">{{Entitydetail.e_mail}}</td>
+             <td class="modalContent">{{Entitydetail.e_mail}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.official_blog)">
             <td class="modalContentLabel">博客</td>
-             <td class="modalContentLabel">{{Entitydetail.official_blog}}</td>
+             <td class="modalContent">{{Entitydetail.official_blog}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.official_website)">
             <td class="modalContentLabel">网站</td>
-             <td class="modalContentLabel">{{Entitydetail.official_website}}</td>
+             <td class="modalContent">{{Entitydetail.official_website}}</td>
           </tr>
           <tr v-if=" ishasValue(Entitydetail.summary)">
             <td class="modalContentLabel">简介</td>
-             <td class="modalContentLabel">{{Entitydetail.summary}}</td>
+             <td class="modalContent">{{Entitydetail.summary}}</td>
           </tr>
         </table>
         </div>
       </div>
-      <div :style="{marginTop:'20px',maxHeight:buttonDivHeight}">
+      <div :style="{margin:'20px 0px',maxHeight:buttonDivHeight}">
         <Row type="flex" justify="start" class="code-row-bg" align="middle">
           <Col span="4" offset="16">
           <div class='buttonModal' @click="showNodeInNet">
@@ -264,6 +265,7 @@ column-count:3;
     line-height: 80px;
     letter-spacing: 0px;
     color: #ccffff;
+    width:100px;
   }
   .modalContentLabel {
     font-family: MicrosoftYaHei;
