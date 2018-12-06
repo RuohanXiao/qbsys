@@ -12,6 +12,7 @@ const routers = [
     //     ]
     // },
     {
+        // path: '/', component: home
         path: '/', component: netView
     },
     {

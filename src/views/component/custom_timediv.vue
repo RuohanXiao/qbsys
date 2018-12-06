@@ -1,7 +1,7 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div id="timechartdiv">
-                <Icon class="icon iconfont icon-drop-down process-img DVSL-bar-btn" id="arrowDown" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',top:iconPosition,zIndex:30}" @click="changHeightCount++"></Icon>
+                <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" id="arrowDown" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',top:iconPosition,zIndex:30,transform:'rotate(180deg)'}" @click="changHeightCount++"></Icon>
                 <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" id='timechartctrl'>
                   <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
                     <!-- <Col span="1" class="bottom">
@@ -312,10 +312,13 @@ export default {
     this.timepxdiv =
       (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
     this.iconPosition = useHeight * 0.8 + "px";
+    // this.iconPosition = useHeight - 40 + "px";
+    
     this.loadEcharts();
     let that = this;
     // Enable data zoom when user click bar.
     var zoomSize = 6;
+    // this.changHeightCount++
   },
   watch: {
     splitWidth: function() {
@@ -329,8 +332,8 @@ export default {
       if (this.changHeightCount % 2 === 0) {
         // this.timepx = "0px";
         // this.timepxdiv = "0px";
-        
         this.iconPosition = useHeight - 40 + "px";
+        
         document.getElementById("timechartctrl").style.display = "none";
         document.getElementById("main1").style.display = "none";
         document.getElementById("timediv").style.display = "none";

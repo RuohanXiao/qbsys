@@ -67,7 +67,7 @@
       <Scroll :on-reach-bottom="handleReachBottom"  v-if='!ifInfo' :height=contentHeight>
         <div id="contentchart" aria-autocomplete="true" :style="{height:contentHeight,display:'flex',overflowY:'scroll'}">
           <Row type="flex" justify="start" align="middle">
-          <Col span="3" align="middle"  v-for="item in items">
+          <Col span="4" align="middle"  v-for="item in items">
             <div class="contentDiv">
               <p class="contentTitle" @click="showContent(item.id)">{{item.title}}</p>
               <p class="contentText">{{item.text}}</p>

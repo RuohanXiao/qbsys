@@ -21,6 +21,18 @@
 </template>
 <script>
   export default {
+     name: "App",
+    data() {
+      return {
+        contentHeight: 0,
+        rightNav: 0
+      }
+    },
+    mounted(){
+      var mthis = this
+      mthis.contentHeight = document.documentElement.clientHeight - 65 + "px";
+      mthis.rightNav = document.documentElement.clientHeight * 1 - 64 + "px";
+    }
   }
 </script>
 <style scoped>
