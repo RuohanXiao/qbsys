@@ -81,7 +81,7 @@
         <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
         <h2 class="contentInfoTitle" id='contentsTitle'></h2>
         <p class="contentInfoTime" id='contentsTime'></p>
-        <div id='contents'></div>
+        <p style='margin:30px'><span id='contents' ></span><span id='pointer'>_</span></p>
       </div>
     </div>
     </Col>
@@ -142,13 +142,38 @@
       //   document.getElementById('contentsTime').innerHTML = res.data.time
       // });
       mthis.$http.get('http://10.60.1.140:5001/context-by-id/?idValue='+ id).then(response => {
-          document.getElementById('contents').innerHTML = response.body.data[0].text
+          //document.getElementById('contents').innerHTML = response.body.data[0].text
+          mthis.printer(response.body.data[0].text, 'contents', 'pointer')
           document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
           document.getElementById('contentsTime').innerHTML = response.body.data[0].from + ((response.body.data[0].from!=='' && response.body.data[0].from !==undefined)?'  |  ':'')+ response.body.data[0].time
           
           // mthis.dataexpand = response.body.data
           // mthis.singlePerson = (opt[1]>1)?false:true
         })
+      },
+      printer(text,contentid,pointerid){ 
+          var l = text.length;
+          var t = 0;
+          var arr = [];    
+          for(var i = 0; i < l; i++){    
+          arr[i] = text.substr(i,1);    
+          } 
+          var contentId = "#" + contentid;
+          var pointerId = "#" + pointerid;
+         // var pointerInit = setInterval(function(){ $(pointerId).fadeOut(100).fadeIn(100); },300); 
+          var init = setInterval(function(){
+          if(t < l){    
+              $(contentId).append(arr[t]);
+              if((t!==(l-1))&&(t%8==7)){
+                  //$(contentId).append('<br/>');
+              }    
+              t++;    
+              }else{
+            clearInterval(init); 
+            //clearInterval(pointerInit);           
+              }
+      },10);
+              
       }
     },
     created() {
@@ -313,9 +338,9 @@
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 26px;
     letter-spacing: 0px;
     color: #ccffff;
     opacity: 0.8;
+    line-height: 24px;
   }
 </style>

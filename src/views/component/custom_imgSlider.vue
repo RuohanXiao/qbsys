@@ -2,8 +2,8 @@
     <li>
         <!-- <div @click='img_click'>111</div> -->
         <div :id='imgS.id + "_imgslider"' @click='img_click'>
-            <img class='imgStyle' :src=this.imgS.imageURL style='width:50px;height:50px;border-radius:30px;border: 2px solid rgba(204, 255, 255, 0);margin: 6px;'>  <!-- style='width:50px;height:50px;border-radius:30px;border: 2px solid rgba(204, 255, 255, 0);margin: 6px;' -->
-            <p style="color:rgba(24,255,255,0.5);font-family:'微软雅黑">{{imgS.name}}</p>
+            <img class='imgStyle' :src=this.imgS.imageURL style='width:46px;height:46px;border-radius:30px;margin: 6px;'>  <!-- style='width:50px;height:50px;border-radius:30px;border: 2px solid rgba(204, 255, 255, 0);margin: 6px;' -->
+            <p style="color:rgb(204, 255, 255);font-family:'微软雅黑">{{imgS.name}}</p>
         </div>
     </li>
 </template>
@@ -30,7 +30,7 @@ export default {
             var mthis = this
             var obj = objEvent.currentTarget
             //var imgDom = obj.currentTarget;
-            if(obj.children[0].style.borderColor == "rgba(204, 255, 255, 0)"){
+            if(obj.children[0].style.width == "46px"){
                 var imgItemOpera = {
                     id:mthis.imgS.id,
                     onOroff:'on'
