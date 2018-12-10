@@ -47,27 +47,39 @@
     position: absolute;
     bottom: 500px;
 }
-/**
-* The zoomslider in the second map shall be placed between the zoom-in and
-* zoom-out buttons.
-*/
 
-#locationRoute_Map .ol-zoom .ol-zoom-out {
+
+#locationRoute_Map .ol-zoom {
+    top: 3.5em !important;
+    right: 0.5em !important;
+    left: auto !important;
+    background-color: transparent;
+    
+}
+#locationRoute_Map .ol-zoom-out {
 margin-top: 204px;
 top: 2.3em;
-right:6px;
 }
 #locationRoute_Map .ol-zoomslider {
-background-color: transparent;
-top: 2.3em;
+background-color: rgba(204,255,255,0.4) !important;
+top: 5.3em;
+left: auto !important;
+right: 1.3em !important;
+width: 0.3em;
 }
-
-/* #locationRoute_Map .ol-touch .ol-zoom .ol-zoom-out {
-margin-top: 212px;
-top: 2.3em;
-} */
+#locationRoute_Map .ol-zoomslider button {
+right: 0.6em;
+background-color: rgb(204,255,255) !important;
+width: 1em !important;
+height: 1em !important;
+border-radius: 0.5em;
+}
 #locationRoute_Map .ol-touch .ol-zoomslider {
 top: 2.75em;
+}
+#locationRoute_Map .ol-control button{
+    background-color: transparent;
+    color: rgb(204,255,255);
 }
 
 #locationRoute_Map .ol-zoom-in.ol-has-tooltip:hover [role=tooltip],
@@ -79,39 +91,6 @@ top: 3px;
 #locationRoute_Map .ol-zoom-out.ol-has-tooltip:focus [role=tooltip] {
 top: 232px;
 }
-
-/**
-* The zoomslider in the third map shall be horizontal, placed in the top-right
-* corner, smaller and orange.
-*/
-
-/* #locationRoute_Map .ol-zoomslider {
-        top: 8px;
-        left: auto;
-        right: 8px;
-        background-color: rgba(255,69,0,0.2);
-        width: 200px;
-        height: 15px;
-        padding: 0;
-        box-shadow: 0 0 5px rgb(255,69,0);
-        border-radius: 20px;
-      }
-
-      #locationRoute_Map .ol-zoomslider:hover {
-        background-color: rgba(255,69,0,0.3);
-      }
-
-      #locationRoute_Map .ol-zoomslider-thumb {
-        height: 15px;
-        width: 15px;
-        margin: 0;
-        filter: none;
-        background-color: rgba(255,69,0,0.6);
-        border-radius: 20px;
-      }
-      #locationRoute_Map a.ol-zoomslider-handle:hover {
-        background-color: rgba(255,69,0,0.7);
-      } */
 
 </style>
 

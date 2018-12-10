@@ -455,11 +455,8 @@
       return {
         evetdata: null,
         detailModalFlag: false,
-<<<<<<< HEAD
         value4: '1-1',
-=======
         id:'',
->>>>>>> 65ae1d0eb6b8f6203feacb1c9fcf00e939cc60d2
         myList: [{
           name: 'aaaaa',
           img: 'https://img3.doubanio.com/view/celebrity/s_ratio_celebrity/public/p230.webp',
