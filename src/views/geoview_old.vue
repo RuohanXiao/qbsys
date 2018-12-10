@@ -280,12 +280,6 @@
     background-color: rgba(0, 0, 0, 0.1) !important;
     padding: 0 !important;
   }
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
-    background: rgba(51, 255, 255, 0.2);
-  }
-  .ivu-tabs-bar {
-    border-bottom: 1px solid rgba(51, 255, 255, 0.2) !important;
-  }
   /* 滚动条样式 */
    ::-webkit-scrollbar {
     width: 5px;
@@ -307,26 +301,12 @@
    ::-webkit-scrollbar-corner {
     background: transparent;
   }
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
-    border: 1px solid rgba(54, 102, 102, 0.1) !important;
-    border-radius: 3px !important;
-    -moz-border-radius: 3px !important;
-    /* Old Firefox */
-    background-color: rgba(51, 255, 255, 0.1) !important;
-  }
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab-active {
-    border: 1px solid rgba(54, 102, 102, 0.1) !important;
-    border-radius: 3px !important;
-    -moz-border-radius: 3px !important;
-    /* Old Firefox */
-    background-color: rgba(51, 255, 255, 0.2) !important;
-  }
   .ivu-progress-inner {
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
-  .ivu-tabs-tab {
+  /* .ivu-tabs-tab {
     color: #ccffff !important;
-  }
+  } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }

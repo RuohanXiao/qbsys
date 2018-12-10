@@ -1,4 +1,9 @@
 <style>
+  .process-img {
+      /* color: rgba(51, 255, 255, 0.4); */
+    color: rgba(51, 255, 255,0.6);
+    size: 30px;
+  }
   .bgDiv {
     width: 100%;
     height: 100%;
@@ -129,12 +134,7 @@
     font-size: 1em;
     font-family: "微软雅黑";
   }
-  .process-img {
-    /* color: rgba(51, 255, 255, 0.4); */
-    color: rgb(51, 255, 255);
-    size: 30px;
-    opacity: 0.4;
-  }
+  
   .ivu-tooltip-rel i {
     width: 30px;
     height: 30px;
@@ -305,12 +305,6 @@
     background-color: rgba(0, 0, 0, 0) !important;
     padding: 0 !important;
   }
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
-    background: rgba(51, 255, 255, 0.2);
-  }
-  .ivu-tabs-bar {
-    border-bottom: 1px solid rgba(51, 255, 255, 0.2) !important;
-  }
   .hoverScroll:hover {
     overflow-y: scroll;
   }
@@ -343,19 +337,12 @@
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
 }
 
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab-active {
-    border: 1px solid rgba(54, 102, 102, 0.1) !important;
-    border-radius: 3px !important;
-    -moz-border-radius: 3px !important;
-    /* Old Firefox */
-    background-color: rgba(51, 255, 255, 0.2) !important;
-  }
   .ivu-progress-inner {
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
-  .ivu-tabs-tab {
+  /* .ivu-tabs-tab {
     color: #ccffff !important;
-  }
+  } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }
@@ -363,7 +350,17 @@
     line-height: 30px;
     color: #33ffff !important;
   }
-  
+  .DVSL-bar-btn-new {
+    line-height: 30px;
+    white-space: nowrap;
+    padding: 0 7px;
+    text-decoration: none;
+    color:rgba(51, 255, 255, 0.5);
+  }
+  .img-content{
+    font-size: 12px;
+    color:rgba(51, 255, 255, 0.6);
+  }
   
   /* 分割线样式 */
   .ivu-split-trigger-vertical {
@@ -468,17 +465,44 @@
   .paneRight {
     border: solid 1px rgba(54, 102, 116, 0.5);
   }
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
-    font-family: MicrosoftYaHei !important;
-    margin-right: 0px !important;
-    border: none !important;
-    border-radius: 0 !important;
-    border: 1px solid rgba(54, 102, 102, 0.1) !important;
-    -moz-border-radius: 3px !important;
-    background-color: rgba(51, 255, 255, 0.1) !important;
-  }
   #barchart {
     width: 100%;
+  }
+  .button-div{
+    cursor: pointer;
+    color: rgba(51, 255, 255,0.6) !important;
+    align-items: center;
+    text-align: center;
+    min-width: 60px;
+    padding: 4px 0;
+  }
+  .button-div:hover, .button-div:hover>i, .button-div:hover>.img-content{
+    cursor: pointer;
+    color: rgba(51, 255, 255,1) !important;
+  }
+  .divStyle{
+    display:flex;
+    flex-flow:row nowrap;
+    height:55px;
+    padding-left:10px;
+    border-top:1px solid rgba(54, 102, 116, 0.5);
+    /* border-right:1px solid rgba(54, 102, 116, 0.5);
+    border-left:1px solid rgba(54, 102, 116, 0.5); */
+  }
+  .divSplitLine{
+    float:center;
+    width: 1px;
+    height: 35px;
+    background: rgba(51, 255, 255, 0.2);
+    margin: 10px 5px 10px 5px;
+  }
+  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab{
+    margin-bottom: 5px !important;
+    background-color:rgba(51,255,255,0.2) !important;
+    border: 1px solid rgba(51,255,255,1) !important;
+  }
+  .ivu-tabs-tab-active{
+    background-color:rgba(51,255,255,0.2) !important;
   }
 </style>
 <template>
@@ -492,16 +516,16 @@
           <div class="navStyleTitle right" :style="{position: 'initial',zIndex: '999999',width:'2vw',bottom:'1px',display:'flex'}">
             <div class="floater">
               <div :style="{height:'5vh'}">
-                <Icon class="icon iconfont icon-file process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" />
+                <Icon class="icon iconfont icon-file DVSL-bar-btn DVSL-bar-btn-back" size="26" />
               </div>
               <div :style="{height:'5vh'}">
-                <Icon class="icon iconfont icon-image process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" />
+                <Icon class="icon iconfont icon-image  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
               </div>
               <div :style="{height:'5vh'}">
-                <Icon class="icon iconfont icon-question process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" />
+                <Icon class="icon iconfont icon-question  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
               </div>
               <div :style="{height:'5vh'}">
-                <Icon class="icon iconfont icon-yidiandiantubiao08 process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" />
+                <Icon class="icon iconfont icon-yidiandiantubiao08  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
               </div>
             </div>
           </div>
@@ -691,6 +715,7 @@
             }
           ],
         },
+        timer: null,
         eventheightdiv: 0,
         eventheight:0,
         changHeightCount: 1,
@@ -834,16 +859,23 @@
       // },
       // netdiv 回传选中节点参数
       selectNodes(opt) {
-        var mthis = this
-        mthis.singlePerson = (opt[1]>1)?false:true
-        let nodeIdsArry = opt[0].ids.map(item => {
-          return item.id;
-        });
-        mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
-          'nodeIds': nodeIdsArry
-        }).then(response => {
-          mthis.dataexpand = response.data.data[0].nodes
-        })
+        let mthis = this
+        if (mthis.timer) {
+          clearTimeout(mthis.timer)
+        }
+        mthis.timer = setTimeout(function() {
+          mthis.singlePerson = (opt[1]>1)?false:true
+          let nodeIdsArry = opt[0].ids.map(item => {
+            return item.id;
+          });
+
+          // 新增防抖功能
+          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+            'nodeIds': nodeIdsArry
+          }).then(response => {
+            mthis.dataexpand = response.data.data[0].nodes
+          })
+        }, 100);
         //单节点
         // if (opt[0].ids.length == 1) {
         //   let nodeIdsArry = opt.ids.map(item => {

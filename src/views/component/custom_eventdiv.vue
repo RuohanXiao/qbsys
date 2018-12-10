@@ -3,31 +3,22 @@
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0'}">
-        <Tabs type="card">
+        <Tabs>
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:eventheight}" id='toushi'>
             <div v-for="object in dataStatisticsEvent">
-            <!-- <div> -->
-              <Collapse simple class="toushiItems" accordion >
-                <Panel name="1">
-                  {{object.name}}({{object.num}})
-                  <div slot="content" :style="{padding:'0 10px'}" class="collapse_bg" v-for="(obj,index) in object.child">
-                      <!-- <p slot="content">iPhone，是美国苹果公司研发的智能手机，它搭载iOS操作系统。第一代iPhone于2007年1月9日由苹果公司前首席执行官史蒂夫·乔布斯发布，并在2007年6月29日正式发售。</p>-->
-                        <Collapse accordion :style="{backgroundColor:'rgba(0,0,0,0)'}" class="collapse_bg">
-                          <Panel name=index>
-                            {{obj.name}}
-                            <div slot="content" :style="{padding:'0 10px'}" class="collapse_bg" v-for="(o,i) in obj.child">
-                              <!-- <Collapse accordion :style="{backgroundColor:'rgba(0,0,0,0)'}" class="collapse_bg">
-                                <Panel name=i> -->
-                                  <p slot="content">{{o.name}}</p>
-                                <!-- </Panel>
-                              </Collapse> -->
+                      <Collapse simple class="toushiItems" accordion >
+                        <Panel name="1" :style='{borderBottom:"1px solid rgba(51,255,255,.5)"}'>
+                          {{object.name}}({{object.num}})
+                             <div v-for="(obj,index) in object.child" :style="{marginLeft:'10px'}" slot="content">
+                              <Collapse simple>
+                                <Panel :name="index">
+                                  {{obj.name}}({{obj.count}})
+                                </Panel>
+                              </Collapse>
                             </div>
-                          </Panel>
+                        </Panel>
                       </Collapse>
-                  </div>
-                </Panel>
-              </Collapse>
-            </div>
+                    </div>
           </Tab-pane>
           <Tab-pane label="目标详情">
             <div>
@@ -38,7 +29,8 @@
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
-                <div class="p-collapse-modal" :style="{width:'100%'}"  v-for="data in evetdata" @click="detail(evetdata.id)">{{data.name}}<!-- onclick="detail(data.id)" -->
+                <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(evetdata.id)">{{data.name}}
+                  <!-- onclick="detail(data.id)" -->
                   <p class="p-collapse-modal-small">{{data.type}}</p>
                 </div>
               </Row>
@@ -213,24 +205,24 @@
                     </Col>
                     <Col span="16">
                     <span class="content_value">
-                            <a :href="evetdata.e_mail" slot="extra">{{evetdata.e_mail}}</a>
-                          </span>
+                                    <a :href="evetdata.e_mail" slot="extra">{{evetdata.e_mail}}</a>
+                                  </span>
                     </Col>
                     <Col span="8">
                     <span class="content_header">博客</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">
-                            <a :href="evetdata.official_blog" slot="extra">{{evetdata.official_blog}}</a>
-                          </span>
+                                    <a :href="evetdata.official_blog" slot="extra">{{evetdata.official_blog}}</a>
+                                  </span>
                     </Col>
                     <Col span="8">
                     <span class="content_header">官⽹</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">
-                            <a :href="evetdata.official_website" slot="extra">{{evetdata.official_website}}</a>
-                          </span>
+                                    <a :href="evetdata.official_website" slot="extra">{{evetdata.official_website}}</a>
+                                  </span>
                     </Col>
                     <Col span="8">
                     <span class="content_header">简介</span>
@@ -423,8 +415,8 @@
                     </Col>
                     <Col span="16">
                     <span class="content_value">
-                            <a :href="evetdata.official_website" slot="extra">{{evetdata.official_website}}</a>
-                          </span>
+                                    <a :href="evetdata.official_website" slot="extra">{{evetdata.official_website}}</a>
+                                  </span>
                     </Col>
                   </Row>
                 </div>
@@ -442,24 +434,11 @@
   import modalChartDetail from './custom_modal_detail'
   /* eslint-disable */
   export default {
-    //   eventData: {
-    //     type: Array,
-    //     default: [0, 0, 0] //这样可以指定默认的值
-    //   },
-    //   detailData:{
-    //     type: Array,
-    //     default: [0, 0, 0] //这样可以指定默认的值
-    //   }
-    // },
     data() {
       return {
         evetdata: null,
         detailModalFlag: false,
-<<<<<<< HEAD
         value4: '1-1',
-=======
-        id:'',
->>>>>>> 65ae1d0eb6b8f6203feacb1c9fcf00e939cc60d2
         myList: [{
           name: 'aaaaa',
           img: 'https://img3.doubanio.com/view/celebrity/s_ratio_celebrity/public/p230.webp',
@@ -472,8 +451,8 @@
         ],
         detail_data: null,
         show: [],
-        show1: ['1', '2', '3', '4'],
-        show1_1: '1-1',
+        value3: '1',
+                value4: '1-1',
         eheight: 0,
         eventheightdiv: 0,
         eventheight: 0,
@@ -487,8 +466,8 @@
             school: '列宁格勒国立大学',
             tag: '俄罗斯联邦政府总统／ 俄罗斯第2任总统／第7届俄罗斯总理／第11届俄罗斯总理',
             introduction: `弗拉基米尔·弗拉基米罗维奇·普京，俄罗斯第2任、第4任总统。曾担任俄罗斯总理、统一俄罗斯党主席、俄白联盟部长会议主席。
-        2000年执政以来，普京致力于复兴俄罗斯超级大国地位，对内加强联邦政府的权力，整顿经济秩序，打击金融寡头，加强军队建设；对外努力改善国际环境…
-        恢复了世界性强国地位。`
+                2000年执政以来，普京致力于复兴俄罗斯超级大国地位，对内加强联邦政府的权力，整顿经济秩序，打击金融寡头，加强军队建设；对外努力改善国际环境…
+                恢复了世界性强国地位。`
           },
           {
             name: "习近平",
@@ -499,8 +478,8 @@
             school: '清华大学人文社会学院马克思主义理论与思想政治教育专业',
             tag: '现任中国共产党中央委员会总书记、中共中央军事委员会主席、中华人民共和国主席、中华人民共和国中央军事委员会主席',
             introduction: `953年6月生，陕西富平人，1969年1月参加工作，1974年1月加入中国共产党，清华大学人文社会学院马克思主义理论与思想政治教育专业毕业，在职研究生学历，法学博士学位。
-        现任中国共产党中央委员会总书记，中共中央军事委员会主席，中华人民共和国主席，中华人民共和国中央军事委员会主席。
-        中共第十五届中央候补委员，十六届、十七届、十八届、十九届中央委员，十七届中央政治局委员、常委、中央书记处书记，十八届、十九届中央政治局委员、常委、中央委员会总书记。第十一届全国人大第一次会议当选为中华人民共和国副主席。十七届五中全会增补为中共中央军事委员会副主席。第十一届全国人大常委会第十七次会议任命为中华人民共和国中央军事委员会副主席。十八届一中全会任中共中央军事委员会主席。第十二届全国人大第一次会议当选为中华人民共和国主席、中华人民共和国中央军事委员会主席`
+                现任中国共产党中央委员会总书记，中共中央军事委员会主席，中华人民共和国主席，中华人民共和国中央军事委员会主席。
+                中共第十五届中央候补委员，十六届、十七届、十八届、十九届中央委员，十七届中央政治局委员、常委、中央书记处书记，十八届、十九届中央政治局委员、常委、中央委员会总书记。第十一届全国人大第一次会议当选为中华人民共和国副主席。十七届五中全会增补为中共中央军事委员会副主席。第十一届全国人大常委会第十七次会议任命为中华人民共和国中央军事委员会副主席。十八届一中全会任中共中央军事委员会主席。第十二届全国人大第一次会议当选为中华人民共和国主席、中华人民共和国中央军事委员会主席`
           }
         ]
       };
@@ -593,8 +572,8 @@
     color: #ccffff;
     margin-bottom: 10px;
   }
-  .ivu-tabs-bar {
-    margin-bottom: 5px !important;
+  .ivu-tabs-nav {
+    background-color: rgba(0, 0, 0, 0) !important;
   }
 </style>
 
@@ -701,36 +680,44 @@
   .circle-img {
     border-radius: 50% !important;
   }
-  #toushi>.ivu-collapse {
+  .ivu-collapse{
     background-color: rgba(0, 0, 0, 0) !important;
     border: none !important;
+    color: #cff !important;
+  }
+  .ivu-collapse-header span{
+    font-size: 14px !important;
+  }
+  .ivu-collapse-content-box>.ivu-collapse{
+    margin: 5px 0 !important;
   }
   #toushi>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-content,
   .toushiItems,
   .toushiItems>.ivu-collapse-item-active>.ivu-collapse-content {
     background-color: rgba(0, 0, 0, 0) !important;
+    border-bottom: 1px solid rgba(51,255,255,0.5) !important;
   }
   #toushi>.ivu-collapse,
-  .toushiItems>.ivu-collapse{
+  .toushiItems>.ivu-collapse {
     background-color: rgba(0, 0, 0, 0) !important;
     border: none !important;
   }
-  .collapse_bg{
-    background-color: rgba(0,0,0,0) !important;
+  .collapse_bg {
+    background-color: rgba(0, 0, 0, 0) !important;
   }
-  #toushi .ivu-collapse-content-box p{
-    font-size:12px !important;
+  #toushi .ivu-collapse-content-box p {
+    font-size: 12px !important;
   }
-  .ivu-collapse-item-active>.ivu-collapse-content{
-    background-color: rgba(0,0,0,0) !important;
+  .ivu-collapse-item-active>.ivu-collapse-content {
+    background-color: rgba(0, 0, 0, 0) !important;
   }
   .ivu-collapse>.ivu-collapse-item {
     border: none !important;
   }
-  .ivu-collapse-item{
-    background-color: rgba(0,0,0,0) !important;
+  .ivu-collapse-item {
+    background-color: rgba(0, 0, 0, 0) !important;
   }
-  #toushi{
+  #toushi {
     overflow-y: scroll;
   }
 </style>

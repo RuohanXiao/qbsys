@@ -190,7 +190,7 @@ column-count:3;
     border: none !important;
   }
   .ivu-collapse-header {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
   }
   .ivu-collapse-content {
     background-color: rgba(51, 255, 255, 0.1) !important;

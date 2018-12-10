@@ -279,12 +279,6 @@
     background-color: rgba(0, 0, 0, 0) !important;
     padding: 0 !important;
   }
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
-    background: rgba(51, 255, 255, 0.2);
-  }
-  .ivu-tabs-bar {
-    border-bottom: 1px solid rgba(51, 255, 255, 0.2) !important;
-  }
   .hoverScroll:hover {
     overflow-y: scroll;
   }
@@ -317,19 +311,12 @@
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
 }
 
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab-active {
-    border: 1px solid rgba(54, 102, 102, 0.1) !important;
-    border-radius: 3px !important;
-    -moz-border-radius: 3px !important;
-    /* Old Firefox */
-    background-color: rgba(51, 255, 255, 0.2) !important;
-  }
   .ivu-progress-inner {
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
-  .ivu-tabs-tab {
+  /* .ivu-tabs-tab {
     color: #ccffff !important;
-  }
+  } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }
@@ -441,15 +428,6 @@
   }
   .paneRight {
     border: solid 1px rgba(54, 102, 116, 0.5);
-  }
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
-    font-family: MicrosoftYaHei !important;
-    margin-right: 0px !important;
-    border: none !important;
-    border-radius: 0 !important;
-    border: 1px solid rgba(54, 102, 102, 0.1) !important;
-    -moz-border-radius: 3px !important;
-    background-color: rgba(51, 255, 255, 0.1) !important;
   }
   #barchart {
     width: 100%;

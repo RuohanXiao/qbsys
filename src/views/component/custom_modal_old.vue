@@ -250,9 +250,6 @@
     border-radius: 0 !important;
     border: none !important;
   }
-  .ivu-collapse-header {
-    background-color: rgba(0, 0, 0, 0.1) !important;
-  }
   .ivu-collapse-content {
     background-color: rgba(51, 255, 255, 0.1) !important;
   }
