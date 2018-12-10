@@ -8,7 +8,7 @@
           <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px',left:'80%'}" v-else/>
         </div>
         <div class='entity_detail'>
-        <table>
+        <table id='entity_detailTable'>
           <!-- <tr v-if=" ishasValue(Entitydetail.birth_name)">
             <td class="modalContentLabel">全名</td>
              <td class="modalContentLabel">{{Entitydetail.birth_name}}</td>
@@ -177,6 +177,13 @@
     } 
   }
 </script>
+
+<style scoped>
+#entity_detailTable tr{
+  border-bottom: 1px solid;
+}
+</style>
+
 
 <style>
 .entity_detail
