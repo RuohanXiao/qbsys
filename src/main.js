@@ -3,6 +3,7 @@ import iView from 'iview';
 import VueRouter from 'vue-router';
 import Routers from './router';
 import Util from './libs/util';
+// import Antd from 'vue-antd';
 // ./dist/assets/styles/demo.css
 import $ from 'jquery';
 import App from './app.vue';
@@ -169,6 +170,7 @@ import { FactChart,NetChart,PieChart,GeoChart } from "./dist/assets/js/zoomchart
   Vue.use(VueRouter);
   Vue.use(iView);
   Vue.use(echarts);
+//   Vue.use(Antd);
 // 路由配置
 const RouterConfig = {
     // mode: 'history',

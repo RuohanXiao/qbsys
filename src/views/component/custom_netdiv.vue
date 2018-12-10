@@ -1,101 +1,100 @@
 <template>
   <div>
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" id="net">
-      <Row type="flex" justify="space-between" class="code-row-bg" align="middle" :style="{height:'70px',paddingLeft:'10px'}">
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="后退" placement="bottom">
-          <Icon class="icon iconfont icon-fanhui process-img DVSL-bar-btn DVSL-bar-btn-back" @click="back" size="26"></Icon>
+      <div class='divStyle'>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="back">
+            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">撤销操作</p>
+          </div>
         </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col>
-        <!-- <Col span="1" align="middle" class="bottom">
-            <Tooltip content="框选" placement="bottom">
-              <Icon class="icon iconfont icon-selection-box process-img DVSL-bar-btn DVSL-bar-btn-back" size="26"></Icon>
-            </Tooltip>
-            </Col>
-            <Col align="middle">
-            <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-            </Col> -->
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="矩形" placement="bottom">
-          <Icon class="icon iconfont icon-grid process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="square"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="星形" placement="bottom">
-          <Icon class="icon iconfont icon-star process-img DVSL-bar-btn DVSL-bar-btn-back" align="center" @click="star" size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="层级" placement="bottom">
-          <Icon class="icon iconfont icon-expand process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="hierarchy"></Icon>
-        </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="知识扩展" placement="bottom">
-          <Icon class="icon iconfont icon-kuozhan--tupu process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="expandNodeKnowledge"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="事件扩展" placement="bottom">
-          <Icon class="icon iconfont icon-kuozhan--shijian process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="expandNodeEvent"></Icon>
-        </Tooltip>
-        </Col>
-        <!-- <Col span="1" align="middle" class="bottom">
-            <Tooltip content="查找关联" placement="bottom">
-              <Icon class="icon iconfont icon-linkedby process-img DVSL-bar-btn DVSL-bar-btn-back" size="26"></Icon>
-            </Tooltip>
-            </Col> -->
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="知识路径" placement="bottom">
-          <Icon class="icon iconfont icon-lujing--tupu process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="showPathKnowledge"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="事件路径" placement="bottom">
-          <Icon class="icon iconfont icon-lujing--shijian process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="showPathEvent"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="删除节点" placement="bottom">
-          <Icon class="icon iconfont icon-delete-point process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="remove"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="反选节点" placement="bottom">
-          <Icon class="icon iconfont icon-fanxuan process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="removeOther"></Icon>
-        </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="添加目标" placement="bottom">
-          <Icon class="icon iconfont icon-add process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="add"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="截屏" placement="bottom">
-          <!-- <Icon class="icon iconfont icon-cut process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="cutScreen"></Icon> -->
-          <Icon class="icon iconfont icon-cut process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="exportImg"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="保存工作集" placement="bottom">
-          <Icon class="icon iconfont icon-save1 process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="save"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" offset="9" align="middle" class="bottom">
-        <Tooltip content="自适应" placement="bottom">
-          <Icon class="icon iconfont icon-zhengchangshitu--quanping process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="fit"></Icon>
-        </Tooltip>
-        </Col>
-      </Row>
+          <div class="divSplitLine"></div>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="square">
+            <Icon class="icon iconfont icon-grid  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">矩形布局</p>
+          </div>
+          </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="star">
+            <Icon class="icon iconfont icon-star  DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
+            <p class="img-content">星形布局</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="hierarchy">
+            <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">层级布局</p>
+          </div>
+           </Tooltip>
+          <div class="divSplitLine"></div>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="expandNodeKnowledge">
+            <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">知识扩展</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="expandNodeEvent">
+            <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">事件扩展</p>
+          </div>
+                       </Tooltip>
+          <!-- <Col span="1" align="middle" class="bottom">
+                      <Tooltip content="查找关联" placement="bottom">
+                        <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                      </Tooltip>
+                      </Col> -->
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div">
+            <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content" @click="showPathKnowledge">知识路径</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="showPathEvent">
+            <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">事件路径</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="remove">
+            <Icon class="icon iconfont icon-delete-point  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">删除节点</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="removeOther">
+            <Icon class="icon iconfont icon-fanxuan  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">反选节点</p>
+          </div>
+           </Tooltip>
+          <div class="divSplitLine"></div>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="add">
+            <Icon class="icon iconfont icon-add  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">添加目标</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="exportImg">
+            <Icon class="icon iconfont icon-cut  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">截屏</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="save">
+            <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">保存工作集</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="fit">
+            <Icon class="icon iconfont icon-zhengchangshitu--quanping  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">自适应</p>
+          </div>
+           </Tooltip>
+      </div>
     </div>
     <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div id="netchart" aria-autocomplete="true" :style="{height:netHeight}"></div>
@@ -117,6 +116,7 @@
     name: "App",
     data() {
       return {
+        timer: null,
         basicY: 0,
         basicX: 0,
         dataurl: '../../dist/data/netData.json',
@@ -151,14 +151,14 @@
       // 调用统计接口
       getStatistics() {
         var mthis = this
-        let nodeArr = Object.keys(mthis.netchart._impl.data.default.nodes).map(key=> mthis.netchart._impl.data.default.nodes[key].id);
-        let linkArr = Object.keys(mthis.netchart._impl.data.default.links).map(key=> mthis.netchart._impl.data.default.links[key]);
+        let nodeArr = Object.keys(mthis.netchart._impl.data.default.nodes).map(key => mthis.netchart._impl.data.default.nodes[key].id);
+        let linkArr = Object.keys(mthis.netchart._impl.data.default.links).map(key => mthis.netchart._impl.data.default.links[key]);
         mthis.$http.post('http://10.60.1.140:5001/graph-statistics/', {
           'nodes': nodeArr,
           'links': linkArr
         }).then(response => {
           console.log(response.data)
-          mthis.$emit('dataStatistics',response.data);
+          mthis.$emit('dataStatistics', response.data);
         })
       },
       del() {
@@ -351,21 +351,22 @@
           mthis.changeFlag();
           for (let index = 1; index < mthis.selectionId.length; index++) {
             mthis.netchart.unlockNode(mthis.selectionId[index].id);
-            let circleNum = Math.floor(Math.log(index) / Math.log(3))
-            let avd = 360 / Math.pow(3, circleNum);
-            // let ahd = avd * Math.PI / 180;
-            let ahd = avd * Math.PI / 360;
-            let radius = 200 * circleNum + 200
-            //解锁位置
-            // this.selectionId[index]["x"] = 
+            // 辐射布局
+            // let circleNum = Math.floor(Math.log(index) / Math.log(3))
+            // let avd = 360 / Math.pow(3, circleNum);
+            // let ahd = avd * Math.PI / 360;
+            // let radius = 200 * circleNum + 200
+            // mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
             //   Math.sin(ahd * index) * radius;
-            // this.selectionId[index]["y"] = 
+            // mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] +
             //   Math.cos(ahd * index) * radius;
+            // 螺旋布局
+            let ahd = Math.PI / 72;
+            let radius = 5 * index + 5
             mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
               Math.sin(ahd * index) * radius;
             mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] +
               Math.cos(ahd * index) * radius;
-            // 锁定位置
             mthis.netchart.lockNode(mthis.selectionId[index].id);
           }
         } else if (mthis.selectionId.length > 0 && mthis.selectionId.length < 27) {
@@ -765,15 +766,15 @@
             nodeLabel: {
               // 节点名称边框
               backgroundStyle: {
-                fillColor: "rgba(0,0,0,0.8)",
-                lineColor: "rgba(0,0,0,0.8)"
+                fillColor: "rgba(0,0,0,0)",
+                lineColor: "rgba(0,0,0,0)"
               }
             },
             linkLabel: {
               // 事件名称边框
               backgroundStyle: {
-                fillColor: "rgba(0,0,0,0.8)",
-                lineColor: "rgba(0,0,0,0.8)"
+                fillColor: "rgba(0,0,0,0)",
+                lineColor: "rgba(0,0,0,0)"
               }
             },
             linkClasses: [
@@ -917,24 +918,29 @@
               // infoElement.style.display = infoElementVisible ? "block" : "none";
             },
             onSelectionChange(event) {
-              if (event.selection.length > 0) {
-                mthis.selectItem = event;
-                // 有选中节点或者link
-                mthis.selectionId = [];
-                for (
-                  let selectNum = 0; selectNum < event.selection.length; selectNum++
-                ) {
-                  // mthis.selectionId.push({"selectionId":event.selection[selectNum].id,"selectionType":(event.selection[selectNum].isNode) ? 'node' : 'link'})
-                  mthis.selectionId.push(event.selection[selectNum]);
-                }
-                // 触发右侧eventdiv改变
-                mthis.$emit('selectNodes1', [{
-                  ids: mthis.selectionId
-                }, mthis.selectionId.length]);
-              } else {
-                mthis.selectionId = [];
-                mthis.selectItem = null;
+              if (this.timer) {
+                clearTimeout(this.timer)
               }
+              this.timer = setTimeout(function() {
+                if (event.selection.length > 0) {
+                  mthis.selectItem = event;
+                  // 有选中节点或者link
+                  mthis.selectionId = [];
+                  for (
+                    let selectNum = 0; selectNum < event.selection.length; selectNum++
+                  ) {
+                    // mthis.selectionId.push({"selectionId":event.selection[selectNum].id,"selectionType":(event.selection[selectNum].isNode) ? 'node' : 'link'})
+                    mthis.selectionId.push(event.selection[selectNum]);
+                  }
+                  // 触发右侧eventdiv改变
+                  mthis.$emit('selectNodes1', [{
+                    ids: mthis.selectionId
+                  }, mthis.selectionId.length]);
+                } else {
+                  mthis.selectionId = [];
+                  mthis.selectItem = null;
+                }
+              }, 500);
             }
           },
           toolbar: {
