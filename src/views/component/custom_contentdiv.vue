@@ -142,8 +142,8 @@
       //   document.getElementById('contentsTime').innerHTML = res.data.time
       // });
       mthis.$http.get('http://10.60.1.140:5001/context-by-id/?idValue='+ id).then(response => {
-          //document.getElementById('contents').innerHTML = response.body.data[0].text
-          mthis.printer(response.body.data[0].text, 'contents', 'pointer')
+          document.getElementById('contents').innerHTML = response.body.data[0].text
+          //mthis.printer(response.body.data[0].text, 'contents', 'pointer')
           document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
           document.getElementById('contentsTime').innerHTML = response.body.data[0].from + ((response.body.data[0].from!=='' && response.body.data[0].from !==undefined)?'  |  ':'')+ response.body.data[0].time
           
@@ -151,7 +151,7 @@
           // mthis.singlePerson = (opt[1]>1)?false:true
         })
       },
-      printer(text,contentid,pointerid){ 
+      /* printer(text,contentid,pointerid){ 
           var l = text.length;
           var t = 0;
           var arr = [];    
@@ -174,7 +174,7 @@
               }
       },10);
               
-      }
+      } */
     },
     created() {
       // var mthis = this

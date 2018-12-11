@@ -27,7 +27,7 @@ var map = function(target){
     var countriesAndProvinces_labelLayer = new TileLayer({
 	    visible: true,
 	    source: new TileWMS({
-            url: 'http://10.60.1.142:8082/geoserver/wms?',
+            url: 'http://10.60.1.142:8082/geoserver/gwc/service/wms?',
 			params: {
 				'FORMAT': 'image/png',
 				'VERSION': '1.1.1',
