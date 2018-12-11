@@ -449,7 +449,11 @@
         statisticsNameList:{
           'entity':'实体',
           'human':'人物',
-          'politician':'政治人物'
+          'politician':'政治人物',
+          'administrative':'管理',
+          'organization':'机构',
+          'political party':'政党',
+          'else':'其他'
 
         },
         evetdata: null,
