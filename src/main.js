@@ -197,7 +197,7 @@ var store = new Vuex.Store({
     geoData: null,
     split:0.85,
     singlePerson:true,
-    dataStatisticsEvent: null,
+    dataStatisticsEvent: {},
     dataexpand: [{
       name:'',
       img:'',

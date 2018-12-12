@@ -158,7 +158,8 @@
           'links': linkArr
         }).then(response => {
           console.log(response.data)
-          mthis.$emit('dataStatistics', response.data);
+          //mthis.$emit('dataStatistics', response.data);
+          mthis.$store.commit('setDataStatisticsEvent', response.data);
         })
       },
       del() {
