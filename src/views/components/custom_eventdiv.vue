@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="{fontSize: '18px',height:viewHeight}">
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0'}">
@@ -7,22 +7,22 @@
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
             <div>
               <Collapse simple class="toushiItems" accordion>
-                <panel v-for="StatisticsType in dataStatistics.data"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
+                <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
                   <div slot="content">
                   <collapse accordion simple>
-                      <panel v-if="StatisticsItem.child == undefined" hide-arrow='true' v-for="StatisticsItem in StatisticsType.child"><span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
-                        <percentBar :num="StatisticsItem.per"></percentBar>
-                      </panel>
-                      <panel v-else="StatisticsItem.child == undefined" v-for="StatisticsItem in StatisticsType.child"><span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
-                        <percentBar :num="StatisticsItem.per"></percentBar>
-                        <div slot="content">
-                          <collapse accordion simple>
-                            <panel v-for="lastStatisticsItem in StatisticsItem.child" hide-arrow='true'><span style="font-size: 10px;padding-left: 30px;">{{statisticsNameList[lastStatisticsItem.name]}}</span>
-                              <percentBar :num="lastStatisticsItem.per"></percentBar>
-                            </panel>
-                          </collapse>
-                        </div>
-                      </panel>
+                    <panel v-for="StatisticsItem in StatisticsType.child" :hide-arrow="(StatisticsItem.child === undefined)">
+                      <span style="width:1em" /><span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
+                      <percentBar :num="StatisticsItem.per" :count="StatisticsItem.count" :index='index'></percentBar>
+                      <div slot="content">
+                        <collapse accordion simple>
+                          <panel v-for="lastStatisticsItem in StatisticsItem.child" :hide-arrow='true'>
+                            <span style="width:2em" />
+                            <span style="font-size: 10px;padding-left:30px">{{statisticsNameList[lastStatisticsItem.name]}}</span>
+                            <percentBar :num="lastStatisticsItem.per" :count="lastStatisticsItem.count" :index='index'></percentBar>
+                          </panel>
+                        </collapse>
+                      </div>
+                    </panel>
                   </collapse>
                   </div>
                 </panel>
@@ -48,12 +48,11 @@
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
                   <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
-                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="dataExpand != null">{{dataExpand.length}}</span>)
+                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="netSelectNodes != null&&netSelectNodes[0]!==undefined">{{netSelectNodes[0].ids.length}}</span>)
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
-                <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(evetdata.id)">{{data.name}}
-                  <!-- onclick="detail(data.id)" -->
+                <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(data.id)">{{data.name}}
                   <p class="p-collapse-modal-small">{{data.type}}</p>
                 </div>
               </Row>
@@ -448,7 +447,7 @@
           </Tab-pane>
         </Tabs>
       </div>
-      <modal-chart-detail :detail="detail_data" :nodeId='id' v-if='detailModalFlag'></modal-chart-detail>
+      <modal-chart-detail :nodeId='modalNodeId' v-if='detailModalFlag'></modal-chart-detail>
     </div>
     </Col>
   </div>
@@ -461,6 +460,7 @@
   export default {
     data() {
       return {
+        modalNodeId: '',
         statisticsNameList:{
           'entity':'实体',
           'human':'人物',
@@ -472,9 +472,7 @@
         },
         evetdata: null,
         detailModalFlag: false,
-        dataStatistics:{
-          data:[]
-        },
+        dataStatistics:[],
         value4: '1-1',
         myList: [{
           name: 'aaaaa',
@@ -530,17 +528,37 @@
         //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['dataExpand', 'singlePerson', 'viewHeight', 'dataStatisticsEvent']),
+    computed:mapState (['netSelectNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent']),
     watch: {
       dataStatisticsEvent: function() {
         var mthis = this;
-        mthis.dataStatistics = mthis.dataStatisticsEvent;
+        mthis.dataStatistics = mthis.dataStatisticsEvent.data;
+        console.log('mthis.dataStatistics')
+        console.log(mthis.dataStatistics)
       },
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
-      dataExpand: function() {
-        this.evetdata = (this.$store.getters.getSinglePerson) ? this.dataExpand[0] : this.dataExpand
+      netSelectNodes: function() {
+        var mthis = this;
+        if (mthis.timer) {
+          clearTimeout(mthis.timer)
+        }
+        mthis.timer = setTimeout(function() {
+          let nodeIdsArry = mthis.netSelectNodes[0].ids.map(item => {
+            return item.id;
+          });
+          // 新增防抖功能
+          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+            'nodeIds': nodeIdsArry
+          }).then(response => {
+            mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
+            console.log(mthis.evetdata)
+            // mthis.evetdata = response.data.data[0].nodes
+          })
+        }, 100);
+        // let qu = (mthis.singlePerson) ? mthis.netSelectNodes[0].ids[0] : mthis.netSelectNodes[0].ids
+        // mthis.evetdata = 
       }
     },
     methods: {
@@ -570,13 +588,13 @@
         // mthis.singlePerson = false
       },
       detail(id) {
+        this.modalNodeId = id
         let nodeIdsArry = []
         nodeIdsArry.push(id)
         this.$http.post('http://10.60.1.140:5001/node-datas/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
-          this.dataExpand = response.body.data[0].nodes[0]
-          this.id = id
+          this.netSelectNodes = response.body.data[0].nodes[0]
           this.detailModalFlag = true
         })
         //查询详细信息
@@ -734,7 +752,7 @@
   .toushiItems,
   .toushiItems>.ivu-collapse-item-active>.ivu-collapse-content {
     background-color: rgba(0, 0, 0, 0) !important;
-    border-bottom: 1px solid rgba(51,255,255,0.5) !important;
+    /* border-bottom: 1px solid rgba(51,255,255,0.5) !important; */
   }
   #toushi>.ivu-collapse,
   .toushiItems>.ivu-collapse {

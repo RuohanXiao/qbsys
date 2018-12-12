@@ -146,7 +146,9 @@
         buttonDivHeight: 0, 
         listHeight: 0,
         InfoHeight: 0,
-        Entitydetail:null,
+        Entitydetail:{
+          name:''
+        },
       }
     },
     props: ['nodeId','flag'],
@@ -157,11 +159,9 @@
     },
     created(){
       var nodeIds =[this.nodeId];
-      
       this.$http.post('http://10.60.1.140:5001/node-datas/', {
           'nodeIds': nodeIds
         }).then(response => {
-          
            this.Entitydetail = response.body.data[0].nodes[0]
         })
     },
@@ -173,6 +173,12 @@
         } else {
           return true;
         }
+      },
+       showNodeInNet() {
+        alert('追加网络分析')
+      },
+      showNodeInNewNet() {
+        alert('新建网络分析')
       }
     } 
   }

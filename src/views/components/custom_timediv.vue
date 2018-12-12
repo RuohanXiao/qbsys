@@ -42,7 +42,7 @@
     <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" id="timediv">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
       <!-- <echarts id='barchart' :options="bar" :style="{height: timepxdiv}" :auto-resize="true" ></echarts> -->
-      <div id="main1" :style="{width:splitWidth}"></div>
+      <div id="main1" :style="{width:pwidth}"></div>
     </div>
     </Col>
   </div>
@@ -55,7 +55,7 @@
     name: "",
     data() {
       return {
-        splitWidth: 0,
+        pwidth: 0,
         timepxdiv: 0,
         timepx: 0,
         iconPosition: 0,
@@ -315,7 +315,7 @@
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
       this.iconPosition = useHeight * 0.8 + "px";
 
-      
+      this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       // this.iconPosition = useHeight - 40 + "px";
       this.loadEcharts();
       let that = this;
@@ -324,7 +324,7 @@
       // this.changHeightCount++
     },
     computed:mapState ([
-      'split'
+      'split','splitWidth'
     ]),
     watch: {
       split: function(va) {
@@ -335,27 +335,32 @@
           height
         })
       },
+      splitWidth: function(va) {
+        this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+      },
       changHeightCount: function() {
         var mthis = this
         let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (this.changHeightCount % 2 === 0) {
+        if (mthis.changHeightCount % 2 === 0) {
           // this.timepx = "0px";
           // this.timepxdiv = "0px";
-          this.iconPosition = useHeight - 40 + "px";
+          mthis.iconPosition = useHeight - 40 + "px";
           document.getElementById("timechartctrl").style.display = "none";
           document.getElementById("main1").style.display = "none";
           document.getElementById("timediv").style.display = "none";
           document.getElementById("arrowDown").style.transform = "rotate(0deg)";
-          mthis.$emit('changenetpx', false);
+          // mthis.$emit('changenetpx', false);
+          mthis.$store.commit('setChangenetpx',false);
         } else {
-          this.iconPosition = useHeight * 0.8 + "px";
+          mthis.iconPosition = useHeight * 0.8 + "px";
           // this.timepx =
           //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
           //   30 +
           //   "px";
           // this.timepxdiv =
           //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-          mthis.$emit('changenetpx', true);
+          // mthis.$emit('changenetpx', true);
+          mthis.$store.commit('setChangenetpx',true);
           document.getElementById("timechartctrl").style.display = "block";
           document.getElementById("main1").style.display = "block";
           document.getElementById("timediv").style.display = "block";

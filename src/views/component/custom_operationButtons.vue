@@ -226,7 +226,6 @@ export default {
     methods:{
         mapOperationClick(mapOperation){
             var mthis = this;
-            
             var mapOperationId = mapOperation.currentTarget.id;
             if(mapOperationId == 'location_button'){
                 mthis.location_cilck();
@@ -949,7 +948,10 @@ export default {
             });  
         },
         deleteOverlayById(id){
+<<<<<<< HEAD
             
+=======
+>>>>>>> d738d8e98c27ff59d87071d1a79fa4678f4bfaea
             var mthis = this;
             var Id_Animation = 'pointAnimation_' + id;
             var Id_localtion = 'localtion_Overlay_' + id;
@@ -963,7 +965,6 @@ export default {
         */
         invertSelectionSliderImgs(){
             var mthis = this
-            
             var invertSelectIds = [];
             mthis.allImgIds.forEach(function(item,index,arr){
                 for(var i = mthis.onImgIds.length - 1; i >= 0; i--){
@@ -1101,7 +1102,6 @@ export default {
             point_animation.style.background = point.getStyle().getImage().getFill().getColor();
             var point_animation_id = point_animation_BelongId + '_' + point.getProperties().properties.id;
             if(mthis.isPointAnimation(point)){
-                
                 mthis.removeOverlays(point_animation_id);
             }
             var point_overlay = mthis.setOverlay(point.getGeometry().getCoordinates(),point_animation,point_animation_id, 'center-center');
