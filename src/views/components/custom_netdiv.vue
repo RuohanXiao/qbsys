@@ -968,7 +968,7 @@
       'searchResult'
     ]),
     watch: {
-      searchResult:function(  ){
+      searchResult:function(va){
         this.reloadNetData(va.nodes[0])
       }
     //   searchResultWatcher:function(old){

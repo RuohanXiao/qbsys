@@ -454,7 +454,6 @@
           'organization':'机构',
           'political party':'政党',
           'else':'其他'
-
         },
         evetdata: null,
         detailModalFlag: false,
@@ -564,7 +563,7 @@
         //查询详细信息
       },
     },
-    props: ['dataExpand', 'singlePerson', 'dataStatisticsEvent'],
+    props: ['dataExpand', 'singlePerson', 'eventheightdiv', 'dataStatisticsEvent'],
     mounted() {
       var mthis = this;
       window.onresize = function() {
