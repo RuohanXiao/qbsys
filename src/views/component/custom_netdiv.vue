@@ -229,7 +229,7 @@
             }));
             mthis.getStatistics()
           });
-          mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
+          // mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
         } else {
           this.$Message.error('请至少选择一个节点进行拓展操作！')
         }
@@ -961,7 +961,7 @@
           },
           theme: NetChart.themes.dark
         }))
-        mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
+        // mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
       }
     },
     created() {},

@@ -564,7 +564,7 @@
         //查询详细信息
       },
     },
-    props: ['dataExpand', 'singlePerson', 'eventheightdiv', 'dataStatisticsEvent'],
+    props: ['dataExpand', 'singlePerson', 'dataStatisticsEvent'],
     mounted() {
       var mthis = this;
       window.onresize = function() {
