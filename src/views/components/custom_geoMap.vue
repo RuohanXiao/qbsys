@@ -1,6 +1,6 @@
 <template>
-    <div :style="{height:geoHeight,width:geoWidth}" class='geoDiv'><!-- :style={height:geoHeight;width:} -->
-        <imgItemOpera @mapOperation='mapOperationClick'></imgItemOpera>
+    <div :style="{height:geoHeight,width:geoWidth}" class='geoDiv'>
+        <imgItemOpera @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
                 <div id='legendDiv'>
@@ -139,6 +139,7 @@ top: 232px;
 </style>
 
 <script>
+import { mapState,mapMutations } from 'vuex'
 
 import {test_Route,test_HeatMap} from '../../dist/assets/js/geo/data.js'
 import {map} from '../../dist/assets/js/geo/ChinaMap.js' 
@@ -199,7 +200,11 @@ export default {
         routeColors:['#616f39','#88A2AA','#509aaf'],
         n :500,//曲线的粒度（曲线是由几个点组成）
         mousePointCoordinate: null,
-        geoHeight:500,
+        geoHeight:'0px',
+        geoWidth:'0px',
+        //tmss:this.$store.state.tmss,
+        /* geoHeight:'500px',
+        geoWidth:'1000px', */
         isCtrl:false,
         onImgIds:[],  //被点亮的img的id
         allImgIds:[], //所有img的id
@@ -222,12 +227,15 @@ export default {
         mthis.test_Route.forEach(function(item){
             mthis.allImgIds.push(item.id);
         })
+        mthis.geoHeight=mthis.$store.getters.getGeoHeight;
+        mthis.geoWidth=document.documentElement.clientWidth * this.$store.state.split - 20 + 'px';
     },
     methods:{
         mapOperationClick(mapOperation){
             var mthis = this;
             
             var mapOperationId = mapOperation.currentTarget.id;
+            
             if(mapOperationId == 'location_button'){
                 mthis.location_cilck();
             } else if(mapOperationId == 'heatMap_button'){
@@ -351,13 +359,14 @@ export default {
         clickButtonOpenDiv(id){
             var mthis = this
             mthis.mapDivbuttonIds.forEach(function(item){
+                
                 var button = document.getElementById(item)
                 var bottonName = item.split('_')[0]
                 var classname = ''
                 if(item == id){
-                    classname = bottonName + '_click'
+                    classname = 'button-div-click';
                 } else {
-                    classname = bottonName + '_Noclick'
+                    classname = 'button-div';
                 }
                 button.className = classname
             })
@@ -1124,6 +1133,9 @@ export default {
         }
 
     },
+    computed:mapState ([
+      'tmss'
+    ]),
     watch:{
         locationClassObject:{
                 handler:function(val,oldval){
@@ -1134,13 +1146,15 @@ export default {
                 },
                 deep:true//对象内部的属性监听，也叫深度监听
         },
-        geoHeight:function(){
+        tmss:function(){
             var mthis = this
-            //mthis.imgTopVules = parseInt(geoHeight) - 80 + 'px';
-            this.$nextTick(function(){
-                var mthis = this
-                mthis.location_cilck()  //初始化时开启location
-            });
+            if(mthis.tmss == 'geo'){
+                this.$nextTick(function(){
+                    var mthis = this
+                    mthis.location_cilck()  //初始化时开启location
+                });
+            }
+            
         },
         geoWidth:function(){
             var mthis = this;
@@ -1157,7 +1171,7 @@ export default {
         
 
     },
-    props: ['geoHeight', 'geoData','geoWidth'],
+    //props: ['geoData'],
     components: {
       imgSlider,
       routeLegend,

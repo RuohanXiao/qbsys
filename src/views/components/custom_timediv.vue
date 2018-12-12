@@ -315,7 +315,7 @@
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
       this.iconPosition = useHeight * 0.8 + "px";
 
-      this.splitWidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+      
       // this.iconPosition = useHeight - 40 + "px";
       this.loadEcharts();
       let that = this;

@@ -157,11 +157,11 @@
     },
     created(){
       var nodeIds =[this.nodeId];
-      debugger
+       
       this.$http.post('http://10.60.1.140:5001/node-datas/', {
           'nodeIds': nodeIds
         }).then(response => {
-          debugger
+           
            this.Entitydetail = response.body.data[0].nodes[0]
         })
     },

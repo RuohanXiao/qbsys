@@ -14,7 +14,7 @@
 </template>
 
 <style>
-.delete_Noclick:hover{
+/* .delete_Noclick:hover{
     background-image: url('../../dist/assets/images/geo/delete_HL.png');
     opacity: 1;
 }
@@ -120,7 +120,6 @@
     background-image: url('../../dist/assets/images/geo/delete_HL.png');
     opacity: 0.4;
 }
-
 .location_Noclick:hover{
     background-image: url('../../dist/assets/images/geo/location_HL.png');
     opacity: 1;
@@ -153,7 +152,7 @@
 .route_Noclick{
     background-image: url('../../dist/assets/images/geo/route_HL.png');
     opacity: 0.4;
-}
+} */
 </style>
 
 <script>
@@ -161,7 +160,6 @@ export default {
     name:'mapOperaButtons',
     methods:{
         divClick(obj){
-            debugger;
             var mthis = this;
             var operationObj = obj;
              mthis.$emit('mapOperation', operationObj)
@@ -169,5 +167,3 @@ export default {
     }
 }
 </script>
-
-

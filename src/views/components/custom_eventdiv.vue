@@ -17,7 +17,7 @@
                         <percentBar :num="StatisticsItem.per"></percentBar>
                         <div slot="content">
                           <collapse accordion simple>
-                            <panel v-for="lastStatisticsItem in StatisticsItem.child" hide-arrow='true'><span style="font-size: 10px;">{{statisticsNameList[lastStatisticsItem.name]}}</span>
+                            <panel v-for="lastStatisticsItem in StatisticsItem.child" hide-arrow='true'><span style="font-size: 10px;padding-left: 30px;">{{statisticsNameList[lastStatisticsItem.name]}}</span>
                               <percentBar :num="lastStatisticsItem.per"></percentBar>
                             </panel>
                           </collapse>
@@ -472,7 +472,9 @@
         },
         evetdata: null,
         detailModalFlag: false,
-        dataStatistics:null,
+        dataStatistics:{
+          data:[]
+        },
         value4: '1-1',
         myList: [{
           name: 'aaaaa',
