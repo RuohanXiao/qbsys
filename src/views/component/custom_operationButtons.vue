@@ -92,6 +92,50 @@ top: 3px;
 top: 232px;
 }
 
+#HeatMap_Map .ol-zoom {
+    top: 3.5em !important;
+    right: 0.5em !important;
+    left: auto !important;
+    background-color: transparent;
+    
+}
+#HeatMap_Map .ol-zoom-out {
+margin-top: 204px;
+top: 2.3em;
+}
+#HeatMap_Map .ol-zoomslider {
+background-color: rgba(204,255,255,0.4) !important;
+top: 5.3em;
+left: auto !important;
+right: 1.3em !important;
+width: 0.3em;
+}
+#HeatMap_Map .ol-zoomslider button {
+right: 0.6em;
+background-color: rgb(204,255,255) !important;
+width: 1em !important;
+height: 1em !important;
+border-radius: 0.5em;
+}
+#HeatMap_Map .ol-touch .ol-zoomslider {
+top: 2.75em;
+}
+#HeatMap_Map .ol-control button{
+    background-color: transparent;
+    color: rgb(204,255,255);
+}
+
+#HeatMap_Map .ol-zoom-in.ol-has-tooltip:hover [role=tooltip],
+#HeatMap_Map .ol-zoom-in.ol-has-tooltip:focus [role=tooltip] {
+top: 3px;
+}
+
+#HeatMap_Map .ol-zoom-out.ol-has-tooltip:hover [role=tooltip],
+#HeatMap_Map .ol-zoom-out.ol-has-tooltip:focus [role=tooltip] {
+top: 232px;
+}
+
+
 </style>
 
 <script>
@@ -396,7 +440,7 @@ export default {
                                     var feature = data.features[0];
                                     //获取wms服务中想要的属性
                                     provinName = feature.properties.name;
-                                    contryName = feature.properties.admin;
+                                    //contryName = feature.properties.admin;
                                 } else {
                                 }
                             }
@@ -405,8 +449,9 @@ export default {
                 var conLabel = document.createElement('div');
                 var Lp = document.createElement('p');
                 conLabel.appendChild(Lp);
-                Lp.style = 'color:#ccffff;padding-left:10px;font-size:6px;margin:0px;';
-                Lp.innerHTML = provinName + ' - ' + contryName;
+                Lp.style = 'color:#ccffff;padding-left:10px;margin:0px;font-family: Arial;font-size: 10px;';
+                //Lp.innerHTML = provinName + ' - ' + contryName;
+                Lp.innerHTML = provinName;
                 var Id = 'localtion_Overlay_'+ item.getProperties().properties.belongId;
                 var localtion_Overlay = mthis.setOverlay(Coor,conLabel,Id,'center-left');
                 map.addOverlay(localtion_Overlay);

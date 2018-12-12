@@ -9,7 +9,7 @@ import {defaults as defaultControls, ScaleLine, FullScreen,ZoomSlider} from 'ol/
 var map = function(target){
 	var bounds = [75, 6,140, 55];//范围
     //var scaleLineControl = new ScaleLine();
-	//中国各省底图（面）
+	//世界地图
     var wmsTileLayer = new TileLayer({
 	    visible: true,
 	    source: new TileWMS({
@@ -19,6 +19,20 @@ var map = function(target){
 				'VERSION': '1.1.1',
 				tiled: true,
 				LAYERS: 'worldBaseMap:worldImgBaseMapGroup',
+			}
+	    })
+    });
+
+    //世界底图标注图层
+    var countriesAndProvinces_labelLayer = new TileLayer({
+	    visible: true,
+	    source: new TileWMS({
+            url: 'http://10.60.1.142:8082/geoserver/gwc/service/wms?',
+			params: {
+				'FORMAT': 'image/png',
+				'VERSION': '1.1.1',
+				tiled: true,
+				LAYERS: 'worldBaseMap:countriesAndProvinces_label',
 			}
 	    })
     });
@@ -47,7 +61,8 @@ var map = function(target){
         //设置图层
         layers: [
             //添加图层
-            wmsTileLayer
+            wmsTileLayer,
+            countriesAndProvinces_labelLayer
         ],
         //设置视图
         view: view

@@ -5,18 +5,27 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs>
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:eventheight}" id='toushi'>
-            <div v-for="object in dataStatisticsEvent">
-              <Collapse simple class="toushiItems" accordion >
-                <Panel name="1" :style='{borderBottom:"1px solid rgba(51,255,255,.5)"}'>
-                  {{object.name}}({{object.num}})
-                      <div v-for="(obj,index) in object.child" :style="{marginLeft:'10px'}" slot="content">
-                      <Collapse simple>
-                        <Panel :name="index">
-                          {{obj.name}}({{obj.count}})
-                        </Panel>
-                      </Collapse>
-                    </div>
-                </Panel>
+            <div>
+              <Collapse simple class="toushiItems" accordion>
+                <panel v-for="StatisticsType in dataStatisticsEvent"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
+                  <div slot="content">
+                  <collapse accordion simple>
+                      <panel v-if="StatisticsItem.child == undefined" hide-arrow='true' v-for="StatisticsItem in StatisticsType.child"><span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
+                        <percentBar :num="StatisticsItem.per"></percentBar>
+                      </panel>
+                      <panel v-else="StatisticsItem.child == undefined" v-for="StatisticsItem in StatisticsType.child"><span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
+                        <percentBar :num="StatisticsItem.per"></percentBar>
+                        <div slot="content">
+                          <collapse accordion simple>
+                            <panel v-for="lastStatisticsItem in StatisticsItem.child" hide-arrow='true'><span style="font-size: 10px;">{{statisticsNameList[lastStatisticsItem.name]}}</span>
+                              <percentBar :num="lastStatisticsItem.per"></percentBar>
+                            </panel>
+                          </collapse>
+                        </div>
+                      </panel>
+                  </collapse>
+                  </div>
+                </panel>
               </Collapse>
             </div>
           </Tab-pane>
@@ -432,10 +441,21 @@
 </template>
 <script>
   import modalChartDetail from './custom_modal_detail'
+  import percentBar from './custom_percentBar'
   /* eslint-disable */
   export default {
     data() {
       return {
+        statisticsNameList:{
+          'entity':'实体',
+          'human':'人物',
+          'politician':'政治人物',
+          'administrative':'管理',
+          'organization':'机构',
+          'political party':'政党',
+          'else':'其他'
+
+        },
         evetdata: null,
         detailModalFlag: false,
         value4: '1-1',
@@ -485,7 +505,8 @@
       };
     },
     components: {
-      modalChartDetail
+      modalChartDetail,
+      percentBar
     },
     watch: {
       dataStatisticsEvent: function() {
@@ -541,7 +562,7 @@
           this.detailModalFlag = true
         })
         //查询详细信息
-      }
+      },
     },
     props: ['dataExpand', 'singlePerson', 'eventheightdiv', 'dataStatisticsEvent'],
     mounted() {
@@ -575,9 +596,14 @@
   .ivu-tabs-nav {
     background-color: rgba(0, 0, 0, 0) !important;
   }
+ 
 </style>
 
 <style>
+  .ivu-collapse>.ivu-collapse-item>.ivu-collapse-header>i {
+    transition: transform .2s ease-in-out;
+    margin-right: 0px !important; 
+}
   .content_header {
     font-family: MicrosoftYaHei;
     font-size: 14px;
