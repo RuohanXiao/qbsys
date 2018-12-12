@@ -114,16 +114,7 @@
     background-color: #99ffff;
     border-radius: 3px;
   }
-  #tab1 {
-    background: -webkit-linear-gradient( bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* Safari 5.1 - 6 */
-    background: -o-linear-gradient( bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* Opera 11.1 - 12*/
-    background: -moz-linear-gradient( bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* Firefox 3.6 - 15*/
-    background: linear-gradient( to bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* 标准的语法 */
-  }
+  
   .changeColor {
     opacity: 40%;
   }

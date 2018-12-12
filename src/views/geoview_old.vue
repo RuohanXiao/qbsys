@@ -15,13 +15,6 @@
     height: 100%;
     width: 100%;
   }
-  .info-detail {}
-  .info-list {
-    background-image: linear-gradient( 8deg, rgba(102, 255, 153, 0.14) 0%, rgba(102, 128, 204, 0.14) 60%, rgba(102, 0, 255, 0.14) 100%), linear-gradient(#000000, #000000);
-    background-blend-mode: normal, normal;
-    border-radius: 0px 0px 0px 0px;
-    border: solid 1px #336666;
-  }
   .menu-item span {
     display: inline-block;
     overflow: hidden;
@@ -118,16 +111,6 @@
     height: 12px;
     background-color: #99ffff;
     border-radius: 3px;
-  }
-  #tab1 {
-    background: -webkit-linear-gradient( bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* Safari 5.1 - 6 */
-    background: -o-linear-gradient( bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* Opera 11.1 - 12*/
-    background: -moz-linear-gradient( bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* Firefox 3.6 - 15*/
-    background: linear-gradient( to bottom, rgba(102, 0, 255, 0.2), rgba(102, 255, 103, 0.2));
-    /* 标准的语法 */
   }
   .changeColor {
     opacity: 40%;

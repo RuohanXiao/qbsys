@@ -4,11 +4,11 @@
     <div class="demo-split" :style="{height:viewHeight}">
       <Split v-model="split1" :max="max" :min="min">
         <div slot="left" class="demo-split-pane" display='flex' :style="{height:viewHeight}">
-          <net-chart-div id="net" :style="{height:netHeight}"></net-chart-div>
-          <time-chart-div @changenetpx="changenetpx" :style="{height:viewHeight}"></time-chart-div>
+          <net-chart-div id="net" :style="{height:nDivHeight}"></net-chart-div>
+          <time-chart-div></time-chart-div>
         </div>
-        <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:viewHeight,maxHeight:viewHeight,marginRight:'2.3vw'}">
-          <event-chart-div id="right" :style="{height:viewHeight,maxHeight:viewHeight}"></event-chart-div>
+        <div id="right" slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:viewHeight,maxHeight:viewHeight,marginRight:'2.3vw'}">
+          <event-chart-div  :style="{height:viewHeight,maxHeight:viewHeight,minHeight:viewHeight}"></event-chart-div>
         </div>
       </Split>
     </div>
@@ -29,7 +29,7 @@
         min: 0.7,
         flag: true,
         viewHeight: null,
-        netHeight: null
+        nHeight: null
       }
     },
     components: {
@@ -38,9 +38,41 @@
       eventChartDiv
     },
     methods: {
-      netData () {
+      selectNodes(opt) {
+        let mthis = this
+        if (mthis.timer) {
+          clearTimeout(mthis.timer)
+        }
+        mthis.timer = setTimeout(function() {
+          mthis.singlePerson = (opt[1]>1)?false:true
+          let nodeIdsArry = opt[0].ids.map(item => {
+            return item.id;
+          });
+          // 新增防抖功能
+          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+            'nodeIds': nodeIdsArry
+          }).then(response => {
+            mthis.$store.commit('setNetSelectNodes',response.data.data[0].nodes)
+            // mthis.dataexpand = response.data.data[0].nodes
+          })
+        }, 100);
+      }
+    },
+    computed:mapState ([
+      'changenetpx','netDivHeight','netHeight'
+    ]),
+    watch:{
+      split1: function(va){
+        this.$store.commit('setSplit',this.split1)
       },
-      changenetpx () {
+      netDivHeight: function(va){
+        this.nDivHeight = this.$store.getters.getNetDivHeight
+      },
+      netHeight: function(va){
+        // this.nHeight = this.$store.getters.getNetHeight
+        this.nHeight = this.netHeight
+      },
+      changenetpx: function(va){
         var mthis = this
         mthis.useHeight = document.documentElement.clientHeight - 65 - 20;
         if (mthis.flag) {
@@ -57,14 +89,14 @@
         mthis.flag = !mthis.flag
       }
     },
-    watch:{
-      split1: function(va){
-        this.$store.commit('setSplit',this.split1)
-      }
-    },
     // computed:mapState ([
     //   'customDivHeight','customCanvasHeight','netDataObj'
     // ]),
+    created(){
+      var mthis = this
+      mthis.viewHeight = mthis.$store.getters.getViewHeight
+      mthis.nDivHeight = mthis.$store.getters.getNetDivHeight
+    },
     mounted(){
       var mthis = this
       // console.log(mthis.$store.getters.getViewHeight)
@@ -74,8 +106,7 @@
       // console.log(mthis.$store.getters.getContentHeight)
       // console.log(mthis.$store.getters.getGeoDivHeight)
       // console.log(mthis.$store.getters.getGeoHeight)
-      mthis.viewHeight = mthis.$store.getters.getViewHeight
-      mthis.netHeight = mthis.$store.getters.getNetDivHeight
+     
       // alert(mthis.$store.state.tmss)
       // mthis.$store.commit('getTMSS',1999)
       // alert(mthis.$store.state.tmss)
@@ -115,9 +146,15 @@
     width: 100%;
   }
   #right {
-    background-image: linear-gradient( 8deg, rgba(102, 255, 153, 0.14) 0%, rgba(102, 128, 204, 0.14) 60%, rgba(102, 0, 255, 0.14) 100%), linear-gradient(#000000, #000000);
-    background-blend-mode: normal, normal;
-    border-radius: 0px 0px 0px 0px;
+    background-image: linear-gradient(8deg, 
+		rgba(102, 255, 153, 0.2) 0%, 
+		rgba(102, 128, 204, 0.2) 60%, 
+		rgba(102, 0, 255, 0.2) 100%), 
+    linear-gradient(
+      #000000, 
+      #000000);
+    background-blend-mode: normal, 
+      normal;
     border: solid 1px #336666;
   }
   .menu-item span {

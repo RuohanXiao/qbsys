@@ -93,12 +93,6 @@
     height: 100%;
     width: 100%;
   }
-  #right {
-    background-image: linear-gradient( 8deg, rgba(102, 255, 153, 0.14) 0%, rgba(102, 128, 204, 0.14) 60%, rgba(102, 0, 255, 0.14) 100%), linear-gradient(#000000, #000000);
-    background-blend-mode: normal, normal;
-    border-radius: 0px 0px 0px 0px;
-    border: solid 1px #336666;
-  }
   .menu-item span {
     display: inline-block;
     overflow: hidden;

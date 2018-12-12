@@ -189,6 +189,9 @@ var store = new Vuex.Store({
     netHeight: 0,
     netDivHeight: 0,
     netData: null,
+    netSelectNodes:[],
+    netModalDetailData: {},
+    netModalDetailNodeId: '',
     contentHeight: 0,
     contentDivHeight: 0,
     contentData: null,
@@ -198,6 +201,7 @@ var store = new Vuex.Store({
     split:0.85,
     singlePerson:true,
     dataStatisticsEvent: {},
+    changenetpx: true,
     dataexpand: [{
       name:'',
       img:'',
@@ -211,6 +215,18 @@ var store = new Vuex.Store({
       // 组件想调用方法，可以使用   this.$store.commit('XXX')
       // 第一个参数始终为state,第二个可以传参（只能支持一个参数，可以通过对象或者数组传多值）
       state.tmss = newStatus
+    },
+    setNetModalDetailData(state,val){
+      state.netModalDetailData = val
+    },
+    setNetModalDetailNodeId(state,val){
+      state.netModalDetailNodeId = val
+    },
+    setChangenetpx(state,val){
+      state.changenetpx = val
+    },
+    setNetSelectNodes(state,val){
+      state.netSelectNodes = val
     },
     setSplit(state,val){
       state.split = val

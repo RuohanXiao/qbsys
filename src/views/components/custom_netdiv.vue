@@ -940,9 +940,13 @@
                     mthis.selectionId.push(event.selection[selectNum]);
                   }
                   // 触发右侧eventdiv改变
-                  mthis.$emit('selectNodes1', [{
+                  // mthis.$emit('selectNodes1', [{
+                  //   ids: mthis.selectionId
+                  // }, mthis.selectionId.length]);
+                  mthis.$store.commit('setNetSelectNodes',[{
                     ids: mthis.selectionId
-                  }, mthis.selectionId.length]);
+                  }, mthis.selectionId.length])
+                   mthis.$store.commit('setSinglePerson',!(mthis.selectionId.length > 1))
                 } else {
                   mthis.selectionId = [];
                   mthis.selectItem = null;

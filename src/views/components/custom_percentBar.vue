@@ -1,8 +1,8 @@
 <template>
-<div style="width:70%;float:right;display: flex;align-items: center;">
-    <span style="font-size: 10px !important;">{{num}}</span>
-    <div id="myProgress" :style="{width:'85%',height:'10px',backgroundColor:'#ddd',float:'right',borderRadius: '10px'}">
-        <div id="myBar" :style="{width:num+'%',height: '10px',backgroundColor: '#4CAF50',textAlign: 'center',color: 'white',borderRadius: '10px'}"></div>
+<div style="width:50%;float:right;display: flex;align-items: center;">
+    <span style="font-size: 10px !important;">{{count}}</span>
+    <div id="myProgress" :style="{width:'85%',height:'10px',float:'right',borderRadius: '10px'}">
+        <div id="myBar" :style="{width:num+'%',height: '10px',backgroundColor:colors[index],textAlign: 'center',color: 'white',borderRadius: '10px',paddingLeft:'5px'}"></div>
     </div>
 </div>
 </template>
@@ -11,10 +11,10 @@ export default {
     name:'percentBar',
     data(){
         return{
-
+            colors:['#33cc99','#33cccc','#3399ff']
         }
     },
-    props:['num']
+    props:['num','count','index']
 }
 </script>
 
