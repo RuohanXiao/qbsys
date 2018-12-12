@@ -10,7 +10,7 @@
           </div>
           </Col>
         </Row>
-        <Collapse class="collapseHover" :style="{textAlign:'left',marginTop:'10px',height:listHeight,maxHeight:listHeight}" accordion>
+        <Collapse class="collapseHover" :style="{textAlign:'left',marginTop:'10px',height:listHeight,maxHeight:listHeight,backgroundColor: 'rgba(0,0,0,0)'}" accordion>
           <Panel v-for="item in edata" :style="{overflowY:'hidden',overflowX:'hidden'}">
             {{item.text}}
             <div slot="content" :style="{overflowY:'hidden',overflowX:'hidden'}">

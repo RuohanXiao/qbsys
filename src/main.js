@@ -10,6 +10,7 @@ import App from './app.vue';
 import 'iview/dist/styles/iview.css';
 import './dist/assets/styles/demo.css';
 import './dist/assets/styles/iconfont.css';
+import Vuex from 'vuex';
 
 import './dist/assets/styles/common.css';
 import './dist/assets/styles/zc.css';
@@ -170,6 +171,7 @@ import { FactChart,NetChart,PieChart,GeoChart } from "./dist/assets/js/zoomchart
   Vue.use(VueRouter);
   Vue.use(iView);
   Vue.use(echarts);
+  Vue.use(Vuex);
 //   Vue.use(Antd);
 // 路由配置
 const RouterConfig = {
@@ -177,6 +179,122 @@ const RouterConfig = {
     mode: 'hash',
     routes: Routers
 };
+var store = new Vuex.Store({
+  state: {
+    // 组件获取数据方式 this.$store.state.XXX
+    tmss:'net', // top menu selected stutas
+    searchResult: '', // search result
+    viewHeight: 0,
+    eventHeight: 0,
+    netHeight: 0,
+    netDivHeight: 0,
+    netData: null,
+    contentHeight: 0,
+    contentDivHeight: 0,
+    contentData: null,
+    geoHeight: 0,
+    geoDivHeight: 0,
+    geoData: null,
+    split:0.85,
+    singlePerson:true,
+    dataStatisticsEvent: null,
+    dataexpand: [{
+      name:'',
+      img:'',
+      type:''
+    }]
+  },
+  mutations:{
+    // 修改state里的数据时，只能通过mutations的形式来操作
+    // 虽然this.$store.state.XXX也可以修改，但是不符合XUEX的理念，万一导致存储数据的混乱，则不能快速溯源，因为每个组件都有可能操作数据
+    changeTMSS(state,newStatus){
+      // 组件想调用方法，可以使用   this.$store.commit('XXX')
+      // 第一个参数始终为state,第二个可以传参（只能支持一个参数，可以通过对象或者数组传多值）
+      state.tmss = newStatus
+    },
+    setSplit(state,val){
+      state.split = val
+    },
+    setDataStatisticsEvent(state,val){
+      state.dataStatisticsEvent = val
+    },
+    setDataexpand(state,val){
+      state.dataexpand = val
+    },
+    setSinglePerson(state,val){
+      state.singlePerson = val
+    },
+    setSearchResult(state,val){
+      state.searchResult = val
+    },
+    setViewHeight(state,height){
+      state.viewHeight = height
+    },
+    setEventHeight(state,height){
+      state.eventHeight = height
+    },
+    setNetDivHeight(state,height){
+      state.netDivHeight = height
+    },
+    setNetHeight(state,height){
+      state.netHeight = height
+    },
+    setContentDivHeight(state,height){
+      state.contentDivHeight = height
+    },
+    setContentHeight(state,height){
+      state.contentHeight = height
+    },
+    setGeoDivHeight(state,height){
+      state.geoDivHeight = height
+    },
+    setGeoHeight(state,height){
+      state.geoHeight = height
+    }
+  },
+  getters:{
+    // 这里，getters只负责取数据，不负责修改数据，修改数据，请调用mutations
+    // 类似于computed，只要state变化，如果getters也引用了这个数据，则立即触发
+    // getters里取数据就相当于this.$store.state.XXX进行了二次包装包装后的数据并未修改原数据
+    getTMSS: function(state){
+      return '现在是：'+state.tmss
+    },
+    getEventHeight: function(state){
+      return state.viewHeight + 'px'
+    },
+    getViewHeight: function(state){
+      return state.viewHeight + 'px'
+    },
+    getNetDivHeight: function(state){
+      return state.netDivHeight + 'px'
+    },
+    getNetHeight: function(state){
+      return state.netHeight + 'px'
+    },
+    getContentDivHeight: function(state){
+      return state.contentDivHeight + 'px'
+    },
+    getContentHeight: function(state){
+      return state.contentHeight + 'px'
+    },
+    getGeoDivHeight: function(state){
+      return state.geoDivHeight + 'px'
+    },
+    getGeoHeight: function(state){
+      return state.geoHeight + 'px'
+    },
+
+    getNetData: function(state){
+      return state.netData
+    },
+    getSplit: function(state){
+      return state.split
+    }, 
+    getSplitWidth: function(state){
+      return document.documentElement.clientWidth * state.split - 20 + 'px'
+    }
+  }
+});
 const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, from, next) => {
@@ -192,6 +310,7 @@ router.afterEach((to, from, next) => {
 
 new Vue({
     el: '#app',
-    router: router,
+    store: store, // 可以缩写 store 只要挂载再vm上，就可以全局访问了
+    router: router, // 可以缩写 router
     render: h => h(App)
 });

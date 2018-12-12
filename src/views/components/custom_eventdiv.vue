@@ -4,7 +4,7 @@
     <div>
       <div id="tab1" :style="{margin:'0'}">
         <Tabs>
-          <Tab-pane label="数据透视" :style="{fontSize: '18px',height:eventheight}" id='toushi'>
+          <Tab-pane label="数据透视" :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
             <div v-for="object in dataStatisticsEvent">
               <Collapse simple class="toushiItems" accordion >
                 <Panel name="1" :style='{borderBottom:"1px solid rgba(51,255,255,.5)"}'>
@@ -20,7 +20,7 @@
               </Collapse>
             </div>
           </Tab-pane>
-          <Tab-pane label="目标详情">
+          <Tab-pane label="目标详情" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
@@ -432,6 +432,7 @@
 </template>
 <script>
   import modalChartDetail from './custom_modal_detail'
+  import { mapState,mapMutations } from 'vuex'
   /* eslint-disable */
   export default {
     data() {
@@ -487,6 +488,12 @@
     components: {
       modalChartDetail
     },
+    // computed: {
+      //   menuitemClasses: function() {
+        //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
+    //   }
+    // },
+    computed:mapState (['dataExpand', 'singlePerson', 'viewHeight', 'dataStatisticsEvent']),
     watch: {
       dataStatisticsEvent: function() {
         console.log('-------------dataStatisticsEvent------------------')
@@ -496,12 +503,7 @@
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
       dataExpand: function() {
-        this.evetdata = (this.singlePerson) ? this.dataExpand[0] : this.dataExpand
-      }
-    },
-    computed: {
-      menuitemClasses: function() {
-        return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
+        this.evetdata = (this.$store.getters.getSinglePerson) ? this.dataExpand[0] : this.dataExpand
       }
     },
     methods: {
@@ -543,7 +545,7 @@
         //查询详细信息
       }
     },
-    props: ['dataExpand', 'singlePerson', 'eventheightdiv', 'dataStatisticsEvent'],
+    // props: ['dataExpand', 'singlePerson', 'eventheightdiv', 'dataStatisticsEvent'],
     mounted() {
       var mthis = this;
       window.onresize = function() {

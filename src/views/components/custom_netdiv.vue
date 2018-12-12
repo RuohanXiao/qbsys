@@ -1,104 +1,102 @@
 <template>
   <div>
-    <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}">
-      <Row type="flex" justify="space-between" class="code-row-bg" align="middle" :style="{height:'70px',paddingLeft:'10px'}">
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="后退" placement="bottom">
-          <Icon class="icon iconfont icon-fanhui process-img DVSL-bar-btn DVSL-bar-btn-back" @click="back" size="26"></Icon>
+    <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" id="net">
+      <div class='divStyle'>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="back">
+            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">撤销操作</p>
+          </div>
         </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col>
-        <!-- <Col span="1" align="middle" class="bottom">
-        <Tooltip content="框选" placement="bottom">
-          <Icon class="icon iconfont icon-selection-box process-img DVSL-bar-btn DVSL-bar-btn-back" size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col> -->
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="矩形" placement="bottom">
-          <Icon class="icon iconfont icon-grid process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="square"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="星形" placement="bottom">
-          <Icon class="icon iconfont icon-star process-img DVSL-bar-btn DVSL-bar-btn-back" align="center" @click="star" size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="层级" placement="bottom">
-          <Icon class="icon iconfont icon-expand process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="hierarchy"></Icon>
-        </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="知识扩展" placement="bottom">
-          <Icon class="icon iconfont icon-kuozhan--tupu process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="expandNodeKnowledge"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="事件扩展" placement="bottom">
-          <Icon class="icon iconfont icon-kuozhan--shijian process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="expandNodeEvent"></Icon>
-        </Tooltip>
-        </Col>
-        
-        <!-- <Col span="1" align="middle" class="bottom">
-        <Tooltip content="查找关联" placement="bottom">
-          <Icon class="icon iconfont icon-linkedby process-img DVSL-bar-btn DVSL-bar-btn-back" size="26"></Icon>
-        </Tooltip>
-        </Col> -->
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="知识路径" placement="bottom">
-          <Icon class="icon iconfont icon-lujing--tupu process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="showPathKnowledge"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="事件路径" placement="bottom">
-          <Icon class="icon iconfont icon-lujing--shijian process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="showPathEvent"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="删除节点" placement="bottom">
-          <Icon class="icon iconfont icon-delete-point process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="remove"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="反选节点" placement="bottom">
-          <Icon class="icon iconfont icon-fanxuan process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="removeOther"></Icon>
-        </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="添加目标" placement="bottom">
-          <Icon class="icon iconfont icon-add process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="add"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="截屏" placement="bottom">
-          <!-- <Icon class="icon iconfont icon-cut process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="cutScreen"></Icon> -->
-          <Icon class="icon iconfont icon-cut process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="exportImg"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="保存工作集" placement="bottom">
-          <Icon class="icon iconfont icon-save1 process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="save"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" offset="9" align="middle" class="bottom">
-        <Tooltip content="自适应" placement="bottom">
-          <Icon class="icon iconfont icon-zhengchangshitu--quanping process-img DVSL-bar-btn DVSL-bar-btn-back" size="26" @click="fit"></Icon>
-        </Tooltip>
-        </Col>
-      </Row>
+          <div class="divSplitLine"></div>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="square">
+            <Icon class="icon iconfont icon-grid  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">矩形布局</p>
+          </div>
+          </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="star">
+            <Icon class="icon iconfont icon-star  DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
+            <p class="img-content">星形布局</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="hierarchy">
+            <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">层级布局</p>
+          </div>
+           </Tooltip>
+          <div class="divSplitLine"></div>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="expandNodeKnowledge">
+            <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">知识扩展</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="expandNodeEvent">
+            <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">事件扩展</p>
+          </div>
+                       </Tooltip>
+          <!-- <Col span="1" align="middle" class="bottom">
+                      <Tooltip content="查找关联" placement="bottom">
+                        <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                      </Tooltip>
+                      </Col> -->
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div">
+            <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content" @click="showPathKnowledge">知识路径</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="showPathEvent">
+            <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">事件路径</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="remove">
+            <Icon class="icon iconfont icon-delete-point  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">删除节点</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="removeOther">
+            <Icon class="icon iconfont icon-fanxuan  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">反选节点</p>
+          </div>
+           </Tooltip>
+          <div class="divSplitLine"></div>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="add">
+            <Icon class="icon iconfont icon-add  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">添加目标</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="exportImg">
+            <Icon class="icon iconfont icon-cut  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">截屏</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="save">
+            <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">保存工作集</p>
+          </div>
+           </Tooltip>
+          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="fit">
+            <Icon class="icon iconfont icon-zhengchangshitu--quanping  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">自适应</p>
+          </div>
+           </Tooltip>
+      </div>
     </div>
-    <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
+    <div :style="{height:netHeight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div id="netchart" aria-autocomplete="true" :style="{height:netHeight}"></div>
     </div>
     </Col>
@@ -111,19 +109,19 @@
   import mock from '../../mock/index.js'
   import modalChart from './custom_modal.vue'
   // import modalChart from './custom_modal_vue.vue'
-  import util from '../../util/tools.js'
-  import store from '../../store/index.js'
   import { mapState, mapActions, mapMutations } from 'vuex'
+  import util from '../../util/tools.js'
   mock.test = 1
   /* eslint-disable */
   export default {
     name: "App",
     data() {
       return {
+        timer: null,
         basicY: 0,
         basicX: 0,
-        dataurl:'../../dist/data/netData.json',
-        netheightdiv: 0,
+        // dataurl: '../../dist/data/netData.json',
+        netHeight: 0,
         pathHoverFlag: false,
         modal_loading: false,
         selectionId: [],
@@ -134,19 +132,34 @@
         saveNum: 0,
         modal01: false,
         eventData: null,
-        ids:[]
+        ids: []
       };
     },
     components: {
       modalChart
     },
     methods: {
+      objOfValueToArr(object) {
+        var arr = [];
+        var i = 0;
+        for (var item in object) {
+          arr[i] = object[item];
+          i++;
+        }
+        return arr;
+      },
       // 调用统计接口
-      getStatistics () {
-        // console.log("nodes:")
-        // console.log(this.netchart._impl.data.default.nodes)
-        // console.log("links:")
-        // console.log(this.netchart._impl.data.default.links)
+      getStatistics() {
+        var mthis = this
+        let nodeArr = Object.keys(mthis.netchart._impl.data.default.nodes).map(key => mthis.netchart._impl.data.default.nodes[key].id);
+        let linkArr = Object.keys(mthis.netchart._impl.data.default.links).map(key => mthis.netchart._impl.data.default.links[key]);
+        mthis.$http.post('http://10.60.1.140:5001/graph-statistics/', {
+          'nodes': nodeArr,
+          'links': linkArr
+        }).then(response => {
+          console.log(response.data)
+          mthis.$emit('dataStatistics', response.data);
+        })
       },
       del() {
         this.modal_loading = true;
@@ -168,78 +181,54 @@
       },
       //知识拓展节点（加载新数据）
       expandNodeKnowledge() {
-        if (this.selectionId.length > 0) {
-          var mthis = this;
-          this.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
-          // for (let i = 0; i < mthis.selectionId.length; i++) {
-          //   // mthis.netchart.expandNode(this.selectionId[i].id)
-          //   // 未来应该是个数组
-          //   mthis.$http.get('http://10.60.1.141:5001/neighbor-datas/?ClassName=knowledge&&nodeId='+mthis.selectionId[i].id).then(response => {
-          //     mthis.netchart.addData(response.body.data[0])
-          //   })
-          // }
+        var mthis = this;
+        if (mthis.selectionId.length > 0) {
+          mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
           let arr = []
-          for(let i = 0;i<mthis.selectionId.length;i++)
-          {
+          for (let i = 0; i < mthis.selectionId.length; i++) {
             arr.push(mthis.selectionId[i].id)
           }
-          mthis.$http.post('http://10.60.1.140:5001/neighbor-datas/',{'ClassName': 'knowledge','nodeIds': arr}).then(response => {
+          mthis.$http.post('http://10.60.1.140:5001/neighbor-datas/', {
+            'ClassName': 'knowledge',
+            'nodeIds': arr
+          }).then(response => {
             mthis.netchart.addData(response.body.data[0])
+            mthis.getStatistics()
           })
-          //访问数据库，拓展新数据
-          // mock.get("/getNodeDataNew").then(function(res) {
-          //   let ids = [];
-          //   let netChartLog = sessionStorage.getItem('netChartLog');
-          //   let netChartLogJson = JSON.parse(netChartLog).data; 
-          //   let data = res.data.data[0];
-          //   mthis.netchart.addData(data);
-          //   for(let num = 0; num <res.data.data[0].nodes.length; num ++){
-          //     ids.push(res.data.data[0].nodes[num].id)
-          //   }
-          //   netChartLogJson.push(
-          //     {
-          //       'id':ids,
-          //       'action':'knowledgeExpand',
-          //       'other': ''
-          //     }
-          //   )
-          //   // netChartLog = JSON.stringify(netChartLogJson);
-          //   sessionStorage.setItem('netChartLog', JSON.stringify({data:netChartLogJson}));
-          // });
-          mthis.getStatistics()
         } else {
-          this.$Message.error('请至少选择一个节点进行拓展操作！')
+          mthis.$Message.error('请至少选择一个节点进行拓展操作！')
         }
       },
       // 事件拓展
       expandNodeEvent() {
-        if (this.selectionId.length > 0) {
-          var mthis = this;
-          this.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
-          for (let i = 0; i < this.selectionId.length; i++) {
-            mthis.netchart.expandNode(this.selectionId[i].id)
+        var mthis = this;
+        if (mthis.selectionId.length > 0) {
+          mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, mthis.saveNum)
+          for (let i = 0; i < mthis.selectionId.length; i++) {
+            mthis.netchart.expandNode(mthis.selectionId[i].id)
           }
           //访问数据库，拓展新数据
           mock.get("/getNodeDataNew").then(function(res) {
             let ids = [];
             let netChartLog = sessionStorage.getItem('netChartLog');
-            let netChartLogJson = JSON.parse(netChartLog).data; 
+            let netChartLogJson = JSON.parse(netChartLog).data;
             let data = res.data.data[0];
             mthis.netchart.addData(data);
-            for(let num = 0; num <res.data.data[0].nodes.length; num ++){
+            for (let num = 0; num < res.data.data[0].nodes.length; num++) {
               ids.push(res.data.data[0].nodes[num].id)
             }
-            netChartLogJson.push(
-              {
-                'id':ids,
-                'action':'eventExpand',
-                'other': ''
-              }
-            )
+            netChartLogJson.push({
+              'id': ids,
+              'action': 'eventExpand',
+              'other': ''
+            })
             // netChartLog = JSON.stringify(netChartLogJson);
-            sessionStorage.setItem('netChartLog', JSON.stringify({data:netChartLogJson}));
+            sessionStorage.setItem('netChartLog', JSON.stringify({
+              data: netChartLogJson
+            }));
             mthis.getStatistics()
           });
+          // mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
         } else {
           this.$Message.error('请至少选择一个节点进行拓展操作！')
         }
@@ -255,7 +244,7 @@
       // 显示路径
       showPathKnowledge() {
         // (this.selectionId.length === 1) ? (this.pathHoverFlag = true) : ((this.selectionId.length > 0) ? (this.$Message.error('请选择单一节点进行路径显示')) : (this.$Message.error('请选择一个节点进行路径显示')))
-        this.netchart.selection(["911716",'1016826'])
+        this.netchart.selection(["911716", '1016826'])
       },
       showPathEvent() {
         (this.selectionId.length === 1) ? (this.pathHoverFlag = true) : ((this.selectionId.length > 0) ? (this.$Message.error('请选择单一节点进行路径显示')) : (this.$Message.error('请选择一个节点进行路径显示')))
@@ -288,8 +277,6 @@
         // image.setAttribute('crossorigin', 'anonymous');
         // window.location.href=image; 
         // return image;
-
-
         // var canvas = document.getElementById('netchart').getElementsByTagName('canvas')[0];
         // var w=window.open('about:blank','image from canvas');  
         // w.document.write("<img id='c2img' alt='from canvas'/>");  
@@ -300,12 +287,8 @@
         //     ctx.drawImage(image, 0, 0);
         //     document.getElementById('c2img').src = canvas.toDataURL('image/png');
         // };
-
-
         // this.netchart.exportAsString('png',(res)=>{
         // })
-
-        
         // this.netchart.exportData('png', {
         //     mime: "image/png",
         //     extension: "png",
@@ -318,7 +301,6 @@
         //     height: 200,
         //     scale: 1
         //   }, true)
-
         // export('png', {
         //     mime: "image/png",
         //     extension: "png",
@@ -370,24 +352,25 @@
           mthis.changeFlag();
           for (let index = 1; index < mthis.selectionId.length; index++) {
             mthis.netchart.unlockNode(mthis.selectionId[index].id);
-            let circleNum = Math.floor(Math.log(index) / Math.log(3))
-            let avd = 360 / Math.pow(3, circleNum);
-            // let ahd = avd * Math.PI / 180;
-            let ahd = avd * Math.PI / 360;
-            let radius = 200 * circleNum + 200
-              //解锁位置
-              // this.selectionId[index]["x"] = 
-              //   Math.sin(ahd * index) * radius;
-              // this.selectionId[index]["y"] = 
-              //   Math.cos(ahd * index) * radius;
-              mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
-                Math.sin(ahd * index) * radius;
-              mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] +
-                Math.cos(ahd * index) * radius;
-              // 锁定位置
-              mthis.netchart.lockNode(mthis.selectionId[index].id);
-            }
-        } else if (mthis.selectionId.length > 0 && mthis.selectionId.length <27) {
+            // 辐射布局
+            // let circleNum = Math.floor(Math.log(index) / Math.log(3))
+            // let avd = 360 / Math.pow(3, circleNum);
+            // let ahd = avd * Math.PI / 360;
+            // let radius = 200 * circleNum + 200
+            // mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
+            //   Math.sin(ahd * index) * radius;
+            // mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] +
+            //   Math.cos(ahd * index) * radius;
+            // 螺旋布局
+            let ahd = Math.PI / 72;
+            let radius = 5 * index + 5
+            mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
+              Math.sin(ahd * index) * radius;
+            mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] +
+              Math.cos(ahd * index) * radius;
+            mthis.netchart.lockNode(mthis.selectionId[index].id);
+          }
+        } else if (mthis.selectionId.length > 0 && mthis.selectionId.length < 27) {
           //半径
           let radius = mthis.selectionId.length > 7 ? 200 : 100;
           //每一个BOX对应的角度;
@@ -429,7 +412,7 @@
             mthis.netchart.lockNode(mthis.selectionId[index].id);
             arrLevel1.push(mthis.selectionId[index].id)
             for (let num = 0; num < mthis.selectionId[index].dataLinks.length; num++) {
-              if(mthis.selectionId[index].dataLinks[num].from === mthis.selectionId[index].id){
+              if (mthis.selectionId[index].dataLinks[num].from === mthis.selectionId[index].id) {
                 (arr.push(mthis.selectionId[index].dataLinks[num].to))
               } else {
                 (arr.push(mthis.selectionId[index].dataLinks[num].from))
@@ -437,27 +420,27 @@
             }
           }
           arr = util.unique(arr)
-          if(mthis.selectionId.length >1){
-            arr = util.diff(arr,arrLevel1)
+          if (mthis.selectionId.length > 1) {
+            arr = util.diff(arr, arrLevel1)
           }
           // arr = util.diff(arr,arrLevel1)
-          for(let nn = 0; nn < arr.length; nn++){
+          for (let nn = 0; nn < arr.length; nn++) {
             mthis.netchart.unlockNode(arr[nn]);
-            mthis.netchart.getNode(arr[nn])["x"] = nn * 100  + mthis.basicX
+            mthis.netchart.getNode(arr[nn])["x"] = nn * 100 + mthis.basicX
             mthis.netchart.getNode(arr[nn])["y"] = mthis.basicY + 200
             mthis.netchart.lockNode(arr[nn]);
           }
           mthis.netchart._impl.autoZoom.scene.autoZoomMode = 'overview'
           mthis.netchart.scrollIntoView();
-        //     //解锁位置
-        //     mthis.netchart.unlockNode(this.selectionId[index].id);
-        //     // this.selectionId[index]["x"] =
-        //     //   Math.sin(ahd * index) * radius;
-        //     // this.selectionId[index]["y"] =
-        //     //   Math.cos(ahd * index) * radius;
-        //     // 锁定位置
-        //     mthis.netchart.lockNode(this.selectionId[index].id);
-        //   }
+          //     //解锁位置
+          //     mthis.netchart.unlockNode(this.selectionId[index].id);
+          //     // this.selectionId[index]["x"] =
+          //     //   Math.sin(ahd * index) * radius;
+          //     // this.selectionId[index]["y"] =
+          //     //   Math.cos(ahd * index) * radius;
+          //     // 锁定位置
+          //     mthis.netchart.lockNode(this.selectionId[index].id);
+          //   }
         } else {
           this.$Message.error('请选择节点进行层级排列操作！')
         }
@@ -485,56 +468,123 @@
       },
       //保存工作集
       save() {
-        this.netchart.selection(["911716",'1016826'])
+        this.netchart.selection(["911716", '1016826'])
       },
       //添加节点
       add() {
-        this.eventData = [
-        {
-          text: 'list1',
-          chlidren: [
-            {text: 'list1-1',info:'this is list1-1'},
-            {text: 'list1-2',info:'this is list1-2'},
-            {text: 'list1-3',info:'this is list1-3'},
-            {text: 'list1-4',info:'this is list1-4'},
-            {text: 'list1-5',info:'this is list1-5'},
-            {text: 'list1-6',info:'this is list1-6'},
-            {text: 'list1-7',info:'this is list1-7'}
-          ]
-        },
-        {
-          text: 'list2',
-          chlidren: [
-            {text: 'list2-1',info:'this is list2-1'},
-            {text: 'list2-2',info:'this is list2-2'},
-            {text: 'list2-3',info:'this is list2-3'}
-          ]
-        },
-        {
-          text: 'list3',
-          chlidren: [
-            {text: 'list3-1',info:'this is list3-1'},
-            {text: 'list3-2',info:'this is list3-2'},
-            {text: 'list3-3',info:'this is list3-3'}
-          ]
-        },
-        {
-          text: 'list4',
-          chlidren: [
-            {text: 'list4-1',info:'this is list4-1'},
-            {text: 'list4-2',info:'this is list4-2'},
-            {text: 'list4-3',info:'this is list4-3'},
-            {text: 'list4-4',info:'this is list4-4'},
-            {text: 'list4-5',info:'this is list4-5'},
-            {text: 'list4-6',info:'this is list4-6'},
-            {text: 'list4-7',info:'this is list4-7'},
-            {text: 'list4-8',info:'this is list4-8'},
-            {text: 'list4-9',info:'this is list4-9'},
-            {text: 'list4-10',info:'this is list4-10'},
-            {text: 'list4-11',info:'this is list4-11'}
-          ]
-        }
-      ];
+        this.eventData = [{
+            text: 'list1',
+            chlidren: [{
+                text: 'list1-1',
+                info: 'this is list1-1'
+              },
+              {
+                text: 'list1-2',
+                info: 'this is list1-2'
+              },
+              {
+                text: 'list1-3',
+                info: 'this is list1-3'
+              },
+              {
+                text: 'list1-4',
+                info: 'this is list1-4'
+              },
+              {
+                text: 'list1-5',
+                info: 'this is list1-5'
+              },
+              {
+                text: 'list1-6',
+                info: 'this is list1-6'
+              },
+              {
+                text: 'list1-7',
+                info: 'this is list1-7'
+              }
+            ]
+          },
+          {
+            text: 'list2',
+            chlidren: [{
+                text: 'list2-1',
+                info: 'this is list2-1'
+              },
+              {
+                text: 'list2-2',
+                info: 'this is list2-2'
+              },
+              {
+                text: 'list2-3',
+                info: 'this is list2-3'
+              }
+            ]
+          },
+          {
+            text: 'list3',
+            chlidren: [{
+                text: 'list3-1',
+                info: 'this is list3-1'
+              },
+              {
+                text: 'list3-2',
+                info: 'this is list3-2'
+              },
+              {
+                text: 'list3-3',
+                info: 'this is list3-3'
+              }
+            ]
+          },
+          {
+            text: 'list4',
+            chlidren: [{
+                text: 'list4-1',
+                info: 'this is list4-1'
+              },
+              {
+                text: 'list4-2',
+                info: 'this is list4-2'
+              },
+              {
+                text: 'list4-3',
+                info: 'this is list4-3'
+              },
+              {
+                text: 'list4-4',
+                info: 'this is list4-4'
+              },
+              {
+                text: 'list4-5',
+                info: 'this is list4-5'
+              },
+              {
+                text: 'list4-6',
+                info: 'this is list4-6'
+              },
+              {
+                text: 'list4-7',
+                info: 'this is list4-7'
+              },
+              {
+                text: 'list4-8',
+                info: 'this is list4-8'
+              },
+              {
+                text: 'list4-9',
+                info: 'this is list4-9'
+              },
+              {
+                text: 'list4-10',
+                info: 'this is list4-10'
+              },
+              {
+                text: 'list4-11',
+                info: 'this is list4-11'
+              }
+            ]
+          }
+        ];
         this.modal01 = true;
       },
       //删除选中节点
@@ -544,7 +594,7 @@
           this.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
           //删除节点
           let netChartLog = sessionStorage.getItem('netChartLog');
-          let netChartLogJson = JSON.parse(netChartLog).data; 
+          let netChartLogJson = JSON.parse(netChartLog).data;
           let ids = [];
           for (let num = 0; num < this.selectionId.length; num++) {
             if (this.selectionId[num].isNode) {
@@ -554,23 +604,23 @@
                   id: this.selectionId[num].id
                 }]
               });
-            // } else if (this.selectionId[num].isLink) {
+              // } else if (this.selectionId[num].isLink) {
               //   event.chart.removeData({
-                //     links: [{
-                //       id: this.selectionId[num].id
-            //     }]
-            //   });
+              //     links: [{
+              //       id: this.selectionId[num].id
+              //     }]
+              //   });
             }
           }
-          netChartLogJson.push(
-                {
-                  'id':ids,
-                  'action':'remove',
-                  'other': ''
-                }
-              )
+          netChartLogJson.push({
+            'id': ids,
+            'action': 'remove',
+            'other': ''
+          })
           // netChartLog = JSON.stringify(netChartLogJson);
-          sessionStorage.setItem('netChartLog', JSON.stringify({data:netChartLogJson}));
+          sessionStorage.setItem('netChartLog', JSON.stringify({
+            data: netChartLogJson
+          }));
           //隐藏节点
           // for (let num = 0; num < this.selectionId.length; num++) {
           //   if (this.selectionId[num].isNode) {
@@ -583,8 +633,7 @@
           this.$Message.error('请选择节点进行矩形排列操作！')
         }
       },
-      queryPerson() {
-      },
+      queryPerson() {},
       //反选节点
       removeOther() {
         var mthis = this;
@@ -592,80 +641,81 @@
         if (this.selectionId.length > 0) {
           // 获取全部节点
           let selectNodes = this.selectionId;
-          let allNodes =  this.netchart.nodes();
+          let allNodes = this.netchart.nodes();
           let temp01 = [];
           let temp02 = [];
           let netChartLog = sessionStorage.getItem('netChartLog');
           let netChartLogJson = JSON.parse(netChartLog).data;
           let ids = [];
-          for(var i in selectNodes){
+          for (var i in selectNodes) {
             temp01[selectNodes[i].id] = true;
           }
-          for (var k in allNodes){
+          for (var k in allNodes) {
             if (!temp01[allNodes[k].id]) {
               if (allNodes[k].isNode) {
                 ids.push(allNodes[k].id);
                 // mthis.netchart.removeData({
-                  //   nodes: [{
-                    //     id: allNodes[k].id
+                //   nodes: [{
+                //     id: allNodes[k].id
                 //   }]
                 // });
               } else if (allNodes[k].isLink) {
                 // ids.push(allNodes[k].id);
                 // event.chart.removeData({
-                  //   links: [{
-                    //     id: allNodes[k].id
+                //   links: [{
+                //     id: allNodes[k].id
                 //   }]
                 // });
               }
             }
             mthis.netchart.selection(ids)
           }
-          netChartLogJson.push(
-            {
-              'id':ids,
-              'action':'remove',
-              'other': '反选'
-            }
-          )
-          sessionStorage.setItem('netChartLog', JSON.stringify({data:netChartLogJson}));
+          netChartLogJson.push({
+            'id': ids,
+            'action': 'remove',
+            'other': '反选'
+          })
+          sessionStorage.setItem('netChartLog', JSON.stringify({
+            data: netChartLogJson
+          }));
           mthis.getStatistics()
           // 反选结果
         } else {
-           this.$Message.error('您并未选中任何节点！')
+          this.$Message.error('您并未选中任何节点！')
         }
-
       },
-      reloadNetData (data) {
+      reloadNetData(data) {
         var mthis = this
         let dataarr = []
         dataarr.push(data)
-        mthis.netchart.replaceData({"nodes":dataarr,"links":[]})
+        mthis.netchart.replaceData({
+          "nodes": dataarr,
+          "links": []
+        })
         mthis.getStatistics()
       },
       back() {
         let netChartLog = sessionStorage.getItem('netChartLog');
         let netChartLogJson = JSON.parse(netChartLog).data;
-        if(netChartLogJson.length>0) {
+        if (netChartLogJson.length > 0) {
           // 删除节点的后退操作 或 反选删除节点的后退操作
-          if(netChartLogJson[netChartLogJson.length-1].action === 'remove') {
+          if (netChartLogJson[netChartLogJson.length - 1].action === 'remove') {
             // for(let i = 0; i < netChartLogJson[netChartLogJson.length-1].id.length; i++) {
             // }
             // 模拟接口，getNodeObjByIds   netChartLogJson[netChartLogJson.length-1].id
           }
           // 添加节点的后退操作
-          if(netChartLogJson[netChartLogJson.length-1].action === 'add') {
-          }
+          if (netChartLogJson[netChartLogJson.length - 1].action === 'add') {}
           // 知识拓展的后退操作
-          if(netChartLogJson[netChartLogJson.length-1].action === 'knowledgeExpand') {
-          }
+          if (netChartLogJson[netChartLogJson.length - 1].action === 'knowledgeExpand') {}
           // 事件拓展的后退操作
-          if(netChartLogJson[netChartLogJson.length-1].action === 'eventExpand') {
-          }
+          if (netChartLogJson[netChartLogJson.length - 1].action === 'eventExpand') {}
           // 删除最后一条日志
-          netChartLogJson = netChartLogJson.slice(0,-1);
+          netChartLogJson = netChartLogJson.slice(0, -1);
           // 将改动过的日志写回session
-          sessionStorage.setItem('netChartLog', JSON.stringify({data:netChartLogJson}));
+          sessionStorage.setItem('netChartLog', JSON.stringify({
+            data: netChartLogJson
+          }));
         } else {
           this.$Message.error('无法后退，已经是第一步了！')
         }
@@ -685,12 +735,12 @@
           // legend: { enabled: true },
           legend: {
             enabled: true,
-            width:900,
-            panel:{
-                side:"top",
-                align:"center"
+            width: 900,
+            panel: {
+              side: "top",
+              align: "center"
             }
-        },
+          },
           interaction: {
             resizing: {
               enabled: false
@@ -717,24 +767,23 @@
             nodeLabel: {
               // 节点名称边框
               backgroundStyle: {
-                fillColor: "rgba(0,0,0,0.8)",
-                lineColor: "rgba(0,0,0,0.8)"
+                fillColor: "rgba(0,0,0,0)",
+                lineColor: "rgba(0,0,0,0)"
               }
             },
             linkLabel: {
               // 事件名称边框
               backgroundStyle: {
-                fillColor: "rgba(0,0,0,0.8)",
-                lineColor: "rgba(0,0,0,0.8)"
+                fillColor: "rgba(0,0,0,0)",
+                lineColor: "rgba(0,0,0,0)"
               }
             },
             linkClasses: [
-                //要改
-                // { className: "知识扩展关系", style: { fillColor: "rgba(51, 255, 255, 0.4)"} ,id: "know"},
-                // { className: "事件扩展关系", style: { fillColor: "rgba(102, 255, 153, 0.4)"},id: "event" }
-                
-                // { className: "知识", style: { fillColor: "rgba(51, 255, 255, 0.4)",direction: "D", lineDash: [3, 3] } },
-                // { className: "事件", style: { fillColor: "rgba(51, 255, 255, 0.4)"} }
+              //要改
+              // { className: "知识扩展关系", style: { fillColor: "rgba(51, 255, 255, 0.4)"} ,id: "know"},
+              // { className: "事件扩展关系", style: { fillColor: "rgba(102, 255, 153, 0.4)"},id: "event" }
+              // { className: "知识", style: { fillColor: "rgba(51, 255, 255, 0.4)",direction: "D", lineDash: [3, 3] } },
+              // { className: "事件", style: { fillColor: "rgba(51, 255, 255, 0.4)"} }
             ],
             node: {
               display: "image",
@@ -746,18 +795,23 @@
             nodeStyleFunction: function(node) {
               node.cursor = "pointer";
               node.label = node.data.name;
+              // node.backgroundStyle.imageCropping =false
               // 默认图标怕
               if (node.data.type === "person" && node.data.img === "") {
                 node.image = "./src/dist/assets/images/ico/b12.ico";
+                nodeimageCropping = 'crop'
               } else if (node.data.type === "event" && node.data.img === "") {
                 node.image = "./src/dist/assets/images/event.png";
+                nodeimageCropping = 'crop'
               } else if (node.data.type === "org" && node.data.img === "") {
                 node.image = "./src/dist/assets/images/ico/b3.ico";
+                nodeimageCropping = 'crop'
               } else {
                 node.image = node.data.img;
+                node.imageCropping = 'crop'
               }
-              if (node.hovered){
-                node.lineColor = node.data.lineColor ="rgba(51, 255, 255, 0.4)"; 
+              if (node.hovered) {
+                node.lineColor = node.data.lineColor = "rgba(51, 255, 255, 0.4)";
                 node.lineWidth = node.data.lineWidth = '5'
               }
               // node.lineColor = node.data.lineColor =color.replace(",1)",",0.5)"); 
@@ -766,22 +820,21 @@
               link.cursor = "pointer";
               link.label = link.data.type === "" ? link.data.num : link.data.type;
               // if(link.data.className === '知识扩展关系') //要改
-              if(link.data.className === '知识')
-              {
+              if (link.data.className === '知识') {
                 link.fillColor = 'rgba(51, 255, 255, 0.4)';
                 // , direction: "D", lineDash: [3, 3] 
               } else {
                 link.fillColor = 'rgba(51, 255, 255, 0.4)';
               }
-              if (link.hovered){
+              if (link.hovered) {
                 link.radius = 3;
                 // 连线颜色
-              // link.fillColor = "#33ffff";
-              } else{
+                // link.fillColor = "#33ffff";
+              } else {
                 //连线粗细
                 link.radius = 1;
                 // 连线颜色
-              // link.fillColor = "#006666";
+                // link.fillColor = "#006666";
               }
             },
             selection: {
@@ -792,9 +845,7 @@
               // lineColor: 'yellow',
             }
           },
-          data: {
-            
-          },
+          data: {},
           container: "netchart",
           events: {
             // onClick(event) - 单击时调用的功能。
@@ -811,17 +862,14 @@
             // onPointerUp(event) - 调用指针的函数。
             // onSettingsChange(event) - 更改设置时调用的函数。
             // onTripleClick(event) - 当用户三次点击图表时调用的函数。用于自定义函数调用。
-            onChartUpdate: function(event) {
-            },
-            onSettingsChange: function(event) {
-            },
+            onChartUpdate: function(event) {},
+            onSettingsChange: function(event) {},
             onRightClick: function(event) {
               event.preventDefault();
             },
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
-                if (event.clickNode) {
-                }
+                if (event.clickNode) {}
                 mthis.selectItem = event;
                 mthis.selectionId = [];
                 for (
@@ -837,8 +885,7 @@
             },
             // onPointerMove: function(event) {
             // },
-            onPointerDrag: function(event) {
-            },
+            onPointerDrag: function(event) {},
             onDoubleClick: function(event) {
               //   if (event.clickNode) {
               //     mthis.selectionId = event.clickNode.id;
@@ -877,22 +924,29 @@
               // infoElement.style.display = infoElementVisible ? "block" : "none";
             },
             onSelectionChange(event) {
-              if (event.selection.length > 0) {
-                mthis.selectItem = event;
-                // 有选中节点或者link
-                mthis.selectionId = [];
-                for (
-                  let selectNum = 0; selectNum < event.selection.length; selectNum++
-                ) {
-                  // mthis.selectionId.push({"selectionId":event.selection[selectNum].id,"selectionType":(event.selection[selectNum].isNode) ? 'node' : 'link'})
-                  mthis.selectionId.push(event.selection[selectNum]);
-                }
-                // 触发右侧eventdiv改变
-                mthis.$emit('selectNodes1',[{ids:mthis.selectionId},mthis.selectionId.length]);
-              } else {
-                mthis.selectionId = [];
-                mthis.selectItem = null;
+              if (this.timer) {
+                clearTimeout(this.timer)
               }
+              this.timer = setTimeout(function() {
+                if (event.selection.length > 0) {
+                  mthis.selectItem = event;
+                  // 有选中节点或者link
+                  mthis.selectionId = [];
+                  for (
+                    let selectNum = 0; selectNum < event.selection.length; selectNum++
+                  ) {
+                    // mthis.selectionId.push({"selectionId":event.selection[selectNum].id,"selectionType":(event.selection[selectNum].isNode) ? 'node' : 'link'})
+                    mthis.selectionId.push(event.selection[selectNum]);
+                  }
+                  // 触发右侧eventdiv改变
+                  mthis.$emit('selectNodes1', [{
+                    ids: mthis.selectionId
+                  }, mthis.selectionId.length]);
+                } else {
+                  mthis.selectionId = [];
+                  mthis.selectItem = null;
+                }
+              }, 500);
             }
           },
           toolbar: {
@@ -906,32 +960,32 @@
           },
           theme: NetChart.themes.dark
         }))
+        // mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
       }
     },
-    created() {
-    },
-    computed: {
-      netHeight: {
-        get() {
-          return store.state.netHeight
-        },
-        set(value) {
-          store.commit('set_netHeight', {
-            netHeight: value
-          })
-        }
-      }
-    },
+    created() {},
+    computed:mapState ([
+      'searchResult'
+    ]),
     watch: {
-      netData: function() {
-        this.reloadNetData(this.netData)
+      searchResult:function(  ){
+        this.reloadNetData(va.nodes[0])
       }
+    //   searchResultWatcher:function(old){
+    //     console.log('000000000001111')
+    //     console.log(old)
+    //     // this.temp = old
+    //   }
     },
-    props: ['netData'],
+    // props: ['netHeight', 'netData'],
     mounted() {
-      sessionStorage.setItem('netChartLog', JSON.stringify({data:[]}));
+      sessionStorage.setItem('netChartLog', JSON.stringify({
+        data: []
+      }));
       var mthis = this
       mthis.initCharts();
+      mthis.netData =  mthis.$store.getters.netData
+      mthis.netHeight = mthis.$store.getters.getNetHeight
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();
       //   mthis.netchart.addData(res.data.data[0]);
@@ -939,7 +993,6 @@
       //     mthis.netchart.lockNode(res.data.data[0].nodes[i].id);
       //   }
       // });
-      
       // mthis.$http.post('http://10.60.1.141:5000/neighbor-datas/',{'type': [],'nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
       // mthis.$http.post('http://10.60.1.140:5001/neighbor-datas/',{'ClassName': '','nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
       //   mthis.initCharts();
@@ -949,14 +1002,13 @@
       //   }
       // }, response => {
       //     this.$Message.error('getNodeData失败,请查看日志或稍后重试！')
-
       // });
       // window.onresize = function() {
-      //   this.netheight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
-      //   this.netheightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
+      //   this.netHeight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
+      //   this.netHeightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
       // }
-      // this.netheight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
-      // this.netheightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
+      // this.netHeight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
+      // this.netHeightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
     }
   };
 </script>

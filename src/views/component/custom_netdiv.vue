@@ -109,6 +109,7 @@
   import mock from '../../mock/index.js'
   import modalChart from './custom_modal.vue'
   // import modalChart from './custom_modal_vue.vue'
+  // import { mapState, mapActions, mapMutations } from 'vuex'
   import util from '../../util/tools.js'
   mock.test = 1
   /* eslint-disable */
@@ -228,6 +229,7 @@
             }));
             mthis.getStatistics()
           });
+          mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
         } else {
           this.$Message.error('请至少选择一个节点进行拓展操作！')
         }
@@ -794,15 +796,20 @@
             nodeStyleFunction: function(node) {
               node.cursor = "pointer";
               node.label = node.data.name;
+              // node.backgroundStyle.imageCropping =false
               // 默认图标怕
               if (node.data.type === "person" && node.data.img === "") {
                 node.image = "./src/dist/assets/images/ico/b12.ico";
+                nodeimageCropping = 'crop'
               } else if (node.data.type === "event" && node.data.img === "") {
                 node.image = "./src/dist/assets/images/event.png";
+                nodeimageCropping = 'crop'
               } else if (node.data.type === "org" && node.data.img === "") {
                 node.image = "./src/dist/assets/images/ico/b3.ico";
+                nodeimageCropping = 'crop'
               } else {
                 node.image = node.data.img;
+                node.imageCropping = 'crop'
               }
               if (node.hovered) {
                 node.lineColor = node.data.lineColor = "rgba(51, 255, 255, 0.4)";
@@ -954,6 +961,7 @@
           },
           theme: NetChart.themes.dark
         }))
+        mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
       }
     },
     created() {},

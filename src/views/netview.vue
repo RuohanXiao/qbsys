@@ -512,25 +512,6 @@
         <top-menu @initNode='initNode'/>
       </Header>
       <Content :style="{marginTop:'64px', width: '100vw'}" id="content">
-        <div class="rightNav" :style="{height:contentHeight,display:'flex'}">
-          <div class="navStyleTitle right" :style="{position: 'initial',zIndex: '999999',width:'2vw',bottom:'1px',display:'flex'}">
-            <div class="floater">
-              <div :style="{height:'5vh'}">
-                <Icon class="icon iconfont icon-file DVSL-bar-btn DVSL-bar-btn-back" size="26" />
-              </div>
-              <div :style="{height:'5vh'}">
-                <Icon class="icon iconfont icon-image  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
-              </div>
-              <div :style="{height:'5vh'}">
-                <Icon class="icon iconfont icon-question  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
-              </div>
-              <div :style="{height:'5vh'}">
-                <Icon class="icon iconfont icon-yidiandiantubiao08  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
-              </div>
-            </div>
-          </div>
-          <div :style="{height:rightNav,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">2222222</div>
-        </div>
         <div class="bgDiv"></div>
         <div class="demo-split" :style="{height:contentHeight}">
           <Split v-model="split1" :max="max" :min="min">
@@ -541,7 +522,7 @@
               
             </div>
             <div slot="right" class="scroll-bar demo-split-pane paneRight"  :style="{height:eventheightdiv,maxHeight:eventheightdiv,marginRight:'2.3vw'}">
-              <event-chart-div id="right" :dataStatisticsEvent="dataStatisticsEvent" :dataExpand="dataexpand" :singlePerson="singlePerson" :eventHeight="eventheightdiv"  :style="{height:eventheightdiv,maxHeight:eventheightdiv}"></event-chart-div>
+              <event-chart-div id="right" :eventHeight="eventheightdiv"  :style="{height:eventheightdiv,maxHeight:eventheightdiv}"></event-chart-div>
             </div>
           </Split>
         </div>
@@ -719,12 +700,6 @@
         eventheightdiv: 0,
         eventheight:0,
         changHeightCount: 1,
-        dataexpand: [{
-          name:'',
-          img:'',
-          type:''
-        }],
-        singlePerson: true,
         msg: [],
         closeFlag: false,
         contentHeight: 0,
@@ -817,7 +792,6 @@
         timeWidth: 0,
         divheight: 0,
         splitWidth: 0,
-        dataStatisticsEvent: null
       };
     },
     components: {
@@ -833,8 +807,7 @@
         this.netData = opt.nodes[0]
       },
       dataStatistics(opt) {
-        this.dataStatisticsEvent = opt.data
-        console.log(this.dataStatisticsEvent)
+        this.$store.commit('setDataStatisticsEvent',opt.data)
       },
       changenetpx () {
         let useHeight = document.documentElement.clientHeight - 64 - 20;
@@ -864,7 +837,7 @@
           clearTimeout(mthis.timer)
         }
         mthis.timer = setTimeout(function() {
-          mthis.singlePerson = (opt[1]>1)?false:true
+          mthis.$store.commit('setSinglePerson',(opt[1]>1)?false:true)
           let nodeIdsArry = opt[0].ids.map(item => {
             return item.id;
           });
@@ -873,7 +846,7 @@
           mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
             'nodeIds': nodeIdsArry
           }).then(response => {
-            mthis.dataexpand = response.data.data[0].nodes
+            mthis.$store.commit('setDataexpand',(response.data.data[0].nodes))
           })
         }, 100);
         //单节点

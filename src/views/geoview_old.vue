@@ -148,7 +148,7 @@
     /* color: rgba(51, 255, 255, 0.4); */
     color: rgb(51, 255, 255);
     size: 30px;
-    opacity: 0.4;
+    /* opacity: 0.4; */
   }
   .ivu-tooltip-rel i {
     width: 30px;
