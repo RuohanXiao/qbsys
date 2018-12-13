@@ -279,7 +279,6 @@
           width: document.documentElement.clientWidth * this.$store.state.split - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
-        debugger
         this.option.xAxis.data = this.dataBySeries.date;
         this.option.series[0].data = this.dataBySeries.num;
         this.charts.setOption(this.option)
@@ -295,7 +294,6 @@
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
-      debugger
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";

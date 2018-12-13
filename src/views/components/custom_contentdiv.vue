@@ -121,7 +121,6 @@
       searchResult:function(va){
         var mthis = this
         if(mthis.$store.state.tmss === 'content') {
-          // console.log(va)
           mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ va.content).then(response => {
             mthis.items = response.body.data
           })

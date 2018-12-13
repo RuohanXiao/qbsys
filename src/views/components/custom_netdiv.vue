@@ -977,8 +977,6 @@
         }
       }
     //   searchResultWatcher:function(old){
-    //     console.log('000000000001111')
-    //     console.log(old)
     //     // this.temp = old
     //   }
     },
