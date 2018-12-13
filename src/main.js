@@ -183,7 +183,11 @@ var store = new Vuex.Store({
   state: {
     // 组件获取数据方式 this.$store.state.XXX
     tmss:'net', // top menu selected stutas
-    searchResult: '', // search result
+    searchResult: {
+      id:'',
+      label:'',
+      node:{}
+    }, // search result
     viewHeight: 0,
     eventHeight: 0,
     netHeight: 0,

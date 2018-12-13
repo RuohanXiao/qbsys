@@ -158,7 +158,6 @@
           'nodes': nodeArr,
           'links': linkArr
         }).then(response => {
-          console.log(response.data)
           mthis.$emit('dataStatistics', response.data);
         })
       },

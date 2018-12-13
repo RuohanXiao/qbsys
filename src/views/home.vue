@@ -276,6 +276,7 @@
   #queryInput .ivu-select-dropdown {
     left: 0px !important;
     background: rgba(0, 0, 0, 0.9) !important;
+    z-index: 99;
   }
   #queryInput .ivu-select-item-focus {
     background: rgba(51, 255, 255, 0.2) !important;

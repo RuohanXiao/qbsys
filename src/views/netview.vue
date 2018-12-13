@@ -828,7 +828,6 @@
       },
       dataStatistics(opt) {
         this.dataStatisticsEvent = opt.data
-        console.log(this.dataStatisticsEvent)
       },
       changenetpx () {
         let useHeight = document.documentElement.clientHeight - 64 - 20;
@@ -1088,7 +1087,6 @@
     },
     mounted() {
       var mthis = this
-      // console.log(mthis.$route.query)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       window.onresize = function() {
         mthis.contentHeight = document.documentElement.clientHeight - 65 + "px";

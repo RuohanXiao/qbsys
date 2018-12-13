@@ -295,7 +295,10 @@
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
+<<<<<<< HEAD
       
+=======
+>>>>>>> 5b4d4dd33b20af7dc1925e13870a099358eed628
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";

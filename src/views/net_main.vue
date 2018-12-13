@@ -100,30 +100,6 @@
     },
     mounted(){
       var mthis = this
-      // console.log(mthis.$store.getters.getViewHeight)
-      // console.log(mthis.$store.getters.getNetDivHeight)
-      // console.log(mthis.$store.getters.getNetHeight)
-      // console.log(mthis.$store.getters.getContentDivHeight)
-      // console.log(mthis.$store.getters.getContentHeight)
-      // console.log(mthis.$store.getters.getGeoDivHeight)
-      // console.log(mthis.$store.getters.getGeoHeight)
-     
-      // alert(mthis.$store.state.tmss)
-      // mthis.$store.commit('getTMSS',1999)
-      // alert(mthis.$store.state.tmss)
-      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
-      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
-      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
-      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
-      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
-      // mthis.useHeight = document.documentElement.clientHeight - 65 - 20;
-      // mthis.contentHeight = document.documentElement.clientHeight - 64 + "px";
-      // mthis.netpxdiv = mthis.useHeight * 0.8 + "px";
-      // mthis.netpx = mthis.useHeight * 0.8 - 55 + "px";
-      // mthis.eventheightdiv = document.documentElement.clientHeight * 1 - 65 - 10 + "px";
-      // mthis.divheight = mthis.eventheightdiv - mthis.netpx + 'px'
-
-      // mthis.netHeight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
     }
   }
 </script>
@@ -342,6 +318,7 @@
   #queryInput .ivu-select-dropdown {
     left: 0px !important;
     background: rgba(0, 0, 0, 0.9) !important;
+    z-index: 99;
   }
   #queryInput .ivu-select-item-focus {
     background: rgba(51, 255, 255, 0.2) !important;

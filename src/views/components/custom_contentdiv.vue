@@ -71,7 +71,7 @@
       <Scroll :on-reach-bottom="handleReachBottom"  v-if='!ifInfo' :height=contentHeight>
         <div id="contentchart" aria-autocomplete="true" :style="{height:contentHeight,display:'flex',overflowY:'scroll'}">
           <Row type="flex" justify="start" align="middle">
-          <Col span="4" align="middle"  v-for="item in items">
+          <Col :sm="8" :lg="6" align="middle"  v-for="item in items">
             <div class="contentDiv">
               <p class="contentTitle" @click="showContent(item.id)">{{item.title}}</p>
               <p class="contentText">{{item.text}}</p>
@@ -96,6 +96,7 @@
 <script>
   import mock from '../../mock/index.js'
   import modalChart from './custom_modal.vue'
+  import { mapState,mapMutations } from 'vuex'
   mock.test = 1
   /* eslint-disable */
   export default {
@@ -112,6 +113,19 @@
         items: [],
         page:1
       };
+    },
+    computed:mapState ([
+      'searchResult'
+    ]),
+    watch: {
+      searchResult:function(va){
+        var mthis = this
+        if(mthis.$store.state.tmss === 'content') {
+          mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ va.content).then(response => {
+            mthis.items = response.body.data
+          })
+        }
+      }
     },
     components: {
       modalChart
@@ -187,23 +201,20 @@
       //   mthis.items = res.data.data
       // });
     },
-    computed: {
-    },
     mounted() {
       var mthis = this
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.contentHeight = useHeight * 0.8 - 68 + "px";
-      if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
-        // 跳转过来的
-        mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
-          mthis.items = response.body.data
-          // mthis.dataexpand = response.body.data
-          // mthis.singlePerson = (opt[1]>1)?false:true
-        })
-
-      }
+      // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
+      //   // 跳转过来的
+      //   mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
+      //     mthis.items = response.body.data
+      //     // mthis.dataexpand = response.body.data
+      //     // mthis.singlePerson = (opt[1]>1)?false:true
+      //   })
+      // }
       
     }
   };

@@ -533,8 +533,6 @@
       dataStatisticsEvent: function() {
         var mthis = this;
         mthis.dataStatistics = mthis.dataStatisticsEvent.data;
-        console.log('mthis.dataStatistics')
-        console.log(mthis.dataStatistics)
       },
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
@@ -553,7 +551,6 @@
             'nodeIds': nodeIdsArry
           }).then(response => {
             mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
-            console.log(mthis.evetdata)
             // mthis.evetdata = response.data.data[0].nodes
           })
         }, 100);

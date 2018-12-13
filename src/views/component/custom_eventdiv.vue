@@ -509,8 +509,6 @@
     },
     watch: {
       dataStatisticsEvent: function() {
-        console.log('-------------dataStatisticsEvent------------------')
-        console.log(this.dataStatisticsEvent)
       },
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
