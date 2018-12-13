@@ -302,7 +302,7 @@ export default {
                 
             } else {
                 mthis.offImgClick(imgItemOpera.id);
-                deleteArrItem(mthis.onImgIds,imgItemOpera.id);
+                mthis.deleteArrItem(mthis.onImgIds,imgItemOpera.id);
             }
         },
         location_cilck(){
