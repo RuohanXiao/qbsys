@@ -75,8 +75,8 @@
       };
     },
     methods: {
-      timeZoomOut() {},
-      timeZoomIn() {},
+      timeZoomOut() { debugger},
+      timeZoomIn() { debugger},
       resize() {
         let width = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
@@ -344,6 +344,7 @@
         if (mthis.changHeightCount % 2 === 0) {
           // this.timepx = "0px";
           // this.timepxdiv = "0px";
+          debugger
           mthis.iconPosition = useHeight - 40 + "px";
           document.getElementById("timechartctrl").style.display = "none";
           document.getElementById("main1").style.display = "none";

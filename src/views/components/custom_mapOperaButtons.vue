@@ -20,32 +20,32 @@
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div id='rectangle_select-s' class="button-div" @click="divClick">
+          <div id='rectangle_select' class="button-div" @click="divClick">
             <Icon class="icon iconfont icon-selection-box  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">框选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div id='Circle_select-s' class="button-div" @click="divClick">
+          <div id='Circle_select' class="button-div" @click="divClick">
             <Icon class="icon iconfont icon-selection-round  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">圆形框选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div id='Polygon_select-s' class="button-div" @click="divClick">
+          <div id='Polygon_select' class="button-div" @click="divClick">
             <Icon class="icon iconfont icon-custom DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">自定义框选</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div id='delete_opera-s' class="button-div" @click="divClick">
+          <div id='delete_opera' class="button-div" @click="divClick">
             <Icon class="icon iconfont icon-delete-point  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">删除</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div id='invertSelection_opera-s' class="button-div" @click="divClick">
+          <div id='invertSelection_opera' class="button-div" @click="divClick">
             <Icon class="icon iconfont icon-fanxuan  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">反选</p>
           </div>
@@ -97,7 +97,7 @@ export default {
     name:'mapOperaButtons',
     methods:{
         divClick(obj){
-
+          debugger
             var mthis = this;
             var operationObj = obj;
              mthis.$emit('mapOperation', operationObj)

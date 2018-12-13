@@ -233,9 +233,7 @@ export default {
     methods:{
         mapOperationClick(mapOperation){
             var mthis = this;
-            
             var mapOperationId = mapOperation.currentTarget.id;
-            
             if(mapOperationId == 'location_button'){
                 mthis.location_cilck();
             } else if(mapOperationId == 'heatMap_button'){
@@ -311,7 +309,7 @@ export default {
                 
             } else {
                 mthis.offImgClick(imgItemOpera.id);
-                deleteArrItem(mthis.onImgIds,imgItemOpera.id);
+                mthis.deleteArrItem(mthis.onImgIds,imgItemOpera.id);
             }
         },
         location_cilck(){
@@ -562,6 +560,7 @@ export default {
         },
         changedrawType(object){
             var mthis = this
+            debugger
             var map = mthis.routeMap.map
             map.removeInteraction(mthis.draw);
             //矢量图层是用来渲染矢量数据的图层类型，在OpenLayers里，它是可以定制的，可以控制它的透明度，颜色，以及加载在上面的要素形状等。
@@ -588,7 +587,7 @@ export default {
                 })
             });
             map.addLayer(polygonLayer);
-            var opt = object.target;
+            var opt = object.currentTarget;
             var typeValue = opt.id.split('_')[0];
             var geometryFunction;
             if (typeValue != "None") {
@@ -1134,7 +1133,7 @@ export default {
 
     },
     computed:mapState ([
-      'tmss'
+      'tmss','split'
     ]),
     watch:{
         locationClassObject:{
@@ -1156,13 +1155,25 @@ export default {
             }
             
         },
+        split:function(){
+            var mthis = this;
+            mthis.geoWidth = document.documentElement.clientWidth * mthis.split - 20 + 'px';
+        },
         geoWidth:function(){
             var mthis = this;
             if(mthis.routeMap != null){
-                mthis.routeMap.map.updateSize();
+                this.$nextTick(function(){
+                    var mthis = this;
+                    mthis.routeMap.map.updateSize();
+                });
+                
             };
             if(mthis.heatMap != null){
-                mthis.heatMap.map.updateSize();
+                this.$nextTick(function(){
+                    var mthis = this;
+                    mthis.heatMap.map.updateSize();
+                });
+                
             }
             
         },
@@ -1171,7 +1182,6 @@ export default {
         
 
     },
-    //props: ['geoData'],
     components: {
       imgSlider,
       routeLegend,
