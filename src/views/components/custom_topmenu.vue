@@ -17,6 +17,7 @@
   </Row>
 </template>
 <script>
+import { mapState,mapMutations } from 'vuex'
 import searchDiv from "./custom_searchdiv";
 export default {
     name: "App",
@@ -28,6 +29,14 @@ export default {
     },
   components: {
     searchDiv
+  },
+  computed:mapState ([
+    'tmss'
+  ]),
+  watch: {
+    tmss: function(va) {
+      this.isActive = va
+    }
   },
   methods:{
     changeActive(val) {

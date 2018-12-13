@@ -157,8 +157,6 @@
           'nodes': nodeArr,
           'links': linkArr
         }).then(response => {
-          console.log(response.data)
-          //mthis.$emit('dataStatistics', response.data);
           mthis.$store.commit('setDataStatisticsEvent', response.data);
         })
       },
@@ -974,7 +972,9 @@
     ]),
     watch: {
       searchResult:function(va){
-        this.reloadNetData(va.nodes[0])
+        if(this.$store.state.tmss === 'net') {
+          this.reloadNetData(va.node.nodes[0])
+        }
       }
     //   searchResultWatcher:function(old){
     //     console.log('000000000001111')
