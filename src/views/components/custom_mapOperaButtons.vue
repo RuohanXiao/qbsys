@@ -97,7 +97,7 @@ export default {
     name:'mapOperaButtons',
     methods:{
         divClick(obj){
-          debugger
+          
             var mthis = this;
             var operationObj = obj;
              mthis.$emit('mapOperation', operationObj)

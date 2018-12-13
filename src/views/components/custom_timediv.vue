@@ -1,8 +1,8 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
-  <div id="timechartdiv">
-    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" id="arrowDown" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',top:iconPosition,zIndex:30,transform:'rotate(180deg)'}" @click="changHeightCount++"></Icon>
-    <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" id='timechartctrl'>
+  <div :id="timechartdivId">
+    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',top:iconPosition,zIndex:30,transform:'rotate(180deg)'}" @click="changHeightCount++"></Icon>
+    <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <Col span="1" class="bottom" offset="21">
         <!-- <Col span="1"  class="bottom"> -->
@@ -16,33 +16,14 @@
         </Tooltip>
         </Col>
         <Col span="1" class="bottom" />
-        <!-- <Col span="10" class="bottom" offset="12" :style="{height:'30px',paddingLeft:'10px'}">
-                        <Row type="flex" justify="space-between" class="code-row-bg">
-                          <Col span="2" class="bottom" offset="6">
-                          <Select v-model="unitValue" style="width:100px;line-height:30px" @on-change='displayUnit' placeholder='按默认显示'>
-                                <Option v-for="item in dataList" :value="item.value" :key="item.value" >{{ item.label }}</Option>
-                              </Select>
-                          </Col>
-                          <Col span="2" class="bottom">
-                          <Select v-model="periodsValue" style="width:100px;line-height:30px" @on-change='displayPeriods' placeholder='全部日期'>
-                                <Option v-for="item in lastDataList" :value="item.value" :key="item.value" >{{ item.label }}</Option>
-                              </Select>
-                          </Col>
-                          <Col span="2" class="bottom">
-                          <Select v-model="exportValue" style="width:100px;line-height:30px" @on-change='exportImg' placeholder='生成图片'>
-                                <Option v-for="item in exportList" :value="item.value" :key="item.value" >{{ item.label }}</Option>
-                              </Select>
-                          </Col>
-                          <Col span="2" class="bottom" offset="2">
-                          </Col> -->
       </Row>
       </Col>
       </Row>
     </div>
-    <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" id="timediv">
+    <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
       <!-- <echarts id='barchart' :options="bar" :style="{height: timepxdiv}" :auto-resize="true" ></echarts> -->
-      <div id="main1" :style="{width:pwidth}"></div>
+      <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
   </div>
@@ -55,6 +36,11 @@
     name: "",
     data() {
       return {
+        timechartdivId:'timechartdiv_' + this.activeId,
+        arrowDownId:'arrowDown_'+ this.activeId,
+        timechartctrlId:'timechartctrl_'+ this.activeId,
+        timedivId:'timediv_'+ this.activeId,
+        main1Id:'main1_'+ this.activeId,
         pwidth: 0,
         timepxdiv: 0,
         timepx: 0,
@@ -75,8 +61,8 @@
       };
     },
     methods: {
-      timeZoomOut() { debugger},
-      timeZoomIn() { debugger},
+      timeZoomOut() { },
+      timeZoomIn() { },
       resize() {
         let width = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
@@ -289,10 +275,11 @@
             data: []
           }]
         };
-        this.charts = echarts.init(document.getElementById("main1"), "", {
+        this.charts = echarts.init(document.getElementById(this.main1Id), "", {
           width: document.documentElement.clientWidth * this.$store.state.split - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
+        debugger
         this.option.xAxis.data = this.dataBySeries.date;
         this.option.series[0].data = this.dataBySeries.num;
         this.charts.setOption(this.option)
@@ -308,6 +295,7 @@
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
+      debugger
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
@@ -344,12 +332,12 @@
         if (mthis.changHeightCount % 2 === 0) {
           // this.timepx = "0px";
           // this.timepxdiv = "0px";
-          debugger
+          
           mthis.iconPosition = useHeight - 40 + "px";
-          document.getElementById("timechartctrl").style.display = "none";
-          document.getElementById("main1").style.display = "none";
-          document.getElementById("timediv").style.display = "none";
-          document.getElementById("arrowDown").style.transform = "rotate(0deg)";
+          document.getElementById(mthis.timechartctrlId).style.display = "none";
+          document.getElementById(mthis.main1Id).style.display = "none";
+          document.getElementById(mthis.timedivId).style.display = "none";
+          document.getElementById(mthis.arrowDownId).style.transform = "rotate(0deg)";
           // mthis.$emit('changenetpx', false);
           mthis.$store.commit('setChangenetpx',false);
         } else {
@@ -362,17 +350,18 @@
           //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
           // mthis.$emit('changenetpx', true);
           mthis.$store.commit('setChangenetpx',true);
-          document.getElementById("timechartctrl").style.display = "block";
-          document.getElementById("main1").style.display = "block";
-          document.getElementById("timediv").style.display = "block";
-          document.getElementById("arrowDown").style.transform = "rotate(180deg)";
+          document.getElementById(mthis.timechartctrlId).style.display = "block";
+          document.getElementById(mthis.main1Id).style.display = "block";
+          document.getElementById(mthis.timedivId).style.display = "block";
+          document.getElementById(mthis.arrowDownId).style.transform = "rotate(180deg)";
         }
-        document.getElementById("arrowDown").style.position = "absolute";
-        document.getElementById("arrowDown").style.right = "20px";
-        document.getElementById("arrowDown").style.top = this.netpxdiv;
-        document.getElementById("arrowDown").style.zIndex = 30;
+        document.getElementById(mthis.arrowDownId).style.position = "absolute";
+        document.getElementById(mthis.arrowDownId).style.right = "20px";
+        document.getElementById(mthis.arrowDownId).style.top = this.netpxdiv;
+        document.getElementById(mthis.arrowDownId).style.zIndex = 30;
       }
-    }
+    },
+    props:{activeId:String}
   };
 </script>
 <style scoped>
