@@ -948,10 +948,6 @@ export default {
             });  
         },
         deleteOverlayById(id){
-<<<<<<< HEAD
-            
-=======
->>>>>>> d738d8e98c27ff59d87071d1a79fa4678f4bfaea
             var mthis = this;
             var Id_Animation = 'pointAnimation_' + id;
             var Id_localtion = 'localtion_Overlay_' + id;
