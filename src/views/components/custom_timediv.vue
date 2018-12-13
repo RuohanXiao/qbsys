@@ -328,7 +328,7 @@
       },
       changHeightCount: function() {
         var mthis = this
-        debugger
+        var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.changHeightCount % 2 === 0) {
           mthis.iconPosition = useHeight - 40 + "px";
@@ -355,8 +355,6 @@
           document.getElementById(mthis.main1Id).style.display = "block";
           document.getElementById(mthis.timedivId).style.display = "block";
           document.getElementById(mthis.arrowDownId).style.transform = "rotate(180deg)";
-          //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
-          debugger
           mthis.$store.commit('setGeoHeight',useHeight * 0.8)
         }
         document.getElementById(mthis.arrowDownId).style.position = "absolute";
