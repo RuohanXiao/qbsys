@@ -96,8 +96,8 @@
            </Tooltip>
       </div>
     </div>
-    <div :style="{height:netHeight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
-      <div id="netchart" aria-autocomplete="true" :style="{height:netHeight}"></div>
+    <div :style="{height:NetHeight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
+      <div id="netchart" aria-autocomplete="true" :style="{height:NetHeight}"></div>
     </div>
     </Col>
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
@@ -121,7 +121,7 @@
         basicY: 0,
         basicX: 0,
         // dataurl: '../../dist/data/netData.json',
-        netHeight: 0,
+        NetHeight: 0,
         pathHoverFlag: false,
         modal_loading: false,
         selectionId: [],
@@ -968,19 +968,23 @@
     },
     created() {},
     computed:mapState ([
-      'searchResult'
+      'searchResult','netHeight'
     ]),
     watch: {
       searchResult:function(va){
         if(this.$store.state.tmss === 'net') {
           this.reloadNetData(va.node.nodes[0])
         }
+      },
+      netHeight:function(va){
+        var mthis = this;
+        mthis.NetHeight = mthis.$store.getters.getNetHeight;
       }
     //   searchResultWatcher:function(old){
     //     // this.temp = old
     //   }
     },
-    // props: ['netHeight', 'netData'],
+    // props: ['NetHeight', 'netData'],
     mounted() {
       sessionStorage.setItem('netChartLog', JSON.stringify({
         data: []
@@ -988,7 +992,7 @@
       var mthis = this
       mthis.initCharts();
       mthis.netData =  mthis.$store.getters.netData
-      mthis.netHeight = mthis.$store.getters.getNetHeight
+      mthis.NetHeight = mthis.$store.getters.getNetHeight
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();
       //   mthis.netchart.addData(res.data.data[0]);
@@ -1007,11 +1011,11 @@
       //     this.$Message.error('getNodeData失败,请查看日志或稍后重试！')
       // });
       // window.onresize = function() {
-      //   this.netHeight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
-      //   this.netHeightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
+      //   this.NetHeight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
+      //   this.NetHeightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
       // }
-      // this.netHeight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
-      // this.netHeightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
+      // this.NetHeight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
+      // this.NetHeightdiv = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + "px";
     }
   };
 </script>

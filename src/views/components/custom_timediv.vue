@@ -334,7 +334,15 @@
           mthis.iconPosition = useHeight - 40 + "px";
           
           //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
-          mthis.$store.commit('setGeoHeight',useHeight * 1)
+          //mthis.$store.commit('setGeoHeight',useHeight * 1)
+          if(tmss == 'geo'){
+            mthis.$store.commit('setGeoHeight',useHeight * 1)
+          } else if (tmss == 'net'){
+            mthis.$store.commit('setNetHeight',useHeight * 1)
+          } else if (tmss == 'content'){
+            mthis.$store.commit('setContentHeight',useHeight * 1)
+          } 
+
           document.getElementById(mthis.timechartctrlId).style.display = "none";
           document.getElementById(mthis.main1Id).style.display = "none";
           document.getElementById(mthis.timedivId).style.display = "none";
@@ -355,7 +363,14 @@
           document.getElementById(mthis.main1Id).style.display = "block";
           document.getElementById(mthis.timedivId).style.display = "block";
           document.getElementById(mthis.arrowDownId).style.transform = "rotate(180deg)";
-          mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+          if(tmss == 'geo'){
+            mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+          } else if (tmss == 'net'){
+            mthis.$store.commit('setNetHeight',useHeight * 0.8)
+          } else if (tmss == 'content'){
+            mthis.$store.commit('setContentHeight',useHeight * 0.8)
+          } 
         }
         document.getElementById(mthis.arrowDownId).style.position = "absolute";
         document.getElementById(mthis.arrowDownId).style.right = "20px";

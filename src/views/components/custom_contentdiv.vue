@@ -68,8 +68,8 @@
       </div>
     </div>
     <div :style="{height:netheight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
-      <Scroll :on-reach-bottom="handleReachBottom"  v-if='!ifInfo' :height=contentHeight>
-        <div id="contentchart" aria-autocomplete="true" :style="{height:contentHeight,display:'flex',overflowY:'scroll'}">
+      <Scroll :on-reach-bottom="handleReachBottom"  v-if='!ifInfo' :height=ContentHeight>
+        <div id="contentchart" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex',overflowY:'scroll'}">
           <Row type="flex" justify="start" align="middle">
           <Col :sm="8" :lg="6" align="middle"  v-for="item in items">
             <div class="contentDiv">
@@ -81,7 +81,7 @@
           </Row>
         </div>
       </Scroll>
-      <div id="contentInfo" v-if='ifInfo' :style="{height:contentHeight,overflowY:'scroll'}">
+      <div id="contentInfo" v-if='ifInfo' :style="{height:ContentHeight,overflowY:'scroll'}">
         <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
         <h2 class="contentInfoTitle" id='contentsTitle'></h2>
         <p class="contentInfoTime" id='contentsTime'></p>
@@ -104,7 +104,7 @@
     data() {
       return {
         ifInfo: false,
-        contentHeight: 0,
+        ContentHeight: 0,
         netheight: 0,
         netheightdiv: 0,
         flag: true,
@@ -115,7 +115,7 @@
       };
     },
     computed:mapState ([
-      'searchResult'
+      'searchResult','netHeight','contentHeight'
     ]),
     watch: {
       searchResult:function(va){
@@ -125,6 +125,14 @@
             mthis.items = response.body.data
           })
         }
+      },
+      netHeight:function(){
+        var mthis = this;
+        mthis.netheight = mthis.$store.getters.getNetHeight;
+      },
+      contentHeight:function(){
+        var mthis = this;
+        mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
       }
     },
     components: {
@@ -206,7 +214,7 @@
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
-      mthis.contentHeight = useHeight * 0.8 - 68 + "px";
+      mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
       //   // 跳转过来的
       //   mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
