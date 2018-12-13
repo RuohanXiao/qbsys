@@ -269,6 +269,7 @@ var store = new Vuex.Store({
       state.geoDivHeight = height
     },
     setGeoHeight(state,height){
+      
       state.geoHeight = height
     }
   },
@@ -301,6 +302,7 @@ var store = new Vuex.Store({
       return state.geoDivHeight + 'px'
     },
     getGeoHeight: function(state){
+      
       return state.geoHeight + 'px'
     },
 

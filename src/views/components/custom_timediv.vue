@@ -279,6 +279,7 @@
           width: document.documentElement.clientWidth * this.$store.state.split - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
+        
         this.option.xAxis.data = this.dataBySeries.date;
         this.option.series[0].data = this.dataBySeries.num;
         this.charts.setOption(this.option)
@@ -294,6 +295,7 @@
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
+      
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
@@ -326,18 +328,19 @@
       },
       changHeightCount: function() {
         var mthis = this
+        var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.changHeightCount % 2 === 0) {
-          // this.timepx = "0px";
-          // this.timepxdiv = "0px";
-          
           mthis.iconPosition = useHeight - 40 + "px";
+          
+          //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
+          mthis.$store.commit('setGeoHeight',useHeight * 1)
           document.getElementById(mthis.timechartctrlId).style.display = "none";
           document.getElementById(mthis.main1Id).style.display = "none";
           document.getElementById(mthis.timedivId).style.display = "none";
           document.getElementById(mthis.arrowDownId).style.transform = "rotate(0deg)";
-          // mthis.$emit('changenetpx', false);
           mthis.$store.commit('setChangenetpx',false);
+          
         } else {
           mthis.iconPosition = useHeight * 0.8 + "px";
           // this.timepx =
@@ -352,11 +355,12 @@
           document.getElementById(mthis.main1Id).style.display = "block";
           document.getElementById(mthis.timedivId).style.display = "block";
           document.getElementById(mthis.arrowDownId).style.transform = "rotate(180deg)";
+          mthis.$store.commit('setGeoHeight',useHeight * 0.8)
         }
         document.getElementById(mthis.arrowDownId).style.position = "absolute";
         document.getElementById(mthis.arrowDownId).style.right = "20px";
         document.getElementById(mthis.arrowDownId).style.top = this.netpxdiv;
-        document.getElementById(mthis.arrowDownId).style.zIndex = 30;
+        document.getElementById(mthis.arrowDownId).style.zIndex = 99;
       }
     },
     props:{activeId:String}

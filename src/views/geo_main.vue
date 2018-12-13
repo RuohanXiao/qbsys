@@ -4,7 +4,7 @@
     <div class="demo-split" :style="{height:viewHeight}">
       <Split v-model="split1" :max="max" :min="min">
         <div slot="left" class="demo-split-pane" display='flex' :style="{height:viewHeight}">
-          <geo-map-div  id="geo" :style="{height:netHeight}" :geoData="geoData"></geo-map-div>
+          <geo-map-div  id="geo" :style="{height:GeoHeight}" :geoData="geoData"></geo-map-div>
           <time-chart-div :activeId='activeId'></time-chart-div>
         </div>
         <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:viewHeight,maxHeight:viewHeight,marginRight:'2.3vw'}">
@@ -29,7 +29,7 @@
         min: 0.7,
         flag: true,
         viewHeight: null,
-        netHeight: null,
+        GeoHeight: null,
         splitWidth:null,
         geoData:null,
         activeId:'geo',
@@ -48,12 +48,12 @@
         mthis.useHeight = document.documentElement.clientHeight - 65 - 20;
         if (mthis.flag) {
           mthis.$store.commit('setNetDivHeight',mthis.useHeight)
-          mthis.$store.commit('setNetHeight',mthis.useHeight - 55)
+          mthis.$store.commit('setgeoHeight',mthis.useHeight - 55)
           // mthis.netpxdiv = mthis.useHeight * 1 + "px";
           // mthis.netpx = mthis.useHeight * 1 - 55 + "px";
         } else {
           mthis.$store.commit('setNetDivHeight',mthis.useHeight* 0.8)
-          mthis.$store.commit('setNetHeight',mthis.useHeight * 0.8 - 55)
+          mthis.$store.commit('setgeoHeight',mthis.useHeight * 0.8 - 55)
           // mthis.netpxdiv = mthis.useHeight * 0.8 + "px";
           // mthis.netpx = mthis.useHeight * 0.8 - 55 + "px";
         }
@@ -64,15 +64,43 @@
       split1: function(va){
         this.$store.commit('setSplit',this.split1);
         this.splitWidth = document.documentElement.clientWidth * this.split1 - 20 + 'px'
+      },
+      geoHeight:function(va){
+        var mthis = this;
+        
+        mthis.GeoHeight = mthis.$store.getters.getGeoHeight;
       }
     },
-    // computed:mapState ([
-    //   'customDivHeight','customCanvasHeight','netDataObj'
-    // ]),
+    computed:mapState ([
+      'geoHeight'
+    ]),
     mounted(){
       var mthis = this
+      // console.log(mthis.$store.getters.getViewHeight)
+      // console.log(mthis.$store.getters.getNetDivHeight)
+      // console.log(mthis.$store.getters.getgeoHeight)
+      // console.log(mthis.$store.getters.getContentDivHeight)
+      // console.log(mthis.$store.getters.getContentHeight)
+      // console.log(mthis.$store.getters.getGeoDivHeight)
+      // console.log(mthis.$store.getters.getGeoHeight)
       mthis.viewHeight = mthis.$store.getters.getViewHeight
-      mthis.netHeight = mthis.$store.getters.getNetDivHeight
+      mthis.GeoHeight = mthis.$store.getters.getNetDivHeight
+      // alert(mthis.$store.state.tmss)
+      // mthis.$store.commit('getTMSS',1999)
+      // alert(mthis.$store.state.tmss)
+      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
+      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
+      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
+      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
+      // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
+      // mthis.useHeight = document.documentElement.clientHeight - 65 - 20;
+      // mthis.contentHeight = document.documentElement.clientHeight - 64 + "px";
+      // mthis.netpxdiv = mthis.useHeight * 0.8 + "px";
+      // mthis.netpx = mthis.useHeight * 0.8 - 55 + "px";
+      // mthis.eventheightdiv = document.documentElement.clientHeight * 1 - 65 - 10 + "px";
+      // mthis.divheight = mthis.eventheightdiv - mthis.netpx + 'px'
+
+      // mthis.geoHeight = (document.body.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 - 55 + "px";
     }
   }
 </script>

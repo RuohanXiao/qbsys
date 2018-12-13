@@ -1,14 +1,14 @@
 <template>
-    <div :style="{height:geoHeight,width:geoWidth}" class='geoDiv'>
+    <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv'>
         <imgItemOpera @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
         <div id='mapDIV'>
-            <div id='locationRoute_Map' :style="{display:'block',height:geoHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
+            <div id='locationRoute_Map' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
                 <div id='legendDiv'>
                     <table id="legendBodyTable" style='border-collapse:separate;border-spacing:5;'>
                         <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
                     </table>
                 </div>
-                <div id="main" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(geoHeight) -30  + 'px'}">
+                <div id="main" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(GeoHeight) -30  + 'px'}">
                     <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
                         <ul class='slides' id='sliderUL'>
                             <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-            <div id='HeatMap_Map' :style="{display:'none',height:geoHeight,width:'100%',backgroundColor:'black'}" ></div>
+            <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
         </div>
     </div>
 </template>
@@ -185,6 +185,7 @@ export default {
       return {
         a:null,
         mapDivbuttonIds : ['location_button','heatMap_button','route_button'],
+        mapHeight:'0px',
         imgTopVules:'',
         test_Route:test_Route,
         test_HeatMap:test_HeatMap,
@@ -200,10 +201,10 @@ export default {
         routeColors:['#616f39','#88A2AA','#509aaf'],
         n :500,//曲线的粒度（曲线是由几个点组成）
         mousePointCoordinate: null,
-        geoHeight:'0px',
+        GeoHeight:'0px',
         geoWidth:'0px',
         //tmss:this.$store.state.tmss,
-        /* geoHeight:'500px',
+        /* GeoHeight:'500px',
         geoWidth:'1000px', */
         isCtrl:false,
         onImgIds:[],  //被点亮的img的id
@@ -227,7 +228,9 @@ export default {
         mthis.test_Route.forEach(function(item){
             mthis.allImgIds.push(item.id);
         })
-        mthis.geoHeight=mthis.$store.getters.getGeoHeight;
+        mthis.GeoHeight=mthis.$store.getters.getGeoHeight;
+        mthis.mapHeight =mthis.$store.getters.getGeoHeight;
+        // alert(mthis.GeoHeight)
         mthis.geoWidth=document.documentElement.clientWidth * this.$store.state.split - 20 + 'px';
     },
     methods:{
@@ -1133,7 +1136,7 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split'
+      'tmss','split','geoHeight'
     ]),
     watch:{
         locationClassObject:{
@@ -1158,6 +1161,25 @@ export default {
         split:function(){
             var mthis = this;
             mthis.geoWidth = document.documentElement.clientWidth * mthis.split - 20 + 'px';
+        },
+        geoHeight:function(){
+            var mthis = this;
+            mthis.GeoHeight = mthis.$store.getters.getGeoHeight;
+            mthis.mapHeight = mthis.$store.state.geoHeight - 55 + 'px';
+            if(mthis.routeMap != null){
+                this.$nextTick(function(){
+                    var mthis = this;
+                    mthis.routeMap.map.updateSize();
+                });
+                
+            };
+            if(mthis.heatMap != null){
+                this.$nextTick(function(){
+                    var mthis = this;
+                    mthis.heatMap.map.updateSize();
+                });
+                
+            }
         },
         geoWidth:function(){
             var mthis = this;
