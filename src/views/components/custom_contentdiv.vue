@@ -1,142 +1,71 @@
 <template>
   <div :style="{height:netheightdiv}">
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px'}">
-      <!-- <div class='divStyle'>
+      <div class='divStyle'>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
-            <Icon class="icon iconfont icon-rectangle process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
+            <Icon class="icon iconfont icon-rectangle DVSL-bar-btn-new DVSL-bar-btn-back"  size="26"></Icon>
             <p class="img-content">分组</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click='toContentDiv'>
-            <Icon class="icon iconfont icon-fanhui process-img DVSL-bar-btn DVSL-bar-btn-back" size="26"></Icon>
+            <Icon class="icon iconfont icon-fanhui DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">缩略图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
-            <Icon class="icon iconfont icon-list process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
+            <Icon class="icon iconfont icon-list DVSL-bar-btn-new DVSL-bar-btn-back"  size="26"></Icon>
             <p class="img-content">列表</p>
           </div>
         </Tooltip>
+        <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
-            <Icon class="icon iconfont icon-selection-box process-img DVSL-bar-btn DVSL-bar-btn-back" size="26"></Icon>
+            <Icon class="icon iconfont icon-selection-box DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">翻译</p>
           </div>
         </Tooltip>
+        <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
-            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">撤销操作</p>
+            <Icon class="icon iconfont icon-up DVSL-bar-btn-new DVSL-bar-btn-back"  size="26"></Icon>
+            <p class="img-content">时间升</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
-            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">撤销操作</p>
+            <Icon class="icon iconfont icon-down DVSL-bar-btn-new DVSL-bar-btn-back"  size="26"></Icon>
+            <p class="img-content">时间降</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
-            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">撤销操作</p>
+            <Icon class="icon iconfont icon-fanhui DVSL-bar-btn-new DVSL-bar-btn-back"  size="26"></Icon>
+            <p class="img-content">热度</p>
+          </div>
+        </Tooltip>
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div">
+            <Icon class="icon iconfont icon-up DVSL-bar-btn-new DVSL-bar-btn-back"  size="26"></Icon>
+            <p class="img-content">截图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
-            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">撤销操作</p>
+            <Icon class="icon iconfont icon-cut DVSL-bar-btn-new DVSL-bar-btn-back"  size="26"></Icon>
+            <p class="img-content">保存</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
-            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">撤销操作</p>
+            <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back"  size="26"></Icon>
+            <p class="img-content">添加目标</p>
           </div>
         </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">撤销操作</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">撤销操作</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">撤销操作</p>
-          </div>
-        </Tooltip>
-      </div> -->
-
-      <Row type="flex" justify="start" class="code-row-bg" align="middle" :style="{height:'70px',paddingLeft:'10px'}">
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="分组" placement="bottom">
-          <Icon class="icon iconfont icon-rectangle process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="缩略图" placement="bottom">
-          <Icon class="icon iconfont icon-fanhui process-img DVSL-bar-btn DVSL-bar-btn-back" @click='toContentDiv' size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="列表" placement="bottom">
-          <Icon class="icon iconfont icon-list process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="翻译" placement="bottom">
-          <Icon class="icon iconfont icon-selection-box process-img DVSL-bar-btn DVSL-bar-btn-back" size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="时间升" placement="bottom">
-          <Icon class="icon iconfont icon-up process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="时间降" placement="bottom">
-          <Icon class="icon iconfont icon-down process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="热度" placement="bottom">
-          <Icon class="icon iconfont icon-fanhui process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col align="middle">
-        <div style="float:center;width: 1px;height: 25px; background: rgba(51, 255, 255, 0.2)"></div>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="截图" placement="bottom">
-          <Icon class="icon iconfont icon-cut process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="保存" placement="bottom">
-          <Icon class="icon iconfont icon-save1 process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
-        </Tooltip>
-        </Col>
-        <Col span="1" align="middle" class="bottom">
-        <Tooltip content="添加目标" placement="bottom">
-          <Icon class="icon iconfont icon-add process-img DVSL-bar-btn DVSL-bar-btn-back"  size="26"></Icon>
-        </Tooltip>
-        </Col>
-      </Row>
+      </div>
     </div>
     <div :style="{height:netheight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <Scroll :on-reach-bottom="handleReachBottom"  v-if='!ifInfo' :height=contentHeight>
@@ -153,7 +82,7 @@
         </div>
       </Scroll>
       <div id="contentInfo" v-if='ifInfo' :style="{height:contentHeight,overflowY:'scroll'}">
-        <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
+        <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
         <h2 class="contentInfoTitle" id='contentsTitle'></h2>
         <p class="contentInfoTime" id='contentsTime'></p>
         <p style='margin:30px'><span id='contents' ></span><span id='pointer'>_</span></p>
