@@ -5,7 +5,7 @@
       <Split v-model="split1" :max="max" :min="min">
         <div slot="left" class="demo-split-pane" display='flex' :style="{height:viewHeight}">
           <net-chart-div id="net" :style="{height:nDivHeight}"></net-chart-div>
-          <time-chart-div></time-chart-div>
+          <time-chart-div :activeId='activeId'></time-chart-div>
         </div>
         <div id="right" slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:viewHeight,maxHeight:viewHeight,marginRight:'2.3vw'}">
           <event-chart-div  :style="{height:viewHeight,maxHeight:viewHeight,minHeight:viewHeight}"></event-chart-div>
@@ -29,7 +29,8 @@
         min: 0.7,
         flag: true,
         viewHeight: null,
-        nHeight: null
+        nHeight: null,
+        activeId:'net',
       }
     },
     components: {

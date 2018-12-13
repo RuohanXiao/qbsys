@@ -560,7 +560,7 @@ export default {
         },
         changedrawType(object){
             var mthis = this
-            debugger
+            
             var map = mthis.routeMap.map
             map.removeInteraction(mthis.draw);
             //矢量图层是用来渲染矢量数据的图层类型，在OpenLayers里，它是可以定制的，可以控制它的透明度，颜色，以及加载在上面的要素形状等。
