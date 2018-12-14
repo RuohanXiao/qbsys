@@ -75,7 +75,7 @@
             <div class="contentDiv">
               <p class="contentTitle" @click="showContent(item.id)">{{item.title}}</p>
               <p class="contentText">{{item.text}}</p>
-              <p class="contentTime">{{item.time}}&nbsp;{{item.from}}</p>
+              <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
             </div>
           </Col>
           </Row>
@@ -121,15 +121,14 @@
     watch: {
       searchContentResult:function(va){
         var mthis = this
-        if(mthis.$store.state.tmss === 'content') {
-          console.log(va)
-          if(va[0].label.split('搜索:').length > 1) {
-            mthis.content = va[0].label.split('搜索:')[1]
+        // if(mthis.$store.state.tmss === 'content') {
+          // if(va[0].label.split('搜索:').length > 1) {
+            mthis.content = va[0].label
             mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.content).then(response => {
               mthis.items = response.body.data
             })
-          }
-        }
+          // }
+        // }
       },
       netHeight:function(){
         var mthis = this;
@@ -173,8 +172,9 @@
       //   document.getElementById('contentsTime').innerHTML = res.data.time
       // });
       mthis.$http.get('http://10.60.1.140:5001/context-by-id/?idValue='+ id).then(response => {
-          document.getElementById('contents').innerHTML = response.body.data[0].text
-          //mthis.printer(response.body.data[0].text, 'contents', 'pointer')
+        // mthis.printer(response.body.data[0].text, 'contents', 'pointer')
+          var text=response.body.data[0].text.replace(/(\r\n)|(\n)/g,'<br>');
+          document.getElementById('contents').innerHTML = text
           document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
           document.getElementById('contentsTime').innerHTML = response.body.data[0].from + ((response.body.data[0].from!=='' && response.body.data[0].from !==undefined)?'  |  ':'')+ response.body.data[0].time
           

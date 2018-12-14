@@ -245,8 +245,31 @@
       },
       // 显示路径
       showPathKnowledge() {
+        var mthis = this
         // (this.selectionId.length === 1) ? (this.pathHoverFlag = true) : ((this.selectionId.length > 0) ? (this.$Message.error('请选择单一节点进行路径显示')) : (this.$Message.error('请选择一个节点进行路径显示')))
-        this.netchart.selection(["911716", '1016826'])
+        // this.netchart.selection(["911716", '1016826'])
+        if(mthis.selectionId.length !== 2) {
+          mthis.$Message.error('现阶段只支持两点路径！')
+        } else {
+          mthis.$http.get('http://10.60.1.140:5001/all-path-data/?start='+mthis.selectionId[0].id+'&end='+mthis.selectionId[1].id+'&step=3').then(response => {
+            if(response.body.data[0].nodes.length + response.body.data[0].links.length > 0) {
+              mthis.netchart.addData(response.body.data[0])
+              let idArr = []
+              let nodeobj = response.body.data[0].nodes
+              let linkobj = response.body.data[0].links
+              for(let i = 0;i<nodeobj.length;i++){
+                idArr.push(nodeobj[i].id)
+              }
+              for(let j = 0;j<linkobj.length;j++){
+                idArr.push(linkobj[j].id)
+              }
+              mthis.netchart.selection(idArr)
+            } else {
+              mthis.$Message.error('未找到此两点的知识路径')
+            }
+          })
+        }
+        // mthis.netchart.selection(["911716", '1016826'])
       },
       showPathEvent() {
         (this.selectionId.length === 1) ? (this.pathHoverFlag = true) : ((this.selectionId.length > 0) ? (this.$Message.error('请选择单一节点进行路径显示')) : (this.$Message.error('请选择一个节点进行路径显示')))
