@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <Modal v-model="a" width='80'  footer-hide>
+    <Modal v-model="flag" width='80' @on-cancel="cancel" footer-hide>
       <div style="margin: 20px;">
         <div>
           <span class="modalTitle" v-if="ishasValue(Entitydetail.name)">{{Entitydetail.name}}</span>
@@ -131,7 +130,6 @@
         </Row>
       </div>
     </Modal>
-  </div>
 </template>
 <script>
   import mock from "../../mock/index.js";
@@ -142,7 +140,7 @@
   export default {
     data() {
       return {
-        a:true,
+        aflag:false,
         buttonDivHeight: 0, 
         listHeight: 0,
         InfoHeight: 0,
@@ -157,16 +155,25 @@
       this.InfoHeight = document.documentElement.clientHeight * 0.8 - 85 + "px";
       this.buttonDivHeight = 69 + "px";
     },
-    created(){
-      var nodeIds =[this.nodeId];
+    watch:{
+      nodeId:function(){
+        var nodeIds =[this.nodeId];
       this.$http.post('http://10.60.1.140:5001/node-datas/', {
           'nodeIds': nodeIds
         }).then(response => {
            this.Entitydetail = response.body.data[0].nodes[0]
         })
+      } 
+    },
+    created(){
+      
     },
     components: {},
     methods: {
+      cancel(){
+        var mthis = this;
+        mthis.$emit('detailModalFlag', false)
+      },
       ishasValue(pro){
         if(pro == '' || pro == undefined){
           return false;
