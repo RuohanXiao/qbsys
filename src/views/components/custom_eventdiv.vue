@@ -5,13 +5,12 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs>
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
-            <div>
               <Collapse simple class="toushiItems" accordion>
                 <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
                   <div slot="content">
                   <collapse accordion simple>
                     <panel v-for="StatisticsItem in StatisticsType.child" :hide-arrow="(StatisticsItem.child === undefined)">
-                      <span style="width:1em" /><span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
+                      <span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
                       <percentBar :num="StatisticsItem.per" :count="StatisticsItem.count" :index='index'></percentBar>
                       <div slot="content">
                         <collapse accordion simple>
@@ -27,7 +26,6 @@
                   </div>
                 </panel>
               </Collapse>
-            </div>
             <!-- <div v-for="object in dataStatisticsEvent">
               <Collapse simple class="toushiItems" accordion >
                 <Panel name="1" :style='{borderBottom:"1px solid rgba(51,255,255,.5)"}'>
@@ -638,6 +636,9 @@
 </style>
 
 <style>
+#toushi>.toushiItems>.ivu-collapse-item>.ivu-collapse-content>.ivu-collapse-content-box>div>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-header>i{
+  margin-left:10px
+}
   .content_header {
     font-family: MicrosoftYaHei;
     font-size: 14px;

@@ -85,7 +85,7 @@
         <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
         <h2 class="contentInfoTitle" id='contentsTitle'></h2>
         <p class="contentInfoTime" id='contentsTime'></p>
-        <p style='margin:30px'><span id='contents' ></span><span id='pointer'>_</span></p>
+        <p style='margin:30px'><span id='contents' ></span></p>
       </div>
     </div>
     </Col>
@@ -173,8 +173,8 @@
       //   document.getElementById('contentsTime').innerHTML = res.data.time
       // });
       mthis.$http.get('http://10.60.1.140:5001/context-by-id/?idValue='+ id).then(response => {
-          //document.getElementById('contents').innerHTML = response.body.data[0].text
-          mthis.printer(response.body.data[0].text, 'contents', 'pointer')
+          document.getElementById('contents').innerHTML = response.body.data[0].text
+          //mthis.printer(response.body.data[0].text, 'contents', 'pointer')
           document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
           document.getElementById('contentsTime').innerHTML = response.body.data[0].from + ((response.body.data[0].from!=='' && response.body.data[0].from !==undefined)?'  |  ':'')+ response.body.data[0].time
           
@@ -182,7 +182,7 @@
           // mthis.singlePerson = (opt[1]>1)?false:true
         })
       },
-      printer(text,contentid,pointerid){ 
+      /* printer(text,contentid,pointerid){ 
           var l = text.length;
           var t = 0;
           var arr = [];    
@@ -205,7 +205,7 @@
               }
       },10);
               
-      }
+      } */
     },
     created() {
       // var mthis = this
