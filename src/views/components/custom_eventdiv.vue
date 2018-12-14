@@ -43,12 +43,12 @@
               </Collapse>
             </div> -->
           </Tab-pane>
-          <Tab-pane label="目标详情" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
+          <Tab-pane label="目标详情" v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
                   <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
-                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="netSelectNodes != null&&netSelectNodes[0]!==undefined">{{netSelectNodes[0].ids.length}}</span>)
+                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="selectNetNodes != null&&selectNetNodes[0]!==undefined">{{selectNetNodes[0].ids.length}}</span>)
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
@@ -528,7 +528,7 @@
         //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['netSelectNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent']),
+    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent']),
     watch: {
       dataStatisticsEvent: function() {
         var mthis = this;
@@ -537,13 +537,13 @@
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
-      netSelectNodes: function() {
+      selectNetNodes: function(va) {
         var mthis = this;
         if (mthis.timer) {
           clearTimeout(mthis.timer)
         }
         mthis.timer = setTimeout(function() {
-          let nodeIdsArry = mthis.netSelectNodes[0].ids.map(item => {
+          let nodeIdsArry = va[0].ids.map(item => {
             return item.id;
           });
           // 新增防抖功能
@@ -551,10 +551,11 @@
             'nodeIds': nodeIdsArry
           }).then(response => {
             mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
+            console.log(mthis.evetdata)
             // mthis.evetdata = response.data.data[0].nodes
           })
         }, 100);
-        // let qu = (mthis.singlePerson) ? mthis.netSelectNodes[0].ids[0] : mthis.netSelectNodes[0].ids
+        // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
         // mthis.evetdata = 
       }
     },
@@ -585,14 +586,15 @@
         // mthis.singlePerson = false
       },
       detail(id) {
-        this.modalNodeId = id
+        var mthis = this
+        mthis.modalNodeId = id
         let nodeIdsArry = []
         nodeIdsArry.push(id)
-        this.$http.post('http://10.60.1.140:5001/node-datas/', {
+        mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
-          this.netSelectNodes = response.body.data[0].nodes[0]
-          this.detailModalFlag = true
+          mthis.selectNetNodes = response.body.data[0].nodes[0]
+          mthis.detailModalFlag = true
         })
         //查询详细信息
       }

@@ -111,19 +111,24 @@
         modal01: false,
         eventData: null,
         items: [],
-        page:1
+        page:1,
+        content:''
       };
     },
     computed:mapState ([
-      'searchResult','netHeight','contentHeight'
+      'searchContentResult','netHeight','contentHeight'
     ]),
     watch: {
-      searchResult:function(va){
+      searchContentResult:function(va){
         var mthis = this
         if(mthis.$store.state.tmss === 'content') {
-          mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ va.content).then(response => {
-            mthis.items = response.body.data
-          })
+          console.log(va)
+          if(va[0].label.split('搜索:').length > 1) {
+            mthis.content = va[0].label.split('搜索:')[1]
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.content).then(response => {
+              mthis.items = response.body.data
+            })
+          }
         }
       },
       netHeight:function(){
@@ -144,7 +149,7 @@
          var mthis = this
          mthis.page = mthis.page + 1
                 return new Promise(resolve => {
-                  mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page='+this.page+'&query='+ mthis.$route.query.content).then(response => {
+                  mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page='+this.page+'&query='+  mthis.content).then(response => {
                     mthis.items = response.body.data
                     resolve();
                     // mthis.dataexpand = response.body.data

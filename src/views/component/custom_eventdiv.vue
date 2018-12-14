@@ -6,7 +6,7 @@
         <Tabs>
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:eventheight}" id='toushi'>
             <div>
-              <Collapse simple class="toushiItems" accordion>
+              <Collapse simple class="toushiItems">
                 <panel v-for="StatisticsType in dataStatisticsEvent"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
                   <div slot="content">
                   <collapse accordion simple>

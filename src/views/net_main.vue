@@ -53,7 +53,7 @@
           mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
             'nodeIds': nodeIdsArry
           }).then(response => {
-            mthis.$store.commit('setNetSelectNodes',response.data.data[0].nodes)
+            mthis.$store.commit('setNetSelectNetNodes',response.data.data[0].nodes)
             // mthis.dataexpand = response.data.data[0].nodes
           })
         }, 100);

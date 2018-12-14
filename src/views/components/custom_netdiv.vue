@@ -8,92 +8,92 @@
             <p class="img-content">撤销操作</p>
           </div>
         </Tooltip>
-          <div class="divSplitLine"></div>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="square">
             <Icon class="icon iconfont icon-grid  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">矩形布局</p>
           </div>
-          </Tooltip>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="star">
             <Icon class="icon iconfont icon-star  DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
             <p class="img-content">星形布局</p>
           </div>
-           </Tooltip>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="hierarchy">
             <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">层级布局</p>
           </div>
-           </Tooltip>
-          <div class="divSplitLine"></div>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="expandNodeKnowledge">
             <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">知识扩展</p>
           </div>
-           </Tooltip>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="expandNodeEvent">
             <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">事件扩展</p>
           </div>
-                       </Tooltip>
-          <!-- <Col span="1" align="middle" class="bottom">
-                      <Tooltip content="查找关联" placement="bottom">
-                        <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                      </Tooltip>
-                      </Col> -->
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <!-- <Col span="1" align="middle" class="bottom">
+                        <Tooltip content="查找关联" placement="bottom">
+                          <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        </Tooltip>
+                        </Col> -->
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
             <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content" @click="showPathKnowledge">知识路径</p>
           </div>
-           </Tooltip>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="showPathEvent">
             <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">事件路径</p>
           </div>
-           </Tooltip>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="remove">
             <Icon class="icon iconfont icon-delete-point  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">删除节点</p>
           </div>
-           </Tooltip>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="removeOther">
             <Icon class="icon iconfont icon-fanxuan  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">反选节点</p>
           </div>
-           </Tooltip>
-          <div class="divSplitLine"></div>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="add">
             <Icon class="icon iconfont icon-add  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">添加目标</p>
           </div>
-           </Tooltip>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="exportImg">
             <Icon class="icon iconfont icon-cut  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">截屏</p>
           </div>
-           </Tooltip>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="save">
             <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">保存工作集</p>
           </div>
-           </Tooltip>
-          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="fit">
             <Icon class="icon iconfont icon-zhengchangshitu--quanping  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">自适应</p>
           </div>
-           </Tooltip>
+        </Tooltip>
       </div>
     </div>
     <div :style="{height:NetHeight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
@@ -109,7 +109,10 @@
   import mock from '../../mock/index.js'
   import modalChart from './custom_modal.vue'
   // import modalChart from './custom_modal_vue.vue'
-  import { mapState, mapActions, mapMutations } from 'vuex'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   import util from '../../util/tools.js'
   mock.test = 1
   /* eslint-disable */
@@ -941,10 +944,10 @@
                   // mthis.$emit('selectNodes1', [{
                   //   ids: mthis.selectionId
                   // }, mthis.selectionId.length]);
-                  mthis.$store.commit('setNetSelectNodes',[{
-                    ids: mthis.selectionId
-                  }, mthis.selectionId.length])
-                   mthis.$store.commit('setSinglePerson',!(mthis.selectionId.length > 1))
+                    mthis.$store.commit('setSelectNetNodes', [{
+                      ids: mthis.selectionId
+                  }])
+                  mthis.$store.commit('setSinglePerson', !(mthis.selectionId.length > 1))
                 } else {
                   mthis.selectionId = [];
                   mthis.selectItem = null;
@@ -967,22 +970,22 @@
       }
     },
     created() {},
-    computed:mapState ([
-      'searchResult','netHeight'
+    computed: mapState([
+      'searchNetResult', 'netHeight'
     ]),
     watch: {
-      searchResult:function(va){
-        if(this.$store.state.tmss === 'net') {
+      searchNetResult: function(va) {
+        if (this.$store.state.tmss === 'net') {
           this.reloadNetData(va.node.nodes[0])
         }
       },
-      netHeight:function(va){
+      netHeight: function(va) {
         var mthis = this;
         mthis.NetHeight = mthis.$store.getters.getNetHeight;
       }
-    //   searchResultWatcher:function(old){
-    //     // this.temp = old
-    //   }
+      //   searchResultWatcher:function(old){
+      //     // this.temp = old
+      //   }
     },
     // props: ['NetHeight', 'netData'],
     mounted() {
@@ -991,7 +994,7 @@
       }));
       var mthis = this
       mthis.initCharts();
-      mthis.netData =  mthis.$store.getters.netData
+      mthis.netData = mthis.$store.getters.netData
       mthis.NetHeight = mthis.$store.getters.getNetHeight
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();

@@ -183,17 +183,29 @@ var store = new Vuex.Store({
   state: {
     // 组件获取数据方式 this.$store.state.XXX
     tmss:'net', // top menu selected stutas
-    searchResult: {
+    searchNetResult: {
       id:'',
       label:'',
       node:{}
     }, // search result
+    searchGeoResult: {
+      id:'',
+      label:'',
+      node:{}
+    }, 
+    searchContentResult: {
+      id:'',
+      label:'',
+      node:{}
+    }, 
     viewHeight: 0,
     eventHeight: 0,
     netHeight: 0,
     netDivHeight: 0,
     netData: null,
-    netSelectNodes:[],
+    selectNetNodes:[],
+    selectGeoNodes:[],
+    selectContentNodes:[],
     netModalDetailData: {},
     netModalDetailNodeId: '',
     contentHeight: 0,
@@ -229,8 +241,14 @@ var store = new Vuex.Store({
     setChangenetpx(state,val){
       state.changenetpx = val
     },
-    setNetSelectNodes(state,val){
-      state.netSelectNodes = val
+    setSelectNetNodes(state,val){
+      state.selectNetNodes = val
+    },
+    setSelectGeoNodes(state,val){
+      state.selectGeoNodes = val
+    },
+    setSelectContentNodes(state,val){
+      state.selectContentNodes = val
     },
     setSplit(state,val){
       state.split = val
@@ -244,8 +262,14 @@ var store = new Vuex.Store({
     setSinglePerson(state,val){
       state.singlePerson = val
     },
-    setSearchResult(state,val){
-      state.searchResult = val
+    setSearchNetResult(state,val){
+      state.searchNetResult = val
+    },
+    setSearchGeoResult(state,val){
+      state.searchGeoResult = val
+    },
+    setSearchContentResult(state,val){
+      state.searchContentResult = val
     },
     setViewHeight(state,height){
       state.viewHeight = height
