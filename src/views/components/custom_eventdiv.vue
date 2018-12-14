@@ -70,7 +70,7 @@
                   </Row>
                   <Row type="flex" justify="center" v-if="evetdata.type === 'human'">
                     <Col span="8">
-                    <span class="content_header">中⽂名</span>
+                    <span class="content_header">中文名</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.name_in_chinese}}</span>
@@ -447,7 +447,7 @@
           </Tab-pane>
         </Tabs>
       </div>
-      <modal-chart-detail :nodeId='modalNodeId' v-if='detailModalFlag'></modal-chart-detail>
+      <modal-chart-detail :nodeId='modalNodeId' :flag='detailModalFlag' @detailModalFlag='setFlagToFalse'></modal-chart-detail>
     </div>
     </Col>
   </div>
@@ -538,6 +538,7 @@
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
       netSelectNodes: function() {
+        debugger
         var mthis = this;
         if (mthis.timer) {
           clearTimeout(mthis.timer)
@@ -559,6 +560,10 @@
       }
     },
     methods: {
+      setFlagToFalse(detailModalFlag){
+        var mthis = this;
+        mthis.detailModalFlag = detailModalFlag;
+      },
       changeLimit() {
         // function getArrayItems(arr, num) {
         //     const temp_array = [];
@@ -585,6 +590,7 @@
         // mthis.singlePerson = false
       },
       detail(id) {
+        debugger
         this.modalNodeId = id
         let nodeIdsArry = []
         nodeIdsArry.push(id)
@@ -592,6 +598,8 @@
           'nodeIds': nodeIdsArry
         }).then(response => {
           this.netSelectNodes = response.body.data[0].nodes[0]
+          //this.$store.commit('setNetSelectNodes',response.body.data[0].nodes[0])
+          debugger
           this.detailModalFlag = true
         })
         //查询详细信息
