@@ -204,7 +204,6 @@
     },
     methods: {
       initNode(initNode) {
-        alert(55);
       },
       // netdiv 回传选中节点参数
       selectNodes(opt) {},
