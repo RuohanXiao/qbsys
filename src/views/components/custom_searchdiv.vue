@@ -77,7 +77,8 @@ import { mapState,mapMutations } from 'vuex'
               }])
             }
             else{
-              mthis.inputInfoContent = a.value.split('搜索:')[1]
+              console.log(a.value)
+              mthis.inputInfoContent = a.value
               alert( mthis.inputInfoContent)
               mthis.$store.commit('setSearchContentResult', [{
                 node:{nodes:[]},
@@ -99,6 +100,7 @@ import { mapState,mapMutations } from 'vuex'
               })
             }
             if (this.$store.state.tmss === 'content') {
+                console.log(a.value)
                mthis.$store.commit('setSearchContentResult', {
                 node:{nodes:[]},
                 id:'',
@@ -189,10 +191,10 @@ import { mapState,mapMutations } from 'vuex'
             let option = []
             let optionWord = {}
             let optionWordArr = []
-            for(let i = 0 ;i<response.body.data.length;i++) {
-              optionWordArr.push({"label":'文档搜索实体-\''+response.body.data[i].name+'\'',"value":response.body.data[i].id,"img":response.body.data[i].img})
-            }
-            optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":''})
+            // for(let i = 0 ;i<response.body.data.length;i++) {
+            //   optionWordArr.push({"label":'文档搜索实体-\''+response.body.data[i].name+'\'',"value":response.body.data[i].id,"img":response.body.data[i].img})
+            // }
+            optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":query,"img":''})
             optionWord.title='文章检索'
             optionWord.data=optionWordArr
             option.push(optionWord)
