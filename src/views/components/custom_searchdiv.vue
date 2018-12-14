@@ -109,7 +109,6 @@
             }
             if (this.$store.state.tmss === 'content') {
               // alert('setoption1')
-              console.log(a.value)
               mthis.inputInfoContent = a.value
               mthis.$store.commit('setSearchContentResult', [{
                 node: {
