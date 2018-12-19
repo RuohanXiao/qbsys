@@ -222,7 +222,8 @@ var store = new Vuex.Store({
       name:'',
       img:'',
       type:''
-    }]
+    }],
+    tabSelect: '数据透视'
   },
   mutations:{
     // 修改state里的数据时，只能通过mutations的形式来操作
@@ -295,6 +296,10 @@ var store = new Vuex.Store({
     setGeoHeight(state,height){
       
       state.geoHeight = height
+    },
+    setTabSelect(state,val){
+      
+      state.tabSelect = val
     }
   },
   getters:{

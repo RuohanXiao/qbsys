@@ -971,6 +971,7 @@
                       ids: mthis.selectionId
                   }])
                   mthis.$store.commit('setSinglePerson', !(mthis.selectionId.length > 1))
+                  mthis.$store.commit('setTabSelect','目标详情')
                 } else {
                   mthis.selectionId = [];
                   mthis.selectItem = null;
