@@ -1,6 +1,6 @@
-import contentView from './views/contentView'
-import geoView from './views/geoview'
-import netView from './views/netview'
+// import contentView from './views/contentView'
+// import geoView from './views/geoview'
+// import netView from './views/netview'
 import home from './views/home'
 const routers = [
     // {

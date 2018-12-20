@@ -5,6 +5,7 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs>
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
+            <!-- <cTree :Statisticsdata="dataStatistics" v-if="dataStatistics.length >0"></cTree> -->
               <Collapse simple class="toushiItems" accordion>
                 <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
                   <div slot="content">
@@ -452,6 +453,7 @@
 </template>
 <script>
   import modalChartDetail from './custom_modal_detail'
+  import cTree from './custom_tree'
   import percentBar from './custom_percentBar'
   import { mapState,mapMutations } from 'vuex'
   /* eslint-disable */
@@ -459,15 +461,6 @@
     data() {
       return {
         modalNodeId: '',
-        statisticsNameList:{
-          'entity':'实体',
-          'human':'人物',
-          'politician':'政治人物',
-          'administrative':'管理',
-          'organization':'机构',
-          'political party':'政党',
-          'else':'其他'
-        },
         evetdata: null,
         detailModalFlag: false,
         dataStatistics:[],
@@ -514,12 +507,23 @@
                 现任中国共产党中央委员会总书记，中共中央军事委员会主席，中华人民共和国主席，中华人民共和国中央军事委员会主席。
                 中共第十五届中央候补委员，十六届、十七届、十八届、十九届中央委员，十七届中央政治局委员、常委、中央书记处书记，十八届、十九届中央政治局委员、常委、中央委员会总书记。第十一届全国人大第一次会议当选为中华人民共和国副主席。十七届五中全会增补为中共中央军事委员会副主席。第十一届全国人大常委会第十七次会议任命为中华人民共和国中央军事委员会副主席。十八届一中全会任中共中央军事委员会主席。第十二届全国人大第一次会议当选为中华人民共和国主席、中华人民共和国中央军事委员会主席`
           }
-        ]
+        ],
+        statisticsNameList:{
+                'entity':'实体',
+                'human':'人物',
+                'politician':'政治人物',
+                'administrative':'管理',
+                'organization':'机构',
+                'political party':'政党',
+                'else':'其他'
+            },
       };
     },
     components: {
       modalChartDetail,
+      cTree,
       percentBar
+
     },
     // computed: {
       //   menuitemClasses: function() {
@@ -530,6 +534,8 @@
     watch: {
       dataStatisticsEvent: function() {
         var mthis = this;
+        // alert(1);
+        console.log(new Date())
         mthis.dataStatistics = mthis.dataStatisticsEvent.data;
       },
       eventheightdiv: function() {
@@ -610,7 +616,7 @@
       this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
       this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
       this.eheight = this.eventheightdiv - 32 - 16 + 'px'
-      this.changeLimit()
+      this.changeLimit();
     }
   };
 </script>

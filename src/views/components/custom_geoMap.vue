@@ -8,7 +8,7 @@
                         <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
                     </table>
                 </div>
-                <div id="main" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(GeoHeight) -30  + 'px'}">
+                <div id="imgmain" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(GeoHeight) -30  + 'px'}">
                     <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
                         <ul class='slides' id='sliderUL'>
                             <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
@@ -28,7 +28,7 @@
 #legendDiv {
     position: absolute;
     z-index: 9999;
-    top: 100%;
+    top: 10%;
     left: 10%;
 }
 .ol-control {
@@ -351,6 +351,7 @@ export default {
         },
         route_cilck(){
             var mthis = this
+            debugger
             mthis.clickButtonOpenDiv('route_button')
             if(mthis.legend == null){
                 mthis.click_route()
@@ -473,11 +474,11 @@ export default {
             var mthis = this
             $('.flexslider').flexslider({
                 animation: "slide",
-                    animationLoop: false,
-                    mousewheel: true,
-                    itemWidth: 50,
-                    minItems: 1,
-                    maxItems: 16
+                animationLoop: false,
+                mousewheel: true,
+                itemWidth: 50,
+                minItems: 1,
+                maxItems: 16
             });
         },
         offImgClick(id){  

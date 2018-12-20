@@ -17,6 +17,7 @@ import './dist/assets/styles/zc.css';
 import './dist/assets/images/sprite.png';
 import './config/ipConfig.js';
 import { FactChart,NetChart,PieChart,GeoChart } from "./dist/assets/js/zoomcharts"; 
+import element from 'element-ui';
 // import { FactChart,NetChart,PieChart,GeoChart } from "@dvsl/zoomcharts/zoomcharts"; 
 // import 'element-ui/lib/theme-chalk/index.css';
 // 怕于与iview有冲突,暂时按需加载
@@ -172,6 +173,8 @@ import { FactChart,NetChart,PieChart,GeoChart } from "./dist/assets/js/zoomchart
   Vue.use(iView);
   Vue.use(echarts);
   Vue.use(Vuex);
+  Vue.use(element);
+  
 //   Vue.use(Antd);
 // 路由配置
 const RouterConfig = {

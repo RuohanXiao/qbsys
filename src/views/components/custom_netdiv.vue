@@ -998,6 +998,7 @@
     ]),
     watch: {
       searchNetResult: function(va) {
+        // alert(0);
         if (this.$store.state.tmss === 'net') {
           this.reloadNetData(va.node.nodes[0])
         }

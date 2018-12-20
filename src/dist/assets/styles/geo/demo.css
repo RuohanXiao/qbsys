@@ -154,7 +154,7 @@ nav li.active a  { cursor: default; }
 @media screen and (max-width: 960px) {
   #container {padding: 35px;}
   header {width: 380px;}
-  #main {margin-left: 380px;}
+  #imgmain {margin-left: 380px;}
   aside h3  {
   	float: none;
   	font-size: 20px;

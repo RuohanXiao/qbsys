@@ -67,7 +67,7 @@
         </Tooltip>
       </div>
     </div>
-    <div :style="{height:netheight,border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
+    <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <Scroll :on-reach-bottom="handleReachBottom"  v-if='!ifInfo' :height=ContentHeight>
         <div id="contentchart" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex',overflowY:'scroll'}">
           <Row type="flex" justify="start" align="middle">
@@ -107,6 +107,7 @@
         ContentHeight: 0,
         netheight: 0,
         netheightdiv: 0,
+        netheightout:0,
         flag: true,
         modal01: false,
         eventData: null,
