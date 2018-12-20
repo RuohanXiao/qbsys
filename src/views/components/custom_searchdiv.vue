@@ -8,7 +8,7 @@
                 <OptionGroup :label="opt.title" v-for="(opt,ind) in options1">
                   <Option v-for="(option, index) in opt.data" :value="option.value" :key="index">
                     <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
-                    <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1544579488321&di=6ac4e68a9c8abbf0316159c3c410fe0e&imgtype=0&src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F00%2F84%2F53%2F3156e7b84954899.jpg" />
+                    <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
                     <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.label}}</Option>
                 </OptionGroup>
               </Select>
@@ -17,8 +17,8 @@
                 <OptionGroup :label="opt.title" v-for="(opt,ind) in options2">
                   <Option v-for="(option, index) in opt.data" :value="option.value" :key="index">
                     <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
-                    <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1544579488321&di=6ac4e68a9c8abbf0316159c3c410fe0e&imgtype=0&src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F00%2F84%2F53%2F3156e7b84954899.jpg" />
-                    <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1544580003616&di=4aa13f45136ed83ee2b79c793b914b8d&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Daa6221f22aa446236ac7ad21f04b187b%2F08f790529822720ecbb3b97271cb0a46f21fab3d.jpg" />{{option.label}}</Option>
+                    <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+                    <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
                 </OptionGroup>
               </Select>
         <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoContent" filterable
@@ -26,8 +26,8 @@
                 <OptionGroup :label="opt.title" v-for="(opt,ind) in options3">
                   <Option v-for="(option, index) in opt.data" :value="option.value" :key="index">
                     <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
-                    <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1544579488321&di=6ac4e68a9c8abbf0316159c3c410fe0e&imgtype=0&src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F00%2F84%2F53%2F3156e7b84954899.jpg" />
-                    <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1544580003616&di=4aa13f45136ed83ee2b79c793b914b8d&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Daa6221f22aa446236ac7ad21f04b187b%2F08f790529822720ecbb3b97271cb0a46f21fab3d.jpg" />{{option.label}}</Option>
+                    <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+                    <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
                 </OptionGroup>
               </Select>
       </div>
