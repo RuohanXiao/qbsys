@@ -183,6 +183,7 @@
       },
        showNodeInNet() {
         alert('追加网络分析')
+        
       },
       showNodeInNewNet() {
         alert('新建网络分析')

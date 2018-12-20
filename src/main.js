@@ -186,6 +186,11 @@ var store = new Vuex.Store({
   state: {
     // 组件获取数据方式 this.$store.state.XXX
     tmss:'net', // top menu selected stutas
+    addNetNodes: {
+      id:'',
+      label:'',
+      node:{}
+    },
     searchNetResult: {
       id:'',
       label:'',
@@ -201,6 +206,11 @@ var store = new Vuex.Store({
       label:'',
       node:{}
     }, 
+    searchModalResult: {
+      id:'',
+      label:'',
+      node:{}
+    },
     viewHeight: 0,
     eventHeight: 0,
     netHeight: 0,
@@ -225,7 +235,8 @@ var store = new Vuex.Store({
       name:'',
       img:'',
       type:''
-    }]
+    }],
+    tabSelect: '数据透视'
   },
   mutations:{
     // 修改state里的数据时，只能通过mutations的形式来操作
@@ -265,6 +276,9 @@ var store = new Vuex.Store({
     setSinglePerson(state,val){
       state.singlePerson = val
     },
+    setAddNetNodes(state,val){
+      state.addNetNodes = val
+    },
     setSearchNetResult(state,val){
       state.searchNetResult = val
     },
@@ -298,6 +312,14 @@ var store = new Vuex.Store({
     setGeoHeight(state,height){
       
       state.geoHeight = height
+    },
+    setTabSelect(state,val){
+      
+      state.tabSelect = val
+    },
+    setSearchModalResult(state,val){
+      
+      state.tabSelect = val
     }
   },
   getters:{

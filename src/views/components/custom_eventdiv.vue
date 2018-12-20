@@ -3,9 +3,14 @@
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0'}">
+<<<<<<< HEAD
         <Tabs>
           <Tab-pane label="数据透视" :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
             <!-- <cTree :Statisticsdata="dataStatistics" v-if="dataStatistics.length >0"></cTree> -->
+=======
+        <Tabs :value=$store.state.tabSelect>
+          <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
+>>>>>>> 09f44e0771a2b5d461b138278c15c6a0d6053335
               <Collapse simple class="toushiItems" accordion>
                 <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
                   <div slot="content">
@@ -42,7 +47,7 @@
               </Collapse>
             </div> -->
           </Tab-pane>
-          <Tab-pane label="目标详情" v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
+          <Tab-pane label="目标详情" name= '目标详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
@@ -460,6 +465,7 @@
   export default {
     data() {
       return {
+        tabSelect:'数据透视',
         modalNodeId: '',
         evetdata: null,
         detailModalFlag: false,

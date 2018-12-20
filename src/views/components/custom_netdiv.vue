@@ -181,12 +181,16 @@
         this.netchart.addFocusNode(focusId, 50)
         // document.getElementById('netchart').focus();
       },
+      lightNodes(){
+      },
       //知识拓展节点（加载新数据）
       expandNodeKnowledge() {
         var mthis = this;
+        console.log(mthis.selectionId)
+        let arr = []
         if (mthis.selectionId.length > 0) {
           mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
-          let arr = []
+          let res = null
           for (let i = 0; i < mthis.selectionId.length; i++) {
             arr.push(mthis.selectionId[i].id)
           }
@@ -194,7 +198,15 @@
             'ClassName': 'knowledge',
             'nodeIds': arr
           }).then(response => {
-            mthis.netchart.addData(response.body.data[0])
+            res = response.body.data[0]
+            for(let m = 0;m<res.nodes.length;m++){
+              arr.push(res.nodes[m].id)
+            }
+            mthis.netchart.addData(res)
+            setTimeout(function() {
+              console.log(util.unique(arr))
+              mthis.netchart.selection(util.unique(arr))
+            },100)
             mthis.getStatistics()
           })
         } else {
@@ -719,6 +731,16 @@
         })
         mthis.getStatistics()
       },
+      addNetData(data){
+        var mthis = this
+        let dataarr = []
+        dataarr.push(data)
+        mthis.netchart.addData({
+          "nodes": dataarr,
+          "links": []
+        })
+        mthis.getStatistics()
+      },
       back() {
         let netChartLog = sessionStorage.getItem('netChartLog');
         let netChartLogJson = JSON.parse(netChartLog).data;
@@ -971,6 +993,7 @@
                       ids: mthis.selectionId
                   }])
                   mthis.$store.commit('setSinglePerson', !(mthis.selectionId.length > 1))
+                  mthis.$store.commit('setTabSelect','目标详情')
                 } else {
                   mthis.selectionId = [];
                   mthis.selectItem = null;
@@ -994,13 +1017,18 @@
     },
     created() {},
     computed: mapState([
-      'searchNetResult', 'netHeight'
+      'searchNetResult', 'netHeight','addNetNodes'
     ]),
     watch: {
       searchNetResult: function(va) {
         // alert(0);
         if (this.$store.state.tmss === 'net') {
           this.reloadNetData(va.node.nodes[0])
+        }
+      },
+      addNetNodes: function(va) {
+        if (this.$store.state.tmss === 'net') {
+          this.addNetData(va.node.nodes[0])
         }
       },
       netHeight: function(va) {
