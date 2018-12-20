@@ -41,7 +41,7 @@
     methods: {
       contentData () {
       },
-      changenetpx () {
+      /* changenetpx () {
         var mthis = this
         mthis.useHeight = document.documentElement.clientHeight - 65 - 20;
         if (mthis.flag) {
@@ -52,7 +52,7 @@
           mthis.$store.commit('setContentHeight',mthis.useHeight * 0.8 - 55)
         }
         mthis.flag = !mthis.flag
-      }
+      } */
     },
     computed:mapState ([
       // 'customDivHeight','customCanvasHeight','netDataObj'

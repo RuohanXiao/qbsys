@@ -71,6 +71,7 @@
         } else if (tmss == 'geo'){
           mthis.geoHeightCount ++;
         } else if(tmss == 'content'){
+          debugger
           mthis.contentHeightCount ++;
         }
       },
@@ -364,13 +365,13 @@
           document.getElementById('main1_geo').style.display = "none";
           document.getElementById('timediv_geo').style.display = "none";
           document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
-          mthis.$store.commit('setChangenetpx',false);
+          /* mthis.$store.commit('setChangenetpx',false); */
           
         } else {
           debugger
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
           document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
-          mthis.$store.commit('setChangenetpx',true);
+          /* mthis.$store.commit('setChangenetpx',true); */
           document.getElementById('timechartctrl_geo').style.display = "block";
           document.getElementById('main1_geo').style.display = "block";
           document.getElementById('timediv_geo').style.display = "block";
@@ -444,7 +445,7 @@
           document.getElementById('main1_content').style.display = "none";
           document.getElementById('timediv_content').style.display = "none";
           document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
-          mthis.$store.commit('setChangenetpx',false);
+          /* mthis.$store.commit('setChangenetpx',false); */
           
         } else {
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
@@ -456,7 +457,7 @@
           // this.timepxdiv =
           //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
           // mthis.$emit('changenetpx', true);
-          mthis.$store.commit('setChangenetpx',true);
+          /* mthis.$store.commit('setChangenetpx',true); */
           document.getElementById('timechartctrl_content').style.display = "block";
           document.getElementById('main1_content').style.display = "block";
           document.getElementById('timediv_content').style.display = "block";
@@ -466,7 +467,6 @@
         }
         document.getElementById('arrowDown_content').style.position = "absolute";
         document.getElementById('arrowDown_content').style.right = "20px";
-        debugger
 /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
         /* document.getElementById('arrowDown_content').style.top = netpxdiv; */
         document.getElementById('arrowDown_content').style.zIndex = 99;
