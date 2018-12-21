@@ -71,7 +71,7 @@
         } else if (tmss == 'geo'){
           mthis.geoHeightCount ++;
         } else if(tmss == 'content'){
-          debugger
+          
           mthis.contentHeightCount ++;
         }
       },
@@ -317,7 +317,7 @@
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
       this.timepxdiv =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-        debugger
+        
       /* this.iconPosition = useHeight * 0.8 + "px"; */
 
       this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
@@ -351,7 +351,7 @@
       },
       geoHeightCount: function() {
         var mthis = this
-        debugger
+        
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.geoHeightCount % 2 === 0) {
@@ -368,7 +368,7 @@
           /* mthis.$store.commit('setChangenetpx',false); */
           
         } else {
-          debugger
+          
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
           document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
           /* mthis.$store.commit('setChangenetpx',true); */
@@ -381,14 +381,14 @@
         }
         document.getElementById('arrowDown_geo').style.position = "absolute";
         document.getElementById('arrowDown_geo').style.right = "20px";
-        debugger
+        
         /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
        /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
         document.getElementById('arrowDown_geo').style.zIndex = 99;
       },
       netHeightCount: function() {
         var mthis = this
-        debugger
+        
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.netHeightCount % 2 === 0) {
@@ -423,14 +423,14 @@
         }
         document.getElementById('arrowDown_net').style.position = "absolute";
         document.getElementById('arrowDown_net').style.right = "20px";
-        debugger
+        
 /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
         /* document.getElementById('arrowDown_net').style.top = netpxdiv; */
         document.getElementById('arrowDown_net').style.zIndex = 99;
       },
       contentHeightCount: function() {
         var mthis = this
-        debugger
+        
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.contentHeightCount % 2 === 0) {

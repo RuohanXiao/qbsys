@@ -92,7 +92,7 @@ export default {
     mounted(){
         var mthis = this;
         mthis.setTreeData(mthis.Statisticsdata);
-        debugger
+        
         /* this.$nextTick(function(){
                 $("#treeTable").treetable({ expandable: true });
                 $("#treeTable tbody").on("mousedown", "a", function() {
@@ -127,7 +127,7 @@ export default {
             }) */
         },
         treeData:function(){
-            /* debugger
+            /* 
             var mthis = this;
             $("#treeTable tbody").empty();
             //mthis.render($("#treeTable tbody"));
@@ -152,7 +152,7 @@ export default {
         if (!data.children) {
           this.$set(data, 'children', []);
         }
-        debugger
+        
         data.children.push(newChild);
       },
 

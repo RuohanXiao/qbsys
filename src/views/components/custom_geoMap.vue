@@ -351,7 +351,7 @@ export default {
         },
         route_cilck(){
             var mthis = this
-            debugger
+            
             mthis.clickButtonOpenDiv('route_button')
             if(mthis.legend == null){
                 mthis.click_route()
