@@ -1,7 +1,7 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId">
-    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
+    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',top:iconPosition,zIndex:30,transform:'rotate(180deg)'}" @click="changHeightCount++"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <Col span="1" class="bottom" offset="21">
@@ -44,14 +44,12 @@
         pwidth: 0,
         timepxdiv: 0,
         timepx: 0,
-        /* iconPosition: 0, */
+        iconPosition: 0,
         charts: null,
         yMax: 500,
         dataShadow: [],
         option: null,
-        netHeightCount: 1,
-        geoHeightCount: 1,
-        contentHeightCount: 1,
+        changHeightCount: 1,
         dataBySeries: {
           num: [
             10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 21, 22, 23, 24, 25, 26, 27
@@ -63,18 +61,6 @@
       };
     },
     methods: {
-      onchangHeightCount(){
-        var mthis = this;
-        var tmss = mthis.$store.state.tmss;
-        if(tmss == 'net'){
-          mthis.netHeightCount ++ ;
-        } else if (tmss == 'geo'){
-          mthis.geoHeightCount ++;
-        } else if(tmss == 'content'){
-          debugger
-          mthis.contentHeightCount ++;
-        }
-      },
       timeZoomOut() { },
       timeZoomIn() { },
       resize() {
@@ -309,16 +295,13 @@
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
-      this.netHeightCount++;
-      this.contentHeightCount++;
-      this.geoHeightCount+=2;
+      
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
       this.timepxdiv =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-        debugger
-      /* this.iconPosition = useHeight * 0.8 + "px"; */
+      this.iconPosition = useHeight * 0.8 + "px";
 
       this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       // this.iconPosition = useHeight - 40 + "px";
@@ -329,15 +312,9 @@
       // this.changHeightCount++
     },
     computed:mapState ([
-      'split','splitWidth','tmss'
+      'split','splitWidth'
     ]),
     watch: {
-      /* tmss: function(){
-        var mthis = this;
-        if(mthis.tmss == 'geo'){
-          mthis.changHeightCount++;
-        }
-      }, */
       split: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
@@ -349,63 +326,30 @@
       splitWidth: function(va) {
         this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       },
-      geoHeightCount: function() {
+      changHeightCount: function() {
         var mthis = this
-        debugger
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (mthis.geoHeightCount % 2 === 0) {
-          /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_geo').style.top = useHeight - 40 + "px";
+        if (mthis.changHeightCount % 2 === 0) {
+          mthis.iconPosition = useHeight - 40 + "px";
+          
           //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
           //mthis.$store.commit('setGeoHeight',useHeight * 1)
+          if(tmss == 'geo'){
             mthis.$store.commit('setGeoHeight',useHeight * 1)
-
-          document.getElementById('timechartctrl_geo').style.display = "none";
-          document.getElementById('main1_geo').style.display = "none";
-          document.getElementById('timediv_geo').style.display = "none";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
-          /* mthis.$store.commit('setChangenetpx',false); */
-          
-        } else {
-          debugger
-          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
-          /* mthis.$store.commit('setChangenetpx',true); */
-          document.getElementById('timechartctrl_geo').style.display = "block";
-          document.getElementById('main1_geo').style.display = "block";
-          document.getElementById('timediv_geo').style.display = "block";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
-          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-            mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-        }
-        document.getElementById('arrowDown_geo').style.position = "absolute";
-        document.getElementById('arrowDown_geo').style.right = "20px";
-        debugger
-        /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-       /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
-        document.getElementById('arrowDown_geo').style.zIndex = 99;
-      },
-      netHeightCount: function() {
-        var mthis = this
-        debugger
-        var tmss = mthis.$store.state.tmss;
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (mthis.netHeightCount % 2 === 0) {
-          /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight - 40 + "px";
-          
+          } else if (tmss == 'net'){
             mthis.$store.commit('setNetHeight',useHeight * 1)
+          } else if (tmss == 'content'){
+            mthis.$store.commit('setContentHeight',useHeight * 1)
+          } 
 
-          document.getElementById('timechartctrl_net').style.display = "none";
-          document.getElementById('main1_net').style.display = "none";
-          document.getElementById('timediv_net').style.display = "none";
-          document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
+          document.getElementById(mthis.main1Id).style.display = "none";
+          document.getElementById(mthis.timedivId).style.display = "none";
+          document.getElementById(mthis.arrowDownId).style.transform = "rotate(0deg)";
           mthis.$store.commit('setChangenetpx',false);
           
         } else {
-          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight * 0.8 + "px";
+          mthis.iconPosition = useHeight * 0.8 + "px";
           // this.timepx =
           //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
           //   30 +
@@ -414,62 +358,23 @@
           //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
           // mthis.$emit('changenetpx', true);
           mthis.$store.commit('setChangenetpx',true);
-          document.getElementById('timechartctrl_net').style.display = "block";
-          document.getElementById('main1_net').style.display = "block";
-          document.getElementById('timediv_net').style.display = "block";
-          document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
+          document.getElementById(mthis.timechartctrlId).style.display = "block";
+          document.getElementById(mthis.main1Id).style.display = "block";
+          document.getElementById(mthis.timedivId).style.display = "block";
+          document.getElementById(mthis.arrowDownId).style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+          if(tmss == 'geo'){
+            mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+          } else if (tmss == 'net'){
             mthis.$store.commit('setNetHeight',useHeight * 0.8)
-        }
-        document.getElementById('arrowDown_net').style.position = "absolute";
-        document.getElementById('arrowDown_net').style.right = "20px";
-        debugger
-/*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-        /* document.getElementById('arrowDown_net').style.top = netpxdiv; */
-        document.getElementById('arrowDown_net').style.zIndex = 99;
-      },
-      contentHeightCount: function() {
-        var mthis = this
-        debugger
-        var tmss = mthis.$store.state.tmss;
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (mthis.contentHeightCount % 2 === 0) {
-          /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_content').style.top = useHeight - 40 + "px";
-          
-          //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
-          //mthis.$store.commit('setGeoHeight',useHeight * 1)
-            mthis.$store.commit('setContentHeight',useHeight * 1)
-
-          document.getElementById('timechartctrl_content').style.display = "none";
-          document.getElementById('main1_content').style.display = "none";
-          document.getElementById('timediv_content').style.display = "none";
-          document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
-          /* mthis.$store.commit('setChangenetpx',false); */
-          
-        } else {
-          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_content').style.top = useHeight * 0.8 + "px";
-          // this.timepx =
-          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
-          //   30 +
-          //   "px";
-          // this.timepxdiv =
-          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-          // mthis.$emit('changenetpx', true);
-          /* mthis.$store.commit('setChangenetpx',true); */
-          document.getElementById('timechartctrl_content').style.display = "block";
-          document.getElementById('main1_content').style.display = "block";
-          document.getElementById('timediv_content').style.display = "block";
-          document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
-          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+          } else if (tmss == 'content'){
             mthis.$store.commit('setContentHeight',useHeight * 0.8)
+          } 
         }
-        document.getElementById('arrowDown_content').style.position = "absolute";
-        document.getElementById('arrowDown_content').style.right = "20px";
-/*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-        /* document.getElementById('arrowDown_content').style.top = netpxdiv; */
-        document.getElementById('arrowDown_content').style.zIndex = 99;
+        document.getElementById(mthis.arrowDownId).style.position = "absolute";
+        document.getElementById(mthis.arrowDownId).style.right = "20px";
+        document.getElementById(mthis.arrowDownId).style.top = this.netpxdiv;
+        document.getElementById(mthis.arrowDownId).style.zIndex = 99;
       }
     },
     props:{activeId:String}
