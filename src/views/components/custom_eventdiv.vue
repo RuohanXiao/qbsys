@@ -9,12 +9,12 @@
                 <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
                   <div slot="content">
                   <collapse accordion simple>
-                    <panel v-for="StatisticsItem in StatisticsType.child" :hide-arrow="(StatisticsItem.child === undefined)">
+                    <panel v-for="StatisticsItem in StatisticsType.children" :hide-arrow="(StatisticsItem.children === undefined)">
                       <span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
                       <percentBar :num="StatisticsItem.per" :count="StatisticsItem.count" :index='index'></percentBar>
                       <div slot="content">
                         <collapse accordion simple>
-                          <panel v-for="lastStatisticsItem in StatisticsItem.child" :hide-arrow='true'>
+                          <panel v-for="lastStatisticsItem in StatisticsItem.children" :hide-arrow='true'>
                             <span style="width:2em" />
                             <span style="font-size: 10px;padding-left:30px">{{statisticsNameList[lastStatisticsItem.name]}}</span>
                             <percentBar :num="lastStatisticsItem.per" :count="lastStatisticsItem.count" :index='index'></percentBar>
@@ -30,7 +30,7 @@
               <Collapse simple class="toushiItems" accordion >
                 <Panel name="1" :style='{borderBottom:"1px solid rgba(51,255,255,.5)"}'>
                   {{object.name}}({{object.num}})
-                      <div v-for="(obj,index) in object.child" :style="{marginLeft:'10px'}" slot="content">
+                      <div v-for="(obj,index) in object.children" :style="{marginLeft:'10px'}" slot="content">
                       <Collapse simple>
                         <Panel :name="index">
                           {{obj.name}}({{obj.count}})
@@ -212,7 +212,7 @@
                     <span class="content_header">??</span>
                     </Col>
                     <Col span="16">
-                    <span class="content_value">{{evetdata.child}}</span>
+                    <span class="content_value">{{evetdata.children}}</span>
                     </Col>
                     <Col span="8">
                     <span class="content_header">兄弟姐妹</span>

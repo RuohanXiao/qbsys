@@ -107,7 +107,7 @@
 <script>
   import axios from 'axios'
   import mock from '../../mock/index.js'
-  import modalChart from './custom_modal.vue'
+  import modalChart from './custom_modal_add.vue'
   // import modalChart from './custom_modal_vue.vue'
   import {
     mapState,
@@ -997,6 +997,7 @@
                 } else {
                   mthis.selectionId = [];
                   mthis.selectItem = null;
+                  mthis.$store.commit('setTabSelect','数据透视')
                 }
               }, 500);
             }

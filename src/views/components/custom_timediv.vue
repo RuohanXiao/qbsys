@@ -4,8 +4,9 @@
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
-        <Col span="1" class="bottom" offset="21">
-        <!-- <Col span="1"  class="bottom"> -->
+        <Col span="3"/>
+        <Col span="18"  class="bottom"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">XXXXXXXXXX</span></Col>
+        <Col span="1"  class="bottom">
         <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip>
