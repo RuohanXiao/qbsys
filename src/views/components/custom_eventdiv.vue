@@ -5,19 +5,22 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
           <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
-              <Collapse simple class="toushiItems" accordion>
+            <c-tree :Statisticsdata='dataStatistics' v-if='dataStatistics.length > 0'></c-tree>
+              <!-- <Collapse simple class="toushiItems">
                 <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
                   <div slot="content">
-                  <collapse accordion simple>
-                    <panel v-for="StatisticsItem in StatisticsType.child" :hide-arrow="(StatisticsItem.child === undefined)">
+                  <collapse simple>
+                    <panel v-for="StatisticsItem in StatisticsType.children" :hide-arrow="(StatisticsItem.children == undefined)">
                       <span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
                       <percentBar :num="StatisticsItem.per" :count="StatisticsItem.count" :index='index'></percentBar>
                       <div slot="content">
-                        <collapse accordion simple>
-                          <panel v-for="lastStatisticsItem in StatisticsItem.child" :hide-arrow='true'>
+                        <collapse  simple>
+                          <panel v-for="lastStatisticsItem in StatisticsItem.children" :hide-arrow='true' :id="lastStatisticsItem.name">
+                            <div onClick="a">
                             <span style="width:2em" />
                             <span style="font-size: 10px;padding-left:30px">{{statisticsNameList[lastStatisticsItem.name]}}</span>
                             <percentBar :num="lastStatisticsItem.per" :count="lastStatisticsItem.count" :index='index'></percentBar>
+                            </div>
                           </panel>
                         </collapse>
                       </div>
@@ -25,7 +28,7 @@
                   </collapse>
                   </div>
                 </panel>
-              </Collapse>
+              </Collapse> -->
             <!-- <div v-for="object in dataStatisticsEvent">
               <Collapse simple class="toushiItems" accordion >
                 <Panel name="1" :style='{borderBottom:"1px solid rgba(51,255,255,.5)"}'>
@@ -86,7 +89,7 @@
                     <span class="content_value">{{evetdata.birth_name}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">外?名</span>
+                    <span class="content_header">外文名</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.name_in_native_language}}</span>
@@ -98,7 +101,7 @@
                     <span class="content_value">{{evetdata.nickname}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">出?</span>
+                    <span class="content_header">出生</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.date_of_birth}} - {{evetdata.date_of_death}}</span>
@@ -110,7 +113,7 @@
                     <span class="content_value">{{evetdata.date_of_disappearance}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">出?地</span>
+                    <span class="content_header">出生地</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.place_of_birth}}</span>
@@ -122,7 +125,7 @@
                     <span class="content_value">{{evetdata.country_of_citizenship}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">?族</span>
+                    <span class="content_header">民族</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.ethic_group}}</span>
@@ -185,19 +188,19 @@
                     <span class="content_value">{{evetdata.academic_degree}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">?作经历</span>
+                    <span class="content_header">工作经历</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.position_held}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">?亲</span>
+                    <span class="content_header">父亲</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.father}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">?亲</span>
+                    <span class="content_header">母亲</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.mother}}</span>
@@ -209,7 +212,7 @@
                     <span class="content_value">{{evetdata.spouse}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">??</span>
+                    <span class="content_header">子女</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.child}}</span>
@@ -237,7 +240,7 @@
                                   </span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">官?</span>
+                    <span class="content_header">官网</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">
@@ -260,7 +263,7 @@
                     <span class="content_value">{{evetdata.description}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">外?名</span>
+                    <span class="content_header">外文名</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.native_label}}</span>
@@ -278,7 +281,7 @@
                     <span class="content_value">{{evetdata.headquarters_location}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">成?</span>
+                    <span class="content_header">成员</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.inception}}</span>
@@ -296,7 +299,7 @@
                     <span class="content_value">{{evetdata.chairperson}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">?席执?官</span>
+                    <span class="content_header">首席执行官</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.chief_executive_officer}}</span>
@@ -308,7 +311,7 @@
                     <span class="content_value">{{evetdata.member_count}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">员?数</span>
+                    <span class="content_header">员工数</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.employees}}</span>
@@ -320,25 +323,25 @@
                     <span class="content_value">{{evetdata.political_ideology}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">业务部?</span>
+                    <span class="content_header">业务部门</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.business_division}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">上级部?</span>
+                    <span class="content_header">上级部门</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.parent_organization}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">下级部?</span>
+                    <span class="content_header">下级部门</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.subsidiary}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">官?</span>
+                    <span class="content_header">官网</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value"><a :href="evetdata.official_website" slot="extra">{{evetdata.official_website}}</a></span>
@@ -359,7 +362,7 @@
                     <span class="content_value">{{evetdata.official_name}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">外?名</span>
+                    <span class="content_header">外文名</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.name_in_native_language}}</span>
@@ -371,13 +374,13 @@
                     <span class="content_value">{{evetdata.short_name}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">国家元?</span>
+                    <span class="content_header">国家元首</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.head_of_state}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">政府?脑</span>
+                    <span class="content_header">政府首脑</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.head_of_government}}</span>
@@ -389,13 +392,13 @@
                     <span class="content_value">{{evetdata.continent}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">?积</span>
+                    <span class="content_header">面积</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.area}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">??</span>
+                    <span class="content_header">人口</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.population}}</span>
@@ -413,7 +416,7 @@
                     <span class="content_value">{{evetdata.gini_coefficient}}</span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">?类发展指数</span>
+                    <span class="content_header">人类发展指数</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">{{evetdata.Human_Development_Index}}</span>
@@ -431,7 +434,7 @@
                     <span class="content_value"><a :href="evetdata.top_level_Internet_domain" slot="extra">{{evetdata.top_level_Internet_domain}}</a></span>
                     </Col>
                     <Col span="8">
-                    <span class="content_header">官?</span>
+                    <span class="content_header">官网</span>
                     </Col>
                     <Col span="16">
                     <span class="content_value">
@@ -454,6 +457,7 @@
   import modalChartDetail from './custom_modal_detail'
   import percentBar from './custom_percentBar'
   import { mapState,mapMutations } from 'vuex'
+  import cTree from './custom_tree'
   /* eslint-disable */
   export default {
     data() {
@@ -520,7 +524,8 @@
     },
     components: {
       modalChartDetail,
-      percentBar
+      percentBar,
+      cTree
     },
     // computed: {
       //   menuitemClasses: function() {
@@ -558,6 +563,9 @@
       }
     },
     methods: {
+      a(){
+        alert(55);
+      },
       setFlagToFalse(detailModalFlag){
         var mthis = this;
         mthis.detailModalFlag = detailModalFlag;

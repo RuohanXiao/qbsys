@@ -216,7 +216,8 @@ var store = new Vuex.Store({
     netHeight: 0,
     netDivHeight: 0,
     netData: null,
-    selectNetNodes:[],
+    returnStatisticsId:[],  //目标详情点击统计量返回的节点id
+    selectNetNodes:[],   //点击net节点，将节点id返回到event
     selectGeoNodes:[],
     selectContentNodes:[],
     netModalDetailData: {},
@@ -245,6 +246,9 @@ var store = new Vuex.Store({
       // 组件想调用方法，可以使用   this.$store.commit('XXX')
       // 第一个参数始终为state,第二个可以传参（只能支持一个参数，可以通过对象或者数组传多值）
       state.tmss = newStatus
+    },
+    setReturnStatisticsId(state,val){
+      state.returnStatisticsId = val
     },
     setNetModalDetailData(state,val){
       state.netModalDetailData = val
