@@ -69,7 +69,6 @@ color: #ccffff !important;
 </template>
 
 <script>
-import treeTable from '../../dist/assets/js/geo/treetable.js'
 import percentBar from './custom_percentBar'
 import { mapState,mapMutations } from 'vuex'
 import 'element-ui/lib/theme-chalk/tree.css'
