@@ -47,7 +47,6 @@
           }, {
             "emulateJSON": true
           }).then(response => {
-            debugger
             mthis.$store.commit('setSearchModalResult', {
               node: response.body.data[0],
               id: response.body.data[0].nodes[0].id,
