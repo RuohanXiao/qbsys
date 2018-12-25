@@ -6,7 +6,7 @@
         <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
           v-show="type==='net'" remote placeholder='' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @on-change="v=>{setOption(v)}">
                 <OptionGroup :label="opt.title" v-for="(opt,ind) in options1">
-                  <Option v-for="(option, index) in opt.data" :value="option.value" :key="index">
+                  <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'17px'}">
                     <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
                     <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
                     <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.label}}</Option>

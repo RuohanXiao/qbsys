@@ -60,7 +60,7 @@
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="remove">
             <Icon class="icon iconfont icon-delete-point  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">删除节点</p>
+            <p class="img-content">删除</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -107,7 +107,7 @@
 <script>
   import axios from 'axios'
   import mock from '../../mock/index.js'
-  import modalChart from './custom_modal.vue'
+  import modalChart from './custom_modal_add.vue'
   // import modalChart from './custom_modal_vue.vue'
   import {
     mapState,
@@ -277,7 +277,7 @@
               }
               mthis.netchart.selection(idArr)
             } else {
-              mthis.$Message.error('未找到此两点的知识路径')
+              mthis.$Message.error('未找到知识路径')
             }
           })
         }
@@ -718,7 +718,7 @@
           mthis.getStatistics()
           // 反选结果
         } else {
-          this.$Message.error('您并未选中任何节点！')
+          this.$Message.error('请选中节点！')
         }
       },
       reloadNetData(data) {
@@ -764,7 +764,7 @@
             data: netChartLogJson
           }));
         } else {
-          this.$Message.error('无法后退，已经是第一步了！')
+          this.$Message.error('无法后退')
         }
         // this.netchart.back();
       },
@@ -997,6 +997,7 @@
                 } else {
                   mthis.selectionId = [];
                   mthis.selectItem = null;
+                  mthis.$store.commit('setTabSelect','数据透视')
                 }
               }, 500);
             }
@@ -1034,6 +1035,7 @@
       netHeight: function(va) {
         var mthis = this;
         mthis.NetHeight = mthis.$store.getters.getNetHeight;
+        console.log('NetHeight2222'+mthis.NetHeight)
       }
       //   searchResultWatcher:function(old){
       //     // this.temp = old
@@ -1048,6 +1050,7 @@
       mthis.initCharts();
       mthis.netData = mthis.$store.getters.netData
       mthis.NetHeight = mthis.$store.getters.getNetHeight
+      console.log('NetHeight11'+mthis.NetHeight)
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();
       //   mthis.netchart.addData(res.data.data[0]);
