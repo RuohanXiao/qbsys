@@ -118,12 +118,7 @@
 .el-tabs--card > .el-tabs__header .el-tabs__nav{
   border: none !important;
 }
-.entity_detail
-{
--moz-column-count:3; /* Firefox */
--webkit-column-count:3; /* Safari and Chrome */
-column-count:3;
-}
+
   .ivu-collapse {
     border-radius: 0 !important;
     border: none !important;
@@ -191,60 +186,7 @@ column-count:3;
     letter-spacing: 0px;
     color: #ccffff;
   }
-  .modalTitle {
-    font-family: MicrosoftYaHei;
-    font-size: 20px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 80px;
-    letter-spacing: 0px;
-    color: #ccffff;
-    width:100px;
-  }
-  .modalContentLabel {
-    font-family: MicrosoftYaHei;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 30px;
-    letter-spacing: 0px;
-    color: #ccffff;
-    opacity: 0.5;
-  }
-  .modalContent {
-    margin-left: 20px;
-    font-family: MicrosoftYaHei;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
-    color: #ccffff;
-    text-align: left;
-  }
-  .modalContent1 {
-    font-family: MicrosoftYaHei;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 25px;
-    letter-spacing: 0px;
-    color: #ccffff;
-    text-align: left;
-  }
-  .modalContent2 {
-    font-family: MicrosoftYaHei;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 25px;
-    letter-spacing: 0px;
-    color: #ccffff;
-    text-align: left;
-  }
-  td {
-    min-width: 40px;
-  }
+  
   .authName {
     height: 8vh;
   }
