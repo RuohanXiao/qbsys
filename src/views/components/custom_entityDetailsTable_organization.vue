@@ -100,7 +100,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .organization_detailTable tr{
   border-bottom: 1px solid;
 }

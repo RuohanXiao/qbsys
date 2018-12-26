@@ -140,7 +140,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .human_detailTable tr{
   border-bottom: 1px solid;
 }
