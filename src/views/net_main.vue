@@ -609,7 +609,10 @@
     background: rgba(51, 255, 255, 0.2);
     margin: 10px 5px 10px 5px;
   }
-  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab{
+ 
+</style>
+<style scoped>
+ .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab{
     margin-bottom: 5px !important;
     background-color:rgba(51,255,255,0.2) !important;
     border: 1px solid rgba(51,255,255,1) !important;
@@ -617,7 +620,4 @@
   .ivu-tabs-tab-active{
     background-color:rgba(51,255,255,0.2) !important;
   }
-</style>
-<style scoped>
-
 </style>

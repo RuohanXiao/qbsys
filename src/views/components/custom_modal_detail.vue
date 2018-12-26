@@ -1,31 +1,17 @@
 <template>
     <Modal v-model="flag" width='80' @on-cancel="cancel" footer-hide>
-      <el-tabs  v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
-        <el-tab-pane v-for="(Entitydetail, index) in editableTabs" :key="index+1" :label="Entitydetail.name" :name="index+1">
-          <entityDetailTable :Entitydetail="Entitydetail"></entityDetailTable>
+      <el-tabs  v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit" :style="{paddingBottom:'20px'}">
+        <el-tab-pane v-for="(Targetdetail, index) in editableTabs" :key="index+1" :label="Targetdetail.name" :name="index+1">
+          <entitydetailsintegration :Entitydetail="Targetdetail" ></entitydetailsintegration>
         </el-tab-pane>
       </el-tabs>
-      <div :style="{margin:'20px 0px',maxHeight:buttonDivHeight}">
-        <Row type="flex" justify="start" class="code-row-bg" align="middle">
-          <Col span="4" offset="16">
-          <div class='buttonModal' @click="showNodeInNet">
-            <p class="buttonModalText">追加网络分析</p>
-          </div>
-          </Col>
-          <Col span="4">
-          <div class='buttonModal' @click="showNodeInNewNet">
-            <p class="buttonModalText">新建网络分析</p>
-          </div>
-          </Col>
-        </Row>
-      </div>
     </Modal>
 </template>
 <script>
   import mock from "../../mock/index.js";
   import util_tools from "../../util/tools.js";
   import 'element-ui/lib/theme-chalk/tabs.css'
-  import entityDetailTable from './custom_entitydetailTable'
+  import entitydetailsintegration from './custom_entityDetailsIntegration'
   const axios = require('axios')
   const MockAdapter = require('axios-mock-adapter')
   mock.test = 1;
@@ -36,11 +22,8 @@
         buttonDivHeight: 0, 
         listHeight: 0,
         InfoHeight: 0,
-        /* Entitydetail:{
-          name:''
-        }, */
         editableTabs:[],
-        editableTabsValue:1
+        editableTabsValue:0
       }
     },
     props: ['nodeId','flag'],
@@ -55,34 +38,70 @@
       this.$http.post('http://10.60.1.140:5001/node-datas/', {
           'nodeIds': nodeIds
         }).then(response => {
-           //this.Entitydetail = response.body.data[0].nodes[0]
-           this.editableTabs.push(response.body.data[0].nodes[0]);
+           if(this.editableTabs.length == 0 || this.getIndexFromArrById(response.body.data[0].nodes[0], this.editableTabs) == -1){
+              this.editableTabs.push(response.body.data[0].nodes[0]);
+              this.editableTabsValue = this.editableTabs.length;
+           }
         })
       } 
     },
     created(){
       
     },
-    components: {entityDetailTable},
+    components: {entitydetailsintegration},
     methods: {
-      removeTab(targetName) {
-       /*  let tabs = this.editableTabs;
-        let activeName = this.editableTabsValue;
-        if (activeName === targetName) {
-          tabs.forEach((tab, index) => {
-            if (tab.name === targetName) {
-              let nextTab = tabs[index + 1] || tabs[index - 1];
-              if (nextTab) {
-                activeName = nextTab.name;
-              }
-            }
+      handleTabsEdit(targetName, action) {
+        /* if (action === 'add') {
+          let newTabName = ++this.tabIndex + '';
+          this.editableTabs.push({
+            title: 'New Tab',
+            name: newTabName,
+            content: 'New Tab content'
           });
+          this.editableTabsValue = newTabName;
+        } */
+        if (action === 'remove') {
+          let tabs = this.editableTabs;
+          let activeName = this.editableTabsValue;
+          if (activeName == targetName) {
+            tabs.forEach((tab, index) => {
+              if (index == targetName - 1) {
+                let nextTab = tabs[index + 1] || tabs[index - 1];
+                if (nextTab) {
+                  activeName = this.getIndexFromArr(nextTab,tabs) + 1;
+                }
+              }
+            });
+          }
+          
+          if(this.editableTabs.length < 2){
+            this.cancel();
+          }
+          this.editableTabsValue = activeName;
+          this.editableTabs = tabs.filter(function(item,index){
+            return index+1 != targetName;
+          });
+          
         }
-        
-        this.editableTabsValue = activeName;
-        this.editableTabs = tabs.filter(tab => tab.name !== targetName); */
-        alert(123);
       },
+      getIndexFromArr(item,arr){
+        for(let i = 0; i < arr.length; i++){
+          if(arr[i] == item){
+            return i;
+          }
+        }
+      },
+      getIndexFromArrById(item,arr){
+        for(let i = 0; i < arr.length; i++){
+          if(arr[i].id == item.id){
+            return i;
+          }
+          if(i == arr.length -1){
+            return -1;
+          }
+        }
+      },
+     
       cancel(){
         var mthis = this;
         mthis.$emit('detailModalFlag', false)
@@ -94,19 +113,43 @@
           return true;
         }
       },
-       showNodeInNet() {
+       /* showNodeInNet() {
         alert('追加网络分析')
         
       },
       showNodeInNewNet() {
         alert('新建网络分析')
-      }
+      } */
     } 
   }
 </script>
 
+<style scoped>
+
+</style>
+
+
 <style>
-.el-tabs--card>.el-tabs__header .el-tabs__item.is-active{
+.ivu-tabs-bar{
+  border-bottom:none!important;
+}
+#detailTabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active{
+  border: none !important;
+  background-color: rgba(0,0,0,0) !important;
+  color:rgba(24,255,255,1) !important;
+}
+#detailTabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab{
+  border: none !important;
+  background-color: rgba(0,0,0,0) !important;
+  /* color:rgba(24,255,255,0.2) !important; */
+}
+.ivu-tabs-nav .ivu-tabs-tab:hover {
+
+    color: rgba(24,255,255,0.5) !important;
+
+}
+
+ .el-tabs--card>.el-tabs__header .el-tabs__item.is-active{
   border-bottom: none !important;
 }
 .el-tabs__item{
@@ -117,8 +160,7 @@
 }
 .el-tabs--card > .el-tabs__header .el-tabs__nav{
   border: none !important;
-}
-
+} 
   .ivu-collapse {
     border-radius: 0 !important;
     border: none !important;

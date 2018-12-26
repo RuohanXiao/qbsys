@@ -1,12 +1,5 @@
 <template>
-    <div style="margin: 0px 20px;">
-            <div>
-              <span class="modalTitle" v-if="ishasValue(Entitydetail.name)">{{Entitydetail.name}}</span>
-              <img :src="Entitydetail.image" v-if="ishasValue(Entitydetail.image)">
-              <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px',left:'80%'}" v-else/>
-            </div>
-            <div class='entity_detail'>
-            <table id='entity_detailTable'>
+    <table class='human_detailTable'>
               <tr v-if=" ishasValue(Entitydetail.name_in_native_language)">
                 <td class="modalContentLabel">外文名</td>
                 <td class="modalContent" v-html="getAllValue(Entitydetail.name_in_native_language)"><!-- {{getAllValue(Entitydetail.name_in_native_language)}} --></td>
@@ -108,15 +101,14 @@
                 <td class="modalContent" v-html="getAllValue(Entitydetail.summary)"><!-- {{getAllValue(Entitydetail.summary)}} --></td>
               </tr>
             </table>
-            </div>
-          </div>
 </template>
 
 <script>
 export default {
-    name:'entityDetailTable',
+    name:'entityDetailsTableHuman',
     data(){
         return{
+            
         }
     },
     props:['Entitydetail'],
@@ -148,14 +140,8 @@ export default {
 }
 </script>
 
-<style scoped>
-.entity_detail
-{
--moz-column-count:3; /* Firefox */
--webkit-column-count:3; /* Safari and Chrome */
-column-count:3;
-}
-#entity_detailTable tr{
+<style>
+.human_detailTable tr{
   border-bottom: 1px solid;
 }
 
@@ -174,7 +160,7 @@ column-count:3;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 30px;
+    /* line-height: 30px; */
     letter-spacing: 0px;
     color: #ccffff;
     opacity: 0.5;
@@ -185,7 +171,7 @@ column-count:3;
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 20px;
+    /* line-height: 20px; */
     letter-spacing: 0px;
     color: #ccffff;
     text-align: left;
@@ -210,10 +196,10 @@ column-count:3;
     color: #ccffff;
     text-align: left;
   }
-  td {
+  .human_detailTable>tr>td {
     min-width: 80px;
     max-width:200px;
+    line-height: 40px;
   }
-
 </style>
 
