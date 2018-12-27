@@ -96,6 +96,7 @@
   export default {
     data() {
       return {
+        timer:null,
         tabSelect:'数据透视',
         modalNodeId: '',
         statisticsNameList:{
@@ -180,13 +181,13 @@
       },
       selectNetNodes: function(va) {
         var mthis = this;
-        if (mthis.timer) {
-          clearTimeout(mthis.timer)
-        }
-        mthis.timer = setTimeout(function() {
           let nodeIdsArry = va[0].ids.map(item => {
             return item.id;
           });
+          if (this.timer) {
+            clearTimeout(this.timer)
+          }
+          this.timer = setTimeout(function() {
           // 新增防抖功能
           mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
             'nodeIds': nodeIdsArry
@@ -194,7 +195,7 @@
             mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
             // mthis.evetdata = response.data.data[0].nodes
           })
-        }, 100);
+          }, 100);
         // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
         // mthis.evetdata = 
       }

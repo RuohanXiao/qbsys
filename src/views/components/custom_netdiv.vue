@@ -116,11 +116,12 @@
   import util from '../../util/tools.js'
   mock.test = 1
   /* eslint-disable */
+  var timer = null;
   export default {
     name: "App",
     data() {
       return {
-        timer: null,
+        // timer: null,
         basicY: 0,
         basicX: 0,
         // dataurl: '../../dist/data/netData.json',
@@ -975,10 +976,10 @@
               // infoElement.style.display = infoElementVisible ? "block" : "none";
             },
             onSelectionChange(event) {
-              if (this.timer) {
-                clearTimeout(this.timer)
+              if (timer) {
+                clearTimeout(timer)
               }
-              this.timer = setTimeout(function() {
+              timer = setTimeout(function() {
                 if (event.selection.length > 0) {
                   mthis.selectItem = event;
                   // 有选中节点或者link

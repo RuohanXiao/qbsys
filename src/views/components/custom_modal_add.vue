@@ -7,7 +7,7 @@
           <Col span="20">
           <div style="width:100%;height:40px">
             <!-- <modal-search-div /> -->
-            <Input v-model="addTargetValue" prefix="ios-search" placeholder="Enter name" style="width: 90%" @on-enter="setOption"/>
+            <Input v-model="addTarget.addTargetValue" id="addTargetInput" prefix="ios-search" placeholder="Enter name" style="width: 90%" @on-enter="setOption"/>
           </div>
           </Col>
         </Row>
@@ -67,7 +67,9 @@
         buttonDivHeight: 0,
         listHeight: 0,
         InfoHeight: 0,
-        addTargetValue:"",
+        addTarget:{
+          'addTargetValue':'',
+        },
         recommendSearchItems:[],
         targetData:{},
       }
@@ -83,6 +85,11 @@
       entityDetailsTableHuman,
       entityDetailsTableAdministrative,
       entityDetailsTableOrganization
+    },
+    watch:{
+      addTargetValue:function(){
+
+      }
     },
     methods: {
       cancel(){
@@ -101,7 +108,7 @@
         var ar = name.split('_');
         var name = ar[0];
         var id = ar[1];
-        mthis.addTargetValue = name;
+        mthis.addTarget.addTargetValue = name;
         mthis.recommendSearchItems = [];
         mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
             'nodeIds': [id]
@@ -111,7 +118,7 @@
       },
       setOption () {
         var mthis = this;
-        let a = mthis.addTargetValue;
+        let a = mthis.addTarget.addTargetValue;
         if(a !== undefined && a!== null && a!==''){
           let response = mthis.$http.get("http://10.60.1.140:5001/fuzzy-matchs/?pattern=" + a, {
               emulateJSON: true
@@ -189,6 +196,18 @@ column-count:2;
 
 
 <style>
+.ivu-card:hover{
+  box-shadow: none !important;
+}
+#addTargetInput>.ivu-input{
+  border-radius: 20px;
+  background-color: rgba(51, 255, 255, 0.2);
+  border: 1px solid rgba(51, 255, 255, 0.4) !important;
+  color: #ccffff !important
+}
+#addTargetInput>.ivu-input:hover{
+  border: 1px solid rgba(51, 255, 255, 0.4) !important;
+}
 
 #addTargetOptionCard>.ivu-card-body>.ivu-cell-group>.ivu-cell>.ivu-cell-link>.ivu-cell-item>.ivu-cell-main{
   float: left !important;
