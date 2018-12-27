@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="flag" width="80%" footer-hide :closable="false">
+    <Modal v-model="flag" width="80%" footer-hide @on-cancel="cancel">
       <Row type="flex" justify="space-between" class="code-row-bg" align="middle" :style="{margin:'0'}">
         <Col span="7" class="leftModal" type="flex" justify="space-between" align="middle" :style="{height:'80vh'}">
         <Row type="flex" justify="center" class="code-row-bg" align="middle" :style="{marginTop:'20px'}">
@@ -85,6 +85,10 @@
       entityDetailsTableOrganization
     },
     methods: {
+      cancel(){
+        var mthis = this;
+        mthis.$emit('detailModalFlag', false)
+      },
       ishasValue(pro){
             if(pro == '' || pro == undefined){
             return false;
@@ -119,7 +123,7 @@
       },
       showPersonInfo(id) {},
       showNodeInNet() {
-       this.flag = false
+       this.cancel();
         this.$store.commit('setAddNetNodes', {
                   node: {
                     nodes: [{
@@ -136,7 +140,7 @@
                 })
       },
       showNodeInNewNet() {
-        this.flag = false
+        this.cancel();
         this.$store.commit('setSearchNetResult', {
                   node: {
                     nodes: [{

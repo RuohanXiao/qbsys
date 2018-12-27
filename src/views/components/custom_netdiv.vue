@@ -101,7 +101,7 @@
     </div>
     </Col>
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
-    <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
+    <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag='setFlagToFalse'></modal-chart>
   </div>
 </template>
 <script>
@@ -142,6 +142,10 @@
       modalChart
     },
     methods: {
+      setFlagToFalse(detailModalFlag){
+        var mthis = this;
+        mthis.modal01 = detailModalFlag;
+      },
       objOfValueToArr(object) {
         var arr = [];
         var i = 0;
