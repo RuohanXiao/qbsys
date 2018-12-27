@@ -2,13 +2,13 @@
   <div>
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" id="net">
       <div class='divStyle'>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="back">
             <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">撤销操作</p>
           </div>
         </Tooltip>
-        <div class="divSplitLine"></div>
+        <div class="divSplitLine"></div> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="square">
             <Icon class="icon iconfont icon-grid  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -64,6 +64,12 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="newCanvans">
+            <Icon class="icon iconfont icon-delete-point  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">清空画布</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="removeOther">
             <Icon class="icon iconfont icon-fanxuan  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">反选节点</p>
@@ -115,13 +121,17 @@
   } from 'vuex'
   import util from '../../util/tools.js'
   mock.test = 1
+  var timer1 = null;
   /* eslint-disable */
   var timer = null;
   export default {
     name: "App",
     data() {
       return {
+<<<<<<< HEAD
         // timer: null,
+=======
+>>>>>>> 60d96d760bf5617c162785ac135c1f1526b1d970
         basicY: 0,
         basicX: 0,
         // dataurl: '../../dist/data/netData.json',
@@ -218,6 +228,15 @@
           mthis.$Message.error('请至少选择一个节点进行拓展操作！')
         }
       },
+      newCanvans(){
+        this.netchart.replaceData({
+          "nodes": [],
+          "links": []
+        })
+        this.$store.commit('setSearchNetResult','')
+        this.selectionId = []
+        this.getStatistics()
+      },
       // 事件拓展
       expandNodeEvent() {
         var mthis = this;
@@ -268,7 +287,7 @@
         if(mthis.selectionId.length !== 2) {
           mthis.$Message.error('现阶段只支持两点路径！')
         } else {
-          mthis.$http.get('http://10.60.1.140:5001/all-path-data/?start='+mthis.selectionId[0].id+'&end='+mthis.selectionId[1].id+'&step=3').then(response => {
+          mthis.$http.get('http://10.60.1.140:5001/all-path-data/?start='+mthis.selectionId[0].id+'&end='+mthis.selectionId[1].id+'&step=5').then(response => {
             if(response.body.data[0].nodes.length + response.body.data[0].links.length > 0) {
               mthis.netchart.addData(response.body.data[0])
               let idArr = []
@@ -984,18 +1003,20 @@
                   mthis.selectItem = event;
                   // 有选中节点或者link
                   mthis.selectionId = [];
+                  let tem = [];
                   for (
                     let selectNum = 0; selectNum < event.selection.length; selectNum++
                   ) {
                     // mthis.selectionId.push({"selectionId":event.selection[selectNum].id,"selectionType":(event.selection[selectNum].isNode) ? 'node' : 'link'})
-                    mthis.selectionId.push(event.selection[selectNum]);
+                    tem.push(event.selection[selectNum]);
                   }
+                  mthis.selectionId = tem
                   // 触发右侧eventdiv改变
                   // mthis.$emit('selectNodes1', [{
                   //   ids: mthis.selectionId
                   // }, mthis.selectionId.length]);
-                    mthis.$store.commit('setSelectNetNodes', [{
-                      ids: mthis.selectionId
+                  mthis.$store.commit('setSelectNetNodes', [{
+                    ids: mthis.selectionId
                   }])
                   mthis.$store.commit('setSinglePerson', !(mthis.selectionId.length > 1))
                   mthis.$store.commit('setTabSelect','目标详情')
@@ -1004,7 +1025,8 @@
                   mthis.selectItem = null;
                   mthis.$store.commit('setTabSelect','数据透视')
                 }
-              }, 500);
+                
+              }, 200);
             }
           },
           toolbar: {

@@ -52,9 +52,11 @@
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
+                <!-- <div :style="{overflowY:'scroll'}"> -->
                 <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(data.id)">{{data.name}}
                   <p class="p-collapse-modal-small">{{data.type}}</p>
                 </div>
+                <!-- </div> -->
               </Row>
               <Card dis-hover style="width:100%,background-color:rgba(0,0,0,0);" :style="{overflowY:'scroll',height:eventheight}" v-show="singlePerson" v-if="evetdata!== undefined && evetdata!==null">
                 <Row type="flex" justify="end">
@@ -93,6 +95,7 @@
   import entityDetailsTableAdministrative from './custom_entityDetailsTable_administrative'
   import entityDetailsTableOrganization from './custom_entityDetailsTable_organization'
   /* eslint-disable */
+  var timer = null;
   export default {
     data() {
       return {
@@ -193,7 +196,6 @@
             'nodeIds': nodeIdsArry
           }).then(response => {
             mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
-            // mthis.evetdata = response.data.data[0].nodes
           })
           }, 100);
         // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
@@ -234,6 +236,7 @@
         // mthis.singlePerson = false
       },
       detail(id) {
+        console.log('detail')
         var mthis = this
         mthis.modalNodeId = id
         let nodeIdsArry = []

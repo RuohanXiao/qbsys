@@ -35,7 +35,7 @@
         loading1: false,
         inputInfo: "",
         options1: [],
-        addTargetValue:'',
+        value11: ''
       }
     },
     methods: {
