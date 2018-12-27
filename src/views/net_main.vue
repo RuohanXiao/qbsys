@@ -39,25 +39,25 @@
       eventChartDiv
     },
     methods: {
-      selectNodes(opt) {
-        let mthis = this
-        if (mthis.timer) {
-          clearTimeout(mthis.timer)
-        }
-        mthis.timer = setTimeout(function() {
-          mthis.singlePerson = (opt[1]>1)?false:true
-          let nodeIdsArry = opt[0].ids.map(item => {
-            return item.id;
-          });
-          // 新增防抖功能
-          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
-            'nodeIds': nodeIdsArry
-          }).then(response => {
-            mthis.$store.commit('setNetSelectNetNodes',response.data.data[0].nodes)
-            // mthis.dataexpand = response.data.data[0].nodes
-          })
-        }, 100);
-      }
+      // selectNodes(opt) {
+      //   let mthis = this
+      //   if (mthis.timer) {
+      //     clearTimeout(mthis.timer)
+      //   }
+      //   mthis.timer = setTimeout(function() {
+      //     mthis.singlePerson = (opt[1]>1)?false:true
+      //     let nodeIdsArry = opt[0].ids.map(item => {
+      //       return item.id;
+      //     });
+      //     // 新增防抖功能
+      //     mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+      //       'nodeIds': nodeIdsArry
+      //     }).then(response => {
+      //       mthis.$store.commit('setNetSelectNetNodes',response.data.data[0].nodes)
+      //       // mthis.dataexpand = response.data.data[0].nodes
+      //     })
+      //   }, 100);
+      // }
     },
     computed:mapState ([
       'changenetpx','netDivHeight','netHeight'

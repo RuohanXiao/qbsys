@@ -33,7 +33,8 @@
       return {
         loading1: false,
         inputInfo: "",
-        options1: []
+        options1: [],
+        value11: ''
       }
     },
     methods: {
