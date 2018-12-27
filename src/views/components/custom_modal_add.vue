@@ -7,15 +7,24 @@
           <Col span="20">
           <div style="width:100%;height:40px">
             <!-- <modal-search-div /> -->
-            <Input v-model="addTarget.addTargetValue" id="addTargetInput" prefix="ios-search" placeholder="Enter name" style="width: 90%" @on-enter="setOption"/>
+            <Input v-model="addTargetValue" id="addTargetInput" prefix="ios-search" placeholder="Enter name" style="width: 90%" @on-enter="setOption"/>
           </div>
           </Col>
         </Row>
-        <Card :bordered="false" id ="addTargetOptionCard" v-if="recommendSearchItems.length > 0">
+        <Card :bordered="false" id ="addTargetOptionCard" v-if="isconp && recommendSearchItems.length > 0">
           <CellGroup @on-click="getElectedEntity">
                 <Cell :title="cellOption.name" v-for="(cellOption , index) in recommendSearchItems" :name="cellOption.name + '_' + cellOption.id"  />
             </CellGroup>
         </Card>
+        <div  v-if="gwTargetData.id !== undefined" style="text-align: left;">
+          <Collapse v-model="vColl" id="vColl">
+            <Panel name="1">实体
+                <CellGroup slot="content" @on-click="setTargetData">
+                  <Cell :title="gwTargetData.name" :label="'描述：' + gwTargetData.type" />
+                </CellGroup>
+            </Panel>
+          </Collapse>
+        </div>
         </Col>
         <Col span="17" align="middle" class="rightModal" :style="{height:'80vh'}">
         <div style="margin:20px;" v-if="targetData.id !== undefined">
@@ -62,16 +71,17 @@
   export default {
     data() {
       return {
+        vColl:1,
         loading1: false,
         options1: [],
         buttonDivHeight: 0,
         listHeight: 0,
         InfoHeight: 0,
-        addTarget:{
-          'addTargetValue':'',
-        },
+        addTargetValue:'',
+        isconp:true,
         recommendSearchItems:[],
         targetData:{},
+        gwTargetData:{},
       }
     },
     props: ['flag', 'edata'],
@@ -88,10 +98,17 @@
     },
     watch:{
       addTargetValue:function(){
-
+        if(this.isconp){
+          this.setOption();
+        }
+        
       }
     },
     methods: {
+      setTargetData(){
+        var mthis = this;
+        mthis.targetData = mthis.gwTargetData;
+      },
       cancel(){
         var mthis = this;
         mthis.$emit('detailModalFlag', false)
@@ -108,17 +125,27 @@
         var ar = name.split('_');
         var name = ar[0];
         var id = ar[1];
-        mthis.addTarget.addTargetValue = name;
+        mthis.addTargetValue = name;
+        mthis.isconp = false;
+        setTimeout(function(){
+          mthis.isconp = true;
+        },200);
         mthis.recommendSearchItems = [];
+        mthis.getPostById(id);
+        
+      },
+
+      getPostById(id){
+        var mthis = this;
         mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
             'nodeIds': [id]
           }).then(response => {
-            mthis.targetData = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes[0];
+            mthis.gwTargetData = response.body.data[0].nodes[0];
           })
       },
       setOption () {
         var mthis = this;
-        let a = mthis.addTarget.addTargetValue;
+        let a = mthis.addTargetValue;
         if(a !== undefined && a!== null && a!==''){
           let response = mthis.$http.get("http://10.60.1.140:5001/fuzzy-matchs/?pattern=" + a, {
               emulateJSON: true
@@ -196,6 +223,16 @@ column-count:2;
 
 
 <style>
+.ivu-cell-link{
+    color: #ccffff !important;
+}
+
+.ivu-cell-link:active, .ivu-cell-link:hover {
+    color: #ccffff !important;
+}
+#vColl>.ivu-collapse-item>.ivu-collapse-content>.ivu-collapse-content-box>.ivu-cell-group>.ivu-cell:hover{
+  background-color:rgba(204,255,255,0.2) !important;
+}
 .ivu-card:hover{
   box-shadow: none !important;
 }
