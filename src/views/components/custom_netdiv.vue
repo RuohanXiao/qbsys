@@ -128,10 +128,7 @@
     name: "App",
     data() {
       return {
-<<<<<<< HEAD
         // timer: null,
-=======
->>>>>>> 60d96d760bf5617c162785ac135c1f1526b1d970
         basicY: 0,
         basicX: 0,
         // dataurl: '../../dist/data/netData.json',
