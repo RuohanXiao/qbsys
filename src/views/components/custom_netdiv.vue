@@ -509,7 +509,7 @@
       },
       //添加节点
       add() {
-        this.eventData = [{
+        /* this.eventData = [{
             text: 'list1',
             chlidren: [{
                 text: 'list1-1',
@@ -621,7 +621,7 @@
               }
             ]
           }
-        ];
+        ]; */
         this.modal01 = true;
       },
       //删除选中节点

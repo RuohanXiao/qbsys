@@ -22,17 +22,7 @@
         </Collapse>
         </Col>
         <Col span="17" align="middle" class="rightModal" :style="{height:'80vh'}">
-        <!-- <div class="closeBackground">
-          <Icon type="ios-more" size='20' :style="{borderRadius:'50%'}" />
-        </div> -->
         <div class="modalHeader">
-          <!-- <div class="modalHeaderBread">
-            <Breadcrumb separator=">">
-              <BreadcrumbItem to="/">Home</BreadcrumbItem>
-              <BreadcrumbItem to="/components/breadcrumb">Components</BreadcrumbItem>
-              <BreadcrumbItem>Breadcrumb</BreadcrumbItem>
-            </Breadcrumb>
-          </div> -->
           <div class="modalHeaderClose">
             <Icon class="closeImg icon iconfont icon-quxiaocancel process-img DVSL-bar-btn DVSL-bar-btn-back" size="45"></Icon>
           </div>
@@ -416,11 +406,11 @@
   .ivu-card-body {
     padding: 3px !important;
   }
-  .buttonModal {
+  /* .buttonModal {
     background-color: rgba(51, 255, 255, 0.5);
     border-radius: 5px;
     height: 30px !important;
-    width: 80% !important;
+    width: 100% !important;
   }
   .buttonModal:hover {
     transition: All 0.4s ease-in-out;
@@ -430,7 +420,7 @@
     cursor: pointer;
     width: 80% !important;
     background-color: rgba(51, 255, 255, 0.8);
-  }
+  } */
   .buttonModalText {
     font-family: MicrosoftYaHei;
     font-size: 16px;
@@ -477,4 +467,3 @@
     color: #ccffff !important;
   }
 </style>
-
