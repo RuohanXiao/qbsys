@@ -122,7 +122,7 @@
              <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change='con'></InputNumber>
         </div>
         <div slot="footer">
-            <Button type="error" size="large" long  @click="cancel">Delete</Button>
+            <Button type="error" size="large" long  @click="pathKnowledge">Delete</Button>
         </div>
     </Modal>
   </div>
@@ -175,7 +175,7 @@
       showModalStep(){
         this.modalStep = true
       },
-      cancel(){
+      pathKnowledge(){
         this.modalStep = false
         this.showPathKnowledge()
       },
@@ -313,7 +313,7 @@
         if(mthis.selectionId.length !== 2) {
           mthis.$Message.error('现阶段只支持两点路径！')
         } else {
-          mthis.$http.get('http://10.60.1.140:5001/all-path-data/?start='+mthis.selectionId[0].id+'&end='+mthis.selectionId[1].id+'&step='+mthis.modalStep).then(response => {
+          mthis.$http.get('http://10.60.1.140:5001/all-path-data?start='+mthis.selectionId[0].id+'&end='+mthis.selectionId[1].id+'&step='+mthis.InputNumber).then(response => {
             if(response.body.data[0].nodes.length + response.body.data[0].links.length > 0) {
               mthis.netchart.addData(response.body.data[0])
               let idArr = []
