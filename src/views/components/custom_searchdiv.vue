@@ -81,7 +81,6 @@
                 label: a.value
               }])
             } else {
-              // alert('setoption')
               mthis.inputInfoContent = a.value
               mthis.$store.commit('setSearchContentResult', [{
                 node: {
@@ -108,7 +107,6 @@
               })
             }
             if (this.$store.state.tmss === 'content') {
-              // alert('setoption1')
               mthis.inputInfoContent = a.value
               mthis.$store.commit('setSearchContentResult', [{
                 node: {
@@ -206,7 +204,6 @@
         }
       },
       searchInfoContent(query) {
-        // alert('search')
         var mthis = this;
         if (query !== "") {
           this.loading3 = true;

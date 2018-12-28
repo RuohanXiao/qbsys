@@ -5,7 +5,7 @@
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <Col span="3"/>
-        <Col span="18"  class="bottom"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">XXXXXXXXXX</span></Col>
+        <Col span="18"  class="bottom"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
         <Col span="1"  class="bottom">
         <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
@@ -37,6 +37,7 @@
     name: "",
     data() {
       return {
+        timeTitle: '',
         timechartdivId:'timechartdiv_' + this.activeId,
         arrowDownId:'arrowDown_'+ this.activeId,
         timechartctrlId:'timechartctrl_'+ this.activeId,
@@ -87,6 +88,7 @@
         })
       },
       loadEcharts() {
+        var mthis = this
         this.option = null
         this.option = {
           tooltip: {
@@ -294,10 +296,50 @@
           width: document.documentElement.clientWidth * this.$store.state.split - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
-        
+        mthis.timeTitle = ''
         this.option.xAxis.data = this.dataBySeries.date;
         this.option.series[0].data = this.dataBySeries.num;
         this.charts.setOption(this.option)
+        this.charts.on('brushSelected', function (params) {
+          console.log(params)
+          mthis.timeTitle = ''
+          if(params.batch[0].areas.length  === 0) {
+            mthis.timeTitle = ''
+          } else{
+            mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex.length-1]
+          }
+        })
+        this.charts.on('click', function (params) {
+          mthis.timeTitle = params.name
+          // alert(0)
+          // console.log(params)
+          // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
+          //   alert(1)
+          //   alert(params.batch!==undefined &&params.batch[0].areas.length  === 0)
+          //   alert(params.batch[0].areas.length)
+          //   mthis.timeTitle = ''
+          // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {
+          //   alert(2)
+          //   alert(params.batch!==undefined &&params.batch[0].areas.length >  0)
+          //   alert(params.batch[0].areas.length)
+          //   mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex.length-1]
+          // } else {
+          //   alert(3)
+          //   mthis.timeTitle = params.name
+          // }
+          
+            // myChart.dispatchAction({
+            //     type: 'dataZoom',
+            //     startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
+            //     endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
+            // });
+          mthis.charts.dispatchAction({
+              type: 'highlight',
+              // 可选，数据的 index
+              dataIndex: params.dataIndex
+          })
+        })
+
         this.charts.dispatchAction({
           type: "takeGlobalCursor",
           key: "brush",

@@ -85,9 +85,7 @@
       // console.log(mthis.$store.getters.getGeoHeight)
       mthis.viewHeight = mthis.$store.getters.getViewHeight
       mthis.GeoHeight = mthis.$store.getters.getNetDivHeight
-      // alert(mthis.$store.state.tmss)
       // mthis.$store.commit('getTMSS',1999)
-      // alert(mthis.$store.state.tmss)
       // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
       // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
       // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
