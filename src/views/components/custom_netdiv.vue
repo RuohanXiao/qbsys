@@ -33,6 +33,7 @@
             <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">知识扩展</p>
           </div>
+           <!-- <InputNumber :max="10" :min="1" v-model="value1"></InputNumber> -->
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="expandNodeEvent">
@@ -48,7 +49,7 @@
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
             <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content" @click="showPathKnowledge">知识路径</p>
+            <p class="img-content" @click="showModalStep">知识路径</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -108,6 +109,22 @@
     </Col>
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag='setFlagToFalse'></modal-chart>
+    <!-- <Modal v-model="modalStep" ok-text="设置步数"
+        cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+      <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+    </Modal> -->
+    <Modal v-model="modalStep" width="360">
+        <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="ios-information-circle"></Icon>
+            <span>Delete confirmation</span>
+        </p>
+        <div style="text-align:center">
+             <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change='con'></InputNumber>
+        </div>
+        <div slot="footer">
+            <Button type="error" size="large" long  @click="pathKnowledge">Delete</Button>
+        </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -128,6 +145,8 @@
     name: "App",
     data() {
       return {
+        InputNumber: 0,
+        modalStep: false,
         // timer: null,
         basicY: 0,
         basicX: 0,
@@ -150,6 +169,16 @@
       modalChart
     },
     methods: {
+      con(){
+        console.log()
+      },
+      showModalStep(){
+        this.modalStep = true
+      },
+      pathKnowledge(){
+        this.modalStep = false
+        this.showPathKnowledge()
+      },
       setFlagToFalse(detailModalFlag){
         var mthis = this;
         mthis.modal01 = detailModalFlag;
@@ -284,7 +313,7 @@
         if(mthis.selectionId.length !== 2) {
           mthis.$Message.error('现阶段只支持两点路径！')
         } else {
-          mthis.$http.get('http://10.60.1.140:5001/all-path-data/?start='+mthis.selectionId[0].id+'&end='+mthis.selectionId[1].id+'&step=5').then(response => {
+          mthis.$http.get('http://10.60.1.140:5001/all-path-data?start='+mthis.selectionId[0].id+'&end='+mthis.selectionId[1].id+'&step='+mthis.InputNumber).then(response => {
             if(response.body.data[0].nodes.length + response.body.data[0].links.length > 0) {
               mthis.netchart.addData(response.body.data[0])
               let idArr = []
@@ -302,6 +331,7 @@
             }
           })
         }
+        mthis.modalStep = 0
         // mthis.netchart.selection(["911716", '1016826'])
       },
       showPathEvent() {
@@ -1046,7 +1076,6 @@
     ]),
     watch: {
       searchNetResult: function(va) {
-        // alert(0);
         if (this.$store.state.tmss === 'net') {
           this.reloadNetData(va.node.nodes[0])
         }

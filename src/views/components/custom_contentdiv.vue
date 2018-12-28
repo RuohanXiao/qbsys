@@ -302,7 +302,6 @@
         });
       },
       handleReachBottom(status) {
-        // alert()
         var mthis = this
         mthis.page = mthis.page + 1
         return new Promise(resolve => {
@@ -330,7 +329,6 @@
           this.REQUIRE = false;
           this.loading = true;
           this.tips = '努力加载中...';
-          alert('aaaa')
           //   axios.get('http://zhihuapi.herokuapp.com/api/4/news/before/' + this.todayDate).then((res) => {
           //     this.newsList.push(res.data['stories']);
           //   this.date.push(res.data['date']);

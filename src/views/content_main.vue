@@ -366,37 +366,9 @@
     background-color: rgba(0, 0, 0, 0) !important;
     padding: 0 !important;
   }
-  .hoverScroll:hover {
-    overflow-y: scroll;
-  }
   .p-collapse-modal {
     overflow: hidden;
   }
-  /* 滚动条样式 */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-
-::-webkit-scrollbar-thumb {
-    border: 5px solid transparent;
-    background-color: rgba(0, 0, 0, 0)
-}
-
-::-webkit-scrollbar-thumb:hover {
-    padding-right: 5px !important;
-    border-radius: 10px;
-    min-height: 20px;
-    background-color:#3cc;
-    box-shadow: 1px 1px 3px #3cc inset;
-}
-
-
-::-webkit-scrollbar-track {
-    border-radius: 2.5px !important;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
-}
 
   .ivu-progress-inner {
     background-color: rgba(54, 102, 102, 0.4) !important;

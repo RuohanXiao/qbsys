@@ -230,7 +230,6 @@ export default {
         })
         mthis.GeoHeight=mthis.$store.getters.getGeoHeight;
         mthis.mapHeight =mthis.$store.getters.getGeoHeight;
-        // alert(mthis.GeoHeight)
         mthis.geoWidth=document.documentElement.clientWidth * this.$store.state.split - 20 + 'px';
     },
     methods:{

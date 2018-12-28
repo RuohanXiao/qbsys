@@ -54,11 +54,11 @@
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
-                <!-- <div :style="{overflowY:'scroll'}"> -->
+                <div class='scrollBarAble' :style="{width:'100%',height:eventheight,margin:'0px 5px 0 10px',paddingRight:'5px'}">
                 <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(data.id)">{{data.name}}
                   <p class="p-collapse-modal-small">{{data.type}}</p>
                 </div>
-                <!-- </div> -->
+                </div>
               </Row>
               <Card dis-hover style="width:100%,background-color:rgba(0,0,0,0);" :style="{overflowY:'scroll',height:eventheight}" v-show="singlePerson" v-if="evetdata!== undefined && evetdata!==null">
                 <Row type="flex" justify="end">

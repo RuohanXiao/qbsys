@@ -85,9 +85,7 @@
       // console.log(mthis.$store.getters.getGeoHeight)
       mthis.viewHeight = mthis.$store.getters.getViewHeight
       mthis.GeoHeight = mthis.$store.getters.getNetDivHeight
-      // alert(mthis.$store.state.tmss)
       // mthis.$store.commit('getTMSS',1999)
-      // alert(mthis.$store.state.tmss)
       // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
       // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
       // mthis.$store.commit('setViewHeight',document.documentElement.clientHeight - 64 -20)
@@ -419,18 +417,18 @@
     overflow: hidden;
   }
   /* 滚动条样式 */
-::-webkit-scrollbar {
+.scrollBarAble:hover::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 
 
-::-webkit-scrollbar-thumb {
+.scrollBarAble:hover::-webkit-scrollbar-thumb {
     border: 5px solid transparent;
     background-color: rgba(0, 0, 0, 0)
 }
 
-::-webkit-scrollbar-thumb:hover {
+.scrollBarAble:hover ::-webkit-scrollbar-thumb {
     padding-right: 5px !important;
     border-radius: 10px;
     min-height: 20px;
@@ -439,7 +437,7 @@
 }
 
 
-::-webkit-scrollbar-track {
+.scrollBarAble:hover::-webkit-scrollbar-track {
     border-radius: 2.5px !important;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
 }
