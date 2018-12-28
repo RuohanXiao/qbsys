@@ -1160,7 +1160,10 @@ export default {
         },
         split:function(){
             var mthis = this;
-            mthis.geoWidth = document.documentElement.clientWidth * mthis.split - 20 + 'px';
+            if(mthis.$store.state.tmss == 'geo'){
+                mthis.geoWidth = document.documentElement.clientWidth * mthis.split - 20 + 'px';
+            }
+            
         },
         geoHeight:function(){
             var mthis = this;
