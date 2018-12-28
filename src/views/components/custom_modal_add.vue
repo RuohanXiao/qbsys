@@ -7,20 +7,21 @@
           <Col span="20">
           <div style="width:100%;height:40px">
             <!-- <modal-search-div /> -->
-            <Input v-model="addTargetValue" id="addTargetInput" prefix="ios-search" placeholder="Enter name" style="width: 90%" @on-enter="setOption"/>
+            <Input v-model="addTargetValue" id="addTargetInput" prefix="ios-search"  style="width: 90%"/>
           </div>
           </Col>
         </Row>
-        <Card :bordered="false" id ="addTargetOptionCard" v-if="isconp && recommendSearchItems.length > 0">
+        <!-- <Card :bordered="false" id ="addTargetOptionCard" v-if="isconp && recommendSearchItems.length > 0">
           <CellGroup @on-click="getElectedEntity">
                 <Cell :title="cellOption.name" v-for="(cellOption , index) in recommendSearchItems" :name="cellOption.name + '_' + cellOption.id"  />
             </CellGroup>
-        </Card>
-        <div  v-if="gwTargetData.id !== undefined" style="text-align: left;">
+        </Card> -->
+        <div  style="text-align: left;">
           <Collapse v-model="vColl" id="vColl">
             <Panel name="1">实体
-                <CellGroup slot="content" @on-click="setTargetData">
-                  <Cell :title="gwTargetData.name" :label="'描述：' + gwTargetData.type" />
+                <CellGroup slot="content" @on-click="getElectedEntity">
+                  <!-- <Cell :title="gwTargetData.name" :label="'描述：' + gwTargetData.type" /> -->
+                  <Cell :title="cellOption.name" v-for="(cellOption , index) in recommendSearchItems" :name="cellOption.name + '_' + cellOption.id"  />
                 </CellGroup>
             </Panel>
           </Collapse>
@@ -46,11 +47,11 @@
                 <p class="buttonModalText">追加网络分析</p>
               </div>
               </Col>
-              <Col  id='newNetEntity'>
+              <!-- <Col  id='newNetEntity'>
               <div class='buttonModal' @click="showNodeInNewNet">
                 <p class="buttonModalText">新建网络分析</p>
               </div>
-              </Col>
+              </Col> -->
             </Row>
           </div>
         </Col>
@@ -71,7 +72,7 @@
   export default {
     data() {
       return {
-        vColl:1,
+        vColl:"1",
         loading1: false,
         options1: [],
         buttonDivHeight: 0,
@@ -105,10 +106,10 @@
       }
     },
     methods: {
-      setTargetData(){
+      /* setTargetData(){
         var mthis = this;
         mthis.targetData = mthis.gwTargetData;
-      },
+      }, */
       cancel(){
         var mthis = this;
         mthis.$emit('detailModalFlag', false)
@@ -130,7 +131,7 @@
         setTimeout(function(){
           mthis.isconp = true;
         },200);
-        mthis.recommendSearchItems = [];
+        /* mthis.recommendSearchItems = []; */
         mthis.getPostById(id);
         
       },
@@ -140,7 +141,7 @@
         mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
             'nodeIds': [id]
           }).then(response => {
-            mthis.gwTargetData = response.body.data[0].nodes[0];
+            mthis.targetData = response.body.data[0].nodes[0];
           })
       },
       setOption () {
