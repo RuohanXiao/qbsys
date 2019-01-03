@@ -3,12 +3,12 @@
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" id="net">
       <div class='divStyle'>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="back">
-            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">撤销操作</p>
-          </div>
-        </Tooltip>
-        <div class="divSplitLine"></div> -->
+            <div class="button-div" @click="back">
+              <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+              <p class="img-content">撤销操作</p>
+            </div>
+          </Tooltip>
+          <div class="divSplitLine"></div> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="square">
             <Icon class="icon iconfont icon-grid  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -33,7 +33,7 @@
             <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">知识扩展</p>
           </div>
-           <!-- <InputNumber :max="10" :min="1" v-model="value1"></InputNumber> -->
+          <!-- <InputNumber :max="10" :min="1" v-model="value1"></InputNumber> -->
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="expandNodeEvent">
@@ -42,10 +42,10 @@
           </div>
         </Tooltip>
         <!-- <Col span="1" align="middle" class="bottom">
-                        <Tooltip content="查找关联" placement="bottom">
-                          <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                        </Tooltip>
-                        </Col> -->
+                          <Tooltip content="查找关联" placement="bottom">
+                            <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                          </Tooltip>
+                          </Col> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
             <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -110,20 +110,20 @@
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag='setFlagToFalse'></modal-chart>
     <!-- <Modal v-model="modalStep" ok-text="设置步数"
-        cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
-      <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
-    </Modal> -->
+          cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+        <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+      </Modal> -->
     <Modal v-model="modalStep" width="360">
-        <p slot="header" style="color:#f60;text-align:center">
-            <Icon type="ios-information-circle"></Icon>
-            <span>Delete confirmation</span>
-        </p>
-        <div style="text-align:center">
-             <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change='con'></InputNumber>
-        </div>
-        <div slot="footer">
-            <Button type="error" size="large" long  @click="pathKnowledge">Delete</Button>
-        </div>
+      <p slot="header" style="color:#f60;text-align:center">
+        <Icon type="ios-information-circle"></Icon>
+        <span>Delete confirmation</span>
+      </p>
+      <div style="text-align:center">
+        <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change='con'></InputNumber>
+      </div>
+      <div slot="footer">
+        <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
+      </div>
     </Modal>
   </div>
 </template>
@@ -162,24 +162,25 @@
         saveNum: 0,
         modal01: false,
         eventData: null,
-        ids: []
+        ids: [],
+        // 节点形状
       };
     },
     components: {
       modalChart
     },
     methods: {
-      con(){
+      con() {
         console.log()
       },
-      showModalStep(){
+      showModalStep() {
         this.modalStep = true
       },
-      pathKnowledge(){
+      pathKnowledge() {
         this.modalStep = false
         this.showPathKnowledge()
       },
-      setFlagToFalse(detailModalFlag){
+      setFlagToFalse(detailModalFlag) {
         var mthis = this;
         mthis.modal01 = detailModalFlag;
       },
@@ -222,8 +223,7 @@
         this.netchart.addFocusNode(focusId, 50)
         // document.getElementById('netchart').focus();
       },
-      lightNodes(){
-      },
+      lightNodes() {},
       //知识拓展节点（加载新数据）
       expandNodeKnowledge() {
         var mthis = this;
@@ -240,26 +240,26 @@
             'nodeIds': arr
           }).then(response => {
             res = response.body.data[0]
-            for(let m = 0;m<res.nodes.length;m++){
+            for (let m = 0; m < res.nodes.length; m++) {
               arr.push(res.nodes[m].id)
             }
             mthis.netchart.addData(res)
             setTimeout(function() {
               console.log(util.unique(arr))
               mthis.netchart.selection(util.unique(arr))
-            },100)
+            }, 100)
             mthis.getStatistics()
           })
         } else {
           mthis.$Message.error('请至少选择一个节点进行拓展操作！')
         }
       },
-      newCanvans(){
+      newCanvans() {
         this.netchart.replaceData({
           "nodes": [],
           "links": []
         })
-        this.$store.commit('setSearchNetResult','')
+        this.$store.commit('setSearchNetResult', '')
         this.selectionId = []
         this.getStatistics()
       },
@@ -310,19 +310,19 @@
         var mthis = this
         // (this.selectionId.length === 1) ? (this.pathHoverFlag = true) : ((this.selectionId.length > 0) ? (this.$Message.error('请选择单一节点进行路径显示')) : (this.$Message.error('请选择一个节点进行路径显示')))
         // this.netchart.selection(["911716", '1016826'])
-        if(mthis.selectionId.length !== 2) {
+        if (mthis.selectionId.length !== 2) {
           mthis.$Message.error('现阶段只支持两点路径！')
         } else {
-          mthis.$http.get('http://10.60.1.140:5001/all-path-data?start='+mthis.selectionId[0].id+'&end='+mthis.selectionId[1].id+'&step='+mthis.InputNumber).then(response => {
-            if(response.body.data[0].nodes.length + response.body.data[0].links.length > 0) {
+          mthis.$http.get('http://10.60.1.140:5001/all-path-data?start=' + mthis.selectionId[0].id + '&end=' + mthis.selectionId[1].id + '&step=' + mthis.InputNumber).then(response => {
+            if (response.body.data[0].nodes.length + response.body.data[0].links.length > 0) {
               mthis.netchart.addData(response.body.data[0])
               let idArr = []
               let nodeobj = response.body.data[0].nodes
               let linkobj = response.body.data[0].links
-              for(let i = 0;i<nodeobj.length;i++){
+              for (let i = 0; i < nodeobj.length; i++) {
                 idArr.push(nodeobj[i].id)
               }
-              for(let j = 0;j<linkobj.length;j++){
+              for (let j = 0; j < linkobj.length; j++) {
                 idArr.push(linkobj[j].id)
               }
               mthis.netchart.selection(idArr)
@@ -780,9 +780,14 @@
           "nodes": dataarr,
           "links": []
         })
+        let ar = []
+        for (let k = 0; k < dataarr.length; k++) {
+          ar.push(dataarr[k].id)
+        }
+        mthis.netchart.selection(ar)
         mthis.getStatistics()
       },
-      addNetData(data){
+      addNetData(data) {
         var mthis = this
         let dataarr = []
         dataarr.push(data)
@@ -895,18 +900,27 @@
               node.label = node.data.name;
               // node.backgroundStyle.imageCropping =false
               // 默认图标怕
-              if (node.data.type === "person" && node.data.img === "") {
-                node.image = "./src/dist/assets/images/ico/b12.ico";
-                nodeimageCropping = 'crop'
-              } else if (node.data.type === "event" && node.data.img === "") {
-                node.image = "./src/dist/assets/images/event.png";
-                nodeimageCropping = 'crop'
-              } else if (node.data.type === "org" && node.data.img === "") {
-                node.image = "./src/dist/assets/images/ico/b3.ico";
-                nodeimageCropping = 'crop'
+              if (node.data.type === "person") {
+                if (node.data.img === "") {
+                  node.image = "./src/dist/assets/images/ico/b12.ico";
+                  nodeimageCropping = 'crop'
+                } 
+              }
+              else if (node.data.type === "event") {
+                if (node.data.img === "") {
+                  node.image = "./src/dist/assets/images/event.png";
+                  nodeimageCropping = 'crop'
+                } 
+              } else if (node.data.type === "org") {
+                if (node.data.img === "") {
+                  node.image = "./src/dist/assets/images/ico/b3.ico";
+                  nodeimageCropping = 'crop'
+                } 
               } else {
-                node.image = node.data.img;
-                node.imageCropping = 'crop'
+                if (node.data.img === "") {
+                  node.image = node.data.img;
+                  node.imageCropping = 'crop'
+                } 
               }
               if (node.hovered) {
                 node.lineColor = node.data.lineColor = "rgba(51, 255, 255, 0.4)";
@@ -1046,13 +1060,12 @@
                     ids: mthis.selectionId
                   }])
                   mthis.$store.commit('setSinglePerson', !(mthis.selectionId.length > 1))
-                  mthis.$store.commit('setTabSelect','目标详情')
+                  mthis.$store.commit('setTabSelect', '目标详情')
                 } else {
                   mthis.selectionId = [];
                   mthis.selectItem = null;
-                  mthis.$store.commit('setTabSelect','数据透视')
+                  mthis.$store.commit('setTabSelect', '数据透视')
                 }
-                
               }, 200);
             }
           },
@@ -1068,11 +1081,32 @@
           theme: NetChart.themes.dark
         }))
         // mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
+        // 节点变形
+        var div = $('<div class="type-select" style="position:absolute;z-index:2" >');
+        var x = $('<label for="v1"><input id="v1" type="radio" checked="checked" name="nodeType" value="rect" />Rectangle <b>(Note: Rectangle shape is also available as a built-in shape since 1.9)</label><br/>');
+        div.append(x);
+        x = $('<label for="v2"><input id="v2" type="radio" name="nodeType" value="diamond"/> Diamond</label><br/>');
+        div.append(x);
+        x = $('<label for="v3"><input id="v3" type="radio" name="nodeType" value="hexagon"/> Hexagon</label><br/>');
+        div.append(x);
+        $("#netchart").before(div);
+        // using jquery to add event handler
+        // Update the chart settings, when user changes desired node display type
+        $('.type-select input:radio').change(function() {
+          var selected = $('.type-select input:radio:checked').val();
+          // mthis.netchart.updateSettings({
+          //   style: {
+          //     node: {
+          //       customShape: this.someUserDefinedShapes[selected]
+          //     }
+          //   }
+          // });
+        });
       }
     },
     created() {},
     computed: mapState([
-      'searchNetResult', 'netHeight','addNetNodes'
+      'searchNetResult', 'netHeight', 'addNetNodes'
     ]),
     watch: {
       searchNetResult: function(va) {
@@ -1088,7 +1122,9 @@
       netHeight: function(va) {
         var mthis = this;
         mthis.NetHeight = mthis.$store.getters.getNetHeight;
-        console.log('NetHeight2222'+mthis.NetHeight)
+        // this.NetHeight = this.$store.state.netHeight - 55 + 'px';
+        // console.log('NetHeight2222' + this.NetHeight)
+        console.log(va)
       }
       //   searchResultWatcher:function(old){
       //     // this.temp = old
@@ -1103,7 +1139,7 @@
       mthis.initCharts();
       mthis.netData = mthis.$store.getters.netData
       mthis.NetHeight = mthis.$store.getters.getNetHeight
-      console.log('NetHeight11'+mthis.NetHeight)
+      console.log('NetHeight11' + mthis.NetHeight)
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();
       //   mthis.netchart.addData(res.data.data[0]);

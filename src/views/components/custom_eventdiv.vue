@@ -4,7 +4,7 @@
     <div>
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
-          <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
+          <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'  class="scrollBarAble">
             <c-tree :Statisticsdata='dataStatistics' v-if='dataStatistics.length > 0'></c-tree>
               <!-- <Collapse simple class="toushiItems">
                 <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
