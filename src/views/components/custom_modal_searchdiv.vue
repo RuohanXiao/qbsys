@@ -1,4 +1,5 @@
 <template>
+<div>
   <!-- <div>
     <i class="icon iconfont icon-search  process-img" style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i>
     <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfo" filterable
@@ -19,7 +20,7 @@
                 <Option v-for="(option, index) in opt.data" :value="option.value" :key="index">{{option.label}}</Option>
               </OptionGroup>
             </Select>-->
-            <Input v-model="addTargetValue" prefix="ios-search" placeholder="Enter name" style="width: 90%" @on-enter="setOption"/>
+            <!-- <Input v-model="addTargetValue" prefix="ios-search" placeholder="Enter name" style="width: 90%" @on-enter="setOption"/> -->
            <!-- <Input v-model="value11"  prefix="icon-search"> -->
           <!-- <i class="icon iconfont icon-search  process-img" slot="prepend" style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i> -->
     <!-- </Input> -->

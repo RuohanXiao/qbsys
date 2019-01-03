@@ -4,8 +4,10 @@
     <div>
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
-          <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'  class="scrollBarAble">
-            <c-tree :Statisticsdata='dataStatistics' v-if='dataStatistics.length > 0'></c-tree>
+          <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
+            <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0" ></c-tree>
+            <!-- <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'geo'" ></c-tree> -->
+            <c-tree :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0" ></c-tree>
               <!-- <Collapse simple class="toushiItems">
                 <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
                   <div slot="content">
@@ -102,6 +104,7 @@
         timer:null,
         tabSelect:'数据透视',
         modalNodeId: '',
+        contentStatisticsdata:{},
         statisticsNameList:{
           'entity':'实体',
           'human':'人物',
@@ -173,8 +176,13 @@
         //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent']),
+    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent','contentStatisticsResult']),
     watch: {
+      contentStatisticsResult:function(){
+        var mthis = this;
+        debugger
+        mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
+      },
       dataStatisticsEvent: function() {
         var mthis = this;
         mthis.dataStatistics = mthis.dataStatisticsEvent.data;

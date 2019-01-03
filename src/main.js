@@ -238,7 +238,8 @@ var store = new Vuex.Store({
       img:'',
       type:''
     }],
-    tabSelect: '数据透视'
+    tabSelect: '数据透视',
+    contentStatisticsResult:{},
   },
   mutations:{
     // 修改state里的数据时，只能通过mutations的形式来操作
@@ -250,6 +251,9 @@ var store = new Vuex.Store({
     },
     setConditionContent(state,val){
       state.conditionContent = val
+    },
+    setContentStatisticsResult(state,val){
+      state.contentStatisticsResult = val
     },
     setReturnStatisticsId(state,val){
       state.returnStatisticsId = val

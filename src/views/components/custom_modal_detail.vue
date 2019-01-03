@@ -1,7 +1,7 @@
 <template>
     <Modal v-model="flag" width='80' @on-cancel="cancel" footer-hide>
       <el-tabs  v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit" :style="{paddingBottom:'20px'}">
-        <el-tab-pane v-for="(Targetdetail, index) in editableTabs" :key="index+1" :label="Targetdetail.name" :name="index+1">
+        <el-tab-pane v-for="(Targetdetail, index) in editableTabs" :key="index+1" :label="Targetdetail.name" :name="index+1+''">
           <entitydetailsintegration :Entitydetail="Targetdetail" ></entitydetailsintegration>
         </el-tab-pane>
       </el-tabs>
@@ -23,7 +23,7 @@
         listHeight: 0,
         InfoHeight: 0,
         editableTabs:[],
-        editableTabsValue:0
+        editableTabsValue:'0'
       }
     },
     props: ['nodeId','flag'],
@@ -40,7 +40,7 @@
         }).then(response => {
            if(this.editableTabs.length == 0 || this.getIndexFromArrById(response.body.data[0].nodes[0], this.editableTabs) == -1){
               this.editableTabs.push(response.body.data[0].nodes[0]);
-              this.editableTabsValue = this.editableTabs.length;
+              this.editableTabsValue = this.editableTabs.length + '';
            }
         })
       } 
@@ -51,15 +51,6 @@
     components: {entitydetailsintegration},
     methods: {
       handleTabsEdit(targetName, action) {
-        /* if (action === 'add') {
-          let newTabName = ++this.tabIndex + '';
-          this.editableTabs.push({
-            title: 'New Tab',
-            name: newTabName,
-            content: 'New Tab content'
-          });
-          this.editableTabsValue = newTabName;
-        } */
         if (action === 'remove') {
           let tabs = this.editableTabs;
           let activeName = this.editableTabsValue;
@@ -68,7 +59,7 @@
               if (index == targetName - 1) {
                 let nextTab = tabs[index + 1] || tabs[index - 1];
                 if (nextTab) {
-                  activeName = this.getIndexFromArr(nextTab,tabs) + 1;
+                  activeName = this.getIndexFromArr(nextTab,tabs) + 1 + '';
                 }
               }
             });
@@ -112,7 +103,7 @@
         } else {
           return true;
         }
-      },
+      }
     } 
   }
 </script>

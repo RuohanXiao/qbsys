@@ -63,6 +63,7 @@
       setOption(a) {
         console.log(a)
         var mthis = this;
+        debugger
         if (a !== undefined && a !== null && a !== '') {
           if (a.value.split('搜索:').length > 1) {
             if (mthis.$store.state.tmss === 'net') {
@@ -81,6 +82,7 @@
                   nodes: []
                 },
                 id: '',
+                
                 label: a.value
               }])
             } else {
@@ -110,14 +112,29 @@
               })
             }
             if (this.$store.state.tmss === 'content') {
-              mthis.inputInfoContent = a.value
+              // alert('setoption1')
+              console.log(a);
+              var query = a.value;
+              mthis.$http.get("http://10.60.1.140:5001/doc-statistics/?query=" + query, {
+              emulateJSON: true
+            })
+            .then(response => {
+              debugger
+              mthis.$store.commit('setContentStatisticsResult', response.body)
+            });
+
+
+
+
+
+              /* mthis.inputInfoContent = a.value
               mthis.$store.commit('setSearchContentResult', [{
                 node: {
                   nodes: []
                 },
                 id: '',
                 label: a.value
-              }])
+              }]) */
             }
             if (this.$store.state.tmss === 'geo') {
               mthis.$store.commit('setSearchGeoResult', {

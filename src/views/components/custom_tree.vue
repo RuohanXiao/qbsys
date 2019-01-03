@@ -62,7 +62,10 @@ color: #ccffff !important;
 <el-tree :data="treeData" :props="defaultProps"  :expand-on-click-node="false" default-expand-all @node-click='treeItem_click'>  <!-- :render-content="renderPercentBar" -->
       <div slot-scope="{ node, data }" :style="{width:'100%'}" >
             <span style="width:2em" />
-            <span style="font-size: 10px;">{{(data.num !== undefined)? (statisticsNameList[data.name] + "(" + data.num + ")") :statisticsNameList[data.name]}}</span>
+            <span style="font-size: 15px;" v-if="data.num !== undefined">{{(statisticsNameList[data.name] === undefined)?(data.name + "(" + data.num + ")"):(statisticsNameList[data.name] + "(" + data.num + ")")}}
+                <span style="float:right">...</span>
+            </span>
+            <span style="font-size: 10px;" v-else>{{(statisticsNameList[data.name] === undefined)?data.name:(statisticsNameList[data.name])}}</span>
             <percentBar v-if="data.num === undefined" :num="data.per" :count="data.count" :index='0'></percentBar>
         </div>
     </el-tree>
@@ -111,6 +114,7 @@ export default {
         },
         Statisticsdata:function(){
             var mthis = this;
+            debugger
             mthis.treeData = JSON.parse(JSON.stringify(mthis.Statisticsdata));
         },
         treeData:function(){
@@ -118,6 +122,19 @@ export default {
     },
     computed:mapState (['split'],),
     methods: { 
+        
+        setEngOrChinName(name){
+            var mthis = this;
+            debugger
+            if(name !== undefined){
+                if(mthis.statisticsNameList[name] !== undefined){
+                    return mthis.statisticsNameList[name]
+                } else{
+                    return name
+                }
+                
+            }
+        },
         treeItem_click(data,node,vuecom){
             var mthis = this;
            if(data.entitylist !== undefined){
