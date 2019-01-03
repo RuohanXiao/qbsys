@@ -60,7 +60,6 @@
       },
       setOption(a) {
         var mthis = this;
-        debugger
         if (a !== undefined && a !== null && a !== '') {
           if (a.value.split('搜索:').length > 1) {
             if (mthis.$store.state.tmss === 'net') {
@@ -116,7 +115,6 @@
               emulateJSON: true
             })
             .then(response => {
-              debugger
               mthis.$store.commit('setContentStatisticsResult', response.body)
             });
 

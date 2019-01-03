@@ -54,6 +54,9 @@ color: #ccffff !important;
     visibility: hidden;
 }
 .el-tree-node.is-current>.el-tree-node__content{background-color:rgba(204,255,255,0.2)!important;}
+.el-tree-node:focus > .el-tree-node__content {
+    background-color: rgba(204,255,255,0.2) !important;
+}
 </style>
 
 
@@ -114,7 +117,6 @@ export default {
         },
         Statisticsdata:function(){
             var mthis = this;
-            debugger
             mthis.treeData = JSON.parse(JSON.stringify(mthis.Statisticsdata));
         },
         treeData:function(){
@@ -125,7 +127,6 @@ export default {
         
         setEngOrChinName(name){
             var mthis = this;
-            debugger
             if(name !== undefined){
                 if(mthis.statisticsNameList[name] !== undefined){
                     return mthis.statisticsNameList[name]

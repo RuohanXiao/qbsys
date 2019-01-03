@@ -1,8 +1,9 @@
 <template>
-<div :style="{width:percentBarWidth+'px',float:'right',display: 'flex',alignItems: 'center',}">
+<!-- <div :style="{width:percentBarWidth+'px',float:'right',display: 'flex',alignItems: 'center',}"> -->
+    <div :style="{width:'100%',float:'right',display: 'flex',alignItems: 'center',}">
     <span style="font-size: 10px !important;margin-right: 5px;width:10px">{{count}}</span>
-    <div id="myProgress" :style="{width:'85%',height:'10px',float:'right',borderRadius: '10px'}">
-        <div id="myBar" :style="{width:num+'%',height: '10px',backgroundColor:colors[index],textAlign: 'center',color: 'white',borderRadius: '10px',paddingLeft:'5px'}"></div>
+    <div id="myProgress" :style="{width:'85%',height:'10px',float:'right',borderRadius: '10px',marginLeft: '10px'}">
+        <div id="myBar" :style="{width:num+'%',height: '10px',backgroundColor:colors[index],textAlign: 'center',color: 'white',borderRadius: '3px',paddingLeft:'5px'}"></div>
     </div>
 </div>
 </template>

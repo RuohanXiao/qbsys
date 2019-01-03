@@ -5,9 +5,11 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
           <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
-            <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0" ></c-tree>
+            <left-statics :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0"></left-statics>
+            <left-statics :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0"></left-statics>
+            <!-- <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0" ></c-tree> -->
             <!-- <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'geo'" ></c-tree> -->
-            <c-tree :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0" ></c-tree>
+            <!-- <c-tree :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0" ></c-tree> -->
               <!-- <Collapse simple class="toushiItems">
                 <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
                   <div slot="content">
@@ -91,6 +93,7 @@
 <script>
   import modalChartDetail from './custom_modal_detail'
   import percentBar from './custom_percentBar'
+  import leftStatics from './custom_leftStatics'
   import { mapState,mapMutations } from 'vuex'
   import cTree from './custom_tree'
   import entityDetailsTableHuman from './custom_entityDetailsTable_human'
@@ -166,6 +169,7 @@
     components: {
       modalChartDetail,
       percentBar,
+      leftStatics,
       cTree,
       entityDetailsTableHuman,
       entityDetailsTableAdministrative,
@@ -180,7 +184,6 @@
     watch: {
       contentStatisticsResult:function(){
         var mthis = this;
-        debugger
         mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       },
       dataStatisticsEvent: function() {
@@ -446,6 +449,7 @@
     background-color: rgba(0, 0, 0, 0) !important;
   }
   #toushi {
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
+    overflow-y: auto;
   }
 </style>
