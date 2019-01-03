@@ -17,7 +17,7 @@
 <script>
   import "../dist/assets/styles/net_main.css";
   import netChartDiv from "./components/custom_netdiv";
-  import timeChartDiv from "./components/custom_timediv";
+  import timeChartDiv from "./components/custom_timediv_net";
   import eventChartDiv from "./components/custom_eventdiv";
   import { mapState,mapMutations } from 'vuex'
   export default {
@@ -70,6 +70,7 @@
         this.nDivHeight = this.$store.getters.getNetDivHeight
       },
       netHeight: function(va){
+        console.log('-------------'+va)
         // this.nHeight = this.$store.getters.getNetHeight
         this.nHeight = this.netHeight
       },

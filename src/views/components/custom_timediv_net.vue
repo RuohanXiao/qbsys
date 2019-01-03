@@ -68,14 +68,7 @@
       onchangHeightCount(){
         var mthis = this;
         var tmss = mthis.$store.state.tmss;
-        if(tmss == 'net'){
-          mthis.netHeightCount ++ ;
-        } else if (tmss == 'geo'){
-          mthis.geoHeightCount ++;
-        } else if(tmss == 'content'){
-          
-          mthis.contentHeightCount ++;
-        }
+        mthis.netHeightCount ++ ;
       },
       timeZoomOut() { },
       timeZoomIn() { },
@@ -382,17 +375,10 @@
         }
       }, */
       selectNetNodes: function(va) {
-        // var mthis = this;
-        // if(mthis.tmss == 'net'){
-        //   alert('下面要查询实体相关时间');
-        // }
-        // if(mthis.tmss == 'geo') {
-        //   alert('geo');
-        // }
-        // if(mthis.tmss == 'content') {
-        //   alert('content');
-        // }
-
+        var mthis = this;
+        if(mthis.tmss == 'net'){
+          // alert('下面要查询实体相关时间');
+        }
       },
       split: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'

@@ -17,7 +17,7 @@
 <script>
   import "../dist/assets/styles/net_main.css";
   import contentChartDiv from "./components/custom_contentdiv";
-  import timeChartDiv from "./components/custom_timediv";
+  import timeChartDiv from "./components/custom_timediv_content";
   import eventChartDiv from "./components/custom_eventdiv";
   import { mapState,mapMutations } from 'vuex'
   export default {

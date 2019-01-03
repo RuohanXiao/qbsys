@@ -71,7 +71,7 @@
       <div :style="{margin:'0,5px'}">
       <div v-if="!showList">
         <Scroll :on-reach-bottom="handleReachBottom" v-if='!ifInfo' :height=ContentHeight>
-          <div id="contentchart" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex',overflowY:'scroll'}">
+          <div id="contentchart"  class="scrollBarAble" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex',overflowY:'scroll'}">
             <Row type="flex" justify="start" align="middle">
               <Col :sm="8" :lg="6" align="middle" v-for="item in items">
               <div class="contentDiv" @click="showContent(item.id)">
@@ -86,7 +86,7 @@
             </Row>
           </div>
         </Scroll>
-        <div id="contentInfo" v-if='ifInfo' :style="{height:ContentHeight,overflowY:'scroll'}">
+        <div id="contentInfo" class="scrollBarAble" v-if='ifInfo' :style="{height:ContentHeight,overflowY:'scroll'}">
           <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
           <h2 class="contentInfoTitle" id='contentsTitle'></h2>
           <p class="contentInfoTime" id='contentsTime'></p>
@@ -132,7 +132,7 @@
         order: '',
         toEdg: -100,
         showList: false,
-
+        moreLoading: false,
         columns2: [
                     {
                         title: 'Name',
@@ -225,7 +225,7 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'netHeight', 'contentHeight'
+      'searchContentResult', 'contentHeight'
     ]),
     watch: {
       searchContentResult: function(va) {
@@ -236,18 +236,21 @@
         mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
             mthis.items = response.body.data
+            mthis.$store.commit('setConditionContent',mthis.content)
             // mthis.showMore = true
           } else {
             // mthis.showMore = false
+            mthis.items = []
+            alert('未找到匹配的文章')
           }
         })
         // }
         // }
       },
-      netHeight: function() {
-        var mthis = this;
-        mthis.netheight = mthis.$store.getters.getNetHeight;
-      },
+      // netHeight: function() {
+      //   var mthis = this;
+      //   mthis.netheight = mthis.$store.getters.getNetHeight;
+      // },
       contentHeight: function() {
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
@@ -304,11 +307,13 @@
       handleReachBottom(status) {
         var mthis = this
         mthis.page = mthis.page + 1
+        mthis.moreLoading = true
         return new Promise(resolve => {
           mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.content + mthis.order).then(response => {
             console.log(mthis.items)
             mthis.items = mthis.items.concat(response.body.data)
             resolve();
+            mthis.moreLoading = false
             // mthis.dataexpand = response.body.data
             // mthis.singlePerson = (opt[1]>1)?false:true
           })
@@ -400,7 +405,7 @@
     mounted() {
       var mthis = this
       let useHeight = document.documentElement.clientHeight - 64 - 20;
-      mthis.netheight = useHeight * 0.8 - 55 + "px";
+      // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
