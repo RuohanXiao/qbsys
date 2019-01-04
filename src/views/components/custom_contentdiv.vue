@@ -242,7 +242,6 @@
         mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
             mthis.items = response.body.data
-            mthis.$store.commit('setConditionContent',mthis.content)
             // mthis.showMore = true
           } else {
             // mthis.showMore = false
