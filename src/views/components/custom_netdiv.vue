@@ -451,11 +451,11 @@
             //   Math.cos(ahd * index) * radius;
             // 螺旋布局
             let ahd = Math.PI / 72;
-            let radius = 5 * index + 5
+            // let radius = 5 * index + 5
             mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
-              Math.sin(ahd * index) * radius;
+              Math.sin(ahd * index)*(Math.random()-0.5)*5000;
             mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] +
-              Math.cos(ahd * index) * radius;
+              Math.cos(ahd * index)*(Math.random()-0.5)*5000;
             mthis.netchart.lockNode(mthis.selectionId[index].id);
           }
         } else if (mthis.selectionId.length > 0 && mthis.selectionId.length < 27) {

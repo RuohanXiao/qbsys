@@ -176,6 +176,7 @@
             splitLine: {
               show: false
             },
+            minInterval: 1,
             // min:-35,
             // name: "占世界贸易额比重",
             axisLabel: {
@@ -292,16 +293,28 @@
         this.option.series[0].data = this.dataBySeries.num;
         this.charts.setOption(this.option)
         this.charts.on('brushSelected', function (params) {
-          console.log(params)
           mthis.timeTitle = ''
           if(params.batch[0].areas.length  === 0) {
             mthis.timeTitle = ''
           } else{
-            mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex.length-1]
+            // console.log('========================================')
+            // console.log(mthis.dataBySeries.date)
+            // console.log(params.batch[0].selected[0].dataIndex.length - 1)
+            // console.log(mthis.dataBySeries.date[(params.batch[0].selected[0].dataIndex.length) - 1])
+            // console.log('========================================')
+            mthis.timeTitle = mthis.dataBySeries.date[0] + ' 至 ' + mthis.dataBySeries.date[(params.batch[0].selected[0].dataIndex.length) - 1]
+            let timeArr = []
+            timeArr.push(mthis.dataBySeries.date[0])
+            timeArr.push(mthis.dataBySeries.date[(params.batch[0].selected[0].dataIndex.length) - 1])
+            mthis.$store.commit('setContentTimeCondition',timeArr)
           }
         })
         this.charts.on('click', function (params) {
           mthis.timeTitle = params.name
+          let timeArr = []
+          timeArr.push(params.name)
+          timeArr.push(params.name)
+          mthis.$store.commit('setContentTimeCondition',timeArr)
           // alert(0)
           // console.log(params)
           // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
@@ -376,10 +389,6 @@
         // 发起http请求,获取时间轴
         var mthis = this
         this.$http.get('http://10.60.1.140:5001/context-time-count/?keyword='+keyword).then(response => {
-          // console.log('----------------------')
-          console.log(response.body.code === 0)
-          // console.log(response.body.data.time)
-          // console.log('----------------------')
           if(response.body.code === 0) {
             mthis.dataBySeries.num = response.body.data.count
             mthis.dataBySeries.date = response.body.data.time

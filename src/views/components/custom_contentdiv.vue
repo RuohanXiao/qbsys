@@ -225,14 +225,20 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition'
     ]),
     watch: {
+      contentTimeCondition: function(va) {
+        // alert('时间变啦!!')
+        console.log(va)
+      },
       searchContentResult: function(va) {
+        console.log('-----------------------1')
+        console.log(va)
         var mthis = this
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
-        mthis.content = va[0].label
+        mthis.content = va
         mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
             mthis.items = response.body.data
@@ -270,6 +276,7 @@
         mthis.order = '&isSortByTime=asc'
         mthis.page = 1
         return new Promise(resolve => {
+          console.log('-----------------------2')
           mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.content + mthis.order).then(response => {
             mthis.items = response.body.data
             resolve();
@@ -283,6 +290,7 @@
         mthis.order = '&isSortByTime=desc'
         mthis.page = 1
         return new Promise(resolve => {
+          console.log('-----------------------3')
           mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.content + mthis.order).then(response => {
             mthis.items = response.body.data
             resolve();
@@ -296,6 +304,7 @@
         mthis.order = ''
         mthis.page = 1
         return new Promise(resolve => {
+          console.log('-----------------------4')
           mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.content + mthis.order).then(response => {
             mthis.items = response.body.data
             resolve();
@@ -309,6 +318,7 @@
         mthis.page = mthis.page + 1
         mthis.moreLoading = true
         return new Promise(resolve => {
+          console.log('-----------------------5')
           mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.content + mthis.order).then(response => {
             console.log(mthis.items)
             mthis.items = mthis.items.concat(response.body.data)

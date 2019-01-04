@@ -61,7 +61,6 @@
         lightIconFlag = !lightIconFlag
       },
       setOption(a) {
-        console.log(a)
         var mthis = this;
         if (a !== undefined && a !== null && a !== '') {
           if (a.value.split('搜索:').length > 1) {
@@ -85,6 +84,7 @@
                 label: a.value
               }])
             } else {
+              alert(a.value)
               mthis.inputInfoContent = a.value
               mthis.$store.commit('setSearchContentResult', [{
                 node: {
@@ -111,10 +111,10 @@
               })
             }
             if (this.$store.state.tmss === 'content') {
-              // alert('setoption1')
-              console.log(a);
+              mthis.$store.commit('setSearchContentResult', a.value)
+              mthis.$store.commit('setConditionContent',a.value)
               var query = a.value;
-              mthis.$http.get("http://10.60.1.140:5001/doc-statistics/?query=" + query, {
+              mthis.$http.get("http://10.60.1.140:5001/doc-statistics/?query=" + a.value, {
               emulateJSON: true
             })
             .then(response => {
