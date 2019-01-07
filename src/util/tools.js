@@ -11,6 +11,7 @@ export default {
     }
     return res;
   },
+  
   // 两数组不同元素
   diff(arr1, arr2) {
     var newArr = [];
@@ -27,12 +28,51 @@ export default {
     newArr = arr3.concat(arr4);
     return newArr;
   },
+
   //判断某对象属性是否存在且为非空字符串，若是则返回true，否为返回false
-  ishasValue(pro){
-    if(pro == ''){
+  ishasValue(pro) {
+    if (pro == '') {
       return false;
     } else {
       return true;
     }
+  },
+
+  // date yy-mm-dd 转 时间戳 (秒)
+  getTimestamp(time) {
+    return Date.parse(new Date(time))/1000;
+  },
+   // date yy-mm-dd 转 时间戳 (毫秒)
+   getTimestampMS(time) {
+    return Date.parse(new Date(time));
+  },
+
+  //时间戳转(毫秒) yy-mm-dd
+  transformPHPTimeMS(time) {
+    var date = new Date(time * 1000);
+    Y = date.getFullYear() + '-';
+    M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    D = date.getDate();
+    space = ' ';
+    h = date.getHours() + ':';
+    m = date.getMinutes() + ':';
+    s = date.getSeconds();
+
+    // return Y + M + D + space + h + m + s;
+    return Y + M + D;
+  },
+  //时间戳转(秒) yy-mm-dd
+  transformPHPTime(time) {
+    var date = new Date(time);
+    Y = date.getFullYear() + '-';
+    M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    D = date.getDate();
+    space = ' ';
+    h = date.getHours() + ':';
+    m = date.getMinutes() + ':';
+    s = date.getSeconds();
+
+    // return Y + M + D + space + h + m + s;
+    return Y + M + D;
   }
 }

@@ -84,7 +84,7 @@
         this.option = {
           tooltip: {
             trigger: "axis",
-            formatter: "{b}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%<br/>{a3}: {c3}%"
+            // formatter: "{b}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%<br/>{a3}: {c3}%"
           },
           // legend: {
           //     data:['China','United States','India','Japan']
@@ -249,7 +249,7 @@
             }
           ],
           series: [{
-            name: "China",
+            name: "事件",
             type: "bar",
             // barMaxWidth: '10%',
             // barMinHeight: '1px',
@@ -297,15 +297,14 @@
           if(params.batch[0].areas.length  === 0) {
             mthis.timeTitle = ''
           } else{
-            // console.log('========================================')
-            // console.log(mthis.dataBySeries.date)
-            // console.log(params.batch[0].selected[0].dataIndex.length - 1)
-            // console.log(mthis.dataBySeries.date[(params.batch[0].selected[0].dataIndex.length) - 1])
-            // console.log('========================================')
-            mthis.timeTitle = mthis.dataBySeries.date[0] + ' 至 ' + mthis.dataBySeries.date[(params.batch[0].selected[0].dataIndex.length) - 1]
+            console.log('========================================')
+            console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
+            console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
+            console.log('========================================')
+            mthis.timeTitle = mthis.dataBySeries.date[0] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]]
             let timeArr = []
-            timeArr.push(mthis.dataBySeries.date[0])
-            timeArr.push(mthis.dataBySeries.date[(params.batch[0].selected[0].dataIndex.length) - 1])
+            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
+            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
             mthis.$store.commit('setContentTimeCondition',timeArr)
           }
         })

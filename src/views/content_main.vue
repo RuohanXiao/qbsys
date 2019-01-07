@@ -529,7 +529,32 @@
     background: rgba(51, 255, 255, 0.2);
     margin: 10px 5px 10px 5px;
   }
-  
+  /* 滚动条样式 */
+  .scrollBarAble {
+    overflow-y: hidden;
+  }
+  .scrollBarAble:hover {
+    overflow-y: scroll;
+  }
+  .scrollBarAble:hover ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  .scrollBarAble:hover ::-webkit-scrollbar-thumb {
+    border: 5px solid transparent;
+    background-color: rgba(0, 0, 0, 0)
+  }
+  .scrollBarAble:hover ::-webkit-scrollbar-thumb {
+    padding-right: 5px !important;
+    border-radius: 10px;
+    min-height: 20px;
+    background-color: #3cc;
+    box-shadow: 1px 1px 3px #3cc inset;
+  }
+  .scrollBarAble:hover ::-webkit-scrollbar-track {
+    border-radius: 2.5px !important;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
+  }
 </style>
 
 <style scoped>
