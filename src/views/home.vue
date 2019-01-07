@@ -376,16 +376,16 @@
     background-color: rgba(0, 0, 0, 0) !important;
     padding: 0 !important;
   }
-  .scrollBarAble {
-    overflow-y: auto;
-  }
-  .scrollBarAble:hover {
-    overflow-y: scroll;
-  }
   .p-collapse-modal {
     overflow: hidden;
   }
   /* 滚动条样式 */
+ .scrollBarAble {
+    overflow-y: hidden;
+  }
+  .scrollBarAble:hover {
+    overflow-y: scroll;
+  }
   .scrollBarAble:hover::-webkit-scrollbar {
     width: 5px;
     height: 5px;

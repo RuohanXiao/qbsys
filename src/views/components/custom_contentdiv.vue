@@ -69,34 +69,35 @@
     </div>
     <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div :style="{margin:'0,5px'}">
-      <div v-if="!showList">
-        <Scroll :on-reach-bottom="handleReachBottom" v-if='!ifInfo' :height=ContentHeight>
-          <div id="contentchart"  class="scrollBarAble" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex',overflowY:'scroll'}">
-            <Row type="flex" justify="start" align="middle">
-              <Col :sm="8" :lg="6" align="middle" v-for="item in items">
-              <div class="contentDiv" @click="showContent(item.id)">
-                <p class="contentTitle" >{{item.title}}</p>
-                <p class="contentText">{{item.text}}</p>
-                <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
-              </div>
-              </Col>
-              <Col span=24 v-if="items.length>0">
-              <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
-              </Col>
-            </Row>
+        <div v-if="!showList">
+          <Scroll :on-reach-bottom="handleReachBottom" v-if='!ifInfo' :height=ContentHeight>
+            <div id="contentchart" class="scrollBarAble" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex'}">
+              <Row type="flex" justify="start" align="middle">
+                <Col :sm="8" :lg="6" align="middle" v-for="item in items">
+                <div class="contentDiv" @click="showContent(item.id)">
+                  <p class="contentTitle">{{item.title}}</p>
+                  <p class="contentText">{{item.text}}</p>
+                  <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
+                </div>
+                </Col>
+                <Col span=24 v-if="items.length>0">
+                <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
+                </Col>
+              </Row>
+            </div>
+          </Scroll>
+          <div id="contentInfo" class="scrollBarAble" v-if='ifInfo' :style="{height:ContentHeight,overflowY:'scroll'}">
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
+            <h2 class="contentInfoTitle" id='contentsTitle'></h2>
+            <p class="contentInfoTime" id='contentsTime'></p>
+            <p style='margin:30px'><span id='contents'></span></p>
           </div>
-        </Scroll>
-        <div id="contentInfo" class="scrollBarAble" v-if='ifInfo' :style="{height:ContentHeight,overflowY:'scroll'}">
-          <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
-          <h2 class="contentInfoTitle" id='contentsTitle'></h2>
-          <p class="contentInfoTime" id='contentsTime'></p>
-          <p style='margin:30px'><span id='contents'></span></p>
         </div>
-      </div></div>
-      <div>
-      <div v-if="showList" :style="{height:ContentHeightList,overflowY:'scroll'}">
-        <Table width="550" border :columns="columns2" :data="data3"></Table>
       </div>
+      <div>
+        <div v-if="showList" :style="{height:ContentHeightList,overflowY:'scroll'}">
+          <Table width="550" border :columns="columns2" :data="data3"></Table>
+        </div>
       </div>
     </div>
     </Col>
@@ -105,6 +106,7 @@
   </div>
 </template>
 <script>
+  import util from '../../util/tools.js'
   import mock from '../../mock/index.js'
   import modalChart from './custom_modal.vue'
   import {
@@ -133,95 +135,93 @@
         toEdg: -100,
         showList: false,
         moreLoading: false,
-        columns2: [
-                    {
-                        title: 'Name',
-                        key: 'name',
-                        width: 100,
-                        fixed: 'left'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age',
-                        width: 100
-                    },
-                    {
-                        title: 'Province',
-                        key: 'province',
-                        width: 100
-                    },
-                    {
-                        title: 'City',
-                        key: 'city',
-                        width: 100
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address',
-                        width: 200
-                    },
-                    {
-                        title: 'Postcode',
-                        key: 'zip',
-                        width: 100
-                    },
-                    {
-                        title: 'Action',
-                        key: 'action',
-                        fixed: 'right',
-                        width: 120,
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    }
-                                }, 'View'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    }
-                                }, 'Edit')
-                            ]);
-                        }
-                    }
-                ],
-                data3: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        province: 'America',
-                        city: 'New York',
-                        zip: 100000
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'Washington, D.C. No. 1 Lake Park',
-                        province: 'America',
-                        city: 'Washington, D.C.',
-                        zip: 100000
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                        province: 'Australian',
-                        city: 'Sydney',
-                        zip: 100000
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park',
-                        province: 'Canada',
-                        city: 'Ottawa',
-                        zip: 100000
-                    }
-                ]
+        columns2: [{
+            title: 'Name',
+            key: 'name',
+            width: 100,
+            fixed: 'left'
+          },
+          {
+            title: 'Age',
+            key: 'age',
+            width: 100
+          },
+          {
+            title: 'Province',
+            key: 'province',
+            width: 100
+          },
+          {
+            title: 'City',
+            key: 'city',
+            width: 100
+          },
+          {
+            title: 'Address',
+            key: 'address',
+            width: 200
+          },
+          {
+            title: 'Postcode',
+            key: 'zip',
+            width: 100
+          },
+          {
+            title: 'Action',
+            key: 'action',
+            fixed: 'right',
+            width: 120,
+            render: (h, params) => {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'text',
+                    size: 'small'
+                  }
+                }, 'View'),
+                h('Button', {
+                  props: {
+                    type: 'text',
+                    size: 'small'
+                  }
+                }, 'Edit')
+              ]);
+            }
+          }
+        ],
+        data3: [{
+            name: 'John Brown',
+            age: 18,
+            address: 'New York No. 1 Lake Park',
+            province: 'America',
+            city: 'New York',
+            zip: 100000
+          },
+          {
+            name: 'Jim Green',
+            age: 24,
+            address: 'Washington, D.C. No. 1 Lake Park',
+            province: 'America',
+            city: 'Washington, D.C.',
+            zip: 100000
+          },
+          {
+            name: 'Joe Black',
+            age: 30,
+            address: 'Sydney No. 1 Lake Park',
+            province: 'Australian',
+            city: 'Sydney',
+            zip: 100000
+          },
+          {
+            name: 'Jon Snow',
+            age: 26,
+            address: 'Ottawa No. 2 Lake Park',
+            province: 'Canada',
+            city: 'Ottawa',
+            zip: 100000
+          }
+        ]
       };
     },
     computed: mapState([
@@ -230,7 +230,24 @@
     watch: {
       contentTimeCondition: function(va) {
         // alert('时间变啦!!')
-        console.log(va)
+        var mthis = this
+        mthis.page = 1
+        if (va.length === 2) {
+          let stime = util.getTimestamp(va[0])
+          let etime = util.getTimestamp(va[1])
+          mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
+            if (response.body.data.length > 0) {
+              mthis.items = response.body.data
+            } else {
+              mthis.items = []
+              // alert('未找到匹配的文章')
+            }
+          })
+        } else if (va.length === 1) {
+          alert('aaa')
+        } else {
+          alert('bbbb')
+        }
       },
       searchContentResult: function(va) {
         console.log('-----------------------1')
@@ -259,7 +276,7 @@
       contentHeight: function() {
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
-        mthis.ContentHeightList =  mthis.$store.state.contentHeight - 75 + 22 + 'px';
+        mthis.ContentHeightList = mthis.$store.state.contentHeight - 75 + 22 + 'px';
       }
     },
     components: {
@@ -275,13 +292,38 @@
         mthis.order = '&isSortByTime=asc'
         mthis.page = 1
         return new Promise(resolve => {
-          console.log('-----------------------2')
-          mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.content + mthis.order).then(response => {
-            mthis.items = response.body.data
-            resolve();
-            // mthis.dataexpand = response.body.data
-            // mthis.singlePerson = (opt[1]>1)?false:true
-          })
+          if (mthis.contentTimeCondition.length === 2) {
+            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = response.body.data
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          } else if (mthis.contentTimeCondition.length === 1) {
+            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = response.body.data
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          } else {
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = response.body.data
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          }
         });
       },
       orderTimeDown() {
@@ -289,13 +331,38 @@
         mthis.order = '&isSortByTime=desc'
         mthis.page = 1
         return new Promise(resolve => {
-          console.log('-----------------------3')
-          mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.content + mthis.order).then(response => {
-            mthis.items = response.body.data
-            resolve();
-            // mthis.dataexpand = response.body.data
-            // mthis.singlePerson = (opt[1]>1)?false:true
-          })
+          if (mthis.contentTimeCondition.length === 2) {
+            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = response.body.data
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          } else if (mthis.contentTimeCondition.length === 1) {
+            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = response.body.data
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          } else {
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = response.body.data
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          }
         });
       },
       orderDefalut() {
@@ -303,13 +370,38 @@
         mthis.order = ''
         mthis.page = 1
         return new Promise(resolve => {
-          console.log('-----------------------4')
-          mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.content + mthis.order).then(response => {
-            mthis.items = response.body.data
-            resolve();
-            // mthis.dataexpand = response.body.data
-            // mthis.singlePerson = (opt[1]>1)?false:true
-          })
+          if (mthis.contentTimeCondition.length === 2) {
+            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = response.body.data
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          } else if (mthis.contentTimeCondition.length === 1) {
+            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = response.body.data
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          } else {
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = response.body.data
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          }
         });
       },
       handleReachBottom(status) {
@@ -317,15 +409,38 @@
         mthis.page = mthis.page + 1
         mthis.moreLoading = true
         return new Promise(resolve => {
-          console.log('-----------------------5')
-          mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.content + mthis.order).then(response => {
-            console.log(mthis.items)
-            mthis.items = mthis.items.concat(response.body.data)
-            resolve();
-            mthis.moreLoading = false
-            // mthis.dataexpand = response.body.data
-            // mthis.singlePerson = (opt[1]>1)?false:true
-          })
+          if (mthis.contentTimeCondition.length === 2) {
+            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = mthis.items.concat(response.body.data)
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          } else if (mthis.contentTimeCondition.length === 1) {
+            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = mthis.items.concat(response.body.data)
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          } else {
+            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+              if(response.body.data.length>0){
+                mthis.items = mthis.items.concat(response.body.data)
+              } else {
+                alert('no data')
+              }
+              resolve();
+            })
+          }
         });
       },
       toContentDiv() {
@@ -451,7 +566,7 @@
     animation: all 1s;
     -webkit-animation: all 1s;
     /* transform:translate(5px,5px); */
-    -webkit-box-shadow:-5px 5px 10px -4px rgba(81, 85, 85, 0.5);
+    -webkit-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     -moz-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
   }

@@ -334,7 +334,7 @@ export default {
             var entityattrEle = document.getElementById(EntityAttrData.id+'/entityattr');
             var moreEle = document.getElementById(EntityAttrData.id+'/more');
             var countSpan = document.getElementById(EntityAttrData.id+'/countSpan');
-            debugger
+            // debugger
             if(entityattrEle.children.length <= 4){
                 mthis.addMore(EntityAttrData.id);
                 moreEle.firstChild.innerHTML = '收起';
@@ -396,7 +396,7 @@ export default {
                 tdperB.className = 'StaticsPerTd';
                 tr.appendChild(tdperB);
                 tdperB.innerHTML = percentBar
-                debugger
+                // debugger
                 entityattrEle.insertBefore(tr,moreEle)
             }
         },
@@ -413,7 +413,7 @@ export default {
             }
         },
         getAttrsById(target){
-            debugger
+            // debugger
         },
         setOpenPanelNames(){
             var mthis = this;
