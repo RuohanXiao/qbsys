@@ -223,18 +223,6 @@ export default {
             route_Noclick:true,
             'route_click': true
         },
-        swiperOption: {              
-                notNextTick: true,
-                direction:'horizontal',
-                centeredSlides: true,
-                loop: true,
-                slidesPerview:'auto',
-                loopedSlides:7,
-                grabCursor:true,
-                paginationClickable :true,
-                prevButton:'.swiper-button-prev',
-                nextButton:'.swiper-button-next',
-            }
       }
     },
     mounted() {
@@ -1226,8 +1214,6 @@ export default {
       imgSlider,
       routeLegend,
       imgItemOpera,
-      swiper,
-      swiperSlide
     }
 }
 </script>
