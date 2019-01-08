@@ -510,7 +510,7 @@
   // import geoChartDiv from "./component/custom_geodiv";
   import geoChartDiv from "./component/custom_operationButtons";
   import timeChartDiv from "./component/custom_timediv";
-  import eventChartDiv from "./component/custom_eventdiv";
+  import eventChartDiv from "./component/custom_eventdiv_geo";
   import navDiv from "./component/custom_nav";
   import '../dist/assets/styles/navsytle.css';
   import nav from "../dist/assets/js/nav.js";

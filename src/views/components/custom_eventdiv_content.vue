@@ -7,6 +7,45 @@
           <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
             <left-statics :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0"></left-statics>
             <left-statics :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0"></left-statics>
+            <!-- <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0" ></c-tree> -->
+            <!-- <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'geo'" ></c-tree> -->
+            <!-- <c-tree :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0" ></c-tree> -->
+              <!-- <Collapse simple class="toushiItems">
+                <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
+                  <div slot="content">
+                  <collapse accordion simple>
+                    <panel v-for="StatisticsItem in StatisticsType.children" :hide-arrow="(StatisticsItem.children === undefined)">
+                      <span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
+                      <percentBar :num="StatisticsItem.per" :count="StatisticsItem.count" :index='index'></percentBar>
+                      <div slot="content">
+                        <collapse accordion simple>
+                          <panel v-for="lastStatisticsItem in StatisticsItem.children" :hide-arrow='true'>
+                            <span style="width:2em" />
+                            <span style="font-size: 10px;padding-left:30px">{{statisticsNameList[lastStatisticsItem.name]}}</span>
+                            <percentBar :num="lastStatisticsItem.per" :count="lastStatisticsItem.count" :index='index'></percentBar>
+                            </div>
+                          </panel>
+                        </collapse>
+                      </div>
+                    </panel>
+                  </collapse>
+                  </div>
+                </panel>
+              </Collapse> -->
+            <!-- <div v-for="object in dataStatisticsEvent">
+              <Collapse simple class="toushiItems" accordion >
+                <Panel name="1" :style='{borderBottom:"1px solid rgba(51,255,255,.5)"}'>
+                  {{object.name}}({{object.num}})
+                      <div v-for="(obj,index) in object.children" :style="{marginLeft:'10px'}" slot="content">
+                      <Collapse simple>
+                        <Panel :name="index">
+                          {{obj.name}}({{obj.count}})
+                        </Panel>
+                      </Collapse>
+                    </div>
+                </Panel>
+              </Collapse>
+            </div> -->
           </Tab-pane>
           <Tab-pane label="目标详情" name= '目标详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
             <div>
@@ -154,25 +193,25 @@
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
-      selectNetNodes: function(va) {
-        var mthis = this;
-          let nodeIdsArry = va[0].ids.map(item => {
-            return item.id;
-          });
-          if (this.timer) {
-            clearTimeout(this.timer)
-          }
-          this.timer = setTimeout(function() {
-          // 新增防抖功能
-          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
-            'nodeIds': nodeIdsArry
-          }).then(response => {
-            mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
-          })
-          }, 100);
-        // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
-        // mthis.evetdata = 
-      }
+      // selectNetNodes: function(va) {
+      //   var mthis = this;
+      //     let nodeIdsArry = va[0].ids.map(item => {
+      //       return item.id;
+      //     });
+      //     if (this.timer) {
+      //       clearTimeout(this.timer)
+      //     }
+      //     this.timer = setTimeout(function() {
+      //     // 新增防抖功能
+      //     mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+      //       'nodeIds': nodeIdsArry
+      //     }).then(response => {
+      //       mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
+      //     })
+      //     }, 100);
+      //   // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
+      //   // mthis.evetdata = 
+      // }
     },
     methods: {
       a(){
@@ -258,31 +297,6 @@
 </style>
 
 <style>
-#tab1 .ivu-tabs-nav-wrap{
-  overflow: hidden;
-  margin-bottom: 0px;
-  border-bottom: 1px solid #447272;
-  background-color: rgba(51,255,255,0.1);
-}
-#tab1 .ivu-tabs-nav .ivu-tabs-tab{
-  margin-right: 0px;
-  border-right: 1px solid #447272;
-  font-family: 'Microsoft Yahei';
-}
-#tab1 .ivu-tabs-ink-bar{
-  bottom:0px;
-  height:0px;
-  background-color:rgba(51,255,255,0.2)
-}
-#tab1 .ivu-tabs-tab-focused {
-    border-color: #57a3f3 !important;
-    background-color:rgba(51,255,255,0.2);
-}
-
-#tab1 .ivu-tabs-tab{
-  border-color: #447272 !important;
-  color:#ccffff !important;
-}
 .entityDetail>.organization_detailTable tr{
   border-bottom: none !important;
 }

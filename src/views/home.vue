@@ -386,22 +386,22 @@
   .scrollBarAble:hover {
     overflow-y: scroll;
   }
-  .scrollBarAble:hover::-webkit-scrollbar {
+  .scrollBarAble:hover ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
   }
-  .scrollBarAble:hover::-webkit-scrollbar-thumb {
+  .scrollBarAble:hover ::-webkit-scrollbar-thumb {
     border: 5px solid transparent;
     background-color: rgba(0, 0, 0, 0)
   }
-  .scrollBarAble:hover::-webkit-scrollbar-thumb {
+  .scrollBarAble:hover ::-webkit-scrollbar-thumb {
     padding-right: 5px !important;
     border-radius: 10px;
     min-height: 20px;
     background-color: #3cc;
     box-shadow: 1px 1px 3px #3cc inset;
   }
-  .scrollBarAble:hover::-webkit-scrollbar-track {
+  .scrollBarAble:hover ::-webkit-scrollbar-track {
     border-radius: 2.5px !important;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
   }
