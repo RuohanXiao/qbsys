@@ -27,31 +27,47 @@ var test_Route = [ {
 		coordinate : [ 117.00559998, 36.6670723 ],
 		type : 1,
 		name : 'a',
-		order : 0
+		order : 0,
+		eventId:'E1111',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:1,
 		coordinate : [ 117.20349884, 39.13111877 ],
 		type : 1,
 		name : 'b',
-		order : 1
+		order : 1,
+		eventId:'E1112',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:2,
 		coordinate : [ 114.48977661, 38.04512787 ],
 		type : 2,
 		name : 'c',
-		order : 2
+		order : 2,
+		eventId:'E1113',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
+		
 	}, {
 		pointId:3,
 		coordinate : [ 116.3809433, 39.9236145 ],
 		type : 2,
 		name : 'd',
-		order : 3
+		order : 3,
+		eventId:'E1114',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:4,
 		coordinate : [ 123.41168213, 41.7966156 ],
 		type : 1,
 		name : 'e',
-		order : 4
+		order : 4,
+		eventId:'E1115',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	} ]
 }, {
 	'id':1,
@@ -62,31 +78,46 @@ var test_Route = [ {
 		coordinate : [ 87.62695, 43.90137 ],
 		type : 1,
 		name : 'a',
-		order : 0
+		order : 0,
+		eventId:'E2111',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:1,
 		coordinate : [ 91.14258, 29.75098 ],
 		type : 1,
 		name : 'b',
-		order : 1
+		order : 1,
+		eventId:'E2112',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:2,
 		coordinate : [ 113.55469, 22.28027 ],
 		type : 2,
 		name : 'c',
-		order : 2
+		order : 2,
+		eventId:'E2113',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:3,
 		coordinate : [ 101.77734, 36.60645 ],
 		type : 2,
 		name : 'd',
-		order : 3
+		order : 3,
+		eventId:'E2114',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:4,
 		coordinate : [ 126.65039, 45.83496 ],
 		type : 1,
 		name : 'e',
-		order : 4
+		order : 4,
+		eventId:'E2115',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	} ]
 }, {
 	'id':2,
@@ -98,30 +129,45 @@ var test_Route = [ {
 		type : 1,
 		name : 'a',
 		order : 0,
+		eventId:'E3111',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:1,
 		coordinate : [ 41.14258, 79.75098 ],
 		type : 1,
 		name : 'b',
-		order : 1
+		order : 1,
+		eventId:'E3112',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:2,
 		coordinate : [ 13.55469, 12.28027 ],
 		type : 2,
 		name : 'c',
-		order : 2
+		order : 2,
+		eventId:'E3113',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:3,
 		coordinate : [ 151.77734, 26.60645 ],
 		type : 2,
 		name : 'd',
-		order : 3
+		order : 3,
+		eventId:'E3114',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	}, {
 		pointId:4,
 		coordinate : [ 26.65039, 15.83496 ],
 		type : 1,
 		name : 'e',
-		order : 4
+		order : 4,
+		eventId:'E3115',
+		eventType:'access', //访问
+		Time:["2018-01-02","2018-01-03"],
 	} ]
 }];
 
@@ -141,81 +187,91 @@ var test_HeatMap = [ {
 } ];
 
 //=============================================================================
-var Response={
+var EventsRon={
 	Code:1,
 	data:[
 		{
 			Person:['普京'],
 			Position: ['北京'],
 			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 117.00559998, 36.6670723 ]
+			EventId: 'E111',
+			PersonId:['Q111'],
+			coordinate:[ 117.00559998, 36.6670723 ]
 		},
 		{
 			Person:['普京'],
 			Position: ['北京'],
 			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 117.20349884, 39.13111877 ]
+			EventId: 'E112',
+			PersonId:['Q111'],
+			coordinate:[ 117.20349884, 39.13111877 ]
+		},
+		{
+			Person:['普京','习近平'],
+			Position: ['北京'],
+			Time:["2018-01-02","2018-01-03"],
+			EventId: 'E113',
+			PersonId:['Q111'],
+			coordinate:[ 114.48977661, 38.04512787 ]
 		},
 		{
 			Person:['普京'],
 			Position: ['北京'],
 			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 114.48977661, 38.04512787 ]
+			EventId: 'E114',
+			PersonId:['Q111'],
+			coordinate:[ 116.3809433, 39.9236145 ]
 		},
 		{
 			Person:['普京'],
 			Position: ['北京'],
 			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 116.3809433, 39.9236145 ]
+			EventId: 'E115',
+			PersonId:['Q111'],
+			coordinate:[ 123.41168213, 41.7966156 ]
 		},
 		{
 			Person:['普京'],
 			Position: ['北京'],
 			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 123.41168213, 41.7966156 ]
+			EventId: 'E116',
+			PersonId:['Q111'],
+			coordinate:[ 87.62695, 43.90137 ]
 		},
 		{
 			Person:['普京'],
 			Position: ['北京'],
 			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 87.62695, 43.90137 ]
+			EventId: 'E117',
+			PersonId:['Q111'],
+			coordinate:[ 91.14258, 29.75098 ]
 		},
 		{
 			Person:['普京'],
 			Position: ['北京'],
 			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 91.14258, 29.75098 ]
+			EventId: 'E118',
+			PersonId:['Q111'],
+			coordinate:[ 113.55469, 22.28027 ]
 		},
 		{
 			Person:['普京'],
 			Position: ['北京'],
 			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 113.55469, 22.28027 ]
+			EventId: 'E119',
+			PersonId:['Q111'],
+			coordinate:[ 101.77734, 36.60645 ]
 		},
 		{
 			Person:['普京'],
 			Position: ['北京'],
 			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 101.77734, 36.60645 ]
-		},
-		{
-			Person:['普京'],
-			Position: ['北京'],
-			Time:["2018-01-02","2018-01-03"],
-			Id: 'E111',
-			location:[ 126.65039, 45.83496 ]
+			EventId: 'E110',
+			PersonId:['Q111'],
+			coordinate:[ 126.65039, 45.83496 ]
 		}
 	]
 };
 	
 
-export {test_Route,test_HeatMap}
+export {test_Route,test_HeatMap,EventsRon}

@@ -8,22 +8,13 @@
                         <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
                     </table>
                 </div>
-                <div id="imgmain" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',top:parseInt(GeoHeight) -30  + 'px'}">
-                    <imgSlider></imgSlider>
-                    <!-- <swiper :options="swiperOption" ref="mySwiper" @someSwiperEvent="callback">
-                        <swiper-slide>I'm Slide 1</swiper-slide>
-                        <swiper-slide>I'm Slide 2</swiper-slide>
-                        <swiper-slide>I'm Slide 3</swiper-slide>
-                        <swiper-slide>I'm Slide 4</swiper-slide>
-                        <swiper-slide>I'm Slide 5</swiper-slide>
-                        <swiper-slide>I'm Slide 6</swiper-slide>
-                        <swiper-slide>I'm Slide 7</swiper-slide>
-                    </swiper> -->
-                    <!-- <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
-                        <ul class='slides' id='sliderUL'>
+                <div id="imgmain" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',top:parseInt(GeoHeight) -30  + 'px',width:geoWidth}" v-if="test_Route.length>0">
+                    <!-- <imgSlider></imgSlider> -->
+                    <div class="flexslider">
+                        <ul class="slides">
                             <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
                         </ul>
-                    </div> -->
+                    </div>
                 </div>
             </div>
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
@@ -179,17 +170,15 @@ import Icon from 'ol/style/Icon'
 
 
 import flexslider from 'flexslider'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css'
 import 'ol/ol.css'
 import '../../dist/assets/styles/geo/flexslider.css'
 import '../../dist/assets/styles/geo/demo.css'
 import '../../dist/assets/styles/geo/mapInit.css'
 
-/* import imgSlider from "./custom_imgSlider" */
+import imgSlider from "./custom_imgSlider"
 import routeLegend from './custom_routeLegend'
 import imgItemOpera from './custom_mapOperaButtons'
-import imgSlider from './custom_newImgSlider'
+
 
 
 export default {

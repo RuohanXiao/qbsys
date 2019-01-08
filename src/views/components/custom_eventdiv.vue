@@ -262,6 +262,7 @@
   overflow: hidden;
   margin-bottom: 0px;
   border-bottom: 1px solid #447272;
+  background-color: rgba(51,255,255,0.1);
 }
 #tab1 .ivu-tabs-nav .ivu-tabs-tab{
   margin-right: 0px;
