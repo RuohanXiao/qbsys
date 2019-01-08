@@ -193,25 +193,25 @@
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
-      selectNetNodes: function(va) {
-        var mthis = this;
-          let nodeIdsArry = va[0].ids.map(item => {
-            return item.id;
-          });
-          if (this.timer) {
-            clearTimeout(this.timer)
-          }
-          this.timer = setTimeout(function() {
-          // 新增防抖功能
-          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
-            'nodeIds': nodeIdsArry
-          }).then(response => {
-            mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
-          })
-          }, 100);
-        // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
-        // mthis.evetdata = 
-      }
+      // selectNetNodes: function(va) {
+      //   var mthis = this;
+      //     let nodeIdsArry = va[0].ids.map(item => {
+      //       return item.id;
+      //     });
+      //     if (this.timer) {
+      //       clearTimeout(this.timer)
+      //     }
+      //     this.timer = setTimeout(function() {
+      //     // 新增防抖功能
+      //     mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+      //       'nodeIds': nodeIdsArry
+      //     }).then(response => {
+      //       mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
+      //     })
+      //     }, 100);
+      //   // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
+      //   // mthis.evetdata = 
+      // }
     },
     methods: {
       a(){

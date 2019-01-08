@@ -18,7 +18,7 @@
   import "../dist/assets/styles/net_main.css";
   import netChartDiv from "./components/custom_netdiv";
   import timeChartDiv from "./components/custom_timediv_net";
-  import eventChartDiv from "./components/custom_eventdiv";
+  import eventChartDiv from "./components/custom_eventdiv_net";
   import { mapState,mapMutations } from 'vuex'
   export default {
     name: "App",
