@@ -8,12 +8,22 @@
                         <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
                     </table>
                 </div>
-                <div id="imgmain" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',width:'100%',top:parseInt(GeoHeight) -30  + 'px'}">
-                    <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
+                <div id="imgmain" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',top:parseInt(GeoHeight) -30  + 'px'}">
+                    <imgSlider></imgSlider>
+                    <!-- <swiper :options="swiperOption" ref="mySwiper" @someSwiperEvent="callback">
+                        <swiper-slide>I'm Slide 1</swiper-slide>
+                        <swiper-slide>I'm Slide 2</swiper-slide>
+                        <swiper-slide>I'm Slide 3</swiper-slide>
+                        <swiper-slide>I'm Slide 4</swiper-slide>
+                        <swiper-slide>I'm Slide 5</swiper-slide>
+                        <swiper-slide>I'm Slide 6</swiper-slide>
+                        <swiper-slide>I'm Slide 7</swiper-slide>
+                    </swiper> -->
+                    <!-- <div style='margin: 0 0 0 0;background:none;border:none' class='flexslider'>
                         <ul class='slides' id='sliderUL'>
                             <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
                         </ul>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
@@ -126,7 +136,7 @@ top: 2.75em;
 }
 
 #HeatMap_Map .ol-zoom-in.ol-has-tooltip:hover [role=tooltip],
-#HeatMap_Map .ol-zoom-in.ol-has-tooltip:focus [role=tooltip] {
+#HeatMap_Map .ol-zoom-in.ol-has-tooltip:focus [rolenpm=tooltip] {
 top: 3px;
 }
 
@@ -169,14 +179,17 @@ import Icon from 'ol/style/Icon'
 
 
 import flexslider from 'flexslider'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 import 'ol/ol.css'
 import '../../dist/assets/styles/geo/flexslider.css'
 import '../../dist/assets/styles/geo/demo.css'
 import '../../dist/assets/styles/geo/mapInit.css'
 
-import imgSlider from "./custom_imgSlider"
+/* import imgSlider from "./custom_imgSlider" */
 import routeLegend from './custom_routeLegend'
 import imgItemOpera from './custom_mapOperaButtons'
+import imgSlider from './custom_newImgSlider'
 
 
 export default {
@@ -220,7 +233,19 @@ export default {
         routeClassObject:{
             route_Noclick:true,
             'route_click': true
-        }
+        },
+        swiperOption: {              
+                notNextTick: true,
+                direction:'horizontal',
+                centeredSlides: true,
+                loop: true,
+                slidesPerview:'auto',
+                loopedSlides:7,
+                grabCursor:true,
+                paginationClickable :true,
+                prevButton:'.swiper-button-prev',
+                nextButton:'.swiper-button-next',
+            }
       }
     },
     mounted() {
@@ -1138,6 +1163,7 @@ export default {
     computed:mapState ([
       'tmss','split','geoHeight'
     ]),
+    
     watch:{
         locationClassObject:{
                 handler:function(val,oldval){
@@ -1210,7 +1236,9 @@ export default {
     components: {
       imgSlider,
       routeLegend,
-      imgItemOpera
+      imgItemOpera,
+      swiper,
+      swiperSlide
     }
 }
 </script>
