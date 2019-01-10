@@ -202,8 +202,11 @@
       // 调用统计接口
       getStatistics() {
         var mthis = this
+        console.log(mthis.netchart)
         let nodeArr = Object.keys(mthis.netchart._impl.data.default.nodes).map(key => mthis.netchart._impl.data.default.nodes[key].id);
         let linkArr = Object.keys(mthis.netchart._impl.data.default.links).map(key => mthis.netchart._impl.data.default.links[key]);
+        console.log(nodeArr)
+        console.log(linkArr)
         mthis.$http.post('http://10.60.1.140:5001/graph-statistics/', {
           'nodes': nodeArr,
           'links': linkArr
@@ -265,39 +268,45 @@
           "nodes": [],
           "links": []
         })
-        this.$store.commit('setSearchNetResult', '')
+        this.$store.commit('setSearchNetResult', [{
+                node: {
+                  nodes: []
+                },
+                id: '',
+                label: ''
+              }])
         this.selectionId = []
         this.getStatistics()
       },
       // 事件拓展
       expandNodeEvent() {
         var mthis = this;
+        console.log('-----shijian tuozhan-----')
+        console.log(mthis.selectionId)
+        let arr = []
         if (mthis.selectionId.length > 0) {
-          mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, mthis.saveNum)
-          for (let i = 0; i < mthis.selectionId.length; i++) {
-            mthis.netchart.expandNode(mthis.selectionId[i].id)
-          }
           //访问数据库，拓展新数据
-          mock.get("/getNodeDataNew").then(function(res) {
-            let ids = [];
-            let netChartLog = sessionStorage.getItem('netChartLog');
-            let netChartLogJson = JSON.parse(netChartLog).data;
-            let data = res.data.data[0];
-            mthis.netchart.addData(data);
-            for (let num = 0; num < res.data.data[0].nodes.length; num++) {
-              ids.push(res.data.data[0].nodes[num].id)
+          mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
+          let res = null
+          for (let i = 0; i < mthis.selectionId.length; i++) {
+            arr.push(mthis.selectionId[i].id)
+          }
+          mthis.$http.post('http://10.60.1.140:5001/event-exploration/', {
+            'nodeIds': arr
+          }).then(response => {
+            res = response.body.data[0]
+            console.log('--------------------------------eventexpand-------------')
+            console.log(res)
+            mthis.netchart.addData(res)
+            for (let m = 0; m < res.nodes.length; m++) {
+              arr.push(res.nodes[m].id)
             }
-            netChartLogJson.push({
-              'id': ids,
-              'action': 'eventExpand',
-              'other': ''
-            })
-            // netChartLog = JSON.stringify(netChartLogJson);
-            sessionStorage.setItem('netChartLog', JSON.stringify({
-              data: netChartLogJson
-            }));
+            setTimeout(function() {
+              console.log(util.unique(arr))
+              mthis.netchart.selection(util.unique(arr))
+            }, 100)
             mthis.getStatistics()
-          });
+          })
           // mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
         } else {
           this.$Message.error('请至少选择一个节点进行拓展操作！')
@@ -779,6 +788,8 @@
         }
       },
       reloadNetData(data) {
+        console.log('========================')
+        console.log(dataarr)
         var mthis = this
         let dataarr = []
         dataarr.push(data)
@@ -1135,13 +1146,16 @@
     ]),
     watch: {
       searchNetResult: function(va) {
+        console.log('1141-----------------')
+        console.log(this.searchNetResult)
         if (this.$store.state.tmss === 'net') {
-          this.reloadNetData(va.node.nodes[0])
+          this.reloadNetData(this.searchNetResult)
+          
         }
       },
       addNetNodes: function(va) {
         if (this.$store.state.tmss === 'net') {
-          this.addNetData(va.node.nodes[0])
+          this.addNetData(va.node)
         }
       },
       netHeight: function(va) {

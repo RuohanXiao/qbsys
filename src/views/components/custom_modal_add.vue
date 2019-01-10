@@ -174,23 +174,23 @@
                   label:this.targetData.name,
                 })
       },
-      showNodeInNewNet() {
-        this.cancel();
-        this.$store.commit('setSearchNetResult', {
-                  node: {
-                    nodes: [{
-                      'id': this.targetData.id,
-                      'type': this.targetData.type,
-                      'name': this.targetData.name,
-                      'img': this.targetData.img,
-                      'loaded': true
-                    }],
-                    links:[]
-                  },
-                  id: this.targetData.id,
-                  label: this.targetData.name,
-                })
-      },
+      // showNodeInNewNet() {
+      //   this.cancel();
+      //   this.$store.commit('setSearchNetResult', {
+      //             node: {
+      //               nodes: [{
+      //                 'id': this.targetData.id,
+      //                 'type': this.targetData.type,
+      //                 'name': this.targetData.name,
+      //                 'img': this.targetData.img,
+      //                 'loaded': true
+      //               }],
+      //               links:[]
+      //             },
+      //             id: this.targetData.id,
+      //             label: this.targetData.name,
+      //           })
+      // },
       queryPerson() {},
       searchInfo(query) {
         var mthis = this

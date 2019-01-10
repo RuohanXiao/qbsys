@@ -103,10 +103,12 @@
               }, {
                 "emulateJSON": true
               }).then(response => {
+                console.log('--------------sss-------------')
+                console.log(response.body.data[0].nodes[0].id)
                 mthis.$store.commit('setSearchNetResult', {
-                  node: response.body.data[0],
+                  node: response.body.data[0].nodes[0],
                   id: response.body.data[0].nodes[0].id,
-                  label: response.body.data[0].nodes[0].name
+                  label: response.body.data[0].nodes[0].entity_name
                 })
               })
             }
@@ -154,17 +156,18 @@
               emulateJSON: true
             })
             .then(response => {
+              console.log(response)
               let option = []
               // let optionWord = {}
               // let optionWordArr = []
               let optionList = {}
               let optionListArr = []
               // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
-              for (let i = 0; i < response.body.data.length; i++) {
+              for (let i = 0; i < response.body.data[0].nodes.length; i++) {
                 optionListArr.push({
-                  "label": response.body.data[i].name,
-                  "value": response.body.data[i].id,
-                  "img": response.body.data[i].img,
+                  "label": response.body.data[0].nodes[i].name,
+                  "value": response.body.data[0].nodes[i].id,
+                  "img": response.body.data[0].nodes[i].img,
                   "type": 'human'
                 })
               }
@@ -200,11 +203,11 @@
                 "img": '',
                 "type": 'content'
               })
-              for (let i = 0; i < response.body.data.length; i++) {
+              for (let i = 0; i < response.body.data[0].nodes.length; i++) {
                 optionListArr.push({
-                  "label": response.body.data[i].name,
-                  "value": response.body.data[i].id,
-                  "img": response.body.data[i].img,
+                  "label": response.body.data[0].nodes[i].name,
+                  "value": response.body.data[0].nodes[i].id,
+                  "img": response.body.data[0].nodes[i].img,
                   "type": 'human'
                 })
               }

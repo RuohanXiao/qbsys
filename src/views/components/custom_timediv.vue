@@ -381,19 +381,20 @@
           mthis.changHeightCount++;
         }
       }, */
-      selectNetNodes: function(va) {
-        // var mthis = this;
-        // if(mthis.tmss == 'net'){
-        //   alert('下面要查询实体相关时间');
-        // }
-        // if(mthis.tmss == 'geo') {
-        //   alert('geo');
-        // }
-        // if(mthis.tmss == 'content') {
-        //   alert('content');
-        // }
+      // selectNetNodes: function(va) {
+      //   var mthis = this;
+      //   if(mthis.tmss == 'net'){
+      //     alert('下面要查询实体相关时间');
+      //   }
+      //   if(mthis.tmss == 'geo') {
+      //     alert('geo');
+      //   }
+      //   if(mthis.tmss == 'content') {
+      //     alert('content');
+      //   }
 
-      },
+      // },
+      
       split: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
