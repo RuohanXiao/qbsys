@@ -243,6 +243,25 @@ var store = new Vuex.Store({
     }],
     tabSelect: '数据透视',
     contentStatisticsResult:{},
+
+
+    // 三模块联动监听参数
+    net_selected_param:{
+      type:'', // 触发联动的模块
+      params:{
+        nodeIds: [],
+        linkIds: []
+      }
+    },
+    geo_selected_param:{
+      type: '',
+      params: {}
+    },
+    content_selected_param:{
+      type: '',
+      params: {}
+    }
+
   },
   mutations:{
     // 修改state里的数据时，只能通过mutations的形式来操作
@@ -344,6 +363,15 @@ var store = new Vuex.Store({
     setSearchModalResult(state,val){
       
       state.tabSelect = val
+    },
+    setNetSelectedParam(state,val){
+      state.net_selected_param = val
+    },
+    setGeoSelectedParam(state,val){
+      state.geo_selected_param = val
+    },
+    setContentSelectedParam(state,val){
+      state.content_selected_param = val
     }
   },
   getters:{
