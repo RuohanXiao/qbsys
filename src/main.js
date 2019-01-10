@@ -255,7 +255,7 @@ var store = new Vuex.Store({
     },
     geo_selected_param:{
       type: '',
-      params: {}
+      eventId: []
     },
     content_selected_param:{
       type: '',
