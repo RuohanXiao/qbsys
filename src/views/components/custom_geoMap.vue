@@ -1,27 +1,3 @@
-<template>
-    <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv'>
-        <imgItemOpera @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
-        <div id='mapDIV'>
-            <div id='locationRoute_Map' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
-                <div id='legendDiv'>
-                    <table id="legendBodyTable" style='border-collapse:separate;border-spacing:5;'>
-                        <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
-                    </table>
-                </div>
-                <div id="imgmain" :style="{marginLeft:'0px',marginTop:'0px',position:'fixed',zIndex:'99',top:parseInt(GeoHeight) -30  + 'px',width:geoWidth}" v-if="test_Route.length>0">
-                    <!-- <imgSlider></imgSlider> -->
-                    <div class="flexslider">
-                        <ul class="slides">
-                            <img-slider :imgS='imgslider' @imgItemOpera='imgClick' v-for='imgslider in test_Route'></img-slider>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
-        </div>
-    </div>
-</template>
-
 <style>
 .geoDiv{
     margin-left: 10px
@@ -139,10 +115,26 @@ top: 232px;
 
 </style>
 
+<template>
+    <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv'>
+        <imgItemOpera @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
+        <div id='mapDIV'>
+            <div id='locationRoute_Map' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
+                <div id='legendDiv'>
+                    <table id="legendBodyTable" style='border-collapse:separate;border-spacing:5;'>
+                        <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
+                    </table>
+                </div>
+            </div>
+            <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
+        </div>
+    </div>
+</template>
+
 <script>
 import { mapState,mapMutations } from 'vuex'
 
-import {test_Route,test_HeatMap} from '../../dist/assets/js/geo/data.js'
+import {test_Route,test_HeatMap,EventsDatas,timeStaticsData} from '../../dist/assets/js/geo/data.js'
 import {map} from '../../dist/assets/js/geo/ChinaMap.js' 
 import {getGradientColors} from '../../dist/assets/js/geo/GradientColors.js'
 import {BezierSinglePoint, BezierLinePoints} from '../../dist/assets/js/geo/geometryType/BezierLine.js'
@@ -191,6 +183,7 @@ export default {
         imgTopVules:'',
         test_Route:test_Route,
         test_HeatMap:test_HeatMap,
+        EventsDatas:EventsDatas,
         routeMap:null,
         heatMap:null,
         provinTilSource:null,
@@ -205,6 +198,7 @@ export default {
         mousePointCoordinate: null,
         GeoHeight:'0px',
         geoWidth:'0px',
+        timeCondition:[],
         //tmss:this.$store.state.tmss,
         /* GeoHeight:'500px',
         geoWidth:'1000px', */
@@ -330,9 +324,11 @@ export default {
                         tiled: true,
                         LAYERS: 'worldBaseMap:World_states_provinces',
                     }
-                })
-                mthis.setPointFeatures(mthis.test_Route)
-                mthis.locationPoints()
+                });
+                mthis.setPointFeatures(mthis.EventsDatas.data);
+                //mthis.returnSelectedEventIds(mthis.EventsDatas.data); //将所有ids返回给全局被选中的节点变量，为了统计时间轴和右侧菜单
+                //mthis.creatPicSlider();//图片轮播
+                //mthis.locationPoints()  //空间查询出点所在地信息
                 //mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight])
                 //mthis.routeMap.map.setSize([0,100])
                 //setTimeout( function() {mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight]);}, 2);
@@ -355,7 +351,7 @@ export default {
             
             mthis.clickButtonOpenDiv('route_button')
             if(mthis.legend == null){
-                mthis.click_route()
+                //mthis.click_route()
             }
             
         },
@@ -383,6 +379,7 @@ export default {
                 HeatMap_Map.style.display = 'none'
             }
         },
+        //returnSelectedEventIds(Data){},
         setPointFeatures(pointsData){
             var mthis = this
             var entityPointsSource = new VectorSource()
@@ -400,19 +397,17 @@ export default {
                 })
             })
             pointsData.forEach(function(item){
-                for(var i = 0; i < item.route.length; i++){
-                    var pointFeature = new Feature({
-                        geometry:new Point(item.route[i].coordinate),
-                        properties:{
-                            id:item.route[i].pointId,
-                            belongId:item.id,
-                            belongName:item.name,
-                            name:item.route[i].name
-                        }
-                    })
-                    pointFeature.setStyle(style)
-                    entityPointsSource.addFeature(pointFeature)
-                }
+                var pointFeature = new Feature({
+                    geometry:new Point(item.coordinate),
+                    properties:{
+                        id:item.EventId+"_eventId"
+                        /* belongId:mthis.integrationStringFromArrLink(item.PersonId,'_'), */
+                        /* belongName:item.name,
+                        name:item.route[i].name */
+                    }
+                })
+                pointFeature.setStyle(style)
+                entityPointsSource.addFeature(pointFeature)
             })
         },
         locationPoints(){
@@ -469,7 +464,7 @@ export default {
                 map.addOverlay(localtion_Overlay);
                 map.render();
             });
-            mthis.creatPicSlider();
+            
         },
         creatPicSlider(){
             var mthis = this
@@ -1138,10 +1133,18 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','geoHeight'
+      'tmss','split','geoHeight','geoTimeCondition'
     ]),
     
     watch:{
+        geoTimeCondition:function(){
+            var mthis = this;
+            mthis.timeCondition = mthis.$store.state.geoTimeCondition;
+        },
+        timeCondition:function(){
+            var mthis = this;
+            //mthis
+        },
         locationClassObject:{
                 handler:function(val,oldval){
                     var locationRoute_Map = document.getElementById('locationRoute_Map');

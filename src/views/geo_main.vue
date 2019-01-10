@@ -17,7 +17,7 @@
 <script>
   import "../dist/assets/styles/net_main.css";
   import geoMapDiv from "./components/custom_geoMap";
-  import timeChartDiv from "./components/custom_timediv";
+  import timeChartDiv from "./components/custom_timediv_geo";
   import eventChartDiv from "./components/custom_eventdiv_geo";
   import { mapState,mapMutations } from 'vuex'
   export default {
