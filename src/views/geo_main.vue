@@ -545,18 +545,7 @@
   #barchart {
     width: 100%;
   }
-  .button-div{
-    cursor: pointer;
-    color: rgba(51, 255, 255,0.6) !important;
-    align-items: center;
-    text-align: center;
-    min-width: 60px;
-    padding: 4px 0;
-  }
-  .button-div:hover, .button-div:hover>i, .button-div:hover>.img-content{
-    cursor: pointer;
-    color: rgba(51, 255, 255,1) !important;
-  }
+  
   .divStyle{
     display:flex;
     flex-flow:row nowrap;

@@ -418,17 +418,8 @@
     line-height: 30px;
     color: #33ffff !important;
   }
-  .DVSL-bar-btn-new {
-    line-height: 30px;
-    white-space: nowrap;
-    padding: 0 7px;
-    text-decoration: none;
-    color: rgba(51, 255, 255, 0.5);
-  }
-  .img-content {
-    font-size: 12px;
-    color: rgba(51, 255, 255, 0.6);
-  }
+  
+  
   /* 分割线样式 */
   .ivu-split-trigger-vertical {
     width: 3px !important;
@@ -552,6 +543,36 @@
   .button-div:hover>.img-content {
     cursor: pointer;
     color: rgba(51, 255, 255, 1) !important;
+  } 
+  .button-div-disable {
+    color: rgba(51, 255, 255, 0.2) !important;
+    align-items: center;
+    text-align: center;
+    min-width: 60px;
+    padding: 4px 0;
+  }
+
+  .button-div>.img-content {
+    font-size: 12px;
+    color: rgba(51, 255, 255, 0.6);
+  }
+  .button-div-disable>.img-content {
+    font-size: 12px;
+    color: rgba(51, 255, 255, 0.2);
+  }
+  .button-div>.DVSL-bar-btn-new {
+    line-height: 30px;
+    white-space: nowrap;
+    /* padding: 0 7px; */
+    text-decoration: none;
+    color: rgba(51, 255, 255, 0.6);
+  }
+  .button-div-disable>.DVSL-bar-btn-new {
+    line-height: 30px;
+    white-space: nowrap;
+    /* padding: 0 7px; */
+    text-decoration: none;
+    color: rgba(51, 255, 255, 0.2);
   }
   .divStyle {
     display: flex;

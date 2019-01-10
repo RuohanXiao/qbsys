@@ -10,33 +10,36 @@
           </Tooltip>
           <div class="divSplitLine"></div> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="square">
+          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="square">
             <Icon class="icon iconfont icon-grid  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">矩形布局</p>
+            <p class="img-content">矩形</p>
+            <!-- <p class="img-content">矩形布局</p> -->
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="star">
+          <div  :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="star">
             <Icon class="icon iconfont icon-star  DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
-            <p class="img-content">星形布局</p>
+            <p class="img-content">星形</p>
+            <!-- <p class="img-content">星形布局</p> -->
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="hierarchy">
+          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="hierarchy">
             <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">层级布局</p>
+            <p class="img-content">层级</p>
+            <!-- <p class="img-content">层级布局</p> -->
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="expandNodeKnowledge">
+          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeKnowledge">
             <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">知识扩展</p>
           </div>
           <!-- <InputNumber :max="10" :min="1" v-model="value1"></InputNumber> -->
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="expandNodeEvent">
+          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
             <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">事件扩展</p>
           </div>
@@ -46,20 +49,27 @@
                             <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
                           </Tooltip>
                           </Col> -->
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000" >
+          <div :class="ifSelectNode? 'button-div': 'button-div-disable'"  @click="showModalStep">
             <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content" @click="showModalStep">知识路径</p>
+            <p class="img-content">路径</p>
+            <!-- <p class="img-content">知识路径</p> -->
           </div>
         </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="showPathEvent">
             <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">事件路径</p>
           </div>
+        </Tooltip> -->
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="removeOther">
+            <Icon class="icon iconfont icon-fanxuan  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">反选节点</p>
+          </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="remove">
+          <div  :class="ifSelectNode? 'button-div': 'button-div-disable'"  @click="remove">
             <Icon class="icon iconfont icon-delete-point  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">删除</p>
           </div>
@@ -70,12 +80,7 @@
             <p class="img-content">清空画布</p>
           </div>
         </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="removeOther">
-            <Icon class="icon iconfont icon-fanxuan  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">反选节点</p>
-          </div>
-        </Tooltip>
+        
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="add">
@@ -163,6 +168,7 @@
         modal01: false,
         eventData: null,
         ids: [],
+        ifSelectNode: false
         // 节点形状
       };
     },
@@ -857,7 +863,7 @@
           // 星形布局
           layout: {
             mode: "radial",
-            nodeSpacing: 100
+            nodeSpacing: 80
           },
           // 层级布局
           // layout: {
@@ -882,6 +888,7 @@
               }
             },
             linkClasses: [
+              // { className: "links", style: { fillColor: "rgba(51, 255, 255, 0.4)"} ,position: 'absolute',borderRadius: '50%',animation: 'move 6s infinite linear'}
               //要改
               // { className: "知识扩展关系", style: { fillColor: "rgba(51, 255, 255, 0.4)"} ,id: "know"},
               // { className: "事件扩展关系", style: { fillColor: "rgba(102, 255, 153, 0.4)"},id: "event" }
@@ -930,14 +937,19 @@
             },
             linkStyleFunction: function(link) {
               link.cursor = "pointer";
+              link.fillColor= "rgba(51, 255, 255, 0.4)";
+              link.position='absolute';
+              link.borderRadius= '50%';
+              link.animation='move 6s infinite linear';
               link.label = link.data.type === "" ? link.data.num : link.data.type;
               // if(link.data.className === '知识扩展关系') //要改
-              if (link.data.className === '知识') {
-                link.fillColor = 'rgba(51, 255, 255, 0.4)';
-                // , direction: "D", lineDash: [3, 3] 
-              } else {
-                link.fillColor = 'rgba(51, 255, 255, 0.4)';
-              }
+              // if (link.data.className === '知识') {
+              //   link.fillColor = 'rgba(51, 255, 255, 0.4)';
+                
+              //   // , direction: "D", lineDash: [3, 3] 
+              // } else {
+              //   link.fillColor = 'rgba(51, 255, 255, 0.4)';
+              // }
               if (link.hovered) {
                 link.radius = 3;
                 // 连线颜色
@@ -999,13 +1011,18 @@
             // },
             onPointerDrag: function(event) {},
             onDoubleClick: function(event) {
-              //   if (event.clickNode) {
-              //     mthis.selectionId = event.clickNode.id;
-              //   } else if (event.clickLink) {
-              //     mthis.selectionId = event.clickLink.id;
-              //   } else {
-              //     mthis.selectionId = null
-              //   }
+              let nodeList = event.selection.filter(function (x) {
+                return x.isNode
+              })
+              let linkList = event.selection.filter(function (x) {
+                return x.isLink
+              })
+              if (event.clickNode||event.clickLink) {
+                mthis.$store.commit('setTabSelect', '选中详情')
+                // console.log(event.clickNode.id)
+              } else {
+                // mthis.selectionId = null
+              }
               //   // if (event.clickNode) { //test the click was on a node
               //   //   this.netchart.addData({
               //   //     nodes: [{
@@ -1041,6 +1058,7 @@
               }
               timer = setTimeout(function() {
                 if (event.selection.length > 0) {
+                  mthis.ifSelectNode = true
                   mthis.selectItem = event;
                   // 有选中节点或者link
                   mthis.selectionId = [];
@@ -1060,11 +1078,10 @@
                     ids: mthis.selectionId
                   }])
                   mthis.$store.commit('setSinglePerson', !(mthis.selectionId.length > 1))
-                  mthis.$store.commit('setTabSelect', '目标详情')
                 } else {
-                  mthis.selectionId = [];
-                  mthis.selectItem = null;
-                  mthis.$store.commit('setTabSelect', '数据透视')
+                  mthis.selectionId = []
+                  mthis.ifSelectNode = false
+                  mthis.selectItem = null
                 }
               }, 200);
             }
@@ -1094,6 +1111,14 @@
         // Update the chart settings, when user changes desired node display type
         $('.type-select input:radio').change(function() {
           var selected = $('.type-select input:radio:checked').val();
+          console.log(selected)
+           mthis.netchart.updateSettings({
+            style: {
+                node: {
+                    display: selected
+                }
+            }
+        });
           // mthis.netchart.updateSettings({
           //   style: {
           //     node: {

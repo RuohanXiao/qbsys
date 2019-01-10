@@ -55,9 +55,12 @@
         geoHeightCount: 1,
         contentHeightCount: 1,
         dataBySeries: {
-          num: [],
-          date: []
-        }
+          num: [1,2,3,4,5,6,7,8
+          ],
+          date: ['2019-01-01','2019-01-02','2019-01-03','2019-01-04','2019-01-05','2019-01-06','2019-01-07','2019-01-08'
+          ]
+        },
+        selectTime:false
       };
     },
     methods: {
@@ -336,6 +339,7 @@
           mthis.timeTitle = ''
           if(params.batch[0].areas.length  === 0) {
             mthis.timeTitle = ''
+            mthis.selectTime = false
           } else{
             console.log('========================================')
             console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
@@ -345,7 +349,8 @@
             let timeArr = []
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            mthis.$store.commit('setContentTimeCondition',timeArr)
+            mthis.$store.commit('setNetTimeCondition',timeArr)
+            mthis.selectTime = true
           }
         })
         this.charts.on('click', function (params) {
@@ -404,7 +409,19 @@
       selectNetNodes: function(va) {
         var mthis = this;
         if(mthis.tmss == 'net'){
-          // alert('下面要查询实体相关时间');
+          // 如果包含事件，要对柱形图高亮
+          console.log('--------custom_time_net 传入的selectNodes--------')
+          // console.log(va[0].ids)
+          let linkArr = va[0].ids.filter(val => {
+            return val.isLink
+          })
+          //linkArr是所有link的合集
+          console.log(linkArr)
+          // console.log('-------------------------------------------------')
+          // let linkids= linkArr.filter(function(item){
+          //   return item.id>0;
+          // })　
+          // console.log(linkids)
         }
       },
       split: function(va) {

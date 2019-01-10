@@ -4,23 +4,28 @@
     <div>
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
-          <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
+          <Tab-pane label="数据透视" name='数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi' @click="changTab('数据透视')">
             <left-statics :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0"></left-statics>
-            <left-statics :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0"></left-statics>
           </Tab-pane>
-          <Tab-pane label="目标详情" name= '目标详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
+          <Tab-pane label="选中详情" name='选中详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing' @click="changTab('选中详情')">
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
-                <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
+                <!-- 目标详情 -->
+                <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default" v-show="!selectTime">
                   <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
                     <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="selectNetNodes != null&&selectNetNodes[0]!==undefined">{{selectNetNodes[0].ids.length}}</span>)
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
                 <div class='scrollBarAble' :style="{width:'100%',height:eventheight,margin:'0px 5px 0 10px',paddingRight:'5px'}">
-                <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(data.id)">{{data.name}}
-                  <p class="p-collapse-modal-small">{{data.type}}</p>
+                  <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(data.id)">{{data.name}}
+                    <p class="p-collapse-modal-small">{{data.type}}</p>
+                  </div>
                 </div>
+                <!-- 事件详情 -->
+                <div  v-show="!selectTime">
+
+                  这里是事件详情
                 </div>
               </Row>
               <Card dis-hover style="width:100%,background-color:rgba(0,0,0,0);" :style="{overflowY:'scroll',height:eventheight}" v-show="singlePerson" v-if="evetdata!== undefined && evetdata!==null">
@@ -36,7 +41,7 @@
                     <Avatar class="circle-img" v-else :src="evetdata.img" :style="{width:'50px',height:'50px'}" />
                   </Row>
                   <div class='entityDetail'>
-                    <entityDetailsTableHuman :Entitydetail="evetdata" v-if="evetdata.type =='human'" ></entityDetailsTableHuman>
+                    <entityDetailsTableHuman :Entitydetail="evetdata" v-if="evetdata.type =='human'"></entityDetailsTableHuman>
                     <entityDetailsTableAdministrative :Entitydetail="evetdata" v-if="evetdata.type =='administrative'"></entityDetailsTableAdministrative>
                     <entityDetailsTableOrganization :Entitydetail="evetdata" v-if="evetdata.type =='organization'"></entityDetailsTableOrganization>
                   </div>
@@ -55,7 +60,10 @@
   import modalChartDetail from './custom_modal_detail'
   import percentBar from './custom_percentBar'
   import leftStatics from './custom_leftStatics'
-  import { mapState,mapMutations } from 'vuex'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   import cTree from './custom_tree'
   import entityDetailsTableHuman from './custom_entityDetailsTable_human'
   import entityDetailsTableAdministrative from './custom_entityDetailsTable_administrative'
@@ -65,22 +73,23 @@
   export default {
     data() {
       return {
-        timer:null,
-        tabSelect:'数据透视',
+        selectTime: false,
+        timer: null,
+        tabSelect: '数据透视',
         modalNodeId: '',
-        contentStatisticsdata:{},
-        statisticsNameList:{
-          'entity':'实体',
-          'human':'人物',
-          'politician':'政治人物',
-          'administrative':'管理',
-          'organization':'机构',
-          'political party':'政党',
-          'else':'其他'
+        contentStatisticsdata: {},
+        statisticsNameList: {
+          'entity': '实体',
+          'human': '人物',
+          'politician': '政治人物',
+          'administrative': '管理',
+          'organization': '机构',
+          'political party': '政党',
+          'else': '其他'
         },
         evetdata: null,
         detailModalFlag: false,
-        dataStatistics:[],
+        dataStatistics: [],
         value4: '1-1',
         myList: [{
           name: 'aaaaa',
@@ -95,7 +104,7 @@
         detail_data: null,
         show: [],
         value3: '1',
-                value4: '1-1',
+        value4: '1-1',
         eheight: 0,
         eventheightdiv: 0,
         eventheight: 0,
@@ -109,8 +118,8 @@
             school: '列宁格勒国立大学',
             tag: '俄罗斯联邦政府总统／ 俄罗斯第2任总统／第7届俄罗斯总理／第11届俄罗斯总理',
             introduction: `弗拉基米尔·弗拉基米罗维奇·普京，俄罗斯第2任、第4任总统。曾担任俄罗斯总理、统一俄罗斯党主席、俄白联盟部长会议主席。
-                2000年执政以来，普京致力于复兴俄罗斯超级大国地位，对内加强联邦政府的权力，整顿经济秩序，打击金融寡头，加强军队建设；对外努力改善国际环境…
-                恢复了世界性强国地位。`
+                  2000年执政以来，普京致力于复兴俄罗斯超级大国地位，对内加强联邦政府的权力，整顿经济秩序，打击金融寡头，加强军队建设；对外努力改善国际环境…
+                  恢复了世界性强国地位。`
           },
           {
             name: "习近平",
@@ -121,8 +130,8 @@
             school: '清华大学人文社会学院马克思主义理论与思想政治教育专业',
             tag: '现任中国共产党中央委员会总书记、中共中央军事委员会主席、中华人民共和国主席、中华人民共和国中央军事委员会主席',
             introduction: `953年6月生，陕西富平人，1969年1月参加工作，1974年1月加入中国共产党，清华大学人文社会学院马克思主义理论与思想政治教育专业毕业，在职研究生学历，法学博士学位。
-                现任中国共产党中央委员会总书记，中共中央军事委员会主席，中华人民共和国主席，中华人民共和国中央军事委员会主席。
-                中共第十五届中央候补委员，十六届、十七届、十八届、十九届中央委员，十七届中央政治局委员、常委、中央书记处书记，十八届、十九届中央政治局委员、常委、中央委员会总书记。第十一届全国人大第一次会议当选为中华人民共和国副主席。十七届五中全会增补为中共中央军事委员会副主席。第十一届全国人大常委会第十七次会议任命为中华人民共和国中央军事委员会副主席。十八届一中全会任中共中央军事委员会主席。第十二届全国人大第一次会议当选为中华人民共和国主席、中华人民共和国中央军事委员会主席`
+                  现任中国共产党中央委员会总书记，中共中央军事委员会主席，中华人民共和国主席，中华人民共和国中央军事委员会主席。
+                  中共第十五届中央候补委员，十六届、十七届、十八届、十九届中央委员，十七届中央政治局委员、常委、中央书记处书记，十八届、十九届中央政治局委员、常委、中央委员会总书记。第十一届全国人大第一次会议当选为中华人民共和国副主席。十七届五中全会增补为中共中央军事委员会副主席。第十一届全国人大常委会第十七次会议任命为中华人民共和国中央军事委员会副主席。十八届一中全会任中共中央军事委员会主席。第十二届全国人大第一次会议当选为中华人民共和国主席、中华人民共和国中央军事委员会主席`
           }
         ]
       };
@@ -137,11 +146,11 @@
       entityDetailsTableOrganization
     },
     // computed: {
-      //   menuitemClasses: function() {
-        //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
+    //   menuitemClasses: function() {
+    //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent','contentStatisticsResult']),
+    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent', 'contentStatisticsResult']),
     watch: {
       // contentStatisticsResult:function(){
       //   var mthis = this;
@@ -154,31 +163,38 @@
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
+      netTimeCondition: function(va) {
+        this.selectTime = true
+        this.tabSelect= '选中详情'
+      },
       selectNetNodes: function(va) {
         var mthis = this;
-          let nodeIdsArry = va[0].ids.map(item => {
-            return item.id;
-          });
-          if (this.timer) {
-            clearTimeout(this.timer)
-          }
-          this.timer = setTimeout(function() {
+        let nodeIdsArry = va[0].ids.map(item => {
+          return item.id;
+        });
+        if (this.timer) {
+          clearTimeout(this.timer)
+        }
+        this.timer = setTimeout(function() {
           // 新增防抖功能
           mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
             'nodeIds': nodeIdsArry
           }).then(response => {
-            mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
+            mthis.evetdata = mthis.singlePerson ? response.body.data[0].nodes[0] : response.body.data[0].nodes
           })
-          }, 100);
+        }, 100);
         // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
         // mthis.evetdata = 
       }
     },
     methods: {
-      a(){
+      changTab(a){
+        this.$store.commit('setTabSelect', a)
+      },
+      a() {
         alert(55);
       },
-      setFlagToFalse(detailModalFlag){
+      setFlagToFalse(detailModalFlag) {
         var mthis = this;
         mthis.detailModalFlag = detailModalFlag;
       },
@@ -237,7 +253,6 @@
   };
 </script>
 <style scoped>
-
   .ivu-card {
     background-color: rgba(0, 0, 0, 0) !important;
     background: rgba(0, 0, 0, 0) !important;
@@ -258,43 +273,42 @@
 </style>
 
 <style>
-#tab1 .ivu-tabs-nav-wrap{
-  overflow: hidden;
-  margin-bottom: 0px;
-  border-bottom: 1px solid #447272;
-  background-color: rgba(51,255,255,0.1);
-}
-#tab1 .ivu-tabs-nav .ivu-tabs-tab{
-  margin-right: 0px;
-  border-right: 1px solid #447272;
-  font-family: 'Microsoft Yahei';
-}
-#tab1 .ivu-tabs-ink-bar{
-  bottom:0px;
-  height:0px;
-  background-color:rgba(51,255,255,0.2)
-}
-#tab1 .ivu-tabs-tab-focused {
+  #tab1 .ivu-tabs-nav-wrap {
+    overflow: hidden;
+    margin-bottom: 0px;
+    border-bottom: 1px solid #447272;
+    background-color: rgba(51, 255, 255, 0.1);
+  }
+  #tab1 .ivu-tabs-nav .ivu-tabs-tab {
+    margin-right: 0px;
+    border-right: 1px solid #447272;
+    font-family: 'Microsoft Yahei';
+  }
+  #tab1 .ivu-tabs-ink-bar {
+    bottom: 0px;
+    height: 0px;
+    background-color: rgba(51, 255, 255, 0.2)
+  }
+  #tab1 .ivu-tabs-tab-focused {
     border-color: #57a3f3 !important;
-    background-color:rgba(51,255,255,0.2);
-}
-
-#tab1 .ivu-tabs-tab{
-  border-color: #447272 !important;
-  color:#ccffff !important;
-}
-.entityDetail>.organization_detailTable tr{
-  border-bottom: none !important;
-}
-.entityDetail>.administrative_detailTable tr{
-  border-bottom: none !important;
-}
-.entityDetail>.human_detailTable tr{
-  border-bottom: none !important;
-}
-#toushi>.toushiItems>.ivu-collapse-item>.ivu-collapse-content>.ivu-collapse-content-box>div>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-header>i{
-  margin-left:10px
-}
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+  #tab1 .ivu-tabs-tab {
+    border-color: #447272 !important;
+    color: #ccffff !important;
+  }
+  .entityDetail>.organization_detailTable tr {
+    border-bottom: none !important;
+  }
+  .entityDetail>.administrative_detailTable tr {
+    border-bottom: none !important;
+  }
+  .entityDetail>.human_detailTable tr {
+    border-bottom: none !important;
+  }
+  #toushi>.toushiItems>.ivu-collapse-item>.ivu-collapse-content>.ivu-collapse-content-box>div>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-header>i {
+    margin-left: 10px
+  }
   .content_header {
     font-family: MicrosoftYaHei;
     font-size: 14px;
@@ -397,15 +411,15 @@
   .circle-img {
     border-radius: 50% !important;
   }
-  .ivu-collapse{
+  .ivu-collapse {
     background-color: rgba(0, 0, 0, 0) !important;
     border: none !important;
     color: #cff !important;
   }
-  .ivu-collapse-header span{
+  .ivu-collapse-header span {
     font-size: 14px !important;
   }
-  .ivu-collapse-content-box>.ivu-collapse{
+  .ivu-collapse-content-box>.ivu-collapse {
     margin: 5px 0 !important;
   }
   #toushi>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-content,
