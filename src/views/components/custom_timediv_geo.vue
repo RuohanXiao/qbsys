@@ -33,10 +33,12 @@
 <script>
   import echarts from "echarts";
   import { mapState,mapMutations } from 'vuex'
+  import {timeStaticsData} from '../../dist/assets/js/geo/data.js'
   export default {
     name: "",
     data() {
       return {
+        timeStaticsData:timeStaticsData,
         timeTitle: '',
         timechartdivId:'timechartdiv_' + this.activeId,
         arrowDownId:'arrowDown_'+ this.activeId,
@@ -341,11 +343,11 @@
             console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
             console.log('========================================')
-            mthis.timeTitle = mthis.dataBySeries.date[0] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]]
+            mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]]
             let timeArr = []
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            mthis.$store.commit('setContentTimeCondition',timeArr)
+            mthis.$store.commit('setGeoTimeCondition',timeArr)
           }
         })
         this.charts.on('click', function (params) {
@@ -353,7 +355,7 @@
           let timeArr = []
           timeArr.push(params.name)
           timeArr.push(params.name)
-          mthis.$store.commit('setNetTimeCondition',timeArr)
+          mthis.$store.commit('setGeoTimeCondition',timeArr)
           mthis.charts.dispatchAction({
               type: 'highlight',
               // 可选，数据的 index
@@ -392,21 +394,27 @@
       // this.changHeightCount++
     },
     computed:mapState ([
-      'split','splitWidth','tmss','selectNetNodes'
+      'split','splitWidth','tmss','selectNetNodes','geo_selected_param'
     ]),
     watch: {
-      /* tmss: function(){
-        var mthis = this;
-        if(mthis.tmss == 'geo'){
-          mthis.changHeightCount++;
-        }
-      }, */
-      selectNetNodes: function(va) {
-        var mthis = this;
-        if(mthis.tmss == 'net'){
-          // alert('下面要查询实体相关时间');
-        }
-      },
+        geo_selected_param:function(){
+            var mthis = this
+            //timeStaticsData
+            mthis.dataBySeries.num = mthis.timeStaticsData.data.count
+            mthis.dataBySeries.date = mthis.timeStaticsData.data.time
+            mthis.option.series[0].data = mthis.timeStaticsData.data.count
+            mthis.option.xAxis.data = mthis.timeStaticsData.data.time
+            mthis.charts.setOption(mthis.option)
+        /*     this.$http.get('http://10.60.1.140:5001/context-time-count/?keyword='+keyword).then(response => {
+            if(response.body.code === 0) {
+                mthis.dataBySeries.num = response.body.data.count
+                mthis.dataBySeries.date = response.body.data.time
+                mthis.option.series[0].data = response.body.data.count
+                mthis.option.xAxis.data = response.body.data.time
+                mthis.charts.setOption(mthis.option)
+            }
+            }) */
+        },
       split: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'

@@ -134,11 +134,12 @@ top: 232px;
 <script>
 import { mapState,mapMutations } from 'vuex'
 
-import {test_Route,test_HeatMap,EventsDatas,timeStaticsData} from '../../dist/assets/js/geo/data.js'
+import {test_Route,test_HeatMap,EventsDatas} from '../../dist/assets/js/geo/data.js'
 import {map} from '../../dist/assets/js/geo/ChinaMap.js' 
 import {getGradientColors} from '../../dist/assets/js/geo/GradientColors.js'
 import {BezierSinglePoint, BezierLinePoints} from '../../dist/assets/js/geo/geometryType/BezierLine.js'
 import {getThirdPoint} from '../../dist/assets/js/geo/geometryType/Arc.js'
+import util from '../../util/tools.js'
 
 import VectorSource from 'ol/source/Vector'
 import VectorLayer from 'ol/layer/Vector'
@@ -217,6 +218,22 @@ export default {
             route_Noclick:true,
             'route_click': true
         },
+        noSelectedstyle : new Style({
+            image : new CircleStyle({
+                radius : 3,
+                fill : new Fill({
+                    color : '#33ffff'
+                })
+            })
+        }),
+        selectedstyle: new Style({
+            image : new CircleStyle({
+                radius : 3,
+                fill : new Fill({
+                    color : '#ff9900'
+                })
+            })
+        }),
       }
     },
     mounted() {
@@ -326,7 +343,7 @@ export default {
                     }
                 });
                 mthis.setPointFeatures(mthis.EventsDatas.data);
-                //mthis.returnSelectedEventIds(mthis.EventsDatas.data); //将所有ids返回给全局被选中的节点变量，为了统计时间轴和右侧菜单
+                mthis.returnSelectedEventIds(mthis.EventsDatas.data); //将所有ids返回给全局被选中的节点变量，为了统计时间轴和右侧菜单
                 //mthis.creatPicSlider();//图片轮播
                 //mthis.locationPoints()  //空间查询出点所在地信息
                 //mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight])
@@ -348,7 +365,6 @@ export default {
         },
         route_cilck(){
             var mthis = this
-            
             mthis.clickButtonOpenDiv('route_button')
             if(mthis.legend == null){
                 //mthis.click_route()
@@ -358,7 +374,6 @@ export default {
         clickButtonOpenDiv(id){
             var mthis = this
             mthis.mapDivbuttonIds.forEach(function(item){
-                
                 var button = document.getElementById(item)
                 var bottonName = item.split('_')[0]
                 var classname = ''
@@ -379,7 +394,18 @@ export default {
                 HeatMap_Map.style.display = 'none'
             }
         },
-        //returnSelectedEventIds(Data){},
+        returnSelectedEventIds(Data){
+            var mthis = this;
+            var EventIds = [];
+            Data.forEach(function(item){
+                EventIds.push(item.EventId);
+            })
+            var selectedParam = {
+                'type':'mapView',
+                eventId:EventIds
+            };
+            mthis.$store.commit('setGeoSelectedParam',selectedParam);
+        },
         setPointFeatures(pointsData){
             var mthis = this
             var entityPointsSource = new VectorSource()
@@ -400,15 +426,14 @@ export default {
                 var pointFeature = new Feature({
                     geometry:new Point(item.coordinate),
                     properties:{
-                        id:item.EventId+"_eventId"
-                        /* belongId:mthis.integrationStringFromArrLink(item.PersonId,'_'), */
-                        /* belongName:item.name,
-                        name:item.route[i].name */
+                        id:item.EventId+"_eventId",
+                        time:[util.getTimestamp(item.Time[0]),util.getTimestamp(item.Time[1])]
                     }
                 })
                 pointFeature.setStyle(style)
                 entityPointsSource.addFeature(pointFeature)
             })
+            debugger
         },
         locationPoints(){
             var mthis = this
@@ -1133,17 +1158,34 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','geoHeight','geoTimeCondition'
+      'tmss','split','geoHeight','geoTimeCondition','geo_selected_param'
     ]),
     
     watch:{
+        geo_selected_param:function(){},
         geoTimeCondition:function(){
             var mthis = this;
-            mthis.timeCondition = mthis.$store.state.geoTimeCondition;
+            mthis.timeCondition = [util.getTimestamp(mthis.$store.state.geoTimeCondition[0]),util.getTimestamp(mthis.$store.state.geoTimeCondition[1])];
         },
         timeCondition:function(){
             var mthis = this;
-            //mthis
+            var layers = mthis.routeMap.map.getLayers().getArray();
+            var eventLayer;
+            debugger
+            for(let i = 0; i < layers.length; i++){
+                if(layers[i].getProperties().id !== undefined && layers[i].getProperties().id === "entityPointsLayer"){
+                    eventLayer = layers[i];
+                    break;
+                }
+            }
+            var eventFeatures = eventLayer.getSource().getFeatures();
+            for(let j = 0; j < eventFeatures.length; j++){
+                if(eventFeatures[j].getProperties().properties.time !== undefined && eventFeatures[j].getProperties().properties.time[0] >= mthis.timeCondition[0] && eventFeatures[j].getProperties().properties.time[0] <= mthis.timeCondition[1]){
+                    eventFeatures[j].setStyle(mthis.selectedstyle);
+                } else {
+                    eventFeatures[j].setStyle(mthis.noSelectedstyle);
+                }
+            }
         },
         locationClassObject:{
                 handler:function(val,oldval){
