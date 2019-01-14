@@ -11029,10 +11029,10 @@ var ZoomCharts = ZoomCharts || {};
                             }, e
                         }(t.Button);
                         t.ToolbarItemNames.back = function (t, i) {
-                            console.log('--------back function--------');
+                            // console.log('--------back function--------');
 
-                            console.log(t);
-                            console.log(i);
+                            // console.log(t);
+                            // console.log(i);
                             var n = t.settings.localization.toolbar;
                             i.label = i.label || n.backButton, i.title = i.title || n.backTitle, i.cssClass = i.cssClass || "DVSL-bar-btn-back";
                             var r = i.onClick;
@@ -12998,7 +12998,7 @@ var ZoomCharts = ZoomCharts || {};
                                     var r = t[i];
                                     if (!r.removed)
                                         { 
-                                            console.log()
+                                            // console.log()
                                             // if (1 === e.status);
                                             // else if (2 === e.status) this.displayBanner(r, e.bannerImage, e.bannerTarget);
                                           }
@@ -15961,9 +15961,9 @@ var ZoomCharts = ZoomCharts || {};
                                 }
                             })
                         }, d.Bar.ToolbarItemNames.fit = function (t, e) {
-                            console.log('---------------DVSL-bar-btn-fit--------');
-                            console.log(t);
-                            console.log(e);
+                            // console.log('---------------DVSL-bar-btn-fit--------');
+                            // console.log(t);
+                            // console.log(e);
                             var i = t.settings.localization.toolbar;
                             return new d.Bar.ToggleButton(t, e, {
                                 labelDisabled: e.label || i.fitButton,
@@ -16148,9 +16148,9 @@ var ZoomCharts = ZoomCharts || {};
                 var b = function () {
                     function t() {
                         this.mode = "showall", this.initialNodes = null, this.focusNodeExpansionRadius = 2, this.focusNodeTailExpansionRadius = null, this.focusAutoFadeout = !1, this.numberOfFocusNodes = 3, this.minNumberOfFocusNodes = 1, this.expandDelay = 0, this.expandOnClick = !0, this.autoZoomOnFocus = !1, this.autoUnfocus = !0
-                        console.log('---------');
-                        console.log(this);
-                        console.log(this.expandOnClick);
+                        // console.log('---------');
+                        // console.log(this);
+                        // console.log(this.expandOnClick);
                     }
                     return t
                 }();
@@ -18643,25 +18643,25 @@ var ZoomCharts = ZoomCharts || {};
                             }, t
                         }();
                         t.Gesture = e;
-                        console.log('begin')
+                        // console.log('begin')
                         var i = function (t) {
-                            console.log('-------t----------');
-                            console.log(t);
+                            // console.log('-------t----------');
+                            // console.log(t);
                             function e() {
                                 var e = t.apply(this, arguments) || this;
-                                console.log('-------arguments----------');
-                                console.log(arguments);
+                                // console.log('-------arguments----------');
+                                // console.log(arguments);
                                 return e.startX = 0, e.startY = 0, e.lastX = 0, e.lastY = 0, e.selectedNodes = null, e
                             }
                             return n(e, t), e.prototype.addPointer = function (e, i) {
-                                console.log('-------e----------');
-                                console.log(e);
+                                // console.log('-------e----------');
+                                // console.log(e);
                                 t.prototype.addPointer.call(this, e, i), this.startX = this.lastX = e.x, this.startY = this.lastY = e.y, this.selectedNodes = new Object(null), e.cursor = "crosshair";
-                                    console.log('-------i----------');
-                                    console.log(i);
+                                    // console.log('-------i----------');
+                                    // console.log(i);
                                     var n = this.manager.chart.scene;
-                                    console.log('-------n----------');
-                                    console.log(n);
+                                    // console.log('-------n----------');
+                                    // console.log(n);
                                 n.disableSelectionChangeNotification();
                                 var r = n.selection.filter(function (t) {
                                     return t.dragging

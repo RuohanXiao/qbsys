@@ -64,52 +64,59 @@
         var mthis = this;
         if (a !== undefined && a !== null && a !== '') {
           if (a.value.split('搜索:').length > 1) {
-            if (mthis.$store.state.tmss === 'net') {
-              mthis.inputInfoNet = a.value.split('搜索:')[1]
-              mthis.$store.commit('setSearchNetResult', [{
-                node: {
-                  nodes: []
-                },
-                id: '',
-                label: a.value
-              }])
-            } else if (mthis.$store.state.tmss === 'geo') {
-              mthis.inputInfoGeo = a.value.split('搜索:')[1]
-              mthis.$store.commit('setSearchGeoResult', [{
-                node: {
-                  nodes: []
-                },
-                id: '',
+            // if (mthis.$store.state.tmss === 'net') {
+            //   mthis.inputInfoNet = a.value.split('搜索:')[1]
+            //   mthis.$store.commit('setSearchNetResult', [{
+            //     node: {
+            //       nodes: []
+            //     },
+            //     id: '',
+            //     label: a.value
+            //   }])
+            // } else if (mthis.$store.state.tmss === 'geo') {
+            //   mthis.inputInfoGeo = a.value.split('搜索:')[1]
+            //   mthis.$store.commit('setSearchGeoResult', [{
+            //     node: {
+            //       nodes: []
+            //     },
+            //     id: '',
                 
-                label: a.value
-              }])
-            } else {
-              alert(a.value)
-              mthis.inputInfoContent = a.value
-              mthis.$store.commit('setSearchContentResult', [{
-                node: {
-                  nodes: []
-                },
-                id: '',
-                label: a.value
-              }])
-            }
+            //     label: a.value
+            //   }])
+            // }  else if (mthis.$store.state.tmss === 'content')  {
+            //   alert(a.value)
+            //   mthis.inputInfoContent = a.value
+            //   mthis.$store.commit('setSearchContentResult', [{
+            //     node: {
+            //       nodes: []
+            //     },
+            //     id: '',
+            //     label: a.value
+            //   }])
+            // }
             // mthis.$router.push({path:'/home/contentView', query:{content:a.value.split('搜索:')[1]}})
           } else {
             // mthis.$store.commit('setSearchResult',response.body.data[0])
             if (this.$store.state.tmss === 'net') {
-              mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
                 'nodeIds': a.value
               }, {
+              // let arr = []
+              // arr.push(a.value)
+              // mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas-coarse/', {
+              //   'nodeIds': arr
+              // }, {
                 "emulateJSON": true
               }).then(response => {
-                console.log('--------------sss-------------')
-                console.log(response.body.data[0].nodes[0].id)
-                mthis.$store.commit('setSearchNetResult', {
-                  node: response.body.data[0].nodes[0],
-                  id: response.body.data[0].nodes[0].id,
-                  label: response.body.data[0].nodes[0].entity_name
-                })
+                if(response.body.code === 0) {
+                  mthis.$store.commit('setSearchNetResult', {
+                    id: response.body.data[0].nodes[0].id,
+                    label: response.body.data[0].nodes[0].name,
+                    nodes:response.body.data[0].nodes
+                  })
+                } else {
+                  alert('node-datas接口异常')
+                }
               })
             }
             if (this.$store.state.tmss === 'content') {
@@ -156,7 +163,7 @@
               emulateJSON: true
             })
             .then(response => {
-              console.log(response)
+              // console.log(response)
               let option = []
               // let optionWord = {}
               // let optionWordArr = []

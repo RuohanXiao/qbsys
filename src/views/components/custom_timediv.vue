@@ -301,7 +301,7 @@
         this.option.series[0].data = this.dataBySeries.num;
         this.charts.setOption(this.option)
         this.charts.on('brushSelected', function (params) {
-          console.log(params)
+          // console.log(params)
           mthis.timeTitle = ''
           if(params.batch[0].areas.length  === 0) {
             mthis.timeTitle = ''
@@ -394,7 +394,7 @@
       //   }
 
       // },
-      
+
       split: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'

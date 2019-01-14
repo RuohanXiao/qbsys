@@ -138,7 +138,7 @@
 
       getPostById(id){
         var mthis = this;
-        mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+        mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
             'nodeIds': [id]
           }).then(response => {
             mthis.targetData = response.body.data[0].nodes[0];

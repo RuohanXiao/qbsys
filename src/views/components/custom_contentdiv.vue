@@ -235,7 +235,7 @@
         if (va.length === 2) {
           let stime = util.getTimestamp(va[0])
           let etime = util.getTimestamp(va[1])
-          mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
+          mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
             if (response.body.data.length > 0) {
               mthis.items = response.body.data
             } else {
@@ -250,13 +250,13 @@
         }
       },
       searchContentResult: function(va) {
-        console.log('-----------------------1')
-        console.log(va)
+        // console.log('-----------------------1')
+        // console.log(va)
         var mthis = this
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
         mthis.content = va
-        mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query=' + mthis.content).then(response => {
+        mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
             mthis.items = response.body.data
             // mthis.showMore = true
@@ -295,7 +295,7 @@
           if (mthis.contentTimeCondition.length === 2) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
@@ -306,7 +306,7 @@
           } else if (mthis.contentTimeCondition.length === 1) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
@@ -315,7 +315,7 @@
               resolve();
             })
           } else {
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
@@ -334,7 +334,7 @@
           if (mthis.contentTimeCondition.length === 2) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
@@ -345,7 +345,7 @@
           } else if (mthis.contentTimeCondition.length === 1) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
@@ -354,7 +354,7 @@
               resolve();
             })
           } else {
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
@@ -373,7 +373,7 @@
           if (mthis.contentTimeCondition.length === 2) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
@@ -384,7 +384,7 @@
           } else if (mthis.contentTimeCondition.length === 1) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
@@ -393,7 +393,7 @@
               resolve();
             })
           } else {
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
@@ -412,7 +412,7 @@
           if (mthis.contentTimeCondition.length === 2) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
@@ -423,7 +423,7 @@
           } else if (mthis.contentTimeCondition.length === 1) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
@@ -432,7 +432,7 @@
               resolve();
             })
           } else {
-            mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if(response.body.data.length>0){
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
@@ -483,7 +483,7 @@
         //   document.getElementById('contentsTitle').innerHTML = res.data.title
         //   document.getElementById('contentsTime').innerHTML = res.data.time
         // });
-        mthis.$http.get('http://10.60.1.140:5001/context-by-id/?idValue=' + id).then(response => {
+        mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-id/?idValue=' + id).then(response => {
           // mthis.printer(response.body.data[0].text, 'contents', 'pointer')
           var text = response.body.data[0].text.replace(/(\r\n)|(\n)/g, '<br>');
           document.getElementById('contents').innerHTML = text
@@ -534,7 +534,7 @@
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
       //   // 跳转过来的
-      //   mthis.$http.get('http://10.60.1.140:5001/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
+      //   mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
       //     mthis.items = response.body.data
       //     // mthis.dataexpand = response.body.data
       //     // mthis.singlePerson = (opt[1]>1)?false:true

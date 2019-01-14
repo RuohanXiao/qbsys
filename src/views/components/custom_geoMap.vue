@@ -433,7 +433,6 @@ export default {
                 pointFeature.setStyle(style)
                 entityPointsSource.addFeature(pointFeature)
             })
-            debugger
         },
         locationPoints(){
             var mthis = this
@@ -1171,7 +1170,6 @@ export default {
             var mthis = this;
             var layers = mthis.routeMap.map.getLayers().getArray();
             var eventLayer;
-            debugger
             for(let i = 0; i < layers.length; i++){
                 if(layers[i].getProperties().id !== undefined && layers[i].getProperties().id === "entityPointsLayer"){
                     eventLayer = layers[i];

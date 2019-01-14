@@ -85,7 +85,7 @@
         this.option = {
           tooltip: {
             trigger: "axis",
-            formatter: "{b}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%<br/>{a3}: {c3}%"
+            formatter: "{b}<br/>{c0}"
           },
           // legend: {
           //     data:['China','United States','India','Japan']
@@ -284,24 +284,32 @@
             data: []
           }]
         };
-        this.charts = echarts.init(document.getElementById(this.main1Id), "", {
-          width: document.documentElement.clientWidth * this.$store.state.split - 20 + 'px',
+        mthis.charts = echarts.init(document.getElementById(mthis.main1Id), "", {
+          width: document.documentElement.clientWidth * mthis.$store.state.split - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
         mthis.timeTitle = ''
-        this.option.xAxis.data = this.dataBySeries.date;
-        this.option.series[0].data = this.dataBySeries.num;
-        this.charts.setOption(this.option)
-        this.charts.on('brushSelected', function (params) {
+        mthis.option.xAxis.data = mthis.dataBySeries.date;
+        mthis.option.series[0].data = mthis.dataBySeries.num;
+        mthis.charts.setOption(mthis.option)
+        mthis.charts.on('brushSelected', function (params) {
           console.log(params)
+          if(params.batch[0].areas[0] !== undefined){
+            console.log(params.batch[0].areas[0].coordRanges[0]);
+            var startAndEnd = params.batch[0].areas[0].coordRanges[0];
+            console.log('起始时间'+mthis.dataBySeries.date[startAndEnd[0]]);
+            console.log('结束时间'+mthis.dataBySeries.date[startAndEnd[1]]);
+            console.log('共' + (startAndEnd[1] - startAndEnd[0] + 1) + '天');
+          }
+          
           mthis.timeTitle = ''
           if(params.batch[0].areas.length  === 0) {
             mthis.timeTitle = ''
           } else{
-            mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex.length-1]
+            mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
           }
         })
-        this.charts.on('click', function (params) {
+        mthis.charts.on('click', function (params) {
           mthis.timeTitle = params.name
           // alert(0)
           // console.log(params)
@@ -341,10 +349,10 @@
             mthis.timeTitle = ''
             mthis.selectTime = false
           } else{
-            console.log('========================================')
-            console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
-            console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            console.log('========================================')
+            // console.log('========================================')
+            // console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
+            // console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
+            // console.log('========================================')
             mthis.timeTitle = mthis.dataBySeries.date[0] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]]
             let timeArr = []
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
@@ -410,13 +418,13 @@
         var mthis = this;
         if(mthis.tmss == 'net'){
           // 如果包含事件，要对柱形图高亮
-          console.log('--------custom_time_net 传入的selectNodes--------')
+          // console.log('--------custom_time_net 传入的selectNodes--------')
           // console.log(va[0].ids)
           let linkArr = va[0].ids.filter(val => {
             return val.isLink
           })
           //linkArr是所有link的合集
-          console.log(linkArr)
+          // console.log(linkArr)
           // console.log('-------------------------------------------------')
           // let linkids= linkArr.filter(function(item){
           //   return item.id>0;

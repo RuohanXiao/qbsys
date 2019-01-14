@@ -177,7 +177,7 @@
     },
     methods: {
       con() {
-        console.log()
+        // console.log()
       },
       showModalStep() {
         this.modalStep = true
@@ -202,12 +202,12 @@
       // 调用统计接口
       getStatistics() {
         var mthis = this
-        console.log(mthis.netchart)
+        // console.log(mthis.netchart)
         let nodeArr = Object.keys(mthis.netchart._impl.data.default.nodes).map(key => mthis.netchart._impl.data.default.nodes[key].id);
         let linkArr = Object.keys(mthis.netchart._impl.data.default.links).map(key => mthis.netchart._impl.data.default.links[key]);
-        console.log(nodeArr)
-        console.log(linkArr)
-        mthis.$http.post('http://10.60.1.140:5001/graph-statistics/', {
+        // console.log(nodeArr)
+        // console.log(linkArr)
+        mthis.$http.post(this.$store.state.ipConfig.api_url + '/graph-statistics/', {
           'nodes': nodeArr,
           'links': linkArr
         }).then(response => {
@@ -236,7 +236,7 @@
       //知识拓展节点（加载新数据）
       expandNodeKnowledge() {
         var mthis = this;
-        console.log(mthis.selectionId)
+        // console.log(mthis.selectionId)
         let arr = []
         if (mthis.selectionId.length > 0) {
           mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
@@ -244,7 +244,7 @@
           for (let i = 0; i < mthis.selectionId.length; i++) {
             arr.push(mthis.selectionId[i].id)
           }
-          mthis.$http.post('http://10.60.1.140:5001/neighbor-datas/', {
+          mthis.$http.post(this.$store.state.ipConfig.api_url + '/neighbor-datas/', {
             'ClassName': 'knowledge',
             'nodeIds': arr
           }).then(response => {
@@ -254,7 +254,7 @@
             }
             mthis.netchart.addData(res)
             setTimeout(function() {
-              console.log(util.unique(arr))
+              // console.log(util.unique(arr))
               mthis.netchart.selection(util.unique(arr))
             }, 100)
             mthis.getStatistics()
@@ -281,8 +281,8 @@
       // 事件拓展
       expandNodeEvent() {
         var mthis = this;
-        console.log('-----shijian tuozhan-----')
-        console.log(mthis.selectionId)
+        // console.log('-----shijian tuozhan-----')
+        // console.log(mthis.selectionId)
         let arr = []
         if (mthis.selectionId.length > 0) {
           //访问数据库，拓展新数据
@@ -291,18 +291,18 @@
           for (let i = 0; i < mthis.selectionId.length; i++) {
             arr.push(mthis.selectionId[i].id)
           }
-          mthis.$http.post('http://10.60.1.140:5001/event-exploration/', {
+          mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-exploration/', {
             'nodeIds': arr
           }).then(response => {
             res = response.body.data[0]
-            console.log('--------------------------------eventexpand-------------')
-            console.log(res)
+            // console.log('--------------------------------eventexpand-------------')
+            // console.log(res)
             mthis.netchart.addData(res)
             for (let m = 0; m < res.nodes.length; m++) {
               arr.push(res.nodes[m].id)
             }
             setTimeout(function() {
-              console.log(util.unique(arr))
+              // console.log(util.unique(arr))
               mthis.netchart.selection(util.unique(arr))
             }, 100)
             mthis.getStatistics()
@@ -328,7 +328,7 @@
         if (mthis.selectionId.length !== 2) {
           mthis.$Message.error('现阶段只支持两点路径！')
         } else {
-          mthis.$http.get('http://10.60.1.140:5001/all-path-data?start=' + mthis.selectionId[0].id + '&end=' + mthis.selectionId[1].id + '&step=' + mthis.InputNumber).then(response => {
+          mthis.$http.get(this.$store.state.ipConfig.api_url + '/all-path-data?start=' + mthis.selectionId[0].id + '&end=' + mthis.selectionId[1].id + '&step=' + mthis.InputNumber).then(response => {
             if (response.body.data[0].nodes.length + response.body.data[0].links.length > 0) {
               mthis.netchart.addData(response.body.data[0])
               let idArr = []
@@ -371,8 +371,8 @@
         // var image = new Image();
         // image.src = document.getElementById('netchart').toDataURL("image/png");  //把canvas转换成base64图像保存
         // var mycanvas = document.getElementById('netchart').getElementsByTagName('canvas')[0];  
-        // // var image    = mycanvas.toDataURL("image/png");  
-        // // img.setAttribute('crossOrigin', 'anonymous');
+        // var image    = mycanvas.toDataURL("image/png");  
+        // img.setAttribute('crossOrigin', 'anonymous');
         // var image = new Image();
         // image.setAttribute('crossorigin', 'anonymous');
         // document.getElementById('image').src = mycanvas.toDataURL("image/png")
@@ -788,8 +788,8 @@
         }
       },
       reloadNetData(data) {
-        console.log('========================')
-        console.log(dataarr)
+        // console.log('========================')
+        // console.log(dataarr)
         var mthis = this
         let dataarr = []
         dataarr.push(data)
@@ -1051,7 +1051,7 @@
             },
             onHoverChange: function(event, args) {
               // var content = "";
-              // // fill the info popup based on the node that was hovered.
+              // fill the info popup based on the node that was hovered.
               // if (args.hoverItem) {
               //     content = "Item hovered";
               // } else if (args.hoverNode) {
@@ -1109,35 +1109,35 @@
           theme: NetChart.themes.dark
         }))
         // mthis.netchart.settings.style.nodeBackground.imageCropping = 'crop'
-        // 节点变形
-        var div = $('<div class="type-select" style="position:absolute;z-index:2" >');
-        var x = $('<label for="v1"><input id="v1" type="radio" checked="checked" name="nodeType" value="rect" />Rectangle <b>(Note: Rectangle shape is also available as a built-in shape since 1.9)</label><br/>');
-        div.append(x);
-        x = $('<label for="v2"><input id="v2" type="radio" name="nodeType" value="diamond"/> Diamond</label><br/>');
-        div.append(x);
-        x = $('<label for="v3"><input id="v3" type="radio" name="nodeType" value="hexagon"/> Hexagon</label><br/>');
-        div.append(x);
-        $("#netchart").before(div);
-        // using jquery to add event handler
-        // Update the chart settings, when user changes desired node display type
-        $('.type-select input:radio').change(function() {
-          var selected = $('.type-select input:radio:checked').val();
-          console.log(selected)
-           mthis.netchart.updateSettings({
-            style: {
-                node: {
-                    display: selected
-                }
-            }
-        });
-          // mthis.netchart.updateSettings({
-          //   style: {
-          //     node: {
-          //       customShape: this.someUserDefinedShapes[selected]
-          //     }
-          //   }
-          // });
-        });
+        // // 节点变形
+        // var div = $('<div class="type-select" style="position:absolute;z-index:2" >');
+        // var x = $('<label for="v1"><input id="v1" type="radio" checked="checked" name="nodeType" value="rect" />Rectangle <b>(Note: Rectangle shape is also available as a built-in shape since 1.9)</label><br/>');
+        // div.append(x);
+        // x = $('<label for="v2"><input id="v2" type="radio" name="nodeType" value="diamond"/> Diamond</label><br/>');
+        // div.append(x);
+        // x = $('<label for="v3"><input id="v3" type="radio" name="nodeType" value="hexagon"/> Hexagon</label><br/>');
+        // div.append(x);
+        // $("#netchart").before(div);
+        // // using jquery to add event handler
+        // // Update the chart settings, when user changes desired node display type
+        // $('.type-select input:radio').change(function() {
+        //   var selected = $('.type-select input:radio:checked').val();
+        //   // console.log(selected)
+        //    mthis.netchart.updateSettings({
+        //     style: {
+        //         node: {
+        //             display: selected
+        //         }
+        //     }
+        // });
+        //   // mthis.netchart.updateSettings({
+        //   //   style: {
+        //   //     node: {
+        //   //       customShape: this.someUserDefinedShapes[selected]
+        //   //     }
+        //   //   }
+        //   // });
+        // });
       }
     },
     created() {},
@@ -1146,11 +1146,16 @@
     ]),
     watch: {
       searchNetResult: function(va) {
-        console.log('1141-----------------')
-        console.log(this.searchNetResult)
         if (this.$store.state.tmss === 'net') {
-          this.reloadNetData(this.searchNetResult)
-          
+          // let objs = {
+          //         nodes: this.searchNetResult,
+          //         links:[]
+          //       }
+          va.links = []
+          va.nodes[0].loaded = true
+          va.nodes[0].type = 'human'
+                console.log(va)
+          this.reloadNetData(va)
         }
       },
       addNetNodes: function(va) {
@@ -1161,15 +1166,8 @@
       netHeight: function(va) {
         var mthis = this;
         mthis.NetHeight = mthis.$store.getters.getNetHeight;
-        // this.NetHeight = this.$store.state.netHeight - 55 + 'px';
-        // console.log('NetHeight2222' + this.NetHeight)
-        console.log(va)
       }
-      //   searchResultWatcher:function(old){
-      //     // this.temp = old
-      //   }
     },
-    // props: ['NetHeight', 'netData'],
     mounted() {
       sessionStorage.setItem('netChartLog', JSON.stringify({
         data: []
@@ -1178,7 +1176,7 @@
       mthis.initCharts();
       mthis.netData = mthis.$store.getters.netData
       mthis.NetHeight = mthis.$store.getters.getNetHeight
-      console.log('NetHeight11' + mthis.NetHeight)
+      // console.log('NetHeight11' + mthis.NetHeight)
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();
       //   mthis.netchart.addData(res.data.data[0]);
@@ -1187,7 +1185,7 @@
       //   }
       // });
       // mthis.$http.post('http://10.60.1.141:5000/neighbor-datas/',{'type': [],'nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
-      // mthis.$http.post('http://10.60.1.140:5001/neighbor-datas/',{'ClassName': '','nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
+      // mthis.$http.post(this.$store.state.ipConfig.api_url + '/neighbor-datas/',{'ClassName': '','nodeIds': 'Q1413'},{"emulateJSON":true}).then(response => {
       //   mthis.initCharts();
       //   mthis.netchart.addData(response.data.data[0]);
       //   for (let i = 0;i<response.data.data[0].nodes.length;i++){

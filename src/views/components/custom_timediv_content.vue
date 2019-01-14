@@ -297,11 +297,24 @@
           if(params.batch[0].areas.length  === 0) {
             mthis.timeTitle = ''
           } else{
-            console.log('========================================')
-            console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
-            console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            console.log('========================================')
-            mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]]
+            // console.log('========================================')
+            // console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
+            // console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
+            // console.log('========================================')
+            if(params.batch[0].areas[0] !== undefined){
+            console.log(params.batch[0].areas[0].coordRanges[0]);
+            var startAndEnd = params.batch[0].areas[0].coordRanges[0];
+            console.log('起始时间'+mthis.dataBySeries.date[startAndEnd[0]]);
+            console.log('结束时间'+mthis.dataBySeries.date[startAndEnd[1]]);
+            console.log('共' + (startAndEnd[1] - startAndEnd[0] + 1) + '天');
+          }
+          
+          mthis.timeTitle = ''
+          if(params.batch[0].areas.length  === 0) {
+            mthis.timeTitle = ''
+          } else{
+            mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
+          }
             let timeArr = []
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
@@ -387,7 +400,7 @@
       conditionContent: function(keyword) {
         // 发起http请求,获取时间轴
         var mthis = this
-        this.$http.get('http://10.60.1.140:5001/context-time-count/?keyword='+keyword).then(response => {
+        this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword='+keyword).then(response => {
           if(response.body.code === 0) {
             mthis.dataBySeries.num = response.body.data.count
             mthis.dataBySeries.date = response.body.data.time
