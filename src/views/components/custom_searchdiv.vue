@@ -64,50 +64,59 @@
         var mthis = this;
         if (a !== undefined && a !== null && a !== '') {
           if (a.value.split('搜索:').length > 1) {
-            if (mthis.$store.state.tmss === 'net') {
-              mthis.inputInfoNet = a.value.split('搜索:')[1]
-              mthis.$store.commit('setSearchNetResult', [{
-                node: {
-                  nodes: []
-                },
-                id: '',
-                label: a.value
-              }])
-            } else if (mthis.$store.state.tmss === 'geo') {
-              mthis.inputInfoGeo = a.value.split('搜索:')[1]
-              mthis.$store.commit('setSearchGeoResult', [{
-                node: {
-                  nodes: []
-                },
-                id: '',
+            // if (mthis.$store.state.tmss === 'net') {
+            //   mthis.inputInfoNet = a.value.split('搜索:')[1]
+            //   mthis.$store.commit('setSearchNetResult', [{
+            //     node: {
+            //       nodes: []
+            //     },
+            //     id: '',
+            //     label: a.value
+            //   }])
+            // } else if (mthis.$store.state.tmss === 'geo') {
+            //   mthis.inputInfoGeo = a.value.split('搜索:')[1]
+            //   mthis.$store.commit('setSearchGeoResult', [{
+            //     node: {
+            //       nodes: []
+            //     },
+            //     id: '',
                 
-                label: a.value
-              }])
-            } else {
-              alert(a.value)
-              mthis.inputInfoContent = a.value
-              mthis.$store.commit('setSearchContentResult', [{
-                node: {
-                  nodes: []
-                },
-                id: '',
-                label: a.value
-              }])
-            }
+            //     label: a.value
+            //   }])
+            // }  else if (mthis.$store.state.tmss === 'content')  {
+            //   alert(a.value)
+            //   mthis.inputInfoContent = a.value
+            //   mthis.$store.commit('setSearchContentResult', [{
+            //     node: {
+            //       nodes: []
+            //     },
+            //     id: '',
+            //     label: a.value
+            //   }])
+            // }
             // mthis.$router.push({path:'/home/contentView', query:{content:a.value.split('搜索:')[1]}})
           } else {
             // mthis.$store.commit('setSearchResult',response.body.data[0])
             if (this.$store.state.tmss === 'net') {
-              mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
                 'nodeIds': a.value
               }, {
+              // let arr = []
+              // arr.push(a.value)
+              // mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas-coarse/', {
+              //   'nodeIds': arr
+              // }, {
                 "emulateJSON": true
               }).then(response => {
-                mthis.$store.commit('setSearchNetResult', {
-                  node: response.body.data[0],
-                  id: response.body.data[0].nodes[0].id,
-                  label: response.body.data[0].nodes[0].name
-                })
+                if(response.body.code === 0) {
+                  mthis.$store.commit('setSearchNetResult', {
+                    id: response.body.data[0].nodes[0].id,
+                    label: response.body.data[0].nodes[0].name,
+                    nodes:response.body.data[0].nodes
+                  })
+                } else {
+                  alert('node-datas接口异常')
+                }
               })
             }
             if (this.$store.state.tmss === 'content') {
@@ -154,17 +163,18 @@
               emulateJSON: true
             })
             .then(response => {
+              // console.log(response)
               let option = []
               // let optionWord = {}
               // let optionWordArr = []
               let optionList = {}
               let optionListArr = []
               // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
-              for (let i = 0; i < response.body.data.length; i++) {
+              for (let i = 0; i < response.body.data[0].nodes.length; i++) {
                 optionListArr.push({
-                  "label": response.body.data[i].name,
-                  "value": response.body.data[i].id,
-                  "img": response.body.data[i].img,
+                  "label": response.body.data[0].nodes[i].name,
+                  "value": response.body.data[0].nodes[i].id,
+                  "img": response.body.data[0].nodes[i].img,
                   "type": 'human'
                 })
               }
@@ -200,11 +210,11 @@
                 "img": '',
                 "type": 'content'
               })
-              for (let i = 0; i < response.body.data.length; i++) {
+              for (let i = 0; i < response.body.data[0].nodes.length; i++) {
                 optionListArr.push({
-                  "label": response.body.data[i].name,
-                  "value": response.body.data[i].id,
-                  "img": response.body.data[i].img,
+                  "label": response.body.data[0].nodes[i].name,
+                  "value": response.body.data[0].nodes[i].id,
+                  "img": response.body.data[0].nodes[i].img,
                   "type": 'human'
                 })
               }

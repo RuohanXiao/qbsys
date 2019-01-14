@@ -186,6 +186,12 @@ var store = new Vuex.Store({
   state: {
     // 组件获取数据方式 this.$store.state.XXX
     tmss:'net', // top menu selected stutas
+
+    // 配置ip
+    ipConfig: {
+      api_url:'http://10.60.1.140:5001',
+      map_url:'http://10.60.1.142:8082'
+    },
     addNetNodes: {
       id:'',
       label:'',
@@ -261,7 +267,6 @@ var store = new Vuex.Store({
       type: '',
       params: {}
     }
-
   },
   mutations:{
     // 修改state里的数据时，只能通过mutations的形式来操作
@@ -323,6 +328,8 @@ var store = new Vuex.Store({
       state.addNetNodes = val
     },
     setSearchNetResult(state,val){
+      console.log('-------setSearchNetResult--------')
+      console.log(val)
       state.searchNetResult = val
     },
     setSearchGeoResult(state,val){

@@ -50,7 +50,7 @@
       //       return item.id;
       //     });
       //     // 新增防抖功能
-      //     mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+      //     mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
       //       'nodeIds': nodeIdsArry
       //     }).then(response => {
       //       mthis.$store.commit('setNetSelectNetNodes',response.data.data[0].nodes)
@@ -70,7 +70,7 @@
         this.nDivHeight = this.$store.getters.getNetDivHeight
       },
       netHeight: function(va){
-        console.log('-------------'+va)
+        // console.log('-------------'+va)
         // this.nHeight = this.$store.getters.getNetHeight
         this.nHeight = this.netHeight
       },

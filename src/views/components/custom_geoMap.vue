@@ -673,8 +673,7 @@ export default {
             var mthis = this
             var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
             selectingPointSource.getFeatures().forEach(function(item){
-                debugger
-                if(item.getStyle().getImage().getFill().getColor() === '#ff9900'){
+                if(item.getStyle() !== null && item.getStyle().getImage().getFill().getColor() === '#ff9900'){
                     mthis.setSelectedEventFeatureParam(item,false);
                 }
             });
@@ -1181,7 +1180,7 @@ export default {
             var selectedEvents = mthis.isEventPointsSelected();
             if(selectedEvents.length > 0){
                 selectedEvents.forEach(function(item){
-                    if(item.get('Time') !== undefined && item.get('Time')[0] >= mthis.timeCondition[0] && util.getTimestamp(item.get('Time')[0]) <= mthis.timeCondition[1]){
+                    if(item.get('Time') !== undefined && util.getTimestamp(item.get('Time')[0]) >= mthis.timeCondition[0] && util.getTimestamp(item.get('Time')[0]) <= mthis.timeCondition[1]){
                         //mthis.setSelectedEventFeatureParam(item,true);
                         item.setStyle(mthis.selectedstyle);
                     } else {

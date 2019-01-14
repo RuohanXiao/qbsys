@@ -138,7 +138,7 @@
 
       getPostById(id){
         var mthis = this;
-        mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+        mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
             'nodeIds': [id]
           }).then(response => {
             mthis.targetData = response.body.data[0].nodes[0];
@@ -174,23 +174,23 @@
                   label:this.targetData.name,
                 })
       },
-      showNodeInNewNet() {
-        this.cancel();
-        this.$store.commit('setSearchNetResult', {
-                  node: {
-                    nodes: [{
-                      'id': this.targetData.id,
-                      'type': this.targetData.type,
-                      'name': this.targetData.name,
-                      'img': this.targetData.img,
-                      'loaded': true
-                    }],
-                    links:[]
-                  },
-                  id: this.targetData.id,
-                  label: this.targetData.name,
-                })
-      },
+      // showNodeInNewNet() {
+      //   this.cancel();
+      //   this.$store.commit('setSearchNetResult', {
+      //             node: {
+      //               nodes: [{
+      //                 'id': this.targetData.id,
+      //                 'type': this.targetData.type,
+      //                 'name': this.targetData.name,
+      //                 'img': this.targetData.img,
+      //                 'loaded': true
+      //               }],
+      //               links:[]
+      //             },
+      //             id: this.targetData.id,
+      //             label: this.targetData.name,
+      //           })
+      // },
       queryPerson() {},
       searchInfo(query) {
         var mthis = this

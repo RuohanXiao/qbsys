@@ -177,9 +177,10 @@
         }
         this.timer = setTimeout(function() {
           // 新增防抖功能
-          mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+          mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
             'nodeIds': nodeIdsArry
           }).then(response => {
+            console.log(response.body.data[0])
             mthis.evetdata = mthis.singlePerson ? response.body.data[0].nodes[0] : response.body.data[0].nodes
           })
         }, 100);
@@ -224,12 +225,12 @@
         // mthis.singlePerson = false
       },
       detail(id) {
-        console.log('detail')
+        // console.log('detail')
         var mthis = this
         mthis.modalNodeId = id
         let nodeIdsArry = []
         nodeIdsArry.push(id)
-        mthis.$http.post('http://10.60.1.140:5001/node-datas/', {
+        mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
           mthis.selectNetNodes = response.body.data[0].nodes[0]
