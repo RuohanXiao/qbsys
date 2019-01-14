@@ -134,7 +134,7 @@ top: 232px;
 <script>
 import { mapState,mapMutations } from 'vuex'
 
-import {test_Route,test_HeatMap,EventsDatas} from '../../dist/assets/js/geo/data.js'
+import {test_Route,test_HeatMap,EventsDatas,eventsPointGeoJson} from '../../dist/assets/js/geo/data.js'
 import {map} from '../../dist/assets/js/geo/ChinaMap.js' 
 import {getGradientColors} from '../../dist/assets/js/geo/GradientColors.js'
 import {BezierSinglePoint, BezierLinePoints} from '../../dist/assets/js/geo/geometryType/BezierLine.js'
@@ -178,6 +178,7 @@ export default {
     name: 'OperationButtons',
     data() {
       return {
+        //isEventPointsSelected:false,
         a:null,
         mapDivbuttonIds : ['location_button','heatMap_button','route_button'],
         mapHeight:'0px',
@@ -185,9 +186,11 @@ export default {
         test_Route:test_Route,
         test_HeatMap:test_HeatMap,
         EventsDatas:EventsDatas,
+        eventsPointGeoJson:eventsPointGeoJson,
         routeMap:null,
         heatMap:null,
         provinTilSource:null,
+        selectedPointsSource:null,
         entityPointsColor: '#33ffff',//初始化加载时的实体点颜色
         frameSelectedColor: '#ff9900',//拉框选中后的实体点颜色
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
@@ -200,9 +203,6 @@ export default {
         GeoHeight:'0px',
         geoWidth:'0px',
         timeCondition:[],
-        //tmss:this.$store.state.tmss,
-        /* GeoHeight:'500px',
-        geoWidth:'1000px', */
         isCtrl:false,
         onImgIds:[],  //被点亮的img的id
         allImgIds:[], //所有img的id
@@ -295,7 +295,6 @@ export default {
                     }
                 }
             }
-            
         },
         imgClick(imgItemOpera){
             var mthis = this;
@@ -342,15 +341,30 @@ export default {
                         LAYERS: 'worldBaseMap:World_states_provinces',
                     }
                 });
-                mthis.setPointFeatures(mthis.EventsDatas.data);
+                /* mthis.selectedPointsSource = new VectorSource()
+                var selectedPointsLayer = new VectorLayer({  //被选择的点组成的图层
+                    id : 'selectedPointsLayer',
+                    source : mthis.selectedPointsSource,
+                    style : mthis.selectedstyle
+                }); */
+                
+                mthis.setPointFeatures(mthis.eventsPointGeoJson);
                 mthis.returnSelectedEventIds(mthis.EventsDatas.data); //将所有ids返回给全局被选中的节点变量，为了统计时间轴和右侧菜单
-                //mthis.creatPicSlider();//图片轮播
+                //mthis.routeMap.addlayer(selectedPointsLayer) 
+               //mthis.creatPicSlider();//图片轮播
                 //mthis.locationPoints()  //空间查询出点所在地信息
                 //mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight])
                 //mthis.routeMap.map.setSize([0,100])
                 //setTimeout( function() {mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight]);}, 2);
             }  
-            //location.reload()
+        },
+        hasDataInSource(targetSource){
+            var features = targetSource.getFeatures();
+            if(features.length > 0){
+                return true;
+            } else {
+                return false;
+            }
         },
         heatMap_cilck(){
             var mthis = this
@@ -406,34 +420,39 @@ export default {
             };
             mthis.$store.commit('setGeoSelectedParam',selectedParam);
         },
-        setPointFeatures(pointsData){
+        setPointFeatures(pointsDataJson){
             var mthis = this
-            var entityPointsSource = new VectorSource()
+            /* var entityPointsSource = new VectorSource()
             var entityPoint_layer = new VectorLayer({
-                id : 'entityPointsLayer',
-                source : entityPointsSource
+                id : 'eventsPointsLayer',
+                source : entityPointsSource,
+                style : null
             })
             mthis.routeMap.addlayer(entityPoint_layer)
-            var style = new Style({
-                image : new CircleStyle({
-                    radius : 3,
-                    fill : new Fill({
-                        color : mthis.entityPointsColor
-                    })
-                })
-            })
             pointsData.forEach(function(item){
                 var pointFeature = new Feature({
                     geometry:new Point(item.coordinate),
                     properties:{
                         id:item.EventId+"_eventId",
-                        time:[util.getTimestamp(item.Time[0]),util.getTimestamp(item.Time[1])]
-                    }
+                        time:[util.getTimestamp(item.Time[0]),util.getTimestamp(item.Time[1])],
+                    },
+                    isSelected:false,
+                    isHidden:false
                 })
-                pointFeature.setStyle(style)
                 entityPointsSource.addFeature(pointFeature)
-            })
-            debugger
+                pointFeature.setStyle(mthis.noSelectedstyle);
+            }) */
+            var layer = new VectorLayer({
+                source: new VectorSource({
+                    features:Feature,
+                    //url: '',
+                    features: (new GeoJSON()).readFeatures(eventsPointGeoJson),
+                    format: new GeoJSON()
+                }),
+                style:mthis.noSelectedstyle,
+                id:'eventsPointsLayer'
+            });
+            mthis.routeMap.addlayer(layer)
         },
         locationPoints(){
             var mthis = this
@@ -450,7 +469,7 @@ export default {
             var provinName;
             var contryName;
             var Coor;
-            var features = mthis.getLayerById("entityPointsLayer").getSource().getFeatures();
+            var features = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
             features.forEach(function(item,index){
                 Coor = item.getGeometry().getCoordinates();
                 var viewResolution=mthis.routeMap.map.getView().getResolution();
@@ -520,10 +539,10 @@ export default {
             element.children[0].style.boxShadow = '';
             //element.children[1].style.color = 'rgba(24,255,255,0.5)';
             var idN = 'pointAnimation_' + id;
-            mthis.removeOverlays(idN);
+            //mthis.removeOverlays(idN);
             var layer = mthis.routeMap.map.getLayers().getArray();
             for(var i = 0; i < layer.length; i++){
-                if(layer[i].getProperties().id == 'entityPointsLayer'){
+                if(layer[i].getProperties().id == 'eventsPointsLayer'){
                     var features = layer[i].getSource().getFeatures();//.getProperties().properties.belongId
                     features.forEach(function(ItemF){
                         if(ItemF.getProperties().properties.belongId == id){
@@ -545,7 +564,7 @@ export default {
                     })
                 })
             });
-            var entityPoints = mthis.getLayerById("entityPointsLayer").getSource().getFeatures();
+            var entityPoints = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
             var returnId = [];
             var idImg = id + '_imgslider';
             var element = document.getElementById(idImg);
@@ -585,7 +604,6 @@ export default {
         },
         changedrawType(object){
             var mthis = this
-            
             var map = mthis.routeMap.map
             map.removeInteraction(mthis.draw);
             //矢量图层是用来渲染矢量数据的图层类型，在OpenLayers里，它是可以定制的，可以控制它的透明度，颜色，以及加载在上面的要素形状等。
@@ -635,81 +653,60 @@ export default {
         draw_polygon(draw) {
             var mthis = this
             draw.on('drawstart',function(){
-                mthis.removeSelectedPoints(mthis.frameSelectedColor, mthis.entityPointsColor);
+                mthis.removeSelectedPoints();
             });
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
                 var geometry = feature.getGeometry();
-                mthis.selectedEntityPoints(geometry);
+                var frameselectedEventIds = [];
+                frameselectedEventIds = mthis.selectEventPointsByGeometry(geometry);
                 mthis.routeMap.map.removeInteraction(draw);
+                var selectedEventsParam = {
+                    type:'GeoView',
+                    eventId:frameselectedEventIds
+                };
+                mthis.$store.commit('setGeoSelectedParam',selectedEventsParam);
             });
         },
         //颜色转换，移除被选择的实体点
-        removeSelectedPoints(RemovedColor,changeColor){
+        removeSelectedPoints(){
             var mthis = this
-            var selectingPointSource = mthis.getLayerById("entityPointsLayer").getSource();
-            var changePointstyle = new Style({
-                image : new CircleStyle({
-                    radius : 3,
-                    fill : new Fill({
-                        color : changeColor
-                    })
-                })
-            });
+            var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
             selectingPointSource.getFeatures().forEach(function(item){
-                if(item.getStyle() != null && item.getStyle().getImage().getFill().getColor() == RemovedColor){
-                    item.setStyle(changePointstyle);
-                    mthis.pointAnimation(item);
+                debugger
+                if(item.getStyle().getImage().getFill().getColor() === '#ff9900'){
+                    mthis.setSelectedEventFeatureParam(item,false);
                 }
             });
         },
         //拉框选择实体点
-        selectedEntityPoints(geometry,selectedColor){
+        selectEventPointsByGeometry(geometry){   
             var mthis = this
-            var frameselectedpoints = [];
-            var selectingPointSource = mthis.getLayerById("entityPointsLayer").getSource();
-            var frameSelectedPointstyle = new Style({
-                image : new CircleStyle({
-                    radius : 3,
-                    fill : new Fill({
-                        color : mthis.frameSelectedColor
-                    })
-                })
+            var frameselectedEventIds = [];
+            var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
+            //mthis.selectedPointsSource.clear();
+            selectingPointSource.getFeatures().forEach(function(item) {
+                var coord = item.getGeometry().getCoordinates();
+                var isIn = geometry.intersectsCoordinate(coord);
+                if (isIn) {
+                    //item.setStyle(mthis.selectedstyle);
+                    mthis.setSelectedEventFeatureParam(item,true);
+                    var itemEventId = item.get('EventId');
+                    frameselectedEventIds.push(itemEventId);
+                }
             });
-            var Returnid = [];
-            var imgSelectedEntityPoints = mthis.selectEntityPointsById(mthis.onImgIds);
-            if (imgSelectedEntityPoints.length != 0) {
-                selectingPointSource.getFeatures().forEach(function(item) {
-                    if (mthis.isPointInPointsArr(item,imgSelectedEntityPoints)) {
-                        var coord = item.getGeometry().getCoordinates();
-                        var isIn = geometry.intersectsCoordinate(coord);
-                        if (isIn) {
-                            //frameSelectedEntityPoints.push(item);
-                            mthis.setpointStyle(item,mthis.frameSelectedColor);
-                            var overlayId = 'pointAnimation_'
-                                + item.getProperties().properties.belongId
-                                + "_"
-                                + item.getProperties().properties.id;
-                            var tarOverlayer = mthis.routeMap.map.getOverlayById(overlayId);
-                            tarOverlayer.getElement().style.background = item.getStyle().getImage().getFill().getColor();
-                            // 传回数据，展示点信息
-                            Returnid.push(item.getProperties().properties.name);
-                        } 
-                    } 
-                });
+            return frameselectedEventIds
+        },
+        setSelectedEventFeatureParam(eventfeature,isSelected){  //isSelected这个参数，true时是被选中，false是取消选中
+            var mthis = this;
+            if(isSelected){
+                eventfeature.setStyle(mthis.selectedstyle);
+                eventfeature.set('isSelected',true,false)
             } else {
-                selectingPointSource.getFeatures().forEach(function(item) {
-                    var coord = item.getGeometry().getCoordinates();
-                    var isIn = geometry.intersectsCoordinate(coord);
-                    if (isIn) {
-                        frameselectedpoints.push(item);
-                        item.setStyle(frameSelectedPointstyle);
-                        // 传回数据，展示点信息
-                        Returnid.push(item.getProperties().properties.name);
-                    }
-                });
+                eventfeature.setStyle(mthis.noSelectedstyle);
+                eventfeature.set('isSelected',false,false)
             }
-            mthis.frameSelectedEntityPoints = frameselectedpoints;
+            
         },
         //==========================================================================
         //路径
@@ -972,8 +969,8 @@ export default {
         },
         deleteEntityPointsById(id){
             var mthis = this;
-            var entityPointsLayer = mthis.getLayerById("entityPointsLayer");
-            var Source =  entityPointsLayer.getSource();
+            var eventsPointsLayer = mthis.getLayerById("eventsPointsLayer");
+            var Source =  eventsPointsLayer.getSource();
             var features = Source.getFeatures();
             features.forEach(function(item){
                 if(item.getProperties().properties.belongId == id){
@@ -986,8 +983,8 @@ export default {
             var mthis = this;
             var Id_Animation = 'pointAnimation_' + id;
             var Id_localtion = 'localtion_Overlay_' + id;
-            mthis.removeOverlays(Id_Animation);
-            mthis.removeOverlays(Id_localtion);
+            // mthis.removeOverlays(Id_Animation);
+            // mthis.removeOverlays(Id_localtion);
         },
         /*
         *
@@ -1055,7 +1052,7 @@ export default {
          * @param 删除map中所有此id的overlay  切记，overlay的移除只能从后往前移除
          */
 
-        removeOverlays(id){
+        /* removeOverlays(id){
             var mthis = this
             var overlays = mthis.routeMap.map.getOverlays().getArray();
             if(overlays.length == 0){
@@ -1068,7 +1065,7 @@ export default {
                 }
             }
             
-        },
+        }, */
         //根据id获取layer
         getLayerById(layerId){
             var mthis = this
@@ -1127,7 +1124,7 @@ export default {
         },
 
         pointAnimation(point){
-            var mthis = this
+            /* var mthis = this
             var point_animation_BelongId = 'pointAnimation_' + point.getProperties().properties.belongId;
             var point_animation = document.createElement('div');
             point_animation.className = 'point_animation';
@@ -1135,16 +1132,16 @@ export default {
             var point_animation_id = point_animation_BelongId + '_' + point.getProperties().properties.id;
             if(mthis.isPointAnimation(point)){
                 
-                mthis.removeOverlays(point_animation_id);
+                //mthis.removeOverlays(point_animation_id);
             }
             var point_overlay = mthis.setOverlay(point.getGeometry().getCoordinates(),point_animation,point_animation_id, 'center-center');
             mthis.routeMap.map.addOverlay(point_overlay);
-            mthis.routeMap.map.render();
+            mthis.routeMap.map.render(); */
         },
         selectEntityPointsById(belongIds){
             var mthis = this;
             var selectedFeatures = [];
-            var entityLayer = mthis.getLayerById('entityPointsLayer');
+            var entityLayer = mthis.getLayerById('eventsPointsLayer');
             var features = entityLayer.getSource().getFeatures();
             belongIds.forEach(function(belongId){
                 features.forEach(function(item){
@@ -1154,6 +1151,17 @@ export default {
                 });
             });
             return selectedFeatures;
+        },
+        isEventPointsSelected(){
+            var mthis = this;
+            var features = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
+            var selectedEvents=[];
+            for(let i = 0; i < features.length; i++){
+                if(features[i].get('isSelected') === true){
+                    selectedEvents.push(features[i]);
+                }
+            }
+            return selectedEvents;
         }
 
     },
@@ -1169,23 +1177,31 @@ export default {
         },
         timeCondition:function(){
             var mthis = this;
-            var layers = mthis.routeMap.map.getLayers().getArray();
-            var eventLayer;
-            debugger
-            for(let i = 0; i < layers.length; i++){
-                if(layers[i].getProperties().id !== undefined && layers[i].getProperties().id === "entityPointsLayer"){
-                    eventLayer = layers[i];
-                    break;
+            var eventFeatures = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
+            var selectedEvents = mthis.isEventPointsSelected();
+            if(selectedEvents.length > 0){
+                selectedEvents.forEach(function(item){
+                    if(item.get('Time') !== undefined && item.get('Time')[0] >= mthis.timeCondition[0] && util.getTimestamp(item.get('Time')[0]) <= mthis.timeCondition[1]){
+                        //mthis.setSelectedEventFeatureParam(item,true);
+                        item.setStyle(mthis.selectedstyle);
+                    } else {
+                        //mthis.setSelectedEventFeatureParam(item,false);
+                        item.setStyle(mthis.noSelectedstyle);
+                    }
+                })
+                
+            } else {
+                for(let j = 0; j < eventFeatures.length; j++){
+                    if(eventFeatures[j].get('Time') !== undefined && util.getTimestamp(eventFeatures[j].get('Time')[0]) >= mthis.timeCondition[0] && util.getTimestamp(eventFeatures[j].get('Time')[0]) <= mthis.timeCondition[1]){
+                        //mthis.setSelectedEventFeatureParam(eventFeatures[j],true);
+                        eventFeatures[j].setStyle(mthis.selectedstyle);
+                    } else{
+                        //mthis.setSelectedEventFeatureParam(eventFeatures[j],false);
+                        eventFeatures[j].setStyle(mthis.noSelectedstyle);
+                    }
                 }
             }
-            var eventFeatures = eventLayer.getSource().getFeatures();
-            for(let j = 0; j < eventFeatures.length; j++){
-                if(eventFeatures[j].getProperties().properties.time !== undefined && eventFeatures[j].getProperties().properties.time[0] >= mthis.timeCondition[0] && eventFeatures[j].getProperties().properties.time[0] <= mthis.timeCondition[1]){
-                    eventFeatures[j].setStyle(mthis.selectedstyle);
-                } else {
-                    eventFeatures[j].setStyle(mthis.noSelectedstyle);
-                }
-            }
+           
         },
         locationClassObject:{
                 handler:function(val,oldval){

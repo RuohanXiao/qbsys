@@ -33,7 +33,7 @@
 <script>
   import echarts from "echarts";
   import { mapState,mapMutations } from 'vuex'
-  import {timeStaticsData} from '../../dist/assets/js/geo/data.js'
+  import {timeStaticsData,reSetTimeStaticsData} from '../../dist/assets/js/geo/data.js'
   export default {
     name: "",
     data() {
@@ -397,9 +397,13 @@
       'split','splitWidth','tmss','selectNetNodes','geo_selected_param'
     ]),
     watch: {
+        /* selectGeoNodes:function(){
+          var mthis = this;
+          mthis.geo_selected_param = mthis.$store.state.selectGeoNodes;
+        }, */
         geo_selected_param:function(){
             var mthis = this
-            //timeStaticsData
+            //var timeStaticsIds = mthis.$store.state.geo_selected_param.eventId;
             mthis.dataBySeries.num = mthis.timeStaticsData.data.count
             mthis.dataBySeries.date = mthis.timeStaticsData.data.time
             mthis.option.series[0].data = mthis.timeStaticsData.data.count
