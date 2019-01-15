@@ -413,27 +413,26 @@
       'split','splitWidth','tmss','selectNetNodes','geo_selected_param'
     ]),
     watch: {
-        /* selectGeoNodes:function(){
-          var mthis = this;
-          mthis.geo_selected_param = mthis.$store.state.selectGeoNodes;
-        }, */
         geo_selected_param:function(){
             var mthis = this
-            //var timeStaticsIds = mthis.$store.state.geo_selected_param.eventId;
-            mthis.dataBySeries.num = mthis.timeStaticsData.data.count
-            mthis.dataBySeries.date = mthis.timeStaticsData.data.time
-            mthis.option.series[0].data = mthis.timeStaticsData.data.count
-            mthis.option.xAxis.data = mthis.timeStaticsData.data.time
-            mthis.charts.setOption(mthis.option)
-        /*     this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword='+keyword).then(response => {
-            if(response.body.code === 0) {
-                mthis.dataBySeries.num = response.body.data.count
-                mthis.dataBySeries.date = response.body.data.time
-                mthis.option.series[0].data = response.body.data.count
-                mthis.option.xAxis.data = response.body.data.time
-                mthis.charts.setOption(mthis.option)
+            var type = mthis.$store.state.geo_selected_param.type;
+            if(type !== 'GeoTime'){
+              //var timeStaticsIds = mthis.$store.state.geo_selected_param.eventId;
+              mthis.dataBySeries.num = mthis.timeStaticsData.data.count
+              mthis.dataBySeries.date = mthis.timeStaticsData.data.time
+              mthis.option.series[0].data = mthis.timeStaticsData.data.count
+              mthis.option.xAxis.data = mthis.timeStaticsData.data.time
+              mthis.charts.setOption(mthis.option)
+            /*this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword='+keyword).then(response => {
+              if(response.body.code === 0) {
+                  mthis.dataBySeries.num = response.body.data.count
+                  mthis.dataBySeries.date = response.body.data.time
+                  mthis.option.series[0].data = response.body.data.count
+                  mthis.option.xAxis.data = response.body.data.time
+                  mthis.charts.setOption(mthis.option)
+              }
+              }) */
             }
-            }) */
         },
       split: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'

@@ -422,26 +422,6 @@ export default {
         },
         setPointFeatures(pointsDataJson){
             var mthis = this
-            /* var entityPointsSource = new VectorSource()
-            var entityPoint_layer = new VectorLayer({
-                id : 'eventsPointsLayer',
-                source : entityPointsSource,
-                style : null
-            })
-            mthis.routeMap.addlayer(entityPoint_layer)
-            pointsData.forEach(function(item){
-                var pointFeature = new Feature({
-                    geometry:new Point(item.coordinate),
-                    properties:{
-                        id:item.EventId+"_eventId",
-                        time:[util.getTimestamp(item.Time[0]),util.getTimestamp(item.Time[1])],
-                    },
-                    isSelected:false,
-                    isHidden:false
-                })
-                entityPointsSource.addFeature(pointFeature)
-                pointFeature.setStyle(mthis.noSelectedstyle);
-            }) */
             var layer = new VectorLayer({
                 source: new VectorSource({
                     features:Feature,
