@@ -177,7 +177,6 @@
     },
     methods: {
       con() {
-        // console.log()
       },
       showModalStep() {
         this.modalStep = true
@@ -202,11 +201,8 @@
       // 调用统计接口
       getStatistics() {
         var mthis = this
-        // console.log(mthis.netchart)
         let nodeArr = Object.keys(mthis.netchart._impl.data.default.nodes).map(key => mthis.netchart._impl.data.default.nodes[key].id);
         let linkArr = Object.keys(mthis.netchart._impl.data.default.links).map(key => mthis.netchart._impl.data.default.links[key]);
-        // console.log(nodeArr)
-        // console.log(linkArr)
         mthis.$http.post(this.$store.state.ipConfig.api_url + '/graph-statistics/', {
           'nodes': nodeArr,
           'links': linkArr
@@ -214,29 +210,29 @@
           mthis.$store.commit('setDataStatisticsEvent', response.data);
         })
       },
-      del() {
-        this.modal_loading = true;
-        setTimeout(() => {
-          this.modal_loading = false;
-          // this.modal01 = false;
-          this.$Message.success('Successfully delete');
-        }, 2000);
-      },
-      longPress() {
-        this.netchart.startLongPress();
-      },
+      // del() {
+      //   this.modal_loading = true;
+      //   setTimeout(() => {
+      //     this.modal_loading = false;
+      //     this.$Message.success('Successfully delete');
+      //   }, 2000);
+      // },
+      // longPress() {
+      //   this.netchart.startLongPress();
+      // },
       //强制重新渲染
       changeFlag() {
         this.flag = !this.flag;
         let focusId = (this.selectionId.length > 0) ? (this.selectionId[0].id) : 'node1'
         this.netchart.addFocusNode(focusId, 50)
-        // document.getElementById('netchart').focus();
       },
-      lightNodes() {},
+      // 悬浮点亮节点
+      hoverLightinNodes(ids) {
+        mthis.netchart.selection(ids)
+      },
       //知识拓展节点（加载新数据）
       expandNodeKnowledge() {
         var mthis = this;
-        // console.log(mthis.selectionId)
         let arr = []
         if (mthis.selectionId.length > 0) {
           mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
@@ -244,17 +240,18 @@
           for (let i = 0; i < mthis.selectionId.length; i++) {
             arr.push(mthis.selectionId[i].id)
           }
-          mthis.$http.post(this.$store.state.ipConfig.api_url + '/neighbor-datas/', {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/neighbor-datas/', {
             'ClassName': 'knowledge',
             'nodeIds': arr
           }).then(response => {
             res = response.body.data[0]
             for (let m = 0; m < res.nodes.length; m++) {
+              res.nodes[m].type = res.nodes[m].entity_type
+              res.nodes[m].imageCropping = true
               arr.push(res.nodes[m].id)
             }
             mthis.netchart.addData(res)
             setTimeout(function() {
-              // console.log(util.unique(arr))
               mthis.netchart.selection(util.unique(arr))
             }, 100)
             mthis.getStatistics()
@@ -273,7 +270,7 @@
                   nodes: []
                 },
                 id: '',
-                label: ''
+                name: ''
               }])
         this.selectionId = []
         this.getStatistics()
@@ -281,8 +278,6 @@
       // 事件拓展
       expandNodeEvent() {
         var mthis = this;
-        // console.log('-----shijian tuozhan-----')
-        // console.log(mthis.selectionId)
         let arr = []
         if (mthis.selectionId.length > 0) {
           //访问数据库，拓展新数据
@@ -295,14 +290,11 @@
             'nodeIds': arr
           }).then(response => {
             res = response.body.data[0]
-            // console.log('--------------------------------eventexpand-------------')
-            // console.log(res)
             mthis.netchart.addData(res)
             for (let m = 0; m < res.nodes.length; m++) {
               arr.push(res.nodes[m].id)
             }
             setTimeout(function() {
-              // console.log(util.unique(arr))
               mthis.netchart.selection(util.unique(arr))
             }, 100)
             mthis.getStatistics()
@@ -468,14 +460,15 @@
             let ahd = Math.PI / 72;
             // let radius = 5 * index + 5
             mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
-              Math.sin(ahd * index)*(Math.random()-0.5)*5000;
+              Math.sin(ahd * index)*(Math.random()-0.5)*2000;
             mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] +
-              Math.cos(ahd * index)*(Math.random()-0.5)*5000;
+              Math.cos(ahd * index)*(Math.random()-0.5)*2000;
             mthis.netchart.lockNode(mthis.selectionId[index].id);
           }
         } else if (mthis.selectionId.length > 0 && mthis.selectionId.length < 27) {
           //半径
           let radius = mthis.selectionId.length > 7 ? 200 : 100;
+          // let radius = mthis.selectionId.length*2;
           //每一个BOX对应的角度;
           let avd = 360 / mthis.selectionId.length;
           //每一个BOX对应的弧度;
@@ -788,11 +781,11 @@
         }
       },
       reloadNetData(data) {
-        // console.log('========================')
-        // console.log(dataarr)
         var mthis = this
         let dataarr = []
         dataarr.push(data)
+        console.log('----dataarr----')
+        console.log(dataarr)
         mthis.netchart.replaceData({
           "nodes": dataarr,
           "links": []
@@ -917,29 +910,30 @@
               node.cursor = "pointer";
               node.label = node.data.name;
               // node.backgroundStyle.imageCropping =false
-              // 默认图标怕
-              if (node.data.type === "person") {
-                if (node.data.img === "") {
-                  node.image = "./src/dist/assets/images/ico/b12.ico";
-                  nodeimageCropping = 'crop'
-                } 
-              }
-              else if (node.data.type === "event") {
-                if (node.data.img === "") {
-                  node.image = "./src/dist/assets/images/event.png";
-                  nodeimageCropping = 'crop'
-                } 
-              } else if (node.data.type === "org") {
-                if (node.data.img === "") {
-                  node.image = "./src/dist/assets/images/ico/b3.ico";
-                  nodeimageCropping = 'crop'
-                } 
-              } else {
-                if (node.data.img === "") {
-                  node.image = node.data.img;
-                  node.imageCropping = 'crop'
-                } 
-              }
+              // 默认图标
+              // if (node.data.type === "human") {
+              //   if (node.data.img === "") {
+              //     node.image = "./src/dist/assets/images/ico/b12.ico";
+              //   } else {
+              //     node.image = "http://10.60.1.143/pic_lib/entity/"+node.id+".png";
+              //   }
+              // }
+              // else if (node.data.type === "event") {
+              //   if (node.data.img === "") {
+              //     node.image = "./src/dist/assets/images/event.png";
+              //   } 
+              // } else if (node.data.type === "org") {
+              //   if (node.data.img === "") {
+              //     node.image = "./src/dist/assets/images/ico/b3.ico";
+              //     nodeimageCropping = 'crop'
+              //   } 
+              // } else {
+              //   if (node.data.img === "") {
+              //     node.image = node.data.img;
+              //     node.imageCropping = 'crop'
+              //   } 
+              // }
+              node.image = "http://10.60.1.143/pic_lib/entity/"+node.id+".png";
               if (node.hovered) {
                 node.lineColor = node.data.lineColor = "rgba(51, 255, 255, 0.4)";
                 node.lineWidth = node.data.lineWidth = '5'
@@ -1073,6 +1067,8 @@
                   mthis.selectItem = event;
                   // 有选中节点或者link
                   mthis.selectionId = [];
+                  console.log('=================')
+                  console.log(event)
                   let tem = [];
                   for (
                     let selectNum = 0; selectNum < event.selection.length; selectNum++
@@ -1147,15 +1143,11 @@
     watch: {
       searchNetResult: function(va) {
         if (this.$store.state.tmss === 'net') {
-          // let objs = {
-          //         nodes: this.searchNetResult,
-          //         links:[]
-          //       }
-          va.links = []
-          va.nodes[0].loaded = true
-          va.nodes[0].type = 'human'
-                console.log(va)
-          this.reloadNetData(va)
+          va.data.type = va.data.entity_type
+          va.data.image = va.data.img
+          va.data.images = va.data.img
+          console.log(va.data)
+          this.reloadNetData(va.data)
         }
       },
       addNetNodes: function(va) {

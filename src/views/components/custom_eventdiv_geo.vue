@@ -345,12 +345,11 @@
         // mthis.singlePerson = false
       },
       detail(id) {
-        // console.log('detail')
         var mthis = this
         mthis.modalNodeId = id
         let nodeIdsArry = []
         nodeIdsArry.push(id)
-        mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
           mthis.selectNetNodes = response.body.data[0].nodes[0]
