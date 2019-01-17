@@ -144,7 +144,6 @@
               }]) */
             }
             if (this.$store.state.tmss === 'geo') {
-              debugger
               mthis.$store.commit('setSearchGeoResult', {
                 node: {
                   nodes: []
@@ -195,7 +194,6 @@
         var mthis = this;
         if (query !== "") {
           this.loading2 = true;
-          debugger
           let response = mthis.$http.get("http://10.60.1.140:5001/fuzzy-matchs/?pattern=" + query, {
               emulateJSON: true
             })

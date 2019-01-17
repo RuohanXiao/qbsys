@@ -159,7 +159,6 @@ export default {
     },
     mounted(){
         var mthis = this;
-        debugger
         mthis.setOpenPanelNames();
     },
     props:['Statisticsdata','firstClassify','nodeTypeClassify','SecondAttrClassify','EntityAttrInformation','nodeTypedata'],
