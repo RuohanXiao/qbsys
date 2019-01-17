@@ -139,6 +139,7 @@
               }]) */
             }
             if (this.$store.state.tmss === 'geo') {
+              debugger
               mthis.$store.commit('setSearchGeoResult', {
                 node: {
                   nodes: []
@@ -179,10 +180,6 @@
               optionList.data = optionListArr
               let option = []
               option.push(optionList)
-              console.log('+++++++++++++++++++++++++')
-              console.log(optionList)
-              console.log(option)
-              console.log('+++++++++++++++++++++++++')
               mthis.options1 = option;
               mthis.loading1 = false;
             });

@@ -50,17 +50,6 @@
             <p class="img-content">反选</p>
           </div>
         </Tooltip>
-
-        <!-- <div id='location_button' class="location_Noclick"  @click='divClick' ></div>
-        <div id='heatMap_button'  class="heatMap_Noclick" @click='divClick'></div>
-        <div id='route_button'  class="route_Noclick" @click='divClick'></div>
-        <div class='separateDiv'></div>
-        <div id='rectangle_select' value='rectangle'  class="rectangle_Noclick" @click='divClick' ></div>
-        <div id='Circle_select' value='Circle' class="Circle_Noclick" @click='divClick'></div>
-        <div id='Polygon_select' value='Polygon' class="Polygon_Noclick" @click='divClick'></div>
-        <div class='separateDiv'></div>
-        <div id='delete_opera' class='delete_Noclick' @click='divClick'></div>
-        <div id='invertSelection_opera' class='invertSelection_Noclick' @click='divClick'></div> -->
     </div>
 </template>
 
@@ -97,7 +86,6 @@ export default {
     name:'mapOperaButtons',
     methods:{
         divClick(obj){
-          
             var mthis = this;
             var operationObj = obj;
              mthis.$emit('mapOperation', operationObj)

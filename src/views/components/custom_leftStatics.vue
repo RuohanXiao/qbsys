@@ -94,12 +94,12 @@
 
 <template>
 <div id='leftStatics' v-if="Statisticsdata.length > 0">
-    <div id='NodeType'>
-        <div id='NodeTypeName'>
+    <div :id='firstClassifyItem.id' v-for='(firstClassifyItem,index) in firstClassify'>
+        <div :id="firstClassifyItem.id + 'Name'">
             <span class="separateLine"></span>
-            <span style="margin-left:10px">节点类型</span>
+            <span style="margin-left:10px">{{firstClassifyItem.disName}}</span>
         </div>
-        <table id='NodeTypeInfo'>
+        <table id='NodeTypeInfo' v-if="index === 0">
             <tr :id='nodeTypeItem.id' v-for="(nodeTypeItem,index) in nodeTypeClassify" v-on:click="getAttrsById(nodeTypeItem.id)">
                 <td :id="nodeTypeItem.id + '_name'" class="NameTd">
                     <span>{{nodeTypeItem.disName}}</span>
@@ -109,14 +109,8 @@
                 </td>
             </tr>
         </table>
-    </div>
-    <div id='EntityAttr'>
-        <div id='EntityAttrName'>
-            <span class="separateLine"></span>
-            <span style="margin-left:10px">实体属性</span>
-        </div>
-        <Collapse simple v-model="openPanelNames" id="EntityAttrColl">
-            <panel v-for="(EntityAttrItem,index) in EntityAttrClassify" :name="EntityAttrItem.id">
+        <Collapse simple v-model="openPanelNames" id="EntityAttrColl" v-if="index === 1">
+            <panel v-for="(EntityAttrItem,index) in SecondAttrClassify" :name="EntityAttrItem.id">
                 <span :id="EntityAttrItem.id + '/countSpan'" v-if="itemInArrById(EntityAttrItem.id) && stateType.id === EntityAttrItem.id && stateType.datasCount>3" v-for="stateType in EntityAttrInformation.data">{{EntityAttrItem.disName + '(' + 3 + '/' + stateType.datasCount + ')'}}</span>
                 <span :id="EntityAttrItem.id + '/countSpan'" v-if="itemInArrById(EntityAttrItem.id) && stateType.id === EntityAttrItem.id && stateType.datasCount<=3" v-for="stateType in EntityAttrInformation.data">{{EntityAttrItem.disName + '(' + stateType.datasCount + '/' + stateType.datasCount + ')'}}</span>
                 <span :id="EntityAttrItem.id + '/countSpan'" v-if="!itemInArrById(EntityAttrItem.id)">{{EntityAttrItem.disName + '(0)'}}</span>
@@ -141,6 +135,13 @@
             </panel>
         </Collapse>
     </div>
+    <!-- <div id='EntityAttr'>
+        <div id='EntityAttrName'>
+            <span class="separateLine"></span>
+            <span style="margin-left:10px">实体属性</span>
+        </div>
+        
+    </div> -->
 </div>
     
 </template>
@@ -153,178 +154,15 @@ export default {
         
         return{
             openPanelNames:[],//['country_of_citizenship','occupation','address','member_of_political_party','religion','e-mail'],
-            firstClassify : [
-                {
-                    id:'NodeType',
-                    disName:'节点类型'
-                },
-                {
-                    id:'EntityAttr',
-                    disName:'实体属性'
-                }
-            ],
-        nodeTypeClassify : [
-                {
-                    id:'human',
-                    disName:'人物'
-                },
-                {
-                    id:'organization',
-                    disName:'组织'
-                },
-                {
-                    id:'administrative',
-                    disName:'国家'
-                },
-                {
-                    id:'event',
-                    disName:'事件'
-                }
-            ],
-            nodeTypedata:{
-                code:0,
-                data:[
-                    {
-                        id:'human',
-                        count: 1,
-                        per: 20,
-                        
-                    },
-                    {
-                        id:'organization',
-                        count: 3,
-                        per: 8,
-                        
-                    },
-                    {
-                        id:'administrative',
-                        count: 8,
-                        per: 90,
-                        
-                    },
-                    {
-                        id:'event',
-                        count: 1,
-                        per: 8,
-                        
-                    }
-                ]
-            },
-            EntityAttrClassify:[
-                {
-                    id:'country_of_citizenship',
-                    disName:'国籍'
-                },
-                {
-                    id:'occupation',
-                    disName:'职业'
-                },
-                {
-                    id:'address',
-                    disName:'地址'
-                },
-                {
-                    id:'member_of_political_party',
-                    disName:'政党'
-                },
-                {
-                    id:'religion',
-                    disName:'信仰'
-                },
-                {
-                    id:'e-mail',
-                    disName:'邮箱'
-                }
-
-            ],
-            EntityAttrInformation:{
-                code:0,
-                data:[
-                    {
-                        id:'country_of_citizenship',
-                        datasCount:4,
-                        moredata:{
-                            dataItem:1,
-                            nodeCount:10
-                        },
-                        datas:[
-                            {
-                                name:"中国",
-                                count: 1,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 8,
-                            },
-                            {
-                                name:"日本",
-                                count: 2,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 16,
-                            },
-                            {
-                                name:"美国",
-                                count: 1,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 8,
-                            },
-                            {
-                                name:"英国",
-                                count: 2,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 16,
-                            }
-                        ]
-                    },
-                    {
-                        id:'occupation',
-                        datasCount:3,
-                        moredata:{
-                            dataItem:1,
-                            nodeCount:10
-                        },
-                        datas:[
-                            {
-                                name:"军人",
-                                count: 1,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 8,
-                            },
-                            {
-                                name:"政治家",
-                                count: 2,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 16,
-                            },
-                            {
-                                name:"企业家",
-                                count: 10,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 100,
-                            }
-                        ]
-                    }
-                ]
-            }
+            
         }
     },
     mounted(){
         var mthis = this;
+        debugger
         mthis.setOpenPanelNames();
     },
-    props:{Statisticsdata:Array},
+    props:['Statisticsdata','firstClassify','nodeTypeClassify','SecondAttrClassify','EntityAttrInformation','nodeTypedata'],
     components: {
       percentBar,
     },
@@ -414,7 +252,7 @@ export default {
         },
         setOpenPanelNames(){
             var mthis = this;
-            mthis.EntityAttrClassify.forEach(function(item,index){
+            mthis.SecondAttrClassify.forEach(function(item,index){
                 mthis.openPanelNames.push(item.id);
             })
         }

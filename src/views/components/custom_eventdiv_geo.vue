@@ -5,47 +5,7 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
           <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
-            <left-statics :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0"></left-statics>
-            <left-statics :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0"></left-statics>
-            <!-- <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0" ></c-tree> -->
-            <!-- <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'geo'" ></c-tree> -->
-            <!-- <c-tree :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0" ></c-tree> -->
-              <!-- <Collapse simple class="toushiItems">
-                <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
-                  <div slot="content">
-                  <collapse accordion simple>
-                    <panel v-for="StatisticsItem in StatisticsType.children" :hide-arrow="(StatisticsItem.children === undefined)">
-                      <span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
-                      <percentBar :num="StatisticsItem.per" :count="StatisticsItem.count" :index='index'></percentBar>
-                      <div slot="content">
-                        <collapse accordion simple>
-                          <panel v-for="lastStatisticsItem in StatisticsItem.children" :hide-arrow='true'>
-                            <span style="width:2em" />
-                            <span style="font-size: 10px;padding-left:30px">{{statisticsNameList[lastStatisticsItem.name]}}</span>
-                            <percentBar :num="lastStatisticsItem.per" :count="lastStatisticsItem.count" :index='index'></percentBar>
-                            </div>
-                          </panel>
-                        </collapse>
-                      </div>
-                    </panel>
-                  </collapse>
-                  </div>
-                </panel>
-              </Collapse> -->
-            <!-- <div v-for="object in dataStatisticsEvent">
-              <Collapse simple class="toushiItems" accordion >
-                <Panel name="1" :style='{borderBottom:"1px solid rgba(51,255,255,.5)"}'>
-                  {{object.name}}({{object.num}})
-                      <div v-for="(obj,index) in object.children" :style="{marginLeft:'10px'}" slot="content">
-                      <Collapse simple>
-                        <Panel :name="index">
-                          {{obj.name}}({{obj.count}})
-                        </Panel>
-                      </Collapse>
-                    </div>
-                </Panel>
-              </Collapse>
-            </div> -->
+            <left-statics :Statisticsdata='dataStatistics' :EntityAttrInformation='EntityAttrInformation' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'geo' && dataStatistics.length > 0"></left-statics>
           </Tab-pane>
           <Tab-pane label="目标详情" name= '目标详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
             <div>
@@ -92,10 +52,8 @@
 </template>
 <script>
   import modalChartDetail from './custom_modal_detail'
-  import percentBar from './custom_percentBar'
   import leftStatics from './custom_leftStatics'
   import { mapState,mapMutations } from 'vuex'
-  import cTree from './custom_tree'
   import entityDetailsTableHuman from './custom_entityDetailsTable_human'
   import entityDetailsTableAdministrative from './custom_entityDetailsTable_administrative'
   import entityDetailsTableOrganization from './custom_entityDetailsTable_organization'
@@ -139,38 +97,175 @@
         eventheightdiv: 0,
         eventheight: 0,
         closable: true,
-        infos: [{
-            name: "普京",
-            img: "https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=53e28aef2f2dd42a4b0409f9625230d0/4a36acaf2edda3ccf81167a60be93901203f92bb.jpg",
-            country: '俄罗斯',
-            org: '俄罗斯联邦',
-            spouse: '柳德米拉·什克列布涅娃',
-            school: '列宁格勒国立大学',
-            tag: '俄罗斯联邦政府总统／ 俄罗斯第2任总统／第7届俄罗斯总理／第11届俄罗斯总理',
-            introduction: `弗拉基米尔·弗拉基米罗维奇·普京，俄罗斯第2任、第4任总统。曾担任俄罗斯总理、统一俄罗斯党主席、俄白联盟部长会议主席。
-                2000年执政以来，普京致力于复兴俄罗斯超级大国地位，对内加强联邦政府的权力，整顿经济秩序，打击金融寡头，加强军队建设；对外努力改善国际环境…
-                恢复了世界性强国地位。`
-          },
-          {
-            name: "习近平",
-            img: "https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=468864cdf0039245b5b8e95de6fdcfa7/54fbb2fb43166d22ca0c87944a2309f79052d2b3.jpg",
-            country: '中华人名共和国',
-            org: '中华人名共和国',
-            spouse: '彭丽媛',
-            school: '清华大学人文社会学院马克思主义理论与思想政治教育专业',
-            tag: '现任中国共产党中央委员会总书记、中共中央军事委员会主席、中华人民共和国主席、中华人民共和国中央军事委员会主席',
-            introduction: `953年6月生，陕西富平人，1969年1月参加工作，1974年1月加入中国共产党，清华大学人文社会学院马克思主义理论与思想政治教育专业毕业，在职研究生学历，法学博士学位。
-                现任中国共产党中央委员会总书记，中共中央军事委员会主席，中华人民共和国主席，中华人民共和国中央军事委员会主席。
-                中共第十五届中央候补委员，十六届、十七届、十八届、十九届中央委员，十七届中央政治局委员、常委、中央书记处书记，十八届、十九届中央政治局委员、常委、中央委员会总书记。第十一届全国人大第一次会议当选为中华人民共和国副主席。十七届五中全会增补为中共中央军事委员会副主席。第十一届全国人大常委会第十七次会议任命为中华人民共和国中央军事委员会副主席。十八届一中全会任中共中央军事委员会主席。第十二届全国人大第一次会议当选为中华人民共和国主席、中华人民共和国中央军事委员会主席`
-          }
-        ]
+        firstClassify : [
+                {
+                    id:'NodeType',
+                    disName:'节点类型'
+                },
+                {
+                    id:'EntityAttr',
+                    disName:'实体属性'
+                }
+            ],
+        nodeTypeClassify : [
+                {
+                    id:'human',
+                    disName:'人物'
+                },
+                {
+                    id:'organization',
+                    disName:'机构'
+                },
+                /* {
+                    id:'administrative',
+                    disName:'国家'
+                },
+                {
+                    id:'event',
+                    disName:'事件'
+                } */
+            ],
+            EntityAttrClassify:[
+                {
+                    id:'country_of_citizenship',
+                    disName:'国籍'
+                },
+                {
+                    id:'occupation',
+                    disName:'职业'
+                },
+                {
+                    id:'address',
+                    disName:'地址'
+                },
+                {
+                    id:'member_of_political_party',
+                    disName:'政党'
+                },
+                {
+                    id:'religion',
+                    disName:'信仰'
+                },
+                {
+                    id:'e-mail',
+                    disName:'邮箱'
+                }
+            ],
+            nodeTypedata:{
+                code:0,
+                data:[
+                    {
+                        id:'human',
+                        count: 1,
+                        per: 20,
+                        
+                    },
+                    {
+                        id:'organization',
+                        count: 3,
+                        per: 8,
+                        
+                    },
+                    {
+                        id:'administrative',
+                        count: 8,
+                        per: 90,
+                        
+                    },
+                    {
+                        id:'event',
+                        count: 1,
+                        per: 8,
+                        
+                    }
+                ]
+            },
+            EntityAttrInformation:{
+                code:0,
+                data:[
+                    {
+                        id:'country_of_citizenship',
+                        datasCount:4,
+                        moredata:{
+                            dataItem:1,
+                            nodeCount:10
+                        },
+                        datas:[
+                            {
+                                name:"中国",
+                                count: 1,
+                                entitylist: [
+                                "Q854"
+                                ],
+                                per: 8,
+                            },
+                            {
+                                name:"日本",
+                                count: 2,
+                                entitylist: [
+                                "Q854"
+                                ],
+                                per: 16,
+                            },
+                            {
+                                name:"美国",
+                                count: 1,
+                                entitylist: [
+                                "Q854"
+                                ],
+                                per: 8,
+                            },
+                            {
+                                name:"英国",
+                                count: 2,
+                                entitylist: [
+                                "Q854"
+                                ],
+                                per: 16,
+                            }
+                        ]
+                    },
+                    {
+                        id:'occupation',
+                        datasCount:3,
+                        moredata:{
+                            dataItem:1,
+                            nodeCount:10
+                        },
+                        datas:[
+                            {
+                                name:"军人",
+                                count: 1,
+                                entitylist: [
+                                "Q854"
+                                ],
+                                per: 8,
+                            },
+                            {
+                                name:"政治家",
+                                count: 2,
+                                entitylist: [
+                                "Q854"
+                                ],
+                                per: 16,
+                            },
+                            {
+                                name:"企业家",
+                                count: 10,
+                                entitylist: [
+                                "Q854"
+                                ],
+                                per: 100,
+                            }
+                        ]
+                    }
+                ]
+            }
       };
     },
     components: {
       modalChartDetail,
-      percentBar,
       leftStatics,
-      cTree,
       entityDetailsTableHuman,
       entityDetailsTableAdministrative,
       entityDetailsTableOrganization
@@ -180,15 +275,18 @@
         //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent','contentStatisticsResult']),
+    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'geo_selected_param','contentStatisticsResult']),
     watch: {
       // contentStatisticsResult:function(){
       //   var mthis = this;
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
-      dataStatisticsEvent: function() {
+      geo_selected_param: function() {
         var mthis = this;
-        mthis.dataStatistics = mthis.dataStatisticsEvent.data;
+        var type = mthis.$store.state.geo_selected_param.type;
+        if(type !== 'GeoTime'){
+          mthis.dataStatistics = mthis.$store.state.geo_selected_param.eventId;
+        }
       },
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
@@ -260,7 +358,6 @@
         //查询详细信息
       }
     },
-    // props: ['dataExpand', 'singlePerson', 'eventheightdiv', 'dataStatisticsEvent'],
     mounted() {
       var mthis = this;
       window.onresize = function() {
