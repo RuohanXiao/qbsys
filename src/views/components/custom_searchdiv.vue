@@ -189,13 +189,8 @@
       searchInfoGeo(query) {
         var mthis = this;
         if (query !== "") {
-<<<<<<< HEAD
-          this.loading2 = true;
-          let response = mthis.$http.get("http://10.60.1.140:5001/fuzzy-matchs/?pattern=" + query, {
-=======
           mthis.loading2 = true;
           let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-matchs/?pattern=" + query, {
->>>>>>> ba95ad2792c9d4842b530e4d50d203b8ebc4fc5b
               emulateJSON: true
             })
             .then(response => {
