@@ -212,7 +212,7 @@ var EventsDatas={
 			Time:["2007-01-02","2018-01-03"],
 			EventId: 'V103',
 			//PersonId:['Q111'],
-			coordinate:[ 114.48977661, 38.04512787 ]
+			coordinate:[ 117.20349884, 39.13111877  ]
 		},
 		{
 			//Person:['普京'],
@@ -275,11 +275,10 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 				'Time':["2002-01-02","2018-01-03"],
 				'EventId': 'V101',
 				'isSelected': false,
-				
 			}
 		},
 		{ "type": "Feature",
-			"geometry": {"type": "Point", "coordinates": [ 117.20349884, 39.13111877 ]},
+			"geometry": {"type": "Point", "coordinates": [ 117.00559998, 36.6670723 ]},
 			"properties": {
 				'Time':["2005-01-02","2018-01-03"],
 				'EventId': 'V102',

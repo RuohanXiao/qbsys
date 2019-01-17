@@ -206,18 +206,10 @@ export default {
         isCtrl:false,
         onImgIds:[],  //被点亮的img的id
         allImgIds:[], //所有img的id
-        locationClassObject:{
-            location_Noclick: true,
-            'location_click': true,
-        },
-        heatMapClassObject:{
-            heatMap_Noclick: true,
-            'heatMap_click': true,
-        },
-        routeClassObject:{
-            route_Noclick:true,
-            'route_click': true
-        },
+        removeFeatures:[],
+        geometrySelectedFeatures:[],
+        timeSelectedFeatures:[],
+        staticsSelectedFeatures:[],
         noSelectedstyle : new Style({
             image : new CircleStyle({
                 radius : 3,
@@ -424,7 +416,7 @@ export default {
             var mthis = this
             var layer = new VectorLayer({
                 source: new VectorSource({
-                    features:Feature,
+                    // features:Feature,
                     //url: '',
                     features: (new GeoJSON()).readFeatures(eventsPointGeoJson),
                     format: new GeoJSON()
@@ -432,7 +424,8 @@ export default {
                 style:mthis.noSelectedstyle,
                 id:'eventsPointsLayer'
             });
-            mthis.routeMap.addlayer(layer)
+            mthis.routeMap.addlayer(layer);
+            mthis.geometrySelectedFeatures = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
         },
         locationPoints(){
             var mthis = this
@@ -662,6 +655,7 @@ export default {
         selectEventPointsByGeometry(geometry){   
             var mthis = this
             var frameselectedEventIds = [];
+            mthis.geometrySelectedFeatures = [];
             var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
             //mthis.selectedPointsSource.clear();
             selectingPointSource.getFeatures().forEach(function(item) {
@@ -670,6 +664,7 @@ export default {
                 if (isIn) {
                     //item.setStyle(mthis.selectedstyle);
                     mthis.setSelectedEventFeatureParam(item,true);
+                    mthis.geometrySelectedFeatures.push(item);
                     var itemEventId = item.get('EventId');
                     frameselectedEventIds.push(itemEventId);
                 }
@@ -922,49 +917,14 @@ export default {
 
         /*
         *
-        * @param图片轮播的删除
+        * @param地图上事件点的删除
         * 
         */
         deleteSliderImgs(){
             var mthis = this;
-            mthis.onImgIds.forEach(function(item){
-                mthis.delteSliderImgById(item);
-            });
+
         },
-        delteSliderImgById(id){
-            var mthis = this
-            mthis.deleteImageById(id);
-            mthis.deleteEntityPointsById(id);
-            mthis.deleteOverlayById(id);
-            mthis.deleteArrItem(mthis.onImgIds,id);
-            mthis.deleteArrItem(mthis.allImgIds,id);
-        },
-        deleteImageById(id){
-            var Id = id + '_imgslider';
-            var imgslider = document.getElementById(Id);
-            var sliderLi = imgslider.parentNode
-            var sliderUL = document.getElementById('sliderUL'); 
-            sliderUL.removeChild(sliderLi);
-        },
-        deleteEntityPointsById(id){
-            var mthis = this;
-            var eventsPointsLayer = mthis.getLayerById("eventsPointsLayer");
-            var Source =  eventsPointsLayer.getSource();
-            var features = Source.getFeatures();
-            features.forEach(function(item){
-                if(item.getProperties().properties.belongId == id){
-                    Source.removeFeature(item);
-                }
-            });  
-        },
-        deleteOverlayById(id){
-            
-            var mthis = this;
-            var Id_Animation = 'pointAnimation_' + id;
-            var Id_localtion = 'localtion_Overlay_' + id;
-            // mthis.removeOverlays(Id_Animation);
-            // mthis.removeOverlays(Id_localtion);
-        },
+        
         /*
         *
         * @param图片轮播的反选
@@ -1030,8 +990,7 @@ export default {
         /**
          * @param 删除map中所有此id的overlay  切记，overlay的移除只能从后往前移除
          */
-
-        /* removeOverlays(id){
+        removeOverlays(id){
             var mthis = this
             var overlays = mthis.routeMap.map.getOverlays().getArray();
             if(overlays.length == 0){
@@ -1044,7 +1003,16 @@ export default {
                 }
             }
             
-        }, */
+        },
+        deleteEntityPointsById(id){
+            var mthis = this;
+            var eventsPointsFeatures = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
+            eventsPointsFeatures.forEach(function(item){
+                if(item.get('EventId') == id){
+                    Source.removeFeature(item);
+                }
+            });  
+        },
         //根据id获取layer
         getLayerById(layerId){
             var mthis = this
@@ -1103,7 +1071,7 @@ export default {
         },
 
         pointAnimation(point){
-            /* var mthis = this
+            var mthis = this
             var point_animation_BelongId = 'pointAnimation_' + point.getProperties().properties.belongId;
             var point_animation = document.createElement('div');
             point_animation.className = 'point_animation';
@@ -1115,7 +1083,7 @@ export default {
             }
             var point_overlay = mthis.setOverlay(point.getGeometry().getCoordinates(),point_animation,point_animation_id, 'center-center');
             mthis.routeMap.map.addOverlay(point_overlay);
-            mthis.routeMap.map.render(); */
+            mthis.routeMap.map.render();
         },
         selectEntityPointsById(belongIds){
             var mthis = this;
@@ -1156,15 +1124,28 @@ export default {
         },
         timeCondition:function(){
             var mthis = this;
-            var eventFeatures = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
-            var selectedEvents = mthis.isEventPointsSelected();
-            if(selectedEvents.length > 0){
+            var selectedFeatures;
+            mthis.timeSelectedFeatures = [];
+            if(mthis.staticsSelectedFeatures.length > 0){
+                selectedFeatures = mthis.geometrySelectedFeatures;
+            } else {
+                selectedFeatures = mthis.geometrySelectedFeatures;
+            }
+            selectedFeatures.forEach(function(item){
+                    if(item.get('Time') !== undefined && util.getTimestamp(item.get('Time')[0]) >= mthis.timeCondition[0] && util.getTimestamp(item.get('Time')[0]) <= mthis.timeCondition[1]){
+                        item.setStyle(mthis.selectedstyle);
+                        mthis.timeSelectedFeatures.push(item);
+                    } else {
+                        item.setStyle(mthis.noSelectedstyle);
+                    }
+                })
+            //var eventFeatures = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
+            //var selectedEvents = mthis.isEventPointsSelected();
+            /* if(selectedEvents.length > 0){
                 selectedEvents.forEach(function(item){
                     if(item.get('Time') !== undefined && util.getTimestamp(item.get('Time')[0]) >= mthis.timeCondition[0] && util.getTimestamp(item.get('Time')[0]) <= mthis.timeCondition[1]){
-                        //mthis.setSelectedEventFeatureParam(item,true);
                         item.setStyle(mthis.selectedstyle);
                     } else {
-                        //mthis.setSelectedEventFeatureParam(item,false);
                         item.setStyle(mthis.noSelectedstyle);
                     }
                 })
@@ -1172,15 +1153,12 @@ export default {
             } else {
                 for(let j = 0; j < eventFeatures.length; j++){
                     if(eventFeatures[j].get('Time') !== undefined && util.getTimestamp(eventFeatures[j].get('Time')[0]) >= mthis.timeCondition[0] && util.getTimestamp(eventFeatures[j].get('Time')[0]) <= mthis.timeCondition[1]){
-                        //mthis.setSelectedEventFeatureParam(eventFeatures[j],true);
                         eventFeatures[j].setStyle(mthis.selectedstyle);
                     } else{
-                        //mthis.setSelectedEventFeatureParam(eventFeatures[j],false);
                         eventFeatures[j].setStyle(mthis.noSelectedstyle);
                     }
                 }
-            }
-           
+            }  */       
         },
         locationClassObject:{
                 handler:function(val,oldval){
@@ -1245,10 +1223,6 @@ export default {
             }
             
         },
-        
-
-        
-
     },
     components: {
       imgSlider,
