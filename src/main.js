@@ -192,6 +192,19 @@ var store = new Vuex.Store({
       api_url:'http://10.60.1.140:5001',
       map_url:'http://10.60.1.142:8082'
     },
+    // 联动监听
+    netWatcher:{ // 网络关系模块监听
+      type: '',
+      params: {}
+    },
+    geoWatcher:{ // 地理信息模块监听
+      type: '',
+      params: {}
+    },
+    contentWatcher:{ // 文本模块监听
+      type: '',
+      params: {}
+    },
     addNetNodes: {
       id:'',
       label:'',
@@ -199,7 +212,7 @@ var store = new Vuex.Store({
     },
     searchNetResult: {
       id:'',
-      label:'',
+      name:'',
       node:{}
     }, // search result
     searchGeoResult: {
@@ -328,8 +341,6 @@ var store = new Vuex.Store({
       state.addNetNodes = val
     },
     setSearchNetResult(state,val){
-      console.log('-------setSearchNetResult--------')
-      console.log(val)
       state.searchNetResult = val
     },
     setSearchGeoResult(state,val){

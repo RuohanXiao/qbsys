@@ -19,7 +19,7 @@
                 </div>
                 <div class='scrollBarAble' :style="{width:'100%',height:eventheight,margin:'0px 5px 0 10px',paddingRight:'5px'}">
                   <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(data.id)">{{data.name}}
-                    <p class="p-collapse-modal-small">{{data.type}}</p>
+                    <p class="p-collapse-modal-small">{{data.entity_type}}</p>
                   </div>
                 </div>
                 <!-- 事件详情 -->
@@ -41,9 +41,9 @@
                     <Avatar class="circle-img" v-else :src="evetdata.img" :style="{width:'50px',height:'50px'}" />
                   </Row>
                   <div class='entityDetail'>
-                    <entityDetailsTableHuman :Entitydetail="evetdata" v-if="evetdata.type =='human'"></entityDetailsTableHuman>
-                    <entityDetailsTableAdministrative :Entitydetail="evetdata" v-if="evetdata.type =='administrative'"></entityDetailsTableAdministrative>
-                    <entityDetailsTableOrganization :Entitydetail="evetdata" v-if="evetdata.type =='organization'"></entityDetailsTableOrganization>
+                    <entityDetailsTableHuman :Entitydetail="evetdata" v-if="evetdata.entity_type =='human'"></entityDetailsTableHuman>
+                    <entityDetailsTableAdministrative :Entitydetail="evetdata" v-if="evetdata.entity_type =='administrative'"></entityDetailsTableAdministrative>
+                    <entityDetailsTableOrganization :Entitydetail="evetdata" v-if="evetdata.entity_type =='organization'"></entityDetailsTableOrganization>
                   </div>
                 </div>
               </Card>
@@ -177,12 +177,22 @@
         }
         this.timer = setTimeout(function() {
           // 新增防抖功能
-          mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
-            'nodeIds': nodeIdsArry
-          }).then(response => {
-            console.log(response.body.data[0])
-            mthis.evetdata = mthis.singlePerson ? response.body.data[0].nodes[0] : response.body.data[0].nodes
-          })
+          if(mthis.singlePerson){
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
+              'nodeIds': nodeIdsArry
+            }).then(response => {
+              console.log(response.body.data[0])
+              mthis.evetdata =  response.body.data[0]
+            })
+          } else {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas-coarse/', {
+              'nodeIds': nodeIdsArry
+            }).then(response => {
+              mthis.evetdata =  response.body.data[0].nodes
+            })
+          }
+
+          
         }, 100);
         // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
         // mthis.evetdata = 
@@ -230,7 +240,7 @@
         mthis.modalNodeId = id
         let nodeIdsArry = []
         nodeIdsArry.push(id)
-        mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
           mthis.selectNetNodes = response.body.data[0].nodes[0]

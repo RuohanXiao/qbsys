@@ -250,8 +250,6 @@
         }
       },
       searchContentResult: function(va) {
-        // console.log('-----------------------1')
-        // console.log(va)
         var mthis = this
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {

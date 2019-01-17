@@ -138,7 +138,7 @@
 
       getPostById(id){
         var mthis = this;
-        mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
             'nodeIds': [id]
           }).then(response => {
             mthis.targetData = response.body.data[0].nodes[0];
@@ -148,7 +148,7 @@
         var mthis = this;
         let a = mthis.addTargetValue;
         if(a !== undefined && a!== null && a!==''){
-          let response = mthis.$http.get("http://10.60.1.140:5001/fuzzy-matchs/?pattern=" + a, {
+          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url+"/fuzzy-matchs/?pattern=" + a, {
               emulateJSON: true
             })
             .then(response => {

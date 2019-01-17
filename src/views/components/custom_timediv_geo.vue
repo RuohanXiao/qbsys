@@ -347,11 +347,7 @@
             mthis.timeTitle = ''
           } else{
             if(params.batch[0].areas[0] !== undefined){
-            console.log(params.batch[0].areas[0].coordRanges[0]);
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-            console.log('起始时间'+mthis.dataBySeries.date[startAndEnd[0]]);
-            console.log('结束时间'+mthis.dataBySeries.date[startAndEnd[1]]);
-            console.log('共' + (startAndEnd[1] - startAndEnd[0] + 1) + '天');
           }
           
           mthis.timeTitle = ''
