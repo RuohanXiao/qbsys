@@ -922,7 +922,6 @@ export default {
         */
         deleteSliderImgs(){
             var mthis = this;
-
         },
         
         /*
@@ -1132,13 +1131,13 @@ export default {
                 selectedFeatures = mthis.geometrySelectedFeatures;
             }
             selectedFeatures.forEach(function(item){
-                    if(item.get('Time') !== undefined && util.getTimestamp(item.get('Time')[0]) >= mthis.timeCondition[0] && util.getTimestamp(item.get('Time')[0]) <= mthis.timeCondition[1]){
-                        item.setStyle(mthis.selectedstyle);
-                        mthis.timeSelectedFeatures.push(item);
-                    } else {
-                        item.setStyle(mthis.noSelectedstyle);
-                    }
-                })
+                if(item.get('Time') !== undefined && util.getTimestamp(item.get('Time')[0]) >= mthis.timeCondition[0] && util.getTimestamp(item.get('Time')[0]) <= mthis.timeCondition[1]){
+                    item.setStyle(mthis.selectedstyle);
+                    mthis.timeSelectedFeatures.push(item);
+                } else {
+                    item.setStyle(mthis.noSelectedstyle);
+                }
+            })
             //var eventFeatures = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
             //var selectedEvents = mthis.isEventPointsSelected();
             /* if(selectedEvents.length > 0){

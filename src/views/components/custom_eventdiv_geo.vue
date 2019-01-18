@@ -109,8 +109,8 @@
             ],
         nodeTypeClassify : [
                 {
-                    id:'human',
-                    disName:'人物'
+                    id:'event',
+                    disName:'事件'
                 },
                 {
                     id:'organization',
