@@ -4,9 +4,9 @@
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
-        <Col span="3"/>
-        <Col span="18"  class="bottom"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
-        <Col span="1"  class="bottom">
+        <Col span="3" />
+        <Col span="18" class="bottom"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
+        <Col span="1" class="bottom">
         <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip>
@@ -32,17 +32,20 @@
  
 <script>
   import echarts from "echarts";
-  import { mapState,mapMutations } from 'vuex'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   export default {
     name: "",
     data() {
       return {
         timeTitle: '',
-        timechartdivId:'timechartdiv_' + this.activeId,
-        arrowDownId:'arrowDown_'+ this.activeId,
-        timechartctrlId:'timechartctrl_'+ this.activeId,
-        timedivId:'timediv_'+ this.activeId,
-        main1Id:'main1_'+ this.activeId,
+        timechartdivId: 'timechartdiv_' + this.activeId,
+        arrowDownId: 'arrowDown_' + this.activeId,
+        timechartctrlId: 'timechartctrl_' + this.activeId,
+        timedivId: 'timediv_' + this.activeId,
+        main1Id: 'main1_' + this.activeId,
         pwidth: 0,
         timepxdiv: 0,
         timepx: 0,
@@ -55,22 +58,21 @@
         geoHeightCount: 1,
         contentHeightCount: 1,
         dataBySeries: {
-          num: [1,2,3,4,5,6,7,8
-          ],
-          date: ['2019-01-01','2019-01-02','2019-01-03','2019-01-04','2019-01-05','2019-01-06','2019-01-07','2019-01-08'
-          ]
+          num: [1,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,],
+          date: ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31',
+                 '2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28']
         },
-        selectTime:false
+        selectTime: false
       };
     },
     methods: {
-      onchangHeightCount(){
+      onchangHeightCount() {
         var mthis = this;
         var tmss = mthis.$store.state.tmss;
-        mthis.netHeightCount ++ ;
+        mthis.netHeightCount++;
       },
-      timeZoomOut() { },
-      timeZoomIn() { },
+      timeZoomOut() {},
+      timeZoomIn() {},
       resize() {
         let width = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
@@ -83,9 +85,12 @@
         var mthis = this
         this.option = null
         this.option = {
+          // tooltip: {
+          //   trigger: "axis",
+          //   formatter: "{b}<br/>{c0}"
+          // },
           tooltip: {
-            trigger: "axis",
-            formatter: "{b}<br/>{c0}"
+            trigger: 'axis'
           },
           // legend: {
           //     data:['China','United States','India','Japan']
@@ -180,14 +185,14 @@
             // min:-35,
             // name: "占世界贸易额比重",
             axisLabel: {
-              formatter: "{value} w",
+              formatter: "{value}",
               color: "rgba(204,255,255,0.5)"
             }
           },
           dataZoom: [{
               type: "slider",
-              start: 0,
-              end: 10,
+              startValue: 0,
+              endValue: 29,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -225,7 +230,7 @@
               xAxisIndex: [0],
               // startValue: 10,
               // endValue: 20,
-              minValueSpan: 1,
+              minValueSpan: 30,
               handleIcon: "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
               handleSize: "80%",
               handleStyle: {
@@ -239,31 +244,44 @@
             },
             {
               type: "inside",
-              start: 0,
-              end: 10,
+              // start: 0,
+              // end: 10,
               show: true,
               xAxisIndex: [0],
-              startValue: 0,
-              endValue: 5,
-              minValueSpan: 100
+              // startValue: 0,
+              // endValue: 5,
+              minValueSpan: 30
             }
           ],
           series: [{
-            name: "China",
+            name: "事件 ",
             type: "bar",
             // barMaxWidth: '10%',
             // barMinHeight: '1px',
             itemStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: "#33ffff"
-                },
-                {
-                  offset: 1,
-                  color: "#9999ff"
-                }
-              ]),
-              barBorderRadius: [3, 3, 3, 3],
+              // 柱形图默认颜色
+              normal: {
+                cursor: "default",
+                barBorderRadius: [3, 3, 3, 3],
+                color: "rgba(51,204,153,1)"
+              },
+              // 柱形图悬浮颜色
+              emphasis: {
+                cursor: "pointer",
+                barBorderRadius: [3, 3, 3, 3],
+                color: "rgba(51,204,153,0.6)"
+                //线性颜色
+                // color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                //     offset: 0,
+                //     color: "#33ffff"
+                //   },
+                //   {
+                //     offset: 1,
+                //     color: "#9999ff"
+                //   }
+                // ])
+              },
+              
               // label: {
               //           show: true,
               //           position: 'top',
@@ -292,85 +310,70 @@
         mthis.option.xAxis.data = mthis.dataBySeries.date;
         mthis.option.series[0].data = mthis.dataBySeries.num;
         mthis.charts.setOption(mthis.option)
-        mthis.charts.on('brushSelected', function (params) {
-          console.log(params)
-          if(params.batch[0].areas[0] !== undefined){
-            console.log(params.batch[0].areas[0].coordRanges[0]);
+        mthis.charts.on('brushSelected', function(params) {
+          // console.log(params)
+          if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-            console.log('起始时间'+mthis.dataBySeries.date[startAndEnd[0]]);
-            console.log('结束时间'+mthis.dataBySeries.date[startAndEnd[1]]);
-            console.log('共' + (startAndEnd[1] - startAndEnd[0] + 1) + '天');
           }
-          
           mthis.timeTitle = ''
-          if(params.batch[0].areas.length  === 0) {
+          if (params.batch[0].areas.length === 0) {
             mthis.timeTitle = ''
-          } else{
+          } else {
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
           }
         })
-        mthis.charts.on('click', function (params) {
+        mthis.charts.on('click', function(params) {
           mthis.timeTitle = params.name
-          // alert(0)
           // console.log(params)
           // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
-          //   alert(1)
-          //   alert(params.batch!==undefined &&params.batch[0].areas.length  === 0)
-          //   alert(params.batch[0].areas.length)
           //   mthis.timeTitle = ''
           // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {
-          //   alert(2)
-          //   alert(params.batch!==undefined &&params.batch[0].areas.length >  0)
-          //   alert(params.batch[0].areas.length)
           //   mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex.length-1]
           // } else {
-          //   alert(3)
           //   mthis.timeTitle = params.name
           // }
-          
-            // myChart.dispatchAction({
-            //     type: 'dataZoom',
-            //     startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
-            //     endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
-            // });
+          // myChart.dispatchAction({
+          //     type: 'dataZoom',
+          //     startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
+          //     endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
+          // });
           mthis.charts.dispatchAction({
-              type: 'highlight',
-              // 可选，数据的 index
-              dataIndex: params.dataIndex
+            type: 'highlight',
+            // 可选，数据的 index
+            dataIndex: params.dataIndex
           })
         })
         mthis.timeTitle = ''
         this.option.xAxis.data = this.dataBySeries.date;
         this.option.series[0].data = this.dataBySeries.num;
         this.charts.setOption(this.option)
-        this.charts.on('brushSelected', function (params) {
+        
+        this.charts.on('brushSelected', function(params) {
+          if (params.batch[0].areas[0] !== undefined) {
+            var startAndEnd = params.batch[0].areas[0].coordRanges[0];
+          }
           mthis.timeTitle = ''
-          if(params.batch[0].areas.length  === 0) {
+          if (params.batch[0].areas.length === 0) {
             mthis.timeTitle = ''
-            mthis.selectTime = false
-          } else{
-            // console.log('========================================')
-            // console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
-            // console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            // console.log('========================================')
-            mthis.timeTitle = mthis.dataBySeries.date[0] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]]
+          } else {
+            mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            mthis.$store.commit('setNetTimeCondition',timeArr)
+            mthis.$store.commit('setNetTimeCondition', timeArr)
             mthis.selectTime = true
           }
         })
-        this.charts.on('click', function (params) {
+        this.charts.on('click', function(params) {
           mthis.timeTitle = params.name
           let timeArr = []
           timeArr.push(params.name)
           timeArr.push(params.name)
-          mthis.$store.commit('setNetTimeCondition',timeArr)
+          mthis.$store.commit('setNetTimeCondition', timeArr)
           mthis.charts.dispatchAction({
-              type: 'highlight',
-              // 可选，数据的 index
-              dataIndex: params.dataIndex
+            type: 'highlight',
+            // 可选，数据的 index
+            dataIndex: params.dataIndex
           })
         })
         this.charts.dispatchAction({
@@ -385,17 +388,16 @@
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
+      console.log(this.dataBySeries)
       this.netHeightCount++;
       this.contentHeightCount++;
-      this.geoHeightCount+=2;
+      this.geoHeightCount += 2;
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
       this.timepxdiv =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-        
       /* this.iconPosition = useHeight * 0.8 + "px"; */
-
       this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       // this.iconPosition = useHeight - 40 + "px";
       this.loadEcharts();
@@ -404,8 +406,8 @@
       var zoomSize = 6;
       // this.changHeightCount++
     },
-    computed:mapState ([
-      'split','splitWidth','tmss','selectNetNodes'
+    computed: mapState([
+      'split', 'splitWidth', 'tmss', 'selectNetNodes'
     ]),
     watch: {
       /* tmss: function(){
@@ -414,9 +416,12 @@
           mthis.changHeightCount++;
         }
       }, */
+      // selectTime: function() {
+      //   netSelectTime
+      // },
       selectNetNodes: function(va) {
         var mthis = this;
-        if(mthis.tmss == 'net'){
+        if (mthis.tmss == 'net') {
           // 如果包含事件，要对柱形图高亮
           // console.log('--------custom_time_net 传入的selectNodes--------')
           // console.log(va[0].ids)
@@ -445,7 +450,6 @@
       },
       geoHeightCount: function() {
         var mthis = this
-        
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.geoHeightCount % 2 === 0) {
@@ -453,16 +457,13 @@
           document.getElementById('arrowDown_geo').style.top = useHeight - 40 + "px";
           //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
           //mthis.$store.commit('setGeoHeight',useHeight * 1)
-            mthis.$store.commit('setGeoHeight',useHeight * 1)
-
+          mthis.$store.commit('setGeoHeight', useHeight * 1)
           document.getElementById('timechartctrl_geo').style.display = "none";
           document.getElementById('main1_geo').style.display = "none";
           document.getElementById('timediv_geo').style.display = "none";
           document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
           /* mthis.$store.commit('setChangenetpx',false); */
-          
         } else {
-          
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
           document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
           /* mthis.$store.commit('setChangenetpx',true); */
@@ -471,32 +472,27 @@
           document.getElementById('timediv_geo').style.display = "block";
           document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-            mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+          mthis.$store.commit('setGeoHeight', useHeight * 0.8)
         }
         document.getElementById('arrowDown_geo').style.position = "absolute";
         document.getElementById('arrowDown_geo').style.right = "20px";
-        
         /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-       /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
+        /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
         document.getElementById('arrowDown_geo').style.zIndex = 99;
       },
       netHeightCount: function() {
         var mthis = this
-        
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.netHeightCount % 2 === 0) {
           /* mthis.iconPosition = useHeight - 40 + "px"; */
           document.getElementById('arrowDown_net').style.top = useHeight - 40 + "px";
-          
-            mthis.$store.commit('setNetHeight',useHeight * 1)
-
+          mthis.$store.commit('setNetHeight', useHeight * 1)
           document.getElementById('timechartctrl_net').style.display = "none";
           document.getElementById('main1_net').style.display = "none";
           document.getElementById('timediv_net').style.display = "none";
           document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
-          mthis.$store.commit('setChangenetpx',false);
-          
+          mthis.$store.commit('setChangenetpx', false);
         } else {
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
           document.getElementById('arrowDown_net').style.top = useHeight * 0.8 + "px";
@@ -507,40 +503,35 @@
           // this.timepxdiv =
           //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
           // mthis.$emit('changenetpx', true);
-          mthis.$store.commit('setChangenetpx',true);
+          mthis.$store.commit('setChangenetpx', true);
           document.getElementById('timechartctrl_net').style.display = "block";
           document.getElementById('main1_net').style.display = "block";
           document.getElementById('timediv_net').style.display = "block";
           document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-            mthis.$store.commit('setNetHeight',useHeight * 0.8)
+          mthis.$store.commit('setNetHeight', useHeight * 0.8)
         }
         document.getElementById('arrowDown_net').style.position = "absolute";
         document.getElementById('arrowDown_net').style.right = "20px";
-        
-/*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+        /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
         /* document.getElementById('arrowDown_net').style.top = netpxdiv; */
         document.getElementById('arrowDown_net').style.zIndex = 99;
       },
       contentHeightCount: function() {
         var mthis = this
-        
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.contentHeightCount % 2 === 0) {
           /* mthis.iconPosition = useHeight - 40 + "px"; */
           document.getElementById('arrowDown_content').style.top = useHeight - 40 + "px";
-          
           //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
           //mthis.$store.commit('setGeoHeight',useHeight * 1)
-            mthis.$store.commit('setContentHeight',useHeight * 1)
-
+          mthis.$store.commit('setContentHeight', useHeight * 1)
           document.getElementById('timechartctrl_content').style.display = "none";
           document.getElementById('main1_content').style.display = "none";
           document.getElementById('timediv_content').style.display = "none";
           document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
           /* mthis.$store.commit('setChangenetpx',false); */
-          
         } else {
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
           document.getElementById('arrowDown_content').style.top = useHeight * 0.8 + "px";
@@ -557,16 +548,18 @@
           document.getElementById('timediv_content').style.display = "block";
           document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-            mthis.$store.commit('setContentHeight',useHeight * 0.8)
+          mthis.$store.commit('setContentHeight', useHeight * 0.8)
         }
         document.getElementById('arrowDown_content').style.position = "absolute";
         document.getElementById('arrowDown_content').style.right = "20px";
-/*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+        /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
         /* document.getElementById('arrowDown_content').style.top = netpxdiv; */
         document.getElementById('arrowDown_content').style.zIndex = 99;
       }
     },
-    props:{activeId:String}
+    props: {
+      activeId: String
+    }
   };
 </script>
 <style scoped>

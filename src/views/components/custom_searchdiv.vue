@@ -82,7 +82,6 @@
             //     label: a.value
             //   }])
             // }  else if (mthis.$store.state.tmss === 'content')  {
-            //   alert(a.value)
             //   mthis.inputInfoContent = a.value
             //   mthis.$store.commit('setSearchContentResult', [{
             //     node: {
@@ -139,7 +138,6 @@
               }]) */
             }
             if (this.$store.state.tmss === 'geo') {
-              debugger
               mthis.$store.commit('setSearchGeoResult', {
                 node: {
                   nodes: []
