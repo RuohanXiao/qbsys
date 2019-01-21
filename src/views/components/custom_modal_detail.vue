@@ -38,7 +38,6 @@
       this.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
           'nodeIds': nodeIds
         }).then(response => {
-          debugger
            if(this.editableTabs.length == 0 || this.getIndexFromArrById(response.body.data[0], this.editableTabs) == -1){
               this.editableTabs.push(response.body.data[0]);
               this.editableTabsValue = this.editableTabs.length + '';

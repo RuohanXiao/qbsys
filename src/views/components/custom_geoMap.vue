@@ -361,7 +361,6 @@ export default {
             }  
         },
         setPointFeatures_test(data){
-            debugger
             var mthis = this
             var layer = new VectorLayer({
                 source: new VectorSource({
@@ -975,7 +974,6 @@ export default {
             var mthis = this;
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
             for(let i = source.getFeatures().length - 1; i >= 0 ; i--){
-                //debugger
                 if(source.getFeatures()[i].getStyle() === mthis.selectedstyle){
                     mthis.removeFeaturesArr.push(source.getFeatures()[i]);
                     source.removeFeature(source.getFeatures()[i]);
@@ -984,7 +982,6 @@ export default {
             mthis.geometrySelectedFeatures = [];
             mthis.timeSelectedFeatures = [];
             mthis.staticsSelectedFeatures = [];
-            debugger
         },
         
         /*

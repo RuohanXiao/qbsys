@@ -114,7 +114,6 @@ export default {
     props:['Entitydetail'],
     methods:{
         ishasValue(pro){
-          debugger
             if(pro == '' || pro == undefined){
             return false;
             } else {
@@ -122,7 +121,6 @@ export default {
             }
         },
         getAllValue(arr){
-          debugger
             /* if(!(arr instanceof Array) ){
                 return arr;
             }
