@@ -349,8 +349,8 @@ export default {
                     style : mthis.selectedstyle
                 }); */
                 
-                //mthis.setPointFeatures(mthis.eventsPointGeoJson);
-                mthis.setPointFeatures_test(mthis.test_mapData.data);
+                mthis.setPointFeatures(mthis.eventsPointGeoJson);
+                //mthis.setPointFeatures_test(mthis.test_mapData.data);
                 mthis.returnSelectedEventIds(mthis.EventsDatas.data); //将所有ids返回给全局被选中的节点变量，为了统计时间轴和右侧菜单
                 //mthis.routeMap.addlayer(selectedPointsLayer) 
                //mthis.creatPicSlider();//图片轮播
