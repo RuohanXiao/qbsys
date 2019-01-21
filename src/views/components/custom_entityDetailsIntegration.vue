@@ -6,9 +6,9 @@
           <Avatar class="circle-img" icon="ios-person" :style="{position: 'absolute',width:'50px',height:'50px',right:'50px'}" v-else/>
         </div>
         <div class='entity_detail'>
-          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.type =='human'" ></entityDetailsTableHuman>
-          <entityDetailsTableAdministrative :Entitydetail="Entitydetail" v-if="Entitydetail.type =='administrative'"></entityDetailsTableAdministrative>
-          <entityDetailsTableOrganization :Entitydetail="Entitydetail" v-if="Entitydetail.type =='organization'"></entityDetailsTableOrganization>
+          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='human'" ></entityDetailsTableHuman>
+          <entityDetailsTableAdministrative :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='administrative'"></entityDetailsTableAdministrative>
+          <entityDetailsTableOrganization :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='organization'"></entityDetailsTableOrganization>
         </div>
     </div>
 </template>
@@ -31,6 +31,7 @@ export default {
     },
     methods:{
         ishasValue(pro){
+            debugger
             if(pro == '' || pro == undefined){
             return false;
             } else {

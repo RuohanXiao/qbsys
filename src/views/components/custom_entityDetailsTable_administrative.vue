@@ -16,13 +16,13 @@
                 <td class="modalContentLabel">简称</td>
                 <td class="modalContent" v-html="getAllValue(Entitydetail.short_name)"><!-- {{getAllValue(Entitydetail.date_of_death)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.head_of_state)">
+              <tr v-if=" ishasValue(Entitydetail.out__head_of_state_names)">
                 <td class="modalContentLabel">国家元首</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.head_of_state)"><!-- {{getAllValue(Entitydetail.date_of_disappearance)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__head_of_state_names)"><!-- {{getAllValue(Entitydetail.date_of_disappearance)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.head_of_government)">
+              <tr v-if=" ishasValue(Entitydetail.out__head_of_government_names)">
                 <td class="modalContentLabel">政府首脑</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.head_of_government)"><!-- {{getAllValue(Entitydetail.place_of_birth)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__head_of_government_names)"><!-- {{getAllValue(Entitydetail.place_of_birth)}} --></td>
               </tr>
               <tr v-if=" ishasValue(Entitydetail.continent)">
                 <td class="modalContentLabel">位于</td>
@@ -44,9 +44,9 @@
                 <td class="modalContentLabel">人类发展指数</td>
                 <td class="modalContent" v-html="getAllValue(Entitydetail.Human_Development_Index)"><!-- {{getAllValue(Entitydetail.member_of)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.shares_border_with)">
+              <tr v-if=" ishasValue(Entitydetail.out__shares_border_with_names)">
                 <td class="modalContentLabel">接壤国家</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.shares_border_with)"><!-- {{getAllValue(Entitydetail.employer)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__shares_border_with_names)"><!-- {{getAllValue(Entitydetail.employer)}} --></td>
               </tr>
               <tr v-if=" ishasValue(Entitydetail.top_level_Internet_domain)">
                 <td class="modalContentLabel">顶级域名</td>
@@ -77,7 +77,7 @@ export default {
             }
         },
         getAllValue(arr){
-            if(!(arr instanceof Array) ){
+            /* if(!(arr instanceof Array) ){
                 return arr;
             }
             var value = '';
@@ -90,6 +90,13 @@ export default {
                 }
                 
             })
+            return value; */
+            var value = '';
+            if(arr.indexOf('[') !== -1){
+              value = arr.split('[')[1].split(']')[0].replace(/,/g, '<br>').replace(/'/g, '');
+            } else {
+              value = arr;
+            }
             return value;
         }
     }

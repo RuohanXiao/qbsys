@@ -24,29 +24,29 @@
                 <td class="modalContentLabel">出生地</td>
                 <td class="modalContent" v-html="getAllValue(Entitydetail.place_of_birth)"><!-- {{getAllValue(Entitydetail.place_of_birth)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.country_of_citizenship)">
+              <tr v-if=" ishasValue(Entitydetail.out__country_of_citizenship_names)">
                 <td class="modalContentLabel">国籍</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.country_of_citizenship)"><!-- {{getAllValue(Entitydetail.country_of_citizenship)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__country_of_citizenship_names)"><!-- {{getAllValue(Entitydetail.country_of_citizenship)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.occupation)">
+              <tr v-if=" ishasValue(Entitydetail.out__occupation_names)">
                 <td class="modalContentLabel">职业</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.occupation)"><!-- {{getAllValue(Entitydetail.occupation)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__occupation_names)"><!-- {{getAllValue(Entitydetail.occupation)}} --></td>
               </tr>
               <tr v-if=" ishasValue(Entitydetail.military_rank)">
                 <td class="modalContentLabel">军衔</td>
                 <td class="modalContent" v-html="getAllValue(Entitydetail.military_rank)"><!-- {{getAllValue(Entitydetail.military_rank)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.member_of_political_party)">
+              <tr v-if=" ishasValue(Entitydetail.out__member_of_political_party_names)">
                 <td class="modalContentLabel">政党</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.member_of_political_party)"><!-- {{getAllValue(Entitydetail.member_of_political_party)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__member_of_political_party_names)"><!-- {{getAllValue(Entitydetail.member_of_political_party)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.member_of)">
+              <tr v-if=" ishasValue(Entitydetail.out__member_of_names)">
                 <td class="modalContentLabel">组织</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.member_of)"><!-- {{getAllValue(Entitydetail.member_of)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__member_of_names)"><!-- {{getAllValue(Entitydetail.member_of)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.employer)">
+              <tr v-if=" ishasValue(Entitydetail.out__employer_names)">
                 <td class="modalContentLabel">雇主</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.employer)"><!-- {{getAllValue(Entitydetail.employer)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__employer_names)"><!-- {{getAllValue(Entitydetail.employer)}} --></td>
               </tr>
               <tr v-if=" ishasValue(Entitydetail.award_received)">
                 <td class="modalContentLabel">荣誉</td>
@@ -64,25 +64,25 @@
                 <td class="modalContentLabel">工作经历</td>
                 <td class="modalContent" v-html="getAllValue(Entitydetail.position_held)"><!-- {{getAllValue(Entitydetail.position_held)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.father)">
+              <tr v-if=" ishasValue(Entitydetail.out__father_names)">
                 <td class="modalContentLabel">父亲</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.father)"><!-- {{getAllValue(Entitydetail.father)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__father_names)"><!-- {{getAllValue(Entitydetail.father)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.mother)">
+              <tr v-if=" ishasValue(Entitydetail.out__mother_names)">
                 <td class="modalContentLabel">母亲</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.mother)"><!-- {{getAllValue(Entitydetail.mother)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__mother_names)"><!-- {{getAllValue(Entitydetail.mother)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.spouse)">
+              <tr v-if=" ishasValue(Entitydetail.out__spouse_names)">
                 <td class="modalContentLabel">配偶</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.spouse)"><!-- {{getAllValue(Entitydetail.spouse)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__spouse_names)"><!-- {{getAllValue(Entitydetail.spouse)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.child)">
+              <tr v-if=" ishasValue(Entitydetail.out__child_names)">
                 <td class="modalContentLabel">子女</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.child)"><!-- {{getAllValue(Entitydetail.child)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__child_names)"><!-- {{getAllValue(Entitydetail.child)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.sibling)">
+              <tr v-if=" ishasValue(Entitydetail.in__sibling_names)">
                 <td class="modalContentLabel">兄弟姐妹</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.sibling)"><!-- {{getAllValue(Entitydetail.sibling)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.in__sibling_names)"><!-- {{getAllValue(Entitydetail.sibling)}} --></td>
               </tr>
               <tr v-if=" ishasValue(Entitydetail.e_mail)">
                 <td class="modalContentLabel">邮箱</td>
@@ -114,6 +114,7 @@ export default {
     props:['Entitydetail'],
     methods:{
         ishasValue(pro){
+          debugger
             if(pro == '' || pro == undefined){
             return false;
             } else {
@@ -121,7 +122,8 @@ export default {
             }
         },
         getAllValue(arr){
-            if(!(arr instanceof Array) ){
+          debugger
+            /* if(!(arr instanceof Array) ){
                 return arr;
             }
             var value = '';
@@ -134,6 +136,13 @@ export default {
                 }
                 
             })
+            return value; */
+            var value = '';
+            if(arr.indexOf('[') !== -1){
+              value = arr.split('[')[1].split(']')[0].replace(/,/g, '<br>').replace(/'/g, '');
+            } else {
+              value = arr;
+            }
             return value;
         }
     }

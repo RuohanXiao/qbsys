@@ -5,47 +5,9 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
           <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
-            <left-statics :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0"></left-statics>
-            <left-statics :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0"></left-statics>
-            <!-- <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0" ></c-tree> -->
-            <!-- <c-tree :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'geo'" ></c-tree> -->
-            <!-- <c-tree :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0" ></c-tree> -->
-              <!-- <Collapse simple class="toushiItems">
-                <panel v-for="(StatisticsType,index) in dataStatistics"><span style="font-size: 10px;">{{statisticsNameList[StatisticsType.name] + "(" + StatisticsType.num + ")"}}</span>
-                  <div slot="content">
-                  <collapse accordion simple>
-                    <panel v-for="StatisticsItem in StatisticsType.children" :hide-arrow="(StatisticsItem.children === undefined)">
-                      <span style="font-size: 10px;">{{statisticsNameList[StatisticsItem.name]}}</span>
-                      <percentBar :num="StatisticsItem.per" :count="StatisticsItem.count" :index='index'></percentBar>
-                      <div slot="content">
-                        <collapse accordion simple>
-                          <panel v-for="lastStatisticsItem in StatisticsItem.children" :hide-arrow='true'>
-                            <span style="width:2em" />
-                            <span style="font-size: 10px;padding-left:30px">{{statisticsNameList[lastStatisticsItem.name]}}</span>
-                            <percentBar :num="lastStatisticsItem.per" :count="lastStatisticsItem.count" :index='index'></percentBar>
-                            </div>
-                          </panel>
-                        </collapse>
-                      </div>
-                    </panel>
-                  </collapse>
-                  </div>
-                </panel>
-              </Collapse> -->
-            <!-- <div v-for="object in dataStatisticsEvent">
-              <Collapse simple class="toushiItems" accordion >
-                <Panel name="1" :style='{borderBottom:"1px solid rgba(51,255,255,.5)"}'>
-                  {{object.name}}({{object.num}})
-                      <div v-for="(obj,index) in object.children" :style="{marginLeft:'10px'}" slot="content">
-                      <Collapse simple>
-                        <Panel :name="index">
-                          {{obj.name}}({{obj.count}})
-                        </Panel>
-                      </Collapse>
-                    </div>
-                </Panel>
-              </Collapse>
-            </div> -->
+            <!-- <left-statics :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0"></left-statics>
+            <left-statics :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0"></left-statics> -->
+            
           </Tab-pane>
           <Tab-pane label="目标详情" name= '目标详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
             <div>

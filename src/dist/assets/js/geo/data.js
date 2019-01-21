@@ -350,7 +350,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 			}
 		}
 	]
- }
+ };
 
 var timeStaticsData = {
 					"code": 0,
@@ -398,6 +398,51 @@ var reSetTimeStaticsData = {
 		]
 	}
 };
+
+var test_mapData = {
+	"code":0,
+	"data":{ "type": "FeatureCollection",
+	'crs': {
+		'type': 'name',
+		'properties': {
+		'name': 'EPSG:4326'
+		}
+	},
+	"features": [
+		{ "type": "Feature",
+			"geometry": {"type": "Point", "coordinates": [ 117.00559998, 36.6670723 ]},
+			"properties": {
+				'Events': [{'id':'V101','time':"2002-01-02"},{'id':'V102','time':"2018-01-03"}],
+				'localtionName':'北京',
+				'isGeometrySelected': false,
+				'isTimeSelected':false,
+				'isStaticsSelected':false
+			}
+		},
+		{ "type": "Feature",
+			"geometry": {"type": "Point", "coordinates": [ 114.48977661, 38.04512787 ]},
+			"properties": {
+				'Events': [{'id':'V102','time':"2002-01-02"},{'id':'V103','time':"2018-01-03"}],
+				'localtionName':'北京',
+				'isGeometrySelected': false,
+				'isTimeSelected':false,
+				'isStaticsSelected':false
+			}
+		},
+		{ "type": "Feature",
+			"geometry": {"type": "Point", "coordinates": [ 116.3809433, 39.9236145 ]},
+			"properties": {
+				'Events': [{'id':'V104','time':"2002-01-02"},{'id':'V105','time':"2018-01-03"}],
+				'localtionName':'北京',
+				'isGeometrySelected': false,
+				'isTimeSelected':false,
+				'isStaticsSelected':false
+			}
+		}
+	]
+ }
+};
+
 	
 
-export {test_Route,test_HeatMap,EventsDatas,timeStaticsData,reSetTimeStaticsData,eventsPointGeoJson}
+export {test_Route,test_HeatMap,EventsDatas,timeStaticsData,reSetTimeStaticsData,eventsPointGeoJson,test_mapData}

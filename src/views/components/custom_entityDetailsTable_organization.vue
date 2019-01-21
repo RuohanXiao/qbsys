@@ -20,17 +20,17 @@
                 <td class="modalContentLabel">成立</td>
                 <td class="modalContent" v-html="getAllValue(Entitydetail.inception)"><!-- {{getAllValue(Entitydetail.date_of_disappearance)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.founded_by)">
+              <tr v-if=" ishasValue(Entitydetail.out__founded_by_names)">
                 <td class="modalContentLabel">创办者</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.founded_by)"><!-- {{getAllValue(Entitydetail.place_of_birth)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__founded_by_names)"><!-- {{getAllValue(Entitydetail.place_of_birth)}} --></td>
               </tr>
               <tr v-if=" ishasValue(Entitydetail.chairperson)">
                 <td class="modalContentLabel">领袖</td>
                 <td class="modalContent" v-html="getAllValue(Entitydetail.chairperson)"><!-- {{getAllValue(Entitydetail.country_of_citizenship)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.chief_executive_officer)">
+              <tr v-if=" ishasValue(Entitydetail.out__chief_executive_officer_names)">
                 <td class="modalContentLabel">首席执行官</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.chief_executive_officer)"><!-- {{getAllValue(Entitydetail.occupation)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__chief_executive_officer_names)"><!-- {{getAllValue(Entitydetail.occupation)}} --></td>
               </tr>
               <tr v-if=" ishasValue(Entitydetail.member_count)">
                 <td class="modalContentLabel">成员</td>
@@ -44,17 +44,17 @@
                 <td class="modalContentLabel">意识形态</td>
                 <td class="modalContent" v-html="getAllValue(Entitydetail.political_ideology)"><!-- {{getAllValue(Entitydetail.member_of)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.business_division)">
+              <tr v-if=" ishasValue(Entitydetail.out__business_division_names)">
                 <td class="modalContentLabel">业务部门</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.business_division)"><!-- {{getAllValue(Entitydetail.employer)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__business_division_names)"><!-- {{getAllValue(Entitydetail.employer)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.parent_organization)">
+              <tr v-if=" ishasValue(Entitydetail.out__parent_organization_names)">
                 <td class="modalContentLabel">上级部门</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.parent_organization)"><!-- {{getAllValue(Entitydetail.award_received)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__parent_organization_names)"><!-- {{getAllValue(Entitydetail.award_received)}} --></td>
               </tr>
-              <tr v-if=" ishasValue(Entitydetail.subsidiary)">
+              <tr v-if=" ishasValue(Entitydetail.out__subsidiary_names)">
                 <td class="modalContentLabel">子组织</td>
-                <td class="modalContent" v-html="getAllValue(Entitydetail.subsidiary)"><!-- {{getAllValue(Entitydetail.educated_at)}} --></td>
+                <td class="modalContent" v-html="getAllValue(Entitydetail.out__subsidiary_names)"><!-- {{getAllValue(Entitydetail.educated_at)}} --></td>
               </tr>
               <tr v-if=" ishasValue(Entitydetail.official_website)">
                 <td class="modalContentLabel">官网</td>
@@ -81,7 +81,7 @@ export default {
             }
         },
         getAllValue(arr){
-            if(!(arr instanceof Array) ){
+            /* if(!(arr instanceof Array) ){
                 return arr;
             }
             var value = '';
@@ -94,6 +94,13 @@ export default {
                 }
                 
             })
+            return value; */
+            var value = '';
+            if(arr.indexOf('[') !== -1){
+              value = arr.split('[')[1].split(']')[0].replace(/,/g, '<br>').replace(/'/g, '');
+            } else {
+              value = arr;
+            }
             return value;
         }
     }

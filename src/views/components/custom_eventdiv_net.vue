@@ -377,14 +377,17 @@
       detail(id) {
         // console.log('detail')
         var mthis = this
+        debugger
         mthis.modalNodeId = id
+        mthis.detailModalFlag = true
         let nodeIdsArry = []
         nodeIdsArry.push(id)
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
-          mthis.selectNetNodes = response.body.data[0].nodes[0]
-          mthis.detailModalFlag = true
+          //mthis.selectNetNodes = response.body.data[0]//.nodes[0]
+          //mthis.$store.commit('setSelectNetNodes',response.body.data);
+          // mthis.detailModalFlag = true
         })
         //查询详细信息
       }

@@ -134,7 +134,7 @@ top: 232px;
 <script>
 import { mapState,mapMutations } from 'vuex'
 
-import {test_Route,test_HeatMap,EventsDatas,eventsPointGeoJson} from '../../dist/assets/js/geo/data.js'
+import {test_Route,test_HeatMap,EventsDatas,eventsPointGeoJson,test_mapData} from '../../dist/assets/js/geo/data.js'
 import {map} from '../../dist/assets/js/geo/ChinaMap.js' 
 import {getGradientColors} from '../../dist/assets/js/geo/GradientColors.js'
 import {BezierSinglePoint, BezierLinePoints} from '../../dist/assets/js/geo/geometryType/BezierLine.js'
@@ -187,6 +187,7 @@ export default {
         test_HeatMap:test_HeatMap,
         EventsDatas:EventsDatas,
         eventsPointGeoJson:eventsPointGeoJson,
+        test_mapData:test_mapData,
         routeMap:null,
         heatMap:null,
         provinTilSource:null,
@@ -206,7 +207,7 @@ export default {
         isCtrl:false,
         onImgIds:[],  //被点亮的img的id
         allImgIds:[], //所有img的id
-        removeFeatures:[],
+        removeFeaturesArr:[],
         geometrySelectedFeatures:[],
         timeSelectedFeatures:[],
         staticsSelectedFeatures:[],
@@ -223,6 +224,14 @@ export default {
                 radius : 3,
                 fill : new Fill({
                     color : '#ff9900'
+                })
+            })
+        }),
+        graystyle:new Style({
+            image : new CircleStyle({
+                radius : 3,
+                fill : new Fill({
+                    color : 'rgba(102,153,153,1)'
                 })
             })
         }),
@@ -250,7 +259,7 @@ export default {
             } else if(mapOperationId == 'Circle_select' || mapOperationId == 'Polygon_select' || mapOperationId == 'rectangle_select'){
                 mthis.changedrawType(mapOperation)
             } else if(mapOperationId == 'delete_opera'){
-                mthis.deleteSliderImgs();
+                mthis.deletePoints();
             } else if(mapOperationId == 'invertSelection_opera'){
                 mthis.invertSelectionSliderImgs();
             }
@@ -340,7 +349,8 @@ export default {
                     style : mthis.selectedstyle
                 }); */
                 
-                mthis.setPointFeatures(mthis.eventsPointGeoJson);
+                //mthis.setPointFeatures(mthis.eventsPointGeoJson);
+                mthis.setPointFeatures_test(mthis.test_mapData.data);
                 mthis.returnSelectedEventIds(mthis.EventsDatas.data); //将所有ids返回给全局被选中的节点变量，为了统计时间轴和右侧菜单
                 //mthis.routeMap.addlayer(selectedPointsLayer) 
                //mthis.creatPicSlider();//图片轮播
@@ -349,6 +359,22 @@ export default {
                 //mthis.routeMap.map.setSize([0,100])
                 //setTimeout( function() {mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight]);}, 2);
             }  
+        },
+        setPointFeatures_test(data){
+            debugger
+            var mthis = this
+            var layer = new VectorLayer({
+                source: new VectorSource({
+                    // features:Feature,
+                    //url: '',
+                    features: (new GeoJSON()).readFeatures(data),
+                    format: new GeoJSON()
+                }),
+                style:mthis.noSelectedstyle,
+                id:'eventsPointsLayer'
+            });
+            mthis.routeMap.addlayer(layer);
+            //mthis.geometrySelectedFeatures = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
         },
         hasDataInSource(targetSource){
             var features = targetSource.getFeatures();
@@ -632,7 +658,8 @@ export default {
                 var feature = obj.feature;
                 var geometry = feature.getGeometry();
                 var frameselectedEventIds = [];
-                frameselectedEventIds = mthis.selectEventPointsByGeometry(geometry);
+                //frameselectedEventIds = mthis.selectEventPointsByGeometry(geometry);
+                frameselectedEventIds = mthis.selectEventPointsByGeometry_test(geometry);
                 mthis.routeMap.map.removeInteraction(draw);
                 var selectedEventsParam = {
                     type:'GeoView',
@@ -646,8 +673,9 @@ export default {
             var mthis = this
             var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
             selectingPointSource.getFeatures().forEach(function(item){
-                if(item.getStyle() !== null && item.getStyle().getImage().getFill().getColor() === '#ff9900'){
-                    mthis.setSelectedEventFeatureParam(item,false);
+                if(item.getStyle() !== null && item.getStyle().getImage().getFill().getColor() === 'rgba(102,153,153,1)'){
+                    //mthis.setSelectedEventFeatureParam(item,false);
+                    item.setStyle(mthis.noSelectedstyle);
                 }
             });
         },
@@ -663,15 +691,38 @@ export default {
                 var isIn = geometry.intersectsCoordinate(coord);
                 if (isIn) {
                     //item.setStyle(mthis.selectedstyle);
-                    mthis.setSelectedEventFeatureParam(item,true);
+                    //mthis.setSelectedEventFeatureParam(item,true);
                     mthis.geometrySelectedFeatures.push(item);
                     var itemEventId = item.get('EventId');
                     frameselectedEventIds.push(itemEventId);
+                } else {
+                    item.setStyle(mthis.graystyle);
                 }
             });
             return frameselectedEventIds
         },
-        setSelectedEventFeatureParam(eventfeature,isSelected){  //isSelected这个参数，true时是被选中，false是取消选中
+        selectEventPointsByGeometry_test(geometry){   
+            var mthis = this
+            var frameselectedEventIds = [];
+            mthis.geometrySelectedFeatures = [];
+            var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
+            //mthis.selectedPointsSource.clear();
+            selectingPointSource.getFeatures().forEach(function(item) {
+                var coord = item.getGeometry().getCoordinates();
+                var isIn = geometry.intersectsCoordinate(coord);
+                if (isIn) {
+                    //item.setStyle(mthis.selectedstyle);
+                    //mthis.setSelectedEventFeatureParam(item,true);
+                    mthis.geometrySelectedFeatures.push(item);
+                    var itemEventId = item.get('EventId');
+                    frameselectedEventIds.push(itemEventId);
+                } else {
+                    item.setStyle(mthis.graystyle);
+                }
+            });
+            return frameselectedEventIds
+        },
+        /* setSelectedEventFeatureParam(eventfeature,isSelected){  //isSelected这个参数，true时是被选中，false是取消选中
             var mthis = this;
             if(isSelected){
                 eventfeature.setStyle(mthis.selectedstyle);
@@ -681,7 +732,7 @@ export default {
                 eventfeature.set('isSelected',false,false)
             }
             
-        },
+        }, */
         //==========================================================================
         //路径
         click_route(){
@@ -920,8 +971,20 @@ export default {
         * @param地图上事件点的删除
         * 
         */
-        deleteSliderImgs(){
+        deletePoints(){
             var mthis = this;
+            var source = mthis.getLayerById('eventsPointsLayer').getSource();
+            for(let i = source.getFeatures().length - 1; i >= 0 ; i--){
+                //debugger
+                if(source.getFeatures()[i].getStyle() === mthis.selectedstyle){
+                    mthis.removeFeaturesArr.push(source.getFeatures()[i]);
+                    source.removeFeature(source.getFeatures()[i]);
+                }
+            }
+            mthis.geometrySelectedFeatures = [];
+            mthis.timeSelectedFeatures = [];
+            mthis.staticsSelectedFeatures = [];
+            debugger
         },
         
         /*
@@ -1116,6 +1179,9 @@ export default {
     ]),
     
     watch:{
+        geometrySelectedFeatures:function(){},
+        timeSelectedFeatures:function(){},
+        staticsSelectedFeatures:function(){},
         geo_selected_param:function(){},
         geoTimeCondition:function(){
             var mthis = this;
@@ -1132,10 +1198,10 @@ export default {
             }
             selectedFeatures.forEach(function(item){
                 if(item.get('Time') !== undefined && util.getTimestamp(item.get('Time')[0]) >= mthis.timeCondition[0] && util.getTimestamp(item.get('Time')[0]) <= mthis.timeCondition[1]){
-                    item.setStyle(mthis.selectedstyle);
+                    item.setStyle(mthis.noSelectedstyle);
                     mthis.timeSelectedFeatures.push(item);
                 } else {
-                    item.setStyle(mthis.noSelectedstyle);
+                    item.setStyle(mthis.graystyle);
                 }
             })
             //var eventFeatures = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
