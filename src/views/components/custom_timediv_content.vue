@@ -323,20 +323,12 @@
           timeArr.push(params.name)
           timeArr.push(params.name)
           mthis.$store.commit('setContentTimeCondition',timeArr)
-          // alert(0)
           // console.log(params)
           // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
-          //   alert(1)
-          //   alert(params.batch!==undefined &&params.batch[0].areas.length  === 0)
-          //   alert(params.batch[0].areas.length)
           //   mthis.timeTitle = ''
           // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {
-          //   alert(2)
-          //   alert(params.batch!==undefined &&params.batch[0].areas.length >  0)
-          //   alert(params.batch[0].areas.length)
           //   mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex.length-1]
           // } else {
-          //   alert(3)
           //   mthis.timeTitle = params.name
           // }
           

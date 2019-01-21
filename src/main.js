@@ -186,7 +186,6 @@ var store = new Vuex.Store({
   state: {
     // 组件获取数据方式 this.$store.state.XXX
     tmss:'net', // top menu selected stutas
-
     // 配置ip
     ipConfig: {
       api_url:'http://10.60.1.140:5001',
@@ -231,6 +230,7 @@ var store = new Vuex.Store({
       node:{}
     },
     conditionContent: '',
+    // 监听时间轴是否被选中
     contentTimeCondition: [],
     netTimeCondition: [],
     geoTimeCondition: [],

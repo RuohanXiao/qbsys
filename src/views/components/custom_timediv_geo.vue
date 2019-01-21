@@ -293,11 +293,7 @@
         this.charts.setOption(this.option)
         this.charts.on('brushSelected', function (params) {
          if(params.batch[0].areas[0] !== undefined){
-            console.log(params.batch[0].areas[0].coordRanges[0]);
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-            console.log('起始时间'+mthis.dataBySeries.date[startAndEnd[0]]);
-            console.log('结束时间'+mthis.dataBySeries.date[startAndEnd[1]]);
-            console.log('共' + (startAndEnd[1] - startAndEnd[0] + 1) + '天');
           }
           
           mthis.timeTitle = ''
@@ -309,20 +305,12 @@
         })
         this.charts.on('click', function (params) {
           mthis.timeTitle = params.name
-          // alert(0)
           // console.log(params)
           // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
-          //   alert(1)
-          //   alert(params.batch!==undefined &&params.batch[0].areas.length  === 0)
-          //   alert(params.batch[0].areas.length)
           //   mthis.timeTitle = ''
           // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {
-          //   alert(2)
-          //   alert(params.batch!==undefined &&params.batch[0].areas.length >  0)
-          //   alert(params.batch[0].areas.length)
           //   mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex.length-1]
           // } else {
-          //   alert(3)
           //   mthis.timeTitle = params.name
           // }
           

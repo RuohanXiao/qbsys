@@ -229,7 +229,6 @@
     ]),
     watch: {
       contentTimeCondition: function(va) {
-        // alert('时间变啦!!')
         var mthis = this
         mthis.page = 1
         if (va.length === 2) {
@@ -240,7 +239,6 @@
               mthis.items = response.body.data
             } else {
               mthis.items = []
-              // alert('未找到匹配的文章')
             }
           })
         } else if (va.length === 1) {

@@ -321,7 +321,7 @@
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
               'nodeIds': nodeIdsArry
             }).then(response => {
-              console.log(response.body.data[0])
+              // console.log(response.body.data[0])
               mthis.evetdata =  response.body.data[0]
             })
           } else {
@@ -341,9 +341,6 @@
     methods: {
       changTab(a){
         this.$store.commit('setTabSelect', a)
-      },
-      a() {
-        alert(55);
       },
       setFlagToFalse(detailModalFlag) {
         var mthis = this;

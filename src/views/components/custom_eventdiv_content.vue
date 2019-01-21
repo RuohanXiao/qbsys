@@ -176,9 +176,6 @@
       // }
     },
     methods: {
-      a(){
-        alert(55);
-      },
       setFlagToFalse(detailModalFlag){
         var mthis = this;
         mthis.detailModalFlag = detailModalFlag;
