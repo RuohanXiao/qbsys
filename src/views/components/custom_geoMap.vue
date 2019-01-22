@@ -160,6 +160,10 @@ import WFS from 'ol/format/WFS'
 import GeoJSON from 'ol/format/GeoJSON'
 import LineString from'ol/geom/LineString'
 import Icon from 'ol/style/Icon'
+import {click, pointerMove} from 'ol/events/condition.js';
+import Select from 'ol/interaction/Select.js';
+import {easeOut} from 'ol/easing.js';
+import {unByKey} from 'ol/Observable.js';
 
 
 import flexslider from 'flexslider'
@@ -192,8 +196,8 @@ export default {
         heatMap:null,
         provinTilSource:null,
         selectedPointsSource:null,
-        entityPointsColor: '#33ffff',//初始化加载时的实体点颜色
-        frameSelectedColor: '#ff9900',//拉框选中后的实体点颜色
+        diePointColor: '#33ffff',//初始化加载时的实体点颜色
+        lifePointColor: '#ff9900',//拉框选中后的实体点颜色
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
         draw:null,
         legend:null,
@@ -211,22 +215,24 @@ export default {
         geometrySelectedFeatures:[],
         timeSelectedFeatures:[],
         staticsSelectedFeatures:[],
+        pointMoveListenerKey:null,
+        pointClickListenerKey:null,
         noSelectedstyle : new Style({
             image : new CircleStyle({
                 radius : 3,
                 fill : new Fill({
-                    color : '#33ffff'
+                    color : '#ff9900' //'#33ffff'
                 })
             })
         }),
-        selectedstyle: new Style({
+        /* selectedstyle: new Style({
             image : new CircleStyle({
                 radius : 3,
                 fill : new Fill({
                     color : '#ff9900'
                 })
             })
-        }),
+        }), */
         graystyle:new Style({
             image : new CircleStyle({
                 radius : 3,
@@ -349,8 +355,8 @@ export default {
                     style : mthis.selectedstyle
                 }); */
                 
-                mthis.setPointFeatures(mthis.eventsPointGeoJson);
-                //mthis.setPointFeatures_test(mthis.test_mapData.data);
+                //mthis.setPointFeatures(mthis.eventsPointGeoJson);
+                mthis.setPointFeatures_test(mthis.test_mapData.data);
                 mthis.returnSelectedEventIds(mthis.EventsDatas.data); //将所有ids返回给全局被选中的节点变量，为了统计时间轴和右侧菜单
                 //mthis.routeMap.addlayer(selectedPointsLayer) 
                //mthis.creatPicSlider();//图片轮播
@@ -360,22 +366,171 @@ export default {
                 //setTimeout( function() {mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight]);}, 2);
             }  
         },
+        setLifePointStyleByValue(feature){
+            var mthis = this;
+            var eventNum = feature.get('Events').length;
+            var fRadius = 0;
+            if(eventNum > 10){
+                fRadius = 13;
+            } else {
+                fRadius = eventNum + 2;
+            }
+            var clickSelectedstyle = new Style({
+                image : new CircleStyle({
+                    radius : fRadius,
+                    fill : new Fill({
+                        color : mthis.lifePointColor //'#33ffff'
+                    })
+                })
+            });
+            feature.setStyle(clickSelectedstyle);
+        },
+        setLifePointSelectedStyle(feature){
+            //var oldRadius = 
+        },
         setPointFeatures_test(data){
-            debugger
             var mthis = this
+            var features = (new GeoJSON()).readFeatures(data);
+            features.forEach(function(item){
+                mthis.setLifePointStyleByValue(item);
+            });
             var layer = new VectorLayer({
                 source: new VectorSource({
                     // features:Feature,
                     //url: '',
-                    features: (new GeoJSON()).readFeatures(data),
+                    features: features,
                     format: new GeoJSON()
                 }),
                 style:mthis.noSelectedstyle,
                 id:'eventsPointsLayer'
             });
             mthis.routeMap.addlayer(layer);
-            //mthis.geometrySelectedFeatures = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
+            var selectPointerMove = new Select({
+                condition: pointerMove
+            });
+            var selectClick = new Select({
+                condition: click
+            });
+            mthis.routeMap.map.addInteraction(selectPointerMove);
+            mthis.routeMap.map.addInteraction(selectClick);
+            selectPointerMove.on('select', function(e) {
+                //alert(111);
+                if(e.selected.length > 0){
+                    mthis.pointSelectedAnimation(e.selected[0],'pointMove');
+                } else {
+                    if(mthis.pointMoveListenerKey !== null){
+                        unByKey(mthis.pointMoveListenerKey);
+                    }
+                    
+                }
+                
+            });
+            selectClick.on('select', function(e) {
+                if(e.selected.length > 0){
+                    if(mthis.pointMoveListenerKey !== null){
+                        unByKey(mthis.pointMoveListenerKey);
+                    }
+                    if(mthis.pointClickListenerKey !== null){
+                        unByKey(mthis.pointClickListenerKey);
+                    }
+                    mthis.pointSelectedAnimation(e.selected[0],'pointClick');
+                } else {
+                    if(mthis.pointClickListenerKey !== null){
+                        unByKey(mthis.pointClickListenerKey);
+                    }
+                }
+            });
+
         },
+        pointSelectedAnimation(feat,listenerKey){
+            var mthis = this;
+                var feature = feat;
+                var start = new Date().getTime();
+                var map = this.routeMap.map;
+                //地图渲染事件 
+                if(listenerKey === 'pointMove'){
+                    mthis.pointMoveListenerKey = map.on('postcompose', animate);     
+                }  else if(listenerKey === 'pointClick'){
+                    mthis.pointClickListenerKey = map.on('postcompose', animate);     
+                }
+                // mthis.pointMoveListenerKey = map.on('postcompose', animate);     
+                //listenerKey = map.on('postcompose', animate); 
+	             
+                function animate(event){
+                    var duration = 3000;
+                    var vectorContext = event.vectorContext;
+                    var frameState = event.frameState;
+                    var flashGeom = feature.getGeometry().clone();
+                    var timeDis = frameState.time - start;
+
+                    var changeBigNum = feature.getStyle().getImage().getRadius() * 1.2;
+                    var changeBigStyle = new Style({//设置样式
+                        image : new CircleStyle({
+                            radius : changeBigNum,
+                            fill : new Fill({
+                                color : mthis.lifePointColor
+                            })
+                        })
+                    });
+                    vectorContext.setStyle(changeBigStyle);
+                    vectorContext.drawGeometry(flashGeom);
+
+                    var elapsed = (timeDis) % duration;
+                    var elapsedRatio1 = elapsed / duration;
+                    var radius1 = easeOut(elapsedRatio1) * 10 + changeBigNum;
+                    var opacity1 = easeOut(1 - elapsedRatio1);
+                    var style1 = new Style({//设置样式
+                        image: new CircleStyle({
+                            radius: radius1,
+                            snapToPixel: false,
+                            stroke: new Stroke({
+                            color: 'rgba(255,153,0, ' + opacity1 + ')',
+                            width: 0.25 + opacity1
+                            })
+                        })
+                    });
+                    vectorContext.setStyle(style1);
+                    vectorContext.drawGeometry(flashGeom);
+                    if(timeDis > 1000){
+                        var elapsed2 = (timeDis - 1000) % duration;
+                        var elapsedRatio2 = (elapsed2) / duration;
+                        var radius2 = easeOut(elapsedRatio2) * 10 + changeBigNum;
+                        var opacity2 = easeOut(1 - elapsedRatio2);
+                        var style2 = new Style({//设置样式
+                            image: new CircleStyle({
+                                radius: radius2,
+                                snapToPixel: false,
+                                stroke: new Stroke({
+                                color: 'rgba(255,153,0, ' + opacity2 + ')',
+                                width: 0.25 + opacity2
+                                })
+                            })
+                        });
+                        vectorContext.setStyle(style2);
+                        vectorContext.drawGeometry(flashGeom);
+                    }
+                    if(timeDis > 2000){
+                        var elapsed3 = (timeDis - 2000) % duration;
+                        var elapsedRatio3 = (elapsed3) / duration;
+                        var radius3 = easeOut(elapsedRatio3) * 10 + changeBigNum;
+                        var opacity3 = easeOut(1 - elapsedRatio3);
+                        var style3 = new Style({//设置样式
+                            image: new CircleStyle({
+                                radius: radius3,
+                                snapToPixel: false,
+                                stroke: new Stroke({
+                                color: 'rgba(255,153,0, ' + opacity3 + ')',
+                                width: 0.25 + opacity3
+                                })
+                            })
+                        });
+                        vectorContext.setStyle(style3);
+                        vectorContext.drawGeometry(flashGeom);
+                    }
+                    // tell OL3 to continue postcompose animation                  	
+                    map.render();  
+                }  
+	    },
         hasDataInSource(targetSource){
             var features = targetSource.getFeatures();
             if(features.length > 0){
@@ -975,7 +1130,6 @@ export default {
             var mthis = this;
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
             for(let i = source.getFeatures().length - 1; i >= 0 ; i--){
-                //debugger
                 if(source.getFeatures()[i].getStyle() === mthis.selectedstyle){
                     mthis.removeFeaturesArr.push(source.getFeatures()[i]);
                     source.removeFeature(source.getFeatures()[i]);
@@ -984,7 +1138,6 @@ export default {
             mthis.geometrySelectedFeatures = [];
             mthis.timeSelectedFeatures = [];
             mthis.staticsSelectedFeatures = [];
-            debugger
         },
         
         /*

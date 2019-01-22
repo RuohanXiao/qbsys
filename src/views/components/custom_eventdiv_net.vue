@@ -374,7 +374,6 @@
       detail(id) {
         // console.log('detail')
         var mthis = this
-        debugger
         mthis.modalNodeId = id
         mthis.detailModalFlag = true
         let nodeIdsArry = []
