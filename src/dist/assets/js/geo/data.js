@@ -19,7 +19,7 @@ var test_Location = [ {
 
 //路径模块测试数据
 var test_Route = [ {
-	'id':0,
+	"id":0,
 	'name' : "普京",
 	'imageURL':'https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=53e28aef2f2dd42a4b0409f9625230d0/4a36acaf2edda3ccf81167a60be93901203f92bb.jpg',
 	'route' : [ {
@@ -30,7 +30,7 @@ var test_Route = [ {
 		order : 0,
 		eventId:'E1111',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:1,
 		coordinate : [ 117.20349884, 39.13111877 ],
@@ -39,7 +39,7 @@ var test_Route = [ {
 		order : 1,
 		eventId:'E1112',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:2,
 		coordinate : [ 114.48977661, 38.04512787 ],
@@ -48,7 +48,7 @@ var test_Route = [ {
 		order : 2,
 		eventId:'E1113',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 		
 	}, {
 		pointId:3,
@@ -58,7 +58,7 @@ var test_Route = [ {
 		order : 3,
 		eventId:'E1114',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:4,
 		coordinate : [ 123.41168213, 41.7966156 ],
@@ -67,10 +67,10 @@ var test_Route = [ {
 		order : 4,
 		eventId:'E1115',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	} ]
 }, {
-	'id':1,
+	"id":1,
 	'name' : "梅德韦杰夫",
 	'imageURL':'https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=472b782bd843ad4bb2234e92e36b31ca/359b033b5bb5c9ea8bd6866ddc39b6003af3b313.jpg',
 	'route' : [ {
@@ -81,7 +81,7 @@ var test_Route = [ {
 		order : 0,
 		eventId:'E2111',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:1,
 		coordinate : [ 91.14258, 29.75098 ],
@@ -90,7 +90,7 @@ var test_Route = [ {
 		order : 1,
 		eventId:'E2112',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:2,
 		coordinate : [ 113.55469, 22.28027 ],
@@ -99,7 +99,7 @@ var test_Route = [ {
 		order : 2,
 		eventId:'E2113',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:3,
 		coordinate : [ 101.77734, 36.60645 ],
@@ -108,7 +108,7 @@ var test_Route = [ {
 		order : 3,
 		eventId:'E2114',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:4,
 		coordinate : [ 126.65039, 45.83496 ],
@@ -117,10 +117,10 @@ var test_Route = [ {
 		order : 4,
 		eventId:'E2115',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	} ]
 }, {
-	'id':2,
+	"id":2,
 	'name' : "默克尔",
 	'imageURL':'https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=5b13b4f4c4fcc3cea0cdc161f32cbded/279759ee3d6d55fbaef84ef061224f4a20a4dd2d.jpg',
 	'route' : [ {
@@ -131,7 +131,7 @@ var test_Route = [ {
 		order : 0,
 		eventId:'E3111',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:1,
 		coordinate : [ 41.14258, 79.75098 ],
@@ -140,7 +140,7 @@ var test_Route = [ {
 		order : 1,
 		eventId:'E3112',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:2,
 		coordinate : [ 13.55469, 12.28027 ],
@@ -149,7 +149,7 @@ var test_Route = [ {
 		order : 2,
 		eventId:'E3113',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:3,
 		coordinate : [ 151.77734, 26.60645 ],
@@ -158,7 +158,7 @@ var test_Route = [ {
 		order : 3,
 		eventId:'E3114',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	}, {
 		pointId:4,
 		coordinate : [ 26.65039, 15.83496 ],
@@ -167,7 +167,7 @@ var test_Route = [ {
 		order : 4,
 		eventId:'E3115',
 		eventType:'access', //访问
-		Time:["2018-01-02","2018-01-03"],
+		Time:["2018-01-02","2018-01-02"],
 	} ]
 }];
 
@@ -193,7 +193,7 @@ var EventsDatas={
 		{
 			//Person:['普京'],
 			//Position: ['北京'],
-			Time:["2002-01-02","2018-01-03"],
+			Time:["2002-01-02","2018-01-02"],
 			EventId: 'V101',
 			//PersonId:['Q111'],
 			coordinate:[ 117.00559998, 36.6670723 ]
@@ -201,7 +201,7 @@ var EventsDatas={
 		{
 			//Person:['普京'],
 			//Position: ['北京'],
-			Time:["2005-01-02","2018-01-03"],
+			Time:["2005-01-02","2018-01-02"],
 			EventId: 'V102',
 			//PersonId:['Q111'],
 			coordinate:[ 117.20349884, 39.13111877 ]
@@ -209,7 +209,7 @@ var EventsDatas={
 		{
 			//Person:['普京','习近平'],
 			//Position: ['北京'],
-			Time:["2007-01-02","2018-01-03"],
+			Time:["2007-01-02","2018-01-02"],
 			EventId: 'V103',
 			//PersonId:['Q111'],
 			coordinate:[ 117.20349884, 39.13111877  ]
@@ -217,35 +217,35 @@ var EventsDatas={
 		{
 			//Person:['普京'],
 			//Position: ['北京'],
-			Time:["2007-01-02","2018-01-03"],
+			Time:["2007-01-02","2018-01-02"],
 			EventId: 'V104',
 			//PersonId:['Q111'],
 			coordinate:[ 116.3809433, 39.9236145 ]
 		},
 		{
-			Time:["2009-01-02","2018-01-03"],
+			Time:["2009-01-02","2018-01-02"],
 			EventId: 'V105',
 			coordinate:[ 123.41168213, 41.7966156 ]
 		},
 		{
-			Time:["2011-01-02","2018-01-03"],
+			Time:["2011-01-02","2018-01-02"],
 			EventId: 'V106',
 			coordinate:[ 87.62695, 43.90137 ]
 		},
 		{
-			Time:["2013-01-02","2018-01-03"],
+			Time:["2013-01-02","2018-01-02"],
 			EventId: 'V107',
 			coordinate:[ 91.14258, 29.75098 ]
 		},
 		{
-			Time:["2014-01-02","2018-01-03"],
+			Time:["2014-01-02","2018-01-02"],
 			EventId: 'V108',
 			coordinate:[ 113.55469, 22.28027 ]
 		},
 		{
 			//Person:['普京'],
 			//Position: ['北京'],
-			Time:["2016-01-02","2018-01-03"],
+			Time:["2016-01-02","2018-01-02"],
 			EventId: 'V109',
 			//PersonId:['Q111'],
 			coordinate:[ 101.77734, 36.60645 ]
@@ -253,7 +253,7 @@ var EventsDatas={
 		{
 			//Person:['普京'],
 			//Position: ['北京'],
-			Time:["2018-01-02","2018-01-03"],
+			Time:["2018-01-02","2018-01-02"],
 			EventId: 'V110',
 			//PersonId:['Q111'],
 			coordinate:[ 126.65039, 45.83496 ]
@@ -272,7 +272,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 117.00559998, 36.6670723 ]},
 			"properties": {
-				'Time':["2002-01-02","2018-01-03"],
+				'Time':["2002-01-02","2018-01-02"],
 				'EventId': 'V101',
 				'isSelected': false,
 			}
@@ -280,7 +280,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 117.00559998, 36.6670723 ]},
 			"properties": {
-				'Time':["2005-01-02","2018-01-03"],
+				'Time':["2005-01-02","2018-01-02"],
 				'EventId': 'V102',
 				'isSelected': false
 			}
@@ -288,7 +288,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 114.48977661, 38.04512787 ]},
 			"properties": {
-				'Time':["2007-01-02","2018-01-03"],
+				'Time':["2007-01-02","2018-01-02"],
 				'EventId': 'V103',
 				'isSelected': false
 			}
@@ -296,7 +296,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 116.3809433, 39.9236145 ]},
 			"properties": {
-				'Time':["2007-01-02","2018-01-03"],
+				'Time':["2007-01-02","2018-01-02"],
 				'EventId': 'V104',
 				'isSelected': false
 			}
@@ -304,7 +304,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 123.41168213, 41.7966156 ]},
 			"properties": {
-				'Time':["2009-01-02","2018-01-03"],
+				'Time':["2009-01-02","2018-01-02"],
 				'EventId': 'V105',
 				'isSelected': false
 			}
@@ -312,7 +312,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 87.62695, 43.90137 ]},
 			"properties": {
-				'Time':["2011-01-02","2018-01-03"],
+				'Time':["2011-01-02","2018-01-02"],
 				'EventId': 'V106',
 				'isSelected': false
 			}
@@ -320,7 +320,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 91.14258, 29.75098 ]},
 			"properties": {
-				'Time':["2013-01-02","2018-01-03"],
+				'Time':["2013-01-02","2018-01-02"],
 				'EventId': 'V107',
 				'isSelected': false
 			}
@@ -328,7 +328,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 113.55469, 22.28027 ]},
 			"properties": {
-				'Time':["2014-01-02","2018-01-03"],
+				'Time':["2014-01-02","2018-01-02"],
 				'EventId': 'V108',
 				'isSelected': false
 			}
@@ -336,7 +336,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 101.77734, 36.60645 ]},
 			"properties": {
-				'Time':["2016-01-02","2018-01-03"],
+				'Time':["2016-01-02","2018-01-02"],
 				'EventId': 'V109',
 				'isSelected': false
 			}
@@ -344,7 +344,7 @@ var eventsPointGeoJson = { "type": "FeatureCollection",
 		{ "type": "Feature",
 			"geometry": {"type": "Point", "coordinates": [ 126.65039, 45.83496 ]},
 			"properties": {
-				'Time':["2018-01-02","2018-01-03"],
+				'Time':["2018-01-02","2018-01-02"],
 				'EventId': 'V110',
 				'isSelected': false
 			}
@@ -356,26 +356,48 @@ var timeStaticsData = {
 					"code": 0,
 					"data": {
 						"time": [
+							"1991-01-02",
+							"1992-01-02",
+							"1993-01-02",
+							"1995-01-02",
+							"1996-01-02",
+							"1997-01-02",
+							"1998-01-02",
+							"1999-01-02",
+							"2000-01-02",
+							"2001-01-02",
 							"2002-01-02",
+							"2003-01-02",
+							"2004-01-02",
 							"2005-01-02",
+							"2006-01-02",
 							"2007-01-02",
+							"2008-01-02",
 							"2009-01-02",
-							"2011-01-02",
-							"2013-01-02",
-							"2014-01-02",
-							"2016-01-02",
+							"2010-01-02",
 							"2018-01-02"
 						],
 						"count": [
-							1,
-							1,
+							3,
 							2,
-							1,
-							1,
-							1,
-							1,
-							1,
-							1,
+							4,
+							5,
+							3,
+							3,
+							3,
+							3,
+							3,
+							2,
+							2,
+							2,
+							2,
+							2,
+							2,
+							2,
+							2,
+							4,
+							3,
+							4
 						]
 					}
 				};
@@ -410,19 +432,22 @@ var test_mapData = {
 	},
 	"features": [
 		{ "type": "Feature",
+			"id":'eventFeature_天津',
 			"geometry": {"type": "Point", "coordinates": [ 117.00559998, 36.6670723 ]},
 			"properties": {
-				'Events': [{'id':'V101','time':"2002-01-02"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V101','time':"1991-01-02"}],
+				'localtionName':'天津',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false
 			}
+			
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_北京',
 			"geometry": {"type": "Point", "coordinates": [ 114.48977661, 38.04512787 ]},
 			"properties": {
-				'Events': [{'id':'V102','time':"2002-01-02"},{'id':'V103','time':"2018-01-03"}],
+				'Events': [{"id":'V102','time':"1991-01-02"},{"id":'V103','time':"1992-01-02"}],
 				'localtionName':'北京',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
@@ -430,90 +455,99 @@ var test_mapData = {
 			}
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_河北',
 			"geometry": {"type": "Point", "coordinates": [ 116.3809433, 39.9236145 ]},
 			"properties": {
-				'Events': [{'id':'V104','time':"2002-01-02"},{'id':'V105','time':"2018-01-03"},{'id':'V102','time':"2018-01-03"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V104','time':"1993-01-02"},{"id":'V105','time':"1993-01-02"},{"id":'V102','time':"1993-01-02"}],
+				'localtionName':'河北',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false
 			}
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_吉林',
 			"geometry": {"type": "Point", "coordinates": [ 123.41168213, 41.7966156 ]},
 			"properties": {
-				'Events': [{'id':'V106','time':"2002-01-02"},{'id':'V107','time':"2018-01-03"},{'id':'V108','time':"2018-01-03"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V106','time':"1993-01-02"},{"id":'V107','time':"1994-01-02"},{"id":'V108','time':"1995-01-02"}],
+				'localtionName':'吉林',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false
 			}
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_新疆',
 			"geometry": {"type": "Point", "coordinates": [ 87.62695, 43.90137 ]},
 			"properties": {
-				'Events': [{'id':'V109','time':"2002-01-02"},{'id':'V110','time':"2018-01-03"},{'id':'V111','time':"2018-01-03"},{'id':'V112','time':"2018-01-03"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V109','time':"1996-01-02"},{"id":'V110','time':"1997-01-02"},{"id":'V111','time':"1998-01-02"},{"id":'V112','time':"2018-01-02"}],
+				'localtionName':'新疆',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false
 			}
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_西藏',
 			"geometry": {"type": "Point", "coordinates": [ 91.14258, 29.75098 ]},
 			"properties": {
-				'Events': [{'id':'V113','time':"2002-01-02"},{'id':'V114','time':"2018-01-03"},{'id':'V115','time':"2018-01-03"},{'id':'V116','time':"2018-01-03"},{'id':'V117','time':"2018-01-03"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V113','time':"1995-01-02"},{"id":'V114','time':"1996-01-02"},{"id":'V115','time':"1995-01-02"},{"id":'V116','time':"1995-01-02"},{"id":'V117','time':"2018-01-02"}],
+				'localtionName':'西藏',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false
 			}
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_广州',
 			"geometry": {"type": "Point", "coordinates": [ 113.55469, 22.28027 ]},
 			"properties": {
-				'Events': [{'id':'V118','time':"2002-01-02"},{'id':'V119','time':"2018-01-03"},{'id':'V120','time':"2018-01-03"},{'id':'V121','time':"2018-01-03"},{'id':'V122','time':"2018-01-03"},{'id':'V123','time':"2018-01-03"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V118','time':"1999-01-02"},{"id":'V119','time':"2003-01-02"},{"id":'V120','time':"2010-01-02"},{"id":'V121','time':"1991-01-02"},{"id":'V122','time':"2005-01-02"},{"id":'V123','time':"2018-01-02"}],
+				'localtionName':'广州',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false
 			}
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_青海',
 			"geometry": {"type": "Point", "coordinates": [ 101.77734, 36.60645 ]},
 			"properties": {
-				'Events': [{'id':'V124','time':"2002-01-02"},{'id':'V125','time':"2018-01-03"},{'id':'V126','time':"2018-01-03"},{'id':'V127','time':"2018-01-03"},{'id':'V128','time':"2018-01-03"},{'id':'V129','time':"2018-01-03"},{'id':'V130','time':"2018-01-03"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V124','time':"2008-01-02"},{"id":'V125','time':"2001-01-02"},{"id":'V126','time':"2002-01-02"},{"id":'V127','time':"2004-01-02"},{"id":'V128','time':"2006-01-02"},{"id":'V129','time':"2007-01-02"},{"id":'V130','time':"2009-01-02"}],
+				'localtionName':'青海',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false
 			}
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_黑龙江',
 			"geometry": {"type": "Point", "coordinates": [ 126.65039, 45.83496 ]},
 			"properties": {
-				'Events': [{'id':'V131','time':"2002-01-02"},{'id':'V132','time':"2018-01-03"},{'id':'V133','time':"2018-01-03"},{'id':'V134','time':"2018-01-03"},{'id':'V135','time':"2018-01-03"},{'id':'V136','time':"2018-01-03"},{'id':'V137','time':"2018-01-03"},{'id':'V138','time':"2018-01-03"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V131','time':"2009-01-02"},{"id":'V132','time':"2000-01-02"},{"id":'V133','time':"2005-01-02"},{"id":'V134','time':"1999-01-02"},{"id":'V135','time':"1997-01-02"},{"id":'V136','time':"2003-01-02"},{"id":'V137','time':"2010-01-02"},{"id":'V138','time':"2009-01-02"}],
+				'localtionName':'黑龙江',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false
 			}
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_波兰',
 			"geometry": {"type": "Point", "coordinates": [ 17.62695, 52.90137 ]},
 			"properties": {
-				'Events': [{'id':'V139','time':"2002-01-02"},{'id':'V140','time':"2018-01-03"},{'id':'V141','time':"2018-01-03"},{'id':'V142','time':"2018-01-03"},{'id':'V143','time':"2018-01-03"},{'id':'V144','time':"2018-01-03"},{'id':'V145','time':"2018-01-03"},{'id':'V146','time':"2018-01-03"},{'id':'V147','time':"2018-01-03"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V139','time':"2002-01-02"},{"id":'V140','time':"2000-01-02"},{"id":'V141','time':"1992-01-02"},{"id":'V142','time':"2007-01-02"},{"id":'V143','time':"2004-01-02"},{"id":'V144','time':"2001-01-02"},{"id":'V145','time':"2008-01-02"},{"id":'V146','time':"1998-01-02"},{"id":'V147','time':"1995-01-02"}],
+				'localtionName':'波兰',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false
 			}
 		},
 		{ "type": "Feature",
+			"id":'eventFeature_ss',
 			"geometry": {"type": "Point", "coordinates": [ 151.77734, 26.60645 ]},
 			"properties": {
-				'Events': [{'id':'V148','time':"2002-01-02"},{'id':'V149','time':"2018-01-03"},{'id':'V150','time':"2018-01-03"},{'id':'V151','time':"2018-01-03"},{'id':'V152','time':"2018-01-03"},{'id':'V153','time':"2018-01-03"},{'id':'V154','time':"2018-01-03"},{'id':'V155','time':"2018-01-03"},{'id':'V156','time':"2018-01-03"},{'id':'V157','time':"2018-01-03"}],
-				'localtionName':'北京',
+				'Events': [{"id":'V148','time':"1996-01-02"},{"id":'V149','time':"2006-01-02"},{"id":'V150','time':"2018-01-02"},{"id":'V151','time':"2010-01-02"},{"id":'V152','time':"2009-01-02"},{"id":'V153','time':"2000-01-02"},{"id":'V154','time':"1997-01-02"},{"id":'V155','time':"1998-01-02"},{"id":'V156','time':"1999-01-02"},{"id":'V157','time':"2018-01-02"}],
+				'localtionName':'ss',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
 				'isStaticsSelected':false

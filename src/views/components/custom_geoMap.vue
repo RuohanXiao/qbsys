@@ -164,6 +164,7 @@ import {click, pointerMove} from 'ol/events/condition.js';
 import Select from 'ol/interaction/Select.js';
 import {easeOut} from 'ol/easing.js';
 import {unByKey} from 'ol/Observable.js';
+import {getCenter} from 'ol/extent.js';
 
 
 import flexslider from 'flexslider'
@@ -196,10 +197,13 @@ export default {
         heatMap:null,
         provinTilSource:null,
         selectedPointsSource:null,
+        polygonLayer:null,
         diePointColor: '#33ffff',//初始化加载时的实体点颜色
         lifePointColor: '#ff9900',//拉框选中后的实体点颜色
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
         draw:null,
+        selectPointerMove : null,
+        selectClick : null,
         legend:null,
         BezierPointsObjsArr:[],
         routeColors:['#616f39','#88A2AA','#509aaf'],
@@ -212,9 +216,11 @@ export default {
         onImgIds:[],  //被点亮的img的id
         allImgIds:[], //所有img的id
         removeFeaturesArr:[],
-        geometrySelectedFeatures:[],
-        timeSelectedFeatures:[],
-        staticsSelectedFeatures:[],
+        allEventIdsToFeaturesIds:{},
+        allEventIds:[],
+        geometrySelectedEventIds:[],
+        timeSelectedFeaturesNum:0,
+        staticsSelectedEventIds:[],
         pointMoveListenerKey:null,
         pointClickListenerKey:null,
         noSelectedstyle : new Style({
@@ -366,34 +372,39 @@ export default {
                 //setTimeout( function() {mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight]);}, 2);
             }  
         },
-        setLifePointStyleByValue(feature){
-            var mthis = this;
-            var eventNum = feature.get('Events').length;
-            var fRadius = 0;
-            if(eventNum > 10){
-                fRadius = 13;
-            } else {
-                fRadius = eventNum + 2;
-            }
-            var clickSelectedstyle = new Style({
-                image : new CircleStyle({
-                    radius : fRadius,
-                    fill : new Fill({
-                        color : mthis.lifePointColor //'#33ffff'
-                    })
-                })
-            });
-            feature.setStyle(clickSelectedstyle);
-        },
+        
         setLifePointSelectedStyle(feature){
             //var oldRadius = 
         },
+        setPointMoveOverlay(feature){
+            var mthis = this;
+            var overlayId = 'pointMoveOverlay';
+            var conLabel = document.createElement('div');
+            var Lp = document.createElement('p');
+            conLabel.appendChild(Lp);
+            Lp.style = 'color:#ccffff;padding-left:10px;margin:0px;font-family: Arial;font-size: 10px;';
+            Lp.innerHTML = feature.get('localtionName');
+            var Ap = document.createElement('p');
+            conLabel.appendChild(Ap);
+            Ap.style = 'color:#ccffff;padding-left:10px;margin:0px;font-family: Arial;font-size: 10px;';
+            Ap.innerHTML = "事件：" + feature.get('Events').length;
+            var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,conLabel,overlayId,'top-left');
+            mthis.routeMap.map.addOverlay(overlayId);
+        },
         setPointFeatures_test(data){
             var mthis = this
+            mthis.allEventIdsToFeaturesIds = {};
+            mthis.allEventIds = [];
             var features = (new GeoJSON()).readFeatures(data);
             features.forEach(function(item){
                 mthis.setLifePointStyleByValue(item);
+                item.get('Events').forEach(function(Iitem){
+                    var eventId = Iitem.id;
+                    mthis.allEventIds.push(eventId);
+                    mthis.allEventIdsToFeaturesIds[eventId] = item.getId();
+                });
             });
+            debugger
             var layer = new VectorLayer({
                 source: new VectorSource({
                     // features:Feature,
@@ -405,37 +416,40 @@ export default {
                 id:'eventsPointsLayer'
             });
             mthis.routeMap.addlayer(layer);
-            var selectPointerMove = new Select({
+            mthis.selectPointerMove = new Select({
                 condition: pointerMove
             });
-            var selectClick = new Select({
+            mthis.selectClick = new Select({
                 condition: click
             });
-            mthis.routeMap.map.addInteraction(selectPointerMove);
-            mthis.routeMap.map.addInteraction(selectClick);
-            selectPointerMove.on('select', function(e) {
+            mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
+            mthis.routeMap.map.addInteraction(mthis.selectClick);
+            mthis.selectPointerMove.on('select', function(e) {
                 //alert(111);
-                if(e.selected.length > 0){
+                debugger
+                if(e.selected.length > 0 && e.selected[0].get('Events') !== undefined && e.selected[0].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     mthis.pointSelectedAnimation(e.selected[0],'pointMove');
+                    //鼠标悬浮时的信息框
+                    mthis.setPointMoveOverlay(e.selected[0]);
                 } else {
-                    if(mthis.pointMoveListenerKey !== null){
+                    if(mthis.pointMoveListenerKey !== null && mthis.pointMoveListenerKey.type !== undefined && mthis.pointMoveListenerKey.type === "postcompose"){
                         unByKey(mthis.pointMoveListenerKey);
                     }
-                    
+                    mthis.removeOverlays('pointMoveOverlay');
                 }
                 
             });
-            selectClick.on('select', function(e) {
-                if(e.selected.length > 0){
-                    if(mthis.pointMoveListenerKey !== null){
+            mthis.selectClick.on('select', function(e) {
+                if(e.selected.length > 0 && e.selected[0].get('Events') !== undefined && e.selected[0].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
+                    if(mthis.pointMoveListenerKey !== null && mthis.pointMoveListenerKey.type !== undefined && mthis.pointMoveListenerKey.type === "postcompose"){
                         unByKey(mthis.pointMoveListenerKey);
                     }
-                    if(mthis.pointClickListenerKey !== null){
+                    if(mthis.pointClickListenerKey !== null && mthis.pointClickListenerKey.type !== undefined && mthis.pointClickListenerKey.type === "postcompose"){
                         unByKey(mthis.pointClickListenerKey);
                     }
                     mthis.pointSelectedAnimation(e.selected[0],'pointClick');
                 } else {
-                    if(mthis.pointClickListenerKey !== null){
+                    if(mthis.pointClickListenerKey !== null && mthis.pointClickListenerKey.type !== undefined && mthis.pointClickListenerKey.type === "postcompose"){
                         unByKey(mthis.pointClickListenerKey);
                     }
                 }
@@ -760,30 +774,16 @@ export default {
             var mthis = this
             var map = mthis.routeMap.map
             map.removeInteraction(mthis.draw);
+            map.removeInteraction(mthis.selectPointerMove);
+            map.removeInteraction(mthis.selectClick);
             //矢量图层是用来渲染矢量数据的图层类型，在OpenLayers里，它是可以定制的，可以控制它的透明度，颜色，以及加载在上面的要素形状等。
             var Vecsource = new VectorSource({
                 features : new Collection()
             });
-            var polygonLayer = new VectorLayer({
-                source : Vecsource,
-                /*图形绘制好时最终呈现的样式,显示在地图上的最终图形*/
-                style : new Style({
-                    fill : new Fill({
-                        color : 'rgba(0, 0, 0, 0.5)'
-                    }),
-                    stroke : new Stroke({
-                        color : '#33E4E4',
-                        width : 2
-                    }),
-                    image : new CircleStyle({
-                        radius : 7,
-                        fill : new Fill({
-                            color : 'rgba(255, 0, 0, 0.6)'
-                        })
-                    })
-                })
+            mthis.polygonLayer = new VectorLayer({
+                source : Vecsource
             });
-            map.addLayer(polygonLayer);
+            map.addLayer(mthis.polygonLayer);
             var opt = object.currentTarget;
             var typeValue = opt.id.split('_')[0];
             var geometryFunction;
@@ -801,7 +801,7 @@ export default {
                 mthis.draw_polygon(mthis.draw);
                 map.addInteraction(mthis.draw);
             } 
-            map.removeLayer(polygonLayer);
+            map.removeLayer(mthis.polygonLayer);
         },
 
         draw_polygon(draw) {
@@ -812,15 +812,15 @@ export default {
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
                 var geometry = feature.getGeometry();
-                var frameselectedEventIds = [];
-                //frameselectedEventIds = mthis.selectEventPointsByGeometry(geometry);
-                frameselectedEventIds = mthis.selectEventPointsByGeometry_test(geometry);
+                mthis.geometrySelectedEventIds = mthis.selectEventPointsByGeometry_test(geometry);
                 mthis.routeMap.map.removeInteraction(draw);
-                var selectedEventsParam = {
-                    type:'GeoView',
-                    eventId:frameselectedEventIds
-                };
-                mthis.$store.commit('setGeoSelectedParam',selectedEventsParam);
+                mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
+                mthis.routeMap.map.addInteraction(mthis.selectClick);
+                mthis.routeMap.map.getView().animate({
+                    center: getCenter(geometry.getExtent()),
+                    duration: 1000
+                });
+                mthis.routeMap.map.render();
             });
         },
         //颜色转换，移除被选择的实体点
@@ -829,8 +829,8 @@ export default {
             var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
             selectingPointSource.getFeatures().forEach(function(item){
                 if(item.getStyle() !== null && item.getStyle().getImage().getFill().getColor() === 'rgba(102,153,153,1)'){
-                    //mthis.setSelectedEventFeatureParam(item,false);
-                    item.setStyle(mthis.noSelectedstyle);
+                    /* item.setStyle(mthis.noSelectedstyle); */
+                    mthis.setLifePointStyleByValue(item);
                 }
             });
         },
@@ -848,8 +848,11 @@ export default {
                     //item.setStyle(mthis.selectedstyle);
                     //mthis.setSelectedEventFeatureParam(item,true);
                     mthis.geometrySelectedFeatures.push(item);
-                    var itemEventId = item.get('EventId');
-                    frameselectedEventIds.push(itemEventId);
+                    debugger
+                    item.get('Events').forEach(function(Iitem){
+                        frameselectedEventIds.push(Iitem.id);
+                    })
+                    
                 } else {
                     item.setStyle(mthis.graystyle);
                 }
@@ -859,35 +862,62 @@ export default {
         selectEventPointsByGeometry_test(geometry){   
             var mthis = this
             var frameselectedEventIds = [];
-            mthis.geometrySelectedFeatures = [];
+            //mthis.geometrySelectedFeatures = [];
+            var num = 0;
             var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
             //mthis.selectedPointsSource.clear();
             selectingPointSource.getFeatures().forEach(function(item) {
                 var coord = item.getGeometry().getCoordinates();
                 var isIn = geometry.intersectsCoordinate(coord);
                 if (isIn) {
-                    //item.setStyle(mthis.selectedstyle);
-                    //mthis.setSelectedEventFeatureParam(item,true);
-                    mthis.geometrySelectedFeatures.push(item);
-                    var itemEventId = item.get('EventId');
-                    frameselectedEventIds.push(itemEventId);
+                    //mthis.geometrySelectedFeatures.push(item);
+                    mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',true);
+                    item.get('Events').forEach(function(Iitem){
+                        frameselectedEventIds.push(Iitem.id);
+                    })
+                    num++;
                 } else {
-                    item.setStyle(mthis.graystyle);
+                    //item.setStyle(mthis.graystyle);
+                    mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',false);
                 }
             });
             return frameselectedEventIds
         },
-        /* setSelectedEventFeatureParam(eventfeature,isSelected){  //isSelected这个参数，true时是被选中，false是取消选中
+
+        setSelectedEventFeatureParam(feature,selectType,isSelected){  
             var mthis = this;
             if(isSelected){
-                eventfeature.setStyle(mthis.selectedstyle);
-                eventfeature.set('isSelected',true,false)
+                //feature.setStyle(mthis.selectedstyle);
+                mthis.setLifePointStyleByValue(feature);
+                feature.set(selectType,true,false)
             } else {
-                eventfeature.setStyle(mthis.noSelectedstyle);
-                eventfeature.set('isSelected',false,false)
+                feature.setStyle(mthis.graystyle);
+                feature.set(selectType,false,false)
             }
             
-        }, */
+        },
+        setLifePointStyleByValue(feature){
+            var mthis = this;
+            if(feature.getStyle() !== null && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
+                return;
+            }
+            var eventNum = feature.get('Events').length;
+            var fRadius = 0;
+            if(eventNum > 10){
+                fRadius = 13;
+            } else {
+                fRadius = eventNum + 2;
+            }
+            var clickSelectedstyle = new Style({
+                image : new CircleStyle({
+                    radius : fRadius,
+                    fill : new Fill({
+                        color : mthis.lifePointColor //'#33ffff'
+                    })
+                })
+            });
+            feature.setStyle(clickSelectedstyle);
+        },
         //==========================================================================
         //路径
         click_route(){
@@ -1188,16 +1218,15 @@ export default {
         setOverlay(coor, element, id, positioning){
             var mthis = this
             var overlay = new Overlay(({
-            element: element,
-            id:id,
-            stopEvent:false,
-            position:coor,
-            positioning:positioning,
-            autoPan: false,
-            autoPanAnimation: {
-                duration: 250
-            }
-            
+                element: element,
+                id:id,
+                stopEvent:false,
+                position:coor,
+                positioning:positioning,
+                autoPan: false,
+                autoPanAnimation: {
+                    duration: 250
+                }
             }));
             return overlay;
         },
@@ -1324,6 +1353,14 @@ export default {
                 }
             }
             return selectedEvents;
+        },
+        differentiateLifeAndDiePointByEventId(id){
+            var mthis = this;
+            var featureId = mthis.allEventIdsToFeaturesIds[id];
+            var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
+            if(feature.getStyle().getImage().getFill().getColor() !== mthis.lifePointColor){
+                //m
+            }
         }
 
     },
@@ -1332,9 +1369,14 @@ export default {
     ]),
     
     watch:{
-        geometrySelectedFeatures:function(){},
-        timeSelectedFeatures:function(){},
-        staticsSelectedFeatures:function(){},
+        geometrySelectedEventIds:function(){
+            var mthis = this;
+            var selectedEventsParam = {
+                type:'GeoView',
+                eventId:mthis.geometrySelectedEventIds
+            };
+            mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
+        },
         geo_selected_param:function(){},
         geoTimeCondition:function(){
             var mthis = this;
@@ -1342,8 +1384,36 @@ export default {
         },
         timeCondition:function(){
             var mthis = this;
-            var selectedFeatures;
-            mthis.timeSelectedFeatures = [];
+            debugger
+            var ids = [];
+            if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0){
+                //全量
+                ids = mthis.allEventIds;
+            } else if(mthis.geometrySelectedEventIds.length !== 0 && (mthis.geometrySelectedEventIds.length <= mthis.staticsSelectedEventIds.length || mthis.staticsSelectedEventIds.length === 0)){
+                //view
+                ids = mthis.geometrySelectedEventIds;
+            } else{
+                //statics
+                ids = mthis.staticsSelectedEventIds;
+            }
+            ids.forEach(function(item){
+                var featureId = mthis.allEventIdsToFeaturesIds[item];
+                var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
+                var eventTime = '';
+                var featrueEvents = feature.get('Events');
+                for(let i = 0; i < featrueEvents.length; i++){
+                    if(item === featrueEvents[i].id){
+                        eventTime = featrueEvents[i].time;
+                        break;
+                    }
+                }
+                if(eventTime !== '' && util.getTimestamp(eventTime) >= mthis.timeCondition[0] && util.getTimestamp(eventTime) <= mthis.timeCondition[1]){
+                    mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',true);
+                } else {
+                    mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
+                }
+            })
+            /* var selectedFeatures;
             if(mthis.staticsSelectedFeatures.length > 0){
                 selectedFeatures = mthis.geometrySelectedFeatures;
             } else {
@@ -1356,7 +1426,7 @@ export default {
                 } else {
                     item.setStyle(mthis.graystyle);
                 }
-            })
+            }) */
             //var eventFeatures = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
             //var selectedEvents = mthis.isEventPointsSelected();
             /* if(selectedEvents.length > 0){
@@ -1377,15 +1447,6 @@ export default {
                     }
                 }
             }  */       
-        },
-        locationClassObject:{
-                handler:function(val,oldval){
-                    var locationRoute_Map = document.getElementById('locationRoute_Map');
-                    if(oldval.location_Noclick){
-                        //locationRoute_Map.
-                    }
-                },
-                deep:true//对象内部的属性监听，也叫深度监听
         },
         tmss:function(){
             var mthis = this
