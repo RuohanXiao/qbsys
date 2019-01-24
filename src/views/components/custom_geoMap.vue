@@ -243,7 +243,7 @@ export default {
             image : new CircleStyle({
                 radius : 3,
                 fill : new Fill({
-                    color : 'rgba(102,153,153,1)'
+                    color : '#788c8c'
                 })
             })
         }),
@@ -404,7 +404,6 @@ export default {
                     mthis.allEventIdsToFeaturesIds[eventId] = item.getId();
                 });
             });
-            debugger
             var layer = new VectorLayer({
                 source: new VectorSource({
                     // features:Feature,
@@ -425,8 +424,6 @@ export default {
             mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
             mthis.routeMap.map.addInteraction(mthis.selectClick);
             mthis.selectPointerMove.on('select', function(e) {
-                //alert(111);
-                debugger
                 if(e.selected.length > 0 && e.selected[0].get('Events') !== undefined && e.selected[0].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     mthis.pointSelectedAnimation(e.selected[0],'pointMove');
                     //鼠标悬浮时的信息框
@@ -848,7 +845,6 @@ export default {
                     //item.setStyle(mthis.selectedstyle);
                     //mthis.setSelectedEventFeatureParam(item,true);
                     mthis.geometrySelectedFeatures.push(item);
-                    debugger
                     item.get('Events').forEach(function(Iitem){
                         frameselectedEventIds.push(Iitem.id);
                     })
@@ -1160,14 +1156,14 @@ export default {
             var mthis = this;
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
             for(let i = source.getFeatures().length - 1; i >= 0 ; i--){
-                if(source.getFeatures()[i].getStyle() === mthis.selectedstyle){
+                if(source.getFeatures()[i].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     mthis.removeFeaturesArr.push(source.getFeatures()[i]);
                     source.removeFeature(source.getFeatures()[i]);
                 }
             }
-            mthis.geometrySelectedFeatures = [];
+            /* mthis.geometrySelectedFeatures = [];
             mthis.timeSelectedFeatures = [];
-            mthis.staticsSelectedFeatures = [];
+            mthis.staticsSelectedFeatures = []; */
         },
         
         /*
@@ -1384,7 +1380,6 @@ export default {
         },
         timeCondition:function(){
             var mthis = this;
-            debugger
             var ids = [];
             if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0){
                 //全量
