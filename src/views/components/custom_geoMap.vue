@@ -198,7 +198,7 @@ export default {
         provinTilSource:null,
         selectedPointsSource:null,
         polygonLayer:null,
-        diePointColor: '#33ffff',//初始化加载时的实体点颜色
+        diePointColor: 'rgba(242,193,121,0.4)',//初始化加载时的实体点颜色
         lifePointColor: '#ff9900',//拉框选中后的实体点颜色
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
         draw:null,
@@ -219,7 +219,7 @@ export default {
         allEventIdsToFeaturesIds:{},
         allEventIds:[],
         geometrySelectedEventIds:[],
-        timeSelectedFeaturesNum:0,
+        timeSelectedEventIds:0,
         staticsSelectedEventIds:[],
         pointMoveListenerKey:null,
         pointClickListenerKey:null,
@@ -274,8 +274,14 @@ export default {
                 mthis.deletePoints();
             } else if(mapOperationId == 'invertSelection_opera'){
                 mthis.invertSelectionSliderImgs();
+            } else if(mapOperationId == 'toNet_push'){
+                mthis.pushToNet();
+            } else if(mapOperationId == 'toContent_push'){
+                mthis.pushToContent();
             }
         },
+        pushToNet(){},
+        pushToContent(){},
         legendItemClick(legendItemOpera){
             var mthis = this;
             var map = mthis.routeMap.map;
@@ -387,7 +393,7 @@ export default {
             var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;padding-left:10px;margin:0px;font-family: Arial;font-size: 10px;';
-            Ap.innerHTML = "事件：" + feature.get('Events').length;
+            Ap.innerHTML = "事件：" + feature.get('selectedEventsNum');
             var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,conLabel,overlayId,'top-left');
             mthis.routeMap.map.addOverlay(overlayId);
         },
@@ -397,7 +403,7 @@ export default {
             mthis.allEventIds = [];
             var features = (new GeoJSON()).readFeatures(data);
             features.forEach(function(item){
-                mthis.setLifePointStyleByValue(item);
+                mthis.setLifeOrDiePointStyleByValue(item,'life');
                 item.get('Events').forEach(function(Iitem){
                     var eventId = Iitem.id;
                     mthis.allEventIds.push(eventId);
@@ -827,7 +833,7 @@ export default {
             selectingPointSource.getFeatures().forEach(function(item){
                 if(item.getStyle() !== null && item.getStyle().getImage().getFill().getColor() === 'rgba(102,153,153,1)'){
                     /* item.setStyle(mthis.noSelectedstyle); */
-                    mthis.setLifePointStyleByValue(item);
+                    mthis.setLifeOrDiePointStyleByValue(item,'life');
                 }
             });
         },
@@ -865,16 +871,17 @@ export default {
             selectingPointSource.getFeatures().forEach(function(item) {
                 var coord = item.getGeometry().getCoordinates();
                 var isIn = geometry.intersectsCoordinate(coord);
+                 mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',false);
                 if (isIn) {
                     //mthis.geometrySelectedFeatures.push(item);
-                    mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',true);
+                    //mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',true);
                     item.get('Events').forEach(function(Iitem){
                         frameselectedEventIds.push(Iitem.id);
                     })
                     num++;
                 } else {
                     //item.setStyle(mthis.graystyle);
-                    mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',false);
+                    //mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',false);
                 }
             });
             return frameselectedEventIds
@@ -884,19 +891,19 @@ export default {
             var mthis = this;
             if(isSelected){
                 //feature.setStyle(mthis.selectedstyle);
-                mthis.setLifePointStyleByValue(feature);
+                mthis.setLifeOrDiePointStyleByValue(feature,'life');
                 feature.set(selectType,true,false)
             } else {
-                feature.setStyle(mthis.graystyle);
+                mthis.setLifeOrDiePointStyleByValue(feature,'die');
                 feature.set(selectType,false,false)
             }
             
         },
-        setLifePointStyleByValue(feature){
+        setLifeOrDiePointStyleByValue(feature,lifeOrdie){
             var mthis = this;
-            if(feature.getStyle() !== null && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
+            /* if(feature.getStyle() !== null && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                 return;
-            }
+            } */
             var eventNum = feature.get('Events').length;
             var fRadius = 0;
             if(eventNum > 10){
@@ -904,7 +911,7 @@ export default {
             } else {
                 fRadius = eventNum + 2;
             }
-            var clickSelectedstyle = new Style({
+            var lifeSelectedstyle = new Style({
                 image : new CircleStyle({
                     radius : fRadius,
                     fill : new Fill({
@@ -912,7 +919,21 @@ export default {
                     })
                 })
             });
-            feature.setStyle(clickSelectedstyle);
+            var dieSelectedstyle = new Style({
+                image : new CircleStyle({
+                    radius : 3,
+                    fill : new Fill({
+                        color : mthis.diePointColor //'#33ffff'
+                    })
+                })
+            });
+            debugger
+            if(lifeOrdie === 'life'){
+                feature.setStyle(lifeSelectedstyle);
+            } else {
+                feature.setStyle(dieSelectedstyle);
+            }
+            
         },
         //==========================================================================
         //路径
@@ -1357,6 +1378,42 @@ export default {
             if(feature.getStyle().getImage().getFill().getColor() !== mthis.lifePointColor){
                 //m
             }
+        },
+        itemIndexInArr(item,arr){
+            if(arr.length > 0){
+                for(var i = 0; i < arr.length; i++){
+                    if(item == arr[i]){
+                        return i;
+                    }
+                    if(i == arr.length-1){
+                        return -1;
+                    }
+                }
+            } else {
+                return -1;
+            }
+            
+        },
+        changeEveryFeatureSelectedEventsNumAndStyleByids(ids){
+            var mthis = this;
+            var featureIds = [];
+            var selectedNum = [];
+            var source = mthis.getLayerById('eventsPointsLayer').getSource();
+            ids.forEach(function(item){
+                var featureId = mthis.allEventIdsToFeaturesIds[item];
+                var index = mthis.itemIndexInArr(featureId,featureIds);
+                if(index === -1){
+                    featureIds.push(featureId);
+                    selectedNum.push(1);
+                } else {
+                    ++selectedNum[index];
+                }
+            })
+            featureIds.forEach(function(Item,index){
+                var feature = source.getFeatureById(Item);
+                feature.set('selectedEventsNum',selectedNum[index],false);
+                mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',true);
+            })
         }
 
     },
@@ -1365,8 +1422,19 @@ export default {
     ]),
     
     watch:{
+        timeSelectedEventIds:function(){
+            var mthis = this;
+            debugger
+            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.timeSelectedEventIds);
+            var selectedEventsParam = {
+                type:'GeoTime',
+                eventId:mthis.timeSelectedEventIds
+            };
+            mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
+        },
         geometrySelectedEventIds:function(){
             var mthis = this;
+            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoView',
                 eventId:mthis.geometrySelectedEventIds
@@ -1381,6 +1449,7 @@ export default {
         timeCondition:function(){
             var mthis = this;
             var ids = [];
+            var selectedIds = [];
             if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0){
                 //全量
                 ids = mthis.allEventIds;
@@ -1396,6 +1465,7 @@ export default {
                 var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
                 var eventTime = '';
                 var featrueEvents = feature.get('Events');
+                mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
                 for(let i = 0; i < featrueEvents.length; i++){
                     if(item === featrueEvents[i].id){
                         eventTime = featrueEvents[i].time;
@@ -1403,11 +1473,13 @@ export default {
                     }
                 }
                 if(eventTime !== '' && util.getTimestamp(eventTime) >= mthis.timeCondition[0] && util.getTimestamp(eventTime) <= mthis.timeCondition[1]){
-                    mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',true);
+                    //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',true);
+                    selectedIds.push(item);
                 } else {
-                    mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
+                    //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
                 }
             })
+            mthis.timeSelectedEventIds = selectedIds;
             /* var selectedFeatures;
             if(mthis.staticsSelectedFeatures.length > 0){
                 selectedFeatures = mthis.geometrySelectedFeatures;

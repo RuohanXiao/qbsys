@@ -439,7 +439,8 @@ var test_mapData = {
 				'localtionName':'天津',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':1
 			}
 			
 		},
@@ -451,18 +452,20 @@ var test_mapData = {
 				'localtionName':'北京',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':2
 			}
 		},
 		{ "type": "Feature",
 			"id":'eventFeature_河北',
 			"geometry": {"type": "Point", "coordinates": [ 116.3809433, 39.9236145 ]},
 			"properties": {
-				'Events': [{"id":'V104','time':"1993-01-02"},{"id":'V105','time':"1993-01-02"},{"id":'V102','time':"1993-01-02"}],
+				'Events': [{"id":'V104','time':"1993-01-02"},{"id":'V105','time':"1993-01-02"},{"id":'V099','time':"1993-01-02"}],
 				'localtionName':'河北',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':3
 			}
 		},
 		{ "type": "Feature",
@@ -473,7 +476,8 @@ var test_mapData = {
 				'localtionName':'吉林',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':3
 			}
 		},
 		{ "type": "Feature",
@@ -484,7 +488,8 @@ var test_mapData = {
 				'localtionName':'新疆',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':4
 			}
 		},
 		{ "type": "Feature",
@@ -495,7 +500,8 @@ var test_mapData = {
 				'localtionName':'西藏',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':5
 			}
 		},
 		{ "type": "Feature",
@@ -506,7 +512,8 @@ var test_mapData = {
 				'localtionName':'广州',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':6
 			}
 		},
 		{ "type": "Feature",
@@ -517,7 +524,8 @@ var test_mapData = {
 				'localtionName':'青海',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':7
 			}
 		},
 		{ "type": "Feature",
@@ -528,7 +536,8 @@ var test_mapData = {
 				'localtionName':'黑龙江',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':8
 			}
 		},
 		{ "type": "Feature",
@@ -539,7 +548,8 @@ var test_mapData = {
 				'localtionName':'波兰',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':9
 			}
 		},
 		{ "type": "Feature",
@@ -550,7 +560,8 @@ var test_mapData = {
 				'localtionName':'ss',
 				'isGeometrySelected': false,
 				'isTimeSelected':false,
-				'isStaticsSelected':false
+				'isStaticsSelected':false,
+				'selectedEventsNum':10
 			}
 		}
 	]

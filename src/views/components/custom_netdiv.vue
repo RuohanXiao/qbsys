@@ -271,10 +271,10 @@
       getStatistics() {
         var mthis = this
         let nodeArr = Object.keys(mthis.netchart._impl.data.default.nodes).map(key => mthis.netchart._impl.data.default.nodes[key].id);
+        mthis.$store.commit('setStaticsIds',nodeArr);
         let linkArr = Object.keys(mthis.netchart._impl.data.default.links).map(key => mthis.netchart._impl.data.default.links[key]);
-        mthis.$http.post(this.$store.state.ipConfig.api_url + '/graph-statistics/', {
-          'nodes': nodeArr,
-          'links': linkArr
+        mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-statistics/', {
+          "nodeIds": nodeArr
         }).then(response => {
           mthis.$store.commit('setDataStatisticsEvent', response.data);
         })

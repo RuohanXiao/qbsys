@@ -50,6 +50,19 @@
             <p class="img-content">反选</p>
           </div>
         </Tooltip>
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div id='toNet_push' class="button-div" @click="divClick">
+            <Icon class="icon iconfont icon-tuisongzhiwangluo  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">网络</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div id='toContent_push' class="button-div" @click="divClick">
+            <Icon class="icon iconfont icon-tuisongzhiwendang  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">文本</p>
+          </div>
+        </Tooltip>
     </div>
 </template>
 

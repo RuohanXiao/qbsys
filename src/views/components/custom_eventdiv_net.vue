@@ -5,7 +5,7 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
           <Tab-pane label="数据透视" name='数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi' @click="changTab('数据透视')">
-            <left-statics :Statisticsdata='dataStatistics' :EntityAttrInformation='EntityAttrInformation' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0"></left-statics>
+            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'net' && nodeTypedata !== null"></left-statics>
           </Tab-pane>
           <Tab-pane label="选中详情" name='选中详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing' @click="changTab('选中详情')">
             <div>
@@ -137,13 +137,14 @@
                     disName:'事件'
                 }
             ],
-            EntityAttrClassify:[
+            EntityAttrClassify:{
+              "human":[
                 {
-                    id:'country_of_citizenship',
+                    id:'out__country_of_citizenship_names',
                     disName:'国籍'
                 },
                 {
-                    id:'occupation',
+                    id:'out__occupation_names',
                     disName:'职业'
                 },
                 {
@@ -151,7 +152,7 @@
                     disName:'地址'
                 },
                 {
-                    id:'member_of_political_party',
+                    id:'out__member_of_political_party_names',
                     disName:'政党'
                 },
                 {
@@ -162,117 +163,67 @@
                     id:'e-mail',
                     disName:'邮箱'
                 }
-            ],
-            nodeTypedata:{
-                code:0,
-                data:[
-                    {
-                        id:'human',
-                        count: 1,
-                        per: 20,
-                        
-                    },
-                    {
-                        id:'organization',
-                        count: 3,
-                        per: 8,
-                        
-                    },
-                    {
-                        id:'administrative',
-                        count: 8,
-                        per: 90,
-                        
-                    },
-                    {
-                        id:'event',
-                        count: 1,
-                        per: 8,
-                        
-                    }
-                ]
+              ],
+              "organization":[
+                {
+                    id:'headquarters_location',
+                    disName:'总部'
+                },
+                {
+                    id:'founded_by',
+                    disName:'创办者'
+                },
+                {
+                    id:'chairperson',
+                    disName:'领袖'
+                },
+                {
+                    id:'chief_executive_officer',
+                    disName:'首席执行官'
+                },
+                {
+                    id:'political_ideology',
+                    disName:'意识形态'
+                }
+              ],
+              "administrative":[
+                {
+                    id:'capital',
+                    disName:'首都'
+                },
+                {
+                    id:'head_of_state',
+                    disName:'国家元首'
+                },
+                {
+                    id:'head_of_government',
+                    disName:'政府首脑'
+                },
+                {
+                    id:'continent',
+                    disName:'所属洲'
+                },
+                {
+                    id:'gini_coefficient',
+                    disName:'基尼指数'
+                },
+                {
+                    id:'Human_Development_Index',
+                    disName:'人类发展指数'
+                },
+                {
+                    id:'top-level_Internet_domain',
+                    disName:'顶级域名'
+                }
+              ],
             },
+            nodeTypedata:null,
             EntityAttrInformation:{
                 code:0,
                 data:[
-                    {
-                        id:'country_of_citizenship',
-                        datasCount:4,
-                        moredata:{
-                            dataItem:1,
-                            nodeCount:10
-                        },
-                        datas:[
-                            {
-                                name:"中国",
-                                count: 1,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 8,
-                            },
-                            {
-                                name:"日本",
-                                count: 2,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 16,
-                            },
-                            {
-                                name:"美国",
-                                count: 1,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 8,
-                            },
-                            {
-                                name:"英国",
-                                count: 2,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 16,
-                            }
-                        ]
-                    },
-                    {
-                        id:'occupation',
-                        datasCount:3,
-                        moredata:{
-                            dataItem:1,
-                            nodeCount:10
-                        },
-                        datas:[
-                            {
-                                name:"军人",
-                                count: 1,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 8,
-                            },
-                            {
-                                name:"政治家",
-                                count: 2,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 16,
-                            },
-                            {
-                                name:"企业家",
-                                count: 10,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 100,
-                            }
-                        ]
-                    }
                 ]
-            }
+            },
+            staticsIds:[],
       };
     },
     components: {
@@ -297,6 +248,9 @@
       // },
       dataStatisticsEvent: function() {
         var mthis = this;
+        debugger
+        mthis.staticsIds = mthis.$store.state.StaticsIds;
+        mthis.nodeTypedata = mthis.$store.state.dataStatisticsEvent
         mthis.dataStatistics = mthis.EntityAttrInformation.data;
         //mthis.dataStatistics = mthis.dataStatisticsEvent.data;  //这是测试数据，正式数据接通后，应删除EntityAttrInformation变量
       },
