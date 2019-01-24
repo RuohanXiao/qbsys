@@ -65,16 +65,68 @@
             <p class="img-content">添加目标</p>
           </div>
         </Tooltip>
+         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="toNet">
+            <Icon class="icon iconfont icon-tuisongzhiwangluo  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">网络</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div">
+            <Icon class="icon iconfont icon-tuisongzhikongjian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">空间</p>
+          </div>
+        </Tooltip>
       </div>
     </div>
     <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div :style="{margin:'0,5px'}">
         <div v-if="!showList">
+          <!-- 
+          <div class="container select-box-container">
+            <div class="fileDiv select-item">file1</div>
+            <div class="fileDiv select-item">file2</div>
+            <div class="fileDiv select-item">file3</div>
+            <div class="fileDiv select-item">file4</div>
+            <div class="fileDiv select-item">file5</div>
+            <div class="fileDiv select-item">file6</div>
+            <div class="fileDiv select-item">file7</div>
+            <div class="fileDiv select-item">file8</div>
+            <div class="fileDiv select-item">file9</div>
+            <div class="fileDiv select-item">file10</div>
+            <div class="fileDiv select-item">file11</div>
+            <div class="fileDiv select-item">file12</div>
+            <div class="fileDiv select-item">file13</div>
+            <div class="fileDiv select-item">file14</div>
+            <div class="fileDiv select-item">file15</div>
+            <div class="fileDiv select-item">file16</div>
+            <div class="fileDiv select-item">file17</div>
+        </div> -->
+
+    <!-- <div style="margin:20px 100px;">
+        <h4>选中文件：</h4>
+        <div id="data"></div>
+    </div> -->
           <Scroll :on-reach-bottom="handleReachBottom" v-if='!ifInfo' :height=ContentHeight>
+            
             <div id="contentchart" class="scrollBarAble" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex'}">
+            <div class="container select-box-container">
               <Row type="flex" justify="start" align="middle">
-                <Col :sm="8" :lg="6" align="middle" v-for="item in items">
-                <div class="contentDiv" @click="showContent(item.id)">
+              <Col :sm="8" :lg="4" class="fileDiv select-item"  v-for="item in items"  type="flex" justify="start" align="middle" >
+                <div align="middle" class="contentDiv fileDiv select-item" @dblclick="showContent(item.id)" :id=item.id :title=item.title>
+                  <p class="contentTitle">{{item.title}}</p>
+                  <p class="contentText">{{item.text}}</p>
+                  <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
+                </div>
+              </Col>
+              <Col span=24 v-if="items.length>0">
+                <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
+              </Col>
+              </Row>
+            </div>
+              <!-- <Row type="flex" justify="start" align="middle">
+                <Col :sm="8" :lg="6" align="middle" v-for="item in items" class="container select-box-container">
+                <div class="contentDiv fileDiv select-item" @dblclick="showContent(item.id)">
                   <p class="contentTitle">{{item.title}}</p>
                   <p class="contentText">{{item.text}}</p>
                   <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
@@ -83,8 +135,8 @@
                 <Col span=24 v-if="items.length>0">
                 <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
                 </Col>
-              </Row>
-            </div>
+              </Row> -->
+              </div>
           </Scroll>
           <div id="contentInfo" class="scrollBarAble" v-if='ifInfo' :style="{height:ContentHeight,overflowY:'scroll'}">
             <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
@@ -109,6 +161,7 @@
   import util from '../../util/tools.js'
   import mock from '../../mock/index.js'
   import modalChart from './custom_modal.vue'
+  import $ from "jquery";
   import {
     mapState,
     mapMutations
@@ -221,7 +274,114 @@
             city: 'Ottawa',
             zip: 100000
           }
-        ]
+        ],
+
+
+        initSelectBox: function(selector, selectCallback) {
+            function clearBubble(e) {
+                if (e.stopPropagation) {
+                    e.stopPropagation();
+                } else {
+                    e.cancelBubble = true;
+                }
+
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    e.returnValue = false;
+                }
+            }
+            var $container = $(selector);
+            //  框选事件
+            $container
+                .on('mousedown', function(eventDown) {
+                    //  设置选择的标识
+                    var isSelect = true;
+                    //  创建选框节点
+                    var $selectBoxDashed = $('<div class="select-box-dashed"></div>');
+                    $('body').append($selectBoxDashed);
+                    //  设置选框的初始位置
+                    var startX = eventDown.x || eventDown.clientX;
+                    var startY = eventDown.y || eventDown.clientY;
+                    $selectBoxDashed.css({
+                        left: startX,
+                        top : startY
+                    });
+                    //  根据鼠标移动，设置选框宽高
+                    var _x = null;
+                    var _y = null;
+                    //  清除事件冒泡、捕获
+                    clearBubble(eventDown);
+                    //  监听鼠标移动事件
+                    $(selector).on('mousemove', function(eventMove) {
+                        //  设置选框可见
+                        $selectBoxDashed.css('display', 'block');
+                        //  根据鼠标移动，设置选框的位置、宽高
+                        _x = eventMove.x || eventMove.clientX;
+                        _y = eventMove.y || eventMove.clientY;
+                        //  暂存选框的位置及宽高，用于将 select-item 选中
+                        var _left   = Math.min(_x, startX);
+                        var _top    = Math.min(_y, startY);
+                        var _width  = Math.abs(_x - startX);
+                        var _height = Math.abs(_y - startY);
+                        $selectBoxDashed.css({
+                            left  : _left,
+                            top   : _top,
+                            width : _width,
+                            height: _height
+                        });
+                        //  遍历容器中的选项，进行选中操作
+                        $(selector).find('.select-item').each(function() {
+                            var $item = $(this);
+                            var itemX_pos = $item.prop('offsetWidth') + $item.prop('offsetLeft');
+                            var itemY_pos = $item.prop('offsetHeight') + $item.prop('offsetTop');
+                            //  判断 select-item 是否与选框有交集，添加选中的效果（ temp-selected ，在事件 mouseup 之后将 temp-selected 替换为 selected）
+                            var condition1 = itemX_pos > _left;
+                            var condition2 = itemY_pos > _top;
+                            var condition3 = $item.prop('offsetLeft') < (_left + _width);
+                            var condition4 = $item.prop('offsetTop') < (_top + _height);
+                            if (condition1 && condition2 && condition3 && condition4) {
+                                $item.addClass('temp-selected');
+                            } else {
+                                $item.removeClass('temp-selected');
+                            }
+                        });
+                        //  清除事件冒泡、捕获
+                        clearBubble(eventMove);
+                    });
+
+                    $(document).on('mouseup', function() {
+                        $(selector).off('mousemove');
+                        $(selector)
+                            .find('.select-item.temp-selected')
+                            .removeClass('temp-selected')
+                            .addClass('selected');
+                        $selectBoxDashed.remove();
+
+                        if (selectCallback) {
+                            selectCallback();
+                        }
+                    });
+                })
+                //  点选切换选中事件
+                .on('click', '.select-item', function() {
+                    if ($(this).hasClass('selected')) {
+                        $(this).removeClass('selected');
+                    } else {
+                        $(this).addClass('selected');
+                    }
+                })
+                //  点选全选全不选
+                // .on('click', '.toggle-all-btn', function() {
+                //     if ($(this).attr('data-all')) {
+                //         $(this).removeAttr('data-all');
+                //         $container.find('.select-item').removeClass('selected');
+                //     } else {
+                //         $(this).attr('data-all', 1);
+                //         $container.find('.select-item').addClass('selected');
+                //     }
+                // });
+        }
       };
     },
     computed: mapState([
@@ -280,6 +440,22 @@
     },
     props: ['contentData'],
     methods: {
+      toNet(){
+        let selectList = $('.fileDiv').filter('.contentDiv').filter('.selected')
+        let infos = []
+        for(let m=0;m<selectList.length;m++){
+          infos.push(
+            {id:selectList[m].id,
+            entity_type: 'content',
+            img: '',
+            name: selectList[m].title,
+            label: selectList[m].title,
+            loaded: true}
+            )
+        }
+        // let idlist = util.unique(ids)
+        this.$store.commit('setContentToNetData', {"nodes":infos})
+      },
       showAsList() {
         this.showList = true
       },
@@ -513,6 +689,12 @@
       },10);
               
       } */
+
+
+        
+
+
+
     },
     created() {
       // var mthis = this
@@ -536,6 +718,10 @@
       //     // mthis.singlePerson = (opt[1]>1)?false:true
       //   })
       // }
+      window.px = "";
+      window.py = "";
+      window.divLength = 0;
+      this.initSelectBox('.container')
     }
   };
 </script>
@@ -552,13 +738,15 @@
     padding: 5px 15px 5px 15px;
     overflow: hidden;
     background: rgba(51, 255, 255, 0.2);
-    margin: 20px;
-    background: linear-gradient(-135deg, transparent 10px, rgba(51, 255, 255, 0.2) 0);
+    margin: 10px;
+    /* 右角标 */
+    /* background: linear-gradient(-135deg, transparent 10px, rgba(51, 255, 255, 0.2) 0); */
     padding-top: 20px;
     cursor: pointer;
   }
   .contentDiv:hover {
-    background: linear-gradient(-135deg, transparent 10px, rgba(51, 255, 255, 0.3) 0);
+    /* 右角标 */
+    /* background: linear-gradient(-135deg, transparent 10px, rgba(51, 255, 255, 0.3) 0); */
     animation: all 1s;
     -webkit-animation: all 1s;
     /* transform:translate(5px,5px); */
@@ -566,7 +754,8 @@
     -moz-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
   }
-  .contentDiv ::before {
+  /* 角标折角 */
+  /* .contentDiv ::before {
     content: "";
     position: absolute;
     top: 20px;
@@ -581,7 +770,7 @@
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
-  }
+  } */
   .contentTitle {
     padding: 0 5px;
     text-align: center;
@@ -701,3 +890,51 @@
     /* 标准的语法 */
   }
 </style>
+<style scoped>
+
+        .select-box-container {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .select-box-container .toggle-all-container {
+            margin-bottom: 25px;
+        }
+
+        /* .select-item {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            line-height: 100px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        } */
+        .select-item.selected,
+        .select-item.temp-selected {
+          background-color: rgba(51, 255, 255, 0.2);
+        }
+        .select-box-dashed {
+            position: absolute;
+            display: none;
+            width: 0px;
+            height: 0px;
+            padding: 0px;
+            margin: 0px;
+            border: 1px dashed #0099ff;
+            background-color: rgba(51, 255, 255, 0.2);
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+            font-size: 0px;
+            z-index: 99999;
+            pointer-events: none;
+        }
+</style>
+

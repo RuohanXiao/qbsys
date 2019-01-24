@@ -165,7 +165,6 @@
               // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
               for (let i = 0; i < response.body.data[0].nodes.length; i++) {
                 // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
-                // console.log(name)
                 optionListArr.push({
                   // "label": name,
                   "label":response.body.data[0].nodes[i].name,
@@ -229,10 +228,10 @@
         var mthis = this;
         if (query !== "") {
           mthis.loading3 = true;
-          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-matchs/?pattern=" + query, {
-              emulateJSON: true
-            })
-            .then(response => {
+          // let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-matchs/?pattern=" + query, {
+          //     emulateJSON: true
+          //   })
+          //   .then(response => {
               let option = []
               let optionWord = {}
               let optionWordArr = []
@@ -249,7 +248,7 @@
               option.push(optionWord)
               mthis.options3 = option;
               mthis.loading3 = false;
-            });
+            // });
         } else {
           mthis.options3 = [];
         }

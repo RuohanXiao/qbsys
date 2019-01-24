@@ -33,12 +33,10 @@
 <script>
   import echarts from "echarts";
   import { mapState,mapMutations } from 'vuex'
-  import {timeStaticsData,reSetTimeStaticsData} from '../../dist/assets/js/geo/data.js'
   export default {
     name: "",
     data() {
       return {
-        timeStaticsData:timeStaticsData,
         timeTitle: '',
         timechartdivId:'timechartdiv_' + this.activeId,
         arrowDownId:'arrowDown_'+ this.activeId,
@@ -57,8 +55,16 @@
         geoHeightCount: 1,
         contentHeightCount: 1,
         dataBySeries: {
-          num: [],
-          date: []
+          num: [
+          ],
+          date: [
+          ]
+        },
+        dataBySeries1: {
+          num: [
+          ],
+          date: [
+          ]
         }
       };
     },
@@ -66,7 +72,7 @@
       onchangHeightCount(){
         var mthis = this;
         var tmss = mthis.$store.state.tmss;
-        mthis.netHeightCount ++ ;
+        mthis.contentHeightCount ++;
       },
       timeZoomOut() { },
       timeZoomIn() { },
@@ -84,7 +90,7 @@
         this.option = {
           tooltip: {
             trigger: "axis",
-            formatter: "{b}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%<br/>{a3}: {c3}%"
+            // formatter: "{b}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%<br/>{a3}: {c3}%"
           },
           // legend: {
           //     data:['China','United States','India','Japan']
@@ -176,10 +182,11 @@
             splitLine: {
               show: false
             },
+            minInterval: 1,
             // min:-35,
             // name: "占世界贸易额比重",
             axisLabel: {
-              formatter: "{value} w",
+              formatter: "{value}",
               color: "rgba(204,255,255,0.5)"
             }
           },
@@ -248,7 +255,7 @@
             }
           ],
           series: [{
-            name: "China",
+            name: "事件",
             type: "bar",
             // barMaxWidth: '10%',
             // barMinHeight: '1px',
@@ -281,6 +288,41 @@
               return 1;
             },
             data: []
+          },
+          {
+            name: "事件",
+            type: "bar",
+            // barMaxWidth: '10%',
+            // barMinHeight: '1px',
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                  offset: 0,
+                  color: "blue"
+                },
+                {
+                  offset: 1,
+                  color: "red"
+                }
+              ]),
+              barBorderRadius: [3, 3, 3, 3],
+              // label: {
+              //           show: true,
+              //           position: 'top',
+              //           textStyle: {
+              //               color: '#fff',
+              //               fontSize: '14'
+              //           }
+              //       }
+            },
+            animationDelay: function(idx) {
+              return 0;
+              //return idx * 1000;
+            },
+            animationDurationUpdate: function(idx) {
+              // 越往后的数据延迟越大
+              return 1;
+            },
+            data: []
           }]
         };
         this.charts = echarts.init(document.getElementById(this.main1Id), "", {
@@ -290,9 +332,14 @@
         mthis.timeTitle = ''
         this.option.xAxis.data = this.dataBySeries.date;
         this.option.series[0].data = this.dataBySeries.num;
+        this.option.series[1].data = this.dataBySeries1.num;
         this.charts.setOption(this.option)
         this.charts.on('brushSelected', function (params) {
-         if(params.batch[0].areas[0] !== undefined){
+          mthis.timeTitle = ''
+          if(params.batch[0].areas.length  === 0) {
+            mthis.timeTitle = ''
+          } else{
+            if(params.batch[0].areas[0] !== undefined){
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
           }
           
@@ -302,9 +349,18 @@
           } else{
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
           }
+            let timeArr = []
+            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
+            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
+            mthis.$store.commit('setContentTimeCondition',timeArr)
+          }
         })
         this.charts.on('click', function (params) {
           mthis.timeTitle = params.name
+          let timeArr = []
+          timeArr.push(params.name)
+          timeArr.push(params.name)
+          mthis.$store.commit('setContentTimeCondition',timeArr)
           // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
           //   mthis.timeTitle = ''
           // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {
@@ -324,43 +380,7 @@
               dataIndex: params.dataIndex
           })
         })
-        mthis.timeTitle = ''
-        this.option.xAxis.data = this.dataBySeries.date;
-        this.option.series[0].data = this.dataBySeries.num;
-        this.charts.setOption(this.option)
-        this.charts.on('brushSelected', function (params) {
-          mthis.timeTitle = ''
-          if(params.batch[0].areas.length  === 0) {
-            mthis.timeTitle = ''
-          } else{
-            if(params.batch[0].areas[0] !== undefined){
-            var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-          }
-          
-          mthis.timeTitle = ''
-          if(params.batch[0].areas.length  === 0) {
-            mthis.timeTitle = ''
-          } else{
-            mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
-          }
-          let timeArr = []
-            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
-            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            mthis.$store.commit('setGeoTimeCondition',timeArr)
-          }
-        })
-        this.charts.on('click', function (params) {
-          mthis.timeTitle = params.name
-          let timeArr = []
-          timeArr.push(params.name)
-          timeArr.push(params.name)
-          mthis.$store.commit('setGeoTimeCondition',timeArr)
-          mthis.charts.dispatchAction({
-              type: 'highlight',
-              // 可选，数据的 index
-              dataIndex: params.dataIndex
-          })
-        })
+
         this.charts.dispatchAction({
           type: "takeGlobalCursor",
           key: "brush",
@@ -393,30 +413,28 @@
       // this.changHeightCount++
     },
     computed:mapState ([
-      'split','splitWidth','tmss','selectNetNodes','geo_selected_param'
+      'split','splitWidth','tmss','conditionContent'
     ]),
     watch: {
-        geo_selected_param:function(){
-            var mthis = this
-            var type = mthis.$store.state.geo_selected_param.type;
-            if(type !== 'GeoTime'){
-              //var timeStaticsIds = mthis.$store.state.geo_selected_param.eventId;
-              mthis.dataBySeries.num = mthis.timeStaticsData.data.count
-              mthis.dataBySeries.date = mthis.timeStaticsData.data.time
-              mthis.option.series[0].data = mthis.timeStaticsData.data.count
-              mthis.option.xAxis.data = mthis.timeStaticsData.data.time
-              mthis.charts.setOption(mthis.option)
-            /*this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword='+keyword).then(response => {
-              if(response.body.code === 0) {
-                  mthis.dataBySeries.num = response.body.data.count
-                  mthis.dataBySeries.date = response.body.data.time
-                  mthis.option.series[0].data = response.body.data.count
-                  mthis.option.xAxis.data = response.body.data.time
-                  mthis.charts.setOption(mthis.option)
-              }
-              }) */
-            }
-        },
+      /* tmss: function(){
+        var mthis = this;
+        if(mthis.tmss == 'geo'){
+          mthis.changHeightCount++;
+        }
+      }, */
+      conditionContent: function(keyword) {
+        // 发起http请求,获取时间轴
+        var mthis = this
+        this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword='+keyword).then(response => {
+          if(response.body.code === 0) {
+            mthis.dataBySeries.num = response.body.data.count
+            mthis.dataBySeries.date = response.body.data.time
+            mthis.option.series[0].data = response.body.data.count
+            mthis.option.xAxis.data = response.body.data.time
+            mthis.charts.setOption(mthis.option)
+          }
+        })
+      },
       split: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'

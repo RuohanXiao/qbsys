@@ -297,10 +297,6 @@
           if(params.batch[0].areas.length  === 0) {
             mthis.timeTitle = ''
           } else{
-            // console.log('========================================')
-            // console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
-            // console.log(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            // console.log('========================================')
             if(params.batch[0].areas[0] !== undefined){
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
           }
@@ -323,7 +319,6 @@
           timeArr.push(params.name)
           timeArr.push(params.name)
           mthis.$store.commit('setContentTimeCondition',timeArr)
-          // console.log(params)
           // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
           //   mthis.timeTitle = ''
           // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {

@@ -301,7 +301,6 @@
         this.option.series[0].data = this.dataBySeries.num;
         this.charts.setOption(this.option)
         this.charts.on('brushSelected', function (params) {
-          // console.log(params)
           mthis.timeTitle = ''
           if(params.batch[0].areas.length  === 0) {
             mthis.timeTitle = ''
@@ -311,7 +310,6 @@
         })
         this.charts.on('click', function (params) {
           mthis.timeTitle = params.name
-          // console.log(params)
           // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
           //   mthis.timeTitle = ''
           // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {

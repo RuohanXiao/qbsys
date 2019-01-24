@@ -321,7 +321,6 @@
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
               'nodeIds': nodeIdsArry
             }).then(response => {
-              // console.log(response.body.data[0])
               mthis.evetdata =  response.body.data[0]
             })
           } else {
@@ -372,7 +371,6 @@
         // mthis.singlePerson = false
       },
       detail(id) {
-        // console.log('detail')
         var mthis = this
         mthis.modalNodeId = id
         mthis.detailModalFlag = true

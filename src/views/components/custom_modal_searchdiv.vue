@@ -67,7 +67,6 @@
             let optionListArr = []
             // optionWordArr.push({"label":query,"value":'搜索:'+query,"img":''})
             // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":''})
-            // console.log(response.body.data)
             for(let i = 0 ;i<response.body.data.length;i++) {
               optionListArr.push({"label":response.body.data[i].name,"value":response.body.data[i].id,"img":response.body.data[i].img})
             }

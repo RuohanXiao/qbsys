@@ -311,7 +311,6 @@
         mthis.option.series[0].data = mthis.dataBySeries.num;
         mthis.charts.setOption(mthis.option)
         mthis.charts.on('brushSelected', function(params) {
-          // console.log(params)
           if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
           }
@@ -319,12 +318,17 @@
           if (params.batch[0].areas.length === 0) {
             mthis.timeTitle = ''
           } else {
+            if(startAndEnd[0]<0){
+              startAndEnd[0] = 0
+            }
+            if(startAndEnd[1]<0){
+              startAndEnd[1] = mthis.dataBySeries.date.length - 1
+            }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
           }
         })
         mthis.charts.on('click', function(params) {
           mthis.timeTitle = params.name
-          // console.log(params)
           // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
           //   mthis.timeTitle = ''
           // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {
@@ -356,6 +360,12 @@
           if (params.batch[0].areas.length === 0) {
             mthis.timeTitle = ''
           } else {
+            if(startAndEnd[0]<0){
+              startAndEnd[0] = 0
+            }
+            if(startAndEnd[1]<0 || mthis.dataBySeries.date[startAndEnd[1]] === undefined){
+              startAndEnd[1] = mthis.dataBySeries.date.length - 1
+            }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
@@ -388,7 +398,6 @@
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
-      console.log(this.dataBySeries)
       this.netHeightCount++;
       this.contentHeightCount++;
       this.geoHeightCount += 2;
@@ -423,18 +432,13 @@
         var mthis = this;
         if (mthis.tmss == 'net') {
           // 如果包含事件，要对柱形图高亮
-          // console.log('--------custom_time_net 传入的selectNodes--------')
-          // console.log(va[0].ids)
           let linkArr = va[0].ids.filter(val => {
             return val.isLink
           })
           //linkArr是所有link的合集
-          // console.log(linkArr)
-          // console.log('-------------------------------------------------')
           // let linkids= linkArr.filter(function(item){
           //   return item.id>0;
           // })　
-          // console.log(linkids)
         }
       },
       split: function(va) {

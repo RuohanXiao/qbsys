@@ -70,7 +70,6 @@
         this.nDivHeight = this.$store.getters.getNetDivHeight
       },
       netHeight: function(va){
-        // console.log('-------------'+va)
         // this.nHeight = this.$store.getters.getNetHeight
         this.nHeight = this.netHeight
       },

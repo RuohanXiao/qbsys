@@ -279,7 +279,8 @@ var store = new Vuex.Store({
     content_selected_param:{
       type: '',
       params: {}
-    }
+    },
+    contentToNetData:{}
   },
   mutations:{
     // 修改state里的数据时，只能通过mutations的形式来操作
@@ -288,6 +289,9 @@ var store = new Vuex.Store({
       // 组件想调用方法，可以使用   this.$store.commit('XXX')
       // 第一个参数始终为state,第二个可以传参（只能支持一个参数，可以通过对象或者数组传多值）
       state.tmss = newStatus
+    },
+    setContentToNetData(state,val){
+      state.contentToNetData = val
     },
     setNetTimeCondition(state,val){
       state.netTimeCondition = val
