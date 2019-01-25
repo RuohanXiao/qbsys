@@ -2,8 +2,10 @@
     <div style="margin: 0px 20px;">
         <div>
           <span class="modalTitle" v-if="ishasValue(Entitydetail.name)">{{Entitydetail.name}}</span>
-          <img :src="Entitydetail.image" v-if="ishasValue(Entitydetail.image)">
-          <Avatar class="circle-img" icon="ios-person" :style="{position: 'absolute',width:'50px',height:'50px',right:'50px'}" v-else/>
+          <!-- <img :src="Entitydetail.image" v-if="ishasValue(Entitydetail.img)">
+          <Avatar class="circle-img" icon="ios-person" :style="{position: 'absolute',width:'50px',height:'50px',right:'50px'}" v-else/> -->
+          <Avatar class="circle-img" icon="ios-person" :style="{position: 'absolute',width:'50px',height:'50px',right:'50px'}"  v-else/>
+          <Avatar class="circle-img" v-if="ishasValue(Entitydetail.img)" :src="Entitydetail.img" :style="{position: 'absolute',width:'50px',height:'50px',right:'50px'}" />
         </div>
         <div class='entity_detail'>
           <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='human'" ></entityDetailsTableHuman>

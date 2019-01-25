@@ -94,13 +94,13 @@
 
 <template>
 <div id='leftStatics'>
-    <div :id='firstClassifyItem.id' v-for='(firstClassifyItem,index) in firstClassify' v-if="index === 0 || (index === 1 )">
+    <div :id='firstClassifyItem.id' v-for='(firstClassifyItem,index) in firstClassify' v-if="index === 0 || (index === 1 && type !== '')">
         <div :id="firstClassifyItem.id + 'Name'">
             <span class="separateLine"></span>
-            <span style="margin-left:10px">{{firstClassifyItem.disName}}</span>
+            <span style="margin-left:10px;font-size: 16px;">{{firstClassifyItem.disName}}</span>
         </div>
         <table id='NodeTypeInfo' v-if="index === 0">
-            <tr :id='nodeTypeItem.id' v-for="(nodeTypeItem,index) in nodeTypeClassify" v-on:click="getAttrsById(nodeTypeItem.id)">
+            <tr :id='nodeTypeItem.id' v-if="isNodeTypehasInnodeTypedata(nodeTypeItem.id) === true" v-for="(nodeTypeItem,index) in nodeTypeClassify" v-on:click="getAttrsById(nodeTypeItem.id)">
                 <td :id="nodeTypeItem.id + '_name'" class="NameTd">
                     <span>{{nodeTypeItem.disName}}</span>
                 </td>
@@ -115,7 +115,7 @@
                 <span :id="EntityAttrItem.id + '/countSpan'" v-if="itemInArrById(EntityAttrItem.id) && stateType.id === EntityAttrItem.id && stateType.datasCount<=3" v-for="stateType in Statisticsdata">{{EntityAttrItem.disName + '(' + stateType.datasCount + '/' + stateType.datasCount + ')'}}</span>
                 <span :id="EntityAttrItem.id + '/countSpan'" v-if="!itemInArrById(EntityAttrItem.id)">{{EntityAttrItem.disName + '(0)'}}</span>
                 <table slot="content" :id="EntityAttrInfoItem.id + '/entityattr'" v-if="itemInArrById(EntityAttrItem.id) && EntityAttrInfoItem.id == EntityAttrItem.id" v-for="(EntityAttrInfoItem,index) in Statisticsdata">
-                    <tr  :id="EntityInformation.name + '/name'" v-if="index<=2" v-for="(EntityInformation,index ) in EntityAttrInfoItem.datas"    >  <!-- v-on:click="cilckEntityAttrClassify(EntityInformation.name)" -->
+                    <tr  :id="EntityInformation.name + '/name'" v-if="index<=2" v-for="(EntityInformation,index ) in EntityAttrInfoItem.datas"  @click="selectedIds(EntityInformation.entitylist)">  
                         <td class="NameTd">
                             <span>{{EntityInformation.name}}</span>
                         </td>
@@ -135,13 +135,6 @@
             </panel>
         </Collapse>
     </div>
-    <!-- <div id='EntityAttr'>
-        <div id='EntityAttrName'>
-            <span class="separateLine"></span>
-            <span style="margin-left:10px">实体属性</span>
-        </div>
-        
-    </div> -->
 </div>
     
 </template>
@@ -169,14 +162,30 @@ export default {
     watch:{
         nodeTypedata:function(){
             var mthis = this;
-            debugger
             if(mthis.type !== ''){
                 mthis.getAttrsById(mthis.type);
             }
+            console.log(mthis.SecondAttrClassify)
             
         }
     },
     methods:{
+        selectedIds(ids){
+            var mthis = this;
+            mthis.$store.commit('setNetStaticsSelectedIds',ids);
+        },
+        isNodeTypehasInnodeTypedata(id){
+            var mthis = this;
+            var data = mthis.nodeTypedata.data;
+            for(let i = 0; i < data.length; i++){
+                if(id === data[i].name){
+                    return true
+                }
+                if( i === data.length - 1){
+                    return false
+                }
+            }
+        },
         displayMore(EntityAttrData){
             var mthis = this;
             var entityattrEle = document.getElementById(EntityAttrData.id+'/entityattr');
