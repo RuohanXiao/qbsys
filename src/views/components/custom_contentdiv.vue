@@ -352,12 +352,14 @@
 
                     $(document).on('mouseup', function() {
                         $(selector).off('mousemove');
+                        $(selector).find('.temp-selected').find('.contentDiv').addClass('selected')
                         $(selector)
-                            .find('.select-item.temp-selected')
-                            .removeClass('temp-selected')
-                            .addClass('selected');
+                            .find('.temp-selected')
+                            .removeClass('temp-selected').addClass('selected');
                         $selectBoxDashed.remove();
 
+                        // console.log('--------')
+                        // console.log($(selector))
                         if (selectCallback) {
                             selectCallback();
                         }
@@ -415,6 +417,7 @@
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
             mthis.items = response.body.data
+            $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
           } else {
             // mthis.showMore = false
@@ -422,6 +425,7 @@
             alert('未找到匹配的文章')
           }
         })
+
         // }
         // }
       },
@@ -442,6 +446,8 @@
     methods: {
       toNet(){
         let selectList = $('.fileDiv').filter('.contentDiv').filter('.selected')
+        // console.log($('.selected'))
+        // console.log(selectList)
         let infos = []
         for(let m=0;m<selectList.length;m++){
           infos.push(
@@ -453,8 +459,8 @@
             loaded: true}
             )
         }
-        // let idlist = util.unique(ids)
         this.$store.commit('setContentToNetData', {"nodes":infos})
+        this.$store.commit('changeTMSS', 'net')
       },
       showAsList() {
         this.showList = true
@@ -929,11 +935,11 @@
             padding: 0px;
             margin: 0px;
             border: 1px dashed #0099ff;
-            background-color: rgba(51, 255, 255, 0.2);
+            background-color: rgb(51, 255, 255);
             opacity: 0.5;
             filter: alpha(opacity=50);
             font-size: 0px;
-            z-index: 99999;
+            z-index: 999;
             pointer-events: none;
         }
 </style>
