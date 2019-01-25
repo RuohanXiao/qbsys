@@ -267,6 +267,70 @@ if (isMock) {
       }, 50)
     })
   })
+  
+  mock.onGet('/getSpreadEvent').reply(config => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve([200, {
+          code: 0,
+          data: [{
+            'nodes': [{
+              'id': 'node01',
+              'entity_type': 'event',
+              'name': '会面',
+              'img': '',
+              'time':'2019-01-01',
+              'loaded': true
+            },
+            {
+                'id': 'node02',
+                'entity_type': 'event',
+                'name': '会面',
+                'img': '',
+                'time':'2019-01-01',
+                'loaded': true
+              }],
+            'links': [{
+              'id': 'event1',
+              "className": "",
+              'from': 'Q7747',
+              'to': 'node01',
+              'img': './src/dist/assets/images/ico/b2.ico',
+              'num': null,
+              'entity_type': 'event'
+            },
+            {
+              'id': 'event2',
+              "className": "",
+              'from': 'node01',
+              'to': 'Q22686',
+              'img': './src/dist/assets/images/ico/b2.ico',
+              'num': null,
+              'entity_type': 'event'
+            },
+            {
+              'id': 'event3',
+              "className": "",
+              'from': 'Q7747',
+              'to': 'node02',
+              'img': './src/dist/assets/images/ico/b2.ico',
+              'num': null,
+              'entity_type': 'event'
+            },
+            {
+              'id': 'event4',
+              "className": "",
+              'from': 'node02',
+              'to': 'Q22686',
+              'img': './src/dist/assets/images/ico/b2.ico',
+              'num': null,
+              'entity_type': 'event'
+            }]
+          }]
+        }])
+      }, 50)
+    })
+  })
   mock.onGet('/getContentInfo').reply(config => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
