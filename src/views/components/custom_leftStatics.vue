@@ -93,8 +93,8 @@
 
 
 <template>
-<div id='leftStatics' v-if="Statisticsdata.length > 0">
-    <div :id='firstClassifyItem.id' v-for='(firstClassifyItem,index) in firstClassify'>
+<div id='leftStatics'>
+    <div :id='firstClassifyItem.id' v-for='(firstClassifyItem,index) in firstClassify' v-if="index === 0 || (index === 1 )">
         <div :id="firstClassifyItem.id + 'Name'">
             <span class="separateLine"></span>
             <span style="margin-left:10px">{{firstClassifyItem.disName}}</span>
@@ -105,16 +105,16 @@
                     <span>{{nodeTypeItem.disName}}</span>
                 </td>
                 <td :id="nodeTypeItem.id + '_StaticsPer'" class="StaticsPerTd">
-                    <percentBar v-if="nodeTypedataItem.id === nodeTypeItem.id" :num="nodeTypedataItem.per" :count="nodeTypedataItem.count" :index='0' v-for="nodeTypedataItem in nodeTypedata.data"></percentBar>
+                    <percentBar v-if="nodeTypedataItem.name === nodeTypeItem.id" :num="nodeTypedataItem.per" :count="nodeTypedataItem.count" :index='0' v-for="nodeTypedataItem in nodeTypedata.data"></percentBar>
                 </td>
             </tr>
         </table>
-        <Collapse simple v-model="openPanelNames" id="EntityAttrColl" v-if="index === 1">
-            <panel v-for="(EntityAttrItem,index) in SecondAttrClassify" :name="EntityAttrItem.id">
-                <span :id="EntityAttrItem.id + '/countSpan'" v-if="itemInArrById(EntityAttrItem.id) && stateType.id === EntityAttrItem.id && stateType.datasCount>3" v-for="stateType in EntityAttrInformation.data">{{EntityAttrItem.disName + '(' + 3 + '/' + stateType.datasCount + ')'}}</span>
-                <span :id="EntityAttrItem.id + '/countSpan'" v-if="itemInArrById(EntityAttrItem.id) && stateType.id === EntityAttrItem.id && stateType.datasCount<=3" v-for="stateType in EntityAttrInformation.data">{{EntityAttrItem.disName + '(' + stateType.datasCount + '/' + stateType.datasCount + ')'}}</span>
+        <Collapse simple v-model="openPanelNames" id="EntityAttrColl" v-if="index === 1 && type !== ''">
+            <panel v-for="(EntityAttrItem,index) in SecondAttrClassify[type]" :name="EntityAttrItem.id">
+                <span :id="EntityAttrItem.id + '/countSpan'" v-if="itemInArrById(EntityAttrItem.id) && stateType.id === EntityAttrItem.id && stateType.datasCount>3" v-for="stateType in Statisticsdata">{{EntityAttrItem.disName + '(' + 3 + '/' + stateType.datasCount + ')'}}</span>
+                <span :id="EntityAttrItem.id + '/countSpan'" v-if="itemInArrById(EntityAttrItem.id) && stateType.id === EntityAttrItem.id && stateType.datasCount<=3" v-for="stateType in Statisticsdata">{{EntityAttrItem.disName + '(' + stateType.datasCount + '/' + stateType.datasCount + ')'}}</span>
                 <span :id="EntityAttrItem.id + '/countSpan'" v-if="!itemInArrById(EntityAttrItem.id)">{{EntityAttrItem.disName + '(0)'}}</span>
-                <table slot="content" :id="EntityAttrInfoItem.id + '/entityattr'" v-if="itemInArrById(EntityAttrItem.id) && EntityAttrInfoItem.id == EntityAttrItem.id" v-for="(EntityAttrInfoItem,index) in EntityAttrInformation.data">
+                <table slot="content" :id="EntityAttrInfoItem.id + '/entityattr'" v-if="itemInArrById(EntityAttrItem.id) && EntityAttrInfoItem.id == EntityAttrItem.id" v-for="(EntityAttrInfoItem,index) in Statisticsdata">
                     <tr  :id="EntityInformation.name + '/name'" v-if="index<=2" v-for="(EntityInformation,index ) in EntityAttrInfoItem.datas"    >  <!-- v-on:click="cilckEntityAttrClassify(EntityInformation.name)" -->
                         <td class="NameTd">
                             <span>{{EntityInformation.name}}</span>
@@ -153,17 +153,28 @@ export default {
     data(){
         
         return{
-            openPanelNames:[],//['country_of_citizenship','occupation','address','member_of_political_party','religion','e-mail'],
-            
+            openPanelNames:[],
+            type:'',
+            Statisticsdata:[]
         }
     },
-    mounted(){
+    /* mounted(){
         var mthis = this;
         mthis.setOpenPanelNames();
-    },
-    props:['Statisticsdata','firstClassify','nodeTypeClassify','SecondAttrClassify','EntityAttrInformation','nodeTypedata'],
+    }, */
+    props:['staticsIds','firstClassify','nodeTypeClassify','SecondAttrClassify','nodeTypedata'],
     components: {
       percentBar,
+    },
+    watch:{
+        nodeTypedata:function(){
+            var mthis = this;
+            debugger
+            if(mthis.type !== ''){
+                mthis.getAttrsById(mthis.type);
+            }
+            
+        }
     },
     methods:{
         displayMore(EntityAttrData){
@@ -184,7 +195,6 @@ export default {
                 var AttrItemSpanName = AttrItemSpan.split('(')[0];
                 countSpan.innerHTML = AttrItemSpanName + "(" + 3 + "/" + EntityAttrData.datasCount + ")";
             }
-            
         },
         deleteMore(parentNode){
             var mthis = this;
@@ -198,7 +208,7 @@ export default {
             var mthis = this;
             var entityattrEle = document.getElementById(id+'/entityattr');
             var moreEle = document.getElementById(id+'/more');
-            var allDatas = mthis.EntityAttrInformation.data;
+            var allDatas = mthis.Statisticsdata;
             var idData = {};
             for(let i = 0; i < allDatas.length; i++){
                 if(allDatas[i].id === id){
@@ -212,13 +222,6 @@ export default {
                                         + "<div id='myBar' style=width:" + idData.datas[j].per + "%;height:10px;background-color:#33cc99;text-align:center;color:white;border-radius:2px;padding-left:5px></div>"
                                     + "</div>"
                                     + "</div>";
-                    /* var trHtml = "<tr id=" + idData.datas[j].name + "'/name' class='aaa'> "
-                    + "<td class='NameTd'>"
-                        +"<span>" + idData.datas[j].name + "</span>"
-                    + "</td>"
-                    + "<td id=" + idData.datas[j].name + "'/StaticsPer' class='StaticsPerTd'>" + percentBar + "</td>"
-                + "</tr>"; */
-
                 var tr = document.createElement('tr');
                 tr.id = idData.datas[j].name + '/name' ;
                 var tdName = document.createElement('td');
@@ -237,7 +240,7 @@ export default {
         },
         itemInArrById(id){
             var mthis = this;
-            var data = mthis.EntityAttrInformation.data;
+            var data = mthis.Statisticsdata;
             for(let i = 0; i < data.length; i++){
                 if(id === data[i].id){
                     return true;
@@ -248,14 +251,46 @@ export default {
             }
         },
         getAttrsById(target){
+            var mthis = this;
+            mthis.type = target;
+            mthis.setOpenPanelNames();
+            mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-statistics-in-type/', {
+            "nodeIds": mthis.staticsIds,
+            "typename": target
+            }).then(response => {
+                mthis.Statisticsdata = response.data.data;
+            })
         },
         setOpenPanelNames(){
             var mthis = this;
-            mthis.SecondAttrClassify.forEach(function(item,index){
+            mthis.openPanelNames = [];
+                /* ["out__country_of_citizenship_names",
+                "out__occupation_names",
+                "address",
+                "out__member_of_political_party_names",
+                "religion",
+                "e-mail",
+                "headquarters_location",
+                "founded_by",
+                "chairperson",
+                "chief_executive_officer",
+                "political_ideology",
+                "capital",
+                "head_of_state",
+                "head_of_government",
+                "continent",
+                "gini_coefficient",
+                "Human_Development_Index",
+                "top-level_Internet_domain" ] */
+            /* mthis.SecondAttrClassify[mthis.type].forEach(function(item,index){
                 mthis.openPanelNames.push(item.id);
+            }) */
+            Object.keys(mthis.SecondAttrClassify).forEach(function(type){
+                mthis.SecondAttrClassify[type].forEach(function(item){
+                    mthis.openPanelNames.push(item.id);
+                })
             })
         }
     }
 }
 </script>
-
