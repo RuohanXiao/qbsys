@@ -1020,6 +1020,23 @@
                 node.display = 'text'
                 // node.image = "http://10.60.1.143/pic_lib/entity/";
                 node.image = 'http://10.60.1.140/assets/images/content_node.png'
+                if (node.hovered) {
+                node.lineColor = "rgba(51, 255, 255, 0.4)";
+                node.data.lineColor = "rgba(51, 255, 255, 0.4)";
+                node.lineWidth = 10
+                node.data.lineWidth = 10
+                for (let m = 0; m < node.links.length; m++) {
+                  // node.links[m].length = 10;
+                  node.links[m].hovered = true;
+                  // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
+                  // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
+                  // node.links[m].animation = 'move 0.5s infinite linear';
+                }
+              } else {
+                for (let m = 0; m < node.links.length; m++) {
+                  node.links[m].hovered = false;
+                }
+              }
               } else if (node.data.entity_type === 'content') {
                 // var defaultUpdateFunction = function (ctx, radius) {
                 //     var halfWidth, halfHeight;
@@ -1051,14 +1068,53 @@
                 node.display = 'rectangle'
                 node.image = 'http://10.60.1.140/assets/images/content_node.png'
                 // node.backgroundStyle= {
-                //   fillColor: "rgba(0,0,0,0)",
-                //   lineColor: "rgba(0,0,0,0)",
+                //   fillColor: "rgba(51,255,255,0.2)",
+                //   lineColor: "rgba(51,255,255,0.2)"
                 // },
+                // node.fillColor = 'rgba(0,0,0,0)'
+                // node.lineColor = 'rgba(0,0,0,0)'
+                
+                if (node.hovered) {
+                  node.fillColor = 'rgba(51,255,255,0.2)'
+                node.lineColor = 'rgba(51,255,255,0.2)'
+                node.data.lineColor = "rgba(51, 255, 255, 0.4)";
+                node.lineWidth = 10
+                node.data.lineWidth = 10
+                for (let m = 0; m < node.links.length; m++) {
+                  // node.links[m].length = 10;
+                  node.links[m].hovered = true;
+                  // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
+                  // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
+                  // node.links[m].animation = 'move 0.5s infinite linear';
+                }
+              } else {
                 node.fillColor = 'rgba(0,0,0,0)'
                 node.lineColor = 'rgba(0,0,0,0)'
+                for (let m = 0; m < node.links.length; m++) {
+                  node.links[m].hovered = false;
+                }
+              }
+
               } else {
                 node.display = 'image'
                 node.image = "http://10.60.1.143/pic_lib/entity/" + node.id + ".png";
+                if (node.hovered) {
+                node.lineColor = "rgba(51, 255, 255, 0.4)";
+                node.data.lineColor = "rgba(51, 255, 255, 0.4)";
+                node.lineWidth = 10
+                node.data.lineWidth = 10
+                for (let m = 0; m < node.links.length; m++) {
+                  // node.links[m].length = 10;
+                  node.links[m].hovered = true;
+                  // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
+                  // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
+                  // node.links[m].animation = 'move 0.5s infinite linear';
+                }
+              } else {
+                for (let m = 0; m < node.links.length; m++) {
+                  node.links[m].hovered = false;
+                }
+              }
               }
               node.cursor = "pointer";
               node.label = node.data.name;
@@ -1086,23 +1142,7 @@
               //     node.imageCropping = 'crop'
               //   } 
               // }
-              if (node.hovered) {
-                node.lineColor = "rgba(51, 255, 255, 0.4)";
-                node.data.lineColor = "rgba(51, 255, 255, 0.4)";
-                node.lineWidth = 10
-                node.data.lineWidth = 10
-                for (let m = 0; m < node.links.length; m++) {
-                  // node.links[m].length = 10;
-                  node.links[m].hovered = true;
-                  // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
-                  // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
-                  // node.links[m].animation = 'move 0.5s infinite linear';
-                }
-              } else {
-                for (let m = 0; m < node.links.length; m++) {
-                  node.links[m].hovered = false;
-                }
-              }
+              
               // node.lineColor = node.data.lineColor =color.replace(",1)",",0.5)"); 
             },
             linkStyleFunction: function(link) {

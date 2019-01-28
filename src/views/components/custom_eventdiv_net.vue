@@ -41,9 +41,9 @@
                     <Avatar class="circle-img" v-else :src="evetdata.img" :style="{width:'50px',height:'50px'}" />
                   </Row>
                   <div class='entityDetail'>
-                    <entityDetailsTableHuman :Entitydetail="evetdata" v-if="evetdata.entity_type =='human'"></entityDetailsTableHuman>
-                    <entityDetailsTableAdministrative :Entitydetail="evetdata" v-if="evetdata.entity_type =='administrative'"></entityDetailsTableAdministrative>
-                    <entityDetailsTableOrganization :Entitydetail="evetdata" v-if="evetdata.entity_type =='organization'"></entityDetailsTableOrganization>
+                    <entityDetailsTableHuman :Entitydetail="evetdata" v-if="evetdata.entity_type =='human'" @click="hightLight(evetdata)"></entityDetailsTableHuman>
+                    <entityDetailsTableAdministrative :Entitydetail="evetdata" v-if="evetdata.entity_type =='administrative'" @click="hightLight(evetdata)"></entityDetailsTableAdministrative>
+                    <entityDetailsTableOrganization :Entitydetail="evetdata" v-if="evetdata.entity_type =='organization'" @click="hightLight(evetdata)"></entityDetailsTableOrganization>
                   </div>
                 </div>
               </Card>
@@ -292,6 +292,10 @@
       }
     },
     methods: {
+      hightLight(id){
+        console.log('-----------------')
+        console.log(id)
+      },
       changTab(a){
         this.$store.commit('setTabSelect', a)
       },

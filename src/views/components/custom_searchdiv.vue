@@ -30,8 +30,52 @@
               <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />&nbsp;&nbsp;{{option.label}}</Option>
           </OptionGroup>
         </Select>
+
+        <!-- <el-select
+         id="queryInput"
+          v-model="inputInfoNet"
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入关键词"
+          :remote-method="searchInfoNet"
+          :loading="loading1">
+          <el-option-group :key='opt1.title' :label="opt1.title" v-for="(opt1) in options1" >
+          <el-option
+            v-for="item in options1"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+          <el-option v-for="(option, index) in opt1.data" :value="option.value" :key="index" :style="{lineHeight:'17px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
+              <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
+              <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+              <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />&nbsp;&nbsp;{{option.label}}</el-option>
+          </el-option-group>
+        </el-select> -->
       </div>
     </div>
+    <!-- <div>
+      <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}"><i class="icon iconfont icon-search  process-img" :class="(lightIconFlag)?'lightIcon':''" id='searchImg' style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i></div>
+      <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}">
+        <el-select
+         id="queryInput"
+          v-model="inputInfoNet"
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入关键词"
+          :remote-method="searchInfoNet"
+          :loading="loading1">
+          <el-option-group :key='opt1.title' :label="opt1.title" v-for="(opt1) in options1" >
+          <el-option v-for="(option, index) in opt1.data" :value="option.value" :key="index" :style="{lineHeight:'17px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
+              <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
+              <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+              <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />&nbsp;&nbsp;{{option.label}}</el-option>
+          </el-option-group>
+        </el-select>
+      </div>
+    </div> -->
   </div>
 </template>
 <script>
