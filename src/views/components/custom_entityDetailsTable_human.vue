@@ -114,7 +114,8 @@ export default {
     props:['Entitydetail'],
     methods:{
         ishasValue(pro){
-            if(pro == '' || pro == undefined){
+          debugger
+            if(pro == '' || pro == undefined || pro == "[]"){
             return false;
             } else {
             return true;

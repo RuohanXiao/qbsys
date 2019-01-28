@@ -1339,9 +1339,17 @@
     },
     created() {},
     computed: mapState([
-      'searchNetResult', 'netHeight', 'addNetNodes', 'netTimeCondition', 'contentToNetData'
+      'searchNetResult', 'netHeight', 'addNetNodes', 'netTimeCondition', 'contentToNetData','netStaticsSelectedIds'
     ]),
     watch: {
+      netStaticsSelectedIds:function(){
+        var mthis = this;
+        if(mthis.$store.state.netStaticsSelectedIds.length > 0){
+          mthis.netchart.selection(mthis.$store.state.netStaticsSelectedIds);
+          mthis.$store.commit('setNetStaticsSelectedIds',[])
+        }
+        
+      },
       contentToNetData: function() {
         this.netchart.addData(this.contentToNetData)
       },

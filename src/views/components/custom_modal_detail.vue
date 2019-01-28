@@ -1,9 +1,10 @@
 <template>
     <Modal v-model="flag" width='80' @on-cancel="cancel" footer-hide>
       <el-tabs  v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit" :style="{paddingBottom:'20px'}">
-        <el-tab-pane v-for="(Targetdetail, index) in editableTabs" :key="index+1" :label="Targetdetail.name" :name="index+1+''">
+        <el-tab-pane v-if="editableTabs.length > 1" v-for="(Targetdetail, index) in editableTabs" :key="index+1" :label="Targetdetail.name" :name="index+1+''">
           <entitydetailsintegration :Entitydetail="Targetdetail" ></entitydetailsintegration>
         </el-tab-pane>
+        <entitydetailsintegration :Entitydetail="editableTabs[0]" v-if="editableTabs.length == 1" ></entitydetailsintegration>
       </el-tabs>
     </Modal>
 </template>

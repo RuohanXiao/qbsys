@@ -198,7 +198,7 @@ export default {
         provinTilSource:null,
         selectedPointsSource:null,
         polygonLayer:null,
-        diePointColor: 'rgba(242,193,121,0.4)',//初始化加载时的实体点颜色
+        diePointColor: 'rgba(255,204,102,0.5)',//初始化加载时的实体点颜色
         lifePointColor: '#ff9900',//拉框选中后的实体点颜色
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
         draw:null,
@@ -385,16 +385,20 @@ export default {
         setPointMoveOverlay(feature){
             var mthis = this;
             var overlayId = 'pointMoveOverlay';
+            var ovdiv = document.createElement('div');
+            ovdiv.style ='background-color: rgba(0,51,51,0.8);border-radius: 5px;';
             var conLabel = document.createElement('div');
+            conLabel.style = 'padding: 5px 10px;';
+            ovdiv.appendChild(conLabel);
             var Lp = document.createElement('p');
             conLabel.appendChild(Lp);
-            Lp.style = 'color:#ccffff;padding-left:10px;margin:0px;font-family: Arial;font-size: 10px;';
+            Lp.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
             Lp.innerHTML = feature.get('localtionName');
             var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
-            Ap.style = 'color:#ccffff;padding-left:10px;margin:0px;font-family: Arial;font-size: 10px;';
+            Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
             Ap.innerHTML = "事件：" + feature.get('selectedEventsNum');
-            var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,conLabel,overlayId,'top-left');
+            var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,ovdiv,overlayId,'top-left');
             mthis.routeMap.map.addOverlay(overlayId);
         },
         setPointFeatures_test(data){
@@ -430,6 +434,7 @@ export default {
             mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
             mthis.routeMap.map.addInteraction(mthis.selectClick);
             mthis.selectPointerMove.on('select', function(e) {
+                debugger
                 if(e.selected.length > 0 && e.selected[0].get('Events') !== undefined && e.selected[0].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     mthis.pointSelectedAnimation(e.selected[0],'pointMove');
                     //鼠标悬浮时的信息框
@@ -927,7 +932,6 @@ export default {
                     })
                 })
             });
-            debugger
             if(lifeOrdie === 'life'){
                 feature.setStyle(lifeSelectedstyle);
             } else {
@@ -1424,7 +1428,6 @@ export default {
     watch:{
         timeSelectedEventIds:function(){
             var mthis = this;
-            debugger
             mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.timeSelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoTime',

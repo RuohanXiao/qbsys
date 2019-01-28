@@ -89,7 +89,7 @@
         },
         evetdata: null,
         detailModalFlag: false,
-        dataStatistics: [],
+        //dataStatistics: [],
         value4: '1-1',
         myList: [{
           name: 'aaaaa',
@@ -208,7 +208,7 @@
                     disName:'基尼指数'
                 },
                 {
-                    id:'Human_Development_Index',
+                    id:'human_development_index',
                     disName:'人类发展指数'
                 },
                 {
@@ -218,11 +218,6 @@
               ],
             },
             nodeTypedata:null,
-            EntityAttrInformation:{
-                code:0,
-                data:[
-                ]
-            },
             staticsIds:[],
       };
     },
@@ -248,10 +243,9 @@
       // },
       dataStatisticsEvent: function() {
         var mthis = this;
-        debugger
         mthis.staticsIds = mthis.$store.state.StaticsIds;
         mthis.nodeTypedata = mthis.$store.state.dataStatisticsEvent
-        mthis.dataStatistics = mthis.EntityAttrInformation.data;
+        //mthis.dataStatistics = mthis.EntityAttrInformation.data;
         //mthis.dataStatistics = mthis.dataStatisticsEvent.data;  //这是测试数据，正式数据接通后，应删除EntityAttrInformation变量
       },
       eventheightdiv: function() {
