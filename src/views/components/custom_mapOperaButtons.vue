@@ -50,6 +50,18 @@
             <p class="img-content">反选</p>
           </div>
         </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div id='selectAll_opera' class="button-div" @click="divClick">
+            <Icon class="icon iconfont icon-rectangle  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">全选</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div id='returnToAllPoints_opera' class="button-div" @click="divClick">
+            <Icon class="icon iconfont icon-refresh  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">复位</p>
+          </div>
+        </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div id='toNet_push' class="button-div" @click="divClick">

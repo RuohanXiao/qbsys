@@ -36,8 +36,13 @@
 #NodeTypeInfo  tr:nth-child(odd), #EntityAttrColl table tr:nth-child(odd){
     background-color: rgba(51,255,255,0.05);
 }
-#NodeTypeInfo  span, #EntityAttrColl table span{
+/* #NodeTypeInfo >tr>td>span{
     padding-left:20px;
+    text-align:left;
+} */
+#EntityAttrColl p{
+    padding-left:20px;
+    text-align:left;
 }
 
 #EntityAttr{
@@ -69,7 +74,7 @@
     margin-left: 10px;
 }
 .NoDataSpan{
-    color: #638888;
+    color: #638888 !important;
     margin-left: 20px;
     display: table-cell;
     vertical-align: middle;
@@ -97,7 +102,7 @@
     <div :id='firstClassifyItem.id' v-for='(firstClassifyItem,index) in firstClassify' v-if="index === 0 || (index === 1 && type !== '')">
         <div :id="firstClassifyItem.id + 'Name'">
             <span class="separateLine"></span>
-            <span style="margin-left:10px;font-size: 16px;">{{firstClassifyItem.disName}}</span>
+            <span style="margin-left:10px;font-size: 14px;">{{firstClassifyItem.disName}}</span>
         </div>
         <table id='NodeTypeInfo' v-if="index === 0">
             <tr :id='nodeTypeItem.id' v-if="isNodeTypehasInnodeTypedata(nodeTypeItem.id) === true" v-for="(nodeTypeItem,index) in nodeTypeClassify" v-on:click="getAttrsById(nodeTypeItem.id)">
@@ -117,7 +122,8 @@
                 <table slot="content" :id="EntityAttrInfoItem.id + '/entityattr'" v-if="itemInArrById(EntityAttrItem.id) && EntityAttrInfoItem.id == EntityAttrItem.id" v-for="(EntityAttrInfoItem,index) in Statisticsdata">
                     <tr  :id="EntityInformation.name + '/name'" v-if="index<=2" v-for="(EntityInformation,index ) in EntityAttrInfoItem.datas"  @click="selectedIds(EntityInformation.entitylist)">  
                         <td class="NameTd">
-                            <span>{{EntityInformation.name}}</span>
+                            <!-- <span>{{EntityInformation.name}}</span> -->
+                            <p>{{EntityInformation.name}}</p>
                         </td>
                         <td :id="EntityInformation.name + '/StaticsPer'" class="StaticsPerTd">
                             <percentBar  :num="EntityInformation.per" :count="EntityInformation.count" :index='0'></percentBar>
@@ -129,7 +135,7 @@
                 </table>
                 <table slot="content" v-if="!itemInArrById(EntityAttrItem.id)">
                     <tr>
-                        <span class="NoDataSpan">无匹配节点</span>
+                        <p class="NoDataSpan">无匹配节点</p>
                     </tr>
                 </table>
             </panel>

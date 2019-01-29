@@ -5,8 +5,7 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
           <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
-            <!-- <left-statics :Statisticsdata='dataStatistics' v-if=" $store.state.tmss === 'net' && dataStatistics.length > 0"></left-statics>
-            <left-statics :Statisticsdata='contentStatisticsdata' v-if=" $store.state.tmss === 'content' && contentStatisticsdata.length > 0"></left-statics> -->
+            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'content' && nodeTypedata !== null"></left-statics>
             
           </Tab-pane>
           <Tab-pane label="目标详情" name= '目标详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
@@ -101,31 +100,76 @@
         eventheightdiv: 0,
         eventheight: 0,
         closable: true,
-        infos: [{
-            name: "普京",
-            img: "https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=53e28aef2f2dd42a4b0409f9625230d0/4a36acaf2edda3ccf81167a60be93901203f92bb.jpg",
-            country: '俄罗斯',
-            org: '俄罗斯联邦',
-            spouse: '柳德米拉·什克列布涅娃',
-            school: '列宁格勒国立大学',
-            tag: '俄罗斯联邦政府总统／ 俄罗斯第2任总统／第7届俄罗斯总理／第11届俄罗斯总理',
-            introduction: `弗拉基米尔·弗拉基米罗维奇·普京，俄罗斯第2任、第4任总统。曾担任俄罗斯总理、统一俄罗斯党主席、俄白联盟部长会议主席。
-                2000年执政以来，普京致力于复兴俄罗斯超级大国地位，对内加强联邦政府的权力，整顿经济秩序，打击金融寡头，加强军队建设；对外努力改善国际环境…
-                恢复了世界性强国地位。`
-          },
-          {
-            name: "习近平",
-            img: "https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=468864cdf0039245b5b8e95de6fdcfa7/54fbb2fb43166d22ca0c87944a2309f79052d2b3.jpg",
-            country: '中华人名共和国',
-            org: '中华人名共和国',
-            spouse: '彭丽媛',
-            school: '清华大学人文社会学院马克思主义理论与思想政治教育专业',
-            tag: '现任中国共产党中央委员会总书记、中共中央军事委员会主席、中华人民共和国主席、中华人民共和国中央军事委员会主席',
-            introduction: `953年6月生，陕西富平人，1969年1月参加工作，1974年1月加入中国共产党，清华大学人文社会学院马克思主义理论与思想政治教育专业毕业，在职研究生学历，法学博士学位。
-                现任中国共产党中央委员会总书记，中共中央军事委员会主席，中华人民共和国主席，中华人民共和国中央军事委员会主席。
-                中共第十五届中央候补委员，十六届、十七届、十八届、十九届中央委员，十七届中央政治局委员、常委、中央书记处书记，十八届、十九届中央政治局委员、常委、中央委员会总书记。第十一届全国人大第一次会议当选为中华人民共和国副主席。十七届五中全会增补为中共中央军事委员会副主席。第十一届全国人大常委会第十七次会议任命为中华人民共和国中央军事委员会副主席。十八届一中全会任中共中央军事委员会主席。第十二届全国人大第一次会议当选为中华人民共和国主席、中华人民共和国中央军事委员会主席`
-          }
-        ]
+        firstClassify : [
+                {
+                    id:'NodeType',
+                    disName:'统计类型'
+                },
+                {
+                    id:'EntityAttr',
+                    disName:'统计属性'
+                }
+            ],
+        nodeTypeClassify : [
+                {
+                    id:'pass',
+                    disName:'通道'
+                },
+                {
+                    id:'topic',
+                    disName:'话题'
+                }
+            ],
+            EntityAttrClassify:{
+              "pass":[{
+                    id:'overseas_news_media',
+                    disName:'境外新闻媒体'
+                },
+                {
+                    id:'overseas_social_media',
+                    disName:'境外社交媒体'
+                },
+                {
+                    id:'domestic_news media',
+                    disName:'境内新闻媒体'
+                },
+                {
+                    id:'domestic_social_media',
+                    disName:'境内社交媒体'
+                }],
+              "topic":[
+                {
+                    id:'type',
+                    disName:'类型'
+                },
+                {
+                    id:'headquarters_location',
+                    disName:'总部'
+                },
+                {
+                    id:'torchbearer',
+                    disName:'领导人'
+                }
+              ]
+            },
+            nodeTypedata:{
+                code:0,
+                data:[
+                    {
+                        id:'event',
+                        count: 1,
+                        per: 8,
+                        
+                    },
+                    {
+                        id:'organization',
+                        count: 3,
+                        per: 8,
+ 
+                    },
+                ]
+            },
+            staticsIds:[],
       };
     },
     components: {

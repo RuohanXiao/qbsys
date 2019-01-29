@@ -5,7 +5,7 @@
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
           <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi'>
-            <left-statics :Statisticsdata='dataStatistics' :EntityAttrInformation='EntityAttrInformation' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'geo' && dataStatistics.length > 0"></left-statics>
+            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'geo' && nodeTypedata !== null"></left-statics>
           </Tab-pane>
           <Tab-pane label="目标详情" name= '目标详情'  :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing'>
             <div>
@@ -117,142 +117,52 @@
                     disName:'机构'
                 }
             ],
-            EntityAttrClassify:[
-                {
-                    id:'country_of_citizenship',
-                    disName:'国籍'
+            EntityAttrClassify:{
+              "event":[{
+                    id:'type',
+                    disName:'类型'
                 },
                 {
-                    id:'occupation',
-                    disName:'职业'
+                    id:'main_body',
+                    disName:'主体'
                 },
                 {
-                    id:'address',
-                    disName:'地址'
+                    id:'place',
+                    disName:'地点'
+                }],
+              "organization":[
+                {
+                    id:'type',
+                    disName:'类型'
                 },
                 {
-                    id:'member_of_political_party',
-                    disName:'政党'
+                    id:'headquarters_location',
+                    disName:'总部'
                 },
                 {
-                    id:'religion',
-                    disName:'信仰'
-                },
-                {
-                    id:'e-mail',
-                    disName:'邮箱'
+                    id:'torchbearer',
+                    disName:'领导人'
                 }
-            ],
+              ]
+            },
             nodeTypedata:{
                 code:0,
                 data:[
                     {
-                        id:'human',
+                        id:'event',
                         count: 1,
-                        per: 20,
+                        per: 8,
                         
                     },
                     {
                         id:'organization',
                         count: 3,
                         per: 8,
-                        
+ 
                     },
-                    {
-                        id:'administrative',
-                        count: 8,
-                        per: 90,
-                        
-                    },
-                    {
-                        id:'event',
-                        count: 1,
-                        per: 8,
-                        
-                    }
                 ]
             },
-            EntityAttrInformation:{
-                code:0,
-                data:[
-                    {
-                        id:'country_of_citizenship',
-                        datasCount:4,
-                        moredata:{
-                            dataItem:1,
-                            nodeCount:10
-                        },
-                        datas:[
-                            {
-                                name:"中国",
-                                count: 1,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 8,
-                            },
-                            {
-                                name:"日本",
-                                count: 2,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 16,
-                            },
-                            {
-                                name:"美国",
-                                count: 1,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 8,
-                            },
-                            {
-                                name:"英国",
-                                count: 2,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 16,
-                            }
-                        ]
-                    },
-                    {
-                        id:'occupation',
-                        datasCount:3,
-                        moredata:{
-                            dataItem:1,
-                            nodeCount:10
-                        },
-                        datas:[
-                            {
-                                name:"军人",
-                                count: 1,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 8,
-                            },
-                            {
-                                name:"政治家",
-                                count: 2,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 16,
-                            },
-                            {
-                                name:"企业家",
-                                count: 10,
-                                entitylist: [
-                                "Q854"
-                                ],
-                                per: 100,
-                            }
-                        ]
-                    }
-                ]
-            }
+            staticsIds:[],
       };
     },
     components: {

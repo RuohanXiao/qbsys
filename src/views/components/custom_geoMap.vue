@@ -219,7 +219,7 @@ export default {
         allEventIdsToFeaturesIds:{},
         allEventIds:[],
         geometrySelectedEventIds:[],
-        timeSelectedEventIds:0,
+        timeSelectedEventIds:[],
         staticsSelectedEventIds:[],
         pointMoveListenerKey:null,
         pointClickListenerKey:null,
@@ -278,10 +278,45 @@ export default {
                 mthis.pushToNet();
             } else if(mapOperationId == 'toContent_push'){
                 mthis.pushToContent();
+            } else if(mapOperationId == 'returnToAllPoints_opera'){
+                mthis.returnToAllPoints();
+            } else if(mapOperationId == 'selectAll_opera'){
+                mthis.selectAll();
             }
         },
         pushToNet(){},
         pushToContent(){},
+        selectAll(){
+            var mthis = this;
+            var features = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
+            features.forEach(function(item){
+                mthis.setSelectedEventFeatureParam(item,true);
+            });
+        },
+        returnToAllPoints(){
+            var mthis = this;
+            if(mthis.removeFeaturesArr.length >0){
+                var source = mthis.getLayerById('eventsPointsLayer').getSource();
+                source.addFeatures(mthis.removeFeaturesArr);
+                mthis.removeFeaturesArr = [];
+                mthis.geometrySelectedEventIds = [];
+                mthis.timeSelectedEventIds = [];
+                mthis.staticsSelectedEventIds = [];
+                mthis.allEventIds = [];
+                mthis.allEventIdsToFeaturesIds = {};
+                var features = source.getFeatures();
+                features.forEach(function(item){
+                    mthis.setSelectedEventFeatureParam(item,true);
+                    item.get('Events').forEach(function(Iitem){
+                        var eventId = Iitem.id;
+                        mthis.allEventIds.push(eventId);
+                        mthis.allEventIdsToFeaturesIds[eventId] = item.getId();
+                    });
+                });
+            }
+            
+            
+        },
         legendItemClick(legendItemOpera){
             var mthis = this;
             var map = mthis.routeMap.map;
@@ -401,6 +436,16 @@ export default {
             var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,ovdiv,overlayId,'top-left');
             mthis.routeMap.map.addOverlay(overlayId);
         },
+        /* getFeatrueAllEventIds(feature){
+            var mthis = this;
+            var ids = [];
+            feature.get('Events').forEach(function(Iitem){
+                var eventId = Iitem.id;
+                ids.push();
+                //mthis.allEventIds.push(eventId);
+                //mthis.allEventIdsToFeaturesIds[eventId] = item.getId();
+            });
+        }, */
         setPointFeatures_test(data){
             var mthis = this
             mthis.allEventIdsToFeaturesIds = {};
@@ -408,6 +453,7 @@ export default {
             var features = (new GeoJSON()).readFeatures(data);
             features.forEach(function(item){
                 mthis.setLifeOrDiePointStyleByValue(item,'life');
+                //mthis.getFeatrueAllEventIds(feature)
                 item.get('Events').forEach(function(Iitem){
                     var eventId = Iitem.id;
                     mthis.allEventIds.push(eventId);
@@ -434,7 +480,6 @@ export default {
             mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
             mthis.routeMap.map.addInteraction(mthis.selectClick);
             mthis.selectPointerMove.on('select', function(e) {
-                debugger
                 if(e.selected.length > 0 && e.selected[0].get('Events') !== undefined && e.selected[0].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     mthis.pointSelectedAnimation(e.selected[0],'pointMove');
                     //鼠标悬浮时的信息框
@@ -876,7 +921,8 @@ export default {
             selectingPointSource.getFeatures().forEach(function(item) {
                 var coord = item.getGeometry().getCoordinates();
                 var isIn = geometry.intersectsCoordinate(coord);
-                 mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',false);
+                 //mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',false);
+                mthis.setSelectedEventFeatureParam(item,false);
                 if (isIn) {
                     //mthis.geometrySelectedFeatures.push(item);
                     //mthis.setSelectedEventFeatureParam(item,'isGeometrySelected',true);
@@ -892,15 +938,15 @@ export default {
             return frameselectedEventIds
         },
 
-        setSelectedEventFeatureParam(feature,selectType,isSelected){  
+        setSelectedEventFeatureParam(feature,isSelected){ //setSelectedEventFeatureParam(feature,selectType,isSelected){  
             var mthis = this;
             if(isSelected){
                 //feature.setStyle(mthis.selectedstyle);
                 mthis.setLifeOrDiePointStyleByValue(feature,'life');
-                feature.set(selectType,true,false)
+                //feature.set(selectType,true,false)
             } else {
                 mthis.setLifeOrDiePointStyleByValue(feature,'die');
-                feature.set(selectType,false,false)
+                //feature.set(selectType,false,false)
             }
             
         },
@@ -1181,14 +1227,17 @@ export default {
             var mthis = this;
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
             for(let i = source.getFeatures().length - 1; i >= 0 ; i--){
+                var events = source.getFeatures()[i].get('Events');
+                events.forEach(function(item){
+                    mthis.deleteArrItem(mthis.allEventIds,item.id);
+                    delete mthis.allEventIdsToFeaturesIds[item.id];
+                });
                 if(source.getFeatures()[i].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     mthis.removeFeaturesArr.push(source.getFeatures()[i]);
                     source.removeFeature(source.getFeatures()[i]);
+                    
                 }
             }
-            /* mthis.geometrySelectedFeatures = [];
-            mthis.timeSelectedFeatures = [];
-            mthis.staticsSelectedFeatures = []; */
         },
         
         /*
@@ -1416,7 +1465,8 @@ export default {
             featureIds.forEach(function(Item,index){
                 var feature = source.getFeatureById(Item);
                 feature.set('selectedEventsNum',selectedNum[index],false);
-                mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',true);
+                //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',true);
+                mthis.setSelectedEventFeatureParam(feature,true);
             })
         }
 
@@ -1468,7 +1518,8 @@ export default {
                 var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
                 var eventTime = '';
                 var featrueEvents = feature.get('Events');
-                mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
+                //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
+                mthis.setSelectedEventFeatureParam(feature,false);
                 for(let i = 0; i < featrueEvents.length; i++){
                     if(item === featrueEvents[i].id){
                         eventTime = featrueEvents[i].time;
