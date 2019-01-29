@@ -3,12 +3,12 @@
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" id="net">
       <div class='divStyle'>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                  <div class="button-div" @click="back">
-                    <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">撤销操作</p>
-                  </div>
-                </Tooltip>
-                <div class="divSplitLine"></div> -->
+                        <div class="button-div" @click="back">
+                          <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                          <p class="img-content">撤销操作</p>
+                        </div>
+                      </Tooltip>
+                      <div class="divSplitLine"></div> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="newCanvans">
             <Icon class="icon iconfont icon-refresh  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -86,29 +86,29 @@
           </Dropdown>
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
-                <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                <p class="img-content">路径</p>
-              </div>
-            </Tooltip>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="showPathEvent">
-                  <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                  <p class="img-content">事件路径</p>
-                </div>
-              </Tooltip>
-             -->
+                    <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
+                      <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                      <p class="img-content">路径</p>
+                    </div>
+                  </Tooltip>
+                  <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+                      <div class="button-div" @click="showPathEvent">
+                        <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <p class="img-content">事件路径</p>
+                      </div>
+                    </Tooltip>
+                   -->
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
-                <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                <p class="img-content">事件扩展</p>
-              </div>
-            </Tooltip> -->
+                    <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
+                      <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                      <p class="img-content">事件扩展</p>
+                    </div>
+                  </Tooltip> -->
         <!-- <Col span="1" align="middle" class="bottom">
-                                <Tooltip content="查找关联" placement="bottom">
-                                  <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                </Tooltip>
-                                </Col> -->
+                                      <Tooltip content="查找关联" placement="bottom">
+                                        <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                      </Tooltip>
+                                      </Col> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <Dropdown trigger="contextMenu">
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
@@ -146,13 +146,13 @@
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="exportImg">
+          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="toGeo()">
             <Icon class="icon iconfont icon-tuisongzhikongjian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">空间</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="exportImg">
+          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="toContent()">
             <Icon class="icon iconfont icon-tuisongzhiwendang  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">文档</p>
           </div>
@@ -185,9 +185,9 @@
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag='setFlagToFalse'></modal-chart>
     <!-- <Modal v-model="modalStep" ok-text="设置步数"
-                cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
-              <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
-            </Modal> -->
+                      cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+                    <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+                  </Modal> -->
     <Modal v-model="modalStep" width="360">
       <p slot="header" style="color:#f60;text-align:center">
         <Icon type="ios-information-circle"></Icon>
@@ -230,6 +230,8 @@
         pathHoverFlag: false,
         modal_loading: false,
         selectionId: [],
+        selectionIdByType:{
+        },
         netchart: null,
         nextId: 4,
         flag: true,
@@ -246,6 +248,19 @@
       modalChart
     },
     methods: {
+      toGeo() {
+        this.$store.commit('setNetToGeoData', this.selectionIdByType)
+        alert('已经推送，结果请参阅控制台')
+        console.log('推送至地理空间模块，推送数据如下：')
+        console.log(this.selectionIdByType)
+        this.$store.commit('changeTMSS', 'geo')
+      },
+      toContent() {
+        this.$store.commit('setNetToContent', this.selectionIdByType)
+        console.log('推送至文本分析模块，推送数据如下：')
+        console.log(this.selectionIdByType)
+        this.$store.commit('changeTMSS', 'content')
+      },
       spread() {
         var mthis = this
         // console.log(this.selectionId)
@@ -264,8 +279,9 @@
         console.log(eventArry)
         this.netchart.removeData({
           links: [{
-                  id: eventArry[0].id
-                }]})
+            id: eventArry[0].id
+          }]
+        })
         mock.get("/getSpreadEvent").then(function(res) {
           mthis.netchart.addData(res.data.data[0])
         });
@@ -295,7 +311,7 @@
       getStatistics() {
         var mthis = this
         let nodeArr = Object.keys(mthis.netchart._impl.data.default.nodes).map(key => mthis.netchart._impl.data.default.nodes[key].id);
-        mthis.$store.commit('setStaticsIds',nodeArr);
+        mthis.$store.commit('setStaticsIds', nodeArr);
         let linkArr = Object.keys(mthis.netchart._impl.data.default.links).map(key => mthis.netchart._impl.data.default.links[key]);
         mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-statistics/', {
           "nodeIds": nodeArr
@@ -979,8 +995,8 @@
           style: {
             // NetChart.settings.style.dragSelection 通过该属性可以设置框选颜色和背景等属性
             nodeLabel: {
-              textStyle:{
-                fillColor:'#ccffff'
+              textStyle: {
+                fillColor: '#ccffff'
               },
               // #ccffff
               // 节点名称边框
@@ -990,8 +1006,8 @@
               }
             },
             linkLabel: {
-              textStyle:{
-                fillColor:'#006666'
+              textStyle: {
+                fillColor: '#006666'
               },
               // 事件名称边框
               backgroundStyle: {
@@ -1000,14 +1016,14 @@
               },
               aspectRatio: 1
             },
-            linkClasses: [
-              // { className: "links", style: { fillColor: "rgba(51, 255, 255, 0.4)"} ,position: 'absolute',borderRadius: '50%',animation: 'move 6s infinite linear'}
-              //要改
-              // { className: "知识扩展关系", style: { fillColor: "rgba(51, 255, 255, 0.4)"} ,id: "know"},
-              // { className: "事件扩展关系", style: { fillColor: "rgba(102, 255, 153, 0.4)"},id: "event" }
-              // { className: "知识", style: { fillColor: "rgba(51, 255, 255, 0.4)",direction: "D", lineDash: [3, 3] } },
-              // { className: "事件", style: { fillColor: "rgba(51, 255, 255, 0.4)"} }
-            ],
+            // linkClasses: [
+            // { className: "links", style: { fillColor: "rgba(51, 255, 255, 0.4)"} ,position: 'absolute',borderRadius: '50%',animation: 'move 6s infinite linear'}
+            //要改
+            // { className: "知识扩展关系", style: { fillColor: "rgba(51, 255, 255, 0.4)"} ,id: "know"},
+            // { className: "事件扩展关系", style: { fillColor: "rgba(102, 255, 153, 0.4)"},id: "event" }
+            // { className: "知识", style: { fillColor: "rgba(51, 255, 255, 0.4)",direction: "D", lineDash: [3, 3] } },
+            // { className: "事件", style: { fillColor: "rgba(51, 255, 255, 0.4)"} }
+            // ],
             node: {
               display: "image",
               //节点外环大小
@@ -1021,22 +1037,22 @@
                 // node.image = "http://10.60.1.143/pic_lib/entity/";
                 node.image = 'http://10.60.1.140/assets/images/content_node.png'
                 if (node.hovered) {
-                node.lineColor = "rgba(51, 255, 255, 0.4)";
-                node.data.lineColor = "rgba(51, 255, 255, 0.4)";
-                node.lineWidth = 10
-                node.data.lineWidth = 10
-                for (let m = 0; m < node.links.length; m++) {
-                  // node.links[m].length = 10;
-                  node.links[m].hovered = true;
-                  // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
-                  // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
-                  // node.links[m].animation = 'move 0.5s infinite linear';
+                  node.lineColor = "rgba(51, 255, 255, 0.4)";
+                  node.data.lineColor = "rgba(51, 255, 255, 0.4)";
+                  node.lineWidth = 10
+                  node.data.lineWidth = 10
+                  for (let m = 0; m < node.links.length; m++) {
+                    // node.links[m].length = 10;
+                    node.links[m].hovered = true;
+                    // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
+                    // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
+                    // node.links[m].animation = 'move 0.5s infinite linear';
+                  }
+                } else {
+                  for (let m = 0; m < node.links.length; m++) {
+                    node.links[m].hovered = false;
+                  }
                 }
-              } else {
-                for (let m = 0; m < node.links.length; m++) {
-                  node.links[m].hovered = false;
-                }
-              }
               } else if (node.data.entity_type === 'content') {
                 // var defaultUpdateFunction = function (ctx, radius) {
                 //     var halfWidth, halfHeight;
@@ -1073,48 +1089,46 @@
                 // },
                 // node.fillColor = 'rgba(0,0,0,0)'
                 // node.lineColor = 'rgba(0,0,0,0)'
-                
                 if (node.hovered) {
                   node.fillColor = 'rgba(51,255,255,0.2)'
-                node.lineColor = 'rgba(51,255,255,0.2)'
-                node.data.lineColor = "rgba(51, 255, 255, 0.4)";
-                node.lineWidth = 10
-                node.data.lineWidth = 10
-                for (let m = 0; m < node.links.length; m++) {
-                  // node.links[m].length = 10;
-                  node.links[m].hovered = true;
-                  // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
-                  // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
-                  // node.links[m].animation = 'move 0.5s infinite linear';
+                  node.lineColor = 'rgba(51,255,255,0.2)'
+                  node.data.lineColor = "rgba(51, 255, 255, 0.4)";
+                  node.lineWidth = 10
+                  node.data.lineWidth = 10
+                  for (let m = 0; m < node.links.length; m++) {
+                    // node.links[m].length = 10;
+                    node.links[m].hovered = true;
+                    // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
+                    // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
+                    // node.links[m].animation = 'move 0.5s infinite linear';
+                  }
+                } else {
+                  node.fillColor = 'rgba(0,0,0,0)'
+                  node.lineColor = 'rgba(0,0,0,0)'
+                  for (let m = 0; m < node.links.length; m++) {
+                    node.links[m].hovered = false;
+                  }
                 }
-              } else {
-                node.fillColor = 'rgba(0,0,0,0)'
-                node.lineColor = 'rgba(0,0,0,0)'
-                for (let m = 0; m < node.links.length; m++) {
-                  node.links[m].hovered = false;
-                }
-              }
-
               } else {
                 node.display = 'image'
                 node.image = "http://10.60.1.143/pic_lib/entity/" + node.id + ".png";
                 if (node.hovered) {
-                node.lineColor = "rgba(51, 255, 255, 0.4)";
-                node.data.lineColor = "rgba(51, 255, 255, 0.4)";
-                node.lineWidth = 10
-                node.data.lineWidth = 10
-                for (let m = 0; m < node.links.length; m++) {
-                  // node.links[m].length = 10;
-                  node.links[m].hovered = true;
-                  // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
-                  // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
-                  // node.links[m].animation = 'move 0.5s infinite linear';
+                  node.lineColor = "rgba(51, 255, 255, 0.4)";
+                  node.data.lineColor = "rgba(51, 255, 255, 0.4)";
+                  node.lineWidth = 10
+                  node.data.lineWidth = 10
+                  for (let m = 0; m < node.links.length; m++) {
+                    // node.links[m].length = 10;
+                    node.links[m].hovered = true;
+                    // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
+                    // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
+                    // node.links[m].animation = 'move 0.5s infinite linear';
+                  }
+                } else {
+                  for (let m = 0; m < node.links.length; m++) {
+                    node.links[m].hovered = false;
+                  }
                 }
-              } else {
-                for (let m = 0; m < node.links.length; m++) {
-                  node.links[m].hovered = false;
-                }
-              }
               }
               node.cursor = "pointer";
               node.label = node.data.name;
@@ -1142,23 +1156,66 @@
               //     node.imageCropping = 'crop'
               //   } 
               // }
-              
               // node.lineColor = node.data.lineColor =color.replace(",1)",",0.5)"); 
             },
             linkStyleFunction: function(link) {
+              link.length = 2;
               link.cursor = "pointer";
               link.fillColor = "rgba(51, 255, 255, 0.4)";
               link.position = 'absolute';
               link.borderRadius = '50%';
               link.animation = 'move 0.5s infinite linear';
-              link.label = (link.data.type !== undefined &&  link.data.type !== "") ?  link.data.type:link.data.num ;
-              // if(link.data.className === '知识扩展关系') //要改
-              // if (link.data.className === '知识') {
-              //   link.fillColor = 'rgba(51, 255, 255, 0.4)';
-              //   // , direction: "D", lineDash: [3, 3] 
-              // } else {
-              //   link.fillColor = 'rgba(51, 255, 255, 0.4)';
-              // }
+              if (link.data.type !== undefined && link.data.type !== "") {
+                // link.label = link.data.type;
+                link.items = [{ // Default item places just as the regular label.
+                  // image:'http://10.60.1.140/assets/images/content_node.png',
+                  text: link.data.type,
+                  padding: 2,
+                  scaleWithZoom: true,
+                  textStyle: {
+                    font: '12px MicrosoftYaHei',
+                    fillColor: '#669999',
+                    // outlineColor:"rgba(0,0,0,1)",
+                    // outlineJoin:'round',
+                    // outlineWidth: 10
+
+                  },
+                  backgroundStyle:{
+                    fillColor:"rgba(0,0,0,0)"
+                  }
+                }]
+              } else {
+                link.items = [{ // Default item places just as the regular label.
+                  rotateWithLink: true,
+                  scaleWithZoom: true,
+                  image: '../../dist/assets/images/circle.png',
+                  text: link.data.num,
+                  imageSlicing:[0,0,20,20],
+                  // padding: 2,
+                  textStyle: {
+                    font: '12px MicrosoftYaHei',
+                    fillColor: '#669999',
+                    
+                    // outlineColor:"rgba(0,0,0,1)",
+                    // outlineJoin:'round',
+                    // outlineWidth: 10
+                  },
+                  backgroundStyle:{
+                    fillColor:"rgba(0,0,0,0)"
+                  }
+                }]
+              }
+              //   // link.backgroundStyle= {
+              //   //   fillColor: "rgba(51,255,255,0)",
+              //   //   lineColor: "rgba(51,255,255,0)"
+              //   // }
+              //   // if(link.data.className === '知识扩展关系') //要改
+              //   // if (link.data.className === '知识') {
+              //   //   link.fillColor = 'rgba(51, 255, 255, 0.4)';
+              //   //   // , direction: "D", lineDash: [3, 3] 
+              //   // } else {
+              //   //   link.fillColor = 'rgba(51, 255, 255, 0.4)';
+              //   // }
               if (link.hovered) {
                 link.radius = 5;
                 // 连线颜色
@@ -1271,6 +1328,30 @@
                   mthis.selectItem = event;
                   // 有选中节点或者link
                   mthis.selectionId = [];
+                  mthis.selectionIdByType = {
+                    nodeIds:[],
+                    enentIds:[],
+                    contentIds:[]
+                  };
+                  console.log('==========event.selection================')
+                  console.log(event.selection)
+                  for(let nu = 0; nu <event.selection.length;nu++){
+                    if(event.selection[nu].isNode){
+                      //有三种情况，实体，事件，文档
+                      if(event.selection[nu].data.entity_type === 'content') {
+                        mthis.selectionIdByType.contentIds.push(event.selection[nu].data.id)
+                      } else if(event.selection[nu].data.entity_type === 'event'){
+                        mthis.selectionIdByType.enentIds.push(event.selection[nu].data.id)
+                      } else {
+                        mthis.selectionIdByType.nodeIds.push(event.selection[nu].data.id)
+                      }
+                      
+                    } else if(event.selection[nu].isLink) {
+                      if(event.selection[nu].data.class === 'event') {
+                        mthis.selectionIdByType.enentIds.push(event.selection[nu].data.id)
+                      }
+                    }
+                  }
                   let tem = [];
                   for (
                     let selectNum = 0; selectNum < event.selection.length; selectNum++
@@ -1289,6 +1370,11 @@
                   mthis.$store.commit('setSinglePerson', !(mthis.selectionId.length > 1))
                 } else {
                   mthis.selectionId = []
+                  mthis.selectionIdByType = {
+                    nodeIds:[],
+                    enentIds:[],
+                    contentIds:[]
+                  };
                   mthis.ifSelectNode = false
                   mthis.selectItem = null
                 }
@@ -1339,16 +1425,18 @@
     },
     created() {},
     computed: mapState([
-      'searchNetResult', 'netHeight', 'addNetNodes', 'netTimeCondition', 'contentToNetData','netStaticsSelectedIds'
+      'searchNetResult', 'netHeight', 'addNetNodes', 'netTimeCondition', 'contentToNetData', 'netStaticsSelectedIds', 'geoToNetData'
     ]),
     watch: {
-      netStaticsSelectedIds:function(){
+      netStaticsSelectedIds: function() {
         var mthis = this;
-        if(mthis.$store.state.netStaticsSelectedIds.length > 0){
+        if (mthis.$store.state.netStaticsSelectedIds.length > 0) {
           mthis.netchart.selection(mthis.$store.state.netStaticsSelectedIds);
-          mthis.$store.commit('setNetStaticsSelectedIds',[])
+          mthis.$store.commit('setNetStaticsSelectedIds', [])
         }
-        
+      },
+      geoToNetData: function() {
+        // 调用查询接口，查询id对应数据
       },
       contentToNetData: function() {
         this.netchart.addData(this.contentToNetData)

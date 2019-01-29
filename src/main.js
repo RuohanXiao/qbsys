@@ -280,7 +280,32 @@ var store = new Vuex.Store({
       type: '',
       params: {}
     },
-    contentToNetData:{}
+    contentToNetData:{},
+    netToContentData:{
+      nodeIds:[],
+      enentIds:[],
+      contentIds:[]
+    },
+    netToGeoData:{
+      nodeIds:[],
+      enentIds:[],
+      contentIds:[]
+    },
+    geoToNetData:{
+      nodeIds:[],
+      enentIds:[],
+      contentIds:[]
+    },
+    contentToGeoData:{
+      nodeIds:[],
+      enentIds:[],
+      contentIds:[]
+    },
+    geoToContentData:{
+      nodeIds:[],
+      enentIds:[],
+      contentIds:[]
+    }
   },
   mutations:{
     // 修改state里的数据时，只能通过mutations的形式来操作
@@ -296,9 +321,28 @@ var store = new Vuex.Store({
     setStaticsIds(state,val){
       state.StaticsIds = val
     },
+    // 网络关系与文本传输
     setContentToNetData(state,val){
       state.contentToNetData = val
     },
+    setNetToContentData(state,val){
+      state.netToContentData = val
+    },
+    // 网络关系与地图传输
+    setNetToGeoData(state,val){
+      state.netToGeoData = val
+    },
+    setGeoToNetData(state,val){
+      state.geoToNetData = val
+    },
+    // 地图与文本传输
+    setContentToGeoData(state,val){
+      state.contentToGeoData = val
+    },
+    setGeoToContentData(state,val){
+      state.geoToContentData = val
+    },
+
     setNetTimeCondition(state,val){
       state.netTimeCondition = val
     },

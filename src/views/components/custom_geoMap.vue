@@ -434,7 +434,6 @@ export default {
             mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
             mthis.routeMap.map.addInteraction(mthis.selectClick);
             mthis.selectPointerMove.on('select', function(e) {
-                debugger
                 if(e.selected.length > 0 && e.selected[0].get('Events') !== undefined && e.selected[0].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     mthis.pointSelectedAnimation(e.selected[0],'pointMove');
                     //鼠标悬浮时的信息框
