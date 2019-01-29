@@ -283,7 +283,7 @@ var store = new Vuex.Store({
     contentToNetData:{},
     netToContentData:{
       nodeIds:[],
-      enentIds:[],
+      eventIds:[],
       contentIds:[]
     },
     netToGeoData:{
@@ -296,7 +296,7 @@ var store = new Vuex.Store({
     },
     contentToGeoData:{
       nodeIds:[],
-      enentIds:[],
+      eventIds:[],
       contentIds:[]
     },
     geoToContentData:{

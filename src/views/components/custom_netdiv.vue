@@ -1346,7 +1346,7 @@
                   mthis.selectionId = [];
                   mthis.selectionIdByType = {
                     nodeIds:[],
-                    enentIds:[],
+                    eventIds:[],
                     contentIds:[]
                   };
                   console.log('==========event.selection================')
@@ -1357,14 +1357,14 @@
                       if(event.selection[nu].data.entity_type === 'content') {
                         mthis.selectionIdByType.contentIds.push(event.selection[nu].data.id)
                       } else if(event.selection[nu].data.entity_type === 'event'){
-                        mthis.selectionIdByType.enentIds.push(event.selection[nu].data.id)
+                        mthis.selectionIdByType.eventIds.push(event.selection[nu].data.id)
                       } else {
                         mthis.selectionIdByType.nodeIds.push(event.selection[nu].data.id)
                       }
                       
                     } else if(event.selection[nu].isLink) {
                       if(event.selection[nu].data.class === 'event') {
-                        mthis.selectionIdByType.enentIds.push(event.selection[nu].data.id)
+                        mthis.selectionIdByType.eventIds.push(event.selection[nu].data.id)
                       }
                     }
                   }
@@ -1388,7 +1388,7 @@
                   mthis.selectionId = []
                   mthis.selectionIdByType = {
                     nodeIds:[],
-                    enentIds:[],
+                    eventIds:[],
                     contentIds:[]
                   };
                   mthis.ifSelectNode = false
