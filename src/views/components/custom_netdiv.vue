@@ -249,11 +249,27 @@
     },
     methods: {
       toGeo() {
-        this.$store.commit('setNetToGeoData', this.selectionIdByType)
-        alert('已经推送，结果请参阅控制台')
-        console.log('推送至地理空间模块，推送数据如下：')
-        console.log(this.selectionIdByType)
         this.$store.commit('changeTMSS', 'geo')
+        let arr = []
+        for(let i = 0; i < this.selectionIdByType.nodeIds.length; i++){
+          arr.push(this.selectionIdByType.nodeIds[i])
+        }
+        for(let j = 0; j < this.selectionIdByType.enentIds.length; j++){
+          arr.push(this.selectionIdByType.enentIds[j])
+        }
+        for(let k = 0; k < this.selectionIdByType.enentIds.length; k++){
+          arr.push(this.selectionIdByType.enentIds[k])
+        }
+        /* arr.push(this.selectionIdByType.nodeIds)
+        arr.push(this.selectionIdByType.enentIds)
+        arr.push(this.selectionIdByType.contentIds) */
+        arr = util.unique(arr)
+        console.log(arr)
+        this.$store.commit('setNetToGeoData', arr)
+        /* alert('已经推送，结果请参阅控制台') */
+        console.log('推送至地理空间模块，推送数据如下：')
+        console.log(arr)
+        //this.$store.commit('changeTMSS', 'geo')
       },
       toContent() {
         this.$store.commit('setNetToContent', this.selectionIdByType)

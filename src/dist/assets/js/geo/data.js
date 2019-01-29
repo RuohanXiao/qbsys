@@ -423,7 +423,7 @@ var reSetTimeStaticsData = {
 
 var test_mapData = {
 	"code":0,
-	"data":{ "type": "FeatureCollection",
+	"data":{'eventFeatures':{ "type": "FeatureCollection",
 	'crs': {
 		'type': 'name',
 		'properties': {
@@ -565,7 +565,7 @@ var test_mapData = {
 			}
 		}
 	]
- }
+ }}
 };
 
 	
