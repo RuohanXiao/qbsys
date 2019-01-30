@@ -390,7 +390,9 @@ var store = new Vuex.Store({
       state.singlePerson = val
     },
     setAddNetNodes(state,val){
+      console.log(val);
       state.addNetNodes = val
+
     },
     setSearchNetResult(state,val){
       state.searchNetResult = val

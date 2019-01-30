@@ -28,16 +28,16 @@
         </div>
         </Col>
         <Col span="17" align="middle" class="rightModal" :style="{height:'80vh'}">
-        <div style="margin:20px;" v-if="targetData.id !== undefined">
+        <div style="margin:20px;overflow: scroll;height: 80%;" v-if="targetData.id !== undefined">
           <div>
             <span class="modalTitle" v-if="ishasValue(targetData.name)">{{targetData.name}}</span>
-            <img :src="targetData.image" v-if="ishasValue(targetData.image)">
-            <Avatar class="circle-img" icon="ios-person" :style="{position: 'absolute',width:'50px',height:'50px',right:'50px'}" v-else/>
+            <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="targetData.img==''" />
+            <Avatar class="circle-img" v-else :src="targetData.img" :style="{width:'50px',height:'50px'}" />
           </div>
           <div class='addTarget'>
-            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.type =='human'" ></entityDetailsTableHuman>
-            <entityDetailsTableAdministrative :Entitydetail="targetData" v-if="targetData.type =='administrative'"></entityDetailsTableAdministrative>
-            <entityDetailsTableOrganization :Entitydetail="targetData" v-if="targetData.type =='organization'"></entityDetailsTableOrganization>
+            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.entity_type =='human'" ></entityDetailsTableHuman>
+            <entityDetailsTableAdministrative :Entitydetail="targetData" v-if="targetData.entity_type =='administrative'"></entityDetailsTableAdministrative>
+            <entityDetailsTableOrganization :Entitydetail="targetData" v-if="targetData.entity_type =='organization'"></entityDetailsTableOrganization>
           </div>
         </div>
         <div>
@@ -115,7 +115,7 @@
         mthis.$emit('detailModalFlag', false)
       },
       ishasValue(pro){
-            if(pro == '' || pro == undefined){
+            if(pro == '' || pro == undefined || pro == "[]"){
             return false;
             } else {
             return true;
@@ -141,7 +141,7 @@
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
             'nodeIds': [id]
           }).then(response => {
-            mthis.targetData = response.body.data[0].nodes[0];
+            mthis.targetData = response.body.data[0];
           })
       },
       setOption () {
@@ -152,27 +152,23 @@
               emulateJSON: true
             })
             .then(response => {
-              mthis.recommendSearchItems = response.body.data;
+              mthis.recommendSearchItems = response.body.data[0].nodes;
             })
         } 
       },
       showPersonInfo(id) {},
       showNodeInNet() {
        this.cancel();
+       console.log(this.targetData);
         this.$store.commit('setAddNetNodes', {
-                  node: {
-                    nodes: [{
-                      'id': this.targetData.id,
-                      'type': this.targetData.type,
-                      'name': this.targetData.name,
-                      'img': this.targetData.img,
-                      'loaded': true
-                    }],
-                    links:[]
-                  },
-                  id: this.targetData.id,
-                  label:this.targetData.name,
-                })
+          nodes: [{
+            'id': this.targetData.id,
+            'type': this.targetData.entity_type,
+            'name': this.targetData.chinese_name,
+            'img': this.targetData.img,
+            'loaded': true
+          }]
+      })
       },
       // showNodeInNewNet() {
       //   this.cancel();

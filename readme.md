@@ -47,6 +47,10 @@ v0.1.1.0129d
 v0.1.1.0129d
 1、增加geoTonet、geoTocontent、netToget
 
+v0.1.1.0130d
+1、修复net模块中添加目标弹出框
+
+
 
 
 

@@ -362,6 +362,7 @@ export default {
             source.addFeatures(mthis.allFeatures); */
             if(mthis.removeFeaturesArr.length > 0){
                 source.addFeatures(mthis.removeFeaturesArr);
+                mthis.removeFeaturesArr = [];
             }
             /* if(mthis.removeEventIdList.length > 0){
                mthis.removeEventIdList.forEach(function(item){
@@ -377,6 +378,7 @@ export default {
                     var events = oldEvent.push(addEvent)
                     feature.set('Events',oldEvent,false);
                 })
+                mthis.removeEventIdList = {};
             }
             var features = source.getFeatures();
             if(features.length > 0){
@@ -385,6 +387,7 @@ export default {
                     mthis.setLifeOrDiePointStyleByValue(item,'life');
                 })
             }
+
             
 
             /* if(mthis.removeFeaturesArr.length >0){
@@ -1041,7 +1044,7 @@ export default {
             /* if(feature.getStyle() !== null && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                 return;
             } */
-            var eventNum = feature.get('Events').length;
+            var eventNum = feature.get('selectedEventsNum');
             var fRadius = 0;
             if(eventNum > 10){
                 fRadius = 13;
@@ -1706,6 +1709,7 @@ export default {
                 this.$nextTick(function(){
                     var mthis = this
                     mthis.location_cilck()  //初始化时开启location
+                    debugger
                     if(mthis.eventGeoJson !== null){
                         var allFeatures = (new GeoJSON()).readFeatures(mthis.eventGeoJson);
                         allFeatures.forEach(function(item){

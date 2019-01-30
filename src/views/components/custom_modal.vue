@@ -173,20 +173,20 @@
       showPersonInfo(id) {},
       showNodeInNet() {
        this.flag = false
-        this.$store.commit('setAddNetNodes', {
-                  node: {
-                    nodes: [{
-                      'id': 'node12',
-                      'type': 'person',
-                      'name': '肖若晗',
-                      'img': 'https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=53e28aef2f2dd42a4b0409f9625230d0/4a36acaf2edda3ccf81167a60be93901203f92bb.jpg',
-                      'loaded': true
-                    }],
-                    links:[]
-                  },
-                  id: 'node12',
-                  label: '肖若晗'
-                })
+        // this.$store.commit('setAddNetNodes', {
+        //           node: {
+        //             nodes: [{
+        //               'id': 'node12',
+        //               'type': 'person',
+        //               'name': '肖若晗',
+        //               'img': 'https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike150%2C5%2C5%2C150%2C50/sign=53e28aef2f2dd42a4b0409f9625230d0/4a36acaf2edda3ccf81167a60be93901203f92bb.jpg',
+        //               'loaded': true
+        //             }],
+        //             links:[]
+        //           },
+        //           id: 'node12',
+        //           label: '肖若晗'
+        //         })
       },
       showNodeInNewNet() {
         this.flag = false
