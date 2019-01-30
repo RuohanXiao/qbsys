@@ -357,7 +357,6 @@ export default {
         },
         returnToAllPoints(){
             var mthis = this;
-            debugger
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
             /* source.clear(true);
             source.addFeatures(mthis.allFeatures); */
@@ -1638,7 +1637,6 @@ export default {
                 ..
                 .. */
                 mthis.eventGeoJson = mthis.test_mapData;
-                debugger
             }
         },
         timeSelectedEventIds:function(){
@@ -1666,7 +1664,6 @@ export default {
         },
         timeCondition:function(){
             var mthis = this;
-            debugger
             var ids = [];
             var selectedIds = [];
             //var allEventIds = [];
@@ -1710,7 +1707,6 @@ export default {
                     var mthis = this
                     mthis.location_cilck()  //初始化时开启location
                     if(mthis.eventGeoJson !== null){
-                        debugger
                         var allFeatures = (new GeoJSON()).readFeatures(mthis.eventGeoJson);
                         allFeatures.forEach(function(item){
                             mthis.setLifeOrDiePointStyleByValue(item,'life');
@@ -1718,7 +1714,6 @@ export default {
                             item.get('Events').forEach(function(Iitem){
                                 var eventId = Iitem.id;
                                 //mthis.allEventIds.push(eventId);
-                                debugger  
                                 mthis.allEventIdsToFeaturesIdsList[eventId] = {
                                     'featureId':item.getId(),
                                     'time':Iitem.time
