@@ -4,8 +4,9 @@
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
-        <Col span="3" />
-        <Col span="18" class="bottom"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
+        <!-- <Col span="1" />
+        <Col span="20" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
+        <Col span="21" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
         <Col span="1" class="bottom">
         <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
@@ -96,7 +97,7 @@
           //     data:['China','United States','India','Japan']
           // },
           grid: {
-            top: "10px",
+            top: "0px",
             right: "20px",
             left: "50px"
           },
@@ -192,7 +193,7 @@
           dataZoom: [{
               type: "slider",
               startValue: 0,
-              endValue: 29,
+              endValue: 100,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -407,7 +408,7 @@
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
       this.timepxdiv =
-        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 8 + "px";
       /* this.iconPosition = useHeight * 0.8 + "px"; */
       this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       // this.iconPosition = useHeight - 40 + "px";
@@ -454,38 +455,38 @@
       splitWidth: function(va) {
         this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       },
-      geoHeightCount: function() {
-        var mthis = this
-        var tmss = mthis.$store.state.tmss;
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (mthis.geoHeightCount % 2 === 0) {
-          /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_geo').style.top = useHeight - 40 + "px";
-          //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
-          //mthis.$store.commit('setGeoHeight',useHeight * 1)
-          mthis.$store.commit('setGeoHeight', useHeight * 1)
-          document.getElementById('timechartctrl_geo').style.display = "none";
-          document.getElementById('main1_geo').style.display = "none";
-          document.getElementById('timediv_geo').style.display = "none";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
-          /* mthis.$store.commit('setChangenetpx',false); */
-        } else {
-          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
-          /* mthis.$store.commit('setChangenetpx',true); */
-          document.getElementById('timechartctrl_geo').style.display = "block";
-          document.getElementById('main1_geo').style.display = "block";
-          document.getElementById('timediv_geo').style.display = "block";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
-          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-          mthis.$store.commit('setGeoHeight', useHeight * 0.8)
-        }
-        document.getElementById('arrowDown_geo').style.position = "absolute";
-        document.getElementById('arrowDown_geo').style.right = "20px";
-        /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-        /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
-        document.getElementById('arrowDown_geo').style.zIndex = 99;
-      },
+      // geoHeightCount: function() {
+      //   var mthis = this
+      //   var tmss = mthis.$store.state.tmss;
+      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
+      //   if (mthis.geoHeightCount % 2 === 0) {
+      //     /* mthis.iconPosition = useHeight - 40 + "px"; */
+      //     document.getElementById('arrowDown_geo').style.top = useHeight - 40 + "px";
+      //     //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
+      //     //mthis.$store.commit('setGeoHeight',useHeight * 1)
+      //     mthis.$store.commit('setGeoHeight', useHeight * 1)
+      //     document.getElementById('timechartctrl_geo').style.display = "none";
+      //     document.getElementById('main1_geo').style.display = "none";
+      //     document.getElementById('timediv_geo').style.display = "none";
+      //     document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
+      //     /* mthis.$store.commit('setChangenetpx',false); */
+      //   } else {
+      //     /* mthis.iconPosition = useHeight * 0.8 + "px"; */
+      //     document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
+      //     /* mthis.$store.commit('setChangenetpx',true); */
+      //     document.getElementById('timechartctrl_geo').style.display = "block";
+      //     document.getElementById('main1_geo').style.display = "block";
+      //     document.getElementById('timediv_geo').style.display = "block";
+      //     document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
+      //     //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+      //     mthis.$store.commit('setGeoHeight', useHeight * 0.8)
+      //   }
+      //   document.getElementById('arrowDown_geo').style.position = "absolute";
+      //   document.getElementById('arrowDown_geo').style.right = "20px";
+      //   /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+      //   /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
+      //   document.getElementById('arrowDown_geo').style.zIndex = 99;
+      // },
       netHeightCount: function() {
         var mthis = this
         var tmss = mthis.$store.state.tmss;
@@ -501,7 +502,7 @@
           mthis.$store.commit('setChangenetpx', false);
         } else {
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight * 0.8 + "px";
+          document.getElementById('arrowDown_net').style.top = useHeight * 0.8 - 3 + "px";
           // this.timepx =
           //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
           //   30 +
@@ -523,45 +524,45 @@
         /* document.getElementById('arrowDown_net').style.top = netpxdiv; */
         document.getElementById('arrowDown_net').style.zIndex = 99;
       },
-      contentHeightCount: function() {
-        var mthis = this
-        var tmss = mthis.$store.state.tmss;
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (mthis.contentHeightCount % 2 === 0) {
-          /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_content').style.top = useHeight - 40 + "px";
-          //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
-          //mthis.$store.commit('setGeoHeight',useHeight * 1)
-          mthis.$store.commit('setContentHeight', useHeight * 1)
-          document.getElementById('timechartctrl_content').style.display = "none";
-          document.getElementById('main1_content').style.display = "none";
-          document.getElementById('timediv_content').style.display = "none";
-          document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
-          /* mthis.$store.commit('setChangenetpx',false); */
-        } else {
-          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_content').style.top = useHeight * 0.8 + "px";
-          // this.timepx =
-          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
-          //   30 +
-          //   "px";
-          // this.timepxdiv =
-          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-          // mthis.$emit('changenetpx', true);
-          /* mthis.$store.commit('setChangenetpx',true); */
-          document.getElementById('timechartctrl_content').style.display = "block";
-          document.getElementById('main1_content').style.display = "block";
-          document.getElementById('timediv_content').style.display = "block";
-          document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
-          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-          mthis.$store.commit('setContentHeight', useHeight * 0.8)
-        }
-        document.getElementById('arrowDown_content').style.position = "absolute";
-        document.getElementById('arrowDown_content').style.right = "20px";
-        /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-        /* document.getElementById('arrowDown_content').style.top = netpxdiv; */
-        document.getElementById('arrowDown_content').style.zIndex = 99;
-      }
+      // contentHeightCount: function() {
+      //   var mthis = this
+      //   var tmss = mthis.$store.state.tmss;
+      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
+      //   if (mthis.contentHeightCount % 2 === 0) {
+      //     /* mthis.iconPosition = useHeight - 40 + "px"; */
+      //     document.getElementById('arrowDown_content').style.top = useHeight - 40 + "px";
+      //     //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
+      //     //mthis.$store.commit('setGeoHeight',useHeight * 1)
+      //     mthis.$store.commit('setContentHeight', useHeight * 1)
+      //     document.getElementById('timechartctrl_content').style.display = "none";
+      //     document.getElementById('main1_content').style.display = "none";
+      //     document.getElementById('timediv_content').style.display = "none";
+      //     document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
+      //     /* mthis.$store.commit('setChangenetpx',false); */
+      //   } else {
+      //     /* mthis.iconPosition = useHeight * 0.8 + "px"; */
+      //     document.getElementById('arrowDown_content').style.top = useHeight * 0.8 + "px";
+      //     // this.timepx =
+      //     //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
+      //     //   30 +
+      //     //   "px";
+      //     // this.timepxdiv =
+      //     //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+      //     // mthis.$emit('changenetpx', true);
+      //     /* mthis.$store.commit('setChangenetpx',true); */
+      //     document.getElementById('timechartctrl_content').style.display = "block";
+      //     document.getElementById('main1_content').style.display = "block";
+      //     document.getElementById('timediv_content').style.display = "block";
+      //     document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
+      //     //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+      //     mthis.$store.commit('setContentHeight', useHeight * 0.8)
+      //   }
+      //   document.getElementById('arrowDown_content').style.position = "absolute";
+      //   document.getElementById('arrowDown_content').style.right = "20px";
+      //   /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+      //   /* document.getElementById('arrowDown_content').style.top = netpxdiv; */
+      //   document.getElementById('arrowDown_content').style.zIndex = 99;
+      // }
     },
     props: {
       activeId: String

@@ -1,0 +1,43 @@
+<!--?xml version="1.0" encoding="gb2312"?-->   
+<configList>
+  <common>
+  </common>
+  <netcahrt>
+    <!---
+      eventImg 里面放的是事件对应的事件图标
+      imgItem 一个图标对象
+      eventType 图标对应的事件类型
+      eventImg 图标地址或svg
+    --->
+    <eventImg>
+      <imgItem>
+        <eventType>
+          金钱交易
+        </eventType>
+        <eventImg>
+
+        </eventImg>
+      </imgItem>
+      <imgItem>
+        <eventType>
+          引渡
+        </eventType>
+        <eventImg>
+          
+        </eventImg>
+      </imgItem>
+      <imgItem>
+        <eventType>
+          定罪
+        </eventType>
+        <eventImg>
+          
+        </eventImg>
+      </imgItem>
+    </eventImg>
+  </netcahrt>
+  <geochart>
+  </geochart>
+  <contentchart>
+  </contentchart>
+</configList>

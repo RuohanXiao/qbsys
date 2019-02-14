@@ -1,13 +1,13 @@
 <template>
-  <div :style="{fontSize: '18px',height:viewHeight}">
+  <div :style="{fontSize: '18px',height:viewHeight_20}">
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0'}">
         <Tabs :value=$store.state.tabSelect>
-          <Tab-pane label="数据透视" name='数据透视' :style="{fontSize: '18px',height:viewHeight}" id='toushi' @click="changTab('数据透视')">
+          <Tab-pane label="数据透视" name='数据透视' :style="{fontSize: '18px',height:viewHeight_20}" id='toushi' @click="changTab('数据透视')">
             <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'net' && nodeTypedata !== null"></left-statics>
           </Tab-pane>
-          <Tab-pane label="选中详情" name='选中详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight}" id='mubiaoxiangqing' @click="changTab('选中详情')">
+          <Tab-pane label="选中详情" name='选中详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_20}" id='mubiaoxiangqing' @click="changTab('选中详情')">
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <!-- 目标详情 -->
@@ -235,7 +235,7 @@
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent', 'contentStatisticsResult']),
+    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult']),
     watch: {
       // contentStatisticsResult:function(){
       //   var mthis = this;
