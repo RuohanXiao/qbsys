@@ -73,7 +73,7 @@
       timeZoomOut() {},
       timeZoomIn() {},
       resize() {
-        let width = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+        let width = document.documentElement.clientWidth * this.$store.state.split_content - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         this.charts.resize({
           width,
@@ -301,7 +301,7 @@
           }]
         };
         mthis.charts = echarts.init(document.getElementById(mthis.main1Id), "", {
-          width: document.documentElement.clientWidth * mthis.$store.state.split - 20 + 'px',
+          width: document.documentElement.clientWidth * mthis.$store.state.split_content - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
         mthis.timeTitle = ''
@@ -404,7 +404,7 @@
       this.timepxdiv =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -8 + "px";
       /* this.iconPosition = useHeight * 0.8 + "px"; */
-      this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+      this.pwidth = document.documentElement.clientWidth * this.$store.state.split_content - 20 + 'px'
       // this.iconPosition = useHeight - 40 + "px";
       this.loadEcharts();
       let that = this;
@@ -413,7 +413,7 @@
       // this.changHeightCount++
     },
     computed: mapState([
-      'split', 'splitWidth', 'tmss', 'conditionContent'
+      'split','split_content', 'splitWidth', 'tmss', 'conditionContent'
     ]),
     watch: {
       /* tmss: function(){
@@ -435,7 +435,7 @@
           }
         })
       },
-      split: function(va) {
+      split_content: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         this.charts.resize({
@@ -444,7 +444,7 @@
         })
       },
       splitWidth: function(va) {
-        this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+        this.pwidth = document.documentElement.clientWidth * this.$store.state.split_content - 20 + 'px'
       },
       // geoHeightCount: function() {
       //   var mthis = this

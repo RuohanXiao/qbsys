@@ -255,6 +255,9 @@ var store = new Vuex.Store({
     geoDivHeight: 0,
     geoData: null,
     split:0.85,
+    split_net:0.85,
+    split_geo:0.85,
+    split_content:0.85,
     singlePerson:true,
     dataStatisticsEvent: {},
     changenetpx: true,
@@ -382,6 +385,15 @@ var store = new Vuex.Store({
     },
     setSplit(state,val){
       state.split = val
+    },
+    setSplit_net(state,val){
+      state.split_net = val
+    },
+    setSplit_geo(state,val){
+      state.split_geo = val
+    },
+    setSplit_content(state,val){
+      state.split_content = val
     },
     setDataStatisticsEvent(state,val){
       state.dataStatisticsEvent = val

@@ -110,7 +110,8 @@
           <Scroll :on-reach-bottom="handleReachBottom" v-if='!ifInfo' :height=ContentHeight>
             
             <div id="contentchart" class="scrollBarAble" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex'}">
-            <div class="container select-box-container" :style="{width:'100%'}">
+
+            <!-- <div class="container select-box-container" :style="{width:'100%'}">
               <Row type="flex" justify="start" align="middle">
               <Col :sm="8" :lg="4" class="fileDiv select-item"  v-for="item in items"  type="flex" justify="start" align="middle" >
                 <div align="middle" class="contentDiv fileDiv select-item" @dblclick="showContent(item.id)" :id=item.id :title=item.title>
@@ -123,9 +124,10 @@
                 <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
               </Col>
               </Row>
-            </div>
-              <!-- <Row type="flex" justify="start" align="middle">
-                <Col :sm="8" :lg="6" align="middle" v-for="item in items" class="container select-box-container">
+            </div> -->
+
+              <Row type="flex" justify="start" align="middle">
+                <Col :sm="8" :lg="4" align="middle" v-for="item in items" @click='mark(item.id)'>
                 <div class="contentDiv fileDiv select-item" @dblclick="showContent(item.id)">
                   <p class="contentTitle">{{item.title}}</p>
                   <p class="contentText">{{item.text}}</p>
@@ -135,7 +137,7 @@
                 <Col span=24 v-if="items.length>0">
                 <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
                 </Col>
-              </Row> -->
+              </Row>
               </div>
           </Scroll>
           <div id="contentInfo" class="scrollBarAble" v-if='ifInfo' :style="{height:ContentHeight,overflowY:'scroll'}">
@@ -445,6 +447,9 @@
     },
     props: ['contentData'],
     methods: {
+      mark(id){
+        // 给选中的文本打勾/取消打勾，
+      },
       alertNotice (titleStr,nodesc) {
         this.$Notice.open({
             title: titleStr,

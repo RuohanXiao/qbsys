@@ -1,4 +1,8 @@
 export default {
+  // 判断数组中是否包含某元素
+  ifInArr(param,arryParams){
+    return !(arryParams.indexOf(param) < 0)
+  },
   // 数组去重
   unique(arr) {
     var res = [];

@@ -71,7 +71,7 @@
     ]),
     watch: {
       split1: function(va) {
-        this.$store.commit('setSplit', this.split1)
+        this.$store.commit('setSplit_net', this.split1)
       },
       netDivHeight: function(va) {
         this.nDivHeight = this.$store.getters.getNetDivHeight

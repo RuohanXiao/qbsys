@@ -258,7 +258,7 @@ export default {
         })
         mthis.GeoHeight=mthis.$store.getters.getGeoHeight;
         mthis.mapHeight =mthis.$store.getters.getGeoHeight;
-        mthis.geoWidth=document.documentElement.clientWidth * this.$store.state.split - 20 + 'px';
+        mthis.geoWidth=document.documentElement.clientWidth * this.$store.state.split_geo - 20 + 'px';
     },
     methods:{
         mapOperationClick(mapOperation){
@@ -1716,7 +1716,7 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData'
+      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData'
     ]),
     
     watch:{
@@ -1821,10 +1821,10 @@ export default {
             }
             
         },
-        split:function(){
+        split_geo:function(){
             var mthis = this;
             if(mthis.$store.state.tmss == 'geo'){
-                mthis.geoWidth = document.documentElement.clientWidth * mthis.split - 20 + 'px';
+                mthis.geoWidth = document.documentElement.clientWidth * mthis.split_geo - 20 + 'px';
             }
             
         },

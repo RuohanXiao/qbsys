@@ -61,7 +61,7 @@
     },
     watch:{
       split1: function(va){
-        this.$store.commit('setSplit',this.split1);
+        this.$store.commit('setSplit_geo',this.split1);
         this.splitWidth = document.documentElement.clientWidth * this.split1 - 20 + 'px'
       },
       geoHeight:function(va){

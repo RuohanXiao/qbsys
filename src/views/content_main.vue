@@ -67,6 +67,12 @@
       mthis.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
       mthis.viewHeight = mthis.$store.getters.getViewHeight
       mthis.contentHeight = mthis.$store.getters.getContentDivHeight
+    },
+    watch:{
+    split1: function(va){
+        this.$store.commit('setSplit_content',this.split1);
+        this.splitWidth = document.documentElement.clientWidth * this.split1 - 20 + 'px'
+      }
     }
   }
 </script>
