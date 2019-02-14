@@ -472,10 +472,64 @@
         this.showList = true
       },
       contentTranslate(){
-        debugger
+        var oldEle = document.getElementById('translatedDiv');
+        if(oldEle !== null){
+          oldEle.parentElement.removeChild(oldEle);
+        }
+        var contentId = document.getElementById('contentInfo').value;
         var contentDiv = document.getElementById('contentInfo');
         contentDiv.style.width = '50%';
-        contentDiv.style.borderRight = '2px #366674 solid'
+        contentDiv.style.float = 'left';
+        contentDiv.style.borderRight = '2px #366674 solid';
+        //contentDiv.parentElement.appendChild()
+        var translatedTitle = "惠普OLED笔记本电脑即将亮相CES 2019";
+        var translatedTime = "2019-01-06 16:00:00";
+        var translatedText = '科技2016年，惠普首次在其13寸的 Spectre x360系列笔记本电脑上安装了OLED显示器，但反响平平，未能在主流高端笔记本电脑中脱颖而出。随着OLED面板供货情况的改善，惠普如今又卷土重来。据外媒1月6日报道，惠普最新研发的15英寸的Spectre x360 OLED屏幕笔记本电脑即将在美亮相国际消费类电子产品展览会(CES)。'
+
+                              + 'OLED屏幕具有节能、延展性和对比度较高、可视角度更大等优势，是未来显示技术发展的新方向。联想和惠普是首批在2016年推出OLED笔记本电脑的公司，但由于面板的价格居高不下，这些显示器未能在主流高端笔记本电脑中脱颖而出。三年前，惠普首次在Spectre x360 13上安装了OLED显示器，但由于性价比不高一直反响平平。'
+
+                              +'如今，随着OLED显示技术的日益成熟，惠普又卷土重来，研发了新一代OLED笔记本电脑——15英寸的HP Spectre x360的可选OLED型号。这也是我们第一次在15英寸的笔记本电脑上看到OLED显示器。此款OLED型号的笔记本电脑将于1月8到11日在美国拉斯维加斯举行的第52届国际消费类电子产品展览会上亮相。'
+
+                              +'此款OLED笔记本电脑将延续当前Spectre x360 15的设计，但显示器将是支持高动态范围图像(即HDR)的OLED面板。这意味着此款OLED型号笔记本将配备第8代英特尔酷睿i7处理器，16GB内存和512GB的PCIe 固态硬盘。'
+
+                              +'惠普预计将于今年3月开始发售这款OLED笔记本型号，其售价目前尚未得到官方确认，但参考以前的OLED笔记本电脑的价格，想必也不会便宜。惠普尚未提供电池续航数据，但现有的Spectre x360 15型号能混合使用长达16小时，而OLED显示器显然会大大延长这一时间。(实习编译：楚肖雅 审稿：李宗泽)'
+                              + 'OLED屏幕具有节能、延展性和对比度较高、可视角度更大等优势，是未来显示技术发展的新方向。联想和惠普是首批在2016年推出OLED笔记本电脑的公司，但由于面板的价格居高不下，这些显示器未能在主流高端笔记本电脑中脱颖而出。三年前，惠普首次在Spectre x360 13上安装了OLED显示器，但由于性价比不高一直反响平平。'
+
+                              +'如今，随着OLED显示技术的日益成熟，惠普又卷土重来，研发了新一代OLED笔记本电脑——15英寸的HP Spectre x360的可选OLED型号。这也是我们第一次在15英寸的笔记本电脑上看到OLED显示器。此款OLED型号的笔记本电脑将于1月8到11日在美国拉斯维加斯举行的第52届国际消费类电子产品展览会上亮相。'
+
+                              +'此款OLED笔记本电脑将延续当前Spectre x360 15的设计，但显示器将是支持高动态范围图像(即HDR)的OLED面板。这意味着此款OLED型号笔记本将配备第8代英特尔酷睿i7处理器，16GB内存和512GB的PCIe 固态硬盘。'
+
+                              +'惠普预计将于今年3月开始发售这款OLED笔记本型号，其售价目前尚未得到官方确认，但参考以前的OLED笔记本电脑的价格，想必也不会便宜。惠普尚未提供电池续航数据，但现有的Spectre x360 15型号能混合使用长达16小时，而OLED显示器显然会大大延长这一时间。(实习编译：楚肖雅 审稿：李宗泽)'
+                              + 'OLED屏幕具有节能、延展性和对比度较高、可视角度更大等优势，是未来显示技术发展的新方向。联想和惠普是首批在2016年推出OLED笔记本电脑的公司，但由于面板的价格居高不下，这些显示器未能在主流高端笔记本电脑中脱颖而出。三年前，惠普首次在Spectre x360 13上安装了OLED显示器，但由于性价比不高一直反响平平。'
+
+                              +'如今，随着OLED显示技术的日益成熟，惠普又卷土重来，研发了新一代OLED笔记本电脑——15英寸的HP Spectre x360的可选OLED型号。这也是我们第一次在15英寸的笔记本电脑上看到OLED显示器。此款OLED型号的笔记本电脑将于1月8到11日在美国拉斯维加斯举行的第52届国际消费类电子产品展览会上亮相。'
+
+                              +'此款OLED笔记本电脑将延续当前Spectre x360 15的设计，但显示器将是支持高动态范围图像(即HDR)的OLED面板。这意味着此款OLED型号笔记本将配备第8代英特尔酷睿i7处理器，16GB内存和512GB的PCIe 固态硬盘。'
+
+                              +'惠普预计将于今年3月开始发售这款OLED笔记本型号，其售价目前尚未得到官方确认，但参考以前的OLED笔记本电脑的价格，想必也不会便宜。惠普尚未提供电池续航数据，但现有的Spectre x360 15型号能混合使用长达16小时，而OLED显示器显然会大大延长这一时间。(实习编译：楚肖雅 审稿：李宗泽)'
+                              + 'OLED屏幕具有节能、延展性和对比度较高、可视角度更大等优势，是未来显示技术发展的新方向。联想和惠普是首批在2016年推出OLED笔记本电脑的公司，但由于面板的价格居高不下，这些显示器未能在主流高端笔记本电脑中脱颖而出。三年前，惠普首次在Spectre x360 13上安装了OLED显示器，但由于性价比不高一直反响平平。'
+
+                              +'如今，随着OLED显示技术的日益成熟，惠普又卷土重来，研发了新一代OLED笔记本电脑——15英寸的HP Spectre x360的可选OLED型号。这也是我们第一次在15英寸的笔记本电脑上看到OLED显示器。此款OLED型号的笔记本电脑将于1月8到11日在美国拉斯维加斯举行的第52届国际消费类电子产品展览会上亮相。'
+
+                              +'此款OLED笔记本电脑将延续当前Spectre x360 15的设计，但显示器将是支持高动态范围图像(即HDR)的OLED面板。这意味着此款OLED型号笔记本将配备第8代英特尔酷睿i7处理器，16GB内存和512GB的PCIe 固态硬盘。'
+
+                              +'惠普预计将于今年3月开始发售这款OLED笔记本型号，其售价目前尚未得到官方确认，但参考以前的OLED笔记本电脑的价格，想必也不会便宜。惠普尚未提供电池续航数据，但现有的Spectre x360 15型号能混合使用长达16小时，而OLED显示器显然会大大延长这一时间。(实习编译：楚肖雅 审稿：李宗泽)'
+                              + 'OLED屏幕具有节能、延展性和对比度较高、可视角度更大等优势，是未来显示技术发展的新方向。联想和惠普是首批在2016年推出OLED笔记本电脑的公司，但由于面板的价格居高不下，这些显示器未能在主流高端笔记本电脑中脱颖而出。三年前，惠普首次在Spectre x360 13上安装了OLED显示器，但由于性价比不高一直反响平平。'
+
+                              +'如今，随着OLED显示技术的日益成熟，惠普又卷土重来，研发了新一代OLED笔记本电脑——15英寸的HP Spectre x360的可选OLED型号。这也是我们第一次在15英寸的笔记本电脑上看到OLED显示器。此款OLED型号的笔记本电脑将于1月8到11日在美国拉斯维加斯举行的第52届国际消费类电子产品展览会上亮相。'
+
+                              +'此款OLED笔记本电脑将延续当前Spectre x360 15的设计，但显示器将是支持高动态范围图像(即HDR)的OLED面板。这意味着此款OLED型号笔记本将配备第8代英特尔酷睿i7处理器，16GB内存和512GB的PCIe 固态硬盘。'
+
+                              +'惠普预计将于今年3月开始发售这款OLED笔记本型号，其售价目前尚未得到官方确认，但参考以前的OLED笔记本电脑的价格，想必也不会便宜。惠普尚未提供电池续航数据，但现有的Spectre x360 15型号能混合使用长达16小时，而OLED显示器显然会大大延长这一时间。(实习编译：楚肖雅 审稿：李宗泽)'
+        var translatedHtml = /* "<div  id='translateContentInfo' class='scrollBarAble' style='height: 607px; overflow-y: scroll; width: 50%; border-right: 2px solid rgb(54, 102, 116);'>" */
+                              "<h2 id='translateContentsTitle'class='contentInfoTitle'>" + translatedTitle 
+                              + "</h2> <p id='translateContentsTime' class='contentInfoTime'>" + translatedTime 
+                              +"</p><p style='margin: 30px;'><span id='translateContents'>" + translatedText + "</span>";
+        var translatedDiv = document.createElement('div');
+        translatedDiv.id='translatedDiv'
+        translatedDiv.style = "height: 607px;overflow-y: scroll;width: 50%;float:right";
+        translatedDiv.innerHTML = translatedHtml;
+        contentDiv.parentElement.appendChild(translatedDiv);
       },
       orderTimeUp() {
         var mthis = this
@@ -885,7 +939,7 @@
     color: #cc6666;
     opacity: 0.8;
   }
-  #contents {
+  #contents,#translateContents {
     font-family: MicrosoftYaHei;
     font-size: 14px;
     font-weight: normal;
