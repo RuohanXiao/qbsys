@@ -1447,6 +1447,7 @@
         var contentDiv = document.getElementById('contentInfo');
         contentDiv.style.width = '50%';
         contentDiv.style.float = 'left';
+        contentDiv.style.display = 'inline';
         contentDiv.style.borderRight = '2px #366674 solid';
         //contentDiv.parentElement.appendChild()
         var translatedTitle = "惠普OLED笔记本电脑即将亮相CES 2019";
@@ -1493,8 +1494,9 @@
                               + "</h2> <p id='translateContentsTime' class='contentInfoTime'>" + translatedTime 
                               +"</p><p style='margin: 30px;'><span id='translateContents'>" + translatedText + "</span>";
         var translatedDiv = document.createElement('div');
-        translatedDiv.id='translatedDiv'
-        translatedDiv.style = "height: 607px;overflow-y: scroll;width: 50%;float:right";
+        translatedDiv.id='translatedDiv';
+        translatedDiv.style = "overflow-y: scroll;width: 50%;";
+        translatedDiv.style.height = contentDiv.style.height;
         translatedDiv.innerHTML = translatedHtml;
         contentDiv.parentElement.appendChild(translatedDiv);
       },
@@ -1657,6 +1659,10 @@
       toContentDiv() {
         this.showList = false
         this.ifInfo = false
+        var oldEle = document.getElementById('translatedDiv');
+        if(oldEle !== null){
+          oldEle.parentElement.removeChild(oldEle);
+        }
         // document.getElementById('contents').innerHTML = ''
         // document.getElementById('contentsTitle').innerHTML = ''
         // document.getElementById('contentsTime').innerHTML = ''
