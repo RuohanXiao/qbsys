@@ -3,17 +3,18 @@
     <div class="bgDiv"></div>
     <div class="demo-split" :style="{height:viewHeight}">
       <div :style="{height:vh20}">
-      <Split v-model="split1" :max="max" :min="min">
-        <div slot="left" class="demo-split-pane" display='flex' :style="{height:vh20}">
-          <!-- <net-chart-div id="net" :style="{height:nDivHeight}"></net-chart-div> -->
-          <net-chart-div id="netC" :style="{height:nHeight}"></net-chart-div>
-          <time-chart-div :activeId='activeId'></time-chart-div>
-        </div>
-        <div id="right" slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
-          <event-chart-div  :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div>
-        </div>
-      </Split>
-    </div></div>
+        <Split v-model="split1" :max="max" :min="min">
+          <div slot="left" class="demo-split-pane" display='flex' :style="{height:vh20}">
+            <!-- <net-chart-div id="net" :style="{height:nDivHeight}"></net-chart-div> -->
+            <net-chart-div id="netC" :style="{height:nHeight}"></net-chart-div>
+            <time-chart-div :activeId='activeId'></time-chart-div>
+          </div>
+          <div id="right" slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
+            <event-chart-div :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div>
+          </div>
+        </Split>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -21,19 +22,22 @@
   import netChartDiv from "./components/custom_netdiv";
   import timeChartDiv from "./components/custom_timediv_net";
   import eventChartDiv from "./components/custom_eventdiv_net";
-  import { mapState,mapMutations } from 'vuex'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   export default {
     name: "App",
     data() {
       return {
-        vh20:0,
+        vh20: 0,
         split1: 0.85,
         max: 0.15,
         min: 0.7,
         flag: true,
         viewHeight: null,
         nHeight: null,
-        activeId:'net',
+        activeId: 'net',
       }
     },
     components: {
@@ -62,32 +66,32 @@
       //   }, 100);
       // }
     },
-    computed:mapState ([
-      'changenetpx','netDivHeight','netHeight','viewHeight_20'
+    computed: mapState([
+      'changenetpx', 'netDivHeight', 'netHeight', 'viewHeight_20'
     ]),
-    watch:{
-      split1: function(va){
-        this.$store.commit('setSplit',this.split1)
+    watch: {
+      split1: function(va) {
+        this.$store.commit('setSplit', this.split1)
       },
-      netDivHeight: function(va){
+      netDivHeight: function(va) {
         this.nDivHeight = this.$store.getters.getNetDivHeight
       },
-      netHeight: function(va){
+      netHeight: function(va) {
         // this.nHeight = this.$store.getters.getNetHeight
         this.nHeight = va
-        this.vh20 =  document.documentElement.clientHeight - 65 - 20 + 'px';
+        this.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
       },
-      changenetpx: function(va){
+      changenetpx: function(va) {
         var mthis = this
         mthis.useHeight = document.documentElement.clientHeight - 65 - 20;
         if (mthis.flag) {
-          mthis.$store.commit('setNetDivHeight',mthis.useHeight)
-          mthis.$store.commit('setNetHeight',mthis.useHeight)
+          mthis.$store.commit('setNetDivHeight', mthis.useHeight)
+          mthis.$store.commit('setNetHeight', mthis.useHeight)
           // mthis.netpxdiv = mthis.useHeight * 1 + "px";
           // mthis.netpx = mthis.useHeight * 1 - 55 + "px";
         } else {
-          mthis.$store.commit('setNetDivHeight',mthis.useHeight* 0.8)
-          mthis.$store.commit('setNetHeight',mthis.useHeight * 0.8)
+          mthis.$store.commit('setNetDivHeight', mthis.useHeight * 0.8)
+          mthis.$store.commit('setNetHeight', mthis.useHeight * 0.8)
           // mthis.netpxdiv = mthis.useHeight * 0.8 + "px";
           // mthis.netpx = mthis.useHeight * 0.8 - 55 + "px";
         }
@@ -97,12 +101,12 @@
     // computed:mapState ([
     //   'customDivHeight','customCanvasHeight','netDataObj'
     // ]),
-    created(){
+    created() {
       var mthis = this
       mthis.viewHeight = mthis.$store.getters.getViewHeight
       mthis.nDivHeight = mthis.$store.getters.getNetDivHeight
     },
-    mounted(){
+    mounted() {
       var mthis = this
     }
   }
@@ -110,8 +114,8 @@
 
 <style>
   .process-img {
-      /* color: rgba(51, 255, 255, 0.4); */
-    color: rgba(51, 255, 255,0.6);
+    /* color: rgba(51, 255, 255, 0.4); */
+    color: rgba(51, 255, 255, 0.6);
     size: 30px;
   }
   .bgDiv {
@@ -127,15 +131,8 @@
     width: 100%;
   }
   #right {
-    background-image: linear-gradient(8deg, 
-		rgba(102, 255, 153, 0.2) 0%, 
-		rgba(102, 128, 204, 0.2) 60%, 
-		rgba(102, 0, 255, 0.2) 100%), 
-    linear-gradient(
-      #000000, 
-      #000000);
-    background-blend-mode: normal, 
-      normal;
+    background-image: linear-gradient(8deg, rgba(102, 255, 153, 0.2) 0%, rgba(102, 128, 204, 0.2) 60%, rgba(102, 0, 255, 0.2) 100%), linear-gradient( #000000, #000000);
+    background-blend-mode: normal, normal;
     border: solid 1px #336666;
   }
   .menu-item span {
@@ -164,8 +161,8 @@
     font-size: 22px;
   }
   /*
-                侧导航end
-              */
+                  侧导航end
+                */
   .white-text {
     color: #fff;
   }
@@ -250,7 +247,6 @@
     font-size: 1em;
     font-family: "微软雅黑";
   }
-  
   .ivu-tooltip-rel i {
     width: 30px;
     height: 30px;
@@ -426,18 +422,16 @@
     overflow: hidden;
   }
   /* 滚动条样式 */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
   .ivu-progress-inner {
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
   /* .ivu-tabs-tab {
-    color: #ccffff !important;
-  } */
+      color: #ccffff !important;
+    } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }
@@ -450,13 +444,12 @@
     white-space: nowrap;
     padding: 0 7px;
     text-decoration: none;
-    color:rgba(51, 255, 255, 0.6);
+    color: rgba(51, 255, 255, 0.6);
   }
-  .img-content{
+  .img-content {
     font-size: 12px;
-    color:rgba(51, 255, 255, 0.6);
+    color: rgba(51, 255, 255, 0.6);
   }
-  
   /* 分割线样式 */
   .ivu-split-trigger-vertical {
     width: 3px !important;
@@ -563,17 +556,17 @@
   #barchart {
     width: 100%;
   }
-  .divStyle{
-    display:flex;
-    flex-flow:row nowrap;
-    height:55px;
-    padding-left:10px;
-    border-top:1px solid rgba(54, 102, 116, 0.5);
+  .divStyle {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 55px;
+    padding-left: 10px;
+    border-top: 1px solid rgba(54, 102, 116, 0.5);
     /* border-right:1px solid rgba(54, 102, 116, 0.5);
-    border-left:1px solid rgba(54, 102, 116, 0.5); */
+      border-left:1px solid rgba(54, 102, 116, 0.5); */
   }
-  .divSplitLine{
-    float:center;
+  .divSplitLine {
+    float: center;
     width: 1px;
     height: 35px;
     background: rgba(51, 255, 255, 0.2);
@@ -607,12 +600,12 @@
   }
 </style>
 <style scoped>
- .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab{
+  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
     margin-bottom: 5px !important;
-    background-color:rgba(51,255,255,0.2) !important;
-    border: 1px solid rgba(51,255,255,1) !important;
+    background-color: rgba(51, 255, 255, 0.2) !important;
+    border: 1px solid rgba(51, 255, 255, 1) !important;
   }
-  .ivu-tabs-tab-active{
-    background-color:rgba(51,255,255,0.2) !important;
+  .ivu-tabs-tab-active {
+    background-color: rgba(51, 255, 255, 0.2) !important;
   }
 </style>

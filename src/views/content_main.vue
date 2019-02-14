@@ -2,15 +2,17 @@
   <div>
     <div class="bgDiv"></div>
     <div class="demo-split" :style="{height:viewHeight}">
-      <Split v-model="split1" :max="max" :min="min">
-        <div slot="left" class="demo-split-pane" display='flex' :style="{height:viewHeight}">
-          <content-chart-div id="net" :style="{height:contentHeight}"></content-chart-div>
-          <time-chart-div :activeId="activeId"></time-chart-div>
-        </div>
-        <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:viewHeight,maxHeight:viewHeight,marginRight:'2.3vw'}">
-          <event-chart-div id="right" :style="{height:viewHeight,maxHeight:viewHeight}"></event-chart-div>
-        </div>
-      </Split>
+      <div :style="{height:vh20}">
+        <Split v-model="split1" :max="max" :min="min">
+          <div slot="left" class="demo-split-pane" display='flex' :style="{height:vh20}">
+            <content-chart-div id="net" :style="{height:contentHeight}"></content-chart-div>
+            <time-chart-div :activeId="activeId"></time-chart-div>
+          </div>
+          <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
+            <event-chart-div id="right" :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div>
+          </div>
+        </Split>
+      </div>
     </div>
   </div>
 </template>
@@ -19,18 +21,22 @@
   import contentChartDiv from "./components/custom_contentdiv";
   import timeChartDiv from "./components/custom_timediv_content";
   import eventChartDiv from "./components/custom_eventdiv_content";
-  import { mapState,mapMutations } from 'vuex'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   export default {
     name: "App",
     data() {
       return {
+        vh20: 0,
         split1: 0.85,
         max: 0.15,
         min: 0.7,
         flag: true,
         viewHeight: 0,
         contentHeight: null,
-        activeId:'content',
+        activeId: 'content',
       }
     },
     components: {
@@ -39,8 +45,7 @@
       eventChartDiv
     },
     methods: {
-      contentData () {
-      },
+      contentData() {},
       /* changenetpx () {
         var mthis = this
         mthis.useHeight = document.documentElement.clientHeight - 65 - 20;
@@ -54,11 +59,12 @@
         mthis.flag = !mthis.flag
       } */
     },
-    computed:mapState ([
+    computed: mapState([
       // 'customDivHeight','customCanvasHeight','netDataObj'
     ]),
-    mounted(){
+    mounted() {
       var mthis = this
+      mthis.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
       mthis.viewHeight = mthis.$store.getters.getViewHeight
       mthis.contentHeight = mthis.$store.getters.getContentDivHeight
     }
@@ -67,8 +73,8 @@
 
 <style>
   .process-img {
-      /* color: rgba(51, 255, 255, 0.4); */
-    color: rgba(51, 255, 255,0.6);
+    /* color: rgba(51, 255, 255, 0.4); */
+    color: rgba(51, 255, 255, 0.6);
     size: 30px;
   }
   .bgDiv {
@@ -109,8 +115,8 @@
     font-size: 22px;
   }
   /*
-                侧导航end
-              */
+                  侧导航end
+                */
   .white-text {
     color: #fff;
   }
@@ -195,7 +201,6 @@
     font-size: 1em;
     font-family: "微软雅黑";
   }
-  
   .ivu-tooltip-rel i {
     width: 30px;
     height: 30px;
@@ -369,13 +374,12 @@
   .p-collapse-modal {
     overflow: hidden;
   }
-
   .ivu-progress-inner {
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
   /* .ivu-tabs-tab {
-    color: #ccffff !important;
-  } */
+      color: #ccffff !important;
+    } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }
@@ -388,13 +392,12 @@
     white-space: nowrap;
     padding: 0 7px;
     text-decoration: none;
-    color:rgba(51, 255, 255, 0.5);
+    color: rgba(51, 255, 255, 0.5);
   }
-  .img-content{
+  .img-content {
     font-size: 12px;
-    color:rgba(51, 255, 255, 0.6);
+    color: rgba(51, 255, 255, 0.6);
   }
-  
   /* 分割线样式 */
   .ivu-split-trigger-vertical {
     width: 3px !important;
@@ -501,17 +504,17 @@
   #barchart {
     width: 100%;
   }
-  .divStyle{
-    display:flex;
-    flex-flow:row nowrap;
-    height:55px;
-    padding-left:10px;
-    border-top:1px solid rgba(54, 102, 116, 0.5);
+  .divStyle {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 55px;
+    padding-left: 10px;
+    border-top: 1px solid rgba(54, 102, 116, 0.5);
     /* border-right:1px solid rgba(54, 102, 116, 0.5);
-    border-left:1px solid rgba(54, 102, 116, 0.5); */
+      border-left:1px solid rgba(54, 102, 116, 0.5); */
   }
-  .divSplitLine{
-    float:center;
+  .divSplitLine {
+    float: center;
     width: 1px;
     height: 35px;
     background: rgba(51, 255, 255, 0.2);
@@ -546,12 +549,12 @@
 </style>
 
 <style scoped>
-.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab{
+  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
     margin-bottom: 5px !important;
-    background-color:rgba(51,255,255,0.2) !important;
-    border: 1px solid rgba(51,255,255,1) !important;
+    background-color: rgba(51, 255, 255, 0.2) !important;
+    border: 1px solid rgba(51, 255, 255, 1) !important;
   }
-  .ivu-tabs-tab-active{
-    background-color:rgba(51,255,255,0.2) !important;
+  .ivu-tabs-tab-active {
+    background-color: rgba(51, 255, 255, 0.2) !important;
   }
 </style>

@@ -4,9 +4,10 @@
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
-        <Col span="3"/>
-        <Col span="18"  class="bottom"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
-        <Col span="1"  class="bottom">
+        <!-- <Col span="1" />
+          <Col span="20" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
+        <Col span="21" class="bottom"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
+        <Col span="1" class="bottom">
         <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip>
@@ -32,17 +33,20 @@
  
 <script>
   import echarts from "echarts";
-  import { mapState,mapMutations } from 'vuex'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   export default {
     name: "",
     data() {
       return {
         timeTitle: '',
-        timechartdivId:'timechartdiv_' + this.activeId,
-        arrowDownId:'arrowDown_'+ this.activeId,
-        timechartctrlId:'timechartctrl_'+ this.activeId,
-        timedivId:'timediv_'+ this.activeId,
-        main1Id:'main1_'+ this.activeId,
+        timechartdivId: 'timechartdiv_' + this.activeId,
+        arrowDownId: 'arrowDown_' + this.activeId,
+        timechartctrlId: 'timechartctrl_' + this.activeId,
+        timedivId: 'timediv_' + this.activeId,
+        main1Id: 'main1_' + this.activeId,
         pwidth: 0,
         timepxdiv: 0,
         timepx: 0,
@@ -55,21 +59,19 @@
         geoHeightCount: 1,
         contentHeightCount: 1,
         dataBySeries: {
-          num: [
-          ],
-          date: [
-          ]
+          num: [],
+          date: []
         }
       };
     },
     methods: {
-      onchangHeightCount(){
+      onchangHeightCount() {
         var mthis = this;
         var tmss = mthis.$store.state.tmss;
-        mthis.contentHeightCount ++;
+        mthis.contentHeightCount++;
       },
-      timeZoomOut() { },
-      timeZoomIn() { },
+      timeZoomOut() {},
+      timeZoomIn() {},
       resize() {
         let width = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
@@ -189,7 +191,7 @@
           dataZoom: [{
               type: "slider",
               startValue: 0,
-              endValue: 29,
+              endValue: 100,
               realtime: false, //是否实时加载
               // realtime: true, //是否实时加载
               show: true,
@@ -278,7 +280,6 @@
                 //   }
                 // ])
               },
-              
               // label: {
               //           show: true,
               //           position: 'top',
@@ -315,10 +316,10 @@
           if (params.batch[0].areas.length === 0) {
             mthis.timeTitle = ''
           } else {
-            if(startAndEnd[0]<0){
+            if (startAndEnd[0] < 0) {
               startAndEnd[0] = 0
             }
-            if(startAndEnd[1]<0){
+            if (startAndEnd[1] < 0) {
               startAndEnd[1] = mthis.dataBySeries.date.length - 1
             }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
@@ -348,7 +349,6 @@
         this.option.xAxis.data = this.dataBySeries.date;
         this.option.series[0].data = this.dataBySeries.num;
         this.charts.setOption(this.option)
-        
         this.charts.on('brushSelected', function(params) {
           if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
@@ -357,17 +357,17 @@
           if (params.batch[0].areas.length === 0) {
             mthis.timeTitle = ''
           } else {
-            if(startAndEnd[0]<0){
+            if (startAndEnd[0] < 0) {
               startAndEnd[0] = 0
             }
-            if(startAndEnd[1]<0 || mthis.dataBySeries.date[startAndEnd[1]] === undefined){
+            if (startAndEnd[1] < 0 || mthis.dataBySeries.date[startAndEnd[1]] === undefined) {
               startAndEnd[1] = mthis.dataBySeries.date.length - 1
             }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            mthis.$store.commit('setContentTimeCondition',timeArr)
+            mthis.$store.commit('setContentTimeCondition', timeArr)
             mthis.selectTime = true
           }
         })
@@ -376,7 +376,7 @@
           let timeArr = []
           timeArr.push(params.name)
           timeArr.push(params.name)
-          mthis.$store.commit('setContentTimeCondition',timeArr)
+          mthis.$store.commit('setContentTimeCondition', timeArr)
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -397,15 +397,13 @@
     mounted() {
       this.netHeightCount++;
       this.contentHeightCount++;
-      this.geoHeightCount+=2;
+      this.geoHeightCount += 2;
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
       this.timepxdiv =
-        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-        
+        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -8 + "px";
       /* this.iconPosition = useHeight * 0.8 + "px"; */
-
       this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       // this.iconPosition = useHeight - 40 + "px";
       this.loadEcharts();
@@ -414,8 +412,8 @@
       var zoomSize = 6;
       // this.changHeightCount++
     },
-    computed:mapState ([
-      'split','splitWidth','tmss','conditionContent'
+    computed: mapState([
+      'split', 'splitWidth', 'tmss', 'conditionContent'
     ]),
     watch: {
       /* tmss: function(){
@@ -427,8 +425,8 @@
       conditionContent: function(keyword) {
         // 发起http请求,获取时间轴
         var mthis = this
-        this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword='+keyword).then(response => {
-          if(response.body.code === 0) {
+        this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword=' + keyword).then(response => {
+          if (response.body.code === 0) {
             mthis.dataBySeries.num = response.body.data.count
             mthis.dataBySeries.date = response.body.data.time
             mthis.option.series[0].data = response.body.data.count
@@ -448,107 +446,93 @@
       splitWidth: function(va) {
         this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       },
-      geoHeightCount: function() {
-        var mthis = this
-        
-        var tmss = mthis.$store.state.tmss;
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (mthis.geoHeightCount % 2 === 0) {
-          /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_geo').style.top = useHeight - 40 + "px";
-          //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
-          //mthis.$store.commit('setGeoHeight',useHeight * 1)
-            mthis.$store.commit('setGeoHeight',useHeight * 1)
-
-          document.getElementById('timechartctrl_geo').style.display = "none";
-          document.getElementById('main1_geo').style.display = "none";
-          document.getElementById('timediv_geo').style.display = "none";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
-          /* mthis.$store.commit('setChangenetpx',false); */
-          
-        } else {
-          
-          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
-          /* mthis.$store.commit('setChangenetpx',true); */
-          document.getElementById('timechartctrl_geo').style.display = "block";
-          document.getElementById('main1_geo').style.display = "block";
-          document.getElementById('timediv_geo').style.display = "block";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
-          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-            mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-        }
-        document.getElementById('arrowDown_geo').style.position = "absolute";
-        document.getElementById('arrowDown_geo').style.right = "20px";
-        
-        /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-       /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
-        document.getElementById('arrowDown_geo').style.zIndex = 99;
-      },
-      netHeightCount: function() {
-        var mthis = this
-        
-        var tmss = mthis.$store.state.tmss;
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (mthis.netHeightCount % 2 === 0) {
-          /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight - 40 + "px";
-          
-            mthis.$store.commit('setNetHeight',useHeight * 1)
-
-          document.getElementById('timechartctrl_net').style.display = "none";
-          document.getElementById('main1_net').style.display = "none";
-          document.getElementById('timediv_net').style.display = "none";
-          document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
-          mthis.$store.commit('setChangenetpx',false);
-          
-        } else {
-          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight * 0.8 + "px";
-          // this.timepx =
-          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
-          //   30 +
-          //   "px";
-          // this.timepxdiv =
-          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-          // mthis.$emit('changenetpx', true);
-          mthis.$store.commit('setChangenetpx',true);
-          document.getElementById('timechartctrl_net').style.display = "block";
-          document.getElementById('main1_net').style.display = "block";
-          document.getElementById('timediv_net').style.display = "block";
-          document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
-          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-            mthis.$store.commit('setNetHeight',useHeight * 0.8)
-        }
-        document.getElementById('arrowDown_net').style.position = "absolute";
-        document.getElementById('arrowDown_net').style.right = "20px";
-        
-/*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-        /* document.getElementById('arrowDown_net').style.top = netpxdiv; */
-        document.getElementById('arrowDown_net').style.zIndex = 99;
-      },
+      // geoHeightCount: function() {
+      //   var mthis = this
+      //   var tmss = mthis.$store.state.tmss;
+      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
+      //   if (mthis.geoHeightCount % 2 === 0) {
+      //     /* mthis.iconPosition = useHeight - 40 + "px"; */
+      //     document.getElementById('arrowDown_geo').style.top = useHeight - 40 + "px";
+      //     //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
+      //     //mthis.$store.commit('setGeoHeight',useHeight * 1)
+      //     mthis.$store.commit('setGeoHeight', useHeight * 1)
+      //     document.getElementById('timechartctrl_geo').style.display = "none";
+      //     document.getElementById('main1_geo').style.display = "none";
+      //     document.getElementById('timediv_geo').style.display = "none";
+      //     document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
+      //     /* mthis.$store.commit('setChangenetpx',false); */
+      //   } else {
+      //     /* mthis.iconPosition = useHeight * 0.8 + "px"; */
+      //     document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
+      //     /* mthis.$store.commit('setChangenetpx',true); */
+      //     document.getElementById('timechartctrl_geo').style.display = "block";
+      //     document.getElementById('main1_geo').style.display = "block";
+      //     document.getElementById('timediv_geo').style.display = "block";
+      //     document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
+      //     //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+      //     mthis.$store.commit('setGeoHeight', useHeight * 0.8)
+      //   }
+      //   document.getElementById('arrowDown_geo').style.position = "absolute";
+      //   document.getElementById('arrowDown_geo').style.right = "20px";
+      //   /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+      //   /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
+      //   document.getElementById('arrowDown_geo').style.zIndex = 99;
+      // },
+      // netHeightCount: function() {
+      //   var mthis = this
+      //   var tmss = mthis.$store.state.tmss;
+      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
+      //   if (mthis.netHeightCount % 2 === 0) {
+      //     /* mthis.iconPosition = useHeight - 40 + "px"; */
+      //     document.getElementById('arrowDown_net').style.top = useHeight - 40 + "px";
+      //     mthis.$store.commit('setNetHeight', useHeight * 1)
+      //     document.getElementById('timechartctrl_net').style.display = "none";
+      //     document.getElementById('main1_net').style.display = "none";
+      //     document.getElementById('timediv_net').style.display = "none";
+      //     document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
+      //     mthis.$store.commit('setChangenetpx', false);
+      //   } else {
+      //     /* mthis.iconPosition = useHeight * 0.8 + "px"; */
+      //     document.getElementById('arrowDown_net').style.top = useHeight * 0.8 -3+ "px";
+      //     // this.timepx =
+      //     //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
+      //     //   30 +
+      //     //   "px";
+      //     // this.timepxdiv =
+      //     //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+      //     // mthis.$emit('changenetpx', true);
+      //     mthis.$store.commit('setChangenetpx', true);
+      //     document.getElementById('timechartctrl_net').style.display = "block";
+      //     document.getElementById('main1_net').style.display = "block";
+      //     document.getElementById('timediv_net').style.display = "block";
+      //     document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
+      //     //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+      //     mthis.$store.commit('setNetHeight', useHeight * 0.8)
+      //   }
+      //   document.getElementById('arrowDown_net').style.position = "absolute";
+      //   document.getElementById('arrowDown_net').style.right = "20px";
+      //   /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+      //   /* document.getElementById('arrowDown_net').style.top = netpxdiv; */
+      //   document.getElementById('arrowDown_net').style.zIndex = 99;
+      // },
       contentHeightCount: function() {
         var mthis = this
-        
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.contentHeightCount % 2 === 0) {
           /* mthis.iconPosition = useHeight - 40 + "px"; */
           document.getElementById('arrowDown_content').style.top = useHeight - 40 + "px";
-          
           //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
           //mthis.$store.commit('setGeoHeight',useHeight * 1)
-            mthis.$store.commit('setContentHeight',useHeight * 1)
-
+          mthis.$store.commit('setContentHeight', useHeight * 1)
           document.getElementById('timechartctrl_content').style.display = "none";
           document.getElementById('main1_content').style.display = "none";
           document.getElementById('timediv_content').style.display = "none";
           document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
           /* mthis.$store.commit('setChangenetpx',false); */
-          
         } else {
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_content').style.top = useHeight * 0.8 + "px";
+          document.getElementById('arrowDown_content').style.top = useHeight * 0.8 -3+ "px";
           // this.timepx =
           //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
           //   30 +
@@ -562,16 +546,18 @@
           document.getElementById('timediv_content').style.display = "block";
           document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-            mthis.$store.commit('setContentHeight',useHeight * 0.8)
+          mthis.$store.commit('setContentHeight', useHeight * 0.8)
         }
         document.getElementById('arrowDown_content').style.position = "absolute";
         document.getElementById('arrowDown_content').style.right = "20px";
-/*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+        /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
         /* document.getElementById('arrowDown_content').style.top = netpxdiv; */
         document.getElementById('arrowDown_content').style.zIndex = 99;
       }
     },
-    props:{activeId:String}
+    props: {
+      activeId: String
+    }
   };
 </script>
 <style scoped>

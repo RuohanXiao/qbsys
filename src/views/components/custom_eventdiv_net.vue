@@ -2,7 +2,7 @@
   <div :style="{fontSize: '18px',height:viewHeight_20}">
     <Col>
     <div>
-      <div id="tab1" :style="{margin:'0'}">
+      <div id="tab1" :style="{margin:'0',height:viewHeight_20}">
         <Tabs :value=$store.state.tabSelect>
           <Tab-pane label="数据透视" name='数据透视' :style="{fontSize: '18px',height:viewHeight_20}" id='toushi' @click="changTab('数据透视')">
             <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'net' && nodeTypedata !== null"></left-statics>
@@ -17,16 +17,15 @@
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
-                <div class='scrollBarAble' :style="{width:'100%',height:eventheight,margin:'0px 5px 0 10px',paddingRight:'5px'}">
+                <div class='scrollBarAble' :style="{width:'100%',height:eventItemHeight,margin:'0px 5px 0 10px',paddingRight:'5px'}">
                   <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(data.id)">{{data.name}}
                     <p class="p-collapse-modal-small">{{data.entity_type}}</p>
                   </div>
                 </div>
                 <!-- 事件详情 -->
-                <div  v-show="!selectTime">
-
+                <!-- <div  v-show="!selectTime">
                   这里是事件详情
-                </div>
+                </div> -->
               </Row>
               <Card dis-hover style="width:100%,background-color:rgba(0,0,0,0);" :style="{overflowY:'scroll',height:eventheight}" v-show="singlePerson" v-if="evetdata!== undefined && evetdata!==null">
                 <Row type="flex" justify="end">
@@ -108,6 +107,7 @@
         eheight: 0,
         eventheightdiv: 0,
         eventheight: 0,
+        eventItemHeight: 0,
         closable: true,
         firstClassify : [
                 {
@@ -344,8 +344,10 @@
       window.onresize = function() {
         this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
         this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
+        this.eventItemHeight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16 - 40) + "px";
       };
       this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
+      this.eventItemHeight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16 - 40) + "px";
       this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
       this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       this.changeLimit()
