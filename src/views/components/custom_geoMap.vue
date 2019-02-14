@@ -221,6 +221,7 @@ export default {
         geometrySelectedEventIds:[],
         timeSelectedEventIds:[],
         staticsSelectedEventIds:[],
+        invertSelectedEventIds:[],
         pointMoveListenerKey:null,
         pointClickListenerKey:null,
         eventGeoJson:null,
@@ -287,19 +288,7 @@ export default {
         },
         pushToNet(){
             var mthis = this;
-            var ids = [];
-            if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0){
-                //全量
-                ids = mthis.getallEventIdsFromallEventIdsToFeaturesIds();
-            } else if(mthis.geometrySelectedEventIds.length !== 0 && (mthis.geometrySelectedEventIds.length <= mthis.staticsSelectedEventIds.length || mthis.geometrySelectedEventIds.length <= mthis.timeSelectedEventIds.length || mthis.staticsSelectedEventIds.length === 0)){
-                //view
-                ids = mthis.geometrySelectedEventIds;
-            } else if(mthis.staticsSelectedEventIds.length !== 0 && (mthis.staticsSelectedEventIds.length <= mthis.geometrySelectedEventIds.length || mthis.staticsSelectedEventIds.length <= mthis.timeSelectedEventIds.length || mthis.staticsSelectedEventIds.length === 0)){
-                //statics
-                ids = mthis.staticsSelectedEventIds;
-            } else{
-                ids =  mthis.timeSelectedEventIds;
-            }
+            var ids = mthis.getSelectedEventIds().ids;
             var GeoToNetData = {
                 nodeIds:[],
                 eventIds:ids,
@@ -310,24 +299,46 @@ export default {
         },
         getSelectedEventIds(){
             var mthis = this;
+            var selectedParam = {
+                "type":'',
+                "ids":[]
+            };
             var ids = [];
+            //var heighUp = '';
             if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0){
                 //全量
-                ids = mthis.getallEventIdsFromallEventIdsToFeaturesIds();
-            } else if(mthis.geometrySelectedEventIds.length !== 0 && (mthis.geometrySelectedEventIds.length <= mthis.staticsSelectedEventIds.length || mthis.geometrySelectedEventIds.length <= mthis.timeSelectedEventIds.length || mthis.staticsSelectedEventIds.length === 0)){
+                //ids = mthis.getallEventIdsFromallEventIdsToFeaturesIds();
+                selectedParam = {
+                    "type":'All',
+                    "ids":mthis.getallEventIdsFromallEventIdsToFeaturesIds()
+                };
+            } else if(mthis.geometrySelectedEventIds.length !== 0 && (mthis.geometrySelectedEventIds.length <= mthis.staticsSelectedEventIds.length || mthis.geometrySelectedEventIds.length <= mthis.timeSelectedEventIds.length || (mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0))){
                 //view
-                ids = mthis.geometrySelectedEventIds;
-            } else if(mthis.staticsSelectedEventIds.length !== 0 && (mthis.staticsSelectedEventIds.length <= mthis.geometrySelectedEventIds.length || mthis.staticsSelectedEventIds.length <= mthis.timeSelectedEventIds.length || mthis.staticsSelectedEventIds.length === 0)){
+                selectedParam = {
+                    "type":'GeoView',
+                    "ids":mthis.geometrySelectedEventIds
+                };
+                //ids = mthis.geometrySelectedEventIds;
+            } else if(mthis.timeSelectedEventIds.length !== 0 && (mthis.timeSelectedEventIds.length <= mthis.staticsSelectedEventIds.length || mthis.timeSelectedEventIds.length <= mthis.geometrySelectedEventIds.length || (mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0))){
                 //statics
-                ids = mthis.staticsSelectedEventIds;
+                selectedParam = {
+                    "type":'GeoTime',
+                    "ids":mthis.timeSelectedEventIds
+                };
+                //ids = mthis.staticsSelectedEventIds;
             } else{
-                ids =  mthis.timeSelectedEventIds;
+                selectedParam = {
+                    "type":'GeoStatics',
+                    "ids":mthis.staticsSelectedEventIds
+                };
+                //ids =  mthis.timeSelectedEventIds;
             }
-            return ids;
+            return selectedParam
+            //return ids;
         },
         pushToContent(){
             var mthis = this;
-            var ids = mthis.getSelectedEventIds();
+            var ids = mthis.getSelectedEventIds().ids;
             /* if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0){
                 //全量
                 ids = mthis.allEventIds;
@@ -385,6 +396,14 @@ export default {
                 features.forEach(function(item){
                     item.set('selectedEventsNum',item.get('Events').length,false);
                     mthis.setLifeOrDiePointStyleByValue(item,'life');
+                    item.get('Events').forEach(function(Iitem){
+                        var eventId = Iitem.id;
+                        //mthis.allEventIds.push(eventId);
+                        mthis.allEventIdsToFeaturesIdsList[eventId] = {
+                            'featureId':item.getId(),
+                            'time':Iitem.time
+                        };
+                    });
                 })
             }
 
@@ -411,6 +430,23 @@ export default {
             } */
             
             
+        },
+        redataAllEventIdsToFeaturesIdsList(){
+            var mthis = this;
+            mthis.allEventIdsToFeaturesIdsList = null;
+            var features = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
+            features.forEach(function(item){
+                //mthis.setLifeOrDiePointStyleByValue(item,'life');
+                //mthis.getFeatrueAllEventIds(feature)
+                item.get('Events').forEach(function(Iitem){
+                    var eventId = Iitem.id;
+                    //mthis.allEventIds.push(eventId);
+                    mthis.allEventIdsToFeaturesIdsList[eventId] = {
+                        'featureId':item.getId(),
+                        'time':Iitem.time
+                    };
+                });
+            });
         },
         legendItemClick(legendItemOpera){
             var mthis = this;
@@ -955,6 +991,8 @@ export default {
                 var feature = obj.feature;
                 var geometry = feature.getGeometry();
                 mthis.geometrySelectedEventIds = mthis.selectEventPointsByGeometry_test(geometry);
+                mthis.timeSelectedEventIds = [];
+                mthis.staticsSelectedEventIds = [];
                 mthis.routeMap.map.removeInteraction(draw);
                 mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
                 mthis.routeMap.map.addInteraction(mthis.selectClick);
@@ -1315,7 +1353,7 @@ export default {
         deletePoints(){
             var mthis = this;
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
-            var selectedEventIds = mthis.getSelectedEventIds();
+            var selectedEventIds = mthis.getSelectedEventIds().ids;
             if(selectedEventIds.length > 0){
                 selectedEventIds.forEach(function(item){
                     //mthis.deleteArrItem(mthis.allEventIds,item.id);
@@ -1324,6 +1362,9 @@ export default {
                     delete mthis.allEventIdsToFeaturesIdsList[item];
                 })
             }
+            mthis.geometrySelectedEventIds = [];
+            mthis.timeSelectedEventIds = [];
+            mthis.staticsSelectedEventIds = [];
             
             /* for(let i = source.getFeatures().length - 1; i >= 0 ; i--){
                 var events = source.getFeatures()[i].get('Events');
@@ -1373,42 +1414,91 @@ export default {
         
         /*
         *
-        * @param图片轮播的反选
+        * @param选中事件的反选
         * 
         */
         invertSelection(){
             var mthis = this
-            var invertSelectIds = [];
-            mthis.allImgIds.forEach(function(item,index,arr){
-                for(var i = mthis.onImgIds.length - 1; i >= 0; i--){
-                    if(item == mthis.onImgIds[i]){
-                        mthis.offImgClick(item);
-                        break;
+            //mthis.invertSelectedEventIds = [];
+            var SelectedEventIds = mthis.getSelectedEventIds();
+            var ids = SelectedEventIds.ids;
+            var type = SelectedEventIds.type;
+            var invertIds = [];
+            var HighUpSelectedParam = mthis.getHighUpSelectedIds();
+            ids.forEach(function(item){ //将原来选中的事件取消
+                var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
+                var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
+                // var eventTime = '';
+                // var featrueEvents = feature.get('Events');
+                //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
+                mthis.setSelectedEventFeatureParam(feature,false);
+            })
+            //找到未被选中的事件并高亮
+            //mthis.invertSelectedEventIds = [];
+            if(type === 'All'){
+                Object.keys(mthis.allEventIdsToFeaturesIdsList).forEach(function(key){
+                    if(mthis.itemIndexInArr(key,ids) === -1){
+                        mthis.invertSelectedEventIds.push(key);
                     }
-                    if(i == 0){
-                        mthis.onImgClick(item);
-                        invertSelectIds.push(item);
+                })
+            } else if(type === 'GeoView'){
+                mthis.geometrySelectedEventIds = [];
+                HighUpSelectedParam.ids.forEach(function(key){
+                    if(mthis.itemIndexInArr(key,ids) === -1){
+                        invertIds.push(key);
                     }
-                }
-            });
-            mthis.onImgIds = invertSelectIds;
+                })
+                mthis.geometrySelectedEventIds = invertIds;
+            } else if(type === 'GeoTime'){
+                mthis.timeSelectedEventIds = [];
+                HighUpSelectedParam.ids.forEach(function(key){
+                    if(mthis.itemIndexInArr(key,ids) === -1){
+                        invertIds.push(key);
+                    }
+                })
+                mthis.timeSelectedEventIds = invertIds;
+            } else {
+                mthis.staticsSelectedEventIds = [];
+                HighUpSelectedParam.ids.forEach(function(key){
+                    if(mthis.itemIndexInArr(key,ids) === -1){
+                        invertIds.push(key);
+                    }
+                })
+                mthis.staticsSelectedEventIds = invertIds;
+            }
+            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(invertIds);
         },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        getHighUpSelectedIds(){
+            var mthis = this;
+            var ids = [];
+            var highUp = '';
+            if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0){
+                //none
+                //ids = mthis.getallEventIdsFromallEventIdsToFeaturesIds();
+                highUp = 'None';
+            } else if((mthis.staticsSelectedEventIds.length !== 0 && mthis.geometrySelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0) || (mthis.geometrySelectedEventIds.length !== 0 && mthis.staticsSelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0) || (mthis.timeSelectedEventIds.length !== 0 && mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0)){
+                //全量
+                highUp = 'All';
+                ids = mthis.getallEventIdsFromallEventIdsToFeaturesIds();
+            } else if(mthis.staticsSelectedEventIds.length !== 0 && (((mthis.geometrySelectedEventIds.length !== 0 && mthis.timeSelectedEventIds.length !== 0) && ((mthis.staticsSelectedEventIds.length <= mthis.geometrySelectedEventIds.length && mthis.staticsSelectedEventIds.length >= mthis.timeSelectedEventIds.length) || (mthis.staticsSelectedEventIds.length <= mthis.timeSelectedEventIds.length && mthis.staticsSelectedEventIds.length >= mthis.geometrySelectedEventIds.length))) || (((mthis.geometrySelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length !== 0) && (mthis.staticsSelectedEventIds.length >= mthis.timeSelectedEventIds.length)) || ((mthis.geometrySelectedEventIds.length !== 0 && mthis.timeSelectedEventIds.length === 0) && (mthis.staticsSelectedEventIds.length >= mthis.geometrySelectedEventIds.length))))){
+                //statics
+                highUp = 'GeoStatics';
+                ids = mthis.staticsSelectedEventIds;
+            } else if(mthis.geometrySelectedEventIds.length !== 0 && (((mthis.staticsSelectedEventIds.length !== 0 && mthis.timeSelectedEventIds.length !== 0) && ((mthis.geometrySelectedEventIds.length <= mthis.staticsSelectedEventIds.length && mthis.geometrySelectedEventIds.length >= mthis.timeSelectedEventIds.length) || (mthis.geometrySelectedEventIds.length <= mthis.timeSelectedEventIds.length && mthis.geometrySelectedEventIds.length >= mthis.staticsSelectedEventIds.length))) || (((mthis.staticsSelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length !== 0) && (mthis.geometrySelectedEventIds.length >= mthis.timeSelectedEventIds.length)) || ((mthis.staticsSelectedEventIds.length !== 0 && mthis.timeSelectedEventIds.length === 0) && (mthis.geometrySelectedEventIds.length >= mthis.staticsSelectedEventIds.length))))){
+                //view
+                highUp = 'GeoView';
+                ids = mthis.geometrySelectedEventIds;
+            } else if(mthis.timeSelectedEventIds.length !== 0 && (((mthis.staticsSelectedEventIds.length !== 0 && mthis.geometrySelectedEventIds.length !== 0) && ((mthis.timeSelectedEventIds.length <= mthis.staticsSelectedEventIds.length && mthis.timeSelectedEventIds.length >= mthis.geometrySelectedEventIds.length) || (mthis.timeSelectedEventIds.length <= mthis.geometrySelectedEventIds.length && mthis.timeSelectedEventIds.length >= mthis.staticsSelectedEventIds.length))) || (((mthis.staticsSelectedEventIds.length === 0 && mthis.geometrySelectedEventIds.length !== 0) && (mthis.timeSelectedEventIds.length >= mthis.geometrySelectedEventIds.length)) || ((mthis.staticsSelectedEventIds.length !== 0 && mthis.geometrySelectedEventIds.length === 0) && (mthis.timeSelectedEventIds.length >= mthis.staticsSelectedEventIds.length))))){
+                //time
+                highUp = 'GeoTime';
+                ids = mthis.timeSelectedEventIds;
+            }
+            
+            return {
+                        "highUp":highUp,
+                        "ids":ids
+                    }
+        },
         //=======================================================================================
         //通用函数
         /**
@@ -1709,7 +1799,6 @@ export default {
                 this.$nextTick(function(){
                     var mthis = this
                     mthis.location_cilck()  //初始化时开启location
-                    debugger
                     if(mthis.eventGeoJson !== null){
                         var allFeatures = (new GeoJSON()).readFeatures(mthis.eventGeoJson);
                         allFeatures.forEach(function(item){

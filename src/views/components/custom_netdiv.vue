@@ -314,7 +314,6 @@
         this.expandVisible = false
       },
       toGeo() {
-        debugger
         this.$store.commit('changeTMSS', 'geo')
         let arr = []
         for(let i = 0; i < this.selectionIdByType.nodeIds.length; i++){
