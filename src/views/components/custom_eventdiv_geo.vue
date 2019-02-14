@@ -145,23 +145,7 @@
                 }
               ]
             },
-            nodeTypedata:{
-                code:0,
-                data:[
-                    {
-                        id:'event',
-                        count: 1,
-                        per: 8,
-                        
-                    },
-                    {
-                        id:'organization',
-                        count: 3,
-                        per: 8,
- 
-                    },
-                ]
-            },
+            nodeTypedata:null,
             staticsIds:[],
       };
     },
@@ -187,7 +171,24 @@
         var mthis = this;
         var type = mthis.$store.state.geo_selected_param.type;
         if(type !== 'GeoTime'){
-          mthis.dataStatistics = mthis.$store.state.geo_selected_param.eventId;
+          //mthis.dataStatistics = mthis.$store.state.geo_selected_param.eventId;
+          mthis.nodeTypedata = {
+                code:0,
+                data:[
+                    {
+                        id:'event',
+                        count: 1,
+                        per: 8,
+                        
+                    },
+                    {
+                        id:'organization',
+                        count: 3,
+                        per: 8,
+ 
+                    },
+                ]
+            };
         }
       },
       eventheightdiv: function() {

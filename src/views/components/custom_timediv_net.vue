@@ -395,6 +395,8 @@
           }
         });
       }
+
+      
     },
     // props: ['splitWidth', 'split'],
     //调用

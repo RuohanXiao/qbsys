@@ -82,9 +82,12 @@
         var mthis = this
         this.option = null
         this.option = {
+          // tooltip: {
+          //   trigger: "axis",
+          //   formatter: "{b}<br/>{c0}"
+          // },
           tooltip: {
-            trigger: "axis",
-            // formatter: "{b}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%<br/>{a3}: {c3}%"
+            trigger: 'axis'
           },
           // legend: {
           //     data:['China','United States','India','Japan']
@@ -176,7 +179,6 @@
             splitLine: {
               show: false
             },
-            minInterval: 1,
             // min:-35,
             // name: "占世界贸易额比重",
             axisLabel: {
@@ -186,10 +188,10 @@
           },
           dataZoom: [{
               type: "slider",
-              start: 0,
-              end: 10,
-              // realtime: false, //是否实时加载
-              realtime: true, //是否实时加载
+              startValue: 0,
+              endValue: 29,
+              realtime: false, //是否实时加载
+              // realtime: true, //是否实时加载
               show: true,
               textStyle: {
                 color: "#33ffff",
@@ -225,7 +227,7 @@
               xAxisIndex: [0],
               // startValue: 10,
               // endValue: 20,
-              minValueSpan: 1,
+              minValueSpan: 30,
               handleIcon: "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
               handleSize: "80%",
               handleStyle: {
@@ -239,31 +241,44 @@
             },
             {
               type: "inside",
-              start: 0,
-              end: 10,
+              // start: 0,
+              // end: 10,
               show: true,
               xAxisIndex: [0],
-              startValue: 0,
-              endValue: 5,
-              minValueSpan: 100
+              // startValue: 0,
+              // endValue: 5,
+              minValueSpan: 30
             }
           ],
           series: [{
-            name: "事件",
+            name: "事件 ",
             type: "bar",
             // barMaxWidth: '10%',
             // barMinHeight: '1px',
             itemStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: "#33ffff"
-                },
-                {
-                  offset: 1,
-                  color: "#9999ff"
-                }
-              ]),
-              barBorderRadius: [3, 3, 3, 3],
+              // 柱形图默认颜色
+              normal: {
+                cursor: "default",
+                barBorderRadius: [3, 3, 3, 3],
+                color: "rgba(51,204,153,1)"
+              },
+              // 柱形图悬浮颜色
+              emphasis: {
+                cursor: "pointer",
+                barBorderRadius: [3, 3, 3, 3],
+                color: "rgba(51,204,153,0.6)"
+                //线性颜色
+                // color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                //     offset: 0,
+                //     color: "#33ffff"
+                //   },
+                //   {
+                //     offset: 1,
+                //     color: "#9999ff"
+                //   }
+                // ])
+              },
+              
               // label: {
               //           show: true,
               //           position: 'top',
@@ -284,41 +299,33 @@
             data: []
           }]
         };
-        this.charts = echarts.init(document.getElementById(this.main1Id), "", {
-          width: document.documentElement.clientWidth * this.$store.state.split - 20 + 'px',
+        mthis.charts = echarts.init(document.getElementById(mthis.main1Id), "", {
+          width: document.documentElement.clientWidth * mthis.$store.state.split - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
         mthis.timeTitle = ''
-        this.option.xAxis.data = this.dataBySeries.date;
-        this.option.series[0].data = this.dataBySeries.num;
-        this.charts.setOption(this.option)
-        this.charts.on('brushSelected', function (params) {
-          mthis.timeTitle = ''
-          if(params.batch[0].areas.length  === 0) {
-            mthis.timeTitle = ''
-          } else{
-            if(params.batch[0].areas[0] !== undefined){
+        mthis.option.xAxis.data = mthis.dataBySeries.date;
+        mthis.option.series[0].data = mthis.dataBySeries.num;
+        mthis.charts.setOption(mthis.option)
+        mthis.charts.on('brushSelected', function(params) {
+          if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
           }
-          
           mthis.timeTitle = ''
-          if(params.batch[0].areas.length  === 0) {
+          if (params.batch[0].areas.length === 0) {
             mthis.timeTitle = ''
-          } else{
+          } else {
+            if(startAndEnd[0]<0){
+              startAndEnd[0] = 0
+            }
+            if(startAndEnd[1]<0){
+              startAndEnd[1] = mthis.dataBySeries.date.length - 1
+            }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
           }
-            let timeArr = []
-            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
-            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            mthis.$store.commit('setContentTimeCondition',timeArr)
-          }
         })
-        this.charts.on('click', function (params) {
+        mthis.charts.on('click', function(params) {
           mthis.timeTitle = params.name
-          let timeArr = []
-          timeArr.push(params.name)
-          timeArr.push(params.name)
-          mthis.$store.commit('setContentTimeCondition',timeArr)
           // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
           //   mthis.timeTitle = ''
           // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {
@@ -326,19 +333,56 @@
           // } else {
           //   mthis.timeTitle = params.name
           // }
-          
-            // myChart.dispatchAction({
-            //     type: 'dataZoom',
-            //     startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
-            //     endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
-            // });
+          // myChart.dispatchAction({
+          //     type: 'dataZoom',
+          //     startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
+          //     endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
+          // });
           mthis.charts.dispatchAction({
-              type: 'highlight',
-              // 可选，数据的 index
-              dataIndex: params.dataIndex
+            type: 'highlight',
+            // 可选，数据的 index
+            dataIndex: params.dataIndex
           })
         })
-
+        mthis.timeTitle = ''
+        this.option.xAxis.data = this.dataBySeries.date;
+        this.option.series[0].data = this.dataBySeries.num;
+        this.charts.setOption(this.option)
+        
+        this.charts.on('brushSelected', function(params) {
+          if (params.batch[0].areas[0] !== undefined) {
+            var startAndEnd = params.batch[0].areas[0].coordRanges[0];
+          }
+          mthis.timeTitle = ''
+          if (params.batch[0].areas.length === 0) {
+            mthis.timeTitle = ''
+          } else {
+            if(startAndEnd[0]<0){
+              startAndEnd[0] = 0
+            }
+            if(startAndEnd[1]<0 || mthis.dataBySeries.date[startAndEnd[1]] === undefined){
+              startAndEnd[1] = mthis.dataBySeries.date.length - 1
+            }
+            mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
+            let timeArr = []
+            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
+            timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
+            mthis.$store.commit('setContentTimeCondition',timeArr)
+            mthis.selectTime = true
+          }
+        })
+        this.charts.on('click', function(params) {
+          mthis.timeTitle = params.name
+          let timeArr = []
+          timeArr.push(params.name)
+          timeArr.push(params.name)
+          mthis.$store.commit('setContentTimeCondition',timeArr)
+          mthis.charts.dispatchAction({
+            type: 'highlight',
+            // 可选，数据的 index
+            dataIndex: params.dataIndex
+          })
+        })
         this.charts.dispatchAction({
           type: "takeGlobalCursor",
           key: "brush",

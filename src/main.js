@@ -288,9 +288,7 @@ var store = new Vuex.Store({
       contentIds:[]
     },
     netToGeoData:{
-      nodeIds:[],
-      eventIds:[],
-      contentIds:[]
+     
     },
     geoToNetData:{
       nodeIds:[],
@@ -393,7 +391,9 @@ var store = new Vuex.Store({
       state.singlePerson = val
     },
     setAddNetNodes(state,val){
+      console.log(val);
       state.addNetNodes = val
+
     },
     setSearchNetResult(state,val){
       state.searchNetResult = val
