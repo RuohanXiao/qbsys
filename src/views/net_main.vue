@@ -2,16 +2,18 @@
   <div>
     <div class="bgDiv"></div>
     <div class="demo-split" :style="{height:viewHeight}">
+      <div :style="{height:vh20}">
       <Split v-model="split1" :max="max" :min="min">
-        <div slot="left" class="demo-split-pane" display='flex' :style="{height:viewHeight}">
-          <net-chart-div id="net" :style="{height:nDivHeight}"></net-chart-div>
+        <div slot="left" class="demo-split-pane" display='flex' :style="{height:vh20}">
+          <!-- <net-chart-div id="net" :style="{height:nDivHeight}"></net-chart-div> -->
+          <net-chart-div id="netC" :style="{height:nHeight}"></net-chart-div>
           <time-chart-div :activeId='activeId'></time-chart-div>
         </div>
-        <div id="right" slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:viewHeight,maxHeight:viewHeight,marginRight:'2.3vw'}">
-          <event-chart-div  :style="{height:viewHeight,maxHeight:viewHeight,minHeight:viewHeight}"></event-chart-div>
+        <div id="right" slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
+          <event-chart-div  :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div>
         </div>
       </Split>
-    </div>
+    </div></div>
   </div>
 </template>
 <script>
@@ -24,6 +26,7 @@
     name: "App",
     data() {
       return {
+        vh20:0,
         split1: 0.85,
         max: 0.15,
         min: 0.7,
@@ -60,7 +63,7 @@
       // }
     },
     computed:mapState ([
-      'changenetpx','netDivHeight','netHeight'
+      'changenetpx','netDivHeight','netHeight','viewHeight_20'
     ]),
     watch:{
       split1: function(va){
@@ -71,19 +74,20 @@
       },
       netHeight: function(va){
         // this.nHeight = this.$store.getters.getNetHeight
-        this.nHeight = this.netHeight
+        this.nHeight = va
+        this.vh20 =  document.documentElement.clientHeight - 65 - 20 + 'px';
       },
       changenetpx: function(va){
         var mthis = this
         mthis.useHeight = document.documentElement.clientHeight - 65 - 20;
         if (mthis.flag) {
           mthis.$store.commit('setNetDivHeight',mthis.useHeight)
-          mthis.$store.commit('setNetHeight',mthis.useHeight - 55)
+          mthis.$store.commit('setNetHeight',mthis.useHeight)
           // mthis.netpxdiv = mthis.useHeight * 1 + "px";
           // mthis.netpx = mthis.useHeight * 1 - 55 + "px";
         } else {
           mthis.$store.commit('setNetDivHeight',mthis.useHeight* 0.8)
-          mthis.$store.commit('setNetHeight',mthis.useHeight * 0.8 - 55)
+          mthis.$store.commit('setNetHeight',mthis.useHeight * 0.8)
           // mthis.netpxdiv = mthis.useHeight * 0.8 + "px";
           // mthis.netpx = mthis.useHeight * 0.8 - 55 + "px";
         }

@@ -110,7 +110,7 @@
           <Scroll :on-reach-bottom="handleReachBottom" v-if='!ifInfo' :height=ContentHeight>
             
             <div id="contentchart" class="scrollBarAble" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex'}">
-            <div class="container select-box-container">
+            <div class="container select-box-container" :style="{width:'100%'}">
               <Row type="flex" justify="start" align="middle">
               <Col :sm="8" :lg="4" class="fileDiv select-item"  v-for="item in items"  type="flex" justify="start" align="middle" >
                 <div align="middle" class="contentDiv fileDiv select-item" @dblclick="showContent(item.id)" :id=item.id :title=item.title>
@@ -444,6 +444,12 @@
     },
     props: ['contentData'],
     methods: {
+      alertNotice (titleStr,nodesc) {
+        this.$Notice.open({
+            title: titleStr,
+            desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
+        });
+      },
       toNet(){
         let selectList = $('.fileDiv').filter('.contentDiv').filter('.selected')
         // console.log($('.selected'))
@@ -477,7 +483,7 @@
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -488,7 +494,7 @@
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -497,7 +503,7 @@
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -516,7 +522,7 @@
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -527,7 +533,7 @@
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -536,7 +542,7 @@
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -555,7 +561,7 @@
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -566,7 +572,7 @@
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -575,7 +581,7 @@
               if(response.body.data.length>0){
                 mthis.items = response.body.data
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -594,7 +600,7 @@
               if(response.body.data.length>0){
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -605,7 +611,7 @@
               if(response.body.data.length>0){
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })
@@ -614,7 +620,7 @@
               if(response.body.data.length>0){
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
-                alert('no data')
+                mthis.alertNotice('无匹配数据',true)
               }
               resolve();
             })

@@ -61,6 +61,7 @@
       mthis.containerDivHeight = (document.documentElement.clientHeight - 65 - 20) * 0.8;
       mthis.containerHeight = (document.documentElement.clientHeight - 65 - 20) * 0.8 - 55;
       mthis.$store.commit('setViewHeight', document.documentElement.clientHeight - 64)
+      mthis.$store.commit('setViewHeight_20', document.documentElement.clientHeight - 64 - 20)
       mthis.$store.commit('setNetDivHeight', mthis.containerDivHeight)
       mthis.$store.commit('setGeoDivHeight', mthis.containerDivHeight)
       mthis.$store.commit('setContentDivHeight', mthis.containerDivHeight)

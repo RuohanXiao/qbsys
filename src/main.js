@@ -235,6 +235,7 @@ var store = new Vuex.Store({
     netTimeCondition: [],
     geoTimeCondition: [],
     viewHeight: 0,
+    viewHeight_20:0,
     eventHeight: 0,
     netHeight: 0,
     netDivHeight: 0,
@@ -406,6 +407,9 @@ var store = new Vuex.Store({
     setViewHeight(state,height){
       state.viewHeight = height
     },
+    setViewHeight_20(state,height){
+      state.viewHeight_20 = height
+    },
     setEventHeight(state,height){
       state.eventHeight = height
     },
@@ -454,10 +458,13 @@ var store = new Vuex.Store({
       return '现在是：'+state.tmss
     },
     getEventHeight: function(state){
-      return state.viewHeight + 'px'
+      return state.eventHeight + 'px'
     },
     getViewHeight: function(state){
       return state.viewHeight + 'px'
+    },
+    getViewHeight_20: function(state){
+      return state.viewHeight_20 + 'px'
     },
     getNetDivHeight: function(state){
       return state.netDivHeight + 'px'

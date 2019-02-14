@@ -296,7 +296,7 @@ if (isMock) {
               'from': 'Q7747',
               'to': 'node01',
               'img': './src/dist/assets/images/ico/b2.ico',
-              'num': null,
+              'num': '1',
               'entity_type': 'event'
             },
             {
@@ -305,7 +305,7 @@ if (isMock) {
               'from': 'node01',
               'to': 'Q22686',
               'img': './src/dist/assets/images/ico/b2.ico',
-              'num': null,
+              'num': '1',
               'entity_type': 'event'
             },
             {
@@ -314,7 +314,7 @@ if (isMock) {
               'from': 'Q7747',
               'to': 'node02',
               'img': './src/dist/assets/images/ico/b2.ico',
-              'num': null,
+              'num': '1',
               'entity_type': 'event'
             },
             {
@@ -323,7 +323,7 @@ if (isMock) {
               'from': 'node02',
               'to': 'Q22686',
               'img': './src/dist/assets/images/ico/b2.ico',
-              'num': null,
+              'num': '1',
               'entity_type': 'event'
             }]
           }]
