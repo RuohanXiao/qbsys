@@ -362,14 +362,12 @@ export default {
         selectAll(){
             var mthis = this;
             var features = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
-            debugger
             features.forEach(function(item){
                 mthis.setSelectedEventFeatureParam(item,true);
             });
         },
         returnToAllPoints(){
             var mthis = this;
-            debugger
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
             /* source.clear(true);
             source.addFeatures(mthis.allFeatures); */
@@ -1421,7 +1419,6 @@ export default {
         */
         invertSelection(){
             var mthis = this
-            debugger
             //mthis.invertSelectedEventIds = [];
             var SelectedEventIds = mthis.getSelectedEventIds();
             var ids = SelectedEventIds.ids;
@@ -1672,7 +1669,6 @@ export default {
         },
         changeEveryFeatureSelectedEventsNumAndStyleByids(ids){
             var mthis = this;
-            debugger
             var featureIds = [];
             var selectedNum = [];
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
@@ -1738,7 +1734,6 @@ export default {
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            debugger
             mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.timeSelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoTime',
@@ -1748,7 +1743,6 @@ export default {
         },
         geometrySelectedEventIds:function(){
             var mthis = this;
-            debugger
             mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoView',
@@ -1805,7 +1799,6 @@ export default {
                 this.$nextTick(function(){
                     var mthis = this
                     mthis.location_cilck()  //初始化时开启location
-                    debugger
                     if(mthis.eventGeoJson !== null){
                         var allFeatures = (new GeoJSON()).readFeatures(mthis.eventGeoJson);
                         allFeatures.forEach(function(item){

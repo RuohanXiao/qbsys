@@ -22,7 +22,7 @@
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
+          <div class="button-div" @click='contentTranslate'>
             <Icon class="icon iconfont icon-selection-box DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">翻译</p>
           </div>
@@ -413,6 +413,7 @@
         var mthis = this
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
+          debugger
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
@@ -471,6 +472,7 @@
       showAsList() {
         this.showList = true
       },
+      contentTranslate(){},
       orderTimeUp() {
         var mthis = this
         mthis.order = '&isSortByTime=asc'
