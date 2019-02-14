@@ -413,7 +413,6 @@
         var mthis = this
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
-          debugger
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
@@ -472,7 +471,12 @@
       showAsList() {
         this.showList = true
       },
-      contentTranslate(){},
+      contentTranslate(){
+        debugger
+        var contentDiv = document.getElementById('contentInfo');
+        contentDiv.style.width = '50%';
+        contentDiv.style.borderRight = '2px #366674 solid'
+      },
       orderTimeUp() {
         var mthis = this
         mthis.order = '&isSortByTime=asc'
@@ -671,6 +675,7 @@
         // });
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-id/?idValue=' + id).then(response => {
           // mthis.printer(response.body.data[0].text, 'contents', 'pointer')
+          document.getElementById('contentInfo').value = response.body.data[0].id;
           var text = response.body.data[0].text.replace(/(\r\n)|(\n)/g, '<br>');
           document.getElementById('contents').innerHTML = text
           document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
