@@ -1,14 +1,14 @@
 <template>
-  <div :style="{fontSize: '18px',height:viewHeight_20_geo}">
+  <div :style="{fontSize: '18px',height:viewHeight_20_content}">
     <Col>
     <div>
-      <div id="tab1" :style="{margin:'0',height:viewHeight_20_geo}">
+      <div id="tab1" :style="{margin:'0',height:viewHeight_20_content}">
         <Tabs :value=$store.state.tabSelect>
-          <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight_20_geo}" id='toushi'>
+          <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight_20_content}" id='toushi'>
             <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'content' && nodeTypedata !== null"></left-statics>
             
           </Tab-pane>
-          <Tab-pane label="目标详情" name= '目标详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_20_geo}" id='mubiaoxiangqing'>
+          <Tab-pane label="目标详情" name= '目标详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_20_content}" id='mubiaoxiangqing'>
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
@@ -186,7 +186,7 @@
         //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent','contentStatisticsResult','viewHeight_20_geo']),
+    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent','contentStatisticsResult','viewHeight_20_content']),
     watch: {
       contentStatisticsResult:function(){
         var mthis = this;

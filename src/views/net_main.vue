@@ -67,7 +67,7 @@
       // }
     },
     computed: mapState([
-      'changenetpx', 'netDivHeight', 'netHeight', 'viewHeight_20'
+      'changenetpx', 'netDivHeight', 'netHeight'
     ]),
     watch: {
       split1: function(va) {

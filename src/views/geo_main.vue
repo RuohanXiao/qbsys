@@ -2,15 +2,17 @@
   <div>
     <div class="bgDiv"></div>
     <div class="demo-split" :style="{height:viewHeight}">
+      <div :style="{height:vh20}">
       <Split v-model="split1" :max="max" :min="min">
-        <div slot="left" class="demo-split-pane" display='flex' :style="{height:viewHeight}">
+        <div slot="left" class="demo-split-pane" display='flex' :style="{height:vh20}">
           <geo-map-div  id="geo" :style="{height:GeoHeight}" :geoData="geoData"></geo-map-div>
           <time-chart-div :activeId='activeId'></time-chart-div>
         </div>
-        <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:viewHeight,maxHeight:viewHeight,marginRight:'2.3vw'}">
-          <event-chart-div id="right" :style="{height:viewHeight,maxHeight:viewHeight}"></event-chart-div>
+        <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
+          <event-chart-div id="right" :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div>
         </div>
       </Split>
+    </div>
     </div>
   </div>
 </template>
@@ -24,6 +26,7 @@
     name: "App",
     data() {
       return {
+        vh20: 0,
         split1: 0.85,
         max: 0.15,
         min: 0.7,
@@ -72,6 +75,7 @@
     ]),
     mounted(){
       var mthis = this
+      mthis.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
       mthis.viewHeight = mthis.$store.getters.getViewHeight
       mthis.GeoHeight = mthis.$store.getters.getNetDivHeight
     }

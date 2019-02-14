@@ -95,7 +95,7 @@
           //     data:['China','United States','India','Japan']
           // },
           grid: {
-            top: "10px",
+            top: "0",
             right: "20px",
             left: "50px"
           },

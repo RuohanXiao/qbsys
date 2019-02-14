@@ -66,7 +66,7 @@
       onchangHeightCount(){
         var mthis = this;
         var tmss = mthis.$store.state.tmss;
-        mthis.netHeightCount ++ ;
+        mthis.geoHeightCount ++ ;
       },
       timeZoomOut() { },
       timeZoomIn() { },
@@ -93,7 +93,7 @@
           //     data:['China','United States','India','Japan']
           // },
           grid: {
-            top: "10px",
+            top: "0",
             right: "20px",
             left: "50px"
           },
@@ -189,7 +189,7 @@
           dataZoom: [{
               type: "slider",
               startValue: 0,
-              endValue: 29,
+              endValue: 100,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -402,7 +402,7 @@
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
       this.timepxdiv =
-        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -8 + "px";
         
       /* this.iconPosition = useHeight * 0.8 + "px"; */
 
@@ -452,7 +452,6 @@
       },
       geoHeightCount: function() {
         var mthis = this
-        
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.geoHeightCount % 2 === 0) {
@@ -471,7 +470,7 @@
         } else {
           
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
+          document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 -3 + "px";
           /* mthis.$store.commit('setChangenetpx',true); */
           document.getElementById('timechartctrl_geo').style.display = "block";
           document.getElementById('main1_geo').style.display = "block";
