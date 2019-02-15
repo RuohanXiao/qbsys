@@ -419,7 +419,7 @@
       },
       // 悬浮点亮节点
       hoverLightinNodes(ids) {
-        mthis.netchart.selection(ids)
+        this.netchart.selection(ids)
       },
       //知识拓展节点（加载新数据）
       expandNodeKnowledge() {
@@ -1013,6 +1013,7 @@
         for (let k = 0; k < dataarr.length; k++) {
           ar.push(dataarr[k].id)
         }
+        console.log(ar)
         mthis.netchart.selection(ar)
         mthis.getStatistics()
       },
@@ -1606,6 +1607,9 @@
           va.data.image = va.data.img
           va.data.images = va.data.img
           this.reloadNetData(va.data)
+          timer = setTimeout(function() {
+            this.netchart.selection(va.data.id)
+          }, 200);
         }
       },
       addNetNodes: function(va) {
