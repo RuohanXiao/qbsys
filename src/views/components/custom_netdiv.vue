@@ -1013,8 +1013,11 @@
         for (let k = 0; k < dataarr.length; k++) {
           ar.push(dataarr[k].id)
         }
-        console.log(ar)
-        mthis.netchart.selection(ar)
+        setTimeout(function() {
+          mthis.netchart.scrollIntoView(ar)
+          mthis.netchart.selection(ar)
+        }, 200)
+        mthis.fit()
         mthis.getStatistics()
       },
       addNetData(data) {
@@ -1549,9 +1552,26 @@
     },
     created() {},
     computed: mapState([
-      'searchNetResult', 'netHeight', 'addNetNodes', 'netTimeCondition', 'contentToNetData', 'netStaticsSelectedIds', 'geoToNetData'
+      'searchNetResult', 'netHeight', 'addNetNodes', 'netTimeCondition', 'contentToNetData', 'netStaticsSelectedIds', 'geoToNetData','workSpaceAddData'
     ]),
     watch: {
+      workSpaceAddData: function(res) {
+        var mthis = this
+        let arr = []
+       for (let m = 0; m < res.nodes.length; m++) {
+          res.nodes[m].type = res.nodes[m].entity_type
+          res.nodes[m].imageCropping = true
+          arr.push(res.nodes[m].id)
+        }
+        mthis.spinShow = false
+        mthis.zIndex = 0
+        mthis.netchart.addData(res)
+        setTimeout(function() {
+          let ar = util.unique(arr)
+          mthis.netchart.selection(ar)
+          mthis.netchart.unlockNode(ar);
+        }, 100)
+      },
       expandVisible: function() {
         this.stepVisible = false
       },
@@ -1602,14 +1622,14 @@
         }
       },
       searchNetResult: function(va) {
+        console.log(va)
         if (this.$store.state.tmss === 'net') {
           va.data.type = va.data.entity_type
           va.data.image = va.data.img
           va.data.images = va.data.img
           this.reloadNetData(va.data)
-          timer = setTimeout(function() {
-            this.netchart.selection(va.data.id)
-          }, 200);
+
+         
         }
       },
       addNetNodes: function(va) {
