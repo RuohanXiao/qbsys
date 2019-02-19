@@ -121,7 +121,6 @@
       },
       setOption(a) {
         var mthis = this;
-        debugger
         if (this.$store.state.tmss === 'net') {
           // if (this.timer) {
           //   clearTimeout(this.timer)
@@ -177,7 +176,6 @@
     },
     searchInfoNet(query) {
       var mthis = this;
-      debugger
       this.loading1 = true;
       if (query !== "") {
         if (this.timer) {
