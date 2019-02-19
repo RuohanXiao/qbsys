@@ -2,12 +2,12 @@
   <div :style="{fontSize: '18px',height:viewHeight_20}">
     <Col>
     <div>
-      <div id="tab1" :style="{margin:'0',height:viewHeight_20}">
+      <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
         <Tabs :value=$store.state.tabSelect>
-          <Tab-pane label="数据透视" name='数据透视' :style="{fontSize: '18px',height:viewHeight_20}" id='toushi' @click="changTab('数据透视')">
+          <Tab-pane label="数据透视" name='数据透视' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('数据透视')">
             <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'net' && nodeTypedata !== null"></left-statics>
           </Tab-pane>
-          <Tab-pane label="选中详情" name='选中详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_20}" id='mubiaoxiangqing' @click="changTab('选中详情')">
+          <Tab-pane label="选中详情" name='选中详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_30}" id='mubiaoxiangqing' @click="changTab('选中详情')">
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <!-- 目标详情 -->
@@ -72,6 +72,7 @@
   export default {
     data() {
       return {
+        vh20: 0,
         selectTime: false,
         timer: null,
         tabSelect: '数据透视',
@@ -235,7 +236,7 @@
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult']),
+    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult','viewHeight_30']),
     watch: {
       // contentStatisticsResult:function(){
       //   var mthis = this;
@@ -345,11 +346,13 @@
         this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
         this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
         this.eventItemHeight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16 - 40) + "px";
+        this.vh20 =  document.documentElement.clientHeight - 65 - 20 + 'px';
       };
       this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
       this.eventItemHeight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16 - 40) + "px";
       this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
       this.eheight = this.eventheightdiv - 32 - 16 + 'px'
+      this.vh20 =  document.documentElement.clientHeight - 65 - 20 + 'px';
       this.changeLimit()
     }
   };

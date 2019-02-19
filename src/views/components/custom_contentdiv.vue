@@ -79,58 +79,53 @@
         </Tooltip>
       </div>
     </div>
+    
     <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div :style="{margin:'0,5px'}">
         <div v-if="!showList">
-          <!-- 
-            <div class="container select-box-container">
-              <div class="fileDiv select-item">file1</div>
-              <div class="fileDiv select-item">file2</div>
-              <div class="fileDiv select-item">file3</div>
-              <div class="fileDiv select-item">file4</div>
-              <div class="fileDiv select-item">file5</div>
-              <div class="fileDiv select-item">file6</div>
-              <div class="fileDiv select-item">file7</div>
-              <div class="fileDiv select-item">file8</div>
-              <div class="fileDiv select-item">file9</div>
-              <div class="fileDiv select-item">file10</div>
-              <div class="fileDiv select-item">file11</div>
-              <div class="fileDiv select-item">file12</div>
-              <div class="fileDiv select-item">file13</div>
-              <div class="fileDiv select-item">file14</div>
-              <div class="fileDiv select-item">file15</div>
-              <div class="fileDiv select-item">file16</div>
-              <div class="fileDiv select-item">file17</div>
-          </div> -->
-          <!-- <div style="margin:20px 100px;">
-          <h4>选中文件：</h4>
-          <div id="data"></div>
-      </div> -->
-          <Scroll :on-reach-bottom="handleReachBottom" v-if='!ifInfo' :height=ContentHeight>
+          <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
+            <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
+              <Spin size="large" fix v-if="spinShow"></Spin>
+            </div>
             <div id="contentchart" class="scrollBarAble" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex'}">
               <!--  <div class="container select-box-container" :style="{width:'100%'}">
-                <Row type="flex" justify="start" align="middle">
-                <Col :sm="8" :lg="4" class="fileDiv select-item"  v-for="item in items"  type="flex" justify="start" align="middle" >
-                  <div align="middle" class="contentDiv fileDiv select-item" @dblclick="showContent(item.id)" :id=item.id :title=item.title>
-                    <p class="contentTitle">{{item.title}}</p>
-                    <p class="contentText">{{item.text}}</p>
-                    <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
-                  </div>
-                </Col>
-                <Col span=24 v-if="items.length>0">
-                  <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
-                </Col>
-                </Row>
-              </div> -->
+                      <Row type="flex" justify="start" align="middle">
+                      <Col :sm="8" :lg="4" class="fileDiv select-item"  v-for="item in items"  type="flex" justify="start" align="middle" >
+                        <div align="middle" class="contentDiv fileDiv select-item" @dblclick="showContent(item.id)" :id=item.id :title=item.title>
+                          <p class="contentTitle">{{item.title}}</p>
+                          <p class="contentText">{{item.text}}</p>
+                          <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
+                        </div>
+                      </Col>
+                      <Col span=24 v-if="items.length>0">
+                        <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
+                      </Col>
+                      </Row>
+                    </div> -->
               <Row type="flex" justify="start" align="middle">
-                <Col :sm="8" :lg="4" align="middle" v-for="item in items">
-                  <div class="contentItem contentDiv" :style="{backgroundColor:'rgba(220,20,60,0.5)'}">
-                  </div>
-                  <div  class="contentDiv fileDiv select-item" >
-                    <p class="contentTitle"  @click="showContent(item.id)">{{item.title}}</p>
-                    <p class="contentText">{{item.text}}</p>
-                    <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
-                  </div>
+                <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items">
+                <div>
+                
+                <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text">
+                  <!-- <Tooltip  placement="bottom" :content="item.title" :delay="1000" :style="{width:'90%'}">
+                    <a class="contentTitle" @click="showContent(item.id)">{{item.title}}</a>
+                  </Tooltip> -->
+                  <a class="contentTitle" @click="showContent(item.id)">{{item.title}}</a>
+                  <!-- <div id="titleWrap" @click="showContent(item.id)">
+                    <div id="titleContent">{{item.title}}</div>
+                  </div> -->
+                  <!-- <p class="contentTitle">{{item.title}}</p>
+                    <div class="showContentButton">
+                      <Icon class="cardIcon icon iconfont icon-fangda process-img DVSL-bar-btn DVSL-bar-btn-back" size="20"/>
+                    </div> -->
+                  <p class="contentText">{{item.text}}</p>
+                  <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
+                </div>
+                <div class="contentItem">
+                  <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back turn180 color255-back" :style="{padding:'0 !important'}" size="35"></Icon>
+                  <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
+                </div>
+                </div>
                 </Col>
                 <Col span=24 v-if="items.length>0">
                 <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
@@ -138,11 +133,11 @@
               </Row>
             </div>
           </Scroll>
-          <div id="contentInfo" class="scrollBarAble" v-if='ifInfo' :style="{height:ContentHeight,overflowY:'scroll'}">
+          <div id="contentInfo" class="scrollBarAble" v-show='ifInfo' :style="{height:ContentHeightList,overflowY:'scroll'}">
             <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
             <h2 class="contentInfoTitle" id='contentsTitle'></h2>
             <p class="contentInfoTime" id='contentsTime'></p>
-            <p style='margin:30px'><span id='contents'></span></p>
+            <p style='margin:10px'><span id='contents'></span></p>
           </div>
         </div>
       </div>
@@ -160,18 +155,23 @@
 <script>
   import util from '../../util/tools.js'
   import mock from '../../mock/index.js'
+  // import liM from '../../dist/assets/js/jquery.liMarquee.js'
   import modalChart from './custom_modal.vue'
   import $ from "jquery";
+  
   import {
     mapState,
     mapMutations
   } from 'vuex'
   mock.test = 1
+  var timer = null;
   /* eslint-disable */
   export default {
     name: "App",
     data() {
       return {
+        spinShow: false,
+        markedItem: false,
         ifInfo: false,
         ContentHeight: 0,
         ContentHeightList: 0,
@@ -188,6 +188,7 @@
         toEdg: -100,
         showList: false,
         moreLoading: false,
+        selectArr: [],
         columns2: [{
             title: 'Name',
             key: 'name',
@@ -348,13 +349,11 @@
               });
               $(document).on('mouseup', function() {
                 $(selector).off('mousemove');
-                $(selector).find('.temp-selected').find('.contentDiv').addClass('selected')
+                // $(selector).find('.temp-selected').find('.contentDiv').addClass('item-selected')
                 $(selector)
                   .find('.temp-selected')
-                  .removeClass('temp-selected').addClass('selected');
+                  .removeClass('temp-selected').addClass('item-selected');
                 $selectBoxDashed.remove();
-                // console.log('--------')
-                // console.log($(selector))
                 if (selectCallback) {
                   selectCallback();
                 }
@@ -362,10 +361,16 @@
             })
             //  点选切换选中事件
             .on('click', '.select-item', function() {
-              if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected');
+              if ($(this).hasClass('item-selected')) {
+                $(this).removeClass('item-selected');
               } else {
-                $(this).addClass('selected');
+                $(this).addClass('item-selected');
+                let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+                console.log(selectList)
+                this.selectArr = []
+                for (let m = 0; m < selectList.length; m++) {
+                  this.selectArr.push(selectList[m].id)
+                }
               }
             })
           //  点选全选全不选
@@ -387,22 +392,29 @@
     watch: {
       contentTimeCondition: function(va) {
         var mthis = this
+        if (timer) {
+          clearTimeout(timer)
+        }
+        timer = setTimeout(function() {
         mthis.page = 1
         if (va.length === 2) {
+          mthis.spinShow = true
           let stime = util.getTimestamp(va[0])
           let etime = util.getTimestamp(va[1])
-          mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
+          mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
             if (response.body.data.length > 0) {
               mthis.items = response.body.data
             } else {
               mthis.items = []
             }
+            mthis.spinShow = false
           })
         } else if (va.length === 1) {
           alert('aaa')
         } else {
           alert('bbbb')
         }
+        }, 500);
       },
       searchContentResult: function(va) {
         var mthis = this
@@ -445,9 +457,8 @@
         });
       },
       toNet() {
-        let selectList = $('.fileDiv').filter('.contentDiv').filter('.selected')
-        // console.log($('.selected'))
-        // console.log(selectList)
+        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        console.log(selectList)
         let infos = []
         for (let m = 0; m < selectList.length; m++) {
           infos.push({
@@ -459,6 +470,7 @@
             loaded: true
           })
         }
+        console.log(infos)
         this.$store.commit('setContentToNetData', {
           "nodes": infos
         })
@@ -507,11 +519,13 @@
           "</h2> <p id='translateContentsTime' class='contentInfoTime'>" + translatedTime +
           "</p><p style='margin: 30px;'><span id='translateContents'>" + translatedText + "</span>";
         var translatedDiv = document.createElement('div');
-        translatedDiv.id='translatedDiv';
+        translatedDiv.id = 'translatedDiv';
+        // translatedDiv.class = 'scrollBarAble';
         translatedDiv.style = "overflow-y: scroll;width: 50%;";
         translatedDiv.style.height = contentDiv.style.height;
         translatedDiv.innerHTML = translatedHtml;
         contentDiv.parentElement.appendChild(translatedDiv);
+        $('#translatedDiv').addClass('scrollBarAble');
       },
       orderTimeUp() {
         var mthis = this
@@ -590,6 +604,13 @@
             })
           }
         });
+      },
+      showAlert(index) {
+        // if ($(this).hasClass('selected'))
+        // alert(index)
+        // this.items[index].check = true
+        console.log('**********************')
+        console.log($('#contentchart')[0].childNodes[0].childNodes[index])
       },
       orderDefalut() {
         var mthis = this
@@ -673,7 +694,7 @@
         this.showList = false
         this.ifInfo = false
         var oldEle = document.getElementById('translatedDiv');
-        if(oldEle !== null){
+        if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
         }
         // document.getElementById('contents').innerHTML = ''
@@ -774,7 +795,10 @@
       window.px = "";
       window.py = "";
       window.divLength = 0;
-      this.initSelectBox('.container')
+      this.initSelectBox('#contentchart')
+      
+
+      // $('.str1').liMarquee();
     }
   };
 </script>
@@ -790,12 +814,14 @@
     max-height: 255px;
     padding: 5px 15px 5px 15px;
     overflow: hidden;
-    background: rgba(51, 255, 255, 0.2);
+    background: rgba(51, 255, 255, 0.1);
     margin: 10px;
     /* 右角标 */
     /* background: linear-gradient(-135deg, transparent 10px, rgba(51, 255, 255, 0.2) 0); */
     padding-top: 20px;
     cursor: pointer;
+    /* 自定义鼠标样式
+    cursor:url(url图片地址) */
   }
   .contentDiv:hover {
     /* 右角标 */
@@ -809,23 +835,23 @@
   }
   /* 角标折角 */
   /* .contentDiv ::before {
-      content: "";
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      border-width: 0 16px 16px 0;
-      border-style: solid;
-      border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(51, 255, 255, 0.5) rgba(51, 255, 255, 0.5);
-      background: rgba(51, 255, 255, 0.5);
-      display: block;
-      width: 0;
-      background: linear-gradient(-135deg, transparent 10px, rgba(51, 255, 255, 0.4) 0);
-      -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
-      -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
-      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
-    } */
+            content: "";
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border-width: 0 16px 16px 0;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(51, 255, 255, 0.5) rgba(51, 255, 255, 0.5);
+            background: rgba(51, 255, 255, 0.5);
+            display: block;
+            width: 0;
+            background: linear-gradient(-135deg, transparent 10px, rgba(51, 255, 255, 0.4) 0);
+            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
+          } */
   .contentTitle {
-    padding: 0 5px;
+    padding: 0 25px 0 5px;
     text-align: center;
     color: #ccffff;
     cursor: pointer;
@@ -837,6 +863,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    width: 95%;
   }
   .contentText {
     text-align: start;
@@ -957,21 +987,31 @@
     margin-bottom: 25px;
   }
   /* .select-item {
-              display: inline-block;
-              width: 100px;
-              height: 100px;
-              text-align: center;
-              line-height: 100px;
-              font-size: 12px;
-              border: 1px solid #ccc;
-              margin-right: 10px;
-              margin-bottom: 10px;
-              cursor: pointer;
-          } */
-  .select-item.selected,
-  .select-item.temp-selected {
+                    display: inline-block;
+                    width: 100px;
+                    height: 100px;
+                    text-align: center;
+                    line-height: 100px;
+                    font-size: 12px;
+                    border: 1px solid #ccc;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+                    cursor: pointer;
+                } */
+  .select-item {
+    border: 1px solid rgba(51, 255, 255, 0);
+  }
+  .item-selected {
+    background-color: rgba(51, 255, 255, 0.4);
+    border: 1px solid rgba(51, 255, 255, 0.5);
+  }
+  .temp-selected {
     background-color: rgba(51, 255, 255, 0.2);
   }
+  /* .select-item.item-selected,
+        .select-item.temp-selected {
+          background-color: rgba(51, 255, 255, 0.2);
+        } */
   .select-box-dashed {
     position: absolute;
     display: none;
@@ -988,9 +1028,53 @@
     pointer-events: none;
   }
   .marked {
-    border: 1px solid rgba(51, 255, 255, 0.5);
+    border: 1px solid rgba(51, 255, 255, 0.8);
   }
-  .contentItem{
+  .contentItem {
     position: absolute;
+    background-color: rgba(0,0,0,0);
+    top:12px;
+    left:12px;
+    width: 15px;
+    height: 15px;
   }
+  contentItem:hover {
+    opacity: 1;
+  }
+  .color255-back{
+    color: rgba(51, 255, 255, 0.1);
+    background-color: rgba(51, 255, 255, 0);
+  }
+  .item-selected+.contentItem>.color255-back{
+    color: rgba(51, 255, 255, 0.3);
+  }
+  .color255 {
+    color: rgba(51, 255, 255, 0.1);
+  }
+  .item-selected+.contentItem>.color255{
+    color: rgba(204,255,255,1);
+  }
+  .top {
+    padding: 10px;
+    background: rgba(0, 153, 229, .7);
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+  }
+  .showContentButton {
+    position: absolute;
+    top: 31px;
+    right: 15px;
+  }
+  .turn180 {
+    transform:rotate(180deg);
+    -ms-transform:rotate(180deg); 	/* IE 9 */
+    -moz-transform:rotate(180deg); 	/* Firefox */
+    -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+    -o-transform:rotate(180deg); 	/* Opera */
+    position: absolute;
+    top: -5px;  
+    left: -4px;
+  }
+  
 </style>

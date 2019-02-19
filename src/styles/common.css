@@ -1,9 +1,11 @@
 /* 滚动条样式 */
 .scrollBarAble {
   overflow-y: auto;
+  overflow-x: hidden;
 }
 .scrollBarAble:hover {
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 .scrollBarAble:hover::-webkit-scrollbar {
   width: 5px;

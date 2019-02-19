@@ -186,6 +186,7 @@ var store = new Vuex.Store({
   state: {
     // 组件获取数据方式 this.$store.state.XXX
     tmss:'net', // top menu selected stutas
+    workSpaceAddData: {},
     // 配置ip
     ipConfig: {
       api_url:'http://10.60.1.140:5001',
@@ -238,6 +239,9 @@ var store = new Vuex.Store({
     viewHeight_20:0,
     viewHeight_20_geo:0,
     viewHeight_20_content:0,
+    viewHeight_30:0,
+    viewHeight_30_geo:0,
+    viewHeight_30_content:0,
     eventHeight: 0,
     netHeight: 0,
     netDivHeight: 0,
@@ -318,6 +322,10 @@ var store = new Vuex.Store({
       // 组件想调用方法，可以使用   this.$store.commit('XXX')
       // 第一个参数始终为state,第二个可以传参（只能支持一个参数，可以通过对象或者数组传多值）
       state.tmss = newStatus
+    },
+    // 从工作及导入到网络关系画布
+    setWorkSpaceAddData(state,val){
+      state.workSpaceAddData = val
     },
     setNetStaticsSelectedIds(state,val){
       state.netStaticsSelectedIds = val
@@ -429,6 +437,15 @@ var store = new Vuex.Store({
     },
     setViewHeight_20_content(state,height){
       state.viewHeight_20_content = height
+    },
+    setViewHeight_30(state,height){
+      state.viewHeight_30 = height
+    },
+    setViewHeight_30_geo(state,height){
+      state.viewHeight_30_geo = height
+    },
+    setViewHeight_30_content(state,height){
+      state.viewHeight_30_content = height
     },
     setEventHeight(state,height){
       state.eventHeight = height
