@@ -443,6 +443,16 @@
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
         mthis.ContentHeightList = mthis.$store.state.contentHeight - 75 + 22 + 'px';
+      },
+      ContentHeightList:function(){
+        debugger
+        var mthis = this;
+        var Ele = document.getElementById('translatedDiv');
+        var contentDiv = document.getElementById('contentInfo');
+        if (Ele !== null) {
+          Ele.style.height = mthis.ContentHeightList;
+        }
+        
       }
     },
     components: {
@@ -696,7 +706,13 @@
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
+          var contentDiv = document.getElementById('contentInfo');
+          contentDiv.style.width = 'auto';
+          contentDiv.style.float = 'none';
+          contentDiv.style.display = 'none';
+          contentDiv.style.borderRight = 'none';
         }
+        
         // document.getElementById('contents').innerHTML = ''
         // document.getElementById('contentsTitle').innerHTML = ''
         // document.getElementById('contentsTime').innerHTML = ''
