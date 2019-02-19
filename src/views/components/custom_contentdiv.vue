@@ -445,7 +445,6 @@
         mthis.ContentHeightList = mthis.$store.state.contentHeight - 75 + 22 + 'px';
       },
       ContentHeightList:function(){
-        debugger
         var mthis = this;
         var Ele = document.getElementById('translatedDiv');
         var contentDiv = document.getElementById('contentInfo');
