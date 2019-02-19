@@ -13,7 +13,7 @@
     background-color: hsla(0,0%,100%,.4);
     border-radius: 4px;
     padding: 2px;
-    z-index: 99;
+    z-index: 9;
 }
 .ol-scale-line {
     background: rgba(0,60,136,.3);
