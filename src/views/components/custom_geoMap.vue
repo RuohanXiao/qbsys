@@ -361,25 +361,26 @@ export default {
         },
         selectAll(){
             var mthis = this;
+            mthis.geometrySelectedEventIds = [];
+            mthis.timeSelectedEventIds = [];
+            mthis.staticsSelectedEventIds = [];
             var features = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
             features.forEach(function(item){
+                var num = item.get('Events').length;
+                item.set('selectedEventsNum',num);
                 mthis.setSelectedEventFeatureParam(item,true);
             });
         },
         returnToAllPoints(){
             var mthis = this;
+            mthis.geometrySelectedEventIds = [];
+            mthis.timeSelectedEventIds = [];
+            mthis.staticsSelectedEventIds = [];
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
-            /* source.clear(true);
-            source.addFeatures(mthis.allFeatures); */
             if(mthis.removeFeaturesArr.length > 0){
                 source.addFeatures(mthis.removeFeaturesArr);
                 mthis.removeFeaturesArr = [];
             }
-            /* if(mthis.removeEventIdList.length > 0){
-               mthis.removeEventIdList.forEach(function(item){
-
-               }) 
-            } */
             var keys = Object.keys(mthis.removeEventIdList);
             if(keys.length > 0){
                 keys.forEach(function(item){
@@ -406,30 +407,6 @@ export default {
                     });
                 })
             }
-
-            
-
-            /* if(mthis.removeFeaturesArr.length >0){
-                var source = mthis.getLayerById('eventsPointsLayer').getSource();
-                source.addFeatures(mthis.removeFeaturesArr);
-                mthis.removeFeaturesArr = [];
-                mthis.geometrySelectedEventIds = [];
-                mthis.timeSelectedEventIds = [];
-                mthis.staticsSelectedEventIds = [];
-                mthis.allEventIds = [];
-                mthis.allEventIdsToFeaturesIdsList = {};
-                var features = source.getFeatures();
-                features.forEach(function(item){
-                    mthis.setSelectedEventFeatureParam(item,true);
-                    item.get('Events').forEach(function(Iitem){
-                        var eventId = Iitem.id;
-                        mthis.allEventIds.push(eventId);
-                        mthis.allEventIdsToFeaturesIdsList[eventId] = item.getId();
-                    });
-                });
-            } */
-            
-            
         },
         redataAllEventIdsToFeaturesIdsList(){
             var mthis = this;
@@ -611,7 +588,7 @@ export default {
             var Lp = document.createElement('p');
             conLabel.appendChild(Lp);
             Lp.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
-            Lp.innerHTML = feature.get('localtionName');
+            Lp.innerHTML = feature.get('locationName');
             var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
@@ -1712,14 +1689,101 @@ export default {
                 ids.push(key)
             })
             return ids;
+        },
+        /**
+         * @param 根据传入的feature往事件ID字典（allEventIdsToFeaturesIdsList）中添加eventid
+         */
+        addEventIdsToAEITFIdsListFromFeature(feature){  
+            var mthis = this;
+            feature.get('Events').forEach(function(Iitem){
+                var eventId = Iitem.id;
+                //mthis.allEventIds.push(eventId);
+                mthis.allEventIdsToFeaturesIdsList[eventId] = {
+                    'featureId':feature.getId(),
+                    'time':Iitem.time
+                };
+            });
+        },
+        /**
+         * @param 将feature追加进入eventsLayer，并将原来已经选中的事件变为不选中状态，新追加的事件为选中状态
+         */
+        addFeaturesToEventLayer(addFeatures){
+            var mthis = this;
+            var eventLayerSource = mthis.getLayerById('eventsPointsLayer').getSource();
+            if(eventLayerSource.getFeatures().length === 0){                          //判断地图中是否原本有数据
+                addFeatures.forEach(function(item){
+                    mthis.setLifeOrDiePointStyleByValue(item,'life');
+                    mthis.addEventIdsToAEITFIdsListFromFeature(item);
+                });
+                mthis.returnSelectedEventIds(mthis.EventsDatas.data);
+                eventLayerSource.addFeatures(addFeatures);
+            } else { //若地图中原本有数据
+                mthis.geometrySelectedEventIds = [];
+                mthis.timeSelectedEventIds = [];
+                mthis.staticsSelectedEventIds = [];
+                var mapFeatures = eventLayerSource.getFeatures();
+                mapFeatures.forEach(function(feature){
+                    feature.set('selectedEventsNum',0);
+                    mthis.setLifeOrDiePointStyleByValue(feature,'die');
+                })
+                addFeatures.forEach(function(additem){
+                    mthis.addEventIdsToAEITFIdsListFromFeature(additem);
+                    if(additem.getId() !== null && additem.getId() !== undefined){
+                        var featureId = additem.getId();
+                        var mapFeature = eventLayerSource.getFeatureById(featureId);
+                        if(mapFeature === null){  //判断地图原有数据中改地点是否有数据
+                            var addevents = additem.get('Events');
+                            addevents.forEach(function(event){
+                                mthis.geometrySelectedEventIds.push(event.id);
+                            })
+                            mthis.setLifeOrDiePointStyleByValue(additem,'life');
+                            eventLayerSource.addFeature(additem);
+                        } else {  //若地图原有数据中没有该地点数据
+                            var addevents = additem.get('Events');
+                            addevents.forEach(function(event){
+                                mthis.geometrySelectedEventIds.push(event.id);
+                                var mapEvents = mapFeature.get('Events');
+                                for(let i = 0; i < mapEvents.length; i++){
+                                    if(event.id === mapEvents[i].id){
+                                        break;
+                                    }
+                                    if(i === mapEvents.length - 1){
+                                        mapEvents.push(event);
+                                        //mapFeature.set('Events',evs);
+                                        var num = mapFeature.get('selectedEventsNum')
+                                        mapFeature.set('selectedEventsNum',++num);
+                                        //mthis.setSelectedEventFeatureParam(feature,false);
+                                    }
+                                }
+                                mthis.setLifeOrDiePointStyleByValue(mapFeature,'life');
+                            })
+                        }
+                    } else {
+                        alert('数据没有id');
+                    }
+                })
+            }
         }
 
     },
     computed:mapState ([
-      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData'
+      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult'
     ]),
     
     watch:{
+        searchGeoEntityResult:function(){
+            var mthis = this;
+        },
+        searchGeoEventResult:function(){
+            var mthis = this;
+            mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-to-GIS/', {
+                "nodeIds": mthis.$store.state.searchGeoEventResult.ids
+            }).then(response => {
+                var eventGeoJson = response.body.data[0].eventGeoJson;
+                var addFeatures = (new GeoJSON()).readFeatures(eventGeoJson);
+                mthis.addFeaturesToEventLayer(addFeatures);
+            })
+        },
         netToGeoData:function(){
             var mthis = this;
             var data = mthis.$store.state.netToGeoData;
@@ -1801,7 +1865,8 @@ export default {
                     mthis.location_cilck()  //初始化时开启location
                     if(mthis.eventGeoJson !== null){
                         var allFeatures = (new GeoJSON()).readFeatures(mthis.eventGeoJson);
-                        allFeatures.forEach(function(item){
+                        mthis.addFeaturesToEventLayer(allFeatures);
+                        /* allFeatures.forEach(function(item){
                             mthis.setLifeOrDiePointStyleByValue(item,'life');
                             //mthis.getFeatrueAllEventIds(feature)
                             item.get('Events').forEach(function(Iitem){
@@ -1812,10 +1877,10 @@ export default {
                                     'time':Iitem.time
                                 };
                             });
-                        });
-                        mthis.returnSelectedEventIds(mthis.EventsDatas.data);
+                        }); */
+                        /* mthis.returnSelectedEventIds(mthis.EventsDatas.data);
                         var source = mthis.getLayerById('eventsPointsLayer').getSource();
-                        source.addFeatures(allFeatures);
+                        source.addFeatures(allFeatures); */
                     }
                 });
             }

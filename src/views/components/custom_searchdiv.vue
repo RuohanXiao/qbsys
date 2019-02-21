@@ -165,13 +165,16 @@
           }]) */
         }
         if (this.$store.state.tmss === 'geo') {
-          // mthis.$store.commit('setSearchGeoResult', {
-          //   node: {
-          //     nodes: []
-          //   },
-          //   id: '',
-          //   label: a.value
-          // })
+          if(a.type === 'human'){
+            mthis.$store.commit('setSearchGeoEventResult', {
+              ids: [a.value]
+            })
+          } else {
+            mthis.$store.commit('setSearchGeoEntityResult', {
+              ids: [a.value]
+            })
+          }
+          
         }
     },
     searchInfoNet(query) {
@@ -232,12 +235,6 @@
             let optionOrgArr = []
             let optionEvent = {}
             let optionEventArr = []
-            /* optionWordArr.push({
-              "label": '文档搜索-\'' + query + '\'',
-              "value": '搜索:' + query,
-              "img": '',
-              "type": 'content'
-            }) */
             for (let i = 0; i < response.body.data[0].nodes.length; i++) {
               if(response.body.data[0].nodes[i].type === 'human'){
                   optionEventArr.push({

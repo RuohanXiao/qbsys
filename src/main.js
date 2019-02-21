@@ -215,11 +215,12 @@ var store = new Vuex.Store({
       name:'',
       node:{}
     }, // search result
-    searchGeoResult: {
-      id:'',
-      label:'',
-      node:{}
+    searchGeoEventResult: {
+      ids:[]
     }, 
+    searchGeoEntityResult: {
+      ids:[]
+    },
     searchContentResult: {
       id:'',
       label:'',
@@ -296,9 +297,7 @@ var store = new Vuex.Store({
       eventIds:[],
       contentIds:[]
     },
-    netToGeoData:{
-     
-    },
+    netToGeoData:[],
     geoToNetData:{
       nodeIds:[],
       eventIds:[],
@@ -420,8 +419,11 @@ var store = new Vuex.Store({
     setSearchNetResult(state,val){
       state.searchNetResult = val
     },
-    setSearchGeoResult(state,val){
-      state.searchGeoResult = val
+    setSearchGeoEventResult(state,val){
+      state.searchGeoEventResult = val
+    },
+    setSearchGeoEntityResult(state,val){
+      state.searchGeoEntityResult = val
     },
     setSearchContentResult(state,val){
       state.searchContentResult = val
