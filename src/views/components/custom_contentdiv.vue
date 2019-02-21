@@ -23,7 +23,7 @@
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click='contentTranslate'>
-            <Icon class="icon iconfont icon-selection-box DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <Icon class="icon iconfont icon-selection-box" :class="(translateButton)?'lightUp':''" size="26"></Icon>
             <p class="img-content">翻译</p>
           </div>
         </Tooltip>
@@ -122,7 +122,7 @@
                   <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
                 </div>
                 <div class="contentItem">
-                  <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back turn180 color255-back" :style="{padding:'0 !important'}" size="35"></Icon>
+                  <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back" :style="{padding:'0 !important'}" size="35"></Icon>
                   <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
                 </div>
                 </div>
@@ -170,6 +170,7 @@
     name: "App",
     data() {
       return {
+        translateButton:false,
         spinShow: false,
         markedItem: false,
         ifInfo: false,
@@ -489,6 +490,7 @@
         this.showList = true
       },
       contentTranslate() {
+        this.translateButton = true
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
@@ -1081,7 +1083,7 @@
     top: 31px;
     right: 15px;
   }
-  .turn180 {
+  .deg180 {
     transform:rotate(180deg);
     -ms-transform:rotate(180deg); 	/* IE 9 */
     -moz-transform:rotate(180deg); 	/* Firefox */
@@ -1091,5 +1093,7 @@
     top: -5px;  
     left: -4px;
   }
-  
+  .lightUp{
+    color: #ccffff;
+  }
 </style>

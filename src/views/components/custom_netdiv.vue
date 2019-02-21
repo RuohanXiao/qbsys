@@ -6,12 +6,12 @@
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" id="net">
       <div class='divStyle'>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                          <div class="button-div" @click="back">
-                            <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                            <p class="img-content">撤销操作</p>
-                          </div>
-                        </Tooltip>
-                        <div class="divSplitLine"></div> -->
+                                <div class="button-div" @click="back">
+                                  <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                  <p class="img-content">撤销操作</p>
+                                </div>
+                              </Tooltip>
+                              <div class="divSplitLine"></div> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="newCanvans">
             <Icon class="icon iconfont icon-refresh  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -64,19 +64,22 @@
           <!-- <Dropdown trigger="custom"  :visible="expandVisible"> -->
           <Dropdown :visible="expandVisible">
             <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeKnowledge" >
-                <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                <p class="img-content">关系扩展</p>
-              </div> -->
+                      <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                      <p class="img-content">关系扩展</p>
+                    </div> -->
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="expandNodeKnowledge" v-if="(expandFlag=='knowledge')">
               <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+              <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
               <p class="img-content">关系扩展</p>
             </div>
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="expandNodeEvent" v-if="(expandFlag=='event')">
               <Icon class="icon iconfont icon-event-expand  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+              <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
               <p class="img-content">事件扩展</p>
             </div>
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" v-if="(expandFlag=='content')" @click="expandNodeContent">
               <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+              <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
               <p class="img-content">共现扩展</p>
             </div>
             <DropdownMenu slot="list" placement="bottom-start">
@@ -102,41 +105,44 @@
           </Dropdown>
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                      <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
-                        <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                        <p class="img-content">路径</p>
-                      </div>
-                    </Tooltip>
-                    <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                        <div class="button-div" @click="showPathEvent">
-                          <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                          <p class="img-content">事件路径</p>
-                        </div>
-                      </Tooltip>
-                     -->
+                            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
+                              <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                              <p class="img-content">路径</p>
+                            </div>
+                          </Tooltip>
+                          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+                              <div class="button-div" @click="showPathEvent">
+                                <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                <p class="img-content">事件路径</p>
+                              </div>
+                            </Tooltip>
+                           -->
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                      <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
-                        <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                        <p class="img-content">事件扩展</p>
-                      </div>
-                    </Tooltip> -->
+                            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
+                              <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                              <p class="img-content">事件扩展</p>
+                            </div>
+                          </Tooltip> -->
         <!-- <Col span="1" align="middle" class="bottom">
-                                        <Tooltip content="查找关联" placement="bottom">
-                                          <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                        </Tooltip>
-                                        </Col> -->
+                                              <Tooltip content="查找关联" placement="bottom">
+                                                <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                              </Tooltip>
+                                              </Col> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="5000">
           <Dropdown :visible="stepVisible" trigger="custom">
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('knowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
               <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+              <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
               <p class="img-content">关系路径</p>
             </div>
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('event')" v-show="stepFlag==='event'" @mouseup="stopStepTimer">
-              <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+              <Icon class="icon iconfont icon-lujing--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+              <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
               <p class="img-content">事件路径</p>
             </div>
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('content')" v-show="stepFlag==='content'" @mouseup="stopStepTimer">
               <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+              <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
               <p class="img-content">共现路径</p>
             </div>
             <DropdownMenu slot="list" placement="bottom-start">
@@ -163,7 +169,7 @@
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="spread">
-            <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back deg-90" size="26"></Icon>
             <p class="img-content">展开</p>
           </div>
         </Tooltip>
@@ -190,7 +196,7 @@
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="save">
             <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">保存工作集</p>
+            <p class="img-content">保存</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -208,9 +214,9 @@
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag='setFlagToFalse'></modal-chart>
     <!-- <Modal v-model="modalStep" ok-text="设置步数"
-                        cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
-                      <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
-                    </Modal> -->
+                              cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+                            <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+                          </Modal> -->
     <Modal v-model="modalStep" width="360">
       <p slot="header" style="color:#f60;text-align:center">
         <Icon type="ios-information-circle"></Icon>
@@ -282,13 +288,13 @@
     methods: {
       startTimer(v) {
         var mthis = this
-        buttonTimer = setTimeout(function (e) {
+        buttonTimer = setTimeout(function(e) {
           console.log('LongPress');
           e.preventDefault();
           mthis.showModalStep(v)
         }, 2000);
       },
-      stopTimer(){
+      stopTimer() {
         clearTimeout(buttonTimer);
       },
       addStepTimer() {
@@ -316,13 +322,13 @@
       toGeo() {
         this.$store.commit('changeTMSS', 'geo')
         let arr = []
-        for(let i = 0; i < this.selectionIdByType.nodeIds.length; i++){
+        for (let i = 0; i < this.selectionIdByType.nodeIds.length; i++) {
           arr.push(this.selectionIdByType.nodeIds[i])
         }
-        for(let j = 0; j < this.selectionIdByType.eventIds.length; j++){
+        for (let j = 0; j < this.selectionIdByType.eventIds.length; j++) {
           arr.push(this.selectionIdByType.enentIds[j])
         }
-        for(let k = 0; k < this.selectionIdByType.contentIds.length; k++){
+        for (let k = 0; k < this.selectionIdByType.contentIds.length; k++) {
           arr.push(this.selectionIdByType.enentIds[k])
         }
         /* arr.push(this.selectionIdByType.nodeIds)
@@ -330,7 +336,6 @@
         arr.push(this.selectionIdByType.contentIds) */
         arr = util.unique(arr)
         console.log(arr)
-        
         this.$store.commit('setNetToGeoData', arr)
         /* alert('已经推送，结果请参阅控制台') */
         console.log('推送至地理空间模块，推送数据如下：')
@@ -450,7 +455,8 @@
             setTimeout(function() {
               let ar = util.unique(arr)
               mthis.netchart.selection(ar)
-              mthis.netchart.unlockNode(ar);
+              // lock
+              // mthis.netchart.unlockNode(ar);
             }, 100)
             mthis.getStatistics()
           })
@@ -644,15 +650,19 @@
             let basePoint = this.selectionId[0];
             for (let i = 0; i < this.selectionId.length; i++) {
               //解锁位置
-              mthis.netchart.unlockNode(this.selectionId[i].id);
+              // mthis.netchart.unlockNode(this.selectionId[i].id);
               let col = i % rowNum;
               let row = parseInt(i / rowNum);
               // this.selectionId[i]["x"] = col * 100;
               // this.selectionId[i]["y"] = row * 100;
               this.selectionId[i]["x"] = this.selectionId[0]["x"] + col * 100;
               this.selectionId[i]["y"] = this.selectionId[0]["y"] + row * 100;
+              mthis.netchart.unlockNode(this.selectionId[i].id);
+              // mthis.netchart.layout.mode = 'dynamic'
+              // mthis.netchart.layout.mode = 'radial'
+              // mthis.netchart.layout.mode = 'static'
               // 锁定位置
-              mthis.netchart.lockNode(this.selectionId[i].id);
+              // mthis.netchart.lockNode(this.selectionId[i].id);
             }
             // mthis.netchart.addFocusNode(this.selectionId[0].id);
           }
@@ -667,7 +677,8 @@
         if (mthis.selectionId.length > 27) {
           mthis.changeFlag();
           for (let index = 1; index < mthis.selectionId.length; index++) {
-            mthis.netchart.unlockNode(mthis.selectionId[index].id);
+            // lock
+            // mthis.netchart.unlockNode(mthis.selectionId[index].id);
             // 辐射布局
             // let circleNum = Math.floor(Math.log(index) / Math.log(3))
             // let avd = 360 / Math.pow(3, circleNum);
@@ -684,7 +695,8 @@
               Math.sin(ahd * index) * (Math.random() - 0.5) * 2000;
             mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] +
               Math.cos(ahd * index) * (Math.random() - 0.5) * 2000;
-            mthis.netchart.lockNode(mthis.selectionId[index].id);
+            //   lock
+            // mthis.netchart.lockNode(mthis.selectionId[index].id);
           }
         } else if (mthis.selectionId.length > 0 && mthis.selectionId.length < 27) {
           //半径
@@ -696,13 +708,15 @@
           let ahd = avd * Math.PI / 180;
           for (let index = 0; index < mthis.selectionId.length; index++) {
             //解锁位置
-            mthis.netchart.unlockNode(mthis.selectionId[index].id);
+            // lock
+            // mthis.netchart.unlockNode(mthis.selectionId[index].id);
             mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
               Math.sin(ahd * index) * radius;
             mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] - radius +
               Math.cos(ahd * index) * radius;
             // 锁定位置
-            mthis.netchart.lockNode(mthis.selectionId[index].id);
+            // lock
+            // mthis.netchart.lockNode(mthis.selectionId[index].id);
           }
           mthis.netchart.addFocusNode(mthis.selectionId[0].id);
         } else {
@@ -726,7 +740,8 @@
             // mthis.netchart.unlockNode(this.selectionId[index].id);
             mthis.selectionId[index]["x"] = index * 100 + mthis.basicX
             mthis.selectionId[index]["y"] = mthis.basicY
-            mthis.netchart.lockNode(mthis.selectionId[index].id);
+            // lock
+            // mthis.netchart.lockNode(mthis.selectionId[index].id);
             arrLevel1.push(mthis.selectionId[index].id)
             for (let num = 0; num < mthis.selectionId[index].dataLinks.length; num++) {
               if (mthis.selectionId[index].dataLinks[num].from === mthis.selectionId[index].id) {
@@ -745,7 +760,8 @@
             // mthis.netchart.unlockNode(arr[nn]);
             mthis.netchart.getNode(arr[nn])["x"] = nn * 100 + mthis.basicX
             mthis.netchart.getNode(arr[nn])["y"] = mthis.basicY + 200
-            mthis.netchart.lockNode(arr[nn]);
+            // lock
+            // mthis.netchart.lockNode(arr[nn]);
           }
           mthis.netchart._impl.autoZoom.scene.autoZoomMode = 'overview'
           mthis.netchart.scrollIntoView();
@@ -785,7 +801,11 @@
       },
       //保存工作集
       save() {
-        this.netchart.selection(["911716", '1016826'])
+        // this.netchart.selection(["911716", '1016826'])
+        console.log('-----save---------')
+        console.log(this.selectionId)
+        // 调用保存工作集接口
+        alert('调用保存工作集接口')
       },
       //添加节点
       add() {
@@ -1028,6 +1048,13 @@
           "nodes": dataarr,
           "links": []
         })
+        setTimeout(() => {
+          let ar = data.map(item => {
+            return item.id
+          })
+          console.log(ar)
+          mthis.netchart.selection(ar)
+        }, 100);
         mthis.getStatistics()
       },
       back() {
@@ -1089,8 +1116,9 @@
           },
           // 星形布局
           layout: {
-            mode: "radial",
-            nodeSpacing: 80
+            // mode: "radial",
+            mode: "dynamic",
+            nodeSpacing: 30
           },
           // 层级布局
           // layout: \
@@ -1552,24 +1580,35 @@
     },
     created() {},
     computed: mapState([
-      'searchNetResult', 'netHeight', 'addNetNodes', 'netTimeCondition', 'contentToNetData', 'netStaticsSelectedIds', 'geoToNetData','workSpaceAddData'
+      'searchNetResult', 'netHeight', 'addNetNodes', 'netTimeCondition', 'contentToNetData', 'netStaticsSelectedIds', 'geoToNetData', 'workSpaceAddData'
     ]),
     watch: {
+      selectionId: function() {
+        console.log(this.selectionId)
+        this.netchart.unlockNode(this.selectionId);
+      },
       workSpaceAddData: function(res) {
         var mthis = this
         let arr = []
-       for (let m = 0; m < res.nodes.length; m++) {
+        let rowNum = Math.ceil(Math.sqrt(res.nodes.length));
+        let col, row;
+        for (let m = 0; m < res.nodes.length; m++) {
           res.nodes[m].type = res.nodes[m].entity_type
           res.nodes[m].imageCropping = true
           arr.push(res.nodes[m].id)
+          // col = m % rowNum;
+          // row = parseInt(m / rowNum);
+          // res.nodes[m]["x"] =  col * 100;
+          // res.nodes[m]["y"] =  row * 100;
         }
         mthis.spinShow = false
         mthis.zIndex = 0
         mthis.netchart.addData(res)
         setTimeout(function() {
-          let ar = util.unique(arr)
-          mthis.netchart.selection(ar)
-          mthis.netchart.unlockNode(ar);
+          let ar = util.unique(arr);
+          mthis.netchart.selection(ar);
+          // lock
+          // mthis.netchart.unlockNode(ar);
         }, 100)
       },
       expandVisible: function() {
@@ -1589,7 +1628,21 @@
         // 调用查询接口，查询id对应数据
       },
       contentToNetData: function() {
+        this.spinShow = true
+        let mthis = this
+        // console.log(JSON.stringify(this.contentToNetData))
+        // let aa = [{id:1},{id:2}]
+        let contentIdsArry = this.contentToNetData.nodes.map(item => {
+          return item.id;
+        });
         this.netchart.addData(this.contentToNetData)
+        setTimeout(() => {
+          mthis.netchart.selection(contentIdsArry)
+          setTimeout(() => {
+            mthis.square()
+            this.spinShow = false
+          }, 200);
+        }, 100);
       },
       netTimeCondition: function() {
         if (this.netTimeCondition) {
@@ -1622,14 +1675,17 @@
         }
       },
       searchNetResult: function(va) {
-        console.log(va)
         if (this.$store.state.tmss === 'net') {
           va.data.type = va.data.entity_type
           va.data.image = va.data.img
           va.data.images = va.data.img
-          this.reloadNetData(va.data)
-
-         
+          // 清空画布后添加节点
+          // this.reloadNetData(va.data)
+          // 不清空画布，直接添加节点
+          this.addNetData(va.data)
+          // setTimeout(() => {
+          //   this.addNetData(va.data)
+          // }, 200);
         }
       },
       addNetNodes: function(va) {
@@ -1704,5 +1760,14 @@
   }
   .ivu-tooltip-rel i {
     line-height: 30px;
+  }
+  .deg-90 {
+    transform: rotate(-90deg);
+  }
+  .downIcon {
+    position: absolute;
+    right: 3px;
+    bottom: 11px;
+    transform: scale(0.5);
   }
 </style>
