@@ -17,7 +17,7 @@
         <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoGeo" filterable
           v-show="type==='geo'" remote placeholder='' :remote-method="searchInfoGeo" :loading="loading2" :label-in-value="true" @on-change="v=>{setOption(v)}" @keyup.enter.native="enterGeoOption(options2[0].data[0])">
             <OptionGroup :label="opt.title" v-for="opt in options2">
-              <Option v-for="(option, index) in opt.data" :value="option.value" :key="index"  @click.native="()=>{setOption(opt.data[index])}">
+              <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'17px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
                 <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
                 <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
                 <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
@@ -165,13 +165,13 @@
           }]) */
         }
         if (this.$store.state.tmss === 'geo') {
-          mthis.$store.commit('setSearchGeoResult', {
-            node: {
-              nodes: []
-            },
-            id: '',
-            label: a.value
-          })
+          // mthis.$store.commit('setSearchGeoResult', {
+          //   node: {
+          //     nodes: []
+          //   },
+          //   id: '',
+          //   label: a.value
+          // })
         }
     },
     searchInfoNet(query) {
@@ -228,30 +228,40 @@
           })
           .then(response => {
             let option = []
-            let optionWord = {}
-            let optionWordArr = []
-            let optionList = {}
-            let optionListArr = []
-            optionWordArr.push({
+            let optionOrg = {}
+            let optionOrgArr = []
+            let optionEvent = {}
+            let optionEventArr = []
+            /* optionWordArr.push({
               "label": '文档搜索-\'' + query + '\'',
               "value": '搜索:' + query,
               "img": '',
               "type": 'content'
-            })
+            }) */
             for (let i = 0; i < response.body.data[0].nodes.length; i++) {
-              optionListArr.push({
-                "label": response.body.data[0].nodes[i].name,
-                "value": response.body.data[0].nodes[i].id,
-                "img": response.body.data[0].nodes[i].img,
-                "type": 'human'
-              })
+              if(response.body.data[0].nodes[i].type === 'human'){
+                  optionEventArr.push({
+                    "label": response.body.data[0].nodes[i].name+' 的事件',
+                    "value": response.body.data[0].nodes[i].id,
+                    "img": response.body.data[0].nodes[i].img,
+                    "type": 'human'
+                  })
+                } else if(response.body.data[0].nodes[i].type === 'organization'){
+                  optionOrgArr.push({
+                    "label": response.body.data[0].nodes[i].name,
+                    "value": response.body.data[0].nodes[i].id,
+                    "img": response.body.data[0].nodes[i].img,
+                    "type": 'organization'
+                  })
+              }
+              
             }
-            optionWord.title = '文章检索'
-            optionWord.data = optionWordArr
-            optionList.title = '实体检索'
-            optionList.data = optionListArr
-            option.push(optionList)
-            option.push(optionWord)
+            optionOrg.title = '实体搜索'
+            optionOrg.data = optionOrgArr
+            optionEvent.title = '事件搜索'
+            optionEvent.data = optionEventArr
+            option.push(optionEvent)
+            option.push(optionOrg)
             mthis.options2 = option;
             mthis.loading2 = false;
           });

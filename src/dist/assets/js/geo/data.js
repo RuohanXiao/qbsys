@@ -437,9 +437,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V101','time':"1991-01-02"}],
 				'localtionName':'天津',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':1
 			}
 			
@@ -450,9 +447,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V102','time':"1991-01-02"},{"id":'V103','time':"1992-01-02"}],
 				'localtionName':'北京',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':2
 			}
 		},
@@ -462,9 +456,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V104','time':"1993-01-02"},{"id":'V105','time':"1993-01-02"},{"id":'V099','time':"1993-01-02"}],
 				'localtionName':'河北',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':3
 			}
 		},
@@ -474,9 +465,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V106','time':"1993-01-02"},{"id":'V107','time':"1994-01-02"},{"id":'V108','time':"1995-01-02"}],
 				'localtionName':'吉林',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':3
 			}
 		},
@@ -486,9 +474,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V109','time':"1996-01-02"},{"id":'V110','time':"1997-01-02"},{"id":'V111','time':"1998-01-02"},{"id":'V112','time':"2018-01-02"}],
 				'localtionName':'新疆',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':4
 			}
 		},
@@ -498,9 +483,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V113','time':"1995-01-02"},{"id":'V114','time':"1996-01-02"},{"id":'V115','time':"1995-01-02"},{"id":'V116','time':"1995-01-02"},{"id":'V117','time':"2018-01-02"}],
 				'localtionName':'西藏',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':5
 			}
 		},
@@ -510,9 +492,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V118','time':"1999-01-02"},{"id":'V119','time':"2003-01-02"},{"id":'V120','time':"2010-01-02"},{"id":'V121','time':"1991-01-02"},{"id":'V122','time':"2005-01-02"},{"id":'V123','time':"2018-01-02"}],
 				'localtionName':'广州',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':6
 			}
 		},
@@ -522,9 +501,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V124','time':"2008-01-02"},{"id":'V125','time':"2001-01-02"},{"id":'V126','time':"2002-01-02"},{"id":'V127','time':"2004-01-02"},{"id":'V128','time':"2006-01-02"},{"id":'V129','time':"2007-01-02"},{"id":'V130','time':"2009-01-02"}],
 				'localtionName':'青海',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':7
 			}
 		},
@@ -534,9 +510,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V131','time':"2009-01-02"},{"id":'V132','time':"2000-01-02"},{"id":'V133','time':"2005-01-02"},{"id":'V134','time':"1999-01-02"},{"id":'V135','time':"1997-01-02"},{"id":'V136','time':"2003-01-02"},{"id":'V137','time':"2010-01-02"},{"id":'V138','time':"2009-01-02"}],
 				'localtionName':'黑龙江',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':8
 			}
 		},
@@ -546,9 +519,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V139','time':"2002-01-02"},{"id":'V140','time':"2000-01-02"},{"id":'V141','time':"1992-01-02"},{"id":'V142','time':"2007-01-02"},{"id":'V143','time':"2004-01-02"},{"id":'V144','time':"2001-01-02"},{"id":'V145','time':"2008-01-02"},{"id":'V146','time':"1998-01-02"},{"id":'V147','time':"1995-01-02"}],
 				'localtionName':'波兰',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':9
 			}
 		},
@@ -558,9 +528,6 @@ var test_mapData = {
 			"properties": {
 				'Events': [{"id":'V148','time':"1996-01-02"},{"id":'V149','time':"2006-01-02"},{"id":'V150','time':"2018-01-02"},{"id":'V151','time':"2010-01-02"},{"id":'V152','time':"2009-01-02"},{"id":'V153','time':"2000-01-02"},{"id":'V154','time':"1997-01-02"},{"id":'V155','time':"1998-01-02"},{"id":'V156','time':"1999-01-02"},{"id":'V157','time':"2018-01-02"}],
 				'localtionName':'ss',
-				'isGeometrySelected': false,
-				'isTimeSelected':false,
-				'isStaticsSelected':false,
 				'selectedEventsNum':10
 			}
 		}
