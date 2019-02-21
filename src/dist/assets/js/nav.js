@@ -53,7 +53,7 @@ $(function () {
         var dom = $(this);
         dom.on('click', function () {
             hideNav();
-            alert(dom.text())
+            // alert(dom.text())
         });
     });
 

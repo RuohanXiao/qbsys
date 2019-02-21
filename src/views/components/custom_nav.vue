@@ -16,11 +16,21 @@
         </div>
       </div>
     </div>
-    <div :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
-      <Row type="flex" justify="start" align="middle">
+    <div class="scrollBarAble" aria-autocomplete="true"  :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
+      <Row type="flex" justify="center">
         <Col :sm="24" align="middle" v-for="item in items">
-          <img :src=item.img width="80%" height="200px"  @click="addToChart(item)"/>
-          <p class="workspaceTitle">{{item.title}}</p>
+          <workspace-item :item="item" @delId='delMethod' @click="importData(item.id)"></workspace-item>
+          <!-- <p class="workspaceTitle">{{item.title}}</p> -->
+          <!-- <Card style="width:80%">
+              <div style="text-align:center">
+                  <p slot="title" class="workspaceTitle">{{item.title}}</p>
+                  <a href="#" slot="extra" @click.prevent="changeLimit"><Icon type="ios-loop-strong"></Icon>导入</a>
+                  <a href="#" slot="extra" @click.prevent="changeLimit"><Icon type="ios-loop-strong"></Icon>修改</a>
+                  <a href="#" slot="extra" @click.prevent="changeLimit"><Icon type="ios-loop-strong"></Icon>删除</a>
+                  <img :src=item.img width="100%" height="200px"  @click="addToChart(item)"/>
+              </div>
+          </Card> -->
+
         </Col>
       </Row>
     </div>
@@ -31,6 +41,7 @@
   import nav from "../../dist/assets/js/nav.js";
   import mock from "../../mock/index.js";
   import Bg2 from "../../dist/assets/images/bg.jpg";
+  import workspaceItem from "./custom_workspaceItem";
   import $ from "jquery";
   // import $ from "jquery";
   mock.test = 1;
@@ -41,11 +52,11 @@
         items:[{
           id: 'r1',
           title: '关系1',
-          img: 'http://www.edrawsoft.cn/images/template/project/engineerrelations.png'
+          img: 'http://5b0988e595225.cdn.sohucs.com/images/20180402/eba2c0e26e714cf08a160b682f1b1b5e.png'
         },{
           id: 'r2',
           title: '关系2',
-          img: 'http://www.edrawsoft.cn/images/template/project/relationshipdiagram.png'
+          img: 'http://5b0988e595225.cdn.sohucs.com/images/20180402/eba2c0e26e714cf08a160b682f1b1b5e.png'
         },{
           id: 'r3',
           title: '关系3',
@@ -60,7 +71,13 @@
     mounted() {
       this.contentHeight = this.$store.getters.getViewHeight
     },
+     components: {
+       workspaceItem
+    },
      methods: {
+       importData(id){
+         this.$emit('workSpaceModal', true)
+       },
        addToChart(id) {
         var mthis = this
         mock.get("/getWorkSpaceAddData").then(function(res) {
@@ -68,6 +85,10 @@
           console.log(res)
           mthis.$store.commit('setWorkSpaceAddData', res.data.data[0])
         })
+       },
+       delMethod(id){
+        //  触发删除工作集方法
+        alert('触发删除工作集方法')
        }
      }
   }

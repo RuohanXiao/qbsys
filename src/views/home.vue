@@ -1,12 +1,12 @@
 <template>
   <!-- 此组件为入口主文件，内部包含
-      net_main.vue（网络关系）
-      content_main.vue（文本检索） 
-      geo_main.vue（地理信息）
-    三个功能子组件和
-      custom_topmenu.vue（头部导航） 
-      custom_nav.vue（右侧工作集）
-    公共组件 -->
+        net_main.vue（网络关系）
+        content_main.vue（文本检索） 
+        geo_main.vue（地理信息）
+      三个功能子组件和
+        custom_topmenu.vue（头部导航） 
+        custom_nav.vue（右侧工作集）
+      公共组件 -->
   <Layout>
     <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
       <top-menu/>
@@ -17,6 +17,11 @@
         <net-main v-show="($store.state.tmss === 'net')"></net-main>
         <geo-main v-show="($store.state.tmss === 'geo')"></geo-main>
         <content-main v-show="($store.state.tmss === 'content')"></content-main>
+        <Modal v-model="workSpaceModalFlag" @workSpaceModal='workSpaceModal' title="Common Modal dialog box title" @on-ok="ok" @on-cancel="cancel">
+          <p>Content of dialog</p>
+          <p>Content of dialog</p>
+          <p>Content of dialog</p>
+        </Modal>
       </Content>
     </Layout>
     <Footer :style="{backgroundColor:'black',height:'0px',padding:'0'}">
@@ -40,8 +45,9 @@
     name: "App",
     data() {
       return {
-        containerDivHeight:0,
-        containerHeight:0
+        containerDivHeight: 0,
+        containerHeight: 0,
+        workSpaceModalFlag:false
       }
     },
     components: {
@@ -55,6 +61,15 @@
       // initNode(opt) {
       //   this.netData = opt.nodes[0]
       // }
+      workSpaceModal(flag) {
+        this.workSpaceModalFlag = true
+      },
+       ok () {
+                this.$Message.info('Clicked ok');
+            },
+            cancel () {
+                this.$Message.info('Clicked cancel');
+            }
     },
     created() {
       var mthis = this
@@ -125,8 +140,8 @@
     font-size: 22px;
   }
   /*
-                  侧导航end
-                */
+                    侧导航end
+                  */
   .white-text {
     color: #fff;
   }
@@ -386,7 +401,7 @@
     overflow: hidden;
   }
   /* 滚动条样式 */
- .scrollBarAble {
+  .scrollBarAble {
     overflow-y: hidden;
   }
   .scrollBarAble:hover {
@@ -415,8 +430,8 @@
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
   /* .ivu-tabs-tab {
-      color: #ccffff !important;
-    } */
+        color: #ccffff !important;
+      } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }
@@ -424,8 +439,6 @@
     line-height: 30px;
     color: #33ffff !important;
   }
-  
-  
   /* 分割线样式 */
   .ivu-split-trigger-vertical {
     width: 3px !important;
@@ -442,7 +455,6 @@
   .scrollBarAble {
     overflow-y: hidden;
   }
-  
   /* timechart样式 */
   .ivu-btn {
     background-color: rgba(0, 0, 0, 0.1) !important;
@@ -549,7 +561,7 @@
   .button-div:hover>.img-content {
     cursor: pointer;
     color: rgba(51, 255, 255, 1) !important;
-  } 
+  }
   .button-div-disable {
     color: rgba(51, 255, 255, 0.2) !important;
     align-items: center;
@@ -557,7 +569,6 @@
     min-width: 60px;
     padding: 4px 0;
   }
-
   .button-div>.img-content {
     font-size: 12px;
     color: rgba(51, 255, 255, 0.6);
@@ -587,7 +598,7 @@
     padding-left: 10px;
     border-top: 1px solid rgba(54, 102, 116, 0.5);
     /* border-right:1px solid rgba(54, 102, 116, 0.5);
-      border-left:1px solid rgba(54, 102, 116, 0.5); */
+        border-left:1px solid rgba(54, 102, 116, 0.5); */
   }
   .divSplitLine {
     float: center;
@@ -596,11 +607,10 @@
     background: rgba(51, 255, 255, 0.2);
     margin: 10px 5px 10px 5px;
   }
-  
 </style>
 
 <style scoped>
-.ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
+  .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab {
     margin-bottom: 5px !important;
     background-color: rgba(51, 255, 255, 0.2) !important;
     border: 1px solid rgba(51, 255, 255, 1) !important;
