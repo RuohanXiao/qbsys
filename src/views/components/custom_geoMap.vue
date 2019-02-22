@@ -198,8 +198,9 @@ export default {
         provinTilSource:null,
         selectedPointsSource:null,
         polygonLayer:null,
-        diePointColor: 'rgba(255,204,102,0.5)',//初始化加载时的实体点颜色
+        diePointColor: '#33ffff',//初始化加载时的实体点颜色
         lifePointColor: '#ff9900',//拉框选中后的实体点颜色
+        halflifePointColor:'rgba(255,204,102,0.5)',
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
         draw:null,
         selectPointerMove : null,
@@ -339,18 +340,6 @@ export default {
         pushToContent(){
             var mthis = this;
             var ids = mthis.getSelectedEventIds().ids;
-            /* if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0){
-                //全量
-                ids = mthis.allEventIds;
-            } else if(mthis.geometrySelectedEventIds.length !== 0 && (mthis.geometrySelectedEventIds.length <= mthis.staticsSelectedEventIds.length || mthis.geometrySelectedEventIds.length <= mthis.timeSelectedEventIds.length || mthis.staticsSelectedEventIds.length === 0)){
-                //view
-                ids = mthis.geometrySelectedEventIds;
-            } else if(mthis.staticsSelectedEventIds.length !== 0 && (mthis.staticsSelectedEventIds.length <= mthis.geometrySelectedEventIds.length || mthis.staticsSelectedEventIds.length <= mthis.timeSelectedEventIds.length || mthis.staticsSelectedEventIds.length === 0)){
-                //statics
-                ids = mthis.staticsSelectedEventIds;
-            } else{
-                ids =  mthis.timeSelectedEventIds;
-            } */
             var GeoToContentData = {
                 nodeIds:[],
                 eventIds:ids,
@@ -494,19 +483,6 @@ export default {
             mthis.legend = null
             if(mthis.routeMap == null){
                 mthis.routeMap = new map('locationRoute_Map')
-                /* mthis.provinTilSource = new TileWMS({
-                    url: 'http://10.60.1.142:8082/geoserver/worldBaseMap/wms',
-                    params: {
-                        'FORMAT': 'image/png',
-                        'VERSION': '1.1.1',
-                        tiled: true,
-                        LAYERS: 'worldBaseMap:World_states_provinces',
-                    }
-                }); */
-                
-                //mthis.setPointFeatures(mthis.eventsPointGeoJson);
-                //mthis.allEventIdsToFeaturesIdsList = {};
-                //mthis.allEventIds = [];
                 var layer = new VectorLayer({
                     source: new VectorSource({
                         // features:Feature,
@@ -1054,23 +1030,31 @@ export default {
             }
             
         },
-        setLifeOrDiePointStyleByValue(feature,lifeOrdie){
+        setLifeOrDiePointStyleByValue(feature,pointStatus){  //pointStatus参数目前一共有三种情况，life、halflife、die
             var mthis = this;
             /* if(feature.getStyle() !== null && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                 return;
             } */
             var eventNum = feature.get('selectedEventsNum');
-            var fRadius = 0;
-            if(eventNum > 10){
+            var fRadius = 3;
+            /* if(eventNum > 10){
                 fRadius = 13;
             } else {
                 fRadius = eventNum + 2;
-            }
+            } */
             var lifeSelectedstyle = new Style({
                 image : new CircleStyle({
                     radius : fRadius,
                     fill : new Fill({
                         color : mthis.lifePointColor //'#33ffff'
+                    })
+                })
+            });
+            var halflifeSelectedstyle = new Style({
+                image : new CircleStyle({
+                    radius : fRadius,
+                    fill : new Fill({
+                        color : mthis.halflifePointColor //'#33ffff'
                     })
                 })
             });
@@ -1082,10 +1066,12 @@ export default {
                     })
                 })
             });
-            if(lifeOrdie === 'life'){
+            if(pointStatus === 'life'){
                 feature.setStyle(lifeSelectedstyle);
-            } else {
+            } else if(pointStatus === 'die') {
                 feature.setStyle(dieSelectedstyle);
+            } else {
+                feature.setStyle(halflifeSelectedstyle);
             }
             
         },
@@ -1823,10 +1809,12 @@ export default {
             var mthis = this;
             var ids = [];
             var selectedIds = [];
+            var idsIsAllIds = false;
             //var allEventIds = [];
             if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0){
                 //全量
                 ids = mthis.getallEventIdsFromallEventIdsToFeaturesIds();
+                idsIsAllIds = true;
             } else if(mthis.geometrySelectedEventIds.length !== 0 && (mthis.geometrySelectedEventIds.length <= mthis.staticsSelectedEventIds.length || mthis.staticsSelectedEventIds.length === 0)){
                 //view
                 ids = mthis.geometrySelectedEventIds;
@@ -1839,8 +1827,11 @@ export default {
                 var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
                 var eventTime = '';
                 var featrueEvents = feature.get('Events');
-                //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
-                mthis.setSelectedEventFeatureParam(feature,false);
+                if(idsIsAllIds){  //判断ids是否是全量，如果是全量的话，则说明是第一步选择，所有的点先变成die的状态
+                    mthis.setLifeOrDiePointStyleByValue(feature,'die');
+                } else {
+                    mthis.setLifeOrDiePointStyleByValue(feature,'halflife');
+                }
                 for(let i = 0; i < featrueEvents.length; i++){
                     if(item === featrueEvents[i].id){
                         eventTime = featrueEvents[i].time;
