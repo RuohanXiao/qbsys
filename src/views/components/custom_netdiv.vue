@@ -2,16 +2,17 @@
   <div :style="{height:nh}">
     <div :style="{height:nh,backgroundColor:'rgba(0,0,0,0)',position:'absolute',zIndex: zIndex,top:0,width:'99%',margin:'0 10px'}">
       <Spin size="large" fix v-if="spinShow"></Spin>
+      <!-- <Spin size="large" fix v-if="true"></Spin> -->
     </div>
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px'}" id="net">
       <div class='divStyle'>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                <div class="button-div" @click="back">
-                                  <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                  <p class="img-content">撤销操作</p>
-                                </div>
-                              </Tooltip>
-                              <div class="divSplitLine"></div> -->
+                                  <div class="button-div" @click="back">
+                                    <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                    <p class="img-content">撤销操作</p>
+                                  </div>
+                                </Tooltip>
+                                <div class="divSplitLine"></div> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="newCanvans">
             <Icon class="icon iconfont icon-refresh  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -64,9 +65,9 @@
           <!-- <Dropdown trigger="custom"  :visible="expandVisible"> -->
           <Dropdown :visible="expandVisible">
             <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeKnowledge" >
-                      <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                      <p class="img-content">关系扩展</p>
-                    </div> -->
+                        <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <p class="img-content">关系扩展</p>
+                      </div> -->
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="expandNodeKnowledge" v-if="(expandFlag=='knowledge')">
               <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
               <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
@@ -105,29 +106,29 @@
           </Dropdown>
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
-                              <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                              <p class="img-content">路径</p>
-                            </div>
-                          </Tooltip>
-                          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                              <div class="button-div" @click="showPathEvent">
-                                <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                <p class="img-content">事件路径</p>
+                              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
+                                <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                <p class="img-content">路径</p>
                               </div>
                             </Tooltip>
-                           -->
+                            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+                                <div class="button-div" @click="showPathEvent">
+                                  <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                  <p class="img-content">事件路径</p>
+                                </div>
+                              </Tooltip>
+                             -->
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
-                              <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                              <p class="img-content">事件扩展</p>
-                            </div>
-                          </Tooltip> -->
+                              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
+                                <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                <p class="img-content">事件扩展</p>
+                              </div>
+                            </Tooltip> -->
         <!-- <Col span="1" align="middle" class="bottom">
-                                              <Tooltip content="查找关联" placement="bottom">
-                                                <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                              </Tooltip>
-                                              </Col> -->
+                                                <Tooltip content="查找关联" placement="bottom">
+                                                  <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                </Tooltip>
+                                                </Col> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="5000">
           <Dropdown :visible="stepVisible" trigger="custom">
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('knowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
@@ -214,9 +215,9 @@
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag='setFlagToFalse'></modal-chart>
     <!-- <Modal v-model="modalStep" ok-text="设置步数"
-                              cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
-                            <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
-                          </Modal> -->
+                                cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+                              <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+                            </Modal> -->
     <Modal v-model="modalStep" width="360">
       <p slot="header" style="color:#f60;text-align:center">
         <Icon type="ios-information-circle"></Icon>
@@ -662,7 +663,7 @@
               // mthis.netchart.layout.mode = 'radial'
               // mthis.netchart.layout.mode = 'static'
               // 锁定位置
-              // mthis.netchart.lockNode(this.selectionId[i].id);
+              mthis.netchart.lockNode(this.selectionId[i].id);
             }
             // mthis.netchart.addFocusNode(this.selectionId[0].id);
           }
@@ -1048,13 +1049,6 @@
           "nodes": dataarr,
           "links": []
         })
-        setTimeout(() => {
-          let ar = data.map(item => {
-            return item.id
-          })
-          console.log(ar)
-          mthis.netchart.selection(ar)
-        }, 100);
         mthis.getStatistics()
       },
       back() {
@@ -1626,6 +1620,9 @@
       },
       geoToNetData: function() {
         // 调用查询接口，查询id对应数据
+        console.log(this.geoToNetData)
+
+        // this.netchart.addData()
       },
       contentToNetData: function() {
         this.spinShow = true
@@ -1675,6 +1672,7 @@
         }
       },
       searchNetResult: function(va) {
+        var mthis = this
         if (this.$store.state.tmss === 'net') {
           va.data.type = va.data.entity_type
           va.data.image = va.data.img
@@ -1683,8 +1681,13 @@
           // this.reloadNetData(va.data)
           // 不清空画布，直接添加节点
           this.addNetData(va.data)
+          this.netchart.selection(va.data.id)
+          // let ar = va.data.id
           // setTimeout(() => {
-          //   this.addNetData(va.data)
+          //   mthis.netchart.selection(ar)
+          // }, 100);
+          // setTimeout(() => {
+          //   this.netchart.selection(va.data.id)
           // }, 200);
         }
       },
@@ -1769,5 +1772,11 @@
     right: 3px;
     bottom: 11px;
     transform: scale(0.5);
+  }
+  .ivu-spin-fix{
+    background-color: rgba(0,0,0,0.8) !important;
+  }
+  .ivu-spin-dot{
+    background-color: rgba(51,255,255,1) !important;
   }
 </style>
