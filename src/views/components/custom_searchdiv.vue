@@ -226,7 +226,7 @@
       var mthis = this;
       if (query !== "") {
         mthis.loading2 = true;
-        let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-matchs/?pattern=" + query, {
+        let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, {
             emulateJSON: true
           })
           .then(response => {
