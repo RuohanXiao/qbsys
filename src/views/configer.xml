@@ -3,6 +3,7 @@
 <configList>
   <common/>
   <netcahrt>
+    <imgPosition>
       <imgItem>
         <eventType>审讯</eventType>
         <imgPosition>0,50,-50,0</imgPosition>
@@ -143,6 +144,7 @@
         <eventType>无罪释放</eventType>
         <imgPosition>-1500,50,-1550,0</imgPosition>
       </imgItem>
+    </imgPosition>
   </netcahrt>
   <geochart/>
   <contentchart/>

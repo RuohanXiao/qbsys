@@ -138,7 +138,7 @@
 
       getPostById(id){
         var mthis = this;
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
             'nodeIds': [id]
           }).then(response => {
             mthis.targetData = response.body.data[0];
@@ -148,7 +148,7 @@
         var mthis = this;
         let a = mthis.addTargetValue;
         if(a !== undefined && a!== null && a!==''){
-          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url+"/fuzzy-matchs/?pattern=" + a, {
+          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url+"/fuzzy-match/?pattern=" + a, {
               emulateJSON: true
             })
             .then(response => {
@@ -159,7 +159,6 @@
       showPersonInfo(id) {},
       showNodeInNet() {
        this.cancel();
-       console.log(this.targetData);
         this.$store.commit('setAddNetNodes', {
           nodes: [{
             'id': this.targetData.id,
@@ -371,7 +370,7 @@ column-count:2;
   }
   .modalContentLabel {
     font-family: MicrosoftYaHei;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
     line-height: 30px;
@@ -382,7 +381,7 @@ column-count:2;
   .modalContent {
     margin-left: 20px;
     font-family: MicrosoftYaHei;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
     line-height: 20px;

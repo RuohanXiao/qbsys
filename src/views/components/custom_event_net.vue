@@ -1,0 +1,1216 @@
+<template>
+  <div :style="{height:eDivH}">
+    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}">
+      <Row type="flex" justify="center">
+        <!-- 头像 + 名字 div -->
+        <Col span="8" align="center" :style="{display:'flex',flexFlow:'row nowarp',justifyContent:'center'}">
+        <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="!detailData && detailData.img" />
+        <Avatar class="circle-img" v-else :src="detailData.img" :style="{width:'50px',height:'50px'}" />
+        </Col>
+        <Col span="16" align="left">
+        <div :style="{margin:'0 10px'}" class="event-title">
+          <!-- 名字 -->
+          <p :style="{lineHeight:'28px',fontSize:'16px'}">{{detailData.name}}</p>
+        </div>
+        <div :style="{margin:'0 10px'}" class="event-content">
+          <!-- 描述 -->
+          <p :style="{lineHeight:'22px'}" v-if="detailData.description">{{detailData.summary}}</p>
+          <p :style="{lineHeight:'22px'}" v-else class="e-content-p">暂无简介</p>
+        </div>
+        </Col>
+      </Row>
+    </div>
+    <div class='scrollBarAble' :style="{height:entDivH}">
+      <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'entity'">
+        <!-- 实体属性 -->
+        <div class="e-title">
+          <div class="e-title-d"></div>
+          <p class="e-title-p">实体属性</p>
+        </div>
+        <div class="e-content" v-if="detailData.entity_type === 'human'">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">全名</p>
+            <p class="e-content-p">{{detailData.chinese_name}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p">{{detailData.entity_name}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">昵称</p>
+            <p class="e-content-p">{{detailData.nickname}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">出生日期</p>
+            <p class="e-content-p">{{detailData.date_of_birth}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">死亡日期</p>
+            <p class="e-content-p">{{detailData.date_of_death}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">失踪日期</p>
+            <p class="e-content-p">{{detailData.date_of_disappearance}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">出生地</p>
+            <p class="e-content-p">{{detailData.place_of_birth}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">国籍</p>
+            <p class="e-content-p">{{detailData.country_of_citizenship}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">所属民族</p>
+            <p class="e-content-p">{{detailData.ethic_group}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">宗教信仰</p>
+            <p class="e-content-p">{{detailData.religion}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">从事职业</p>
+            <p class="e-content-p">{{detailData.occupation}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">军衔</p>
+            <p class="e-content-p">{{detailData.military_rank}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">所属军种</p>
+            <p class="e-content-p">{{detailData.military_branch}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">所属政党</p>
+            <p class="e-content-p">{{detailData.member_of_political_party}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">荣誉</p>
+            <p class="e-content-p">{{detailData.award_received}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">邮箱</p>
+            <p class="e-content-p">{{detailData.e_mail}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">博客</p>
+            <p class="e-content-p">{{detailData.official_blog}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p">{{detailData.official_website}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">简介</p>
+            <p class="e-content-p">{{detailData.summary}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+        </div>
+        <div class="e-content" v-if="detailData.entity_type === 'organization'">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">描述</p>
+            <p class="e-content-p">{{detailData.description}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p">{{detailData.native_label}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">简称</p>
+            <p class="e-content-p">{{detailData.short_name}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">组织总部</p>
+            <p class="e-content-p">{{detailData.headquarters_location}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">组织类型</p>
+            <p class="e-content-p">{{detailData.type}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">成立</p>
+            <p class="e-content-p">{{detailData.inception}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">成员数</p>
+            <p class="e-content-p">{{detailData.member_count}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">员工数</p>
+            <p class="e-content-p">{{detailData.employees}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">意识形态</p>
+            <p class="e-content-p">{{detailData.political_ideology}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p">{{detailData.official_website}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">电话</p>
+            <p class="e-content-p">{{detailData.telephone_number}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+        </div>
+        <div class="e-content" v-if="detailData.entity_type === 'administrative'">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">地图</p>
+            <p class="e-content-p">{{detailData.location_map}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">地标</p>
+            <p class="e-content-p">{{detailData.image}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">描述</p>
+            <p class="e-content-p">{{detailData.description}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">全名</p>
+            <p class="e-content-p">{{detailData.official_name}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p">{{detailData.name_in_native_language}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">曾用名</p>
+            <p class="e-content-p">{{detailData.replaces}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">现用名</p>
+            <p class="e-content-p">{{detailData.replaces_by}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">昵称</p>
+            <p class="e-content-p">{{detailData.nickname}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">简称</p>
+            <p class="e-content-p">{{detailData.short_name}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">建立时间</p>
+            <p class="e-content-p">{{detailData.inception}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">首府</p>
+            <p class="e-content-p">{{detailData.capital}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">所属大陆</p>
+            <p class="e-content-p">{{detailData.continent}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">所属国家</p>
+            <p class="e-content-p">{{detailData.country}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">面积</p>
+            <p class="e-content-p">{{detailData.area}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">水域</p>
+            <p class="e-content-p">{{detailData.located_in_or_next_to_body_of_water}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">人口</p>
+            <p class="e-content-p">{{detailData.population}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">GDP</p>
+            <p class="e-content-p">{{detailData.GDP}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">基尼系数</p>
+            <p class="e-content-p">{{detailData.gini_coefficient}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">人类发展指数</p>
+            <p class="e-content-p">{{detailData.Human_Development_Index}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">时区</p>
+            <p class="e-content-p">{{detailData.located_in_time_zone}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">坐标</p>
+            <p class="e-content-p">{{detailData.coordinate_location}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">电话区号</p>
+            <p class="e-content-p">{{detailData.local_dialing_code}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">邮编</p>
+            <p class="e-content-p">{{detailData.postal_code}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">顶级域名</p>
+            <p class="e-content-p">{{detailData.top_level_Internet_domain}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p">{{detailData.official_website}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">博客</p>
+            <p class="e-content-p">{{detailData.office_blog}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+        </div>
+        <div class="e-content" v-if="detailData.entity_type === 'weapon'">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">描述</p>
+            <p class="e-content-p">{{detailData.description}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p">{{detailData.native_label}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">简称</p>
+            <p class="e-content-p">{{detailData.short_name}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">组织总部</p>
+            <p class="e-content-p">{{detailData.headquarters_location}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">组织类型</p>
+            <p class="e-content-p">{{detailData.type}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">成立</p>
+            <p class="e-content-p">{{detailData.inception}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">成员数</p>
+            <p class="e-content-p">{{detailData.member_count}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">员工数</p>
+            <p class="e-content-p">{{detailData.employees}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">意识形态</p>
+            <p class="e-content-p">{{detailData.political_ideology}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p">{{detailData.official_website}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">电话</p>
+            <p class="e-content-p">{{detailData.telephone_number}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+        </div>
+        <div class="e-title">
+          <div class="e-title-d"></div>
+          <p class="e-title-p">相关实体</p>
+        </div>
+        <div class="e-content" v-if="detailData.entity_type === 'human'">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">组织</p>
+            <p class="e-content-p">{{detailData.member_of}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">雇主</p>
+            <p class="e-content-p">{{detailData.employer}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">学习经历</p>
+            <p class="e-content-p">{{detailData.educated_at}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">工作经历</p>
+            <p class="e-content-p">{{detailData.work_at}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">父亲</p>
+            <p class="e-content-p">{{detailData.father}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">母亲</p>
+            <p class="e-content-p">{{detailData.mother}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">配偶</p>
+            <p class="e-content-p">{{detailData.spouse}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">子女</p>
+            <p class="e-content-p">{{detailData.child}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">兄弟姐妹</p>
+            <p class="e-content-p">{{detailData.sibling}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+        </div>
+        <div class="e-content" v-if="detailData.entity_type === 'organization'">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">创办者</p>
+            <p class="e-content-p">{{detailData.founded_by}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">领袖</p>
+            <p class="e-content-p">{{detailData.chairperson}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">首席执行官</p>
+            <p class="e-content-p">{{detailData.chief_executive_officer}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">业务部门</p>
+            <p class="e-content-p">{{detailData.business_division}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">上级部门</p>
+            <p class="e-content-p">{{detailData.parent_organization}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">下级部门</p>
+            <p class="e-content-p">{{detailData.subsidiary}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+        </div>
+        <div class="e-content" v-if="detailData.entity_type === 'administrative'">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">国家元首</p>
+            <p class="e-content-p">{{detailData.head_of_state}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">政府首脑</p>
+            <p class="e-content-p">{{detailData.head_of_government}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">政府机构</p>
+            <p class="e-content-p">{{detailData.office_held_by_head_of_government}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">政府首长</p>
+            <p class="e-content-p">{{detailData.head_of_government}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">立法机构</p>
+            <p class="e-content-p">{{detailData.legislative_body}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">执行政府</p>
+            <p class="e-content-p">{{detailData.executive_body}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">最高司法机关</p>
+            <p class="e-content-p">{{detailData.highest_judicial_authority}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">位于</p>
+            <p class="e-content-p">{{detailData.located_in_the_administrative_territorial_entity}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">下属地区</p>
+            <p class="e-content-p">{{detailData.contains_administrative_territorial_entity}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">邦交国家</p>
+            <p class="e-content-p">{{detailData.diplomatic_relation}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">友好城市</p>
+            <p class="e-content-p">{{detailData.twinned_administrative_body}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">接壤于</p>
+            <p class="e-content-p">{{detailData.shares_border_with}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+        </div>
+        <div class="e-content" v-if="detailData.entity_type === 'weapon'">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">原产国</p>
+            <p class="e-content-p">{{detailData.country_of_origin}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">服役国家</p>
+            <p class="e-content-p">{{detailData.country}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">生产商</p>
+            <p class="e-content-p">{{detailData.manufacturer}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">开发者</p>
+            <p class="e-content-p">{{detailData.developer}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">设计者</p>
+            <p class="e-content-p">{{detailData.designed_by}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">使用者</p>
+            <p class="e-content-p">{{detailData.operator}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">制导系统</p>
+            <p class="e-content-p">{{detailData.guidance_system}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">弹药</p>
+            <p class="e-content-p">{{detailData.ammunition}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">发动机</p>
+            <p class="e-content-p">{{detailData.powerplant}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">航空电子设备</p>
+            <p class="e-content-p">{{detailData.avionics}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+        </div>
+        <div class="e-title">
+          <div class="e-title-d"></div>
+          <p class="e-title-p">相关文档</p>
+        </div>
+        <div class="e-title">
+          <div class="e-title-d"></div>
+          <p class="e-title-p">相关事件</p>
+        </div>
+      </div>
+      <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'event'">
+        <!-- 实体属性 -->
+        <div class="e-title">
+          <div class="e-title-d"></div>
+          <p class="e-title-p">事件属性</p>
+        </div>
+        <div class="e-content">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">全名</p>
+            <p class="e-content-p">{{detailData.chinese_name}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p">{{detailData.entity_name}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">昵称</p>
+            <p class="e-content-p">{{detailData.nickname}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">出生日期</p>
+            <p class="e-content-p">{{detailData.date_of_birth}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">死亡日期</p>
+            <p class="e-content-p">{{detailData.date_of_death}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">失踪日期</p>
+            <p class="e-content-p">{{detailData.date_of_disappearance}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">出生地</p>
+            <p class="e-content-p">{{detailData.place_of_birth}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">国籍</p>
+            <p class="e-content-p">{{detailData.country_of_citizenship}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">所属民族</p>
+            <p class="e-content-p">{{detailData.ethic_group}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">宗教信仰</p>
+            <p class="e-content-p">{{detailData.religion}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">从事职业</p>
+            <p class="e-content-p">{{detailData.occupation}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">军衔</p>
+            <p class="e-content-p">{{detailData.military_rank}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">所属军种</p>
+            <p class="e-content-p">{{detailData.military_branch}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">所属政党</p>
+            <p class="e-content-p">{{detailData.member_of_political_party}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">荣誉</p>
+            <p class="e-content-p">{{detailData.award_received}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">邮箱</p>
+            <p class="e-content-p">{{detailData.e_mail}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">博客</p>
+            <p class="e-content-p">{{detailData.official_blog}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p">{{detailData.official_website}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">简介</p>
+            <p class="e-content-p">{{detailData.summary}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'document'">
+        <!-- 实体属性 -->
+        <div class="e-title">
+          <div class="e-title-d"></div>
+          <p class="e-title-p">文档属性</p>
+        </div>
+        <div class="e-content">
+          <div class="e-content-d">
+            <p class="e-content-p w5em">通道</p>
+            <p class="e-content-p">{{detailData.channel}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">类别</p>
+            <p class="e-content-p">{{detailData.topic}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">类型</p>
+            <p class="e-content-p">{{detailData.type}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">时间</p>
+            <p class="e-content-p">{{detailData.time}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="selectDiv" :style="{height:selectDivHeight}">
+      <div class="selectEdiv" :style="{height:selectDivHeight,maxHeight:selectDivHeight}">
+        <!-- 实体属性 -->
+        <div class="e-title">
+          <div class="e-title-d"></div>
+          <p class="e-title-p">当前选择({{evetdata.length}})</p>
+        </div>
+        <div class="e-content" v-if="evetdata.length == undefined" :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+          <div class="e-content-d pointIcon" @click="changeDetailDiv(evetdata.id,evetdata.entity_type)">
+            <p class="e-content-p">{{evetdata.name}}</p>
+          </div>
+        </div>
+        <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+          <div class="e-content-d pointIcon" v-for="item in evetdata" @click="changeDetailDiv(item.id,item.entity_type)">
+            <p class="e-content-p">{{item.name}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  import configer from '../../util/configContrl.js'
+  export default {
+    data() {
+      return {
+        detailData: null,
+        selectDivHeight: '',
+        eDivH: '',
+        selectHeight: '',
+        entDivH: '',
+        entityT: '',
+        myMap: null
+      }
+    },
+    props: ['evetdata'],
+    mounted() {
+      this.selectDivHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 8 + 30 + "px";
+      this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 10 + "px";
+      this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
+      this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 30 + "px";
+    },
+    components: {},
+    watch: {
+      evetdata: function() {
+        // console.log('***********')
+        // console.log(this.evetdata)
+        // console.log(this.evetdata[0])
+        let detailId = (this.evetdata.length !== undefined) ? (this.evetdata[0].id) : (this.evetdata.id);
+        let detailType = (this.evetdata.length !== undefined) ? (this.evetdata[0].entity_type) : (this.evetdata.entity_type);
+        var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
+        var entityMainType = ob.getElementsByTagName("entityMainType");
+        let arr = []
+        this.myMap = new Map();
+        for (var i = 0; i < entityMainType.length; i++) {
+          let typeName = entityMainType[i].children[0].textContent;
+          let typeChild = []
+          for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
+            // typeChild.push(entityMainType[i].children[1].children[n].textContent)
+            this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
+          }
+        }
+        let a = []
+        a.push(detailId)
+        this.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
+          "nodeIds": a
+        }).then(response => {
+          this.detailData = response.body.data[0]
+        })
+      }
+    },
+    methods: {
+      changeDetailDiv(id, type) {
+        // alert(this.myMap.get(type))
+        //    实体：entity-detail/
+        //    事件：event-detail/
+        //    文档：doc-detail/
+        let arr = []
+        arr.push(id)
+        if (this.myMap.get(type) === 'entity') {
+          this.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
+            "nodeIds": arr
+          }).then(response => {
+            this.detailData = response.body.data[0]
+          })
+        }
+        if (this.myMap.get(type) === 'event') {
+          this.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
+            "EventIds": arr
+          }).then(response => {
+            this.detailData = response.body.data[0]
+          })
+        }
+        if (this.myMap.get(type) === 'document') {
+          this.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
+            "docIds": arr
+          }).then(response => {
+            this.detailData = response.body.data[0]
+          })
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .event-title {
+    width: 90%;
+    height: 28px;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #ccffff;
+    text-overflow: ellipsis;
+  }
+  .event-content {
+    height: 20px;
+    font-family: MicrosoftYaHei;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 20px;
+    letter-spacing: 0px;
+    color: #ccffff;
+    opacity: 0.5;
+    flex-wrap: nowrap;
+    display: flex;
+    overflow-y: hidden;
+  }
+  .e-title {
+    height: 30px;
+    background-color: rgba(51, 255, 255, 0.2);
+    border-top: solid 1px #366674;
+    border-bottom: solid 1px #366674;
+    display: flex;
+  }
+  .e-title-p {
+    height: 18px;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #ccffff;
+  }
+  .e-title-d {
+    width: 4px;
+    height: 16px;
+    background-color: #009999;
+    margin: 6px 6px;
+  }
+  .e-content {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  .buttonD {
+    /* background-color: red; */
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    min-width: 20px;
+    margin: 0px 10px;
+    top: 0;
+    right: 0;
+    opacity: 0;
+  }
+  .e-content-p {
+    /* height: 14px; */
+    font-family: MicrosoftYaHei;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #ccffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: auto;
+    max-width: 70%;
+    white-space: nowrap;
+    margin-right: 40px;
+  }
+  .wspace {
+    white-space: nowrap;
+  }
+  .e-content-p-c {
+    height: 14px;
+    font-family: MicrosoftYaHei;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #ccffff;
+    text-overflow: ellipsis;
+    flex-wrap: nowrap;
+    display: flex;
+  }
+  .e-content-d {
+    padding: 0 0 0 18px;
+    display: flex;
+    height: auto;
+    min-height: 30px;
+    position: relative;
+  }
+  .w5em {
+    width: 5em;
+    min-width: 5em;
+    margin: 0;
+  }
+  .mxw30 {
+    max-width: 30%;
+    width: 30%;
+  }
+  .mxw60 {
+    max-width: 60%;
+    width: 60%;
+  }
+  .mxw70 {
+    max-width: 70%;
+    width: 70%;
+  }
+  .e-content-d:hover {
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+  .e-content-d:hover .buttonD {
+    opacity: 1;
+  }
+  .e-content div:nth-child(even):hover {
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+  .e-content div:nth-child(even) {
+    background-color: rgba(51, 255, 255, 0.05);
+  }
+  .selectDiv {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+  .selectEdiv {}
+  .pointIcon {
+    cursor: pointer;
+  }
+  .bstyle:hover {
+    color: rgba(51, 255, 255, 0.8) !important;
+  }
+</style>
+

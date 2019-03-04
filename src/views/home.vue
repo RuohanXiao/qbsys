@@ -1,12 +1,12 @@
 <template>
   <!-- 此组件为入口主文件，内部包含
-        net_main.vue（网络关系）
-        content_main.vue（文本检索） 
-        geo_main.vue（地理信息）
-      三个功能子组件和
-        custom_topmenu.vue（头部导航） 
-        custom_nav.vue（右侧工作集）
-      公共组件 -->
+            net_main.vue（网络关系）
+            content_main.vue（文本检索） 
+            geo_main.vue（地理信息）
+          三个功能子组件和
+            custom_topmenu.vue（头部导航） 
+            custom_nav.vue（右侧工作集）
+          公共组件 -->
   <Layout>
     <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
       <top-menu/>
@@ -30,6 +30,7 @@
 </template>
 <script>
   import $ from "jquery";
+  import configer from '../util/configContrl.js'
   import topMenu from "./components/custom_topmenu";
   import navDiv from "./components/custom_nav";
   import netMain from "./net_main"
@@ -47,7 +48,7 @@
       return {
         containerDivHeight: 0,
         containerHeight: 0,
-        workSpaceModalFlag:false
+        workSpaceModalFlag: false
       }
     },
     components: {
@@ -64,12 +65,12 @@
       workSpaceModal(flag) {
         this.workSpaceModalFlag = true
       },
-       ok () {
-                this.$Message.info('Clicked ok');
-            },
-            cancel () {
-                this.$Message.info('Clicked cancel');
-            }
+      ok() {
+        this.$Message.info('Clicked ok');
+      },
+      cancel() {
+        this.$Message.info('Clicked cancel');
+      }
     },
     created() {
       var mthis = this
@@ -89,7 +90,18 @@
       mthis.$store.commit('setGeoHeight', mthis.containerHeight)
       mthis.$store.commit('setContentHeight', mthis.containerHeight)
     },
-    mounted() {}
+    mounted() {
+      var ob = configer.loadxmlDoc("../src/util/configer.xml");
+      var imgItem = ob.getElementsByTagName("imgItem");
+      let arr = []
+      var myMap = new Map();
+      for (var i = 0; i < imgItem.length; i++) {
+        var eventType = imgItem[i].children[0].textContent;
+        var imgPosition = imgItem[i].children[1].textContent;
+        myMap.set(eventType,imgPosition)
+      }
+      this.$store.commit('setEventImg', myMap)   
+    }
   }
 </script>
 <style scoped>
@@ -140,8 +152,8 @@
     font-size: 22px;
   }
   /*
-                    侧导航end
-                  */
+                        侧导航end
+                      */
   .white-text {
     color: #fff;
   }
@@ -275,7 +287,7 @@
     text-align: left;
     height: 4vh;
     color: #ccffff;
-    border: 1px solid rgba(51, 255, 255, 0.2);
+    /* border: 1px solid rgba(51, 255, 255, 0.2); */
     background: rgba(51, 255, 255, 0.2);
     outline: none;
     font-family: "微软雅黑";
@@ -404,34 +416,54 @@
   .scrollBarAble {
     overflow-y: hidden;
   }
+  .scrollBarAble::-webkit-scrollbar {
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    position: absolute;
+  }
+  .scrollBarAble::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+  }
+  .scrollBarAble::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+  }
   .scrollBarAble:hover {
     overflow-y: scroll;
   }
-  .scrollBarAble:hover ::-webkit-scrollbar {
+  .scrollBarAble:hover::-webkit-scrollbar {
+    opacity: 1;
     width: 5px;
     height: 5px;
   }
-  .scrollBarAble:hover ::-webkit-scrollbar-thumb {
+  .scrollBarAble:hover::-webkit-scrollbar-thumb {
+    opacity: 1;
     border: 5px solid transparent;
-    background-color: rgba(0, 0, 0, 0)
-  }
-  .scrollBarAble:hover ::-webkit-scrollbar-thumb {
     padding-right: 5px !important;
     border-radius: 10px;
     min-height: 20px;
     background-color: #3cc;
     box-shadow: 1px 1px 3px #3cc inset;
   }
-  .scrollBarAble:hover ::-webkit-scrollbar-track {
+  .scrollBarAble:hover::-webkit-scrollbar-track {
+    opacity: 0;
     border-radius: 2.5px !important;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
+    background: rgba(0, 0, 0, 0);
   }
   .ivu-progress-inner {
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
   /* .ivu-tabs-tab {
-        color: #ccffff !important;
-      } */
+            color: #ccffff !important;
+          } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }
@@ -598,7 +630,7 @@
     padding-left: 10px;
     border-top: 1px solid rgba(54, 102, 116, 0.5);
     /* border-right:1px solid rgba(54, 102, 116, 0.5);
-        border-left:1px solid rgba(54, 102, 116, 0.5); */
+            border-left:1px solid rgba(54, 102, 116, 0.5); */
   }
   .divSplitLine {
     float: center;

@@ -81,8 +81,6 @@
        addToChart(id) {
         var mthis = this
         mock.get("/getWorkSpaceAddData").then(function(res) {
-          console.log('********************')
-          console.log(res)
           mthis.$store.commit('setWorkSpaceAddData', res.data.data[0])
         })
        },

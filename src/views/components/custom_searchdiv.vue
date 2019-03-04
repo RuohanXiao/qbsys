@@ -1,35 +1,35 @@
 <template>
   <div>
     <div>
-      <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}"><i class="icon iconfont icon-search  process-img" :class="(lightIconFlag)?'lightIcon':''" id='searchImg' style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i></div>
-      <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}">
-        <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
-          v-show="type==='net'" remote placeholder='' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @change.native="v=>{setOption(v)}" @keyup.enter.native="enterNetOption(options1[0].data[0])">
-            <!-- <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
+      
+      <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}" class="inputDiv">
+        <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
+          v-show="type==='net'" remote placeholder='' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @change.native="v=>{setOption(v)}" @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
+            <!-- <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
             v-show="type==='net'" remote placeholder='' :loading="loading1" :label-in-value="true" @change.native="searchInfoNet" @keyup.enter.native="enterNetOption(options1[0].data[0])"> -->
-            <OptionGroup :label="opt1.title" v-for="(opt1) in options1">
-              <Option v-for="(option, index) in opt1.data" :value="option.value" :key="index" :style="{lineHeight:'17px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
-                <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
-                <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.label}}</Option>
+            <OptionGroup :label="opt1.title" v-for="(opt1) in options1" class="optionTitle">
+              <Option v-for="(option, index) in opt1.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
+                <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
+                <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+                <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.label}}</Option>
             </OptionGroup>
           </Select>
-        <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoGeo" filterable
-          v-show="type==='geo'" remote placeholder='' :remote-method="searchInfoGeo" :loading="loading2" :label-in-value="true" @on-change="v=>{setOption(v)}" @keyup.enter.native="enterGeoOption(options2[0].data[0])">
+        <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoGeo" filterable
+          v-show="type==='geo'" remote placeholder='' :remote-method="searchInfoGeo" :loading="loading2" :label-in-value="true" @on-change="v=>{setOption(v)}" @focus="lightIcon" @keyup.enter.native="enterGeoOption(options2[0].data[0])">
             <OptionGroup :label="opt.title" v-for="opt in options2">
-              <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'17px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
-                <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
-                <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
+              <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
+                <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
+                <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+                <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
             </OptionGroup>
           </Select>
-        <Select id="queryInput" style="line-height: 40px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoContent" filterable
-          v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}" @keyup.enter.native="enterContentOption(options3[0].data[0])">
+        <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoContent" filterable
+          v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}" @blur="lightIcon" @focus="lightIcon" @keyup.enter.native="enterContentOption(options3[0].data[0])">
             <OptionGroup :label="opt.title" v-for="opt in options3">
               <Option v-for="(option, index) in opt.data" :value="option.value" :key="index"  @click.native="()=>{setOption(opt.data[index])}">
-                <img v-if="option.img !== ''" :style="{width:'17px',height:'17px',borderRadius:'50%'}" :src="option.img" />
-                <img v-else-if="option.type ==='human'" :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                <img v-else :style="{width:'17px',height:'17px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
+                <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
+                <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+                <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
             </OptionGroup>
           </Select>
         <!-- <el-select
@@ -55,6 +55,7 @@
             </el-option-group>
           </el-select> -->
       </div>
+      <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}" class="imgDiv"><i class="icon iconfont icon-search process-img" :class="(lightIconFlag)?'lightIcon':''" id='searchImg' style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i></div>
     </div>
     <!-- <div>
         <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}"><i class="icon iconfont icon-search  process-img" :class="(lightIconFlag)?'lightIcon':''" id='searchImg' style="position: absolute;top:4px;left:14px;width:25px;height:25px;"></i></div>
@@ -102,22 +103,19 @@
     },
     methods: {
       enterNetOption(a) {
-        console.log(a)
         this.inputInfoNet = a.label
         this.setOption(a)
       },
       enterGeoOption(a) {
-        console.log(a)
         this.setOption(a)
         this.inputInfoGeo = a.label
       },
       enterContentOption(a) {
-        console.log(a)
         this.inputInfoContent = a.label
         this.setOption(a)
       },
       lightIcon() {
-        lightIconFlag = !lightIconFlag
+        this.lightIconFlag = !this.lightIconFlag
       },
       setOption(a) {
         var mthis = this;
@@ -129,7 +127,7 @@
           //   // 新增防抖功能
             let arr = []
             arr.push(a.id)
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas-coarse/', {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
               'nodeIds': arr
             }).then(response => {
               if (response.body.code === 0) {
@@ -140,7 +138,7 @@
                   data: response.body.data[0].nodes[0]
                 })
               } else {
-                alert('node-datas接口异常')
+                alert('entity-detail接口异常')
               }
             })
           // }, 100);
@@ -185,7 +183,7 @@
           clearTimeout(this.timer)
         }
         this.timer = setTimeout(function() {
-          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-matchs/?pattern=" + query, {
+          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, {
               emulateJSON: true
             })
             .then(response => {
@@ -206,10 +204,6 @@
                   "type": response.body.data[0].nodes[i].type
                 })
               }
-              console.log('------------')
-              console.log(response.body.data[0].nodes)
-              console.log(optionListArr)
-              console.log('------------')
               optionList.title = '实体检索'
               optionList.data = optionListArr
               let option = []
@@ -226,7 +220,7 @@
       var mthis = this;
       if (query !== "") {
         mthis.loading2 = true;
-        let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-matchs/?pattern=" + query, {
+        let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, {
             emulateJSON: true
           })
           .then(response => {
@@ -270,7 +264,7 @@
       var mthis = this;
       if (query !== "") {
         mthis.loading3 = true;
-        // let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-matchs/?pattern=" + query, {
+        // let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, {
         //     emulateJSON: true
         //   })
         //   .then(response => {
@@ -301,6 +295,23 @@
 </script>
 <style scoped>
   .lightIcon {
-    color: #33ffff;
+    color: rgb(51, 255, 255, 0.8);
   }
+  
 </style>
+<style>
+.ivu-select-group-title{
+    color: rgba(204,255,255,0.5) !important;
+    line-height:10px  !important;
+    height: 10px  !important;
+  }
+  .process-img {
+    color:rgba(51,255,255,0.5);
+    animation: all 1s;
+    -webkit-animation: all 1s;
+  }
+  /* #queryInput:focus>.inputDiv+.imgDiv .process-img {
+    color: red;
+  } */
+</style>
+

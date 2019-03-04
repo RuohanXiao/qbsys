@@ -68,9 +68,9 @@
       mthis.viewHeight = mthis.$store.getters.getViewHeight
       mthis.contentHeight = mthis.$store.getters.getContentDivHeight
     },
-    watch:{
-    split1: function(va){
-        this.$store.commit('setSplit_content',this.split1);
+    watch: {
+      split1: function(va) {
+        this.$store.commit('setSplit_content', this.split1);
         this.splitWidth = document.documentElement.clientWidth * this.split1 - 20 + 'px'
       }
     }
@@ -121,8 +121,8 @@
     font-size: 22px;
   }
   /*
-                  侧导航end
-                */
+                    侧导航end
+                  */
   .white-text {
     color: #fff;
   }
@@ -256,7 +256,7 @@
     text-align: left;
     height: 4vh;
     color: #ccffff;
-    border: 1px solid rgba(51, 255, 255, 0.2);
+    /* border: 1px solid rgba(51, 255, 255, 0.2); */
     background: rgba(51, 255, 255, 0.2);
     outline: none;
     font-family: "微软雅黑";
@@ -384,8 +384,8 @@
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
   /* .ivu-tabs-tab {
-      color: #ccffff !important;
-    } */
+        color: #ccffff !important;
+      } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }
@@ -517,7 +517,7 @@
     padding-left: 10px;
     border-top: 1px solid rgba(54, 102, 116, 0.5);
     /* border-right:1px solid rgba(54, 102, 116, 0.5);
-      border-left:1px solid rgba(54, 102, 116, 0.5); */
+        border-left:1px solid rgba(54, 102, 116, 0.5); */
   }
   .divSplitLine {
     float: center;
@@ -530,27 +530,47 @@
   .scrollBarAble {
     overflow-y: hidden;
   }
+  .scrollBarAble::-webkit-scrollbar {
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    position: absolute;
+  }
+  .scrollBarAble::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+  }
+  .scrollBarAble::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+  }
   .scrollBarAble:hover {
     overflow-y: scroll;
   }
-  .scrollBarAble:hover ::-webkit-scrollbar {
+  .scrollBarAble:hover::-webkit-scrollbar {
+    opacity: 1;
     width: 5px;
     height: 5px;
   }
-  .scrollBarAble:hover ::-webkit-scrollbar-thumb {
+  .scrollBarAble:hover::-webkit-scrollbar-thumb {
+    opacity: 1;
     border: 5px solid transparent;
-    background-color: rgba(0, 0, 0, 0)
-  }
-  .scrollBarAble:hover ::-webkit-scrollbar-thumb {
     padding-right: 5px !important;
     border-radius: 10px;
     min-height: 20px;
     background-color: #3cc;
     box-shadow: 1px 1px 3px #3cc inset;
   }
-  .scrollBarAble:hover ::-webkit-scrollbar-track {
+  .scrollBarAble:hover::-webkit-scrollbar-track {
+    opacity: 0;
     border-radius: 2.5px !important;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
+    background: rgba(0, 0, 0, 0);
   }
 </style>
 

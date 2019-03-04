@@ -195,7 +195,7 @@ export default {
   }
   .modalContent2 {
     font-family: MicrosoftYaHei;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
     line-height: 25px;
@@ -206,7 +206,7 @@ export default {
   .human_detailTable>tr>td {
     min-width: 80px;
     max-width:200px;
-    line-height: 40px;
+    line-height: 30px;
   }
 </style>
 
