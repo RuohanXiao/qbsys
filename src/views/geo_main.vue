@@ -100,7 +100,7 @@
     width: 100%;
   }
   #right {
-    background-image: linear-gradient( 8deg, rgba(102, 255, 153, 0.14) 0%, rgba(102, 128, 204, 0.14) 60%, rgba(102, 0, 255, 0.14) 100%), linear-gradient(#000000, #000000);
+    background-image: linear-gradient(8deg, rgba(102, 255, 153, 0.3) -10%, rgba(102, 128, 204, 0.3) 65%, rgba(102, 0, 255, 0.3) 100%), linear-gradient(#000000, #000000);
     background-blend-mode: normal, normal;
     border-radius: 0px 0px 0px 0px;
     border: solid 1px #336666;
@@ -267,7 +267,7 @@
     text-align: left;
     height: 4vh;
     color: #ccffff;
-    border: 1px solid rgba(51, 255, 255, 0.2);
+    /* border: 1px solid rgba(51, 255, 255, 0.2); */
     background: rgba(51, 255, 255, 0.2);
     outline: none;
     font-family: "微软雅黑";

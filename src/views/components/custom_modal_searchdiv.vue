@@ -44,7 +44,7 @@
         var mthis = this;
         let a = mthis.addTargetValue;
         if(a !== undefined && a!== null && a!==''){
-          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url+"/fuzzy-matchs/?pattern=" + a, {
+          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url+"/fuzzy-match/?pattern=" + a, {
               emulateJSON: true
             })
             .then(response => {
@@ -56,7 +56,7 @@
       var mthis = this;
       if (query !== "") {
         // this.loading1 = true;
-        let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url+"/fuzzy-matchs/?pattern=" + query, {
+        let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url+"/fuzzy-match/?pattern=" + query, {
             emulateJSON: true
           })
           .then(response => {

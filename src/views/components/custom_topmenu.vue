@@ -14,7 +14,7 @@
       <img class="menu_img" src="../../dist/assets/images/content.png" style="display: flex;align-items: center;" />
     </div>
     </Col>
-    <Col span="4" align="right">
+    <Col span="5" align="right">
     <search-div :type="isActive"/>
     </Col>
   </Row>
@@ -99,6 +99,9 @@ export default {
   width: auto;
   height: 48px;
   
+}
+.ivu-select-item img{
+  margin-right: 10px;
 }
 
 </style>

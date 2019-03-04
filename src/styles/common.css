@@ -1,21 +1,37 @@
 /* 滚动条样式 */
 .scrollBarAble {
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.scrollBarAble::-webkit-scrollbar {
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+  position: absolute;
+}
+.scrollBarAble::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+}
+.scrollBarAble::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
 }
 .scrollBarAble:hover {
   overflow-y: scroll;
-  overflow-x: hidden;
 }
 .scrollBarAble:hover::-webkit-scrollbar {
+  opacity: 1;
   width: 5px;
   height: 5px;
 }
 .scrollBarAble:hover::-webkit-scrollbar-thumb {
+  opacity: 1;
   border: 5px solid transparent;
-  background-color: rgba(0, 0, 0, 0)
-}
-.scrollBarAble:hover::-webkit-scrollbar-thumb {
   padding-right: 5px !important;
   border-radius: 10px;
   min-height: 20px;
@@ -23,6 +39,8 @@
   box-shadow: 1px 1px 3px #3cc inset;
 }
 .scrollBarAble:hover::-webkit-scrollbar-track {
+  opacity: 0;
   border-radius: 2.5px !important;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
+  background: rgba(0, 0, 0, 0);
 }

@@ -4,48 +4,22 @@
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
         <Tabs :value=$store.state.tabSelect>
-          <Tab-pane label="数据透视" name='数据透视' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('数据透视')">
-            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'net' && nodeTypedata !== null"></left-statics>
+          <Tab-pane label="选中详情" name='mubiaoxiangqing' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqing' @click="changTab('mubiaoxiangqing')">
+            <eventNet :resArr='resArr' :evetdata='evetdata' v-if='evetdata'></eventNet>
+            <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
+              <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
+                <img src="../../dist/assets/images/need_select.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
+                <p class="selectP">请选择左边节点，查看目标详情</p>
+              </div>
+            </div>
           </Tab-pane>
-          <Tab-pane label="选中详情" name='选中详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_30}" id='mubiaoxiangqing' @click="changTab('选中详情')">
-            <div>
-              <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
-                <!-- 目标详情 -->
-                <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default" v-show="!selectTime">
-                  <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
-                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="selectNetNodes != null&&selectNetNodes[0]!==undefined">{{selectNetNodes[0].ids.length}}</span>)
-                    <i class="icon iconfont icon-more" style="float:right"></i>
-                  </p>
-                </div>
-                <div class='scrollBarAble' :style="{width:'100%',height:eventItemHeight,margin:'0px 5px 0 10px',paddingRight:'5px'}">
-                  <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(data.id)">{{data.name}}
-                    <p class="p-collapse-modal-small">{{data.entity_type}}</p>
-                  </div>
-                </div>
-                <!-- 事件详情 -->
-                <!-- <div  v-show="!selectTime">
-                  这里是事件详情
-                </div> -->
-              </Row>
-              <Card dis-hover style="width:100%,background-color:rgba(0,0,0,0);" :style="{overflowY:'scroll',height:eventheight}" v-show="singlePerson" v-if="evetdata!== undefined && evetdata!==null">
-                <Row type="flex" justify="end">
-                  <Icon class="cardIcon icon iconfont icon-fangda process-img DVSL-bar-btn DVSL-bar-btn-back" size="20" @click="detail(evetdata.id)" />
-                </Row>
-                <div :style="{padding:'0 5px'}">
-                  <Row type="flex" justify="center">
-                    <span class="infoTitle">{{evetdata.name}}</span>
-                  </Row>
-                  <Row type="flex" justify="center" :style="{margin:'5px 0 '}">
-                    <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="evetdata.img==''" />
-                    <Avatar class="circle-img" v-else :src="evetdata.img" :style="{width:'50px',height:'50px'}" />
-                  </Row>
-                  <div class='entityDetail'>
-                    <entityDetailsTableHuman :Entitydetail="evetdata" v-if="evetdata.entity_type =='human'" @click="hightLight(evetdata)"></entityDetailsTableHuman>
-                    <entityDetailsTableAdministrative :Entitydetail="evetdata" v-if="evetdata.entity_type =='administrative'" @click="hightLight(evetdata)"></entityDetailsTableAdministrative>
-                    <entityDetailsTableOrganization :Entitydetail="evetdata" v-if="evetdata.entity_type =='organization'" @click="hightLight(evetdata)"></entityDetailsTableOrganization>
-                  </div>
-                </div>
-              </Card>
+          <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('toushi')">
+            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'net' && nodeTypedata !== null"></left-statics>
+            <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
+              <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
+                <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
+                <p class="selectP">请选择两个以上节点，查看数据透视</p>
+              </div>
             </div>
           </Tab-pane>
         </Tabs>
@@ -59,6 +33,7 @@
   import modalChartDetail from './custom_modal_detail'
   import percentBar from './custom_percentBar'
   import leftStatics from './custom_leftStatics'
+  import eventNet from './custom_event_net'
   import {
     mapState,
     mapMutations
@@ -72,10 +47,12 @@
   export default {
     data() {
       return {
+        eDiv: '',
         vh20: 0,
         selectTime: false,
         timer: null,
-        tabSelect: '数据透视',
+        // tabSelect: '数据透视',
+        tabSelect: 'mubiaoxiangqing',
         modalNodeId: '',
         contentStatisticsdata: {},
         statisticsNameList: {
@@ -110,116 +87,113 @@
         eventheight: 0,
         eventItemHeight: 0,
         closable: true,
-        firstClassify : [
-                {
-                    id:'NodeType',
-                    disName:'节点类型'
-                },
-                {
-                    id:'EntityAttr',
-                    disName:'实体属性'
-                }
-            ],
-        nodeTypeClassify : [
-                {
-                    id:'human',
-                    disName:'人物'
-                },
-                {
-                    id:'organization',
-                    disName:'组织'
-                },
-                {
-                    id:'administrative',
-                    disName:'国家'
-                },
-                {
-                    id:'event',
-                    disName:'事件'
-                }
-            ],
-            EntityAttrClassify:{
-              "human":[
-                {
-                    id:'out__country_of_citizenship_names',
-                    disName:'国籍'
-                },
-                {
-                    id:'out__occupation_names',
-                    disName:'职业'
-                },
-                {
-                    id:'address',
-                    disName:'地址'
-                },
-                {
-                    id:'out__member_of_political_party_names',
-                    disName:'政党'
-                },
-                {
-                    id:'religion',
-                    disName:'信仰'
-                },
-                {
-                    id:'e-mail',
-                    disName:'邮箱'
-                }
-              ],
-              "organization":[
-                {
-                    id:'headquarters_location',
-                    disName:'总部'
-                },
-                {
-                    id:'founded_by',
-                    disName:'创办者'
-                },
-                {
-                    id:'chairperson',
-                    disName:'领袖'
-                },
-                {
-                    id:'chief_executive_officer',
-                    disName:'首席执行官'
-                },
-                {
-                    id:'political_ideology',
-                    disName:'意识形态'
-                }
-              ],
-              "administrative":[
-                {
-                    id:'capital',
-                    disName:'首都'
-                },
-                {
-                    id:'head_of_state',
-                    disName:'国家元首'
-                },
-                {
-                    id:'head_of_government',
-                    disName:'政府首脑'
-                },
-                {
-                    id:'continent',
-                    disName:'所属洲'
-                },
-                {
-                    id:'gini_coefficient',
-                    disName:'基尼指数'
-                },
-                {
-                    id:'human_development_index',
-                    disName:'人类发展指数'
-                },
-                {
-                    id:'top-level_Internet_domain',
-                    disName:'顶级域名'
-                }
-              ],
+        firstClassify: [{
+            id: 'NodeType',
+            disName: '节点类型'
+          },
+          {
+            id: 'EntityAttr',
+            disName: '实体属性'
+          }
+        ],
+        nodeTypeClassify: [{
+            id: 'human',
+            disName: '人物'
+          },
+          {
+            id: 'organization',
+            disName: '组织'
+          },
+          {
+            id: 'administrative',
+            disName: '国家'
+          },
+          {
+            id: 'event',
+            disName: '事件'
+          }
+        ],
+        EntityAttrClassify: {
+          "human": [{
+              id: 'out__country_of_citizenship_names',
+              disName: '国籍'
             },
-            nodeTypedata:null,
-            staticsIds:[],
+            {
+              id: 'out__occupation_names',
+              disName: '职业'
+            },
+            {
+              id: 'address',
+              disName: '地址'
+            },
+            {
+              id: 'out__member_of_political_party_names',
+              disName: '政党'
+            },
+            {
+              id: 'religion',
+              disName: '信仰'
+            },
+            {
+              id: 'e-mail',
+              disName: '邮箱'
+            }
+          ],
+          "organization": [{
+              id: 'headquarters_location',
+              disName: '总部'
+            },
+            {
+              id: 'founded_by',
+              disName: '创办者'
+            },
+            {
+              id: 'chairperson',
+              disName: '领袖'
+            },
+            {
+              id: 'chief_executive_officer',
+              disName: '首席执行官'
+            },
+            {
+              id: 'political_ideology',
+              disName: '意识形态'
+            }
+          ],
+          "administrative": [{
+              id: 'capital',
+              disName: '首都'
+            },
+            {
+              id: 'head_of_state',
+              disName: '国家元首'
+            },
+            {
+              id: 'head_of_government',
+              disName: '政府首脑'
+            },
+            {
+              id: 'continent',
+              disName: '所属洲'
+            },
+            {
+              id: 'gini_coefficient',
+              disName: '基尼指数'
+            },
+            {
+              id: 'human_development_index',
+              disName: '人类发展指数'
+            },
+            {
+              id: 'top-level_Internet_domain',
+              disName: '顶级域名'
+            }
+          ],
+        },
+        nodeTypedata: null,
+        staticsIds: [],
+        single: false,
+        resArr:[]
       };
     },
     components: {
@@ -229,19 +203,116 @@
       cTree,
       entityDetailsTableHuman,
       entityDetailsTableAdministrative,
-      entityDetailsTableOrganization
+      entityDetailsTableOrganization,
+      eventNet
     },
     // computed: {
     //   menuitemClasses: function() {
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult','viewHeight_30']),
+    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType']),
     watch: {
       // contentStatisticsResult:function(){
       //   var mthis = this;
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
+      selectionIdByType: function() {
+        // var mthis = this;
+        // let nodeIdsArry = mthis.selectionIdByType.nodeIds;
+        // let eventsArry = mthis.selectionIdByType.eventIds;
+        // let contentsArry = mthis.selectionIdByType.contentIds;
+        // // let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
+        // //   return item.id;
+        // // });
+        // let ob = {}
+        // ob.nodeIds = nodeIdsArry
+        // // 新增防抖功能
+        // this.timer = setTimeout(function() {
+        //   mthis.resArr = []
+        //   if (nodeIdsArry.length > 0) {
+        //     if (nodeIdsArry.length > 1) {
+        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
+        //         'nodeIds': nodeIdsArry
+        //       }).then(response => {
+        //         // mthis.evetdata = response.body.data[0].nodes
+        //         mthis.resArr.push({
+        //           'nodeRes': response.body.data[0].nodes
+        //         })
+        //       })
+        //     } else if (nodeIdsArry.length = 1) {
+        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
+        //         'nodeIds': nodeIdsArry
+        //       }).then(response => {
+        //         // mthis.evetdata = response.body.data[0]
+        //         mthis.resArr.push({
+        //           'nodeRes': response.body.data[0]
+        //         })
+        //       })
+        //     } else {
+        //       // mthis.evetdata = null
+        //       mthis.resArr.push({
+        //         'nodeRes': null
+        //       })
+        //     }
+        //   }
+        //   if (eventsArry.length > 0) {
+        //     if (nodeIdsArry.length > 1) {
+        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-info/', {
+        //         'EventIds': eventsArry
+        //       }).then(response => {
+        //         // mthis.evetdata = response.body.data[0].nodes
+        //         mthis.resArr.push({
+        //           'eventRes': response.body.data[0].nodes
+        //         })
+        //       })
+        //     } else if (nodeIdsArry.length = 1) {
+        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
+        //         'EventIds': eventsArry
+        //       }).then(response => {
+        //         // mthis.evetdata = response.body.data[0]
+        //         mthis.resArr.push({
+        //           'eventRes': response.body.data[0].nodes
+        //         })
+        //       })
+        //     } else {
+        //       // mthis.evetdata = null
+        //       mthis.resArr.push({
+        //         'eventRes': response.body.data[0].nodes
+        //       })
+        //     }
+        //   }
+        //   if (contentsArry.length > 0) {
+        //     if (nodeIdsArry.length > 1) {
+        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', {
+        //         'docIds': contentsArry
+        //       }).then(response => {
+        //         // mthis.evetdata = response.body.data[0].nodes
+        //         mthis.resArr.push({
+        //           'contentRes': response.body.data[0].nodes
+        //         })
+        //       })
+        //     } else if (nodeIdsArry.length = 1) {
+        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+        //         'docIds': contentsArry
+        //       }).then(response => {
+        //         // mthis.evetdata = response.body.data[0]
+        //         mthis.resArr.push({
+        //           'contentRes': response.body.data[0].nodes
+        //         })
+        //       })
+        //     } else {
+        //       // mthis.evetdata = null
+        //       mthis.resArr.push({
+        //         'contentRes': response.body.data[0].nodes
+        //       })
+        //     }
+        //   }
+        // }, 200);
+      },
+      singlePerson: function() {
+        this.single = this.singlePerson
+      },
       dataStatisticsEvent: function() {
         var mthis = this;
         mthis.staticsIds = mthis.$store.state.StaticsIds;
@@ -254,44 +325,34 @@
       },
       netTimeCondition: function(va) {
         this.selectTime = true
-        this.tabSelect= '选中详情'
+        this.tabSelect = 'mubiaoxiangqing'
       },
-      selectNetNodes: function(va) {
+      selectNetNodes: function() {
         var mthis = this;
-        let nodeIdsArry = va[0].ids.map(item => {
+        let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
           return item.id;
         });
-        if (this.timer) {
-          clearTimeout(this.timer)
-        }
+        let ob = {}
+        ob.nodeIds = nodeIdsArry
+        // 新增防抖功能
         this.timer = setTimeout(function() {
-          // 新增防抖功能
-          if(mthis.singlePerson){
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
-              'nodeIds': nodeIdsArry
-            }).then(response => {
-              mthis.evetdata =  response.body.data[0]
+          if (nodeIdsArry.length > 1) {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', ob).then(response => {
+              mthis.evetdata = response.body.data[0].nodes
+            })
+          } else if (nodeIdsArry.length = 1) {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', ob).then(response => {
+              mthis.evetdata = response.body.data[0]
             })
           } else {
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas-coarse/', {
-              'nodeIds': nodeIdsArry
-            }).then(response => {
-              mthis.evetdata =  response.body.data[0].nodes
-            })
+            mthis.evetdata = null
           }
-
-          
-        }, 100);
-        // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
-        // mthis.evetdata = 
+        }, 200);
       }
     },
     methods: {
-      hightLight(id){
-        console.log('-----------------')
-        console.log(id)
-      },
-      changTab(a){
+      hightLight(id) {},
+      changTab(a) {
         this.$store.commit('setTabSelect', a)
       },
       setFlagToFalse(detailModalFlag) {
@@ -329,7 +390,7 @@
         mthis.detailModalFlag = true
         let nodeIdsArry = []
         nodeIdsArry.push(id)
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
           //mthis.selectNetNodes = response.body.data[0]//.nodes[0]
@@ -346,13 +407,13 @@
         this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
         this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
         this.eventItemHeight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16 - 40) + "px";
-        this.vh20 =  document.documentElement.clientHeight - 65 - 20 + 'px';
+        this.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
       };
       this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
       this.eventItemHeight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16 - 40) + "px";
       this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
       this.eheight = this.eventheightdiv - 32 - 16 + 'px'
-      this.vh20 =  document.documentElement.clientHeight - 65 - 20 + 'px';
+      this.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
       this.changeLimit()
     }
   };
@@ -556,5 +617,18 @@
   #toushi {
     /* overflow-y: scroll; */
     overflow-y: auto;
+  }
+  .selectP {
+    width: 100%;
+    text-align: center;
+    height: 17px;
+    font-family: MicrosoftYaHei;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 32px;
+    letter-spacing: 0px;
+    color: #ccffff;
+    opacity: 0.5;
   }
 </style>

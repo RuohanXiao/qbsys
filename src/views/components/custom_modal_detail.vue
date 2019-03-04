@@ -36,7 +36,7 @@
     watch:{
       nodeId:function(){
         var nodeIds =[this.nodeId];
-      this.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
+      this.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
           'nodeIds': nodeIds
         }).then(response => {
            if(this.editableTabs.length == 0 || this.getIndexFromArrById(response.body.data[0], this.editableTabs) == -1){

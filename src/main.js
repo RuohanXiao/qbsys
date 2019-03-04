@@ -184,6 +184,7 @@ const RouterConfig = {
 };
 var store = new Vuex.Store({
   state: {
+    eventImg:null,
     // 组件获取数据方式 this.$store.state.XXX
     tmss:'net', // top menu selected stutas
     workSpaceAddData: {},
@@ -266,12 +267,13 @@ var store = new Vuex.Store({
     singlePerson:true,
     dataStatisticsEvent: {},
     changenetpx: true,
+    selectionIdByType:{},
     dataexpand: [{
       name:'',
       img:'',
       type:''
     }],
-    tabSelect: '数据透视',
+    tabSelect: 'mubiaoxiangqing',
     contentStatisticsResult:{},
     StaticsIds:[],
     netStaticsSelectedIds:[],  //net模块中点击右侧统计保存ids
@@ -326,8 +328,14 @@ var store = new Vuex.Store({
     setWorkSpaceAddData(state,val){
       state.workSpaceAddData = val
     },
+    setSelectionIdByType(state,val){
+      state.selectionIdByType = val
+    },
     setNetStaticsSelectedIds(state,val){
       state.netStaticsSelectedIds = val
+    },
+    setEventImg(state,val){
+      state.eventImg = val
     },
     setStaticsIds(state,val){
       state.StaticsIds = val
@@ -412,7 +420,6 @@ var store = new Vuex.Store({
       state.singlePerson = val
     },
     setAddNetNodes(state,val){
-      console.log(val);
       state.addNetNodes = val
 
     },

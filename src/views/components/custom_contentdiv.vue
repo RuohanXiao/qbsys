@@ -106,11 +106,12 @@
                 <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items">
                 <div>
                 
-                <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text">
+                <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id)">
                   <!-- <Tooltip  placement="bottom" :content="item.title" :delay="1000" :style="{width:'90%'}">
                     <a class="contentTitle" @click="showContent(item.id)">{{item.title}}</a>
                   </Tooltip> -->
-                  <a class="contentTitle" @click="showContent(item.id)">{{item.title}}</a>
+                  <!-- <a class="contentTitle" @click="showContent(item.id)">{{item.title}}</a> -->
+                  <p class="contentTitle">{{item.title}}</p>
                   <!-- <div id="titleWrap" @click="showContent(item.id)">
                     <div id="titleContent">{{item.title}}</div>
                   </div> -->
@@ -367,7 +368,6 @@
               } else {
                 $(this).addClass('item-selected');
                 let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-                console.log(selectList)
                 this.selectArr = []
                 for (let m = 0; m < selectList.length; m++) {
                   this.selectArr.push(selectList[m].id)
@@ -468,7 +468,6 @@
       },
       toNet() {
         let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-        console.log(selectList)
         let infos = []
         for (let m = 0; m < selectList.length; m++) {
           infos.push({
@@ -480,7 +479,6 @@
             loaded: true
           })
         }
-        console.log(infos)
         this.$store.commit('setContentToNetData', {
           "nodes": infos
         })
@@ -620,8 +618,6 @@
         // if ($(this).hasClass('selected'))
         // alert(index)
         // this.items[index].check = true
-        console.log('**********************')
-        console.log($('#contentchart')[0].childNodes[0].childNodes[index])
       },
       orderDefalut() {
         var mthis = this
@@ -1019,6 +1015,8 @@
     border: 1px solid rgba(51, 255, 255, 0);
   }
   .item-selected {
+    animation: all 1s;
+    -webkit-animation: all 1s;
     background-color: rgba(51, 255, 255, 0.4);
     border: 1px solid rgba(51, 255, 255, 0.5);
   }

@@ -4,11 +4,7 @@
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_20_content}">
         <Tabs :value=$store.state.tabSelect>
-          <Tab-pane label="数据透视" name= '数据透视' :style="{fontSize: '18px',height:viewHeight_20_content}" id='toushi'>
-            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'content' && nodeTypedata !== null"></left-statics>
-            
-          </Tab-pane>
-          <Tab-pane label="目标详情" name= '目标详情' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_20_content}" id='mubiaoxiangqing'>
+          <Tab-pane label="选中详情" name= 'mubiaoxiangqing' v-if="$store.state.tmss === 'content'" :style="{fontSize: '18px',height:viewHeight_20_content}" id='mubiaoxiangqing'  @click="changTab('mubiaoxiangqing')">
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
@@ -44,6 +40,9 @@
               </Card>
             </div>
           </Tab-pane>
+          <Tab-pane label="数据透视" name= 'toushi' :style="{fontSize: '18px',height:viewHeight_20_content}" id='toushi'  @click="changTab('toushi')">
+            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'content' && nodeTypedata !== null"></left-statics>
+          </Tab-pane>
         </Tabs>
       </div>
       <modal-chart-detail :nodeId='modalNodeId' :flag='detailModalFlag' @detailModalFlag='setFlagToFalse'></modal-chart-detail>
@@ -66,7 +65,7 @@
     data() {
       return {
         timer:null,
-        tabSelect:'数据透视',
+        tabSelect:'mubiaoxiangqing',
         modalNodeId: '',
         contentStatisticsdata:{},
         statisticsNameList:{
@@ -209,7 +208,7 @@
       //     }
       //     this.timer = setTimeout(function() {
       //     // 新增防抖功能
-      //     mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
+      //     mthis.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
       //       'nodeIds': nodeIdsArry
       //     }).then(response => {
       //       mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
@@ -220,6 +219,9 @@
       // }
     },
     methods: {
+      changTab(a) {
+        this.$store.commit('setTabSelect', a)
+      },
       setFlagToFalse(detailModalFlag){
         var mthis = this;
         mthis.detailModalFlag = detailModalFlag;
@@ -254,7 +256,7 @@
         mthis.modalNodeId = id
         let nodeIdsArry = []
         nodeIdsArry.push(id)
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/node-datas/', {
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
           mthis.selectNetNodes = response.body.data[0].nodes[0]
@@ -285,7 +287,7 @@
   }
   .infoTitle {
     font-family: MicrosoftYaHei;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: normal;
     font-stretch: normal;
     line-height: 26px;

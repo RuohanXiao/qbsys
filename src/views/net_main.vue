@@ -10,7 +10,9 @@
             <time-chart-div :activeId='activeId'></time-chart-div>
           </div>
           <div id="right" slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
+            <!-- <div :style="{backgroundColor:'rgba(0,0,0,0.5)'}"> -->
             <event-chart-div :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div>
+            <!-- </div> -->
           </div>
         </Split>
       </div>
@@ -57,7 +59,7 @@
       //       return item.id;
       //     });
       //     // 新增防抖功能
-      //     mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-datas/', {
+      //     mthis.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
       //       'nodeIds': nodeIdsArry
       //     }).then(response => {
       //       mthis.$store.commit('setNetSelectNetNodes',response.data.data[0].nodes)
@@ -115,7 +117,7 @@
 <style>
   .process-img {
     /* color: rgba(51, 255, 255, 0.4); */
-    color: rgba(51, 255, 255, 0.6);
+    color: rgba(51, 255, 255, 0.4);
     size: 30px;
   }
   .bgDiv {
@@ -131,7 +133,7 @@
     width: 100%;
   }
   #right {
-    background-image: linear-gradient(8deg, rgba(102, 255, 153, 0.2) 0%, rgba(102, 128, 204, 0.2) 60%, rgba(102, 0, 255, 0.2) 100%), linear-gradient( #000000, #000000);
+    background-image: linear-gradient(8deg, rgba(102, 255, 153, 0.3) -10%, rgba(102, 128, 204, 0.3) 65%, rgba(102, 0, 255, 0.3) 100%), linear-gradient(#000000, #000000);
     background-blend-mode: normal, normal;
     border: solid 1px #336666;
   }
@@ -161,8 +163,8 @@
     font-size: 22px;
   }
   /*
-                  侧导航end
-                */
+                    侧导航end
+                  */
   .white-text {
     color: #fff;
   }
@@ -296,7 +298,7 @@
     text-align: left;
     height: 4vh;
     color: #ccffff;
-    border: 1px solid rgba(51, 255, 255, 0.2);
+    /* border: 1px solid rgba(51, 255, 255, 0.2); */
     background: rgba(51, 255, 255, 0.2);
     outline: none;
     font-family: "微软雅黑";
@@ -422,7 +424,7 @@
     overflow: hidden;
   }
   /* 滚动条样式 */
-  ::-webkit-scrollbar {
+   ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
   }
@@ -430,8 +432,8 @@
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
   /* .ivu-tabs-tab {
-      color: #ccffff !important;
-    } */
+        color: #ccffff !important;
+      } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }
@@ -563,7 +565,7 @@
     padding-left: 10px;
     border-top: 1px solid rgba(54, 102, 116, 0.5);
     /* border-right:1px solid rgba(54, 102, 116, 0.5);
-      border-left:1px solid rgba(54, 102, 116, 0.5); */
+        border-left:1px solid rgba(54, 102, 116, 0.5); */
   }
   .divSplitLine {
     float: center;
@@ -576,18 +578,36 @@
   .scrollBarAble {
     overflow-y: hidden;
   }
+  .scrollBarAble::-webkit-scrollbar {
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    position: absolute;
+  }
+  .scrollBarAble::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+  }
+  .scrollBarAble::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+  }
   .scrollBarAble:hover {
     overflow-y: scroll;
   }
   .scrollBarAble:hover::-webkit-scrollbar {
+    opacity: 1;
     width: 5px;
     height: 5px;
   }
   .scrollBarAble:hover::-webkit-scrollbar-thumb {
+    opacity: 1;
     border: 5px solid transparent;
-    background-color: rgba(0, 0, 0, 0)
-  }
-  .scrollBarAble:hover::-webkit-scrollbar-thumb {
     padding-right: 5px !important;
     border-radius: 10px;
     min-height: 20px;
@@ -595,8 +615,10 @@
     box-shadow: 1px 1px 3px #3cc inset;
   }
   .scrollBarAble:hover::-webkit-scrollbar-track {
+    opacity: 0;
     border-radius: 2.5px !important;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
+    background: rgba(0, 0, 0, 0);
   }
 </style>
 <style scoped>

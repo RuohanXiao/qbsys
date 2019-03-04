@@ -171,7 +171,6 @@ export default {
             if(mthis.type !== ''){
                 mthis.getAttrsById(mthis.type);
             }
-            console.log(mthis.SecondAttrClassify)
             
         }
     },
