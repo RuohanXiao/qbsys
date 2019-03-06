@@ -5,8 +5,8 @@
       <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
         <Tabs :value=$store.state.tabSelect>
           <Tab-pane label="选中详情" name='mubiaoxiangqing' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqing' @click="changTab('mubiaoxiangqing')">
-            <eventNet :resArr='resArr' :evetdata='evetdata' v-if='evetdata'></eventNet>
-            <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
+            <eventNet :resArr='resArr' :evetdata='evetdata' v-show='evetdataFlag'></eventNet>
+            <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_select.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
                 <p class="selectP">请选择左边节点，查看目标详情</p>
@@ -56,6 +56,7 @@
         tabSelect: 'mubiaoxiangqing',
         modalNodeId: '',
         contentStatisticsdata: {},
+        evetdataFlag:false,
         statisticsNameList: {
           'entity': '实体',
           'human': '人物',
@@ -65,7 +66,7 @@
           'political party': '政党',
           'else': '其他'
         },
-        evetdata: null,
+        evetdata: [],
         detailModalFlag: false,
         //dataStatistics: [],
         value4: '1-1',
@@ -114,7 +115,7 @@
         nodeTypedata: null,
         staticsIds: [],
         single: false,
-        resArr:[]
+        resArr: []
       };
     },
     components: {
@@ -139,97 +140,77 @@
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
       selectionIdByType: function() {
-        // var mthis = this;
-        // let nodeIdsArry = mthis.selectionIdByType.nodeIds;
-        // let eventsArry = mthis.selectionIdByType.eventIds;
-        // let contentsArry = mthis.selectionIdByType.contentIds;
-        // // let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
-        // //   return item.id;
-        // // });
-        // let ob = {}
-        // ob.nodeIds = nodeIdsArry
-        // // 新增防抖功能
-        // this.timer = setTimeout(function() {
-        //   mthis.resArr = []
-        //   if (nodeIdsArry.length > 0) {
-        //     if (nodeIdsArry.length > 1) {
-        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
-        //         'nodeIds': nodeIdsArry
-        //       }).then(response => {
-        //         // mthis.evetdata = response.body.data[0].nodes
-        //         mthis.resArr.push({
-        //           'nodeRes': response.body.data[0].nodes
-        //         })
-        //       })
-        //     } else if (nodeIdsArry.length = 1) {
-        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
-        //         'nodeIds': nodeIdsArry
-        //       }).then(response => {
-        //         // mthis.evetdata = response.body.data[0]
-        //         mthis.resArr.push({
-        //           'nodeRes': response.body.data[0]
-        //         })
-        //       })
-        //     } else {
-        //       // mthis.evetdata = null
-        //       mthis.resArr.push({
-        //         'nodeRes': null
-        //       })
-        //     }
-        //   }
-        //   if (eventsArry.length > 0) {
-        //     if (nodeIdsArry.length > 1) {
-        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-info/', {
-        //         'EventIds': eventsArry
-        //       }).then(response => {
-        //         // mthis.evetdata = response.body.data[0].nodes
-        //         mthis.resArr.push({
-        //           'eventRes': response.body.data[0].nodes
-        //         })
-        //       })
-        //     } else if (nodeIdsArry.length = 1) {
-        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
-        //         'EventIds': eventsArry
-        //       }).then(response => {
-        //         // mthis.evetdata = response.body.data[0]
-        //         mthis.resArr.push({
-        //           'eventRes': response.body.data[0].nodes
-        //         })
-        //       })
-        //     } else {
-        //       // mthis.evetdata = null
-        //       mthis.resArr.push({
-        //         'eventRes': response.body.data[0].nodes
-        //       })
-        //     }
-        //   }
-        //   if (contentsArry.length > 0) {
-        //     if (nodeIdsArry.length > 1) {
-        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', {
-        //         'docIds': contentsArry
-        //       }).then(response => {
-        //         // mthis.evetdata = response.body.data[0].nodes
-        //         mthis.resArr.push({
-        //           'contentRes': response.body.data[0].nodes
-        //         })
-        //       })
-        //     } else if (nodeIdsArry.length = 1) {
-        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
-        //         'docIds': contentsArry
-        //       }).then(response => {
-        //         // mthis.evetdata = response.body.data[0]
-        //         mthis.resArr.push({
-        //           'contentRes': response.body.data[0].nodes
-        //         })
-        //       })
-        //     } else {
-        //       // mthis.evetdata = null
-        //       mthis.resArr.push({
-        //         'contentRes': response.body.data[0].nodes
-        //       })
-        //     }
-        //   }
-        // }, 200);
+        console.log(this.selectionIdByType)
+        var mthis = this;
+        if (mthis.selectNetNodes[0].ids.length > 0) {
+          // 新增防抖功能
+          this.timer = setTimeout(function() {
+            if (mthis.selectionIdByType.nodeIds.length > 0) {
+              let nodeOb = {}
+              nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
+                mthis.evetdataFlag = true
+                mthis.evetdata = response.body.data[0].nodes
+              })
+            }
+            // if (mthis.selectionIdByType.nodeIds.length == 0) {
+            //   let nodeIdsArry = new Array(mthis.selectNetNodes[0].ids[0]);
+            //   let ar = nodeIdsArry.map(item=>{
+            //     return item.id
+            //   })
+            //     mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/',{nodeIds:ar}).then(response => {
+            //       mthis.evetdataFlag = true
+            //       mthis.$set(mthis.evetdata,0,response.body.data[0])
+            //   })
+            // }
+            if (mthis.selectionIdByType.eventIds.length > 0) {
+              // let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
+              //   return item.id;
+              // });
+              let eventOb = {}
+              eventOb.EventIds = mthis.selectionIdByType.eventIds
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-info/', eventOb).then(response => {
+                // mthis.evetdataFlag = true
+                // mthis.evetdata = response.body.data[0].nodes
+              })
+            }
+            // if (mthis.selectionIdByType.eventIds.length == 0) {
+            //   let nodeIdsArry = new Array(mthis.selectNetNodes[0].ids[0]);
+            //   let ar = nodeIdsArry.map(item=>{
+            //     return item.id
+            //   })
+            //     mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/',{nodeIds:ar}).then(response => {
+            //       mthis.evetdataFlag = true
+            //       mthis.$set(mthis.evetdata,0,response.body.data[0])
+            //   })
+            // } 
+            if (mthis.selectionIdByType.contentIds.length > 0) {
+              // let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
+              //   return item.id;
+              // });
+              let docOb = {}
+              docOb.docIds = mthis.selectionIdByType.contentIds
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
+                // mthis.evetdataFlag = true
+                // mthis.evetdata = response.body.data[0].nodes
+              })
+            }
+            // if (mthis.selectionIdByType.contentIds.length == 0) {
+            //   let nodeIdsArry = new Array(mthis.selectNetNodes[0].ids[0]);
+            //   let ar = nodeIdsArry.map(item=>{
+            //     return item.id
+            //   })
+            //     mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/',{nodeIds:ar}).then(response => {
+            //       mthis.evetdataFlag = true
+            //       mthis.$set(mthis.evetdata,0,response.body.data[0])
+            //   })
+            // }
+          }, 200);
+        } else {
+          // mthis.$set(mthis.evetdata,0,null)
+          mthis.evetdata =  []
+          mthis.evetdataFlag = false
+        }
       },
       singlePerson: function() {
         this.single = this.singlePerson
@@ -249,26 +230,40 @@
         this.tabSelect = 'mubiaoxiangqing'
       },
       selectNetNodes: function() {
-        var mthis = this;
-        let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
-          return item.id;
-        });
-        let ob = {}
-        ob.nodeIds = nodeIdsArry
-        // 新增防抖功能
-        this.timer = setTimeout(function() {
-          if (nodeIdsArry.length > 1) {
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', ob).then(response => {
-              mthis.evetdata = response.body.data[0].nodes
-            })
-          } else if (nodeIdsArry.length = 1) {
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', ob).then(response => {
-              mthis.evetdata = response.body.data[0]
-            })
-          } else {
-            mthis.evetdata = null
-          }
-        }, 200);
+        // var mthis = this;
+        // if (mthis.selectNetNodes[0].ids.length > 0) {
+        //   // 新增防抖功能
+        //   this.timer = setTimeout(function() {
+        //     if (mthis.selectNetNodes[0].ids.length > 1) {
+        //       let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
+        //         return item.id;
+        //       });
+        //       let ob = {}
+        //       ob.nodeIds = nodeIdsArry
+
+        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', ob).then(response => {
+        //         mthis.evetdataFlag = true
+        //         mthis.evetdata = response.body.data[0].nodes
+        //       })
+        //     } else {
+        //       let nodeIdsArry = new Array(mthis.selectNetNodes[0].ids[0]);
+        //       let ar = nodeIdsArry.map(item=>{
+        //         return item.id
+        //       })
+        //       // setTimeout(function() {
+        //         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/',{nodeIds:ar}).then(response => {
+        //           // mthis.evetdata =  new Array(response.body.data[0])
+        //           mthis.evetdataFlag = true
+        //           mthis.$set(mthis.evetdata,0,response.body.data[0])
+        //       })
+        //       // }, 50);
+        //     }
+        //   }, 200);
+        // } else {
+        //   // mthis.$set(mthis.evetdata,0,null)
+        //   mthis.evetdata =  []
+        //   mthis.evetdataFlag = false
+        // }
       }
     },
     methods: {
