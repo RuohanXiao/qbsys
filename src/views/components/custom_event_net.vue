@@ -977,7 +977,7 @@
           </div>
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" v-for="item in evetdata" @click="changeDetailDiv(item.id,item.entity_type)">
+          <div class="e-content-d pointIcon" v-for="(item,index) in evetdata" @click="changeDetailDiv(item.id,item.entity_type)" :class="(selectTag===item.id)?'selectedTag':''">
             <p class="e-content-p">{{item.name}}</p>
           </div>
         </div>
@@ -990,6 +990,7 @@
   export default {
     data() {
       return {
+        selectTag:'',
         detailData: null,
         selectDivHeight: '',
         eDivH: '',
@@ -1009,11 +1010,6 @@
     components: {},
     watch: {
       evetdata: function() {
-        // console.log('***********')
-        // console.log(this.evetdata)
-        // console.log(this.evetdata[0])
-        let detailId = (this.evetdata.length !== undefined) ? (this.evetdata[0].id) : (this.evetdata.id);
-        let detailType = (this.evetdata.length !== undefined) ? (this.evetdata[0].entity_type) : (this.evetdata.entity_type);
         var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
         var entityMainType = ob.getElementsByTagName("entityMainType");
         let arr = []
@@ -1026,8 +1022,12 @@
             this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
           }
         }
+        let detailId = (this.evetdata.length !== undefined) ? (this.evetdata[0].id) : (this.evetdata.id);
+        this.selectTag = detailId
+        let detailType = (this.evetdata.length !== undefined) ? (this.evetdata[0].entity_type) : (this.evetdata.entity_type);
         let a = []
         a.push(detailId)
+        this.detailData = {}
         this.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
           "nodeIds": a
         }).then(response => {
@@ -1064,6 +1064,7 @@
             this.detailData = response.body.data[0]
           })
         }
+        this.selectTag = id
       }
     }
   }
@@ -1211,6 +1212,12 @@
   }
   .bstyle:hover {
     color: rgba(51, 255, 255, 0.8) !important;
+  }
+  .selectedTag{
+    /* color:red !important;
+    background-color: blue !important; */
+    /* opacity: 0.5 !important; */
+    background-color: rgba(51, 255, 255, 0.5) !important;;
   }
 </style>
 

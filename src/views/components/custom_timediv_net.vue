@@ -431,6 +431,14 @@
       // selectTime: function() {
       //   netSelectTime
       // },
+      split_net: function(va) {
+        let width = document.documentElement.clientWidth *  this.split_net  - 22 + 'px'
+        let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
+        this.charts.resize({
+          width,
+          height
+        })
+      },
       selectNetNodes: function(va) {
         var mthis = this;
         if (mthis.tmss == 'net') {
@@ -453,7 +461,13 @@
         })
       },
       splitWidth: function(va) {
-        this.pwidth = document.documentElement.clientWidth * this.$store.state.split_net - 20 + 'px'
+        // this.pwidth = document.documentElement.clientWidth * this.$store.state.split_net - 20 + 'px'
+        let width = document.documentElement.clientWidth *  this.$store.state.split_net  - 20 + 'px'
+        let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
+        this.charts.resize({
+          width,
+          height
+        })
       },
       // geoHeightCount: function() {
       //   var mthis = this
