@@ -535,6 +535,111 @@ var test_mapData = {
  }}
 };
 
+var netStaticsAttr = {
+	"code": 0,
+	"data": [
+		{
+			firstlevelId: 'ObjectsType',
+			firstlevelName: '对象类型',
+			subStaticsAttr:[
+				{
+					secondlevelId:'EntityType',
+					secondlevelName:'实体类型',
+					typecount:3,
+					specificStaticsAttr:[
+						{
+							thirdlevelId:'all',
+							thirdlevelName:'全部',
+							count: 1,
+							entitylist: [
+								"Q148"
+							],
+							per: 50
+						},
+						{
+							thirdlevelId:'human',
+							thirdlevelName:'人物',
+							count: 1,
+							entitylist: [
+								"Q148"
+							],
+							per: 50
+						}
+					]
+				},
+				{
+					secondlevelId:'EventType',
+					secondlevelName:'事件类型',
+					typecount:3,
+					specificStaticsAttr:[
+						{
+							thirdlevelId:'all',
+							thirdlevelName:'全部',
+							count: 1,
+							entitylist: [
+								"Q148"
+							],
+							per: 50
+						},
+						{
+							thirdlevelId:'transfer_money',
+							thirdlevelName:'金钱交易',
+							count: 1,
+							entitylist: [
+								"Q148"
+							],
+							per: 50
+						}
+					]
+				}
+			]
+		},
+		{
+			firstlevelId: 'EntityAttr',
+			firstlevelName: '实体属性',
+			subStaticsAttr:[
+				{
+					secondlevelId:'country_of_citizenship',
+					secondlevelName:'国籍',
+					typecount:3,
+					specificStaticsAttr:[
+						{
+							thirdlevelId:'China',
+							thirdlevelName:'中国',
+							count: 1,
+							entitylist: [
+								"Q148"
+							],
+							per: 50
+						},
+						{
+							thirdlevelId:'America',
+							thirdlevelName:'美国',
+							count: 1,
+							entitylist: [
+								"Q148"
+							],
+							per: 50
+						}
+					]
+				}
+			]
+		}/* ,
+		{
+			firstId: 'EventsAttr',
+			disName: '事件属性'
+		},
+		{
+			firstId: 'ContentsAttr',
+			disName: '文档属性'
+		},
+		{
+			firstId: 'EntityRelationship',
+			disName: '实体关系'
+		} */
+	]
+};
+
 	
 
-export {test_Route,test_HeatMap,EventsDatas,timeStaticsData,reSetTimeStaticsData,eventsPointGeoJson,test_mapData}
+export {test_Route,test_HeatMap,EventsDatas,timeStaticsData,reSetTimeStaticsData,eventsPointGeoJson,test_mapData,netStaticsAttr}

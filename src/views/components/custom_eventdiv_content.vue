@@ -441,7 +441,11 @@
     background-color: rgba(0, 0, 0, 0) !important;
   }
   #toushi .ivu-collapse-content-box p {
-    font-size: 12px !important;
+    font-size: 14px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80px;
   }
   .ivu-collapse-item-active>.ivu-collapse-content {
     background-color: rgba(0, 0, 0, 0) !important;

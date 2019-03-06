@@ -14,7 +14,7 @@
             </div>
           </Tab-pane>
           <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('toushi')">
-            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'net' && nodeTypedata !== null"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' v-if=" $store.state.tmss === 'net'"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -42,6 +42,7 @@
   import entityDetailsTableHuman from './custom_entityDetailsTable_human'
   import entityDetailsTableAdministrative from './custom_entityDetailsTable_administrative'
   import entityDetailsTableOrganization from './custom_entityDetailsTable_organization'
+  import {netStaticsAttr} from '../../dist/assets/js/geo/data.js'
   /* eslint-disable */
   var timer = null;
   export default {
@@ -87,109 +88,29 @@
         eventheight: 0,
         eventItemHeight: 0,
         closable: true,
-        firstClassify: [{
-            id: 'NodeType',
-            disName: '节点类型'
+        staticsDatas:netStaticsAttr.data,
+        /* firstClassify: [{
+            id: 'ObjectsType',
+            disName: '对象类型'
           },
           {
             id: 'EntityAttr',
             disName: '实体属性'
+          },
+          {
+            id: 'EventsAttr',
+            disName: '事件属性'
+          },
+          {
+            id: 'ContentsAttr',
+            disName: '文档属性'
+          },
+          {
+            id: 'EntityRelationship',
+            disName: '实体关系'
           }
-        ],
-        nodeTypeClassify: [{
-            id: 'human',
-            disName: '人物'
-          },
-          {
-            id: 'organization',
-            disName: '组织'
-          },
-          {
-            id: 'administrative',
-            disName: '国家'
-          },
-          {
-            id: 'event',
-            disName: '事件'
-          }
-        ],
-        EntityAttrClassify: {
-          "human": [{
-              id: 'out__country_of_citizenship_names',
-              disName: '国籍'
-            },
-            {
-              id: 'out__occupation_names',
-              disName: '职业'
-            },
-            {
-              id: 'address',
-              disName: '地址'
-            },
-            {
-              id: 'out__member_of_political_party_names',
-              disName: '政党'
-            },
-            {
-              id: 'religion',
-              disName: '信仰'
-            },
-            {
-              id: 'e-mail',
-              disName: '邮箱'
-            }
-          ],
-          "organization": [{
-              id: 'headquarters_location',
-              disName: '总部'
-            },
-            {
-              id: 'founded_by',
-              disName: '创办者'
-            },
-            {
-              id: 'chairperson',
-              disName: '领袖'
-            },
-            {
-              id: 'chief_executive_officer',
-              disName: '首席执行官'
-            },
-            {
-              id: 'political_ideology',
-              disName: '意识形态'
-            }
-          ],
-          "administrative": [{
-              id: 'capital',
-              disName: '首都'
-            },
-            {
-              id: 'head_of_state',
-              disName: '国家元首'
-            },
-            {
-              id: 'head_of_government',
-              disName: '政府首脑'
-            },
-            {
-              id: 'continent',
-              disName: '所属洲'
-            },
-            {
-              id: 'gini_coefficient',
-              disName: '基尼指数'
-            },
-            {
-              id: 'human_development_index',
-              disName: '人类发展指数'
-            },
-            {
-              id: 'top-level_Internet_domain',
-              disName: '顶级域名'
-            }
-          ],
-        },
+        ], */
+        
         nodeTypedata: null,
         staticsIds: [],
         single: false,
