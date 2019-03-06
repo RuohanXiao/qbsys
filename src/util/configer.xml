@@ -1,107 +1,106 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--imgPosition====>   for(let i = 0;i<40;i++){console.log((-60*i)+','+50+','+(10-60*(i+1))+','+0)} -->
+<?xml version="1.0" encoding="utf8"?>
 <configList>
   <common/>
   <netcahrt>
       <imgItem>
         <eventType>审讯</eventType>
-        <imgPosition>0,50,-50,0</imgPosition>
+        <imgPosition>0,50,50,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>攻击</eventType>
-        <imgPosition>-60,50,-110,0</imgPosition>
+        <imgPosition>60,50,110,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>伤害</eventType>
-        <imgPosition>-60,50,-110,0</imgPosition>
+        <imgPosition>60,50,110,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>死亡</eventType>
-        <imgPosition>-120,50,-170,0</imgPosition>
+        <imgPosition>120,50,170,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>罚款</eventType>
-        <imgPosition>-180,50,-230,0</imgPosition>
+        <imgPosition>180,50,230,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>赦免</eventType>
-        <imgPosition>-240,50,-290,0</imgPosition>
+        <imgPosition>240,50,290,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>宣布破产</eventType>
-        <imgPosition>-300,50,-350,0</imgPosition>
+        <imgPosition>300,50,350,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>提名</eventType>
-        <imgPosition>-360,50,-410,0</imgPosition>
+        <imgPosition>360,50,410,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>逮捕</eventType>
-        <imgPosition>-420,50,-470,0</imgPosition>
+        <imgPosition>420,50,470,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>监禁</eventType>
-        <imgPosition>-420,50,-470,0</imgPosition>
+        <imgPosition>420,50,470,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>金钱交易</eventType>
-        <imgPosition>-480,50,-530,0</imgPosition>
+        <imgPosition>480,50,530,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>引渡</eventType>
-        <imgPosition>-540,50,-590,0</imgPosition>
+        <imgPosition>540,50,590,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>处死</eventType>
-        <imgPosition>-600,50,-650,0</imgPosition>
+        <imgPosition>600,50,650,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>就任职位</eventType>
-        <imgPosition>-660,50,-710,0</imgPosition>
+        <imgPosition>660,50,710,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>组织合并</eventType>
-        <imgPosition>-720,50,-770,0</imgPosition>
+        <imgPosition>720,50,770,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>判决</eventType>
-        <imgPosition>-780,50,-830,0</imgPosition>
+        <imgPosition>780,50,830,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>控告</eventType>
-        <imgPosition>-780,50,-830,0</imgPosition>
+        <imgPosition>780,50,830,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>上诉</eventType>
-        <imgPosition>-780,50,-830,0</imgPosition>
+        <imgPosition>780,50,830,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>起诉</eventType>
-        <imgPosition>-780,50,-830,0</imgPosition>
+        <imgPosition>780,50,830,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>定罪</eventType>
-        <imgPosition>-780,50,-830,0</imgPosition>
+        <imgPosition>780,50,830,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>会面</eventType>
-        <imgPosition>-840,50,-890,0</imgPosition>
+        <imgPosition>840,50,890,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>释放</eventType>
-        <imgPosition>-900,50,-950,0</imgPosition>
+        <imgPosition>900,50,950,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>假释</eventType>
-        <imgPosition>-900,50,-950,0</imgPosition>
+        <imgPosition>900,50,950,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>结束职位</eventType>
-        <imgPosition>-960,50,-1010,0</imgPosition>
+        <imgPosition>960,50,1010,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>离婚</eventType>
-        <imgPosition>-1020,50,-1070,0</imgPosition>
+        <imgPosition>1020,50,1070,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>组织结束</eventType>
@@ -109,39 +108,39 @@
       </imgItem>
       <imgItem>
         <eventType>游行示威</eventType>
-        <imgPosition>-1080,50,-1130,0</imgPosition>
+        <imgPosition>1080,50,1130,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>结婚</eventType>
-        <imgPosition>-1140,50,-1190,0</imgPosition>
+        <imgPosition>1140,50,1190,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>诞生</eventType>
-        <imgPosition>-1200,50,-1250,0</imgPosition>
+        <imgPosition>1200,50,1250,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>运输</eventType>
-        <imgPosition>-1260,50,-1310,0</imgPosition>
+        <imgPosition>1260,50,1310,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>组织创建</eventType>
-        <imgPosition>-1320,50,-1370,0</imgPosition>
+        <imgPosition>1320,50,1370,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>选举</eventType>
-        <imgPosition>-1380,50,-1430,0</imgPosition>
+        <imgPosition>1380,50,1430,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>电话</eventType>
-        <imgPosition>-1440,50,-1490,0</imgPosition>
+        <imgPosition>1440,50,1490,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>书信</eventType>
-        <imgPosition>-1440,50,-1490,0</imgPosition>
+        <imgPosition>1440,50,1490,0</imgPosition>
       </imgItem>
       <imgItem>
         <eventType>无罪释放</eventType>
-        <imgPosition>-1500,50,-1550,0</imgPosition>
+        <imgPosition>1500,50,1550,0</imgPosition>
       </imgItem>
   </netcahrt>
   <geochart/>
