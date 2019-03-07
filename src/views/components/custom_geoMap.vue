@@ -165,6 +165,7 @@ import Select from 'ol/interaction/Select.js';
 import {easeOut} from 'ol/easing.js';
 import {unByKey} from 'ol/Observable.js';
 import {getCenter} from 'ol/extent.js';
+import Heatmap from 'ol/layer/Heatmap';
 
 
 import flexslider from 'flexslider'
@@ -216,6 +217,7 @@ export default {
         isCtrl:false,
         onImgIds:[],  //被点亮的img的id
         allImgIds:[], //所有img的id
+        maxEventsNum:0,
         removeFeaturesArr:[],
         allEventIdsToFeaturesIdsList:{},
         removeEventIdList:{},
@@ -299,7 +301,7 @@ export default {
             mthis.$store.commit('setGeoToNetData',GeoToNetData);
             mthis.$store.commit('changeTMSS', 'net');
         },
-        getSelectedEventIds(){
+        getSelectedEventIds(){  //获取被选择的ids
             var mthis = this;
             var selectedParam = {
                 "type":'',
@@ -382,7 +384,6 @@ export default {
                     var oldEvent = feature.get('Events');
                     var events = oldEvent.push(addEvent)
                     feature.set('Events',oldEvent,false);
-                    debugger
                     mthis.$delete(mthis.removeEventIdList,item);
                 })
                 //mthis.removeEventIdList = {};
@@ -399,7 +400,6 @@ export default {
                             'featureId':item.getId(),
                             'time':Iitem.time
                         };
-                        debugger
                         mthis.$set(mthis.allEventIdsToFeaturesIdsList,eventId,param)
                             /* mthis.allEventIdsToFeaturesIdsList[eventId] = {
                                 'featureId':item.getId(),
@@ -489,10 +489,8 @@ export default {
                 mthis.deleteArrItem(mthis.onImgIds,imgItemOpera.id);
             }
         },
-        location_cilck(){
-            var mthis = this
-            mthis.clickButtonOpenDiv('location_button')
-            mthis.legend = null
+        addlocationLayer(){
+            var mthis = this;
             if(mthis.routeMap == null){
                 mthis.routeMap = new map('locationRoute_Map')
                 var layer = new VectorLayer({
@@ -560,6 +558,12 @@ export default {
                 //mthis.routeMap.map.setSize([0,100])
                 //setTimeout( function() {mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight]);}, 2);
             }  
+        },
+        location_cilck(){
+            var mthis = this
+            mthis.clickButtonOpenDiv('location_button')
+            mthis.legend = null
+            mthis.addlocationLayer();
         },
         
         setLifePointSelectedStyle(feature){
@@ -710,14 +714,33 @@ export default {
         },
         heatMap_cilck(){
             var mthis = this
+            var heatMapLayer;
             mthis.clickButtonOpenDiv('heatMap_button')
             if(mthis.heatMap == null){
                 mthis.heatMap = new map('HeatMap_Map')
-                mthis.click_heatMap()
-            }  
-            //document.body.style.zoom = 1
-            //setTimeout( function() { mthis.routeMap.map.updateSize();}, 2000);
-            
+                //mthis.click_heatMap();
+                var source = new VectorSource({
+                });
+                heatMapLayer = new Heatmap({
+                    source: source,
+                    blur: 20,
+                    radius: 15,
+                    weight:mthis.weightFunction,
+                    renderModed:'image',
+                    id:'heatmapLayer'
+                })
+                mthis.heatMap.addlayer(heatMapLayer);
+            } else {
+                var layers = mthis.heatMap.map.getLayers().getArray();
+                for(let i = 0; i < layers.length; i++){
+                    if(layers[i].getProperties().id !== undefined){
+                        heatMapLayer = layers[i];
+                        break;
+                    }
+                }
+                heatMapLayer.getSource().clear();
+            }
+            mthis.click_heatMap(heatMapLayer);
         },
         route_cilck(){
             var mthis = this
@@ -736,7 +759,20 @@ export default {
                 if(item == id){
                     classname = 'button-div-click';
                 } else {
-                    classname = 'button-div';
+                    var arr = mthis.changeButtonParam;
+                    var isOpen = true;
+                    for(let i = 0; i < arr.length - 1; i++){
+                        if(arr[i].id === item){
+                            isOpen = arr[i].isOpen;
+                            break
+                        }
+                    }
+                    if(isOpen){
+                        classname = 'button-div';
+                    } else {
+                        classname = 'button-none';
+                    }
+                    //classname = 'button-div';
                 }
                 button.className = classname
             })
@@ -955,12 +991,11 @@ export default {
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
                 var geometry = feature.getGeometry();
-                debugger
                 //mthis.geometrySelectedEventIds = [1,2]
                 mthis.selectEventPointsByGeometry_test(geometry);
                 if(mthis.geometrySelectedEventIds.length === 0){
                     //mthis.geometrySelectedEventIds = 
-                    mthis.$set(mthis.geometrySelectedEventIds,0,'geo没有选择到数据')  //为了解决使用geometry选择没有选择到数据时，对geometrySelectedEventIds的监视
+                    mthis.$set(mthis.geometrySelectedEventIds,mthis.geometrySelectedEventIds.length,'geo没有选择到数据')  //为了解决使用geometry选择没有选择到数据时，对geometrySelectedEventIds的监视
                 }
                 
                 mthis.timeSelectedEventIds = [];
@@ -1017,16 +1052,17 @@ export default {
             var num = 0;
             var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
             //mthis.selectedPointsSource.clear();
+            mthis.geometrySelectedEventIds = [];
             selectingPointSource.getFeatures().forEach(function(item) {
                 var coord = item.getGeometry().getCoordinates();
                 var isIn = geometry.intersectsCoordinate(coord);
-                mthis.setSelectedEventFeatureParam(item,false);
+                mthis.setLifeOrDiePointStyleByValue(item,'die');
                 if (isIn) {
                     item.get('Events').forEach(function(Iitem){
                         mthis.$set(mthis.geometrySelectedEventIds,num,Iitem.id);
                         num++;
                     })
-                    
+                    mthis.setLifeOrDiePointStyleByValue(item,'life');
                 } 
             });
             //return frameselectedEventIds
@@ -1254,19 +1290,52 @@ export default {
 
         //===========================================================================
         //热力图
-        click_heatMap(){
+        click_heatMap(layer){
             var mthis = this
-            var seachCondition = [];
+            debugger
+            mthis.maxEventsNum = 0;
+            var heatSource = layer.getSource();
+            var selectedIds = mthis.getSelectedEventIds().ids;
+            selectedIds.forEach(function(item){
+                var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
+                var feature = heatSource.getFeatureById(featureId);
+                if(feature === null){
+                    var heatFeature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId).clone();
+                    heatFeature.setId(featureId);
+                    heatFeature.setStyle(null);
+                    heatSource.addFeature(heatFeature);
+                    var num = heatFeature.get('selectedEventsNum');
+                    if(num > mthis.maxEventsNum){
+                        mthis.maxEventsNum = num;
+                    }
+                }
+            })
+            /* mthis.getLayerById('eventsPointsLayer').getSource().getFeatures().forEach(function(item){
+                var heatFeature = item.clone();
+                heatFeature.setStyle(null);
+                //source.addFeature(item);
+                layer.getSource().addFeature(heatFeature);
+                var num = item.get('selectedEventsNum');
+                if(num > mthis.maxEventsNum){
+                    mthis.maxEventsNum = num;
+                }
+            }) */
+            /* var seachCondition = [];
             mthis.test_HeatMap.forEach(function(item){
                 var a = new EqualTo('name', item.city);
                 seachCondition.push(a);
             });
             var filter = new Or(seachCondition[0],seachCondition[1],seachCondition[2],seachCondition[3]);
-            mthis.getWfsData(filter);
+            mthis.getWfsData(filter); */
             //查询条件的嵌套关系
         },
+        weightFunction(feature){
+            var mthis = this;
+            var weight = feature.get('selectedEventsNum') / mthis.maxEventsNum;
+            return weight
+        },
         getWfsData(filter) {
-        var mthis = this
+            var mthis = this
             //获取wms生成的资源url， fdLayer.getSource().getGetFeatureInfoUrl
             var featureRequest = new WFS().writeGetFeature({
                 srsName : 'EPSG:4326',//坐标系统
@@ -1333,7 +1402,6 @@ export default {
             var selectedEventIds = mthis.getSelectedEventIds().ids;
             if(selectedEventIds.length > 0){
                 selectedEventIds.forEach(function(item){
-                    debugger
                     //mthis.deleteArrItem(mthis.allEventIds,item.id);
                     //mthis.removeEventIdList[item] = mthis.allEventIdsToFeaturesIdsList[item];
                     mthis.$set(mthis.removeEventIdList,item,mthis.allEventIdsToFeaturesIdsList[item]);
@@ -1342,9 +1410,9 @@ export default {
                     mthis.$delete(mthis.allEventIdsToFeaturesIdsList,item)
                 })
             }
-            mthis.geometrySelectedEventIds = [];
-            mthis.timeSelectedEventIds = [];
-            mthis.staticsSelectedEventIds = [];
+            mthis.geometrySelectedEventIds.length = 0;
+            mthis.timeSelectedEventIds.length = 0;
+            mthis.staticsSelectedEventIds.length = 0;
             
             /* for(let i = source.getFeatures().length - 1; i >= 0 ; i--){
                 var events = source.getFeatures()[i].get('Events');
@@ -1448,7 +1516,7 @@ export default {
             }
             mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(invertIds);
         },
-        getHighUpSelectedIds(){
+        getHighUpSelectedIds(){  //获取此时选择的上一级选择
             var mthis = this;
             var ids = [];
             var highUp = '';
@@ -1784,128 +1852,6 @@ export default {
     ]),
     
     watch:{
-        geometrySelectedEventIds:function(){
-            var mthis = this;
-            debugger
-            if(mthis.geometrySelectedEventIds.length !==0){
-                mthis.changeButtonParam=[
-                    {
-                        'id':'rectangle_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'Circle_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'Polygon_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'heatMap_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'route_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'delete_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'invertSelection_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'selectAll_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'toNet_push',
-                        'isOpen':true
-                    }
-                ]
-            } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && !$.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                mthis.changeButtonParam=[
-                    {
-                        'id':'rectangle_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'Circle_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'Polygon_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'heatMap_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'route_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'delete_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'invertSelection_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'selectAll_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'toNet_push',
-                        'isOpen':true
-                    }
-                ]
-            } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && $.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                mthis.changeButtonParam=[
-                    {
-                        'id':'rectangle_select',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'Circle_select',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'Polygon_select',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'heatMap_button',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'route_button',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'delete_opera',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'invertSelection_opera',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'selectAll_opera',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'toNet_push',
-                        'isOpen':false
-                    }
-                ]
-            }
-        },
         timeSelectedEventIds:function(){
             var mthis = this;
             if(mthis.timeSelectedEventIds.length !==0){
@@ -2148,32 +2094,8 @@ export default {
                 ]
             }
         },
-        /* removeEventIdList:{
-            handler(newValue) {
-                var mthis = this;
-                debugger
-                if($.isEmptyObject(newValue)){
-                    mthis.changeButtonParam=[
-                        {
-                            'id':'returnToAllPoints_opera',
-                            'isOpen':false
-                        }
-                    ]
-                } else {
-                    mthis.changeButtonParam=[
-                        {
-                            'id':'returnToAllPoints_opera',
-                            'isOpen':true
-                        }
-                    ]
-                }
-    　　　　 },
-    　　　　 deep: true,
-            immediate: true
-        }, */
         allEventIdsToFeaturesIdsList:{
             handler(newValue) {
-    　　　　　　debugger
                 var mthis = this;
                 if($.isEmptyObject(newValue)){
                     if($.isEmptyObject(mthis.removeEventIdList)){
@@ -2445,7 +2367,7 @@ export default {
                             'isOpen':false
                         }
                     ]
-                return
+                //return
             } else{
                 if(mthis.geometrySelectedEventIds.length !==0){
                     mthis.changeButtonParam=[
@@ -2627,6 +2549,7 @@ export default {
                 this.$nextTick(function(){
                     var mthis = this
                     mthis.location_cilck()  //初始化时开启location
+                    //mthis.addlocationLayer();
                     if(mthis.eventGeoJson !== null){
                         var allFeatures = (new GeoJSON()).readFeatures(mthis.eventGeoJson);
                         mthis.addFeaturesToEventLayer(allFeatures);

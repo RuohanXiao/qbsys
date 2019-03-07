@@ -273,7 +273,9 @@ var store = new Vuex.Store({
       img:'',
       type:''
     }],
-    tabSelect: 'mubiaoxiangqing',
+    tabSelectNet: 'mubiaoxiangqing',
+    tabSelectGeo: 'mubiaoxiangqing',
+    tabSelectContent: 'mubiaoxiangqing',
     contentStatisticsResult:{},
     StaticsIds:[],
     netStaticsSelectedIds:[],  //net模块中点击右侧统计保存ids
@@ -478,13 +480,21 @@ var store = new Vuex.Store({
       
       state.geoHeight = height
     },
-    setTabSelect(state,val){
+    setTabSelectNet(state,val){
       
-      state.tabSelect = val
+      state.tabSelectNet = val
+    },
+    setTabSelectGeo(state,val){
+      
+      state.tabSelectGeo = val
+    },
+    setTabSelectContent(state,val){
+      
+      state.tabSelectContent = val
     },
     setSearchModalResult(state,val){
       
-      state.tabSelect = val
+      state.searchModalResult = val
     },
     setNetSelectedParam(state,val){
       state.net_selected_param = val
