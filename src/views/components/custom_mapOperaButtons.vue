@@ -53,31 +53,38 @@ export default {
       return {
         buttonParamArr:[
           {
-            'id':'location_button',
+            'id':'location_AT',
             'name':'定位',
             'imgClass':'icon-location1',
             'isOpen':true
           },
           {
-            'id':'heatMap_button',
+            'id':'heatMap_HSD',
             'name':'热力',
             'imgClass':'icon-hot',
             'isOpen':false
           },
           {
-            'id':'route_button',
+            'id':'route_HSD',
             'name':'路径',
             'imgClass':'icon-route',
             'isOpen':false
           },
           {'id':'separate'},
           {
-            'id':'rectangle_select',
+            'id':'clearAll_HD',
+            'name':'清空',
+            'imgClass':'icon-qingchu',
+            'isOpen':false
+          },
+          {
+            'id':'rectangle_HD',
             'name':'框选',
             'imgClass':'icon-selection-box',
             'isOpen':false
           },
-          {
+          {'id':'separate'},
+          /* {
             'id':'Circle_select',
             'name':'圆形框选',
             'imgClass':'icon-selection-round',
@@ -88,35 +95,36 @@ export default {
             'name':'自定义框选',
             'imgClass':'icon-custom',
             'isOpen':false
+
           },
-          {'id':'separate'},
+          {'id':'separate'}, */
           {
-            'id':'delete_opera',
+            'id':'delete_HSD',
             'name':'删除',
             'imgClass':'icon-delete-point',
             'isOpen':false
           },
           {
-            'id':'invertSelection_opera',
+            'id':'invertSelection_HSD',
             'name':'反选',
             'imgClass':'icon-fanxuan',
             'isOpen':false
-          },
+          }, 
           {
-            'id':'selectAll_opera',
+            'id':'selectAll_HD',
             'name':'全选',
             'imgClass':'icon-rectangle',
             'isOpen':false
           },
           {
-            'id':'returnToAllPoints_opera',
+            'id':'returnToAllPoints_HDD',
             'name':'复位',
             'imgClass':'icon-refresh',
             'isOpen':false
           },
           {'id':'separate'},
           {
-            'id':'toNet_push',
+            'id':'toNet_HSD',
             'name':'网络',
             'imgClass':'icon-tuisongzhiwangluo',
             'isOpen':false
@@ -140,9 +148,10 @@ export default {
     watch:{
       changeButton:function(){
         var mthis = this;
+        debugger
         mthis.changeButton.forEach(function(item){
           mthis.buttonParamArr.forEach(function(Iitem){
-            if(item.id === Iitem.id){
+            if(item.id_suf === Iitem.id.split('_')[1]){
               Iitem.isOpen = item.isOpen;
             }
           })

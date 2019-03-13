@@ -14,7 +14,7 @@
             </div>
           </Tab-pane>
           <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('toushi')">
-            <left-statics :staticsDatas='staticsDatas' v-if=" $store.state.tmss === 'net'"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' v-if=" $store.state.tmss === 'net' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -232,6 +232,11 @@
         this.tabSelect = 'mubiaoxiangqing'
       },
       selectNetNodes: function() {
+        var mthis = this;
+        debugger
+        if(mthis.selectNetNodes[0].ids.length < 2){
+
+        }
         // var mthis = this;
         // if (mthis.selectNetNodes[0].ids.length > 0) {
         //   // 新增防抖功能

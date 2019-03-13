@@ -186,7 +186,7 @@ export default {
       return {
         //isEventPointsSelected:false,
         a:null,
-        mapDivbuttonIds : ['location_button','heatMap_button','route_button'],
+        mapDivbuttonIds : ['location_AT','heatMap_HSD','route_HSD'],
         mapHeight:'0px',
         imgTopVules:'',
         test_Route:test_Route,
@@ -224,7 +224,7 @@ export default {
         geometrySelectedEventIds:[],
         timeSelectedEventIds:[],
         staticsSelectedEventIds:[],
-        invertSelectedEventIds:[],
+        invertSelectedEventIds:[], //反选存储
         changeButtonParam:[],
         pointMoveListenerKey:null,
         pointClickListenerKey:null,
@@ -268,27 +268,38 @@ export default {
         mapOperationClick(mapOperation){
             var mthis = this;
             var mapOperationId = mapOperation.currentTarget.id;
-            if(mapOperationId == 'location_button'){
+            if(mapOperationId == 'location_AT'){
                 mthis.location_cilck();
-            } else if(mapOperationId == 'heatMap_button'){
+            } else if(mapOperationId == 'heatMap_HSD'){
                 mthis.heatMap_cilck();
-            } else if(mapOperationId == 'route_button'){
+            } else if(mapOperationId == 'route_HSD'){
                 mthis.route_cilck();
-            } else if(mapOperationId == 'Circle_select' || mapOperationId == 'Polygon_select' || mapOperationId == 'rectangle_select'){
+            } else if(mapOperationId == 'Circle_HD' || mapOperationId == 'Polygon_HD' || mapOperationId == 'rectangle_HD'){
                 mthis.changedrawType(mapOperation)
-            } else if(mapOperationId == 'delete_opera'){
+            } else if(mapOperationId == 'delete_HSD'){
                 mthis.deletePoints();
-            } else if(mapOperationId == 'invertSelection_opera'){
+            } else if(mapOperationId == 'invertSelection_HSD'){
                 mthis.invertSelection();
-            } else if(mapOperationId == 'toNet_push'){
+            } else if(mapOperationId == 'toNet_HSD'){
                 mthis.pushToNet();
-            } else if(mapOperationId == 'toContent_push'){
-                mthis.pushToContent();
-            } else if(mapOperationId == 'returnToAllPoints_opera'){
+            } else if(mapOperationId == 'returnToAllPoints_HDD'){
                 mthis.returnToAllPoints();
-            } else if(mapOperationId == 'selectAll_opera'){
+            } else if(mapOperationId == 'selectAll_HD'){
                 mthis.selectAll();
+            } else if(mapOperationId == 'clearAll_HD'){
+                mthis.clearAll();
             }
+        },
+        clearAll(){
+            var mthis = this;
+            mthis.getLayerById('eventsPointsLayer').getSource().clear();
+            mthis.getLayerById('HLAreaLayer').getSource().clear();
+            mthis.geometrySelectedEventIds = [];
+            mthis.timeSelectedEventIds = [];
+            mthis.staticsSelectedEventIds = [];
+            mthis.invertSelectedEventIds = [];
+            mthis.allEventIdsToFeaturesIdsList = new Object();
+            mthis.removeEventIdList = new Object();
         },
         pushToNet(){
             var mthis = this;
@@ -492,12 +503,22 @@ export default {
         addlocationLayer(){
             var mthis = this;
             if(mthis.routeMap == null){
+                var HLAreaStyle = new Style({
+                    fill: new Fill({ //矢量图层填充颜色，以及透明度
+                        color: 'rgba(51, 255, 255, 0.3)'
+                    }),
+                    stroke: new Stroke({ //边界样式
+                        color: 'rgba(51, 255, 255, 1)',
+                        width: 1
+                    })
+                });
+                
                 mthis.routeMap = new map('locationRoute_Map')
                 var HLArealayer = new VectorLayer({  //高亮地区图层
                     source: new VectorSource({
                     }),
-                    //style:mthis.noSelectedstyle,
-                    id:'HLArealayer'
+                    style:HLAreaStyle,
+                    id:'HLAreaLayer'
                 });
                 mthis.routeMap.addlayer(HLArealayer);
                 var Eventslayer = new VectorLayer({  //事件图层
@@ -518,35 +539,60 @@ export default {
                     condition: click
                 });
                 mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
-                mthis.routeMap.map.addInteraction(mthis.selectClick);
+                // mthis.routeMap.map.addInteraction(mthis.selectClick);
                 mthis.selectPointerMove.on('select', function(e) {
-                    if(e.selected.length > 0 && e.selected[0].get('Events') !== undefined && e.selected[0].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
-                        mthis.pointSelectedAnimation(e.selected[0],'pointMove');
-                        //鼠标悬浮时的信息框
-                        mthis.setPointMoveOverlay(e.selected[0]);
+                    debugger
+                    var features = e.selected;
+                    if(features.length > 0){
+                        for(let i = 0; i < features.length; i++){
+                            if(features[i].getId().split('_')[0] === 'event'){
+                                //if(features.length > 0 && features[i].get('Events') !== undefined && features[i].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
+                                    mthis.pointSelectedAnimation(features[i],'pointMove');
+                                    //鼠标悬浮时的信息框
+                                    mthis.setPointMoveOverlay(features[i]);
+                                // } else {
+                                //     if(mthis.pointMoveListenerKey !== null && mthis.pointMoveListenerKey.type !== undefined && mthis.pointMoveListenerKey.type === "postcompose"){
+                                //         unByKey(mthis.pointMoveListenerKey);
+                                //     }
+                                //     mthis.removeOverlays('pointMoveOverlay');
+                                // }
+                            } else {
+                                features[i].setStyle(HLAreaStyle);
+                                if(mthis.pointMoveListenerKey !== null && mthis.pointMoveListenerKey.type !== undefined && mthis.pointMoveListenerKey.type === "postcompose"){
+                                    unByKey(mthis.pointMoveListenerKey);
+                                }
+                                mthis.removeOverlays('pointMoveOverlay');
+                            }
+                        }
                     } else {
                         if(mthis.pointMoveListenerKey !== null && mthis.pointMoveListenerKey.type !== undefined && mthis.pointMoveListenerKey.type === "postcompose"){
                             unByKey(mthis.pointMoveListenerKey);
                         }
                         mthis.removeOverlays('pointMoveOverlay');
                     }
-                    
                 });
-                mthis.selectClick.on('select', function(e) {
-                    if(e.selected.length > 0 && e.selected[0].get('Events') !== undefined && e.selected[0].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
-                        if(mthis.pointMoveListenerKey !== null && mthis.pointMoveListenerKey.type !== undefined && mthis.pointMoveListenerKey.type === "postcompose"){
-                            unByKey(mthis.pointMoveListenerKey);
-                        }
-                        if(mthis.pointClickListenerKey !== null && mthis.pointClickListenerKey.type !== undefined && mthis.pointClickListenerKey.type === "postcompose"){
-                            unByKey(mthis.pointClickListenerKey);
-                        }
-                        mthis.pointSelectedAnimation(e.selected[0],'pointClick');
-                    } else {
-                        if(mthis.pointClickListenerKey !== null && mthis.pointClickListenerKey.type !== undefined && mthis.pointClickListenerKey.type === "postcompose"){
-                            unByKey(mthis.pointClickListenerKey);
+               /*  mthis.selectClick.on('select', function(e) {
+                    debugger
+                    var features = e.selected;
+                    for(let i = 0; i < features.length; i++){
+                        if(features[i].getId().split('_')[0] === 'event_Feature'){
+                            if(features.length > 0 && features[i].get('Events') !== undefined && features[i].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
+                                if(mthis.pointMoveListenerKey !== null && mthis.pointMoveListenerKey.type !== undefined && mthis.pointMoveListenerKey.type === "postcompose"){
+                                    unByKey(mthis.pointMoveListenerKey);
+                                }
+                                if(mthis.pointClickListenerKey !== null && mthis.pointClickListenerKey.type !== undefined && mthis.pointClickListenerKey.type === "postcompose"){
+                                    unByKey(mthis.pointClickListenerKey);
+                                }
+                                mthis.pointSelectedAnimation(features[i],'pointClick');
+                            } else {
+                                if(mthis.pointClickListenerKey !== null && mthis.pointClickListenerKey.type !== undefined && mthis.pointClickListenerKey.type === "postcompose"){
+                                    unByKey(mthis.pointClickListenerKey);
+                                }
+                            }
                         }
                     }
-                });
+                    
+                }); */
                 /* var features = (new GeoJSON()).readFeatures(mthis.test_mapData.data);
                 features.forEach(function(item){
                     mthis.setLifeOrDiePointStyleByValue(item,'life');
@@ -568,7 +614,7 @@ export default {
         },
         location_cilck(){
             var mthis = this
-            mthis.clickButtonOpenDiv('location_button')
+            mthis.clickButtonOpenDiv('location_AT')
             mthis.legend = null
             mthis.addlocationLayer();
         },
@@ -722,7 +768,7 @@ export default {
         heatMap_cilck(){
             var mthis = this
             var heatMapLayer;
-            mthis.clickButtonOpenDiv('heatMap_button')
+            mthis.clickButtonOpenDiv('heatMap_HSD')
             if(mthis.heatMap == null){
                 mthis.heatMap = new map('HeatMap_Map')
                 //mthis.click_heatMap();
@@ -751,7 +797,7 @@ export default {
         },
         route_cilck(){
             var mthis = this
-            mthis.clickButtonOpenDiv('route_button')
+            mthis.clickButtonOpenDiv('route_HSD')
             if(mthis.legend == null){
                 //mthis.click_route()
             }
@@ -766,10 +812,11 @@ export default {
                 if(item == id){
                     classname = 'button-div-click';
                 } else {
+                    debugger
                     var arr = mthis.changeButtonParam;
                     var isOpen = true;
                     for(let i = 0; i < arr.length - 1; i++){
-                        if(arr[i].id === item){
+                        if(arr[i].id_suf === item.split('_')[1]){
                             isOpen = arr[i].isOpen;
                             break
                         }
@@ -1255,6 +1302,7 @@ export default {
 
 //鼠标移动事件
         mapPointerMove() {
+            debugger
             var mthis = this;
             var map = mthis.routeMap.map;
             var routeSusOverlay = document.createElement('div');
@@ -1358,10 +1406,9 @@ export default {
                 return response.json();
             }).then(function (data) {
                 //查询结果
-                debugger
                 var features = new GeoJSON().readFeatures(data);
                 var map = mthis.routeMap.map;
-                var source = mthis.getLayerById('HLArealayer').getSource();
+                var source = mthis.getLayerById('HLAreaLayer').getSource();
                 var extent = features[0].getGeometry().getExtent();
                 source.addFeatures(features)
                 /* map.getView().animate({
@@ -1874,7 +1921,7 @@ export default {
         HLlocationIds:function(){
             var mthis = this;
             var ids = mthis.$store.state.HLlocationIds;
-            var source = mthis.getLayerById('HLArealayer').getSource();
+            var source = mthis.getLayerById('HLAreaLayer').getSource();
             source.clear();
             var feature;
             for(let i = 0; i < ids.length; i++){
@@ -1889,117 +1936,33 @@ export default {
             if(mthis.timeSelectedEventIds.length !==0){
                 mthis.changeButtonParam=[
                     {
-                        'id':'rectangle_select',
+                        'id_suf':'HSD',
                         'isOpen':true
                     },
                     {
-                        'id':'Circle_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'Polygon_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'heatMap_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'route_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'delete_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'invertSelection_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'selectAll_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'toNet_push',
+                        'id_suf':'HD',
                         'isOpen':true
                     }
                 ]
             } else if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && !$.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
                 mthis.changeButtonParam=[
                     {
-                        'id':'rectangle_select',
+                        'id_suf':'HSD',
                         'isOpen':true
                     },
                     {
-                        'id':'Circle_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'Polygon_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'heatMap_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'route_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'delete_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'invertSelection_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'selectAll_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'toNet_push',
+                        'id_suf':'HD',
                         'isOpen':true
                     }
                 ]
             } else if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && $.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
                 mthis.changeButtonParam=[
                     {
-                        'id':'rectangle_select',
+                        'id_suf':'HSD',
                         'isOpen':false
                     },
                     {
-                        'id':'Circle_select',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'Polygon_select',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'heatMap_button',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'route_button',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'delete_opera',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'invertSelection_opera',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'selectAll_opera',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'toNet_push',
+                        'id_suf':'HD',
                         'isOpen':false
                     }
                 ]
@@ -2010,117 +1973,33 @@ export default {
             if(mthis.staticsSelectedEventIds.length !==0){
                 mthis.changeButtonParam=[
                     {
-                        'id':'rectangle_select',
+                        'id_suf':'HSD',
                         'isOpen':true
                     },
                     {
-                        'id':'Circle_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'Polygon_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'heatMap_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'route_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'delete_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'invertSelection_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'selectAll_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'toNet_push',
+                        'id_suf':'HD',
                         'isOpen':true
                     }
                 ]
             } else if(mthis.timeSelectedEventIds.length === 0 && mthis.geometrySelectedEventIds.length === 0 && !$.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
                 mthis.changeButtonParam=[
                     {
-                        'id':'rectangle_select',
+                        'id_suf':'HSD',
                         'isOpen':true
                     },
                     {
-                        'id':'Circle_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'Polygon_select',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'heatMap_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'route_button',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'delete_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'invertSelection_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'selectAll_opera',
-                        'isOpen':true
-                    },
-                    {
-                        'id':'toNet_push',
+                        'id_suf':'HD',
                         'isOpen':true
                     }
                 ]
             } else if(mthis.timeSelectedEventIds.length === 0 && mthis.geometrySelectedEventIds.length === 0 && $.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
                 mthis.changeButtonParam=[
                     {
-                        'id':'rectangle_select',
+                        'id_suf':'HSD',
                         'isOpen':false
                     },
                     {
-                        'id':'Circle_select',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'Polygon_select',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'heatMap_button',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'route_button',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'delete_opera',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'invertSelection_opera',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'selectAll_opera',
-                        'isOpen':false
-                    },
-                    {
-                        'id':'toNet_push',
+                        'id_suf':'HD',
                         'isOpen':false
                     }
                 ]
@@ -2133,189 +2012,69 @@ export default {
                     if($.isEmptyObject(mthis.removeEventIdList)){
                         mthis.changeButtonParam=[
                             {
-                                'id':'heatMap_button',
+                                'id_suf':'HSD',
                                 'isOpen':false
                             },
                             {
-                                'id':'route_button',
+                                'id_suf':'HD',
                                 'isOpen':false
                             },
                             {
-                                'id':'rectangle_select',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'Circle_select',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'Polygon_select',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'delete_opera',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'invertSelection_opera',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'selectAll_opera',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'returnToAllPoints_opera',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'toNet_push',
+                                'id_suf':'HDD',
                                 'isOpen':false
                             }
                         ]
                     } else {
                         mthis.changeButtonParam=[
                             {
-                                'id':'heatMap_button',
+                                'id_suf':'HSD',
                                 'isOpen':false
                             },
                             {
-                                'id':'route_button',
+                                'id_suf':'HD',
                                 'isOpen':false
                             },
                             {
-                                'id':'rectangle_select',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'Circle_select',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'Polygon_select',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'delete_opera',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'invertSelection_opera',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'selectAll_opera',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'returnToAllPoints_opera',
+                                'id_suf':'HDD',
                                 'isOpen':true
-                            },
-                            {
-                                'id':'toNet_push',
-                                'isOpen':false
                             }
                         ]
                     }
                 } else {
                     mthis.changeButtonParam=[
                         {
-                            'id':'rectangle_select',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'Circle_select',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'Polygon_select',
+                            'id_suf':'HD',
                             'isOpen':true
                         }
                     ]
                     if(mthis.geometrySelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && $.isEmptyObject(mthis.removeEventIdList)){
                         mthis.changeButtonParam=[
                             {
-                                'id':'rectangle_select',
+                                'id_suf':'HSD',
                                 'isOpen':true
                             },
                             {
-                                'id':'Circle_select',
+                                'id_suf':'HD',
                                 'isOpen':true
                             },
                             {
-                                'id':'Polygon_select',
-                                'isOpen':true
-                            },
-                            {
-                                'id':'heatMap_button',
-                                'isOpen':true
-                            },
-                            {
-                                'id':'route_button',
-                                'isOpen':true
-                            },
-                            {
-                                'id':'delete_opera',
-                                'isOpen':true
-                            },
-                            {
-                                'id':'invertSelection_opera',
-                                'isOpen':true
-                            },
-                            {
-                                'id':'selectAll_opera',
-                                'isOpen':true
-                            },
-                            {
-                                'id':'returnToAllPoints_opera',
+                                'id_suf':'HDD',
                                 'isOpen':false
-                            },
-                            {
-                                'id':'toNet_push',
-                                'isOpen':true
                             }
                         ]
                     } else if(mthis.geometrySelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && !($.isEmptyObject(mthis.removeEventIdList))){
                         mthis.changeButtonParam=[
                             {
-                                'id':'rectangle_select',
-                                'isOpen':true
-                            },
-                            {
-                                'id':'Circle_select',
-                                'isOpen':true
-                            },
-                            {
-                                'id':'Polygon_select',
-                                'isOpen':true
-                            },
-                            {
-                                'id':'heatMap_button',
+                                'id_suf':'HSD',
                                 'isOpen':false
                             },
                             {
-                                'id':'route_button',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'delete_opera',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'invertSelection_opera',
-                                'isOpen':false
-                            },
-                            {
-                                'id':'selectAll_opera',
+                                'id_suf':'HD',
                                 'isOpen':true
                             },
                             {
-                                'id':'returnToAllPoints_opera',
+                                'id_suf':'HDD',
                                 'isOpen':true
-                            },
-                            {
-                                'id':'toNet_push',
-                                'isOpen':false
                             }
                         ]
                     }
@@ -2363,40 +2122,12 @@ export default {
             if(mthis.geometrySelectedEventIds[0] === "geo没有选择到数据"){
                 mthis.changeButtonParam=[
                         {
-                            'id':'rectangle_select',
+                            'id_suf':'HSD',
+                            'isOpen':false
+                        },
+                        {
+                            'id_suf':'HD',
                             'isOpen':true
-                        },
-                        {
-                            'id':'Circle_select',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'Polygon_select',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'heatMap_button',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'route_button',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'delete_opera',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'invertSelection_opera',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'selectAll_opera',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'toNet_push',
-                            'isOpen':false
                         }
                     ]
                 //return
@@ -2404,117 +2135,33 @@ export default {
                 if(mthis.geometrySelectedEventIds.length !==0){
                     mthis.changeButtonParam=[
                         {
-                            'id':'rectangle_select',
+                            'id_suf':'HSD',
                             'isOpen':true
                         },
                         {
-                            'id':'Circle_select',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'Polygon_select',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'heatMap_button',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'route_button',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'delete_opera',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'invertSelection_opera',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'selectAll_opera',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'toNet_push',
+                            'id_suf':'HD',
                             'isOpen':true
                         }
                     ]
                 } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && !$.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
                     mthis.changeButtonParam=[
                         {
-                            'id':'rectangle_select',
+                            'id_suf':'HSD',
                             'isOpen':true
                         },
                         {
-                            'id':'Circle_select',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'Polygon_select',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'heatMap_button',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'route_button',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'delete_opera',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'invertSelection_opera',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'selectAll_opera',
-                            'isOpen':true
-                        },
-                        {
-                            'id':'toNet_push',
+                            'id_suf':'HD',
                             'isOpen':true
                         }
                     ]
                 } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && $.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
                     mthis.changeButtonParam=[
                         {
-                            'id':'rectangle_select',
+                            'id_suf':'HSD',
                             'isOpen':false
                         },
                         {
-                            'id':'Circle_select',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'Polygon_select',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'heatMap_button',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'route_button',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'delete_opera',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'invertSelection_opera',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'selectAll_opera',
-                            'isOpen':false
-                        },
-                        {
-                            'id':'toNet_push',
+                            'id_suf':'HD',
                             'isOpen':false
                         }
                     ]
