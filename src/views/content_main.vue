@@ -9,7 +9,7 @@
             <time-chart-div :activeId="activeId"></time-chart-div>
           </div>
           <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
-            <event-chart-div id="right" :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div>
+            <event-chart-div-content id="right" :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div-content>
           </div>
         </Split>
       </div>
@@ -20,7 +20,7 @@
   import "../dist/assets/styles/net_main.css";
   import contentChartDiv from "./components/custom_contentdiv";
   import timeChartDiv from "./components/custom_timediv_content";
-  import eventChartDiv from "./components/custom_eventdiv_content";
+  import eventChartDivContent from "./components/custom_eventdiv_content";
   import {
     mapState,
     mapMutations
@@ -42,7 +42,7 @@
     components: {
       contentChartDiv,
       timeChartDiv,
-      eventChartDiv
+      eventChartDivContent
     },
     methods: {
       contentData() {},

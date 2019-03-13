@@ -11,13 +11,13 @@
     /* font-family: */
     font-family:"微软雅黑"
 }
-#EntityAttrName, #NodeTypeName{
+/* #EntityAttrName, #NodeTypeName{
     background-color: rgba(51,255,255,0.1);
     font-size: 18px;
     border-top: 1px solid rgba(51, 255, 255, 0.2);
     border-bottom: 1px solid rgba(51, 255, 255, 0.2);
     cursor: default;
-}
+} */
 
 #NodeTypeInfo,  #EntityAttrColl table{
     width:100%;
@@ -41,7 +41,7 @@
     text-align:left;
 } */
 #EntityAttrColl p{
-    padding-left:20px;
+    padding-left:24px;
     text-align:left;
 }
 
@@ -65,13 +65,13 @@
     text-align: center; 
 }
 .separateLine{
-    width: 5px;
-    height: 20px;
+    width: 4px;
+    height: 16px;
     background-color: rgb(0, 153, 153);
     float: left;
     display: table-cell;
-    margin-top: 3px;
-    margin-left: 10px;
+    margin-top: 6px;
+    margin-left: 8px;
 }
 .NoDataSpan{
     color: #638888 !important;
@@ -92,6 +92,13 @@
     line-height: 30px !important;
     cursor: default !important;
 }
+#leftStatics>div>div{
+    background-color: rgba(51,255,255,0.15);
+    font-size: 18px;
+    border-top: 1px solid #336666;;
+    border-bottom: 1px solid #336666;;
+    cursor: default;
+}
 
 </style>
 
@@ -99,44 +106,23 @@
 
 <template>
 <div id='leftStatics'>
-    <div :id='firstClassifyItem.id' v-for='(firstClassifyItem,index) in firstClassify' v-if="index === 0 || (index === 1 && type !== '')">
-        <div :id="firstClassifyItem.id + 'Name'">
+    <div :id='staticsData.firstlevelId' v-for='(staticsData,index) in staticsDatas'>
+        <div :id="staticsData.firstlevelId + 'Name'">
             <span class="separateLine"></span>
-            <span style="margin-left:10px;font-size: 14px;">{{firstClassifyItem.disName}}</span>
+            <span style="margin-left:10px;font-size: 14px;">{{staticsData.firstlevelName}}</span>
         </div>
-        <table id='NodeTypeInfo' v-if="index === 0">
-            <tr :id='nodeTypeItem.id' v-if="isNodeTypehasInnodeTypedata(nodeTypeItem.id) === true" v-for="(nodeTypeItem,index) in nodeTypeClassify" v-on:click="getAttrsById(nodeTypeItem.id)">
-                <td :id="nodeTypeItem.id + '_name'" class="NameTd">
-                    <span>{{nodeTypeItem.disName}}</span>
-                </td>
-                <td :id="nodeTypeItem.id + '_StaticsPer'" class="StaticsPerTd">
-                    <percentBar v-if="nodeTypedataItem.name === nodeTypeItem.id" :num="nodeTypedataItem.per" :count="nodeTypedataItem.count" :index='0' v-for="nodeTypedataItem in nodeTypedata.data"></percentBar>
-                </td>
-            </tr>
-        </table>
-        <Collapse simple v-model="openPanelNames" id="EntityAttrColl" v-if="index === 1 && type !== ''">
-            <panel v-for="(EntityAttrItem,index) in SecondAttrClassify[type]" :name="EntityAttrItem.id">
-                <span :id="EntityAttrItem.id + '/countSpan'" v-if="itemInArrById(EntityAttrItem.id) && stateType.id === EntityAttrItem.id && stateType.datasCount>3" v-for="stateType in Statisticsdata">{{EntityAttrItem.disName + '(' + 3 + '/' + stateType.datasCount + ')'}}</span>
-                <span :id="EntityAttrItem.id + '/countSpan'" v-if="itemInArrById(EntityAttrItem.id) && stateType.id === EntityAttrItem.id && stateType.datasCount<=3" v-for="stateType in Statisticsdata">{{EntityAttrItem.disName + '(' + stateType.datasCount + '/' + stateType.datasCount + ')'}}</span>
-                <span :id="EntityAttrItem.id + '/countSpan'" v-if="!itemInArrById(EntityAttrItem.id)">{{EntityAttrItem.disName + '(0)'}}</span>
-                <table slot="content" :id="EntityAttrInfoItem.id + '/entityattr'" v-if="itemInArrById(EntityAttrItem.id) && EntityAttrInfoItem.id == EntityAttrItem.id" v-for="(EntityAttrInfoItem,index) in Statisticsdata">
-                    <tr  :id="EntityInformation.name + '/name'" v-if="index<=2" v-for="(EntityInformation,index ) in EntityAttrInfoItem.datas"  @click="selectedIds(EntityInformation.entitylist)">  
+        <Collapse simple v-model="openPanelNames" id="EntityAttrColl">
+            <panel v-for="(staticsPanel,index) in staticsData.subStaticsAttr" :name="staticsPanel.secondlevelId">
+                <span :id="staticsPanel.secondlevelId + '/countSpan'">{{staticsPanel.secondlevelName + '（' + staticsPanel.typecount + '）'}}</span>
+                <table slot="content" :id="staticsPanel.secondlevelId + '/entityattr'">
+                    <tr  :id="specificStatics.thirdlevelId + '/id'" v-if="index<=2" v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr"  @click="selectedIds(specificStatics.entitylist)">  
                         <td class="NameTd">
-                            <!-- <span>{{EntityInformation.name}}</span> -->
-                            <p>{{EntityInformation.name}}</p>
+                            <p>{{specificStatics.thirdlevelName}}</p>
                         </td>
-                        <td :id="EntityInformation.name + '/StaticsPer'" class="StaticsPerTd">
-                            <percentBar  :num="EntityInformation.per" :count="EntityInformation.count" :index='0'></percentBar>
+                        <td :id="specificStatics.thirdlevelId + '/StaticsPer'" class="StaticsPerTd">
+                            <percentBar  :num="specificStatics.per" :count="specificStatics.count" :index='0'></percentBar>
                         </td>
-                    </tr>
-                    <tr :id="EntityAttrInfoItem.id + '/more'" v-else-if="index===3" @click="displayMore(EntityAttrInfoItem)">
-                        <td colspan="2" style="text-align: center;color:#ccffff;text-decoration: underline;">{{"还有"+EntityAttrInfoItem.moredata.dataItem + "个值," + EntityAttrInfoItem.moredata.nodeCount + "个节点"}}</td>
                     </tr> 
-                </table>
-                <table slot="content" v-if="!itemInArrById(EntityAttrItem.id)">
-                    <tr>
-                        <p class="NoDataSpan">无匹配节点</p>
-                    </tr>
                 </table>
             </panel>
         </Collapse>
@@ -154,24 +140,34 @@ export default {
         return{
             openPanelNames:[],
             type:'',
-            Statisticsdata:[]
+            //Statisticsdata:[]
+            staticsdatas:[],
         }
     },
     /* mounted(){
         var mthis = this;
         mthis.setOpenPanelNames();
     }, */
-    props:['staticsIds','firstClassify','nodeTypeClassify','SecondAttrClassify','nodeTypedata'],
+    props:['staticsDatas'],
     components: {
       percentBar,
     },
     watch:{
-        nodeTypedata:function(){
-            var mthis = this;
-            if(mthis.type !== ''){
-                mthis.getAttrsById(mthis.type);
-            }
-            
+        staticsdatas:{
+            handler:function(val){
+                var mthis = this;
+                mthis.openPanelNames = [];
+                if(!mthis.staticsDatas){
+                    return;
+                }
+                mthis.staticsdatas = mthis.staticsDatas;
+                mthis.staticsDatas.forEach(function(item){
+                    item.subStaticsAttr.forEach(function(Iitem){
+                        mthis.openPanelNames.push(Iitem.secondlevelId);
+                    })
+                })
+            },
+            immediate:true
         }
     },
     methods:{

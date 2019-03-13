@@ -167,6 +167,8 @@
             mthis.$store.commit('setSearchGeoEventResult', {
               ids: [a.value]
             })
+          } else if(a.type === 'location'){
+            mthis.$store.commit('setHLlocationIds', [a.value])
           } else {
             mthis.$store.commit('setSearchGeoEntityResult', {
               ids: [a.value]
@@ -221,6 +223,8 @@
       var mthis = this;
       if (query !== "") {
         mthis.loading2 = true;
+        //mthis.options2 = [];
+        /* let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, { */
         let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, {
             emulateJSON: true
           })
@@ -230,22 +234,43 @@
             let optionOrgArr = []
             let optionEvent = {}
             let optionEventArr = []
-            for (let i = 0; i < response.body.data.nodes.length; i++) {
-              if(response.body.data.nodes[i].type === 'human'){
-                  optionEventArr.push({
-                    "label": response.body.data.nodes[i].name+' 的事件',
-                    "value": response.body.data.nodes[i].id,
-                    "img": response.body.data.nodes[i].img,
-                    "type": 'human'
-                  })
-                } else if(response.body.data.nodes[i].type === 'organization'){
-                  optionOrgArr.push({
-                    "label": response.body.data.nodes[i].name,
-                    "value": response.body.data.nodes[i].id,
-                    "img": response.body.data.nodes[i].img,
-                    "type": 'organization'
-                  })
-              }
+            let optionLocationName ={}
+            let optionLocationNameArr = []
+
+
+            let response_geo = mthis.$http.get("http://localhost:5000/searchLocationName/" + query, {
+              emulateJSON: true
+            })
+            .then(response_geo => {
+              if(response_geo.data !== 'false'){
+                var LCdata = response_geo.body.data;
+                LCdata.forEach(function(item){
+                  var queryObj = {
+                    "label": item.name,
+                    "value": item.id,
+                    "type": 'location'
+                  }
+                  optionLocationNameArr.push(queryObj)
+                })
+                optionLocationName.title = "地名搜索";
+                optionLocationName.data = optionLocationNameArr
+
+                for (let i = 0; i < response.body.data.nodes.length; i++) {
+                  if(response.body.data.nodes[i].type === 'human'){
+                      optionEventArr.push({
+                        "label": response.body.data.nodes[i].name+' 的事件',
+                        "value": response.body.data.nodes[i].id,
+                        "img": response.body.data.nodes[i].img,
+                        "type": 'human'
+                      })
+                    } else if(response.body.data.nodes[i].type === 'organization'){
+                      optionOrgArr.push({
+                        "label": response.body.data.nodes[i].name,
+                        "value": response.body.data.nodes[i].id,
+                        "img": response.body.data.nodes[i].img,
+                        "type": 'organization'
+                      })
+                  }
               
             }
             optionOrg.title = '实体搜索'
@@ -254,8 +279,16 @@
             optionEvent.data = optionEventArr
             option.push(optionEvent)
             option.push(optionOrg)
+            option.push(optionLocationName)
             mthis.options2 = option;
             mthis.loading2 = false;
+              }
+            })
+
+
+
+
+            
           });
       } else {
         mthis.options2 = [];

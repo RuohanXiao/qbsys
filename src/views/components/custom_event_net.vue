@@ -4,7 +4,7 @@
       <Row type="flex" justify="center">
         <!-- 头像 + 名字 div -->
         <Col span="8" align="center" :style="{display:'flex',flexFlow:'row nowarp',justifyContent:'center'}">
-        <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="!detailData && detailData.img" />
+        <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="!(detailData && detailData.img)" />
         <Avatar class="circle-img" v-else :src="detailData.img" :style="{width:'50px',height:'50px'}" />
         </Col>
         <Col span="16" align="left">
@@ -779,11 +779,31 @@
           <div class="e-title-d"></div>
           <p class="e-title-p">相关文档</p>
         </div>
+        <div class="e-content" v-if="myMap.get(detailData.entity_type) === 'entity'">
+          <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+            <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanDoc" v-if="(xiangguanDoc.length>0)">
+              <p class="e-content-p">{{item.title}}</p>
+            </div>
+            <div class="e-content-d" >
+              <p class="e-content-p">暂无相关文档</p>
+            </div>
+          </div>
+        </div>
         <div class="e-title">
           <div class="e-title-d"></div>
           <p class="e-title-p">相关事件</p>
         </div>
       </div>
+     <div class="e-content" v-if="myMap.get(detailData.entity_type) === 'entity'">
+          <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+            <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanevent" v-if="(xiangguanevent.length>0)">
+              <p class="e-content-p">{{item.title}}</p>
+            </div>
+            <div class="e-content-d">
+              <p class="e-content-p">暂无相关事件</p>
+            </div>
+          </div>
+        </div>
       <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'event'">
         <!-- 实体属性 -->
         <div class="e-title">
@@ -927,6 +947,7 @@
         </div>
       </div>
       <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'document'">
+        aaasss
         <!-- 实体属性 -->
         <div class="e-title">
           <div class="e-title-d"></div>
@@ -990,14 +1011,16 @@
   export default {
     data() {
       return {
-        selectTag:'',
-        detailData: null,
+        selectTag: '',
+        detailData: new Object(),
         selectDivHeight: '',
         eDivH: '',
         selectHeight: '',
         entDivH: '',
         entityT: '',
-        myMap: null
+        myMap: new Map(),
+        xiangguanDoc: [],
+        xiangguanEvent: []
       }
     },
     props: ['evetdata'],
@@ -1010,29 +1033,71 @@
     components: {},
     watch: {
       evetdata: function() {
+        var mthis = this
         var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
         var entityMainType = ob.getElementsByTagName("entityMainType");
         let arr = []
-        this.myMap = new Map();
+        mthis.myMap = new Map();
         for (var i = 0; i < entityMainType.length; i++) {
           let typeName = entityMainType[i].children[0].textContent;
           let typeChild = []
           for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
             // typeChild.push(entityMainType[i].children[1].children[n].textContent)
-            this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
+            mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
           }
         }
-        let detailId = (this.evetdata.length !== undefined) ? (this.evetdata[0].id) : (this.evetdata.id);
-        this.selectTag = detailId
-        let detailType = (this.evetdata.length !== undefined) ? (this.evetdata[0].entity_type) : (this.evetdata.entity_type);
-        let a = []
-        a.push(detailId)
-        this.detailData = {}
-        this.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
-          "nodeIds": a
-        }).then(response => {
-          this.detailData = response.body.data[0]
-        })
+        // console.log('mthis.evetdata[0].entity_type')
+        // console.log(mthis.evetdata[0].entity_type)
+        // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
+        if (mthis.evetdata[0] !== undefined) {
+          if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
+            // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
+            // let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
+            let detailId = (mthis.evetdata[0].id)
+            mthis.selectTag = detailId
+            // let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
+            let a = []
+            a.push(detailId)
+            mthis.detailData = {}
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
+              "nodeIds": a
+            }).then(response => {
+              // console.log(response.body.data[0])
+              mthis.detailData = response.body.data[0]
+            })
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
+              "entityIds": a
+            }).then(response => {
+              // console.log(response.body.data[0].children.data)
+              mthis.xiangguanDoc = response.body.data[0].children.data
+            })
+          } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
+            let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
+            mthis.selectTag = detailId
+            let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
+            let a = []
+            a.push(detailId)
+            mthis.detailData = {}
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
+              "EventIds": a
+            }).then(response => {
+              mthis.detailData = response.body.data[0]
+            })
+          } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'document') {
+            alert('doc')
+            let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
+            mthis.selectTag = detailId
+            let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
+            let a = []
+            a.push(detailId)
+            mthis.detailData = {}
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+              "docIds": a
+            }).then(response => {
+              mthis.detailData = response.body.data[0]
+            })
+          }
+        }
       }
     },
     methods: {
@@ -1231,11 +1296,12 @@
   .bstyle:hover {
     color: rgba(51, 255, 255, 0.8) !important;
   }
-  .selectedTag{
+  .selectedTag {
     /* color:red !important;
-    background-color: blue !important; */
+      background-color: blue !important; */
     /* opacity: 0.5 !important; */
-    background-color: rgba(51, 255, 255, 0.5) !important;;
+    background-color: rgba(51, 255, 255, 0.5) !important;
+    ;
   }
 </style>
 

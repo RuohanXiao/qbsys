@@ -623,7 +623,62 @@
       // 共线扩展
       expandNodeContent() {
         var mthis = this;
+        let arr = []
+        // console.log('mthis.selectionId')
+        // console.log(mthis.selectionId)
+        if (mthis.selectionId.length > 0) {
+          mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
+          let res = null
+          for (let i = 0; i < mthis.selectionId.length; i++) {
+            arr.push(mthis.selectionId[i].id)
+          }
+          mthis.spinShow = true
+          mthis.zIndex = 999
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
+            'entityIds': arr
+          }).then(response => {
+            if(response.body.code == 0 && response.body.data.length>0) {
+
+              console.log('response.body.data[0]')
+              console.log(response.body.data[0])
+              res = response.body.data[0].children.data
+              let resNodes = new Object()
+              resNodes.nodes = []
+              for (let m = 0; m < res.length; m++) {
+              let resNodeItem = new Object()
+              resNodeItem.id = res[m].id
+              resNodeItem.entity_type = 'documnet'
+              resNodeItem.loaded= true
+              resNodeItem.img = 'xx'
+              resNodeItem.name = res[m].title
+              resNodeItem.namimageCroppinge = true
+              resNodes.nodes.push(resNodeItem)
+                // res.nodes[m].type = res.nodes[m].entity_type
+                // res.nodes[m].imageCropping = true
+              arr.push(res[m].id)
+              }
+              mthis.spinShow = false
+              mthis.zIndex = 0
+              console.log(resNodes)
+              mthis.netchart.addData(resNodes)
+              setTimeout(function() {
+                let ar = util.unique(arr)
+                mthis.netchart.selection(ar)
+                // lock
+                // mthis.netchart.unlockNode(ar);
+                // mthis.netchart.lockNode(ar);
+              }, 100)
+              mthis.getStatistics()
+            } else {
+              alert('无匹配数据')
+              mthis.spinShow = false
+            }
+          })
+        } else {
+          mthis.$Message.error('请至少选择一个节点进行拓展操作！')
+        }
         mthis.expandFlag = 'content'
+
       },
       saveData(nodes, links, num) {
         // sessionStorage.setItem('dataInfo' + num, JSON.stringify({
@@ -880,31 +935,70 @@
               } else {
                 (arr.push(mthis.selectionId[index].dataLinks[num].from))
               }
-            }
-          }
-          arr = util.unique(arr)
-          if (mthis.selectionId.length > 1) {
-            arr = util.diff(arr, arrLevel1)
-          }
-          // arr = util.diff(arr,arrLevel1)
-          for (let nn = 0; nn < arr.length; nn++) {
-            // mthis.netchart.unlockNode(arr[nn]);
-            mthis.netchart.getNode(arr[nn])["x"] = nn * 100 + mthis.basicX
-            mthis.netchart.getNode(arr[nn])["y"] = mthis.basicY + 200
-            // lock
-            // mthis.netchart.lockNode(arr[nn]);
-          }
-          mthis.netchart._impl.autoZoom.scene.autoZoomMode = 'overview'
-          mthis.netchart.scrollIntoView();
-          //     //解锁位置
-          //     mthis.netchart.unlockNode(this.selectionId[index].id);
-          //     // this.selectionId[index]["x"] =
-          //     //   Math.sin(ahd * index) * radius;
-          //     // this.selectionId[index]["y"] =
-          //     //   Math.cos(ahd * index) * radius;
-          //     // 锁定位置
-          //     mthis.netchart.lockNode(this.selectionId[index].id);
+              var item;
+              let num = 0
+              while (stack.length) {
+                item = stack.shift();
+                // console.log(item.id);
+                //如果该节点有子节点，继续添加进入栈底
+                if (item.children && item.children.length) {
+                // console.log('=====-----======')
+                console.log(mthis.netchart.getNode(item.id).label)
+                  stack = stack.concat(item.children);
+                } else {
+                  // console.log('!!!!!!!!___________!!!!!!!!!!')
+                console.log(mthis.netchart.getNode(item.id).label)
+                }
+                console.log('aaaaaaa')
+              }
+            };
+            iterator1(response.body.data[0]);
+          })
+          // 层级老版代码start
+          // mthis.changeFlag();
+          // mthis.basicX = mthis.selectionId[0]['x']
+          // mthis.basicY = mthis.selectionId[0]['y']
+          // let arr = []
+          // let arrLevel1 = []
+          // for (let index = 0; index < mthis.selectionId.length; index++) {
+          //   // mthis.netchart.unlockNode(this.selectionId[index].id);
+          //   mthis.selectionId[index]["x"] = index * 100 + mthis.basicX
+          //   mthis.selectionId[index]["y"] = mthis.basicY
+          //   // lock
+          //   // mthis.netchart.lockNode(mthis.selectionId[index].id);
+          //   arrLevel1.push(mthis.selectionId[index].id)
+          //   for (let num = 0; num < mthis.selectionId[index].dataLinks.length; num++) {
+          //     if (mthis.selectionId[index].dataLinks[num].from === mthis.selectionId[index].id) {
+          //       (arr.push(mthis.selectionId[index].dataLinks[num].to))
+          //     } else {
+          //       (arr.push(mthis.selectionId[index].dataLinks[num].from))
+          //     }
           //   }
+          // }
+          // arr = util.unique(arr)
+          // if (mthis.selectionId.length > 1) {
+          //   arr = util.diff(arr, arrLevel1)
+          // }
+          // // arr = util.diff(arr,arrLevel1)
+          // for (let nn = 0; nn < arr.length; nn++) {
+          //   // mthis.netchart.unlockNode(arr[nn]);
+          //   mthis.netchart.getNode(arr[nn])["x"] = nn * 100 + mthis.basicX
+          //   mthis.netchart.getNode(arr[nn])["y"] = mthis.basicY + 200
+          //   // lock
+          //   // mthis.netchart.lockNode(arr[nn]);
+          // }
+          // mthis.netchart._impl.autoZoom.scene.autoZoomMode = 'overview'
+          // mthis.netchart.scrollIntoView();
+          // //     //解锁位置
+          // //     mthis.netchart.unlockNode(this.selectionId[index].id);
+          // //     // this.selectionId[index]["x"] =
+          // //     //   Math.sin(ahd * index) * radius;
+          // //     // this.selectionId[index]["y"] =
+          // //     //   Math.cos(ahd * index) * radius;
+          // //     // 锁定位置
+          // //     mthis.netchart.lockNode(this.selectionId[index].id);
+          // //   }
+          // 层级老版代码end
         } else {
           this.$Message.error('请选择节点进行层级排列操作！')
         }
