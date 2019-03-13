@@ -3,7 +3,7 @@
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_20_content}">
-        <Tabs :value=$store.state.tabSelect>
+        <Tabs :value=$store.state.tabSelectContent>
           <Tab-pane label="选中详情" name= 'mubiaoxiangqing' v-if="$store.state.tmss === 'content'" :style="{fontSize: '18px',height:viewHeight_20_content}" id='mubiaoxiangqing'  @click="changTab('mubiaoxiangqing')">
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
@@ -442,10 +442,6 @@
   }
   #toushi .ivu-collapse-content-box p {
     font-size: 14px !important;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 80px;
   }
   .ivu-collapse-item-active>.ivu-collapse-content {
     background-color: rgba(0, 0, 0, 0) !important;

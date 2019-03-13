@@ -3,7 +3,7 @@
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
-        <Tabs :value=$store.state.tabSelect>
+        <Tabs :value=$store.state.tabSelectNet>
           <Tab-pane label="选中详情" name='mubiaoxiangqing' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqing' @click="changTab('mubiaoxiangqing')">
             <eventNet :resArr='resArr' :evetdata='evetdata' v-show='evetdataFlag'></eventNet>
             <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
@@ -30,6 +30,7 @@
   </div>
 </template>
 <script>
+  import util from '../../util/tools.js'
   import modalChartDetail from './custom_modal_detail'
   import percentBar from './custom_percentBar'
   import leftStatics from './custom_leftStatics'
@@ -140,74 +141,75 @@
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
       selectionIdByType: function() {
-        console.log(this.selectionIdByType)
+        // console.log(this.selectionIdByType)
         var mthis = this;
         if (mthis.selectNetNodes[0].ids.length > 0) {
           // 新增防抖功能
-          this.timer = setTimeout(function() {
+          mthis.timer = setTimeout(function() {
+            mthis.evetdata = []
             if (mthis.selectionIdByType.nodeIds.length > 0) {
               let nodeOb = {}
               nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
+                // mthis.evetdata = response.body.data[0].nodes
+                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
                 mthis.evetdataFlag = true
-                mthis.evetdata = response.body.data[0].nodes
+                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                // mthis.$set(mthis.evetdata,0,response.body.data[0].nodes)
               })
             }
-            // if (mthis.selectionIdByType.nodeIds.length == 0) {
-            //   let nodeIdsArry = new Array(mthis.selectNetNodes[0].ids[0]);
-            //   let ar = nodeIdsArry.map(item=>{
-            //     return item.id
-            //   })
-            //     mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/',{nodeIds:ar}).then(response => {
-            //       mthis.evetdataFlag = true
-            //       mthis.$set(mthis.evetdata,0,response.body.data[0])
-            //   })
-            // }
             if (mthis.selectionIdByType.eventIds.length > 0) {
               // let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
               //   return item.id;
               // });
               let eventOb = {}
               eventOb.EventIds = mthis.selectionIdByType.eventIds
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-info/', eventOb).then(response => {
+              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-info/', eventOb).then(response => {
+              //   // mthis.evetdataFlag = true
+              //   // mthis.evetdata = response.body.data[0].nodes
+              //   util.hebing(mthis.evetdata,response.body.data[0].nodes)
+              // })
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventOb).then(response => {
                 // mthis.evetdataFlag = true
                 // mthis.evetdata = response.body.data[0].nodes
+                for(let i = 0; i < response.body.data.length;i++){
+                  response.body.data[i].id = response.body.data[i].doc_id
+                  response.body.data[i].entity_type = response.body.data[i].event_type
+                  response.body.data[i].name = response.body.data[i].event_subtype
+                }
+                // console.log(util.hebing(mthis.evetdata,response.body.data))
+                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                mthis.evetdataFlag = true
               })
             }
-            // if (mthis.selectionIdByType.eventIds.length == 0) {
-            //   let nodeIdsArry = new Array(mthis.selectNetNodes[0].ids[0]);
-            //   let ar = nodeIdsArry.map(item=>{
-            //     return item.id
-            //   })
-            //     mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/',{nodeIds:ar}).then(response => {
-            //       mthis.evetdataFlag = true
-            //       mthis.$set(mthis.evetdata,0,response.body.data[0])
-            //   })
-            // } 
             if (mthis.selectionIdByType.contentIds.length > 0) {
               // let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
               //   return item.id;
               // });
               let docOb = {}
               docOb.docIds = mthis.selectionIdByType.contentIds
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
+              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
+              //   // mthis.evetdataFlag = true
+              //   // mthis.evetdata = response.body.data[0].nodes
+              // })
+               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
                 // mthis.evetdataFlag = true
                 // mthis.evetdata = response.body.data[0].nodes
+                for(let i = 0; i < response.body.data.length;i++){
+                  response.body.data[i].entity_type = 'document'
+                  response.body.data[i].name = response.body.data[i].title
+                }
+                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                // console.log(util.hebing(mthis.evetdata,response.body.data))
+                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                mthis.evetdataFlag = true
               })
             }
-            // if (mthis.selectionIdByType.contentIds.length == 0) {
-            //   let nodeIdsArry = new Array(mthis.selectNetNodes[0].ids[0]);
-            //   let ar = nodeIdsArry.map(item=>{
-            //     return item.id
-            //   })
-            //     mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/',{nodeIds:ar}).then(response => {
-            //       mthis.evetdataFlag = true
-            //       mthis.$set(mthis.evetdata,0,response.body.data[0])
-            //   })
-            // }
           }, 200);
         } else {
           // mthis.$set(mthis.evetdata,0,null)
+          mthis.$set(mthis.evetdata,0,[])
           mthis.evetdata =  []
           mthis.evetdataFlag = false
         }

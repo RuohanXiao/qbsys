@@ -3,7 +3,7 @@
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_20_geo}">
-        <Tabs :value=$store.state.tabSelect>
+        <Tabs :value=$store.state.tabSelectGeo>
           
           <Tab-pane label="选中详情" name= 'mubiaoxiangqing'  :style="{fontSize: '18px',height:viewHeight_20_geo}" id='mubiaoxiangqing' @click="changTab('mubiaoxiangqing')">
             <div>
