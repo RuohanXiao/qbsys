@@ -382,7 +382,7 @@ export default {
                     var oldEvent = feature.get('Events');
                     var events = oldEvent.push(addEvent)
                     feature.set('Events',oldEvent,false);
-                    debugger
+                    // debugger
                     mthis.$delete(mthis.removeEventIdList,item);
                 })
                 //mthis.removeEventIdList = {};
@@ -399,7 +399,7 @@ export default {
                             'featureId':item.getId(),
                             'time':Iitem.time
                         };
-                        debugger
+                        // debugger
                         mthis.$set(mthis.allEventIdsToFeaturesIdsList,eventId,param)
                             /* mthis.allEventIdsToFeaturesIdsList[eventId] = {
                                 'featureId':item.getId(),
@@ -955,7 +955,7 @@ export default {
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
                 var geometry = feature.getGeometry();
-                debugger
+                // debugger
                 //mthis.geometrySelectedEventIds = [1,2]
                 mthis.selectEventPointsByGeometry_test(geometry);
                 if(mthis.geometrySelectedEventIds.length === 0){
@@ -1333,7 +1333,7 @@ export default {
             var selectedEventIds = mthis.getSelectedEventIds().ids;
             if(selectedEventIds.length > 0){
                 selectedEventIds.forEach(function(item){
-                    debugger
+                    // debugger
                     //mthis.deleteArrItem(mthis.allEventIds,item.id);
                     //mthis.removeEventIdList[item] = mthis.allEventIdsToFeaturesIdsList[item];
                     mthis.$set(mthis.removeEventIdList,item,mthis.allEventIdsToFeaturesIdsList[item]);
@@ -1786,7 +1786,7 @@ export default {
     watch:{
         geometrySelectedEventIds:function(){
             var mthis = this;
-            debugger
+            // debugger
             if(mthis.geometrySelectedEventIds.length !==0){
                 mthis.changeButtonParam=[
                     {
@@ -2151,7 +2151,7 @@ export default {
         /* removeEventIdList:{
             handler(newValue) {
                 var mthis = this;
-                debugger
+                // debugger
                 if($.isEmptyObject(newValue)){
                     mthis.changeButtonParam=[
                         {
@@ -2173,7 +2173,7 @@ export default {
         }, */
         allEventIdsToFeaturesIdsList:{
             handler(newValue) {
-    　　　　　　debugger
+    　　　　　　// debugger
                 var mthis = this;
                 if($.isEmptyObject(newValue)){
                     if($.isEmptyObject(mthis.removeEventIdList)){

@@ -1,6 +1,20 @@
 export default {
+  // 两数组交集
+  intersect (arr1, arr2) {
+    if(Object.prototype.toString.call(arr1) === "[object Array]" && Object.prototype.toString.call(arr2) === "[object Array]") {
+      return arr1.filter(function(v){ 
+       return arr2.indexOf(v)!==-1 
+      }) 
+    }
+  },
+  // 两数组并集
+  union (arr1, arr2) {
+    if(Object.prototype.toString.call(arr1) === "[object Array]" && Object.prototype.toString.call(arr2) === "[object Array]") {
+      return arr1.concat(arr2).unique()
+    }
+  },
   // 判断数组中是否包含某元素
-  ifInArr(param,arryParams){
+  ifInArr(param, arryParams) {
     return !(arryParams.indexOf(param) < 0)
   },
   // 数组去重
@@ -15,7 +29,7 @@ export default {
     }
     return res;
   },
-  
+
   // 两数组不同元素
   diff(arr1, arr2) {
     var newArr = [];
@@ -44,10 +58,10 @@ export default {
 
   // date yy-mm-dd 转 时间戳 (秒)
   getTimestamp(time) {
-    return Date.parse(new Date(time))/1000;
+    return Date.parse(new Date(time)) / 1000;
   },
-   // date yy-mm-dd 转 时间戳 (毫秒)
-   getTimestampMS(time) {
+  // date yy-mm-dd 转 时间戳 (毫秒)
+  getTimestampMS(time) {
     return Date.parse(new Date(time));
   },
 
@@ -78,5 +92,47 @@ export default {
 
     // return Y + M + D + space + h + m + s;
     return Y + M + D;
+  },
+  //树形递归遍历
+  traverseNode(node) {
+    console.log('----node-----')
+    console.log(node)
+  },
+  traverseTree(node) {
+    if (!node) {
+      return;
+    }
+    traverseNode(node);
+    if (node.children && node.children.length > 0) {
+      var i = 0;
+      for (i = 0; i < node.children.length; i++) {
+        this.traverseTree(node.children[i]);
+      }
+    }
+  },
+  //非递归遍历
+  traverseNode2(node) {
+    console.log('------')
+    console.log(node)
+    console.log('------')
+  },
+  traverseTree2(node) {
+    if (!node) {
+      return;
+    }
+
+    var stack = [];
+    stack.push(node);
+    var tmpNode;
+    while (stack.length > 0) {
+      tmpNode = stack.pop();
+      this.traverseNode2(tmpNode);
+      if (tmpNode.children && tmpNode.children.length > 0) {
+        var i = tmpNode.children.length - 1;
+        for (i = tmpNode.children.length - 1; i >= 0; i--) {
+          stack.push(tmpNode.children[i]);
+        }
+      }
+    }
   }
 }

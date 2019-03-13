@@ -139,7 +139,7 @@ export default {
     },
     watch:{
       changeButton:function(){
-        debugger
+        // debugger
         var mthis = this;
         mthis.changeButton.forEach(function(item){
           mthis.buttonParamArr.forEach(function(Iitem){

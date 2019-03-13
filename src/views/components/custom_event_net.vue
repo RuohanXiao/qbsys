@@ -1049,6 +1049,12 @@
           }).then(response => {
             this.detailData = response.body.data[0]
           })
+          this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+            "nodeIds": arr,
+            "TypeLabel":'entity'
+          }).then(response => {
+
+          })
         }
         if (this.myMap.get(type) === 'event') {
           this.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
@@ -1056,12 +1062,24 @@
           }).then(response => {
             this.detailData = response.body.data[0]
           })
+          this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+            "nodeIds": arr,
+            "TypeLabel":'event'
+          }).then(response => {
+
+          })
         }
         if (this.myMap.get(type) === 'document') {
           this.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
             "docIds": arr
           }).then(response => {
             this.detailData = response.body.data[0]
+          })
+          this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+            "nodeIds": arr,
+            "TypeLabel":'document'
+          }).then(response => {
+
           })
         }
         this.selectTag = id

@@ -192,16 +192,17 @@
               // let optionWordArr = []
               let optionList = {}
               let optionListArr = []
+              console.log(response.body)
               // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
-              for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+              for (let i = 0; i < response.body.data.nodes.length; i++) {
                 // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
                 optionListArr.push({
                   // "label": name,
-                  "label": response.body.data[0].nodes[i].name,
+                  "label": response.body.data.nodes[i].name,
                   "value": query,
-                  "id": response.body.data[0].nodes[i].id,
-                  "img": response.body.data[0].nodes[i].img,
-                  "type": response.body.data[0].nodes[i].type
+                  "id": response.body.data.nodes[i].id,
+                  "img": response.body.data.nodes[i].img,
+                  "type": response.body.data.nodes[i].type
                 })
               }
               optionList.title = '实体检索'
@@ -229,19 +230,19 @@
             let optionOrgArr = []
             let optionEvent = {}
             let optionEventArr = []
-            for (let i = 0; i < response.body.data[0].nodes.length; i++) {
-              if(response.body.data[0].nodes[i].type === 'human'){
+            for (let i = 0; i < response.body.data.nodes.length; i++) {
+              if(response.body.data.nodes[i].type === 'human'){
                   optionEventArr.push({
-                    "label": response.body.data[0].nodes[i].name+' 的事件',
-                    "value": response.body.data[0].nodes[i].id,
-                    "img": response.body.data[0].nodes[i].img,
+                    "label": response.body.data.nodes[i].name+' 的事件',
+                    "value": response.body.data.nodes[i].id,
+                    "img": response.body.data.nodes[i].img,
                     "type": 'human'
                   })
-                } else if(response.body.data[0].nodes[i].type === 'organization'){
+                } else if(response.body.data.nodes[i].type === 'organization'){
                   optionOrgArr.push({
-                    "label": response.body.data[0].nodes[i].name,
-                    "value": response.body.data[0].nodes[i].id,
-                    "img": response.body.data[0].nodes[i].img,
+                    "label": response.body.data.nodes[i].name,
+                    "value": response.body.data.nodes[i].id,
+                    "img": response.body.data.nodes[i].img,
                     "type": 'organization'
                   })
               }
@@ -302,8 +303,8 @@
 <style>
 .ivu-select-group-title{
     color: rgba(204,255,255,0.5) !important;
-    line-height:10px  !important;
-    height: 10px  !important;
+    line-height:20px  !important;
+    height: 20px  !important;
   }
   .process-img {
     color:rgba(51,255,255,0.5);
