@@ -19,7 +19,7 @@
     <div class="scrollBarAble" aria-autocomplete="true"  :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
       <Row type="flex" justify="center">
         <Col :sm="24" align="middle" v-for="item in items">
-          <workspace-item :item="item" @delId='delMethod' @click="importData(item.id)"></workspace-item>
+          <workspace-item :item="item" @delId='delMethod'></workspace-item>
           <!-- <p class="workspaceTitle">{{item.title}}</p> -->
           <!-- <Card style="width:80%">
               <div style="text-align:center">
@@ -52,7 +52,7 @@
         items:[{
           id: 'r1',
           title: '关系1',
-          img: 'http://5b0988e595225.cdn.sohucs.com/images/20180402/eba2c0e26e714cf08a160b682f1b1b5e.png'
+          img: '../../src/dist/assets/images/group1.png'
         },{
           id: 'r2',
           title: '关系2',
@@ -75,15 +75,6 @@
        workspaceItem
     },
      methods: {
-       importData(id){
-         this.$emit('workSpaceModal', true)
-       },
-       addToChart(id) {
-        var mthis = this
-        mock.get("/getWorkSpaceAddData").then(function(res) {
-          mthis.$store.commit('setWorkSpaceAddData', res.data.data[0])
-        })
-       },
        delMethod(id){
         //  触发删除工作集方法
         alert('触发删除工作集方法')

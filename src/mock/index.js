@@ -261,6 +261,18 @@ if (isMock) {
       }, 50)
     })
   })
+  mock.onGet('/getXianggaunshiti').reply(config => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve([200, {
+          code: 0,
+          data: [{}]
+        }])
+      }, 50)
+    })
+  })
+
+
   mock.onGet('/getWorkSpaceAddData').reply(config => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {

@@ -4,6 +4,9 @@
       <p class='titleFront'>{{item.title}}</p>
     </div>
     <div class="itemContentDiv">
+      <div class="buttonFront-add ">
+        <Icon class="icon iconfont icon-delete-point iconHover1 deg45" size="20" @click="importData(item.id)"></Icon>
+      </div>
       <div class="buttonFront-del ">
         <Icon class="icon iconfont icon-delete-point iconHover" size="20" @click="del(item.id)"></Icon>
       </div>
@@ -22,6 +25,8 @@
   </div>
 </template>
 <script>
+ import mock from '../../mock/index.js'
+ mock.test = 1
   export default {
     data() {
       return {
@@ -31,7 +36,17 @@
     methods: {
       del(id) {
         this.$emit('delId',id)
-      }
+      },
+      importData(id){
+         this.$emit('workSpaceModal', true)
+         this.addToChart(id)
+       },
+       addToChart(id) {
+        var mthis = this
+        mock.get("/getWorkSpaceAddData").then(function(res) {
+          mthis.$store.commit('setWorkSpaceAddData', res.data.data[0])
+        })
+       },
     },
     props: {
       item: Object
@@ -102,8 +117,18 @@
     /* color: #ccffff; */
     color: rgba(51, 255, 255, 0.8);
   }
+   .itemDiv:hover .buttonFront-add {
+    /* color: #ccffff; */
+    color: rgba(51, 255, 255, 0.8);
+  }
   .iconHover {
     opacity: 0;
+  }
+   .iconHover1 {
+    opacity: 0;
+  }
+  .deg45{
+    transform: rotate(45deg);
   }
   .itemDiv:hover {
     /* transform: translateX(10px);
@@ -114,6 +139,17 @@
     -moz-transition: all 1s;
     /* 　　-webkit-transition: all 1s;
   　　-o-transition: all 1s; */
+  }
+  .itemDiv:hover .iconHover1 {
+    transition: opacity 1s;
+    opacity: 1;
+  }
+  .buttonFront-add:hover .iconHover1 {
+    /* color: rgba(51, 255, 255, 0.4); */
+    color: #ccffff;
+    transform: rotate(135deg);
+    transition: all 1s;
+    /* transition: font-size 0.2s ease, transform 0.2s ease; */
   }
   .itemDiv:hover .iconHover {
     transition: opacity 1s;
@@ -130,6 +166,12 @@
     position: absolute;
     z-index: 99;
     right: 15px;
+    top: 15px;
+  }
+  .buttonFront-add {
+    position: absolute;
+    z-index: 99;
+    right: 45px;
     top: 15px;
   }
 </style>

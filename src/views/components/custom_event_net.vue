@@ -21,6 +21,8 @@
       </Row>
     </div>
     <div class='scrollBarAble' :style="{height:entDivH}">
+      <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'event'">
+      </div>
       <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'entity'">
         <!-- 实体属性 -->
         <div class="e-title">
@@ -784,7 +786,7 @@
             <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanDoc" v-if="(xiangguanDoc.length>0)">
               <p class="e-content-p">{{item.title}}</p>
             </div>
-            <div class="e-content-d" >
+            <div class="e-content-d">
               <p class="e-content-p">暂无相关文档</p>
             </div>
           </div>
@@ -794,16 +796,16 @@
           <p class="e-title-p">相关事件</p>
         </div>
       </div>
-     <div class="e-content" v-if="myMap.get(detailData.entity_type) === 'entity'">
-          <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-            <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanevent" v-if="(xiangguanevent.length>0)">
-              <p class="e-content-p">{{item.title}}</p>
-            </div>
-            <div class="e-content-d">
-              <p class="e-content-p">暂无相关事件</p>
-            </div>
+      <div class="e-content" v-if="myMap.get(detailData.entity_type) === 'entity'">
+        <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+          <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanevent" v-if="(xiangguanevent.length>0)">
+            <p class="e-content-p">{{item.title}}</p>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p">暂无相关事件</p>
           </div>
         </div>
+      </div>
       <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'event'">
         <!-- 实体属性 -->
         <div class="e-title">
@@ -947,30 +949,28 @@
         </div>
       </div>
       <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'document'">
-        aaasss
-        <!-- 实体属性 -->
         <div class="e-title">
           <div class="e-title-d"></div>
           <p class="e-title-p">文档属性</p>
         </div>
         <div class="e-content">
           <div class="e-content-d">
-            <p class="e-content-p w5em">通道</p>
-            <p class="e-content-p">{{detailData.channel}}</p>
+            <p class="e-content-p w5em">标题</p>
+            <p class="e-content-p">{{detailData.title}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d">
-            <p class="e-content-p w5em">类别</p>
-            <p class="e-content-p">{{detailData.topic}}</p>
+            <p class="e-content-p w5em">来源</p>
+            <p class="e-content-p">{{detailData.i_sn}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d">
-            <p class="e-content-p w5em">类型</p>
-            <p class="e-content-p">{{detailData.type}}</p>
+            <p class="e-content-p w5em">作者</p>
+            <p class="e-content-p">{{detailData.from}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
@@ -982,6 +982,28 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">通道</p>
+            <p class="e-content-p">{{detailData.channel}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="e-content-d">
+            <p class="e-content-p w5em">类型</p>
+            <p class="e-content-p">{{detailData.type}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <!--
+          <div class="e-content-d">
+            <p class="e-content-p w5em">文档内容</p>
+            <p class="e-content-p">{{detailData.text}}</p>
+            <div class="buttonD">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -1007,7 +1029,9 @@
   </div>
 </template>
 <script>
+  import mock from '../../mock/index.js'
   import configer from '../../util/configContrl.js'
+  mock.test = 1
   export default {
     data() {
       return {
@@ -1065,11 +1089,41 @@
               // console.log(response.body.data[0])
               mthis.detailData = response.body.data[0]
             })
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
-              "entityIds": a
+            // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
+            //   "entityIds": a
+            // }).then(response => {
+            //   console.log(response.body.data[0])
+            //   // mthis.xiangguanDoc = response.body.data[0].children.data
+            // })
+            this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+              "nodeIds": detailId,
+              "TypeLabel": 'entity'
             }).then(response => {
-              // console.log(response.body.data[0].children.data)
-              mthis.xiangguanDoc = response.body.data[0].children.data
+              console.log('=============related entity=============')
+              console.log(response)
+              if (response.body.code == 0) {
+                // let ids = response.body.data[0].nodes.map(item=>{
+                //   return item.id
+                // })
+                let objArr = new Array()
+                for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+                  let itemid = response.body.data[0].nodes[i].id
+                  let itemObj = response.body.data[0].links.filter(item => {
+                    return item.from == detailId && item.to == itemid
+                  })
+                  if (itemObj.length > 0) {
+                    objArr.push({
+                      relation: itemObj[0].type,
+                      id: detailId,
+                      relationTo: itemid
+                    })
+                  }
+                }
+                console.log('objArr')
+                console.log(objArr)
+              } else {
+                alert('相关实体查询接口异常')
+              }
             })
           } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
             let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
@@ -1082,9 +1136,39 @@
               "EventIds": a
             }).then(response => {
               mthis.detailData = response.body.data[0]
+              mthis.detailData.entity_type = 'event'
+            })
+            this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+              "nodeIds": detailId,
+              "TypeLabel": 'event'
+            }).then(response => {
+              console.log('=============related event=============')
+              console.log(response)
+              if (response.body.code == 0) {
+                // let ids = response.body.data[0].nodes.map(item=>{
+                //   return item.id
+                // })
+                let objArr = new Array()
+                for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+                  let itemid = response.body.data[0].nodes[i].id
+                  let itemObj = response.body.data[0].links.filter(item => {
+                    return item.from == detailId && item.to == itemid
+                  })
+                  if (itemObj.length > 0) {
+                    objArr.push({
+                      relation: itemObj[0].type,
+                      id: detailId,
+                      relationTo: itemid
+                    })
+                  }
+                }
+                console.log('objArr')
+                console.log(objArr)
+              } else {
+                alert('相关事件查询接口异常')
+              }
             })
           } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'document') {
-            alert('doc')
             let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
             mthis.selectTag = detailId
             let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
@@ -1094,7 +1178,40 @@
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
               "docIds": a
             }).then(response => {
+              console.log('response=====================')
               mthis.detailData = response.body.data[0]
+              mthis.detailData.entity_type = 'document'
+              console.log(mthis.detailData)
+            })
+            this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+              "nodeIds": detailId,
+              "TypeLabel": 'document'
+            }).then(response => {
+              console.log('=============related document=============')
+              console.log(response)
+              if (response.body.code == 0) {
+                // let ids = response.body.data[0].nodes.map(item=>{
+                //   return item.id
+                // })
+                let objArr = new Array()
+                for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+                  let itemid = response.body.data[0].nodes[i].id
+                  let itemObj = response.body.data[0].links.filter(item => {
+                    return item.from == detailId && item.to == itemid
+                  })
+                  if (itemObj.length > 0) {
+                    objArr.push({
+                      relation: itemObj[0].type,
+                      id: detailId,
+                      relationTo: itemid
+                    })
+                  }
+                }
+                console.log('objArr')
+                console.log(objArr)
+              } else {
+                alert('相关文档查询接口异常')
+              }
             })
           }
         }
@@ -1102,6 +1219,7 @@
     },
     methods: {
       changeDetailDiv(id, type) {
+        var mthis = this
         // alert(this.myMap.get(type))
         //    实体：entity-detail/
         //    事件：event-detail/
@@ -1114,20 +1232,77 @@
           }).then(response => {
             this.detailData = response.body.data[0]
           })
+          this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+            "nodeIds": arr,
+            "TypeLabel": 'entity'
+          }).then(response => {
+            console.log('=============related entity=============')
+            console.log(response)
+            if (response.body.code == 0) {
+              // let ids = response.body.data[0].nodes.map(item=>{
+              //   return item.id
+              // })
+              let objArr = new Array()
+              for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+                let itemid = response.body.data[0].nodes[i].id
+                let itemObj = response.body.data[0].links.filter(item => {
+                  return item.from == id && item.to == itemid
+                })
+                if (itemObj.length > 0) {
+                  objArr.push({
+                    relation: itemObj[0].type,
+                    id: id,
+                    relationTo: itemid
+                  })
+                }
+              }
+              console.log('objArr')
+              console.log(objArr)
+            } else {
+              alert('相关实体查询接口异常')
+            }
+          })
+          // mock.get("/getXiangguanshiti",{id:id}).then(function(res) {
+          //   //  获取相关实体
+          // });
         }
         if (this.myMap.get(type) === 'event') {
           this.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {
             this.detailData = response.body.data[0]
+            this.detailData.entity_type = 'event'
           })
+          this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+            "nodeIds": arr,
+            "TypeLabel": 'event'
+          }).then(response => {
+            console.log('=============related event=============')
+            console.log(response)
+          })
+          // mock.get("/getXiangguanshijian",{id:id}).then(function(res) {
+          //   //  获取相关实体
+          // });
         }
         if (this.myMap.get(type) === 'document') {
           this.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
             "docIds": arr
           }).then(response => {
-            this.detailData = response.body.data[0]
+            console.log('response=====================')
+            mthis.detailData = response.body.data[0]
+            mthis.detailData.entity_type = 'document'
+            console.log(mthis.detailData)
           })
+          this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+            "nodeIds": arr,
+            "TypeLabel": 'document'
+          }).then(response => {
+            console.log('=============related doc=============')
+            console.log(response)
+          })
+          // mock.get("/getXianguanwendang",{id:id}).then(function(res) {
+          //   //  获取相关实体
+          // });
         }
         this.selectTag = id
       }
@@ -1280,7 +1455,7 @@
   }
   .selectedTag {
     /* color:red !important;
-      background-color: blue !important; */
+          background-color: blue !important; */
     /* opacity: 0.5 !important; */
     background-color: rgba(51, 255, 255, 0.5) !important;
     ;

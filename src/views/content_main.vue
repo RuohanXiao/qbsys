@@ -550,7 +550,8 @@
     opacity: 0;
   }
   .scrollBarAble:hover {
-    overflow-y: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .scrollBarAble:hover::-webkit-scrollbar {
     opacity: 1;
