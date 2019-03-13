@@ -106,20 +106,20 @@
 
 <template>
 <div id='leftStatics'>
-    <div :id='staticsData.firstlevelId' v-for='(staticsData,index) in staticsDatas'>
-        <div :id="staticsData.firstlevelId + 'Name'">
+    <div :id='staticsData.firstLevelId' v-for='(staticsData,index) in staticsDatas'>
+        <div :id="staticsData.firstLevelId + 'Name'">
             <span class="separateLine"></span>
-            <span style="margin-left:10px;font-size: 14px;">{{staticsData.firstlevelName}}</span>
+            <span style="margin-left:10px;font-size: 14px;">{{staticsData.firstLevelName}}</span>
         </div>
         <Collapse simple v-model="openPanelNames" id="EntityAttrColl">
-            <panel v-for="(staticsPanel,index) in staticsData.subStaticsAttr" :name="staticsPanel.secondlevelId">
-                <span :id="staticsPanel.secondlevelId + '/countSpan'">{{staticsPanel.secondlevelName + '（' + staticsPanel.typecount + '）'}}</span>
-                <table slot="content" :id="staticsPanel.secondlevelId + '/entityattr'">
-                    <tr  :id="specificStatics.thirdlevelId + '/id'" v-if="index<=2" v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr"  @click="selectedIds(specificStatics.entitylist)">  
+            <panel v-for="(staticsPanel,index) in staticsData.subStatisticsAttr" :name="staticsPanel.secondLevelId">
+                <span :id="staticsPanel.secondLevelId + '/countSpan'">{{staticsPanel.secondLevelName + '（' + staticsPanel.typecount + '）'}}</span>
+                <table slot="content" :id="staticsPanel.secondLevelId + '/entityattr'">
+                    <tr  :id="specificStatics.thirdLevelId + '/id'" v-if="index<=2" v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr"  @click="selectedIds(specificStatics.idlist)">  
                         <td class="NameTd">
-                            <p>{{specificStatics.thirdlevelName}}</p>
+                            <p>{{specificStatics.thirdLevelName}}</p>
                         </td>
-                        <td :id="specificStatics.thirdlevelId + '/StaticsPer'" class="StaticsPerTd">
+                        <td :id="specificStatics.thirdLevelId + '/StaticsPer'" class="StaticsPerTd">
                             <percentBar  :num="specificStatics.per" :count="specificStatics.count" :index='0'></percentBar>
                         </td>
                     </tr> 
@@ -155,6 +155,7 @@ export default {
     watch:{
         staticsdatas:{
             handler:function(val){
+                debugger
                 var mthis = this;
                 mthis.openPanelNames = [];
                 if(!mthis.staticsDatas){
@@ -162,8 +163,8 @@ export default {
                 }
                 mthis.staticsdatas = mthis.staticsDatas;
                 mthis.staticsDatas.forEach(function(item){
-                    item.subStaticsAttr.forEach(function(Iitem){
-                        mthis.openPanelNames.push(Iitem.secondlevelId);
+                    item.subStatisticsAttr.forEach(function(Iitem){
+                        mthis.openPanelNames.push(Iitem.secondLevelId);
                     })
                 })
             },
