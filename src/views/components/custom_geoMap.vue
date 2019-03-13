@@ -493,7 +493,14 @@ export default {
             var mthis = this;
             if(mthis.routeMap == null){
                 mthis.routeMap = new map('locationRoute_Map')
-                var layer = new VectorLayer({
+                var HLArealayer = new VectorLayer({  //高亮地区图层
+                    source: new VectorSource({
+                    }),
+                    //style:mthis.noSelectedstyle,
+                    id:'HLArealayer'
+                });
+                mthis.routeMap.addlayer(HLArealayer);
+                var Eventslayer = new VectorLayer({  //事件图层
                     source: new VectorSource({
                         // features:Feature,
                         //url: '',
@@ -503,7 +510,7 @@ export default {
                     style:mthis.noSelectedstyle,
                     id:'eventsPointsLayer'
                 });
-                mthis.routeMap.addlayer(layer);
+                mthis.routeMap.addlayer(Eventslayer);
                 mthis.selectPointerMove = new Select({
                     condition: pointerMove
                 });
@@ -1292,7 +1299,6 @@ export default {
         //热力图
         click_heatMap(layer){
             var mthis = this
-            debugger
             mthis.maxEventsNum = 0;
             var heatSource = layer.getSource();
             var selectedIds = mthis.getSelectedEventIds().ids;
@@ -1341,7 +1347,7 @@ export default {
                 srsName : 'EPSG:4326',//坐标系统
                 featureNS : 'http://10.60.1.142:8082/worldBaseMap',//命名空间 URI
                 featurePrefix : 'worldBaseMap',//工作区名称
-                featureTypes : [ 'World_states_provinces' ],//查询图层，可以同一个工作区下多个图层，逗号隔开
+                featureTypes : [ 'world_states_provinces_postgis' ],//查询图层，可以同一个工作区下多个图层，逗号隔开
                 outputFormat : 'application/json',
                 filter : filter
             });
@@ -1352,8 +1358,21 @@ export default {
                 return response.json();
             }).then(function (data) {
                 //查询结果
+                debugger
                 var features = new GeoJSON().readFeatures(data);
-                mthis.setheatMap(features);
+                var map = mthis.routeMap.map;
+                var source = mthis.getLayerById('HLArealayer').getSource();
+                var extent = features[0].getGeometry().getExtent();
+                source.addFeatures(features)
+                /* map.getView().animate({
+                    center: getCenter(extent),
+                    duration: 1000
+                }); */
+                map.getView().fit(extent,{
+                    size:map.getSize(),
+                    duration: 1000
+                });
+                //mthis.routeMap.map.render();
             });
         },
 
@@ -1848,10 +1867,23 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult'
+      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult','HLlocationIds'
     ]),
     
     watch:{
+        HLlocationIds:function(){
+            var mthis = this;
+            var ids = mthis.$store.state.HLlocationIds;
+            var source = mthis.getLayerById('HLArealayer').getSource();
+            source.clear();
+            var feature;
+            for(let i = 0; i < ids.length; i++){
+                var filter = new EqualTo('objectid_1',ids[i]);
+                //var filter = new Or(seachCondition[0],seachCondition[1],seachCondition[2],seachCondition[3]);
+                mthis.getWfsData(filter);
+            }
+
+        },
         timeSelectedEventIds:function(){
             var mthis = this;
             if(mthis.timeSelectedEventIds.length !==0){

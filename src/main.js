@@ -260,6 +260,7 @@ var store = new Vuex.Store({
     geoHeight: 0,
     geoDivHeight: 0,
     geoData: null,
+    HLlocationIds:[],
     split:0.85,
     split_net:0.85,
     split_geo:0.85,
@@ -323,6 +324,9 @@ var store = new Vuex.Store({
       // 组件想调用方法，可以使用   this.$store.commit('XXX')
       // 第一个参数始终为state,第二个可以传参（只能支持一个参数，可以通过对象或者数组传多值）
       state.tmss = newStatus
+    },
+    setHLlocationIds(state,val){
+      state.HLlocationIds = val
     },
     // 从工作及导入到网络关系画布
     setWorkSpaceAddData(state,val){
