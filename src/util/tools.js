@@ -13,6 +13,11 @@ export default {
       return arr1.concat(arr2).unique()
     }
   },
+  // 两数组合并
+  hebing(resarr,hebingarr){
+    resarr = resarr.concat(hebingarr);
+    return resarr;
+  },
   // 判断数组中是否包含某元素
   ifInArr(param, arryParams) {
     return !(arryParams.indexOf(param) < 0)
