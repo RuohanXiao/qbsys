@@ -148,7 +148,6 @@ export default {
     watch:{
       changeButton:function(){
         var mthis = this;
-        debugger
         mthis.changeButton.forEach(function(item){
           mthis.buttonParamArr.forEach(function(Iitem){
             if(item.id_suf === Iitem.id.split('_')[1]){

@@ -233,7 +233,6 @@
       },
       selectNetNodes: function() {
         var mthis = this;
-        debugger
         if(mthis.selectNetNodes[0].ids.length < 2){
 
         }

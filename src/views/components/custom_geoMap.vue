@@ -395,7 +395,6 @@ export default {
                     var oldEvent = feature.get('Events');
                     var events = oldEvent.push(addEvent)
                     feature.set('Events',oldEvent,false);
-                    // debugger
                     mthis.$delete(mthis.removeEventIdList,item);
                 })
                 //mthis.removeEventIdList = {};
@@ -412,7 +411,6 @@ export default {
                             'featureId':item.getId(),
                             'time':Iitem.time
                         };
-                        // debugger
                         mthis.$set(mthis.allEventIdsToFeaturesIdsList,eventId,param)
                             /* mthis.allEventIdsToFeaturesIdsList[eventId] = {
                                 'featureId':item.getId(),
@@ -543,7 +541,6 @@ export default {
                 mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
                 // mthis.routeMap.map.addInteraction(mthis.selectClick);
                 mthis.selectPointerMove.on('select', function(e) {
-                    debugger
                     var features = e.selected;
                     if(features.length > 0){
                         for(let i = 0; i < features.length; i++){
@@ -574,7 +571,6 @@ export default {
                     }
                 });
                /*  mthis.selectClick.on('select', function(e) {
-                    debugger
                     var features = e.selected;
                     for(let i = 0; i < features.length; i++){
                         if(features[i].getId().split('_')[0] === 'event_Feature'){
@@ -814,7 +810,6 @@ export default {
                 if(item == id){
                     classname = 'button-div-click';
                 } else {
-                    debugger
                     var arr = mthis.changeButtonParam;
                     var isOpen = true;
                     for(let i = 0; i < arr.length - 1; i++){
@@ -1047,7 +1042,6 @@ export default {
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
                 var geometry = feature.getGeometry();
-                // debugger
                 //mthis.geometrySelectedEventIds = [1,2]
                 mthis.selectEventPointsByGeometry_test(geometry);
                 if(mthis.geometrySelectedEventIds.length === 0){
@@ -1305,7 +1299,6 @@ export default {
 
 //鼠标移动事件
         mapPointerMove() {
-            debugger
             var mthis = this;
             var map = mthis.routeMap.map;
             var routeSusOverlay = document.createElement('div');
@@ -1471,7 +1464,6 @@ export default {
             var selectedEventIds = mthis.getSelectedEventIds().ids;
             if(selectedEventIds.length > 0){
                 selectedEventIds.forEach(function(item){
-                    // debugger
                     //mthis.deleteArrItem(mthis.allEventIds,item.id);
                     //mthis.removeEventIdList[item] = mthis.allEventIdsToFeaturesIdsList[item];
                     mthis.$set(mthis.removeEventIdList,item,mthis.allEventIdsToFeaturesIdsList[item]);
