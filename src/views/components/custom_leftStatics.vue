@@ -155,7 +155,6 @@ export default {
     watch:{
         staticsdatas:{
             handler:function(val){
-                debugger
                 var mthis = this;
                 mthis.openPanelNames = [];
                 if(!mthis.staticsDatas){
@@ -163,7 +162,7 @@ export default {
                 }
                 mthis.staticsdatas = mthis.staticsDatas;
                 mthis.staticsDatas.forEach(function(item){
-                    item.subStatisticsAttr.forEach(function(Iitem){
+                    item.subStaticsAttr.forEach(function(Iitem){
                         mthis.openPanelNames.push(Iitem.secondLevelId);
                     })
                 })
