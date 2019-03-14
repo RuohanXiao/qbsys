@@ -90,7 +90,7 @@
         eventheight: 0,
         eventItemHeight: 0,
         closable: true,
-        staticsDatas:netStaticsAttr.data,
+        staticsDatas:[],
         /* firstClassify: [{
             id: 'ObjectsType',
             disName: '对象类型'
@@ -233,43 +233,19 @@
       },
       selectNetNodes: function() {
         var mthis = this;
-        if(mthis.selectNetNodes[0].ids.length < 2){
-
-        }
-        // var mthis = this;
-        // if (mthis.selectNetNodes[0].ids.length > 0) {
-        //   // 新增防抖功能
-        //   this.timer = setTimeout(function() {
-        //     if (mthis.selectNetNodes[0].ids.length > 1) {
-        //       let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
-        //         return item.id;
-        //       });
-        //       let ob = {}
-        //       ob.nodeIds = nodeIdsArry
-
-        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', ob).then(response => {
-        //         mthis.evetdataFlag = true
-        //         mthis.evetdata = response.body.data[0].nodes
-        //       })
-        //     } else {
-        //       let nodeIdsArry = new Array(mthis.selectNetNodes[0].ids[0]);
-        //       let ar = nodeIdsArry.map(item=>{
-        //         return item.id
-        //       })
-        //       // setTimeout(function() {
-        //         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/',{nodeIds:ar}).then(response => {
-        //           // mthis.evetdata =  new Array(response.body.data[0])
-        //           mthis.evetdataFlag = true
-        //           mthis.$set(mthis.evetdata,0,response.body.data[0])
-        //       })
-        //       // }, 50);
-        //     }
-        //   }, 200);
-        // } else {
-        //   // mthis.$set(mthis.evetdata,0,null)
-        //   mthis.evetdata =  []
-        //   mthis.evetdataFlag = false
-        // }
+        if(mthis.selectNetNodes[0].ids.length > 1){
+          mthis.$http.post('http://10.60.1.141:5001/graph-attr/', {
+          'nodeIds': mthis.selectNetNodes[0].ids
+          }).then(response => {
+              mthis.staticsDatas = response.body.data;
+          //mthis.$data.staticsDatas.splice(0,0,response.body.data);
+          /* response.body.data.forEach(function(item,index){
+          mthis.$set(mthis.staticsDatas,index,item)
+          }) */
+            })
+          } else {
+            mthis.staticsDatas = [];
+          }
       }
     },
     methods: {

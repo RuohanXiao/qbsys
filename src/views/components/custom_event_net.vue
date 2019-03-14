@@ -798,7 +798,8 @@
       </div>
       <div class="e-content" v-if="myMap.get(detailData.entity_type) === 'entity'">
         <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanevent" v-if="(xiangguanevent.length>0)">
+          <!-- <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanevent" v-if="(xiangguanevent.length>0)"> -->
+          <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanEvent" v-if="(xiangguanEvent.length>0)">
             <p class="e-content-p">{{item.title}}</p>
           </div>
           <div class="e-content-d">
