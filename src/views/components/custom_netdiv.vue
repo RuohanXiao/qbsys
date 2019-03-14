@@ -624,41 +624,49 @@
       expandNodeContent() {
         var mthis = this;
         let arr = []
+        let rearr = []
         // console.log('mthis.selectionId')
         // console.log(mthis.selectionId)
         if (mthis.selectionId.length > 0) {
           mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
           let res = null
-          for (let i = 0; i < mthis.selectionId.length; i++) {
-            arr.push(mthis.selectionId[i].id)
+          if(mthis.selectionId.length>1 || mthis.selectionId[0].id == undefined){
+            rearr = mthis.selectionId
+          } else {
+            rearr = arr.push(mthis.selectionId[0].id)
           }
           mthis.spinShow = true
           mthis.zIndex = 999
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
-            'entityIds': arr
+            'entityIds': rearr
           }).then(response => {
             if (response.body.code == 0 && response.body.data.length > 0) {
-              console.log('response.body.data[0]')
-              console.log(response.body.data[0])
               res = response.body.data[0].children.data
               let resNodes = new Object()
               resNodes.nodes = []
+              resNodes.links = []
               for (let m = 0; m < res.length; m++) {
                 let resNodeItem = new Object()
                 resNodeItem.id = res[m].id
-                resNodeItem.entity_type = 'documnet'
+                resNodeItem.entity_type = 'content'
                 resNodeItem.loaded = true
-                resNodeItem.img = 'xx'
+                resNodeItem.img = ''
                 resNodeItem.name = res[m].title
                 resNodeItem.namimageCroppinge = true
                 resNodes.nodes.push(resNodeItem)
+                resNodes.links.push({
+                  id:'content'+m+rearr,
+                  from:rearr,
+                  to:res[m].id,
+                  type: '关联',
+                  relation_id: 'guanlian'
+                })
                 // res.nodes[m].type = res.nodes[m].entity_type
                 // res.nodes[m].imageCropping = true
                 arr.push(res[m].id)
               }
-              mthis.spinShow = false
               mthis.zIndex = 0
-              console.log(resNodes)
+              mthis.spinShow = false
               mthis.netchart.addData(resNodes)
               setTimeout(function() {
                 let ar = util.unique(arr)
@@ -670,6 +678,7 @@
               mthis.getStatistics()
             } else {
               alert('无匹配数据')
+               mthis.zIndex = 0
               mthis.spinShow = false
             }
           })
@@ -1740,6 +1749,39 @@
                   let selectNIds = selectN.nodes.map(ite => {
                     return ite.id
                   })
+                  console.log('-----------------------chart------------------------')
+                  console.log(selectNIds)
+                  // 所有有关节点的link
+                  // console.log(mthis.netchart._impl.data.default.nodeToLinks)
+                  // let alllinks = mthis.netchart._impl.data.default.nodeToLinks
+                  // var linkarr = []
+                  // for (let i in alllinks) {
+                  // // linkarr.push(alllinks[i]); //属性
+                  //   linkarr.push(alllinks[i]); //值
+                  // }
+                  // 遍历所有边
+                  // console.log(linkarr)
+                  let linksArr = []
+                  for(let n = 0;n<selectNIds.length;n++){
+                    mthis.netchart.getNode(selectNIds[n])
+                    console.log(mthis.netchart.getNode(selectNIds[n]))
+                    linksArr.push(mthis.netchart.getNode(selectNIds[n]).links.map(item=>{
+                      if((selectNIds.indexOf(item.from.id) > -1)&&(selectNIds.indexOf(item.to.id) > -1)){
+                        return item.id
+                      }
+                      else {
+                        return ''
+                      }
+                    }))
+                  }
+                  let c = []
+                  for(let nn =0;nn<linksArr.length;nn++){
+                    c = c.concat(linksArr[nn])
+                  }
+                  let uniquec = util.unique(c)
+                  console.log('========uniquec=========')
+                  console.log(uniquec)
+                  mthis.netchart.selection(uniquec.concat(selectNIds))
                   // 有选中节点或者link
                   mthis.selectionId = selectNIds;
                   mthis.selectionIdByType = {
@@ -1930,6 +1972,8 @@
         // this.netchart.addData()
       },
       contentToNetData: function() {
+        console.log('this.contentToNetData')
+        console.log(this.contentToNetData)
         this.spinShow = true
         let mthis = this
         let contentIdsArry = this.contentToNetData.nodes.map(item => {
