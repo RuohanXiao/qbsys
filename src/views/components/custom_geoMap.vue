@@ -237,14 +237,6 @@ export default {
                 })
             })
         }),
-        /* selectedstyle: new Style({
-            image : new CircleStyle({
-                radius : 3,
-                fill : new Fill({
-                    color : '#ff9900'
-                })
-            })
-        }), */
         graystyle:new Style({
             image : new CircleStyle({
                 radius : 3,
@@ -766,6 +758,7 @@ export default {
         heatMap_cilck(){
             var mthis = this
             var heatMapLayer;
+            debugger;
             mthis.clickButtonOpenDiv('heatMap_HSD')
             if(mthis.heatMap == null){
                 mthis.heatMap = new map('HeatMap_Map')
@@ -829,7 +822,7 @@ export default {
             })
             var locationRoute_Map = document.getElementById('locationRoute_Map')
             var HeatMap_Map = document.getElementById('HeatMap_Map')
-            if(id == 'heatMap_button'){
+            if(id == 'heatMap_HSD'){
                 locationRoute_Map.style.display = 'none'
                 HeatMap_Map.style.display = 'block'
             } else {

@@ -233,8 +233,9 @@
       },
       selectNetNodes: function() {
         var mthis = this;
+        debugger
         if(mthis.selectNetNodes[0].ids.length > 1){
-          mthis.$http.post('http://10.60.1.141:5001/graph-attr/', {
+          mthis.$http.post('http://10.60.1.140:5001/graph-attr/', {
           'nodeIds': mthis.selectNetNodes[0].ids
           }).then(response => {
               mthis.staticsDatas = response.body.data;
@@ -502,6 +503,9 @@
   }
   #toushi .ivu-collapse-content-box p {
     font-size: 12px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .ivu-collapse-item-active>.ivu-collapse-content {
     background-color: rgba(0, 0, 0, 0) !important;
