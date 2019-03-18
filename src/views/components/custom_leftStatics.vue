@@ -194,6 +194,9 @@ export default {
             var mthis = this;
             debugger
             //trClick
+            if(el.style.backgroundColor ==='rgba(51,255,255,0.2)'){
+                return;
+            }
             var oldtrClick = document.getElementsByClassName('trClick');
             if(oldtrClick.length !== 0){
                 for(let i = 0; i < oldtrClick.length; i++){
@@ -203,7 +206,8 @@ export default {
             }
             el.className='trClick';
             el.style.backgroundColor='rgba(51,255,255,0.2)';
-            mthis.$store.commit('setNetStaticsSelectedIds',ids);
+            //mthis.$store.commit('setNetStaticsSelectedIds',ids);
+            mthis.$emit('staticsClick', ids)
         },
         isNodeTypehasInnodeTypedata(id){
             var mthis = this;
