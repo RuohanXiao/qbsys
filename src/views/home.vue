@@ -92,6 +92,7 @@
     },
     mounted() {
       var ob = configer.loadxmlDoc("../src/util/configer.xml");
+      // var ob = configer.loadxmlDoc("http://10.60.1.140/assets/configer.xml");
       var imgItem = ob.getElementsByTagName("imgItem");
       let arr = []
       var myMap = new Map();

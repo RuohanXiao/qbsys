@@ -1,20 +1,32 @@
 export default {
+  //验证图片资源是否存在（404）
+  checkImgExists(imgurl) {
+    var ImgObj = new Image(); //判断图片是否存在  
+    ImgObj.src = imgurl;
+    //没有图片，则返回-1  
+    if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
   // 两数组交集
-  intersect (arr1, arr2) {
-    if(Object.prototype.toString.call(arr1) === "[object Array]" && Object.prototype.toString.call(arr2) === "[object Array]") {
-      return arr1.filter(function(v){ 
-       return arr2.indexOf(v)!==-1 
-      }) 
+  intersect(arr1, arr2) {
+    if (Object.prototype.toString.call(arr1) === "[object Array]" && Object.prototype.toString.call(arr2) === "[object Array]") {
+      return arr1.filter(function (v) {
+        return arr2.indexOf(v) !== -1
+      })
     }
   },
   // 两数组并集
-  union (arr1, arr2) {
-    if(Object.prototype.toString.call(arr1) === "[object Array]" && Object.prototype.toString.call(arr2) === "[object Array]") {
+  union(arr1, arr2) {
+    if (Object.prototype.toString.call(arr1) === "[object Array]" && Object.prototype.toString.call(arr2) === "[object Array]") {
       return arr1.concat(arr2).unique()
     }
   },
   // 两数组合并
-  hebing(resarr,hebingarr){
+  hebing(resarr, hebingarr) {
     resarr = resarr.concat(hebingarr);
     return resarr;
   },

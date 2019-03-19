@@ -2,7 +2,8 @@ import $ from "jquery";
 $(function () {
 
     var left = $('.left');
-    var right = $('.right');
+    // var right = $('.right');
+    var right1 = $('.right1');
     var down = $('.down');
     var up = $('.up');
     var bg = $('.bgDiv');
@@ -12,7 +13,8 @@ $(function () {
     var upNav = $('.upNav');
 
     showNav(left, leftNav, "left");
-    showNav(right, rightNav, "right");
+    // showNav(right, rightNav, "right");
+    showNav(right1, rightNav, "right");
     showNav(up, upNav, "up");
     showNav(down, downNav, "down");
 

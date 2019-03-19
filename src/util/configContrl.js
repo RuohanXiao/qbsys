@@ -21,6 +21,7 @@ export default {
       //针对Chrome,不过只能通过http访问,通过file协议访问会报错
       var xmlhttp = new window.XMLHttpRequest();
       xmlhttp.open("GET", file, false);
+      // xmlhttp.setRequestHeader( 'Access-Control-Allow-Origin', '*');
       xmlhttp.send(null);
       xmlDoc = xmlhttp.responseXML.documentElement;
     }

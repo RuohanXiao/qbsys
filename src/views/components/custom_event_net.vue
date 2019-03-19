@@ -4,8 +4,8 @@
       <Row type="flex" justify="center">
         <!-- 头像 + 名字 div -->
         <Col span="8" align="center" :style="{display:'flex',flexFlow:'row nowarp',justifyContent:'center'}">
-        <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="!(detailData && detailData.img)" />
-        <Avatar class="circle-img" v-else :src="detailData.img" :style="{width:'50px',height:'50px'}" />
+        <!-- <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="!(detailData && detailData.img)" /> -->
+        <Avatar class="circle-img" :src="detailData.img" :style="{width:'50px',height:'50px'}" @error="errorImg()" />
         </Col>
         <Col span="16" align="left">
         <div :style="{margin:'0 10px'}" class="event-title">
@@ -798,7 +798,7 @@
       </div>
       <div class="e-content" v-if="myMap.get(detailData.entity_type) === 'entity'">
         <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanevent" v-if="(xiangguanevent.length>0)">
+          <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanEvent" v-if="(xiangguanEvent.length>0)">
             <p class="e-content-p">{{item.title}}</p>
           </div>
           <div class="e-content-d">
@@ -997,13 +997,13 @@
             </div>
           </div>
           <!--
-          <div class="e-content-d">
-            <p class="e-content-p w5em">文档内容</p>
-            <p class="e-content-p">{{detailData.text}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
-            </div>
-          </div>-->
+            <div class="e-content-d">
+              <p class="e-content-p w5em">文档内容</p>
+              <p class="e-content-p">{{detailData.text}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+              </div>
+            </div>-->
         </div>
       </div>
     </div>
@@ -1031,6 +1031,7 @@
 <script>
   import mock from '../../mock/index.js'
   import configer from '../../util/configContrl.js'
+  import util from '../../util/tools.js'
   mock.test = 1
   export default {
     data() {
@@ -1044,7 +1045,8 @@
         entityT: '',
         myMap: new Map(),
         xiangguanDoc: [],
-        xiangguanEvent: []
+        xiangguanEvent: [],
+        timer:null
       }
     },
     props: ['evetdata'],
@@ -1059,165 +1061,170 @@
       evetdata: function() {
         var mthis = this
         var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
+        // var ob = configer.loadxmlDoc("http://10.60.1.140/assets/entityTypeTable.xml");
         var entityMainType = ob.getElementsByTagName("entityMainType");
-        let arr = []
-        mthis.myMap = new Map();
-        for (var i = 0; i < entityMainType.length; i++) {
-          let typeName = entityMainType[i].children[0].textContent;
-          let typeChild = []
-          for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
-            // typeChild.push(entityMainType[i].children[1].children[n].textContent)
-            mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
-          }
+        if (this.timer) {
+          clearTimeout(this.timer)
         }
-        // console.log('mthis.evetdata[0].entity_type')
-        // console.log(mthis.evetdata[0].entity_type)
-        // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
-        if (mthis.evetdata[0] !== undefined) {
-          if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
-            // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
-            // let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
-            let detailId = (mthis.evetdata[0].id)
-            mthis.selectTag = detailId
-            // let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
-            let a = []
-            a.push(detailId)
-            mthis.detailData = {}
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
-              "nodeIds": a
-            }).then(response => {
-              // console.log(response.body.data[0])
-              mthis.detailData = response.body.data[0]
-            })
-            // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
-            //   "entityIds": a
-            // }).then(response => {
-            //   console.log(response.body.data[0])
-            //   // mthis.xiangguanDoc = response.body.data[0].children.data
-            // })
-            this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
-              "nodeIds": detailId,
-              "TypeLabel": 'entity'
-            }).then(response => {
-              console.log('=============related entity=============')
-              console.log(response)
-              if (response.body.code == 0) {
-                // let ids = response.body.data[0].nodes.map(item=>{
-                //   return item.id
-                // })
-                let objArr = new Array()
-                for (let i = 0; i < response.body.data[0].nodes.length; i++) {
-                  let itemid = response.body.data[0].nodes[i].id
-                  let itemObj = response.body.data[0].links.filter(item => {
-                    return item.from == detailId && item.to == itemid
-                  })
-                  if (itemObj.length > 0) {
-                    objArr.push({
-                      relation: itemObj[0].type,
-                      id: detailId,
-                      relationTo: itemid
-                    })
-                  }
-                }
-                console.log('objArr')
-                console.log(objArr)
-              } else {
-                alert('相关实体查询接口异常')
-              }
-            })
-          } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
-            let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
-            mthis.selectTag = detailId
-            let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
-            let a = []
-            a.push(detailId)
-            mthis.detailData = {}
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
-              "EventIds": a
-            }).then(response => {
-              mthis.detailData = response.body.data[0]
-              mthis.detailData.entity_type = 'event'
-            })
-            this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
-              "nodeIds": detailId,
-              "TypeLabel": 'event'
-            }).then(response => {
-              console.log('=============related event=============')
-              console.log(response)
-              if (response.body.code == 0) {
-                // let ids = response.body.data[0].nodes.map(item=>{
-                //   return item.id
-                // })
-                let objArr = new Array()
-                for (let i = 0; i < response.body.data[0].nodes.length; i++) {
-                  let itemid = response.body.data[0].nodes[i].id
-                  let itemObj = response.body.data[0].links.filter(item => {
-                    return item.from == detailId && item.to == itemid
-                  })
-                  if (itemObj.length > 0) {
-                    objArr.push({
-                      relation: itemObj[0].type,
-                      id: detailId,
-                      relationTo: itemid
-                    })
-                  }
-                }
-                console.log('objArr')
-                console.log(objArr)
-              } else {
-                alert('相关事件查询接口异常')
-              }
-            })
-          } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'document') {
-            let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
-            mthis.selectTag = detailId
-            let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
-            let a = []
-            a.push(detailId)
-            mthis.detailData = {}
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
-              "docIds": a
-            }).then(response => {
-              console.log('response=====================')
-              mthis.detailData = response.body.data[0]
-              mthis.detailData.entity_type = 'document'
-              console.log(mthis.detailData)
-            })
-            this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
-              "nodeIds": detailId,
-              "TypeLabel": 'document'
-            }).then(response => {
-              console.log('=============related document=============')
-              console.log(response)
-              if (response.body.code == 0) {
-                // let ids = response.body.data[0].nodes.map(item=>{
-                //   return item.id
-                // })
-                let objArr = new Array()
-                for (let i = 0; i < response.body.data[0].nodes.length; i++) {
-                  let itemid = response.body.data[0].nodes[i].id
-                  let itemObj = response.body.data[0].links.filter(item => {
-                    return item.from == detailId && item.to == itemid
-                  })
-                  if (itemObj.length > 0) {
-                    objArr.push({
-                      relation: itemObj[0].type,
-                      id: detailId,
-                      relationTo: itemid
-                    })
-                  }
-                }
-                console.log('objArr')
-                console.log(objArr)
-              } else {
-                alert('相关文档查询接口异常')
-              }
-            })
+        this.timer = setTimeout(function() {
+          let arr = []
+          mthis.myMap = new Map();
+          for (var i = 0; i < entityMainType.length; i++) {
+            let typeName = entityMainType[i].children[0].textContent;
+            let typeChild = []
+            for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
+              // typeChild.push(entityMainType[i].children[1].children[n].textContent)
+              mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
+            }
           }
-        }
+          // console.log('mthis.evetdata[0].entity_type')
+          // console.log(mthis.evetdata[0].entity_type)
+          // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
+          if (mthis.evetdata[0] !== undefined) {
+            if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
+              // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
+              // let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
+              let detailId = (mthis.evetdata[0].id)
+              mthis.selectTag = detailId
+              // let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
+              let a = []
+              a.push(detailId)
+              mthis.detailData = {}
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
+                "nodeIds": a
+              }).then(response => {
+                // console.log(response.body.data[0])
+                mthis.detailData = response.body.data[0]
+              })
+              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
+              //   "entityIds": a
+              // }).then(response => {
+              //   console.log(response.body.data[0])
+              //   // mthis.xiangguanDoc = response.body.data[0].children.data
+              // })
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
+                "nodeIds": a,
+                "TypeLabel": 'entity'
+              }).then(response => {
+                console.log('=============related entity=============')
+                console.log(response)
+                if (response.body.code == 0) {
+                  // let ids = response.body.data[0].nodes.map(item=>{
+                  //   return item.id
+                  // })
+                  let objArr = new Array()
+                  for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+                    let itemid = response.body.data[0].nodes[i].id
+                    let itemObj = response.body.data[0].links.filter(item => {
+                      return item.from == detailId && item.to == itemid
+                    })
+                    if (itemObj.length > 0) {
+                      objArr.push({
+                        relation: itemObj[0].type,
+                        id: detailId,
+                        relationTo: itemid
+                      })
+                    }
+                  }
+                } else {
+                  alert('相关实体查询接口异常')
+                }
+              })
+            } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
+              let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
+              mthis.selectTag = detailId
+              let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
+              let a = []
+              a.push(detailId)
+              mthis.detailData = {}
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
+                "EventIds": a
+              }).then(response => {
+                mthis.detailData = response.body.data[0]
+                mthis.detailData.entity_type = 'event'
+              })
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
+                "nodeIds": a,
+                "TypeLabel": 'event'
+              }).then(response => {
+                console.log('=============related event=============')
+                console.log(response)
+                if (response.body.code == 0) {
+                  // let ids = response.body.data[0].nodes.map(item=>{
+                  //   return item.id
+                  // })
+                  let objArr = new Array()
+                  for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+                    let itemid = response.body.data[0].nodes[i].id
+                    let itemObj = response.body.data[0].links.filter(item => {
+                      return item.from == detailId && item.to == itemid
+                    })
+                    if (itemObj.length > 0) {
+                      objArr.push({
+                        relation: itemObj[0].type,
+                        id: detailId,
+                        relationTo: itemid
+                      })
+                    }
+                  }
+                } else {
+                  alert('相关事件查询接口异常')
+                }
+              })
+            } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'document') {
+              let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
+              mthis.selectTag = detailId
+              let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
+              let a = []
+              a.push(detailId)
+              mthis.detailData = {}
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+                "docIds": a
+              }).then(response => {
+                console.log('response=====================')
+                mthis.detailData = response.body.data[0]
+                mthis.detailData.entity_type = 'document'
+                console.log(mthis.detailData)
+              })
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
+                "nodeIds": a,
+                "TypeLabel": 'document'
+              }).then(response => {
+                console.log('=============related document=============')
+                console.log(response)
+                if (response.body.code == 0) {
+                  // let ids = response.body.data[0].nodes.map(item=>{
+                  //   return item.id
+                  // })
+                  let objArr = new Array()
+                  for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+                    let itemid = response.body.data[0].nodes[i].id
+                    let itemObj = response.body.data[0].links.filter(item => {
+                      return item.from == detailId && item.to == itemid
+                    })
+                    if (itemObj.length > 0) {
+                      objArr.push({
+                        relation: itemObj[0].type,
+                        id: detailId,
+                        relationTo: itemid
+                      })
+                    }
+                  }
+                  console.log('objArr')
+                  console.log(objArr)
+                } else {
+                  alert('相关文档查询接口异常')
+                }
+              })
+            }
+          }
+        }, 200);
       }
     },
     methods: {
+      errorImg(){
+        this.detailData.img = 'http://10.60.1.140/assets/images/image.png'
+      },
       changeDetailDiv(id, type) {
         var mthis = this
         // alert(this.myMap.get(type))
@@ -1227,12 +1234,14 @@
         let arr = []
         arr.push(id)
         if (this.myMap.get(type) === 'entity') {
-          this.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
+          mthis.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
             "nodeIds": arr
           }).then(response => {
-            this.detailData = response.body.data[0]
+            let res = response.body.data[0]
+            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/image.png'
+            this.detailData = res
           })
-          this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
             "nodeIds": arr,
             "TypeLabel": 'entity'
           }).then(response => {
@@ -1256,8 +1265,6 @@
                   })
                 }
               }
-              console.log('objArr')
-              console.log(objArr)
             } else {
               alert('相关实体查询接口异常')
             }
@@ -1267,13 +1274,16 @@
           // });
         }
         if (this.myMap.get(type) === 'event') {
-          this.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
+          mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {
-            this.detailData = response.body.data[0]
+            // this.detailData = response.body.data[0]
+            let res = response.body.data[0]
+            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/image.png'
+            this.detailData = res
             this.detailData.entity_type = 'event'
           })
-          this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
             "nodeIds": arr,
             "TypeLabel": 'event'
           }).then(response => {
@@ -1285,15 +1295,15 @@
           // });
         }
         if (this.myMap.get(type) === 'document') {
-          this.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
+          mthis.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
             "docIds": arr
           }).then(response => {
-            console.log('response=====================')
-            mthis.detailData = response.body.data[0]
+             let res = response.body.data[0]
+            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/image.png'
+            this.detailData = res
             mthis.detailData.entity_type = 'document'
-            console.log(mthis.detailData)
           })
-          this.$http.post(this.$store.state.ipConfig.api_url + '/related/', {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
             "nodeIds": arr,
             "TypeLabel": 'document'
           }).then(response => {
@@ -1455,7 +1465,7 @@
   }
   .selectedTag {
     /* color:red !important;
-          background-color: blue !important; */
+            background-color: blue !important; */
     /* opacity: 0.5 !important; */
     background-color: rgba(51, 255, 255, 0.5) !important;
     ;
