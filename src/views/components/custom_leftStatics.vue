@@ -174,7 +174,7 @@ export default {
                 }
                 mthis.staticsdatas = mthis.staticsDatas;
                 mthis.staticsDatas.forEach(function(item){
-                    item.subStaticsAttr.forEach(function(Iitem){
+                    item.subStatisticsAttr.forEach(function(Iitem){
                         mthis.openPanelNames.push(Iitem.secondLevelId);
                     })
                 })
