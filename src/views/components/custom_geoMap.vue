@@ -758,7 +758,6 @@ export default {
         heatMap_cilck(){
             var mthis = this
             var heatMapLayer;
-            debugger;
             mthis.clickButtonOpenDiv('heatMap_HSD')
             if(mthis.heatMap == null){
                 mthis.heatMap = new map('HeatMap_Map')
@@ -1377,14 +1376,24 @@ export default {
             var weight = feature.get('selectedEventsNum') / mthis.maxEventsNum;
             return weight
         },
-        getWfsData(filter) {
-            var mthis = this
+        getWfsData(type,id) {
+            var mthis = this;
+            var featureTypes;
+            var filter;
+            if(type === 'province'){
+                featureTypes = "world_states_provinces_postgis"
+                filter = new EqualTo('objectid',id);
+            } else {
+                featureTypes = "world_states_countries_postgis"
+                filter = new EqualTo('id',id);
+            }
+            
             //获取wms生成的资源url， fdLayer.getSource().getGetFeatureInfoUrl
             var featureRequest = new WFS().writeGetFeature({
                 srsName : 'EPSG:4326',//坐标系统
                 featureNS : 'http://10.60.1.142:8082/worldBaseMap',//命名空间 URI
                 featurePrefix : 'worldBaseMap',//工作区名称
-                featureTypes : [ 'world_states_provinces_postgis' ],//查询图层，可以同一个工作区下多个图层，逗号隔开
+                featureTypes : [ featureTypes ],//查询图层，可以同一个工作区下多个图层，逗号隔开
                 outputFormat : 'application/json',
                 filter : filter
             });
@@ -1914,9 +1923,9 @@ export default {
             source.clear();
             var feature;
             for(let i = 0; i < ids.length; i++){
-                var filter = new EqualTo('objectid_1',ids[i]);
-                //var filter = new Or(seachCondition[0],seachCondition[1],seachCondition[2],seachCondition[3]);
-                mthis.getWfsData(filter);
+                var type = ids[i].split('_')[1];
+                var id = ids[i].split('_')[0];
+                mthis.getWfsData(type,id);
             }
 
         },

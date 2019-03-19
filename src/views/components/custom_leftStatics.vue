@@ -184,7 +184,6 @@ export default {
     },
     methods:{
         /* trHover(el,index){
-            debugger
             var mthis = this;
             if(index % 2 === 0){
                 el.className = 
@@ -192,7 +191,6 @@ export default {
         }, */
         selectedIds(el,ids){
             var mthis = this;
-            debugger
             //trClick
             if(el.style.backgroundColor ==='rgba(51,255,255,0.2)'){
                 return;
