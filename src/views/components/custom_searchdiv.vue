@@ -81,6 +81,7 @@
   </div>
 </template>
 <script>
+  import util from '../../util/tools.js'
   import {
     mapState,
     mapMutations
@@ -164,17 +165,16 @@
           }]) */
         }
         if (this.$store.state.tmss === 'geo') {
-          mthis.begeoSea = false;
-          if(a && a.id){
+          if(a && a.value){
             if (a.type === 'human') {
               mthis.$store.commit('setSearchGeoEventResult', {
-                ids: [a.id]
+                ids: [a.value]
               })
             } else if (a.type === 'location') {
-              mthis.$store.commit('setHLlocationIds', [a.id])
+              mthis.$store.commit('setHLlocationIds', [a.value])
             } else {
               mthis.$store.commit('setSearchGeoEntityResult', {
-                ids: [a.id]
+                ids: [a.value]
               })
             }
           }
@@ -204,10 +204,9 @@
                   optionListArr.push({
                     // "label": name,
                     "label": response.body.data.nodes[i].name,
-                    //"value": query,
                     "value": response.body.data.nodes[i].id,
                     "id": response.body.data.nodes[i].id,
-                    "img": response.body.data.nodes[i].img,
+                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image.png'),
                     "type": response.body.data.nodes[i].type
                   })
                 }
@@ -240,8 +239,8 @@
               let optionEventArr = []
               let optionLocationName = {}
               let optionLocationNameArr = []
-              //let response_geo = mthis.$http.get("http://10.60.1.141:5001/search-location-name/?localName=" + query, {
-              let response_geo = mthis.$http.get("http://127.0.0.1:5000/searchLocationName/" + query, {
+              let response_geo = mthis.$http.get("http://10.60.1.141:5001/search-location-name/?localName=" + query, {
+              //let response_geo = mthis.$http.get("http://127.0.0.1:5000/searchLocationName/" + query, {
                   emulateJSON: true
                 })
                 .then(response_geo => {

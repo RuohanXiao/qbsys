@@ -1,8 +1,8 @@
 <template>
-  <div class="rightNav" :style="{height:contentHeight,display:'flex'}">
+  <div class='rightNav'  :style="{height:contentHeight,display:'flex'}">
     <div class="navStyleTitle right" :style="{position: 'initial',zIndex: '999999',width:'2vw',bottom:'1px',display:'flex'}">
       <div class="floater">
-        <div :style="{height:'5vh'}">
+        <div :style="{height:'5vh'}" class="right1">
           <Icon class="icon iconfont icon-file DVSL-bar-btn DVSL-bar-btn-back" size="26" />
         </div>
         <div :style="{height:'5vh'}">
@@ -12,7 +12,7 @@
           <Icon class="icon iconfont icon-question  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
         </div>
         <div :style="{height:'5vh'}">
-          <Icon class="icon iconfont icon-yidiandiantubiao08  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
+          <Icon class="icon iconfont icon-user DVSL-bar-btn DVSL-bar-btn-back" size="26" />
         </div>
       </div>
     </div>
@@ -51,20 +51,49 @@
         contentHeight:0,
         items:[{
           id: 'r1',
-          title: '关系1',
-          img: '../../src/dist/assets/images/group1.png'
+          title: '台D人员',
+          disc:'包含台湾地区领导人',
+          time:'2019-03-12',
+          num: '3',
+          img: '',
+          available: true,
+          groupType: 'human'
         },{
           id: 'r2',
-          title: '关系2',
-          img: 'http://5b0988e595225.cdn.sohucs.com/images/20180402/eba2c0e26e714cf08a160b682f1b1b5e.png'
+          title: '拉美领导人',
+          disc:'包含特朗普',
+          time:'2019-03-12',
+          num: '1',
+          img: '',
+          available: false,
+          groupType: 'administrative'
         },{
           id: 'r3',
-          title: '关系3',
-          img: 'http://5b0988e595225.cdn.sohucs.com/images/20180402/eba2c0e26e714cf08a160b682f1b1b5e.png'
+           title: '20机构',
+          disc:'s',
+          time:'2019-03-12',
+          num: '1',
+          img: '',
+          available: false,
+          groupType: 'organization'
         },{
           id: 'r4',
-          title: '关系4',
-          img: 'http://5b0988e595225.cdn.sohucs.com/images/20180402/bea5f9c3ec88434ba8ff29505e565563.jpeg'
+           title: '水门事件',
+          disc:'包含特朗普',
+          time:'2019-03-12',
+          num: '1',
+          img: '',
+          available: false,
+          groupType: 'event'
+        },{
+          id: 'r5',
+           title: 'X文档集合',
+          disc:'包含特朗普',
+          time:'2019-03-12',
+          num: '1',
+          img: '',
+          available: false,
+          groupType: 'document'
         }]
       }
     },

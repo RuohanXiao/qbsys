@@ -7,12 +7,12 @@
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',border:'solid 1px #336666'}" id="net">
       <div class='divStyle'>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                              <div class="button-div" @click="back">
-                                                <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                <p class="img-content">撤销操作</p>
-                                              </div>
-                                            </Tooltip>
-                                            <div class="divSplitLine"></div> -->
+                                                      <div class="button-div" @click="back">
+                                                        <Icon class="icon iconfont icon-fanhui  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                        <p class="img-content">撤销操作</p>
+                                                      </div>
+                                                    </Tooltip>
+                                                    <div class="divSplitLine"></div> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="newCanvans">
             <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -21,11 +21,11 @@
         </Tooltip>
         <!-- <div class="divSplitLine"></div> -->
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="add">
-                  <Icon class="icon iconfont icon-add  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                  <p class="img-content">添加目标</p>
-                </div>
-              </Tooltip> -->
+                        <div class="button-div" @click="add">
+                          <Icon class="icon iconfont icon-add  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                          <p class="img-content">添加目标</p>
+                        </div>
+                      </Tooltip> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="removeOther">
             <Icon class="icon iconfont icon-fanxuan  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -84,9 +84,9 @@
           <!-- <Dropdown trigger="custom"  :visible="expandVisible"> -->
           <Dropdown :visible="expandVisible">
             <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeKnowledge" >
-                                    <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                    <p class="img-content">关系扩展</p>
-                                  </div> -->
+                                            <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                            <p class="img-content">关系扩展</p>
+                                          </div> -->
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="expandNodeKnowledge" v-if="(expandFlag=='knowledge')">
               <Icon class="icon iconfont icon-guanlianshiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
               <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
@@ -128,9 +128,9 @@
           <!-- <Dropdown trigger="custom"  :visible="expandVisible"> -->
           <Dropdown :visible="expandGongzhiVisible">
             <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeKnowledge" >
-                                    <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                    <p class="img-content">关系扩展</p>
-                                  </div> -->
+                                            <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                            <p class="img-content">关系扩展</p>
+                                          </div> -->
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="gongzhiEnitiy" v-if="(expandFlag_gongzhi=='knowledge_gongzhi')">
               <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
               <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
@@ -169,29 +169,29 @@
           </Dropdown>
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
-                                            <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                            <p class="img-content">路径</p>
-                                          </div>
-                                        </Tooltip>
-                                        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                            <div class="button-div" @click="showPathEvent">
-                                              <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                              <p class="img-content">事件路径</p>
-                                            </div>
-                                          </Tooltip>
-                                         -->
+                                                  <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
+                                                    <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                    <p class="img-content">路径</p>
+                                                  </div>
+                                                </Tooltip>
+                                                <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+                                                    <div class="button-div" @click="showPathEvent">
+                                                      <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                      <p class="img-content">事件路径</p>
+                                                    </div>
+                                                  </Tooltip>
+                                                 -->
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
-                                            <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                            <p class="img-content">事件扩展</p>
-                                          </div>
-                                        </Tooltip> -->
+                                                  <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
+                                                    <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                    <p class="img-content">事件扩展</p>
+                                                  </div>
+                                                </Tooltip> -->
         <!-- <Col span="1" align="middle" class="bottom">
-                                                            <Tooltip content="查找关联" placement="bottom">
-                                                              <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                            </Tooltip>
-                                                            </Col> -->
+                                                                    <Tooltip content="查找关联" placement="bottom">
+                                                                      <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                    </Tooltip>
+                                                                    </Col> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="5000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('knowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
             <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -199,49 +199,49 @@
             <p class="img-content">关系路径</p>
           </div>
           <!-- <Dropdown :visible="stepVisible" trigger="custom">
-                  <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('knowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
-                    <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                    <p class="img-content">关系路径</p>
-                  </div>
-                  <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('event')" v-show="stepFlag==='event'" @mouseup="stopStepTimer">
-                    <Icon class="icon iconfont icon-lujing--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                    <p class="img-content">事件路径</p>
-                  </div>
-                  <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('content')" v-show="stepFlag==='content'" @mouseup="stopStepTimer">
-                    <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                    <p class="img-content">共现路径</p>
-                  </div>
-                  <DropdownMenu slot="list" placement="bottom-start">
-                    <div class="button-div">
-                      <DropdownItem class="img-content" @click="showModalStep('knowledge')">
-                        <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                        <span>关系路径</span>
-                      </DropdownItem>
-                    </div>
-                    <div class="button-div">
-                      <DropdownItem class="img-content" @click="showModalStep('event')">
-                        <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                        <span>事件路径</span>
-                      </DropdownItem>
-                    </div>
-                    <div class="button-div">
-                      <DropdownItem class="img-content" @click="showModalStep('content')">
-                        <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                        <span>共现路径</span>
-                      </DropdownItem>
-                    </div>
-                  </DropdownMenu>
-                </Dropdown> -->
+                          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('knowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
+                            <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                            <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                            <p class="img-content">关系路径</p>
+                          </div>
+                          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('event')" v-show="stepFlag==='event'" @mouseup="stopStepTimer">
+                            <Icon class="icon iconfont icon-lujing--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                            <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                            <p class="img-content">事件路径</p>
+                          </div>
+                          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('content')" v-show="stepFlag==='content'" @mouseup="stopStepTimer">
+                            <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                            <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                            <p class="img-content">共现路径</p>
+                          </div>
+                          <DropdownMenu slot="list" placement="bottom-start">
+                            <div class="button-div">
+                              <DropdownItem class="img-content" @click="showModalStep('knowledge')">
+                                <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                                <span>关系路径</span>
+                              </DropdownItem>
+                            </div>
+                            <div class="button-div">
+                              <DropdownItem class="img-content" @click="showModalStep('event')">
+                                <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                                <span>事件路径</span>
+                              </DropdownItem>
+                            </div>
+                            <div class="button-div">
+                              <DropdownItem class="img-content" @click="showModalStep('content')">
+                                <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                                <span>共现路径</span>
+                              </DropdownItem>
+                            </div>
+                          </DropdownMenu>
+                        </Dropdown> -->
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="spread">
-                  <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back deg-90" size="26"></Icon>
-                  <p class="img-content">展开</p>
-                </div>
-              </Tooltip> -->
+                        <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="spread">
+                          <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back deg-90" size="26"></Icon>
+                          <p class="img-content">展开</p>
+                        </div>
+                      </Tooltip> -->
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="toGeo()">
@@ -275,11 +275,11 @@
           </div>
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="save">
-                  <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                  <p class="img-content">保存</p>
-                </div>
-              </Tooltip> -->
+                        <div class="button-div" @click="save">
+                          <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                          <p class="img-content">保存</p>
+                        </div>
+                      </Tooltip> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="fit">
             <Icon class="icon iconfont icon-zhengchangshitu--quanping  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -295,9 +295,9 @@
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag='setFlagToFalse'></modal-chart>
     <!-- <Modal v-model="modalStep" ok-text="设置步数"
-                                            cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
-                                          <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
-                                        </Modal> -->
+                                                    cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+                                                  <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+                                                </Modal> -->
     <Modal v-model="modalStep" width="360">
       <p slot="header" style="color:#f60;text-align:center">
         <Icon type="ios-information-circle"></Icon>
@@ -517,8 +517,6 @@
       expandNodeKnowledge() {
         var mthis = this;
         let arr = []
-        console.log('mthis.selectionId')
-        console.log(mthis.selectionId)
         if (mthis.selectionId.length > 0) {
           mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
           let res = null
@@ -531,8 +529,6 @@
           for (let i = 0; i < mthis.selectionId.length; i++) {
             arr.push((mthis.selectionId[i].id) ? mthis.selectionId[i].id : mthis.selectionId[i])
           }
-          console.log('arr')
-          console.log(arr)
           mthis.spinShow = true
           mthis.zIndex = 999
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/neighbor-datas/', {
@@ -630,7 +626,7 @@
         if (mthis.selectionId.length > 0) {
           mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
           let res = null
-          if(mthis.selectionId.length>1 || mthis.selectionId[0].id == undefined){
+          if (mthis.selectionId.length > 1 || mthis.selectionId[0].id == undefined) {
             rearr = mthis.selectionId
           } else {
             rearr = arr.push(mthis.selectionId[0].id)
@@ -655,9 +651,9 @@
                 resNodeItem.namimageCroppinge = true
                 resNodes.nodes.push(resNodeItem)
                 resNodes.links.push({
-                  id:'content'+m+rearr,
-                  from:rearr,
-                  to:res[m].id,
+                  id: 'content' + m + rearr,
+                  from: rearr,
+                  to: res[m].id,
                   type: '关联',
                   relation_id: 'guanlian'
                 })
@@ -678,7 +674,7 @@
               mthis.getStatistics()
             } else {
               alert('无匹配数据')
-               mthis.zIndex = 0
+              mthis.zIndex = 0
               mthis.spinShow = false
             }
           })
@@ -735,6 +731,18 @@
       gongzhiEvent() {},
       gongzhiDoc() {},
       exportImg() {
+        console.log('=================exportImg==================')
+        console.log(this.netchart.getNode("Q22368"))
+        let nodeObj = this.netchart.getNode("Q22368")
+        nodeObj.lineColor = 'rgba(51,255,255,0.5)';
+        nodeObj.backgroundStyle = {
+          lineColor: 'rgba(51,255,255,0.5)',
+          fillColor: 'rgba(51,255,255,0.4)'
+        }
+        // nodeObj.fillColor = 'rgba(51,255,255,1)';
+        nodeObj.lineWidth = 30;
+        // nodeObj.radius = 50;
+        // this.netchart.getNode("Q22368").hovered = true;
         // if (this.exportValue !== '') {
         //   this.netchart.export(this.exportValue, {
         //     mime: "image/png",
@@ -822,8 +830,8 @@
               // this.selectionId[i]["x"] = col * 100;
               // this.selectionId[i]["y"] = row * 100;
               let no = mthis.netchart.getNode(this.selectionId[i])
-              no["x"] = no1["x"] + col * 100;
-              no["y"] = no1["y"] + row * 100;
+              no["x"] = no1["x"] + col * 150;
+              no["y"] = no1["y"] + row * 150;
               // mthis.netchart.unlockNode(this.selectionId[i].id);
               // // mthis.netchart.layout.mode = 'dynamic'
               // // mthis.netchart.layout.mode = 'radial'
@@ -949,8 +957,6 @@
                 // console.log(item.id);
                 //如果该节点有子节点，继续添加进入栈底
                 if (item.children && item.children.length) {
-                  // console.log('=====-----======')
-                  console.log(mthis.netchart.getNode(item.id).label)
                   stack = stack.concat(item.children);
                 } else {
                   // console.log('!!!!!!!!___________!!!!!!!!!!')
@@ -1353,6 +1359,21 @@
           //   rowSpacing: 100 // vertical spacing between node rows in the hierarchy layout
           // },
           style: {
+            // nodeLocked: {
+            //   items: [{
+            //     image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
+            //       "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
+            //       "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
+            //       "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
+            //       "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
+            //       "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
+            //     py: -1,
+            //     x: 6,
+            //     backgroundStyle: {
+            //       fillColor: "transparent"
+            //     }
+            //   }],
+            // },
             // NetChart.settings.style.dragSelection 通过该属性可以设置框选颜色和背景等属性
             nodeLabel: {
               textStyle: {
@@ -1387,24 +1408,10 @@
             node: {
               display: "image",
               //节点外环大小
-              lineWidth: 2,
-              lineColor: "rgba(204,255,255,0.5)",
-              imageCropping: true,
-              nodeLocked: {
-                items: [{
-                  image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
-                    "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
-                    "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
-                    "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
-                    "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
-                    "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
-                  py: -1,
-                  x: 6,
-                  backgroundStyle: {
-                    fillColor: "transparent"
-                  }
-                }]
-              }
+              // lineWidth: 2,
+              // lineColor: "rgba(204,255,255,0.5)",
+              // fillColor: "rgba(51, 255, 255, 0.2)",
+              imageCropping: true
             },
             nodeStyleFunction: function(node) {
               // var mthis = this
@@ -1491,55 +1498,107 @@
                 // node.imageCropping = true
                 node.display = 'rectangle'
                 node.image = 'http://10.60.1.140/assets/images/content_node.png'
-                // node.backgroundStyle= {
-                //   fillColor: "rgba(51,255,255,0.2)",
-                //   lineColor: "rgba(51,255,255,0.2)"
-                // },
+                node.backgroundStyle = {}
                 // node.fillColor = 'rgba(0,0,0,0)'
                 // node.lineColor = 'rgba(0,0,0,0)'
                 if (node.hovered) {
-                  node.fillColor = 'rgba(51,255,255,0.2)'
-                  node.lineColor = 'rgba(51,255,255,0.2)'
-                  node.data.lineColor = "rgba(51, 255, 255, 0.4)";
-                  node.lineWidth = 10
-                  node.data.lineWidth = 10
+                  // node.lineColor = '#003333';
+                  // node.shadowColor='#003333';
+                  // node.fillColor='#003333';
+                  node.fillColor = "#025455";
+                  node.lineColor = "#025455";
+                  node.shadowColor = "#025455";
+                  node.shadowBlur = 15;
+                  node.lineWidth = 15;
+                  // node.data.lineWidth = 10
                   for (let m = 0; m < node.links.length; m++) {
                     // node.links[m].length = 10;
                     node.links[m].hovered = true;
-                    // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
-                    // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
+                    // node.links[m].fillColor = "84FFFF";
+                    node.links[m].lineColor = "#025455";
                     // node.links[m].animation = 'move 0.5s infinite linear';
                   }
+                } else if (node.selected) {
+                  // node.fillColor="#33FFFF";
+                  node.lineColor = "#33FFFF";
+                  node.fillColor = "#003333";
+                  node.shadowColor = "#0babad";
+                  node.shadowBlur = 30;
+                  node.lineWidth = 3;
+                } else if (node.hightLight) {
+                  node.fillColor = "#CCFFFF";
+                  node.shadowBlur = 30;
+                  node.lineColor = "#CCFFFF";
+                  node.lineWidth = 3;
+                  node.shadowColor = "#CCFFFF";
                 } else {
-                  node.fillColor = 'rgba(0,0,0,0)'
-                  node.lineColor = 'rgba(0,0,0,0)'
-                  for (let m = 0; m < node.links.length; m++) {
-                    node.links[m].hovered = false;
-                  }
+                  node.lineColor = 'rgba(0,0,0,0)';
+                  node.shadowColor = 'rgba(0,0,0,0)';
+                  node.fillColor = 'rgba(0,0,0,0)';
                 }
               } else {
                 node.display = 'image'
-                node.image = "http://10.60.1.143/pic_lib/entity/" + node.id + ".png";
+                //判断图片资源是否存在
+                if (util.checkImgExists("http://10.60.1.143/pic_lib/entity/" + node.id + ".png")) {
+                  node.image = "http://10.60.1.143/pic_lib/entity/" + node.id + ".png"
+                } else {
+                  node.image = 'http://10.60.1.140/assets/images/' + node.data.entity_type + '.png';
+                  // node.image = 'http://10.60.1.140/assets/images/human.png';
+                }
+                // node.image = 'http://10.60.1.140/assets/images/content_node.png'
+                // node.image = "http://10.60.1.143/pic_lib/entity/" + node.id + ".png";
                 if (node.hovered) {
-                  node.lineColor = "rgba(51, 255, 255, 0.4)";
-                  node.data.lineColor = "rgba(51, 255, 255, 0.4)";
-                  node.lineWidth = 10
-                  node.data.lineWidth = 10
+                  // node.lineColor = '#003333';
+                  // node.shadowColor='#003333';
+                  // node.fillColor='#003333';
+                  node.fillColor = "#025455";
+                  node.lineColor = "#025455";
+                  node.shadowColor = "#025455";
+                  node.shadowBlur = 15;
+                  node.lineWidth = 15;
+                  // node.data.lineWidth = 10
                   for (let m = 0; m < node.links.length; m++) {
                     // node.links[m].length = 10;
                     node.links[m].hovered = true;
-                    // node.links[m].fillColor = "rgba(51, 255, 255, 0.4)";
-                    // node.links[m].lineColor = "rgba(51, 255, 255, 0.4)";
+                    // node.links[m].fillColor = "84FFFF";
+                    node.links[m].lineColor = "#CCFFFF";
                     // node.links[m].animation = 'move 0.5s infinite linear';
                   }
+                } else if (node.selected) {
+                  // node.fillColor="#33FFFF";
+                  node.lineColor = "#33FFFF";
+                  node.fillColor = "#33FFFF";
+                  node.shadowColor = "#0babad";
+                  node.shadowBlur = 30;
+                  node.lineWidth = 2;
+                } else if (node.hightLight) {
+                  node.fillColor = "#CCFFFF";
+                  node.lineColor = "#CCFFFF";
+                  node.shadowBlur = 30;
+                  node.lineWidth = 2;
+                  node.shadowColor = "#CCFFFF";
                 } else {
+                  node.lineColor = '#003333';
+                  node.shadowColor = '#003333';
+                  node.fillColor = '#003333';
+                  node.shadowBlur = 30;
+                  node.lineWidth = 2;
                   for (let m = 0; m < node.links.length; m++) {
                     node.links[m].hovered = false;
+                    // node.fillColor="#668484";
+                    // node.lineColor="#668484";
+                    // node.shadowColor="#668484";
+                    node.lineColor = '#CCFFFF';
+                    node.shadowColor = '#CCFFFF';
+                    node.fillColor = '#CCFFFF';
+                    // node.shadowBlur=5;
+                    node.lineWidth = 2;
                   }
                 }
               }
               node.cursor = "pointer";
               node.label = node.data.name;
+              // node.fillColor="rgba(51,255,255,0.2)";
               // node.backgroundStyle.imageCropping =false
               // 默认图标
               // if (node.data.type === "human") {
@@ -1570,25 +1629,83 @@
             linkStyleFunction: function(link) {
               link.length = 2;
               link.cursor = "pointer";
-              link.fillColor = "rgba(51, 255, 255, 0.4)";
+              // link.fillColor = "rgba(51, 255, 255, 0.4)";
+              link.fillColor = "#336666";
               link.position = 'absolute';
-              link.borderRadius = '50%';
-              link.animation = 'move 0.5s infinite linear';
+              link.items = {
+                backgroundStyle: {
+                  fillColor: 'rgba(0,0,0,0)'
+                }
+              }
+              if (link.hovered) {
+                // node.lineColor = '#003333';
+                // node.shadowColor='#003333';
+                // node.fillColor='#003333';
+                // link.fillColor="#99ADAD";
+                // link.lineColor="#99ADAD";
+                // link.shadowColor="#99ADAD";
+                // link.shadowBlur=15;
+                link.fillColor = "#025455";
+                link.lineWidth = 4;
+                link.radius = 4;
+                link.lineWidth = 4;
+                link.shadowBlur = 10;
+                link.shadowColor = '#265151';
+              } else if (link.selected) {
+                // link.lineColor="#33FFFF";
+                // link.fillColor="#33FFFF";
+                // link.shadowColor="#00FFFF";
+                // link.shadowBlur=30;
+                // link.lineWidth = 3;
+                link.fillColor = "#33FFFF";
+                link.lineWidth = 4;
+                link.radius = 4;
+                link.lineWidth = 4;
+                link.shadowBlur = 10;
+                link.shadowColor = '#265151';
+              } else if (link.hightLight) {
+                // link.fillColor="#CCFFFF";
+                // link.shadowBlur=30;
+                // link.lineColor="#CCFFFF";
+                // link.lineWidth = 3;
+                // link.shadowColor="#CCFFFF";
+                link.fillColor = "#CCFFFF";
+                link.lineWidth = 4;
+                link.radius = 4;
+                link.lineWidth = 4;
+                link.shadowBlur = 10;
+                link.shadowColor = '#265151';
+              } else {
+                // link.lineColor = '#003333';
+                // link.shadowColor='#003333';
+                // link.fillColor='#003333';
+                link.fillColor = "#325B5B";
+                link.lineWidth = 4;
+                link.radius = 4;
+                link.lineWidth = 4;
+                link.shadowBlur = 10;
+                link.shadowColor = '#265151';
+              }
+              // ------0318test------
+              // link.borderRadius = '50%';
+              // link.animation = 'move 0.5s infinite linear';
               if (link.data.type !== undefined && link.data.type !== "") {
                 // link.label = link.data.type;
                 link.items = [{ // Default item places just as the regular label.
                   text: link.data.type,
-                  padding: 2,
+                  // padding: 2,
                   scaleWithZoom: true,
                   textStyle: {
-                    font: '12px MicrosoftYaHei',
+                    font: '10px MicrosoftYaHei',
                     fillColor: '#669999',
                     // outlineColor:"rgba(0,0,0,1)",
                     // outlineJoin:'round',
                     // outlineWidth: 10
                   },
                   backgroundStyle: {
-                    fillColor: "rgba(0,0,0,0)"
+                    //连线文字背景色
+                    // fillColor: "rgba(0,0,0,0)"
+                    fillColor: "rgba(0,0,0,0.8)"
                   }
                 }]
               } else {
@@ -1596,7 +1713,8 @@
                 link.fromDecoration = "arrow";
                 link.toDecoration = "arrow";
                 link.fillColor = 'rgba(51,255,255,0.2)'
-                link.lineColor = 'rgba(51,255,255,0.2)'
+                // link.lineColor = 'rgba(51,255,255,0.2)'
+                link.lineColor = '#336666'
                 link.items = [{ // Default item places just as the regular label.
                   rotateWithLink: true,
                   scaleWithZoom: true,
@@ -1631,24 +1749,64 @@
               //   //   link.fillColor = 'rgba(51, 255, 255, 0.4)';
               //   // }
               if (link.hovered) {
-                link.radius = 5;
-                // 连线颜色
-                link.fillColor = "rgba(51, 255, 255, 0.8)";
+                // node.lineColor = '#003333';
+                // node.shadowColor='#003333';
+                // node.fillColor='#003333';
+                link.lineColor = "red";
+                // link.fillColor="#99ADAD";
+                // link.lineColor="#99ADAD";
+                // link.shadowColor="#99ADAD";
+                // link.shadowBlur=15;
+                // link.lineWidth = 15;
+              } else if (link.selected) {
+                // link.lineColor="#33FFFF";
+                // link.fillColor="#33FFFF";
+                // link.shadowColor="#00FFFF";
+                // link.shadowBlur=30;
+                // link.lineWidth = 3;
+                link.lineColor = "yellow";
+              } else if (link.hightLight) {
+                // link.fillColor="#CCFFFF";
+                // link.shadowBlur=30;
+                // link.lineColor="#CCFFFF";
+                // link.lineWidth = 3;
+                // link.shadowColor="#CCFFFF";
+                link.lineColor = "#33ffff";
               } else {
-                //连线粗细
-                link.radius = 1;
-                // 连线颜色
-                link.fillColor = "rgba(51, 255, 255, 0.4)";
-                // link.fillColor = "#006666";
+                // link.lineColor = '#003333';
+                // link.shadowColor='#003333';
+                // link.fillColor='#003333';
+                link.lineColor = "green";
               }
+              // if (link.hovered) {
+              //   link.radius = 1;
+              //   // 连线颜色
+              //   link.fillColor = "rgba(51, 255, 255, 0.4)";
+              //   link.lineColor = 'rgba(51, 255, 255, 0.4)';
+              // } else {
+              //   //连线粗细
+              //   link.radius = 1;
+              //   // 连线颜色
+              //   link.fillColor = "rgba(51, 255, 255, 0.2)";
+              //   link.lineColor = 'rgba(51, 255, 255, 0.2)';
+              //   // link.fillColor = "#336666";
+              //   // link.fillColor = "#006666";
+              // }
             },
-            selection: {
-              // 选中样式
-              fillColor: "rgba(51, 255, 255, 0.4)",
-              lineColor: "#33ffff"
-              // fillColor: 'red',
-              // lineColor: 'yellow',
-            }
+            // selection: {
+            //   // 选中样式
+            //   // fillColor: "rgba(51, 255, 255, 0.8)",
+            //   // fillColor: "rgba(51,255,255,0.3)",
+            //   // fillColor: 'red',
+            //   // lineColor: 'yellow',
+            //   fillColor: "#ccffff",
+            //   lineColor: "#ccffff",
+            //   shadowColor:"#ccffff",  
+            //   // lineColor: "rgba(51,255,255,1)",
+            //   // shadowColor:"rgba(51,255,255,1)",
+            //   lineWidth: 1,
+            //   shadowBlur:10
+            // }
           },
           data: {},
           container: "netchart",
@@ -1671,6 +1829,10 @@
             onSettingsChange: function(event) {},
             onRightClick: function(event) {
               event.preventDefault();
+            },
+            onError: function(event) {
+              console.log('------error-------------')
+              console.log(event)
             },
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
@@ -1733,7 +1895,6 @@
               // infoElement.style.display = infoElementVisible ? "block" : "none";
             },
             onSelectionChange(event) {
-              console.log(event.selection)
               // this.selectionEventObj = event.selection
               if (timer) {
                 clearTimeout(timer)
@@ -1749,8 +1910,7 @@
                   let selectNIds = selectN.nodes.map(ite => {
                     return ite.id
                   })
-                  console.log('-----------------------chart------------------------')
-                  console.log(selectNIds)
+                  // mthis.netchart.lockNode(selectNIds);
                   // 所有有关节点的link
                   // console.log(mthis.netchart._impl.data.default.nodeToLinks)
                   // let alllinks = mthis.netchart._impl.data.default.nodeToLinks
@@ -1762,25 +1922,21 @@
                   // 遍历所有边
                   // console.log(linkarr)
                   let linksArr = []
-                  for(let n = 0;n<selectNIds.length;n++){
+                  for (let n = 0; n < selectNIds.length; n++) {
                     mthis.netchart.getNode(selectNIds[n])
-                    console.log(mthis.netchart.getNode(selectNIds[n]))
-                    linksArr.push(mthis.netchart.getNode(selectNIds[n]).links.map(item=>{
-                      if((selectNIds.indexOf(item.from.id) > -1)&&(selectNIds.indexOf(item.to.id) > -1)){
+                    linksArr.push(mthis.netchart.getNode(selectNIds[n]).links.map(item => {
+                      if ((selectNIds.indexOf(item.from.id) > -1) && (selectNIds.indexOf(item.to.id) > -1)) {
                         return item.id
-                      }
-                      else {
+                      } else {
                         return ''
                       }
                     }))
                   }
                   let c = []
-                  for(let nn =0;nn<linksArr.length;nn++){
+                  for (let nn = 0; nn < linksArr.length; nn++) {
                     c = c.concat(linksArr[nn])
                   }
                   let uniquec = util.unique(c)
-                  console.log('========uniquec=========')
-                  console.log(uniquec)
                   mthis.netchart.selection(uniquec.concat(selectNIds))
                   // 有选中节点或者link
                   mthis.selectionId = selectNIds;
@@ -1809,6 +1965,7 @@
                   // console.log('-----console.log(nodeArr)-----')
                   for (let nu = 0; nu < event.selection.length; nu++) {
                     if (event.selection[nu].isNode) {
+                      mthis.netchart.lockNode(event.selection[nu].data.id)
                       //有三种情况，实体，事件，文档
                       if (event.selection[nu].data.entity_type === 'content') {
                         mthis.selectionIdByType.contentIds.push(event.selection[nu].data.id)
@@ -1860,8 +2017,11 @@
           toolbar: {
             // enabled: false,
             zoomControl: true,
-            items:
-            [{ item: "zoomcontrol", side: "left", align: "top" }]
+            items: [{
+              item: "zoomcontrol",
+              side: "left",
+              align: "top"
+            }]
           },
           interaction: {
             resizing: {
@@ -1910,30 +2070,23 @@
         this.eventImgRules = this.eventImg
       },
       selectionId: function() {
-        this.netchart.unlockNode(this.selectionId);
+        // this.netchart.unlockNode(this.selectionId);
       },
       workSpaceAddData: function(res) {
         var mthis = this
         let arr = []
-        let rowNum = Math.ceil(Math.sqrt(res.nodes.length));
-        let col, row;
+        console.log(res)
         for (let m = 0; m < res.nodes.length; m++) {
           res.nodes[m].type = res.nodes[m].entity_type
           res.nodes[m].imageCropping = true
           arr.push(res.nodes[m].id)
-          // col = m % rowNum;
-          // row = parseInt(m / rowNum);
-          // res.nodes[m]["x"] =  col * 100;
-          // res.nodes[m]["y"] =  row * 100;
         }
         mthis.spinShow = false
         mthis.zIndex = 0
-        mthis.netchart.addData(res)
+        mthis.netchart.addData(res);
         setTimeout(function() {
           let ar = util.unique(arr);
           mthis.netchart.selection(ar);
-          // lock
-          // mthis.netchart.unlockNode(ar);
         }, 100)
       },
       expandVisible: function() {
@@ -1985,6 +2138,7 @@
           setTimeout(() => {
             mthis.square()
             this.spinShow = false
+            mthis.netchart.lockNode(contentIdsArry);
           }, 200);
         }, 100);
       },
@@ -2027,17 +2181,14 @@
           // 清空画布后添加节点
           // this.reloadNetData(va.data)
           // 不清空画布，直接添加节点
-          console.log(va.data)
-          console.log('======____=======_____=======')
           this.addNetData(va.data)
           // let arr = va.data.nodes.map(item => {
           //   return item.id
           // })
           setTimeout(function() {
             let arr = new Array(va.data.id)
-            console.log(va.data)
-            console.log(arr)
             mthis.netchart.selection(arr)
+            mthis.netchart.lockNode(arr)
             mthis.netchart.scrollIntoView(arr);
             // alert(8)
             // mthis.netchart.selection(util.unique(arr))

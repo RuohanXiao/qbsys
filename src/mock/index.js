@@ -279,36 +279,26 @@ if (isMock) {
         resolve([200, {
           code: 0,
           data: [{
+
+            // ["Q22368", "Q315528", "Q233984"]
             "nodes": [{
-              "id": "Q7389446",
-              "img": "http://10.60.1.143/pic_lib/entity/Q7389446.png",
-              "entity_type": "organization",
-              "name": "SDI Media Czech Republic",
-              "loaded": true
+              'entity_type': "human",
+              'id': "Q22368",
+              'img': "http://10.60.1.143/pic_lib/entity/Q22368.png",
+              'loaded': true,
+              'name': "陈水扁"
             }, {
-              "id": "Q7747",
-              "img": "http://10.60.1.143/pic_lib/entity/Q7747.png",
-              "entity_type": "human",
-              "name": "\u5f17\u62c9\u57fa\u7c73\u5c14\u00b7\u5f17\u62c9\u57fa\u7c73\u7f57\u7ef4\u5947\u00b7\u666e\u4eac",
-              "loaded": true
+              'entity_type': "human",
+              'id': "Q315528",
+              'img': "http://10.60.1.143/pic_lib/entity/Q315528.png",
+              'loaded': true,
+              'name': "李登辉"
             }, {
-              "id": "Q22686",
-              "img": "http://10.60.1.143/pic_lib/entity/Q22686.png",
-              "entity_type": "human",
-              "name": "\u5510\u7eb3\u5fb7\u00b7\u7279\u6717\u666e",
-              "loaded": true
-            }, {
-              "id": "Q15031",
-              "img": "http://10.60.1.143/pic_lib/entity/Q15031.png",
-              "entity_type": "human",
-              "name": "\u4e60\u8fd1\u5e73",
-              "loaded": true
-            }, {
-              "id": "Q159",
-              "img": "http://10.60.1.143/pic_lib/entity/Q159.png",
-              "entity_type": "administrative",
-              "name": "\u4fc4\u7f57\u65af",
-              "loaded": true
+              'entity_type': "human",
+              'id': "Q233984",
+              'img': "http://10.60.1.143/pic_lib/entity/Q233984.png",
+              'loaded': true,
+              'name': "蔡英文"
             }]
           }]
         }])

@@ -1,41 +1,86 @@
 <template>
-  <div class="itemDiv">
-    <div class="titleDiv">
-      <p class='titleFront'>{{item.title}}</p>
-    </div>
-    <div class="itemContentDiv">
-      <div class="buttonFront-add ">
-        <Icon class="icon iconfont icon-delete-point iconHover1 deg45" size="20" @click="importData(item.id)"></Icon>
+  <div>
+    <Row type="flex" justify="center" v-if="item.available"  class="itemDiv">
+      <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
+      <div class="cardDiv">
+        <div :style="{display: 'flex'}">
+          <span class='titleFront'>{{item.title}}</span>
+          <Icon v-if="item.groupType === 'human'" class="icon iconfont icon-ren padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'organization'" class="icon iconfont icon-zuzhi padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'weapon'" class="icon iconfont icon-shouqiang padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'administrative'" class="icon iconfont icon-diqu padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'event'" class="icon iconfont icon-shijian padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'document'" class="icon iconfont icon-wendang padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'mix'" class="icon iconfont icon-star1 padd8 color515" size="14" />
+        </div>
+         <div class="lineheight25">
+          <span class='cardFront'>描述:{{item.disc}}</span>
+        </div>
+         <div class="lineheight25">
+          <span class='cardFront'>{{item.time}}</span>
+          &nbsp;&nbsp;&nbsp;
+          <span class='cardFront'>数量:{{item.num}}</span>
+        </div>
       </div>
-      <div class="buttonFront-del ">
-        <Icon class="icon iconfont icon-delete-point iconHover" size="20" @click="del(item.id)"></Icon>
+      </Col>
+      <Col :sm="6" align="right" :style="{flexDirection: 'column'}">
+      <div class="cardButD">
+        <div class="cd">
+        <Icon class="icon iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="importData(item.id)"/>
+        <Icon class="icon iconfont icon-edit DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="modData(item.id)"/>
+        <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="del(item.id)"/>
+        </div>
       </div>
-      <div class="imgDiv">
-        <img :src=item.img :style="{width:'100%',height:'auto',maxHeight:'200px'}" />
+      </Col>
+    </Row>
+    <Row type="flex" justify="center" v-else  class="itemDivDisable">
+      <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
+      <div class="cardDiv">
+        <div :style="{display: 'flex'}">
+          <span class='titleFront'>{{item.title}}</span>
+          <Icon v-if="item.groupType === 'human'" class="icon iconfont icon-ren padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'organization'" class="icon iconfont icon-zuzhi padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'weapon'" class="icon iconfont icon-shouqiang padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'administrative'" class="icon iconfont icon-diqu padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'event'" class="icon iconfont icon-shijian padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'document'" class="icon iconfont icon-wendang padd8 color515" size="14" />
+          <Icon v-if="item.groupType === 'mix'" class="icon iconfont icon-star1 padd8 color515" size="14" />
+        </div>
+         <div class="lineheight25">
+          <span class='cardFront'>描述:{{item.disc}}</span>
+        </div>
+         <div class="lineheight25">
+          <span class='cardFront'>{{item.time}}</span>
+          &nbsp;&nbsp;&nbsp;
+          <span class='cardFront'>数量:{{item.num}}</span>
+        </div>
       </div>
-      <!--  <div class="buttonDiv">
-          <Button type="primary" class="DVSL-bar-btn-new DVSL-bar-btn-back">
-          <p class='buttonFront-detail'> 详情 </p>
-      </Button>
-      <Button type="primary"  class="DVSL-bar-btn-new DVSL-bar-btn-back">
-          <p  class='buttonFront-del'> 删除 </p>
-      </Button>
-        </div> -->
-    </div>
+      </Col>
+      <Col :sm="6" align="right" :style="{flexDirection: 'column'}">
+      <div class="cardButD">
+        <div class="cd">
+        <Icon class="icon iconfont icon-tianjia DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()"/>
+        <Icon class="icon iconfont icon-edit DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()"/>
+        <Icon class="icon iconfont icon-shanchu DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()"/>
+        </div>
+      </div>
+      </Col>
+    </Row>
   </div>
 </template>
 <script>
- import mock from '../../mock/index.js'
- mock.test = 1
+  import mock from '../../mock/index.js'
+  mock.test = 1
   export default {
     data() {
-      return {
-
-      }
+      return {}
     },
     methods: {
       del(id) {
         this.$emit('delId',id)
+      },
+      modData(id){
+        alert('modify');
       },
       importData(id){
          this.$emit('workSpaceModal', true)
@@ -46,7 +91,12 @@
         mock.get("/getWorkSpaceAddData").then(function(res) {
           mthis.$store.commit('setWorkSpaceAddData', res.data.data[0])
         })
-       },
+      },
+      cantClick(){
+        alert(
+          '不可用工作集，不可导入'
+        )
+      }
     },
     props: {
       item: Object
@@ -54,125 +104,63 @@
   }
 </script>
 <style scoped>
-  /* 标题栏样式 */
-  .titleDiv {
-    /* background-color: brown; */
-    height: 30px;
-    position: absolute;
+.DVSL-bar-btndisHover {
+    white-space: nowrap;
+    color: #cff;
+    float: left;
+    padding: 0 7px;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: .6;
+}
+  .cardButD{
+    width: 30px;
+    color: #ccffff;
+    display: flex;
+    height: 100%;
+    align-items: center;
   }
-  /* 标题栏文字 */
-  .titleFront {
+  .lineH20{
+    line-height: 20px;
+  }
+  .itemDivDisable{
+    background-color: rgba(51, 255, 255, 0.2);
+    padding: 5px;
+    margin: 5px 5px 5px 0;
     font-family: MicrosoftYaHei;
-    font-size: 14px;
+    /* font-size: 16px; */
+    font-weight: normal;
+    font-stretch: normal;
+    /* line-height: 42px; */
     letter-spacing: 0px;
     color: #ccffff;
-    position: absolute;
-    z-index: 99;
-    right: auto;
-    width: 21vw;
-    background-color: rgba(0, 0, 0, 0.5);
-    line-height: 30px;
   }
-  /* 工作集样式 */
   .itemDiv {
-    /* background-color: antiquewhite; */
-    height: 200px;
-    width: 21vw;
-    margin: 10px 0 20px 0;
-    /* border: 1px solid rgba(51,255,255,0.4); */
-  }
-  /* 内容样式 */
-  .itemContentDiv {
-    /* background-color: blueviolet; */
-    display: flex;
-    justify-content: center;
-  }
-  /* 工作集图片样式 */
-  .imgDiv {
-    background-color: antiquewhite;
-    width: 21vw;
-    height: auto;
-    max-height: 200px;
-    position: inherit;
-  }
-  /* 按钮样式 */
-  .buttonDiv {
-    /* background-color: pink; */
-    position: absolute;
-    bottom: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 99;
-    width: 100%;
-    height: 20px;
-    display: flex;
-    justify-content: space-around;
-  }
-  .buttonFront-detail {
+    background-color: rgba(51, 255, 255, 0.3);
+    padding: 5px;
+    margin: 5px 5px 5px 0;
     font-family: MicrosoftYaHei;
-    font-size: 12px;
+    /* font-size: 16px; */
+    font-weight: normal;
+    font-stretch: normal;
+    /* line-height: 42px; */
     letter-spacing: 0px;
     color: #ccffff;
   }
-  .itemDiv:hover .buttonFront-del {
-    /* color: #ccffff; */
-    color: rgba(51, 255, 255, 0.8);
+  .cardFront{
+    font-size: 12px;
+    line-height: 25px;
   }
-   .itemDiv:hover .buttonFront-add {
-    /* color: #ccffff; */
-    color: rgba(51, 255, 255, 0.8);
+  .titleFront{
+    font-size: 14px;
+    line-height: 30px;
+    display: inline;
   }
-  .iconHover {
-    opacity: 0;
+  .padd8{
+    padding:8px;
   }
-   .iconHover1 {
-    opacity: 0;
-  }
-  .deg45{
-    transform: rotate(45deg);
-  }
-  .itemDiv:hover {
-    /* transform: translateX(10px);
-    transform: translateY(-10px); */
-    /* box-shadow: 4px 4px 10px #ccffff; */
-    /* border: 1px solid #ccffff; */
-    transition: all 1s;
-    -moz-transition: all 1s;
-    /* 　　-webkit-transition: all 1s;
-  　　-o-transition: all 1s; */
-  }
-  .itemDiv:hover .iconHover1 {
-    transition: opacity 1s;
-    opacity: 1;
-  }
-  .buttonFront-add:hover .iconHover1 {
-    /* color: rgba(51, 255, 255, 0.4); */
-    color: #ccffff;
-    transform: rotate(135deg);
-    transition: all 1s;
-    /* transition: font-size 0.2s ease, transform 0.2s ease; */
-  }
-  .itemDiv:hover .iconHover {
-    transition: opacity 1s;
-    opacity: 1;
-  }
-  .buttonFront-del:hover .iconHover {
-    /* color: rgba(51, 255, 255, 0.4); */
-    color: #ccffff;
-    transform: rotate(90deg);
-    transition: all 1s;
-    /* transition: font-size 0.2s ease, transform 0.2s ease; */
-  }
-  .buttonFront-del {
-    position: absolute;
-    z-index: 99;
-    right: 15px;
-    top: 15px;
-  }
-  .buttonFront-add {
-    position: absolute;
-    z-index: 99;
-    right: 45px;
-    top: 15px;
+  .color515{
+    color: rgba(51, 255, 255, 0.5);
   }
 </style>
 
