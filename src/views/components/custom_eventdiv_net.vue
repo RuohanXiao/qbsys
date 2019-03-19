@@ -14,7 +14,7 @@
             </div>
           </Tab-pane>
           <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('toushi')">
-            <left-statics :staticsDatas='staticsDatas' v-if=" $store.state.tmss === 'net' && staticsDatas.length > 0"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' v-if=" $store.state.tmss === 'net' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -90,7 +90,7 @@
         eventheight: 0,
         eventItemHeight: 0,
         closable: true,
-        staticsDatas:netStaticsAttr.data,
+        staticsDatas:[],
         /* firstClassify: [{
             id: 'ObjectsType',
             disName: '对象类型'
@@ -233,46 +233,26 @@
       },
       selectNetNodes: function() {
         var mthis = this;
-        if(mthis.selectNetNodes[0].ids.length < 2){
-
-        }
-        // var mthis = this;
-        // if (mthis.selectNetNodes[0].ids.length > 0) {
-        //   // 新增防抖功能
-        //   this.timer = setTimeout(function() {
-        //     if (mthis.selectNetNodes[0].ids.length > 1) {
-        //       let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
-        //         return item.id;
-        //       });
-        //       let ob = {}
-        //       ob.nodeIds = nodeIdsArry
-
-        //       mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', ob).then(response => {
-        //         mthis.evetdataFlag = true
-        //         mthis.evetdata = response.body.data[0].nodes
-        //       })
-        //     } else {
-        //       let nodeIdsArry = new Array(mthis.selectNetNodes[0].ids[0]);
-        //       let ar = nodeIdsArry.map(item=>{
-        //         return item.id
-        //       })
-        //       // setTimeout(function() {
-        //         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/',{nodeIds:ar}).then(response => {
-        //           // mthis.evetdata =  new Array(response.body.data[0])
-        //           mthis.evetdataFlag = true
-        //           mthis.$set(mthis.evetdata,0,response.body.data[0])
-        //       })
-        //       // }, 50);
-        //     }
-        //   }, 200);
-        // } else {
-        //   // mthis.$set(mthis.evetdata,0,null)
-        //   mthis.evetdata =  []
-        //   mthis.evetdataFlag = false
-        // }
+        if(mthis.selectNetNodes[0].ids.length > 1){
+          mthis.$http.post('http://10.60.1.140:5001/graph-attr/', {
+          'nodeIds': mthis.selectNetNodes[0].ids
+          }).then(response => {
+              mthis.staticsDatas = response.body.data;
+          //mthis.$data.staticsDatas.splice(0,0,response.body.data);
+          /* response.body.data.forEach(function(item,index){
+          mthis.$set(mthis.staticsDatas,index,item)
+          }) */
+            })
+          } else {
+            mthis.staticsDatas = [];
+          }
       }
     },
     methods: {
+      clickLeftStatics(staticsClick){
+        var mthis = this;
+        mthis.$store.commit('setNetStaticsSelectedIds',ids);
+      },
       hightLight(id) {},
       changTab(a) {
         this.$store.commit('setTabSelect', a)
@@ -526,6 +506,9 @@
   }
   #toushi .ivu-collapse-content-box p {
     font-size: 12px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .ivu-collapse-item-active>.ivu-collapse-content {
     background-color: rgba(0, 0, 0, 0) !important;

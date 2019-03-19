@@ -22,18 +22,29 @@
 #NodeTypeInfo,  #EntityAttrColl table{
     width:100%;
     font-size:12px !important;
+    table-layout: fixed;
 }
 #NodeTypeInfo tr, #EntityAttrColl table tr{
     height:25px;
 }
-#NodeTypeInfo  tr:hover, #EntityAttrColl table tr:hover{
+#EntityAttrColl table tr:hover{
     background-color: rgba(51,255,255,0.2);
     cursor:pointer;
 }
-#NodeTypeInfo  tr:nth-child(odd):hover,#EntityAttrColl table tr:nth-child(odd):hover {
+
+trNoClick{
+    height:25px;
+}
+
+trClick{
+    background-color: rgba(51,255,255,0.2);
+    color: #ccffff;
+}
+
+#EntityAttrColl table tr:nth-child(odd):hover {
     background-color: rgba(51,255,255,0.2);
 }
-#NodeTypeInfo  tr:nth-child(odd), #EntityAttrColl table tr:nth-child(odd){
+#EntityAttrColl table tr:nth-child(odd){
     background-color: rgba(51,255,255,0.05);
 }
 /* #NodeTypeInfo >tr>td>span{
@@ -111,12 +122,12 @@
             <span class="separateLine"></span>
             <span style="margin-left:10px;font-size: 14px;">{{staticsData.firstLevelName}}</span>
         </div>
-        <Collapse simple v-model="openPanelNames" id="EntityAttrColl">
+        <Collapse simple v-model="openPanelNames" id="EntityAttrColl" v-if='staticsData.subStatisticsAttr.length > 0'>
             <panel v-for="(staticsPanel,index) in staticsData.subStatisticsAttr" :name="staticsPanel.secondLevelId">
                 <span :id="staticsPanel.secondLevelId + '/countSpan'">{{staticsPanel.secondLevelName + '（' + staticsPanel.typecount + '）'}}</span>
                 <table slot="content" :id="staticsPanel.secondLevelId + '/entityattr'">
-                    <tr  :id="specificStatics.thirdLevelId + '/id'" v-if="index<=2" v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr"  @click="selectedIds(specificStatics.idlist)">  
-                        <td class="NameTd">
+                    <tr  :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
+                        <td class="NameTd">   <!--  @mouseover='trHover($event.currentTarget,index)' -->
                             <p>{{specificStatics.thirdLevelName}}</p>
                         </td>
                         <td :id="specificStatics.thirdLevelId + '/StaticsPer'" class="StaticsPerTd">
@@ -126,6 +137,7 @@
                 </table>
             </panel>
         </Collapse>
+        <div style='background-color: rgba(0,0,0,0);font-size: 14px;padding-left: 24px;text-align: left;line-height: 30px;border-top: 0px solid #336666;border-bottom: 0px solid #336666;}' v-else>无统计项</div>
     </div>
 </div>
     
@@ -171,9 +183,31 @@ export default {
         }
     },
     methods:{
-        selectedIds(ids){
+        /* trHover(el,index){
+            debugger
             var mthis = this;
-            mthis.$store.commit('setNetStaticsSelectedIds',ids);
+            if(index % 2 === 0){
+                el.className = 
+            }
+        }, */
+        selectedIds(el,ids){
+            var mthis = this;
+            debugger
+            //trClick
+            if(el.style.backgroundColor ==='rgba(51,255,255,0.2)'){
+                return;
+            }
+            var oldtrClick = document.getElementsByClassName('trClick');
+            if(oldtrClick.length !== 0){
+                for(let i = 0; i < oldtrClick.length; i++){
+                    oldtrClick[i].removeAttribute('style')
+                    oldtrClick[i].classList.remove('trClick')
+                }
+            }
+            el.className='trClick';
+            el.style.backgroundColor='rgba(51,255,255,0.2)';
+            //mthis.$store.commit('setNetStaticsSelectedIds',ids);
+            mthis.$emit('staticsClick', ids)
         },
         isNodeTypehasInnodeTypedata(id){
             var mthis = this;
