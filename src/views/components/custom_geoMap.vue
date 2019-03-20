@@ -280,7 +280,22 @@ export default {
                 mthis.selectAll();
             } else if(mapOperationId == 'clearAll_HD'){
                 mthis.clearAll();
+            } else if(mapOperationId == 'exploreLocationName_AT'){
+                mthis.explore();
             }
+        },
+        explore(){
+            var mthis = this;
+            var s = mthis.getLayerById('HLAreaLayer').getSource().getFeatures()[0].getGeometry();
+            var g = new GeoJSON().writeGeometry(s)
+            //mthis.$http.post('http://localhost:5000/exploreOrg/', {
+            mthis.$http.post('http://10.60.1.141:5001/exploreOrg/', {
+                'geometry':g
+            }).then(response => {
+                var OrgGeojson = response.body.data.OrgFeatures;
+                var features = (new GeoJSON()).readFeatures(OrgGeojson);
+                mthis.getLayerById('OrgLayer').getSource().addFeatures(features);
+            })
         },
         clearAll(){
             var mthis = this;
@@ -492,6 +507,17 @@ export default {
                 mthis.deleteArrItem(mthis.onImgIds,imgItemOpera.id);
             }
         },
+        OrgStyleFun(feature){
+            var mthis = this;
+            var iconStyle = new Style({
+                image: new Icon(({
+                    src: '../../dist/assets/images/geo/Organization.png'
+                }))
+            });
+
+            return iconStyle;
+
+        },
         addlocationLayer(){
             var mthis = this;
             if(mthis.routeMap == null){
@@ -506,6 +532,11 @@ export default {
                 });
                 
                 mthis.routeMap = new map('locationRoute_Map')
+                var iconStyle = new Style({
+                        image: new Icon(({
+                            src: require('../../dist/assets/images/geo/Organization.png')
+                        }))
+                    });
                 var HLArealayer = new VectorLayer({  //高亮地区图层
                     source: new VectorSource({
                     }),
@@ -524,8 +555,16 @@ export default {
                     id:'eventsPointsLayer'
                 });
                 mthis.routeMap.addlayer(Eventslayer);
+                var Orglayer = new VectorLayer({  //组织机构图层
+                    source: new VectorSource({
+                    }),
+                    style: iconStyle,//mthis.OrgStyleFun,//mthis.graystyle,
+                    id:'OrgLayer'
+                });
+                mthis.routeMap.addlayer(Orglayer);
                 mthis.selectPointerMove = new Select({
-                    condition: pointerMove
+                    condition: pointerMove,
+                    layers:[Eventslayer]
                 });
                 mthis.selectClick = new Select({
                     condition: click
@@ -1801,27 +1840,27 @@ export default {
                 mthis.setSelectedEventFeatureParam(feature,true);
             })
         },
-        addFeaturesByGeoJsonToSource(GeoJson,source){
-            var mthis = this;
-            var features = (new GeoJSON()).readFeatures(mthis.test_mapData);
-            features.forEach(function(item){
-                mthis.setLifeOrDiePointStyleByValue(item,'life');
-                //mthis.getFeatrueAllEventIds(feature)
-                item.get('Events').forEach(function(Iitem){
-                    var eventId = Iitem.id;
-                    //mthis.allEventIds.push(eventId);
-                    var param = {
-                        'featureId':item.getId(),
-                        'time':Iitem.time
-                    };
-                    mthis.$set(mthis.allEventIdsToFeaturesIdsList,eventId,param)
-                   /*  mthis.allEventIdsToFeaturesIdsList[eventId] = {
-                        'featureId':item.getId(),
-                        'time':Iitem.time
-                    }; */
-                });
-            });
-        },
+        // addFeaturesByGeoJsonToSource(GeoJson,source){
+        //     var mthis = this;
+        //     var features = (new GeoJSON()).readFeatures(mthis.test_mapData);
+        //     features.forEach(function(item){
+        //         // mthis.setLifeOrDiePointStyleByValue(item,'life');
+        //         // //mthis.getFeatrueAllEventIds(feature)
+        //         // item.get('Events').forEach(function(Iitem){
+        //         //     var eventId = Iitem.id;
+        //         //     //mthis.allEventIds.push(eventId);
+        //         //     var param = {
+        //         //         'featureId':item.getId(),
+        //         //         'time':Iitem.time
+        //         //     };
+        //         //     mthis.$set(mthis.allEventIdsToFeaturesIdsList,eventId,param)
+        //         //    /*  mthis.allEventIdsToFeaturesIdsList[eventId] = {
+        //         //         'featureId':item.getId(),
+        //         //         'time':Iitem.time
+        //         //     }; */
+        //         // });
+        //     });
+        // },
         getallEventIdsFromallEventIdsToFeaturesIds(){
             var mthis = this;
             var ids = []
