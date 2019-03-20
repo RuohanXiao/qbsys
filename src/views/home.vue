@@ -1,12 +1,12 @@
 <template>
   <!-- 此组件为入口主文件，内部包含
-            net_main.vue（网络关系）
-            content_main.vue（文本检索） 
-            geo_main.vue（地理信息）
-          三个功能子组件和
-            custom_topmenu.vue（头部导航） 
-            custom_nav.vue（右侧工作集）
-          公共组件 -->
+                net_main.vue（网络关系）
+                content_main.vue（文本检索） 
+                geo_main.vue（地理信息）
+              三个功能子组件和
+                custom_topmenu.vue（头部导航） 
+                custom_nav.vue（右侧工作集）
+              公共组件 -->
   <Layout>
     <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
       <top-menu/>
@@ -17,7 +17,7 @@
         <net-main v-show="($store.state.tmss === 'net')"></net-main>
         <geo-main v-show="($store.state.tmss === 'geo')"></geo-main>
         <content-main v-show="($store.state.tmss === 'content')"></content-main>
-        <Modal v-model="workSpaceModalFlag" @workSpaceModal='workSpaceModal' title="Common Modal dialog box title" @on-ok="ok" @on-cancel="cancel">
+        <Modal v-model="workSpaceModalFlag" title="Common Modal dialog box title" @on-ok="ok" @on-cancel="cancel">
           <p>Content of dialog</p>
           <p>Content of dialog</p>
           <p>Content of dialog</p>
@@ -40,6 +40,10 @@
   import "../dist/assets/styles/common.css"
   import nav from "../dist/assets/js/nav.js";
   import mock from "../mock/index.js";
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   const axios = require("axios");
   const MockAdapter = require("axios-mock-adapter");
   export default {
@@ -62,9 +66,9 @@
       // initNode(opt) {
       //   this.netData = opt.nodes[0]
       // }
-      workSpaceModal(flag) {
-        this.workSpaceModalFlag = true
-      },
+      // workSpaceModal(flag) {
+      //   this.workSpaceModalFlag = true
+      // },
       ok() {
         this.$Message.info('Clicked ok');
       },
@@ -90,6 +94,14 @@
       mthis.$store.commit('setGeoHeight', mthis.containerHeight)
       mthis.$store.commit('setContentHeight', mthis.containerHeight)
     },
+    computed: mapState([
+      'workSpaceModal'
+    ]),
+    watch: {
+      workSpaceModal: function() {
+        this.workSpaceModalFlag = true
+      }
+    },
     mounted() {
       var ob = configer.loadxmlDoc("../src/util/configer.xml");
       // var ob = configer.loadxmlDoc("http://10.60.1.140/assets/configer.xml");
@@ -99,9 +111,9 @@
       for (var i = 0; i < imgItem.length; i++) {
         var eventType = imgItem[i].children[0].textContent;
         var imgPosition = imgItem[i].children[1].textContent;
-        myMap.set(eventType,imgPosition)
+        myMap.set(eventType, imgPosition)
       }
-      this.$store.commit('setEventImg', myMap)   
+      this.$store.commit('setEventImg', myMap)
     }
   }
 </script>
@@ -153,8 +165,8 @@
     font-size: 22px;
   }
   /*
-                        侧导航end
-                      */
+                            侧导航end
+                          */
   .white-text {
     color: #fff;
   }
@@ -464,8 +476,8 @@
     background-color: rgba(54, 102, 102, 0.4) !important;
   }
   /* .ivu-tabs-tab {
-            color: #ccffff !important;
-          } */
+                color: #ccffff !important;
+              } */
   .DVSL-bar-btn p {
     color: #ccffff;
   }
@@ -632,7 +644,7 @@
     padding-left: 10px;
     border-top: 1px solid rgba(54, 102, 116, 0.5);
     /* border-right:1px solid rgba(54, 102, 116, 0.5);
-            border-left:1px solid rgba(54, 102, 116, 0.5); */
+                border-left:1px solid rgba(54, 102, 116, 0.5); */
   }
   .divSplitLine {
     float: center;

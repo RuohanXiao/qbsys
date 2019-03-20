@@ -277,6 +277,7 @@ var store = new Vuex.Store({
     tabSelectNet: 'mubiaoxiangqing',
     tabSelectGeo: 'mubiaoxiangqing',
     tabSelectContent: 'mubiaoxiangqing',
+    workSpaceModal:{id:'',flag:false},
     contentStatisticsResult:{},
     StaticsIds:[],
     netStaticsSelectedIds:[],  //net模块中点击右侧统计保存ids
@@ -329,6 +330,10 @@ var store = new Vuex.Store({
     },
     setHLlocationIds(state,val){
       state.HLlocationIds = val
+    },
+    //修改工作集调用modal
+    setWorkSpaceModal(state,val){
+      state.workSpaceAddData = val
     },
     // 从工作及导入到网络关系画布
     setWorkSpaceAddData(state,val){
