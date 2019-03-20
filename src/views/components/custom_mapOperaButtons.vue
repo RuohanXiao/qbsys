@@ -83,6 +83,13 @@ export default {
             'imgClass':'icon-selection-box',
             'isOpen':false
           },
+          {
+            'id':'exploreLocationName_AT',
+            'name':'探索',
+            'imgClass':'icon-custom',
+            'isOpen':true
+
+          },
           {'id':'separate'},
           /* {
             'id':'Circle_select',

@@ -239,8 +239,8 @@
               let optionEventArr = []
               let optionLocationName = {}
               let optionLocationNameArr = []
-              //let response_geo = mthis.$http.get("http://10.60.1.141:5001/search-location-name/?localName=" + query, {
-              let response_geo = mthis.$http.get("http://127.0.0.1:5000/searchLocationName/" + query, {
+              let response_geo = mthis.$http.get("http://10.60.1.140:5001/search-location-name/?localName=" + query, {
+              //let response_geo = mthis.$http.get("http://127.0.0.1:5000/searchLocationName/" + query, {
                   emulateJSON: true
                 })
                 .then(response_geo => {
