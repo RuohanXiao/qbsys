@@ -19,7 +19,7 @@
                 <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
                   <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
                   <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                  <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic diagra.png" />
+                  <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic_diagra.png" />
                   <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
               </OptionGroup>
             </Select>
@@ -239,8 +239,8 @@
               let optionEventArr = []
               let optionLocationName = {}
               let optionLocationNameArr = []
-              let response_geo = mthis.$http.get("http://10.60.1.141:5001/search-location-name/?localName=" + query, {
-              //let response_geo = mthis.$http.get("http://127.0.0.1:5000/searchLocationName/" + query, {
+              //let response_geo = mthis.$http.get("http://10.60.1.141:5001/search-location-name/?localName=" + query, {
+              let response_geo = mthis.$http.get("http://127.0.0.1:5000/searchLocationName/" + query, {
                   emulateJSON: true
                 })
                 .then(response_geo => {
