@@ -52,25 +52,12 @@ export default {
     data() {
       return {
         buttonParamArr:[
-          {
+          /* {
             'id':'location_AT',
             'name':'定位',
-            'imgClass':'icon-location1',
+            'imgClass':'icon-location',
             'isOpen':true
-          },
-          {
-            'id':'heatMap_HSD',
-            'name':'热力',
-            'imgClass':'icon-hot',
-            'isOpen':false
-          },
-          {
-            'id':'route_HSD',
-            'name':'路径',
-            'imgClass':'icon-route',
-            'isOpen':false
-          },
-          {'id':'separate'},
+          }, */
           {
             'id':'clearAll_HD',
             'name':'清空',
@@ -84,31 +71,9 @@ export default {
             'isOpen':false
           },
           {
-            'id':'exploreLocationName_AT',
-            'name':'探索',
-            'imgClass':'icon-custom',
-            'isOpen':true
-
-          },
-          {'id':'separate'},
-          /* {
-            'id':'Circle_select',
-            'name':'圆形框选',
-            'imgClass':'icon-selection-round',
-            'isOpen':false
-          },
-          {
-            'id':'Polygon_select',
-            'name':'自定义框选',
-            'imgClass':'icon-custom',
-            'isOpen':false
-
-          },
-          {'id':'separate'}, */
-          {
-            'id':'delete_HSD',
-            'name':'删除',
-            'imgClass':'icon-delete-point',
+            'id':'selectAll_HD',
+            'name':'全选',
+            'imgClass':'icon-rectangle',
             'isOpen':false
           },
           {
@@ -118,24 +83,88 @@ export default {
             'isOpen':false
           }, 
           {
-            'id':'selectAll_HD',
-            'name':'全选',
-            'imgClass':'icon-rectangle',
+            'id':'delete_HSD',
+            'name':'删除',
+            'imgClass':'icon-delete-point',
             'isOpen':false
           },
           {
             'id':'returnToAllPoints_HDD',
             'name':'复位',
+            'imgClass':'icon-fuwei',
+            'isOpen':false
+          },
+          {
+            'id':'createWorkSpace_HDD',
+            'name':'创建集合',
             'imgClass':'icon-refresh',
             'isOpen':false
           },
           {'id':'separate'},
           {
+            'id':'RectangleExplore_AT',
+            'name':'矩形探索',
+            'imgClass':'icon-selection-round',
+            'isOpen':true
+          },
+          {
+            'id':'CircleExplore_AT',
+            'name':'圆形探索',
+            'imgClass':'icon-selection-round',
+            'isOpen':true
+          },
+          {
+            'id':'customExplore_AT',
+            'name':'自定义探索',
+            'imgClass':'icon-selection-round',
+            'isOpen':true
+          },
+          {
+            'id':'exploreLocationName_HL',
+            'name':'探索',
+            'imgClass':'icon-match-search',
+            'isOpen':true
+
+          },
+          {'id':'separate'},
+          {
+            'id':'heatMap_HSD',
+            'name':'显示热力',
+            'imgClass':'icon-hot',
+            'isOpen':false
+          },
+          {
+            'id':'route_HSD',
+            'name':'显示轨迹',
+            'imgClass':'icon-route',
+            'isOpen':false
+          },
+          {'id':'separate'},
+          {
             'id':'toNet_HSD',
-            'name':'网络',
+            'name':'网络(推送)',
             'imgClass':'icon-tuisongzhiwangluo',
             'isOpen':false
-          }
+          },
+          {'id':'separate'},
+          {
+            'id':'leadingInPic_NT',
+            'name':'导入图',
+            'imgClass':'icon-daoru',
+            'isOpen':false
+          },
+          {
+            'id':'exportPic_NT',
+            'name':'导出图',
+            'imgClass':'icon-daochu',
+            'isOpen':false
+          },
+          {
+            'id':'screenCapture_NT',
+            'name':'截屏',
+            'imgClass':'icon-cut',
+            'isOpen':false
+          },
         ]
       }
     },
@@ -143,6 +172,7 @@ export default {
     methods:{
         divClick(obj){
             var mthis = this;
+            debugger
             var operationObj = obj;
             if(operationObj.currentTarget.className === 'button-none'){
               return
