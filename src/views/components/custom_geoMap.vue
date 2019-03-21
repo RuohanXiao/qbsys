@@ -263,8 +263,8 @@ export default {
             if(mapOperationId == 'location_AT'){
                 mthis.location_cilck();
             } else if(mapOperationId == 'heatMap_HSD'){
-                //mthis.heatMap_cilck();
-                mthis.disHeatMap();
+                mthis.heatMap_cilck();
+                //mthis.disHeatMap();
             } else if(mapOperationId == 'route_HSD'){
                 mthis.route_cilck();
             } else if(mapOperationId == 'Circle_HD' || mapOperationId == 'Polygon_HD' || mapOperationId == 'rectangle_HD'){
@@ -612,7 +612,8 @@ export default {
                 });
                 mthis.routeMap.addlayer(Eventslayer);
                 var heatMapLayer = new Heatmap({  //热力图层
-                    source: source,
+                    source: new VectorSource({
+                    }),
                     blur: 20,
                     radius: 15,
                     weight:mthis.weightFunction,
@@ -2170,6 +2171,63 @@ export default {
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
         },
+        /* geometrySelectedEventIds:function(){
+            var mthis = this;
+            if(mthis.geometrySelectedEventIds[0] === "geo没有选择到数据"){
+                mthis.changeButtonParam=[
+                        {
+                            'id_suf':'HSD',
+                            'isOpen':false
+                        },
+                        {
+                            'id_suf':'HD',
+                            'isOpen':true
+                        }
+                    ]
+                //return
+            } else{
+                if(mthis.geometrySelectedEventIds.length !==0){
+                    mthis.changeButtonParam=[
+                        {
+                            'id_suf':'HSD',
+                            'isOpen':true
+                        },
+                        {
+                            'id_suf':'HD',
+                            'isOpen':true
+                        }
+                    ]
+                } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && !$.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
+                    mthis.changeButtonParam=[
+                        {
+                            'id_suf':'HSD',
+                            'isOpen':true
+                        },
+                        {
+                            'id_suf':'HD',
+                            'isOpen':true
+                        }
+                    ]
+                } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && $.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
+                    mthis.changeButtonParam=[
+                        {
+                            'id_suf':'HSD',
+                            'isOpen':false
+                        },
+                        {
+                            'id_suf':'HD',
+                            'isOpen':false
+                        }
+                    ]
+                }
+            }
+            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
+            var selectedEventsParam = {
+                type:'GeoView',
+                eventId:mthis.geometrySelectedEventIds
+            };
+            mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
+        }, */
         geometrySelectedEventIds:function(){
             var mthis = this;
             if(mthis.geometrySelectedEventIds[0] === "geo没有选择到数据"){
