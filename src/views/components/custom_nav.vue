@@ -6,7 +6,7 @@
           <Icon class="icon iconfont icon-file DVSL-bar-btn DVSL-bar-btn-back" size="26" />
         </div>
         <div :style="{height:'5vh'}">
-          <Icon class="icon iconfont icon-image  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
+          <Icon class="icon iconfont icon-image  DVSL-bar-btn DVSL-bar-btn-back"  size="26" />
         </div>
         <div :style="{height:'5vh'}">
           <Icon class="icon iconfont icon-question  DVSL-bar-btn DVSL-bar-btn-back" size="26" />
@@ -20,20 +20,16 @@
       <Row type="flex" justify="center">
         <Col :sm="24" align="middle" v-for="item in items">
           <workspace-item :item="item" @delId='delMethod'></workspace-item>
-          <!-- <p class="workspaceTitle">{{item.title}}</p> -->
-          <!-- <Card style="width:80%">
-              <div style="text-align:center">
-                  <p slot="title" class="workspaceTitle">{{item.title}}</p>
-                  <a href="#" slot="extra" @click.prevent="changeLimit"><Icon type="ios-loop-strong"></Icon>导入</a>
-                  <a href="#" slot="extra" @click.prevent="changeLimit"><Icon type="ios-loop-strong"></Icon>修改</a>
-                  <a href="#" slot="extra" @click.prevent="changeLimit"><Icon type="ios-loop-strong"></Icon>删除</a>
-                  <img :src=item.img width="100%" height="200px"  @click="addToChart(item)"/>
-              </div>
-          </Card> -->
-
         </Col>
       </Row>
     </div>
+    <!-- <div class="scrollBarAble" aria-autocomplete="true"  :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
+      <Row type="flex" justify="center">
+        <Col :sm="24" align="middle" v-for="item in items">
+          <workspace-item-pic :item="item" @delId='delMethod'></workspaceItemPic>
+        </Col>
+      </Row>
+    </div> -->
   </div>
 </template>
 <script>
@@ -42,6 +38,7 @@
   import mock from "../../mock/index.js";
   import Bg2 from "../../dist/assets/images/bg.jpg";
   import workspaceItem from "./custom_workspaceItem";
+  // import workspaceItemPic from "./custom_workspaceItem_pic";
   import $ from "jquery";
   // import $ from "jquery";
   mock.test = 1;

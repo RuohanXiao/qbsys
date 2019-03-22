@@ -274,9 +274,9 @@ var store = new Vuex.Store({
       img:'',
       type:''
     }],
-    tabSelectNet: 'mubiaoxiangqing',
-    tabSelectGeo: 'mubiaoxiangqing',
-    tabSelectContent: 'mubiaoxiangqing',
+    tabSelectNet: 'mubiaoxiangqingNet',
+    tabSelectGeo: 'mubiaoxiangqingGeo',
+    tabSelectContent: 'mubiaoxiangqingContent',
     workSpaceModal:{id:'',flag:false},
     contentStatisticsResult:{},
     StaticsIds:[],

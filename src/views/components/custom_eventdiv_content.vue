@@ -4,7 +4,7 @@
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_20_content}">
         <Tabs :value=$store.state.tabSelectContent>
-          <Tab-pane label="选中详情" name= 'mubiaoxiangqing' v-if="$store.state.tmss === 'content'" :style="{fontSize: '18px',height:viewHeight_20_content}" id='mubiaoxiangqing'  @click="changTab('mubiaoxiangqing')">
+          <Tab-pane label="选中详情" name= 'mubiaoxiangqingContent' :style="{fontSize: '18px',height:viewHeight_20_content}" id='mubiaoxiangqingContent'  @click="changTab('mubiaoxiangqingContent')">
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
@@ -65,7 +65,7 @@
     data() {
       return {
         timer:null,
-        tabSelect:'mubiaoxiangqing',
+        tabSelectContent:'mubiaoxiangqingContent',
         modalNodeId: '',
         contentStatisticsdata:{},
         statisticsNameList:{
@@ -220,7 +220,8 @@
     },
     methods: {
       changTab(a) {
-        this.$store.commit('setTabSelect', a)
+        alert(a)
+        this.$store.commit('setTabSelectContent', a)
       },
       setFlagToFalse(detailModalFlag){
         var mthis = this;

@@ -3,7 +3,7 @@
     <div>
       <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}" class="inputDiv">
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
-          v-show="type==='net'" remote placeholder='' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @change.native="v=>{setOption(v)}" @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
+          v-show="type==='net'"  placeholder='' :remote='true' loading-text='加载中···' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true"  @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
               <!-- <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
               v-show="type==='net'" remote placeholder='' :loading="loading1" :label-in-value="true" @change.native="searchInfoNet" @keyup.enter.native="enterNetOption(options1[0].data[0])"> -->
               <OptionGroup :label="opt1.title" v-for="(opt1) in options1" class="optionTitle">
@@ -100,7 +100,8 @@
         options2: [],
         options3: [],
         lightIconFlag: false,
-        timer: null
+        timer: null,
+        optionNet: []
       }
     },
     methods: {
@@ -120,6 +121,8 @@
         this.lightIconFlag = !this.lightIconFlag
       },
       setOption(a) {
+        console.log('----setoption-----')
+        console.log(a)
         var mthis = this;
         if (this.$store.state.tmss === 'net') {
           // if (this.timer) {
@@ -129,6 +132,8 @@
           //   // 新增防抖功能
           let arr = []
           arr.push(a.id)
+          console.log(a)
+          console.log(arr)
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
             'nodeIds': arr
           }).then(response => {
@@ -192,6 +197,8 @@
                 emulateJSON: true
               })
               .then(response => {
+                console.log('=======pattern======')
+                // console.log(response)
                 mthis.options1 = []
                 // let optionWord = {}
                 // let optionWordArr = []
@@ -204,7 +211,8 @@
                   optionListArr.push({
                     // "label": name,
                     "label": response.body.data.nodes[i].name,
-                    "value": response.body.data.nodes[i].id,
+                    // "value": response.body.data.nodes[i].id,
+                    "value": query,
                     "id": response.body.data.nodes[i].id,
                     "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image.png'),
                     "type": response.body.data.nodes[i].type
@@ -212,15 +220,17 @@
                 }
                 optionList.title = '实体检索'
                 optionList.data = optionListArr
-                let option = []
-                option.push(optionList)
-                mthis.options1 = option;
+                // mthis.optionNet.push(optionList)
+                // mthis.options1 = mthis.optionNet;
+                mthis.options1 = new Array(optionList)
+                console.log(mthis.options1)
+                mthis.loading1 = false;
               })
           }, 200);
         } else {
           mthis.options1 = [];
-        }
         mthis.loading1 = false;
+        }
       },
       searchInfoGeo(query) {
         var mthis = this;

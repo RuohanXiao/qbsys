@@ -134,6 +134,13 @@ v0.1.1.0320d
 
 
 
+v0.1.1.0322x
+1.修改搜索BUG
+2.修改网络分析zoomchart样式
+3.修改高亮状态
+4.更新updateStyle
+
+
 
 部署时修改本地资源为服务器资源！！！！
 custom_event_net    home

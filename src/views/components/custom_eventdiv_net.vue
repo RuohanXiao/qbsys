@@ -4,7 +4,7 @@
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
         <Tabs :value=$store.state.tabSelectNet>
-          <Tab-pane label="选中详情" name='mubiaoxiangqing' v-if="$store.state.tmss === 'net'" :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqing' @click="changTab('mubiaoxiangqing')">
+          <Tab-pane label="选中详情" name='mubiaoxiangqingNet' :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqingNet' @click="changTab('mubiaoxiangqingNet')">
             <eventNet :resArr='resArr' :evetdata='evetdata' v-show='evetdataFlag'></eventNet>
             <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
@@ -54,7 +54,7 @@
         selectTime: false,
         timer: null,
         // tabSelect: '数据透视',
-        tabSelect: 'mubiaoxiangqing',
+        tabSelectNet: 'mubiaoxiangqingNet',
         modalNodeId: '',
         contentStatisticsdata: {},
         evetdataFlag:false,
@@ -229,7 +229,7 @@
       },
       netTimeCondition: function(va) {
         this.selectTime = true
-        this.tabSelect = 'mubiaoxiangqing'
+        this.tabSelectNet = 'mubiaoxiangqingNet'
       },
       selectNetNodes: function() {
         var mthis = this;
@@ -251,11 +251,13 @@
     methods: {
       clickLeftStatics(staticsClick){
         var mthis = this;
-        mthis.$store.commit('setNetStaticsSelectedIds',ids);
+        // console.log(staticsClick)
+        mthis.$store.commit('setNetStaticsSelectedIds',staticsClick);
       },
       hightLight(id) {},
       changTab(a) {
-        this.$store.commit('setTabSelect', a)
+        alert(a)
+        this.$store.commit('setTabSelectNet', a)
       },
       setFlagToFalse(detailModalFlag) {
         var mthis = this;

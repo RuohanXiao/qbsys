@@ -5,7 +5,7 @@
       <div id="tab1" :style="{margin:'0',height:viewHeight_20_geo}">
         <Tabs :value=$store.state.tabSelectGeo>
           
-          <Tab-pane label="选中详情" name= 'mubiaoxiangqing'  :style="{fontSize: '18px',height:viewHeight_20_geo}" id='mubiaoxiangqing' @click="changTab('mubiaoxiangqing')">
+          <Tab-pane label="选中详情" name= 'mubiaoxiangqingGeo'  :style="{fontSize: '18px',height:viewHeight_20_geo}" id='mubiaoxiangqingGeo' @click="changTab('mubiaoxiangqingGeo')">
             <div>
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
@@ -64,7 +64,7 @@
     data() {
       return {
         timer:null,
-        tabSelect:'mubiaoxiangqing',
+        tabSelectGeo:'mubiaoxiangqingGeo',
         modalNodeId: '',
         contentStatisticsdata:{},
         statisticsNameList:{
@@ -217,7 +217,8 @@
     },
     methods: {
       changTab(a) {
-        this.$store.commit('setTabSelect', a)
+        alert(a)
+        this.$store.commit('setTabSelectGeo', a)
       },
       setFlagToFalse(detailModalFlag){
         var mthis = this;

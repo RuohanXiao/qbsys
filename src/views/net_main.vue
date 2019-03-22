@@ -11,7 +11,7 @@
           </div>
           <div id="right" slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
             <!-- <div :style="{backgroundColor:'rgba(0,0,0,0.5)'}"> -->
-            <event-chart-div :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div>
+            <event-chart-div-net :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div-net>
             <!-- </div> -->
           </div>
         </Split>
@@ -23,7 +23,7 @@
   import "../dist/assets/styles/net_main.css";
   import netChartDiv from "./components/custom_netdiv";
   import timeChartDiv from "./components/custom_timediv_net";
-  import eventChartDiv from "./components/custom_eventdiv_net";
+  import eventChartDivNet from "./components/custom_eventdiv_net";
   import {
     mapState,
     mapMutations
@@ -45,7 +45,7 @@
     components: {
       netChartDiv,
       timeChartDiv,
-      eventChartDiv
+      eventChartDivNet
     },
     methods: {
       // selectNodes(opt) {
