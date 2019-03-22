@@ -224,7 +224,9 @@ export default {
         geometrySelectedEventIds:[],
         timeSelectedEventIds:[],
         staticsSelectedEventIds:[],
+        SelectedEventIds:[],//被选中的事件ids
         invertSelectedEventIds:[], //反选存储
+        AreaIds:[],  //行政区划ids
         changeButtonParam:[],
         pointMoveListenerKey:null,
         pointClickListenerKey:null,
@@ -322,17 +324,18 @@ export default {
         },
         explore(){
             var mthis = this;
-            var s = mthis.getLayerById('HLAreaLayer').getSource().getFeatures()[0].getGeometry();
-            var g = new GeoJSON().writeGeometry(s)
+            var geometry = mthis.getLayerById('HLAreaLayer').getSource().getFeatures()[0].getGeometry();
+            var geometryStr = new GeoJSON().writeGeometry(geometry)
             //mthis.$http.post('http://localhost:5000/exploreOrg/', {
             mthis.$http.post('http://10.60.1.141:5001/exploreOrg/', {
-                'geometry':g
+                'geometry':geometryStr
             }).then(response => {
                 var OrgGeojson = response.body.data.OrgFeatures;
                 var features = (new GeoJSON()).readFeatures(OrgGeojson);
                 mthis.getLayerById('OrgLayer').getSource().addFeatures(features);
             })
         },
+        
         clearAll(){
             var mthis = this;
             mthis.getLayerById('eventsPointsLayer').getSource().clear();
@@ -407,24 +410,27 @@ export default {
         },
         selectAll(){
             var mthis = this;
-            mthis.geometrySelectedEventIds = [];
-            mthis.timeSelectedEventIds = [];
-            mthis.staticsSelectedEventIds = [];
+            debugger
+            mthis.geometrySelectedEventIds.length = 0;
+            mthis.timeSelectedEventIds.length = 0;
+            mthis.staticsSelectedEventIds.length = 0;
             var features = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
             features.forEach(function(item){
                 var num = item.get('Events').length;
                 item.set('selectedEventsNum',num);
+                mthis.addEventIdsToSelectedIds(item);
                 mthis.setSelectedEventFeatureParam(item,true);
             });
         },
         returnToAllPoints(){
             var mthis = this;
+            debugger
             if($.isEmptyObject(mthis.removeEventIdList)){
                 return;
             }
-            mthis.geometrySelectedEventIds = [];
-            mthis.timeSelectedEventIds = [];
-            mthis.staticsSelectedEventIds = [];
+            mthis.geometrySelectedEventIds.length = 0;
+            mthis.timeSelectedEventIds.length = 0;
+            mthis.staticsSelectedEventIds.length = 0;
             var source = mthis.getLayerById('eventsPointsLayer').getSource();
             if(mthis.removeFeaturesArr.length > 0){
                 source.addFeatures(mthis.removeFeaturesArr);
@@ -440,46 +446,17 @@ export default {
                     feature.set('Events',oldEvent,false);
                     mthis.$delete(mthis.removeEventIdList,item);
                 })
-                //mthis.removeEventIdList = {};
             }
             var features = source.getFeatures();
             if(features.length > 0){
                 features.forEach(function(item){
                     item.set('selectedEventsNum',item.get('Events').length,false);
                     mthis.setLifeOrDiePointStyleByValue(item,'life');
-                    item.get('Events').forEach(function(Iitem){
-                        var eventId = Iitem.id;
-                        //mthis.allEventIds.push(eventId);
-                        var param = {
-                            'featureId':item.getId(),
-                            'time':Iitem.time
-                        };
-                        mthis.$set(mthis.allEventIdsToFeaturesIdsList,eventId,param)
-                            /* mthis.allEventIdsToFeaturesIdsList[eventId] = {
-                                'featureId':item.getId(),
-                                'time':Iitem.time
-                            }; */
-                    });
+                    mthis.addEventIdsToAEITFIdsListFromFeature(item);
+                    mthis.addEventIdsToSelectedIds(item);
                 })
             }
         },
-        /* redataAllEventIdsToFeaturesIdsList(){
-            var mthis = this;
-            mthis.allEventIdsToFeaturesIdsList = null;
-            var features = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
-            features.forEach(function(item){
-                //mthis.setLifeOrDiePointStyleByValue(item,'life');
-                //mthis.getFeatrueAllEventIds(feature)
-                item.get('Events').forEach(function(Iitem){
-                    var eventId = Iitem.id;
-                    //mthis.allEventIds.push(eventId);
-                    mthis.allEventIdsToFeaturesIdsList[eventId] = {
-                        'featureId':item.getId(),
-                        'time':Iitem.time
-                    };
-                });
-            });
-        }, */
         legendItemClick(legendItemOpera){
             var mthis = this;
             var map = mthis.routeMap.map;
@@ -554,7 +531,7 @@ export default {
             return iconStyle;
 
         },
-        selectfilterFun(feature,layer){
+        pointerMoveselectfilterFun(feature,layer){
             var mthis = this;
             if(layer.get('id') === "eventsPointsLayer"){
                 if(feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
@@ -574,6 +551,9 @@ export default {
                 }))
             });
             return iconStyle
+        },
+        clickselectfilterFun(feature,layer){
+            return true
         },
         addlocationLayer(){
             var mthis = this;
@@ -625,14 +605,26 @@ export default {
                 mthis.selectPointerMove = new Select({
                     condition: pointerMove,
                     layers:[Eventslayer,Orglayer],
-                    filter:mthis.selectfilterFun,
+                    filter:mthis.pointerMoveselectfilterFun,
                     style:mthis.selectfilterStyleFun   
                 });
                 mthis.selectClick = new Select({
-                    condition: click
+                    condition: click,
+                    layers:[HLArealayer],
+                    filter:mthis.clickselectfilterFun,
+                    style:new Style({
+                        fill: new Fill({ //矢量图层填充颜色，以及透明度
+                            color: 'rgba(51, 255, 255, 0.0)'
+                        }),
+                        stroke: new Stroke({ //边界样式
+                            color: 'rgba(51, 255, 255, 0)',
+                            width: 0
+                        })
+                    })
+
                 });
                 mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
-                // mthis.routeMap.map.addInteraction(mthis.selectClick);
+                mthis.routeMap.map.addInteraction(mthis.selectClick);
                 mthis.selectPointerMove.on('select', function(e) {
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected
@@ -660,27 +652,27 @@ export default {
                         }
                     }
                 });
-               /*  mthis.selectClick.on('select', function(e) {
-                    var features = e.selected;
-                    for(let i = 0; i < features.length; i++){
-                        if(features[i].getId().split('_')[0] === 'event_Feature'){
-                            if(features.length > 0 && features[i].get('Events') !== undefined && features[i].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
-                                if(mthis.pointMoveListenerKey !== null && mthis.pointMoveListenerKey.type !== undefined && mthis.pointMoveListenerKey.type === "postcompose"){
-                                    unByKey(mthis.pointMoveListenerKey);
-                                }
-                                if(mthis.pointClickListenerKey !== null && mthis.pointClickListenerKey.type !== undefined && mthis.pointClickListenerKey.type === "postcompose"){
-                                    unByKey(mthis.pointClickListenerKey);
-                                }
-                                mthis.pointSelectedAnimation(features[i],'pointClick');
-                            } else {
-                                if(mthis.pointClickListenerKey !== null && mthis.pointClickListenerKey.type !== undefined && mthis.pointClickListenerKey.type === "postcompose"){
-                                    unByKey(mthis.pointClickListenerKey);
+                mthis.selectClick.on('select', function(e) {
+                    debugger
+                    var Gfeatures = e.selected;
+                    if(Gfeatures.length > 0){
+                        var source = mthis.getLayerById('HLAreaLayer').getSource();
+                        Gfeatures.forEach(function(item){
+                            debugger
+                            var id = item.getId();
+                            var index;
+                            for(let i = 0; i < mthis.AreaIds.length; i++){
+                                if(id === mthis.AreaIds[i]){
+                                    index = i
                                 }
                             }
-                        }
+                            mthis.$data.AreaIds.splice(index,1);
+                            source.removeFeature(item);
+                        })
                     }
                     
-                }); */
+
+                });
                 /* var features = (new GeoJSON()).readFeatures(mthis.test_mapData.data);
                 features.forEach(function(item){
                     mthis.setLifeOrDiePointStyleByValue(item,'life');
@@ -1199,9 +1191,6 @@ export default {
         },
         setLifeOrDiePointStyleByValue(feature,pointStatus){  //pointStatus参数目前一共有三种情况，life、halflife、die
             var mthis = this;
-            /* if(feature.getStyle() !== null && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
-                return;
-            } */
             var eventNum = feature.get('selectedEventsNum');
             var fRadius = 3;
             /* if(eventNum > 10){
@@ -1460,15 +1449,29 @@ export default {
                 return response.json();
             }).then(function (data) {
                 //查询结果
+                debugger
                 var features = new GeoJSON().readFeatures(data);
                 var map = mthis.routeMap.map;
                 var source = mthis.getLayerById('HLAreaLayer').getSource();
                 var extent = features[0].getGeometry().getExtent();
+                if(features.length > 0){
+                    for(let j = 0; j < features.length; j++){
+                        var id = features[j].getId();
+                        var index = -1;
+                        for(let i = 0; i < mthis.AreaIds.length; i++){
+                            if(id === mthis.AreaIds[i]){
+                                index = i
+                            }
+                        }
+                        if(index !== -1){
+                            features.splice(index,1);
+                        } else {
+                            mthis.$data.AreaIds.push(id);
+                        }
+                        
+                    }
+                }
                 source.addFeatures(features)
-                /* map.getView().animate({
-                    center: getCenter(extent),
-                    duration: 1000
-                }); */
                 map.getView().fit(extent,{
                     size:map.getSize(),
                     duration: 1000
@@ -1494,7 +1497,6 @@ export default {
                 })
             });
             map.addLayer(heatMap_layer);
-            //heatMap_source.addFeatures(features);
             features.forEach(function(item,index){
                 
                 var heatMapStyle = new Style({
@@ -1522,30 +1524,16 @@ export default {
             var selectedEventIds = mthis.getSelectedEventIds().ids;
             if(selectedEventIds.length > 0){
                 selectedEventIds.forEach(function(item){
-                    //mthis.deleteArrItem(mthis.allEventIds,item.id);
-                    //mthis.removeEventIdList[item] = mthis.allEventIdsToFeaturesIdsList[item];
                     mthis.$set(mthis.removeEventIdList,item,mthis.allEventIdsToFeaturesIdsList[item]);
                     mthis.deleteEventInFeaturesById(item);
-                    //delete mthis.allEventIdsToFeaturesIdsList[item];
                     mthis.$delete(mthis.allEventIdsToFeaturesIdsList,item)
                 })
             }
             mthis.geometrySelectedEventIds.length = 0;
             mthis.timeSelectedEventIds.length = 0;
             mthis.staticsSelectedEventIds.length = 0;
+            mthis.selectedIds = [];
             
-            /* for(let i = source.getFeatures().length - 1; i >= 0 ; i--){
-                var events = source.getFeatures()[i].get('Events');
-                events.forEach(function(item){
-                    mthis.deleteArrItem(mthis.allEventIds,item.id);
-                    delete mthis.allEventIdsToFeaturesIdsList[item.id];
-                });
-                if(source.getFeatures()[i].getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
-                    mthis.removeFeaturesArr.push(source.getFeatures()[i]);
-                    source.removeFeature(source.getFeatures()[i]);
-                    
-                }
-            } */
         },
         getBelongFeatureByEventId(id){
             var mthis = this;
@@ -1565,11 +1553,6 @@ export default {
             }
             var selectedEventsNum = feature.get('selectedEventsNum');
             feature.set('selectedEventsNum',selectedEventsNum - 1,false);
-            /* if(feature.get('selectedEventsNum') <= 0){
-                mthis.setSelectedEventFeatureParam(feature,false);
-            } else {
-                mthis.setSelectedEventFeatureParam(feature,true);
-            } */
             if(feature.get('Events').length === 0){
                 mthis.removeFeaturesArr.push(feature);
                 source.removeFeature(feature);
@@ -1596,9 +1579,6 @@ export default {
             ids.forEach(function(item){ //将原来选中的事件取消
                 var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
                 var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
-                // var eventTime = '';
-                // var featrueEvents = feature.get('Events');
-                //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
                 mthis.setSelectedEventFeatureParam(feature,false);
             })
             //找到未被选中的事件并高亮
@@ -1688,7 +1668,6 @@ export default {
             }));
             return overlay;
         },
-
         /**
          * @param 删除map中所有此id的overlay  切记，overlay的移除只能从后往前移除
          */
@@ -1857,27 +1836,6 @@ export default {
                 mthis.setSelectedEventFeatureParam(feature,true);
             })
         },
-        // addFeaturesByGeoJsonToSource(GeoJson,source){
-        //     var mthis = this;
-        //     var features = (new GeoJSON()).readFeatures(mthis.test_mapData);
-        //     features.forEach(function(item){
-        //         // mthis.setLifeOrDiePointStyleByValue(item,'life');
-        //         // //mthis.getFeatrueAllEventIds(feature)
-        //         // item.get('Events').forEach(function(Iitem){
-        //         //     var eventId = Iitem.id;
-        //         //     //mthis.allEventIds.push(eventId);
-        //         //     var param = {
-        //         //         'featureId':item.getId(),
-        //         //         'time':Iitem.time
-        //         //     };
-        //         //     mthis.$set(mthis.allEventIdsToFeaturesIdsList,eventId,param)
-        //         //    /*  mthis.allEventIdsToFeaturesIdsList[eventId] = {
-        //         //         'featureId':item.getId(),
-        //         //         'time':Iitem.time
-        //         //     }; */
-        //         // });
-        //     });
-        // },
         getallEventIdsFromallEventIdsToFeaturesIds(){
             var mthis = this;
             var ids = []
@@ -1899,10 +1857,14 @@ export default {
                         'time':Iitem.time
                     };
                 mthis.$set(mthis.allEventIdsToFeaturesIdsList,eventId,param)
-                /* mthis.allEventIdsToFeaturesIdsList[eventId] = {
-                    'featureId':feature.getId(),
-                    'time':Iitem.time
-                }; */
+            });
+        },
+        addEventIdsToSelectedIds(eventFeature){
+            debugger
+            var mthis = this;
+            eventFeature.get('Events').forEach(function(Iitem){
+                var eventId = Iitem.id;
+                mthis.$data.SelectedEventIds.push(eventId);
             });
         },
         /**
@@ -1910,18 +1872,21 @@ export default {
          */
         addFeaturesToEventLayer(addFeatures){
             var mthis = this;
+            debugger
             var eventLayerSource = mthis.getLayerById('eventsPointsLayer').getSource();
             if(eventLayerSource.getFeatures().length === 0){                          //判断地图中是否原本有数据
                 addFeatures.forEach(function(item){
                     mthis.setLifeOrDiePointStyleByValue(item,'life');
                     mthis.addEventIdsToAEITFIdsListFromFeature(item);
+                    mthis.addEventIdsToSelectedIds(item)
                 });
                 mthis.returnSelectedEventIds(mthis.EventsDatas.data);
                 eventLayerSource.addFeatures(addFeatures);
             } else { //若地图中原本有数据
-                mthis.geometrySelectedEventIds = [];
-                mthis.timeSelectedEventIds = [];
-                mthis.staticsSelectedEventIds = [];
+                mthis.geometrySelectedEventIds.length = 0;
+                mthis.timeSelectedEventIds.length = 0;
+                mthis.staticsSelectedEventIds.length = 0;
+                mthis.SelectedEventIds = []
                 var mapFeatures = eventLayerSource.getFeatures();
                 mapFeatures.forEach(function(feature){
                     feature.set('selectedEventsNum',0);
@@ -1929,6 +1894,7 @@ export default {
                 })
                 addFeatures.forEach(function(additem){
                     mthis.addEventIdsToAEITFIdsListFromFeature(additem);
+                    mthis.addEventIdsToSelectedIds(additem)
                     if(additem.getId() !== null && additem.getId() !== undefined){
                         var featureId = additem.getId();
                         var mapFeature = eventLayerSource.getFeatureById(featureId);
@@ -1964,6 +1930,85 @@ export default {
                     }
                 })
             }
+        },
+        isOperateButtonsHLOrDim(){
+            var mthis = this;
+            debugger
+            if($.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
+                mthis.changeButtonParam=[
+                        {
+                            'id_suf':'HSD',
+                            'isOpen':false
+                        },
+                        {
+                            'id_suf':'HD',
+                            'isOpen':false
+                        }
+                    ]
+                if($.isEmptyObject(mthis.removeEventIdList)){
+                    mthis.changeButtonParam.push({
+                            'id_suf':'HDD',
+                            'isOpen':false
+                        })
+                        
+                } else {
+                    mthis.changeButtonParam.push({
+                            'id_suf':'HDD',
+                            'isOpen':true
+                        })
+                }
+                if(mthis.AreaIds.length == 0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HL',
+                        'isOpen':false
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HL',
+                        'isOpen':true
+                    })
+                }
+            } else {
+                mthis.changeButtonParam=[
+                    {
+                        'id_suf':'HD',
+                        'isOpen':true
+                    }
+                ]
+                if(mthis.SelectedEventIds.length > 0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HSD',
+                        'isOpen':true
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HSD',
+                        'isOpen':false
+                    })
+                }
+                if($.isEmptyObject(mthis.removeEventIdList)){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HDD',
+                        'isOpen':false
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HDD',
+                        'isOpen':true
+                    })
+                }
+                if(mthis.AreaIds.length == 0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HL',
+                        'isOpen':false
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HL',
+                        'isOpen':true
+                    })
+                }
+            }
         }
 
     },
@@ -1972,11 +2017,16 @@ export default {
     ]),
     
     watch:{
+        AreaIds:function(){
+            debugger
+            var mthis = this;
+            mthis.isOperateButtonsHLOrDim();
+        },
         HLlocationIds:function(){
             var mthis = this;
             var ids = mthis.$store.state.HLlocationIds;
-            var source = mthis.getLayerById('HLAreaLayer').getSource();
-            source.clear();
+            //var source = mthis.getLayerById('HLAreaLayer').getSource();
+            //source.clear();
             var feature;
             for(let i = 0; i < ids.length; i++){
                 var type = ids[i].split('_')[1];
@@ -1985,154 +2035,10 @@ export default {
             }
 
         },
-        timeSelectedEventIds:function(){
-            var mthis = this;
-            if(mthis.timeSelectedEventIds.length !==0){
-                mthis.changeButtonParam=[
-                    {
-                        'id_suf':'HSD',
-                        'isOpen':true
-                    },
-                    {
-                        'id_suf':'HD',
-                        'isOpen':true
-                    }
-                ]
-            } else if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && !$.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                mthis.changeButtonParam=[
-                    {
-                        'id_suf':'HSD',
-                        'isOpen':true
-                    },
-                    {
-                        'id_suf':'HD',
-                        'isOpen':true
-                    }
-                ]
-            } else if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && $.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                mthis.changeButtonParam=[
-                    {
-                        'id_suf':'HSD',
-                        'isOpen':false
-                    },
-                    {
-                        'id_suf':'HD',
-                        'isOpen':false
-                    }
-                ]
-            }
-        },
-        staticsSelectedEventIds:function(){
-            var mthis = this;
-            if(mthis.staticsSelectedEventIds.length !==0){
-                mthis.changeButtonParam=[
-                    {
-                        'id_suf':'HSD',
-                        'isOpen':true
-                    },
-                    {
-                        'id_suf':'HD',
-                        'isOpen':true
-                    }
-                ]
-            } else if(mthis.timeSelectedEventIds.length === 0 && mthis.geometrySelectedEventIds.length === 0 && !$.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                mthis.changeButtonParam=[
-                    {
-                        'id_suf':'HSD',
-                        'isOpen':true
-                    },
-                    {
-                        'id_suf':'HD',
-                        'isOpen':true
-                    }
-                ]
-            } else if(mthis.timeSelectedEventIds.length === 0 && mthis.geometrySelectedEventIds.length === 0 && $.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                mthis.changeButtonParam=[
-                    {
-                        'id_suf':'HSD',
-                        'isOpen':false
-                    },
-                    {
-                        'id_suf':'HD',
-                        'isOpen':false
-                    }
-                ]
-            }
-        },
         allEventIdsToFeaturesIdsList:{
             handler(newValue) {
                 var mthis = this;
-                if($.isEmptyObject(newValue)){
-                    if($.isEmptyObject(mthis.removeEventIdList)){
-                        mthis.changeButtonParam=[
-                            {
-                                'id_suf':'HSD',
-                                'isOpen':false
-                            },
-                            {
-                                'id_suf':'HD',
-                                'isOpen':false
-                            },
-                            {
-                                'id_suf':'HDD',
-                                'isOpen':false
-                            }
-                        ]
-                    } else {
-                        mthis.changeButtonParam=[
-                            {
-                                'id_suf':'HSD',
-                                'isOpen':false
-                            },
-                            {
-                                'id_suf':'HD',
-                                'isOpen':false
-                            },
-                            {
-                                'id_suf':'HDD',
-                                'isOpen':true
-                            }
-                        ]
-                    }
-                } else {
-                    mthis.changeButtonParam=[
-                        {
-                            'id_suf':'HD',
-                            'isOpen':true
-                        }
-                    ]
-                    if(mthis.geometrySelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && $.isEmptyObject(mthis.removeEventIdList)){
-                        mthis.changeButtonParam=[
-                            {
-                                'id_suf':'HSD',
-                                'isOpen':true
-                            },
-                            {
-                                'id_suf':'HD',
-                                'isOpen':true
-                            },
-                            {
-                                'id_suf':'HDD',
-                                'isOpen':false
-                            }
-                        ]
-                    } else if(mthis.geometrySelectedEventIds.length === 0 && mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && !($.isEmptyObject(mthis.removeEventIdList))){
-                        mthis.changeButtonParam=[
-                            {
-                                'id_suf':'HSD',
-                                'isOpen':false
-                            },
-                            {
-                                'id_suf':'HD',
-                                'isOpen':true
-                            },
-                            {
-                                'id_suf':'HDD',
-                                'isOpen':true
-                            }
-                        ]
-                    }
-                }
+                mthis.isOperateButtonsHLOrDim();
     　　　　 },
     　　　　 deep: true,
             immediate: true
@@ -2159,133 +2065,39 @@ export default {
                 /* 根据ids请求数据
                 ..
                 .. */
+                debugger
                 mthis.eventGeoJson = mthis.test_mapData;
             }
         },
+        SelectedEventIds:function(){
+            var mthis = this;
+            debugger
+            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.SelectedEventIds);
+            mthis.isOperateButtonsHLOrDim();
+            
+        },
         timeSelectedEventIds:function(){
             var mthis = this;
-            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.timeSelectedEventIds);
+            debugger
+            mthis.SelectedEventIds = mthis.timeSelectedEventIds
+            //mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.timeSelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoTime',
                 eventId:mthis.timeSelectedEventIds
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
         },
-        /* geometrySelectedEventIds:function(){
-            var mthis = this;
-            if(mthis.geometrySelectedEventIds[0] === "geo没有选择到数据"){
-                mthis.changeButtonParam=[
-                        {
-                            'id_suf':'HSD',
-                            'isOpen':false
-                        },
-                        {
-                            'id_suf':'HD',
-                            'isOpen':true
-                        }
-                    ]
-                //return
-            } else{
-                if(mthis.geometrySelectedEventIds.length !==0){
-                    mthis.changeButtonParam=[
-                        {
-                            'id_suf':'HSD',
-                            'isOpen':true
-                        },
-                        {
-                            'id_suf':'HD',
-                            'isOpen':true
-                        }
-                    ]
-                } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && !$.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                    mthis.changeButtonParam=[
-                        {
-                            'id_suf':'HSD',
-                            'isOpen':true
-                        },
-                        {
-                            'id_suf':'HD',
-                            'isOpen':true
-                        }
-                    ]
-                } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && $.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                    mthis.changeButtonParam=[
-                        {
-                            'id_suf':'HSD',
-                            'isOpen':false
-                        },
-                        {
-                            'id_suf':'HD',
-                            'isOpen':false
-                        }
-                    ]
-                }
-            }
-            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
-            var selectedEventsParam = {
-                type:'GeoView',
-                eventId:mthis.geometrySelectedEventIds
-            };
-            mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
-        }, */
         geometrySelectedEventIds:function(){
             var mthis = this;
-            if(mthis.geometrySelectedEventIds[0] === "geo没有选择到数据"){
-                mthis.changeButtonParam=[
-                        {
-                            'id_suf':'HSD',
-                            'isOpen':false
-                        },
-                        {
-                            'id_suf':'HD',
-                            'isOpen':true
-                        }
-                    ]
-                //return
-            } else{
-                if(mthis.geometrySelectedEventIds.length !==0){
-                    mthis.changeButtonParam=[
-                        {
-                            'id_suf':'HSD',
-                            'isOpen':true
-                        },
-                        {
-                            'id_suf':'HD',
-                            'isOpen':true
-                        }
-                    ]
-                } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && !$.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                    mthis.changeButtonParam=[
-                        {
-                            'id_suf':'HSD',
-                            'isOpen':true
-                        },
-                        {
-                            'id_suf':'HD',
-                            'isOpen':true
-                        }
-                    ]
-                } else if(mthis.timeSelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0 && $.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
-                    mthis.changeButtonParam=[
-                        {
-                            'id_suf':'HSD',
-                            'isOpen':false
-                        },
-                        {
-                            'id_suf':'HD',
-                            'isOpen':false
-                        }
-                    ]
-                }
-            }
-            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
+            debugger
+            mthis.SelectedEventIds = mthis.geometrySelectedEventIds
+            // mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoView',
                 eventId:mthis.geometrySelectedEventIds
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
         },
-        geo_selected_param:function(){},
         geoTimeCondition:function(){
             var mthis = this;
             mthis.timeCondition = [util.getTimestamp(mthis.$store.state.geoTimeCondition[0]),util.getTimestamp(mthis.$store.state.geoTimeCondition[1])];
@@ -2335,6 +2147,7 @@ export default {
         },
         tmss:function(){
             var mthis = this
+            debugger
             if(mthis.tmss == 'geo'){
                 this.$nextTick(function(){
                     var mthis = this
@@ -2343,21 +2156,6 @@ export default {
                     if(mthis.eventGeoJson !== null){
                         var allFeatures = (new GeoJSON()).readFeatures(mthis.eventGeoJson);
                         mthis.addFeaturesToEventLayer(allFeatures);
-                        /* allFeatures.forEach(function(item){
-                            mthis.setLifeOrDiePointStyleByValue(item,'life');
-                            //mthis.getFeatrueAllEventIds(feature)
-                            item.get('Events').forEach(function(Iitem){
-                                var eventId = Iitem.id;
-                                //mthis.allEventIds.push(eventId);
-                                mthis.allEventIdsToFeaturesIdsList[eventId] = {
-                                    'featureId':item.getId(),
-                                    'time':Iitem.time
-                                };
-                            });
-                        }); */
-                        /* mthis.returnSelectedEventIds(mthis.EventsDatas.data);
-                        var source = mthis.getLayerById('eventsPointsLayer').getSource();
-                        source.addFeatures(allFeatures); */
                     }
                 });
             }
