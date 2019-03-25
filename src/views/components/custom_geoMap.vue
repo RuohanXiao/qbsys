@@ -199,7 +199,7 @@ export default {
         provinTilSource:null,
         selectedPointsSource:null,
         polygonLayer:null,
-        diePointColor: '#33ffff',//初始化加载时的实体点颜色
+        diePointColor:'#9eb2b1', //'#33ffff',//初始化加载时的实体点颜色
         lifePointColor: '#ff9900',//拉框选中后的实体点颜色
         halflifePointColor:'rgba(255,204,102,0.5)',
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
@@ -227,6 +227,7 @@ export default {
         SelectedEventIds:[],//被选中的事件ids
         invertSelectedEventIds:[], //反选存储
         AreaIds:[],  //行政区划ids
+        selectedOrgIds:[],  //被选中的组织机构ids
         changeButtonParam:[],
         pointMoveListenerKey:null,
         pointClickListenerKey:null,
@@ -318,7 +319,7 @@ export default {
             mthis.click_heatMap(heatMapLayer);
         },
         disHeatMap(){
-            debugger
+            //debugger
             var mthis = this;
             
         },
@@ -326,8 +327,8 @@ export default {
             var mthis = this;
             var geometry = mthis.getLayerById('HLAreaLayer').getSource().getFeatures()[0].getGeometry();
             var geometryStr = new GeoJSON().writeGeometry(geometry)
-            //mthis.$http.post('http://localhost:5000/exploreOrg/', {
-            mthis.$http.post('http://10.60.1.141:5001/exploreOrg/', {
+            mthis.$http.post('http://localhost:5000/exploreOrg/', {
+           //mthis.$http.post('http://10.60.1.141:5001/exploreOrg/', {
                 'geometry':geometryStr
             }).then(response => {
                 var OrgGeojson = response.body.data.OrgFeatures;
@@ -410,7 +411,7 @@ export default {
         },
         selectAll(){
             var mthis = this;
-            debugger
+            //debugger
             mthis.geometrySelectedEventIds.length = 0;
             mthis.timeSelectedEventIds.length = 0;
             mthis.staticsSelectedEventIds.length = 0;
@@ -424,7 +425,7 @@ export default {
         },
         returnToAllPoints(){
             var mthis = this;
-            debugger
+            //debugger
             if($.isEmptyObject(mthis.removeEventIdList)){
                 return;
             }
@@ -451,7 +452,7 @@ export default {
             if(features.length > 0){
                 features.forEach(function(item){
                     item.set('selectedEventsNum',item.get('Events').length,false);
-                    mthis.setLifeOrDiePointStyleByValue(item,'life');
+                    mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
                     mthis.addEventIdsToAEITFIdsListFromFeature(item);
                     mthis.addEventIdsToSelectedIds(item);
                 })
@@ -522,11 +523,27 @@ export default {
         },
         OrgStyleFun(feature){
             var mthis = this;
-            var iconStyle = new Style({
-                image: new Icon(({
-                    src: require('../../dist/assets/images/geo/Organization.png')
-                }))
-            });
+            var iconStyle
+            if(feature.get('dispStatus') === 'life'){
+                iconStyle = new Style({
+                    image: new Icon(({
+                        src: require('../../dist/assets/images/geo/Organization.png')
+                    }))
+                });
+            } else if(feature.get('dispStatus') === 'die'){
+                iconStyle = new Style({
+                    image: new Icon(({
+                        src: require('../../dist/assets/images/geo/Organization.png')
+                    }))
+                });
+            } else {
+                iconStyle = new Style({
+                    image: new Icon(({
+                        src: require('../../dist/assets/images/geo/Organization.png')
+                    }))
+                }); 
+            }
+            
 
             return iconStyle;
 
@@ -544,7 +561,7 @@ export default {
             }
         },
         selectfilterStyleFun(feature,resolution){
-            debugger
+            //debugger
             var iconStyle = new Style({
                 image: new Icon(({
                     src: require('../../dist/assets/images/geo/Organization_Selected.png')
@@ -653,12 +670,12 @@ export default {
                     }
                 });
                 mthis.selectClick.on('select', function(e) {
-                    debugger
+                    //debugger
                     var Gfeatures = e.selected;
                     if(Gfeatures.length > 0){
                         var source = mthis.getLayerById('HLAreaLayer').getSource();
                         Gfeatures.forEach(function(item){
-                            debugger
+                            //debugger
                             var id = item.getId();
                             var index;
                             for(let i = 0; i < mthis.AreaIds.length; i++){
@@ -675,7 +692,7 @@ export default {
                 });
                 /* var features = (new GeoJSON()).readFeatures(mthis.test_mapData.data);
                 features.forEach(function(item){
-                    mthis.setLifeOrDiePointStyleByValue(item,'life');
+                    mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
                     //mthis.getFeatrueAllEventIds(feature)
                     item.get('Events').forEach(function(Iitem){
                         var eventId = Iitem.id;
@@ -1084,7 +1101,17 @@ export default {
                 mthis.draw = new Draw({
                     source: Vecsource,
                     type: typeValue,                                // 几何图形类型
-                    geometryFunction: geometryFunction              // 几何信息变更时的回调函数
+                    geometryFunction: geometryFunction,              // 几何信息变更时的回调函数
+                    style: new Style({
+                        fill: new Fill({ //矢量图层填充颜色，以及透明度
+                            color: 'rgba(51, 255, 255, 0.3)',
+                            
+                        }),
+                        stroke: new Stroke({ //边界样式
+                            color: 'rgba(51, 255, 255, 1)',
+                            width: 3
+                        })
+                    })
                 });
                 mthis.draw_polygon(mthis.draw);
                 map.addInteraction(mthis.draw);
@@ -1099,6 +1126,7 @@ export default {
             });
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
+                //debugger
                 var geometry = feature.getGeometry();
                 //mthis.geometrySelectedEventIds = [1,2]
                 mthis.selectEventPointsByGeometry_test(geometry);
@@ -1126,7 +1154,7 @@ export default {
             selectingPointSource.getFeatures().forEach(function(item){
                 if(item.getStyle() !== null && item.getStyle().getImage().getFill().getColor() === 'rgba(102,153,153,1)'){
                     /* item.setStyle(mthis.noSelectedstyle); */
-                    mthis.setLifeOrDiePointStyleByValue(item,'life');
+                    mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
                 }
             });
         },
@@ -1165,13 +1193,13 @@ export default {
             selectingPointSource.getFeatures().forEach(function(item) {
                 var coord = item.getGeometry().getCoordinates();
                 var isIn = geometry.intersectsCoordinate(coord);
-                mthis.setLifeOrDiePointStyleByValue(item,'die');
+                mthis.setLifeOrDieEventsPointStyleByValue(item,'die');
                 if (isIn) {
                     item.get('Events').forEach(function(Iitem){
                         mthis.$set(mthis.geometrySelectedEventIds,num,Iitem.id);
                         num++;
                     })
-                    mthis.setLifeOrDiePointStyleByValue(item,'life');
+                    mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
                 } 
             });
             //return frameselectedEventIds
@@ -1181,15 +1209,16 @@ export default {
             var mthis = this;
             if(isSelected){
                 //feature.setStyle(mthis.selectedstyle);
-                mthis.setLifeOrDiePointStyleByValue(feature,'life');
+                mthis.setLifeOrDieEventsPointStyleByValue(feature,'life');
                 //feature.set(selectType,true,false)
             } else {
-                mthis.setLifeOrDiePointStyleByValue(feature,'die');
+                mthis.setLifeOrDieEventsPointStyleByValue(feature,'die');
                 //feature.set(selectType,false,false)
             }
             
         },
-        setLifeOrDiePointStyleByValue(feature,pointStatus){  //pointStatus参数目前一共有三种情况，life、halflife、die
+        //setLifeOrDieOrgPointStyleByValue(){},
+        setLifeOrDieEventsPointStyleByValue(feature,pointStatus){  //pointStatus参数目前一共有三种情况，life、halflife、die
             var mthis = this;
             var eventNum = feature.get('selectedEventsNum');
             var fRadius = 3;
@@ -1449,7 +1478,7 @@ export default {
                 return response.json();
             }).then(function (data) {
                 //查询结果
-                debugger
+                //debugger
                 var features = new GeoJSON().readFeatures(data);
                 var map = mthis.routeMap.map;
                 var source = mthis.getLayerById('HLAreaLayer').getSource();
@@ -1860,7 +1889,7 @@ export default {
             });
         },
         addEventIdsToSelectedIds(eventFeature){
-            debugger
+            //debugger
             var mthis = this;
             eventFeature.get('Events').forEach(function(Iitem){
                 var eventId = Iitem.id;
@@ -1872,11 +1901,11 @@ export default {
          */
         addFeaturesToEventLayer(addFeatures){
             var mthis = this;
-            debugger
+            //debugger
             var eventLayerSource = mthis.getLayerById('eventsPointsLayer').getSource();
             if(eventLayerSource.getFeatures().length === 0){                          //判断地图中是否原本有数据
                 addFeatures.forEach(function(item){
-                    mthis.setLifeOrDiePointStyleByValue(item,'life');
+                    mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
                     mthis.addEventIdsToAEITFIdsListFromFeature(item);
                     mthis.addEventIdsToSelectedIds(item)
                 });
@@ -1890,7 +1919,7 @@ export default {
                 var mapFeatures = eventLayerSource.getFeatures();
                 mapFeatures.forEach(function(feature){
                     feature.set('selectedEventsNum',0);
-                    mthis.setLifeOrDiePointStyleByValue(feature,'die');
+                    mthis.setLifeOrDieEventsPointStyleByValue(feature,'die');
                 })
                 addFeatures.forEach(function(additem){
                     mthis.addEventIdsToAEITFIdsListFromFeature(additem);
@@ -1903,7 +1932,7 @@ export default {
                             addevents.forEach(function(event){
                                 mthis.geometrySelectedEventIds.push(event.id);
                             })
-                            mthis.setLifeOrDiePointStyleByValue(additem,'life');
+                            mthis.setLifeOrDieEventsPointStyleByValue(additem,'life');
                             eventLayerSource.addFeature(additem);
                         } else {  //若地图原有数据中没有该地点数据
                             var addevents = additem.get('Events');
@@ -1922,7 +1951,7 @@ export default {
                                         //mthis.setSelectedEventFeatureParam(feature,false);
                                     }
                                 }
-                                mthis.setLifeOrDiePointStyleByValue(mapFeature,'life');
+                                mthis.setLifeOrDieEventsPointStyleByValue(mapFeature,'life');
                             })
                         }
                     } else {
@@ -1933,7 +1962,7 @@ export default {
         },
         isOperateButtonsHLOrDim(){
             var mthis = this;
-            debugger
+            //debugger
             if($.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
                 mthis.changeButtonParam=[
                         {
@@ -2018,7 +2047,7 @@ export default {
     
     watch:{
         AreaIds:function(){
-            debugger
+            //debugger
             var mthis = this;
             mthis.isOperateButtonsHLOrDim();
         },
@@ -2065,20 +2094,20 @@ export default {
                 /* 根据ids请求数据
                 ..
                 .. */
-                debugger
+                //debugger
                 mthis.eventGeoJson = mthis.test_mapData;
             }
         },
         SelectedEventIds:function(){
             var mthis = this;
-            debugger
+            //debugger
             mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.SelectedEventIds);
             mthis.isOperateButtonsHLOrDim();
             
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            debugger
+            //debugger
             mthis.SelectedEventIds = mthis.timeSelectedEventIds
             //mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.timeSelectedEventIds);
             var selectedEventsParam = {
@@ -2089,7 +2118,7 @@ export default {
         },
         geometrySelectedEventIds:function(){
             var mthis = this;
-            debugger
+            //debugger
             mthis.SelectedEventIds = mthis.geometrySelectedEventIds
             // mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
             var selectedEventsParam = {
@@ -2125,9 +2154,9 @@ export default {
                 var eventTime = '';
                 var featrueEvents = feature.get('Events');
                 if(idsIsAllIds){  //判断ids是否是全量，如果是全量的话，则说明是第一步选择，所有的点先变成die的状态
-                    mthis.setLifeOrDiePointStyleByValue(feature,'die');
+                    mthis.setLifeOrDieEventsPointStyleByValue(feature,'die');
                 } else {
-                    mthis.setLifeOrDiePointStyleByValue(feature,'halflife');
+                    mthis.setLifeOrDieEventsPointStyleByValue(feature,'halflife');
                 }
                 for(let i = 0; i < featrueEvents.length; i++){
                     if(item === featrueEvents[i].id){
@@ -2147,7 +2176,7 @@ export default {
         },
         tmss:function(){
             var mthis = this
-            debugger
+            //debugger
             if(mthis.tmss == 'geo'){
                 this.$nextTick(function(){
                     var mthis = this

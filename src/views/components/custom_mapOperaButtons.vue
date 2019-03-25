@@ -173,7 +173,7 @@ export default {
     methods:{
         divClick(obj){
             var mthis = this;
-            debugger
+            //debugger
             var operationObj = obj;
             if(operationObj.currentTarget.className === 'button-none'){
               return
