@@ -10,7 +10,7 @@
               <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
                 <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
                   <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
-                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="selectNetNodes != null&&selectNetNodes[0]!==undefined">{{selectNetNodes[0].ids.length}}</span>)
+                    <!-- <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="selectNetNodes != null&&selectNetNodes[0]!==undefined">{{selectNetNodes[0].ids.length}}</span>) -->
                     <i class="icon iconfont icon-more" style="float:right"></i>
                   </p>
                 </div>
@@ -42,7 +42,7 @@
             </div>
           </Tab-pane>
           <Tab-pane label="数据透视" name= 'toushi' :style="{fontSize: '18px',height:viewHeight_20_geo}" id='toushi' @click="changTab('toushi')">
-            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'geo' && nodeTypedata !== null"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
           </Tab-pane>
         </Tabs>
       </div>
@@ -98,56 +98,7 @@
         eventheightdiv: 0,
         eventheight: 0,
         closable: true,
-        firstClassify : [
-                {
-                    id:'NodeType',
-                    disName:'节点类型'
-                },
-                {
-                    id:'EntityAttr',
-                    disName:'实体属性'
-                }
-            ],
-        nodeTypeClassify : [
-                {
-                    id:'event',
-                    disName:'事件'
-                },
-                {
-                    id:'organization',
-                    disName:'机构'
-                }
-            ],
-            EntityAttrClassify:{
-              "event":[{
-                    id:'type',
-                    disName:'类型'
-                },
-                {
-                    id:'main_body',
-                    disName:'主体'
-                },
-                {
-                    id:'place',
-                    disName:'地点'
-                }],
-              "organization":[
-                {
-                    id:'type',
-                    disName:'类型'
-                },
-                {
-                    id:'headquarters_location',
-                    disName:'总部'
-                },
-                {
-                    id:'torchbearer',
-                    disName:'领导人'
-                }
-              ]
-            },
-            nodeTypedata:null,
-            staticsIds:[],
+        staticsDatas:[],
       };
     },
     components: {
@@ -162,60 +113,43 @@
         //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'geo_selected_param','contentStatisticsResult','viewHeight_20_geo']),
+    computed:mapState (['geo_selected_param', 'singlePerson', 'viewHeight', 'geo_selected_param','contentStatisticsResult','viewHeight_20_geo']),
     watch: {
       // contentStatisticsResult:function(){
       //   var mthis = this;
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
-      geo_selected_param: function() {
-        var mthis = this;
-        var type = mthis.$store.state.geo_selected_param.type;
-        if(type !== 'GeoTime'){
-          //mthis.dataStatistics = mthis.$store.state.geo_selected_param.eventId;
-          mthis.nodeTypedata = {
-                code:0,
-                data:[
-                    {
-                        id:'event',
-                        count: 1,
-                        per: 8,
-                        
-                    },
-                    {
-                        id:'organization',
-                        count: 3,
-                        per: 8,
- 
-                    },
-                ]
-            };
-        }
-      },
+      
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
-      // selectNetNodes: function(va) {
-      //   var mthis = this;
-      //     let nodeIdsArry = va[0].ids.map(item => {
-      //       return item.id;
-      //     });
-      //     if (this.timer) {
-      //       clearTimeout(this.timer)
-      //     }
-      //     this.timer = setTimeout(function() {
-      //     // 新增防抖功能
-      //     mthis.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
-      //       'nodeIds': nodeIdsArry
-      //     }).then(response => {
-      //       mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
-      //     })
-      //     }, 100);
-      //   // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
-      //   // mthis.evetdata = 
-      // }
+      geo_selected_param:function(){
+        var mthis = this;
+        if(mthis.geo_selected_param.type === 'GeoStatics'){
+          return
+        }
+        if(mthis.geo_selected_param.paramIds.length > 1){
+          mthis.$http.post('http://10.60.1.140:5001/graph-attr/', {
+          'nodeIds': mthis.geo_selected_param.paramIds
+          }).then(response => {
+              mthis.staticsDatas = response.body.data;
+          //mthis.$data.staticsDatas.splice(0,0,response.body.data);
+          /* response.body.data.forEach(function(item,index){
+          mthis.$set(mthis.staticsDatas,index,item)
+          }) */
+            })
+          } else {
+            mthis.staticsDatas = [];
+          }
+      }
     },
     methods: {
+      clickLeftStatics(staticsClick){
+        var mthis = this;
+        mthis.$store.commit('setGeoStaticsSelectedIds', staticsClick)
+        
+
+      },
       changTab(a) {
         alert(a)
         this.$store.commit('setTabSelectGeo', a)
@@ -249,7 +183,7 @@
         // let mthis = this
         // mthis.singlePerson = false
       },
-      detail(id) {
+      /* detail(id) {
         var mthis = this
         mthis.modalNodeId = id
         let nodeIdsArry = []
@@ -261,7 +195,7 @@
           mthis.detailModalFlag = true
         })
         //查询详细信息
-      }
+      } */
     },
     mounted() {
       var mthis = this;

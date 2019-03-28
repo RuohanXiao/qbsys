@@ -148,7 +148,7 @@ import Fill from 'ol/style/Fill'
 import Style from 'ol/style/Style'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
-import Polygon from 'ol/geom/Polygon'
+import Polygon,{fromCircle} from 'ol/geom/Polygon'
 import TileWMS from 'ol/source/TileWMS'
 import Overlay from 'ol/Overlay'
 import Collection from 'ol/Collection'
@@ -166,6 +166,7 @@ import {easeOut} from 'ol/easing.js';
 import {unByKey} from 'ol/Observable.js';
 import {getCenter} from 'ol/extent.js';
 import Heatmap from 'ol/layer/Heatmap';
+import Circle from '@turf/circle'
 
 
 import flexslider from 'flexslider'
@@ -219,15 +220,16 @@ export default {
         allImgIds:[], //所有img的id
         maxEventsNum:0,
         removeFeaturesArr:[],
-        allEventIdsToFeaturesIdsList:{},
+        allEventIdsToFeaturesIdsList:{},   //{<paramId>:{'featureId':<featureId>,...}} 省略的属性，都存放在AllLayerList_conf中的paramAttrs中，除id外都存在该对象中
         removeEventIdList:{},
         geometrySelectedEventIds:[],
         timeSelectedEventIds:[],
         staticsSelectedEventIds:[],
-        SelectedEventIds:[],//被选中的事件ids
+        SelectedIds:[],//被选中的事件或组织机构ids
+        halfSelectedIds:{},
         invertSelectedEventIds:[], //反选存储
         AreaIds:[],  //行政区划ids
-        selectedOrgIds:[],  //被选中的组织机构ids
+        //selectedOrgIds:[],  //被选中的组织机构ids
         changeButtonParam:[],
         pointMoveListenerKey:null,
         pointClickListenerKey:null,
@@ -248,7 +250,35 @@ export default {
                 })
             })
         }),
-      }
+        /* idTypeToLayerList:{
+            'event':'eventsPointsLayer',
+            'org':'OrgLayer'
+        } */
+        AllLayerList_conf:{
+            'event':{
+                'layerId':'eventsPointsLayer',
+                'paramAttrs':['id','time']    //除id外的所有属性都应该写在allEventIdsToFeaturesIdsList中，
+            },
+            'org':{
+                'layerId':'OrgLayer',
+                'paramAttrs':['id','OrgName']
+            }
+        },
+        orgStyleList:{
+            'lifeStyle':new Style({
+                                image: new Icon(({
+                                    src: require('../../dist/assets/images/geo/Organization.png'),
+                                    opacity:1
+                                }))
+                            }),
+            'dieStyle':new Style({
+                                image: new Icon(({
+                                    src: require('../../dist/assets/images/geo/Organization_Selected.png'),
+                                    opacity:1
+                                }))
+                            })
+        }
+      } 
     },
     mounted() {
         var mthis = this;
@@ -286,6 +316,8 @@ export default {
                 mthis.clearAll();
             } else if(mapOperationId == 'exploreLocationName_HL'){
                 mthis.explore();
+            } else if(mapOperationId == 'RectangleExplore_AT' || mapOperationId == 'CircleExplore_AT' || mapOperationId == 'customExplore_AT'){
+                mthis.drawExplore(mapOperation)
             }
         },
         heatMap_cilck(){
@@ -319,28 +351,108 @@ export default {
             mthis.click_heatMap(heatMapLayer);
         },
         disHeatMap(){
-            //debugger
             var mthis = this;
             
         },
+        mapAddFeature(feature){
+            var mthis = this;
+            var featureId = feature.getId();
+            var layerId = mthis.AllLayerList_conf[featureId.split('_')[0]].layerId;
+            var source = mthis.getLayerById(layerId).getSource();
+            source.addFeature(feature);
+            var params = feature.get('Params');
+            params.forEach(function(param){
+                var paramId = param.id;
+                var listParam = {'featureId':featureId};
+                var paramAttrs = mthis.AllLayerList_conf[featureId.split('_')[0]].paramAttrs;
+                paramAttrs.forEach(function(attr){
+                    if(attr !== 'id'){
+                        listParam[attr] = param[attr]
+                    }
+                })
+                mthis.$set(mthis.allEventIdsToFeaturesIdsList,paramId,listParam);
+                var index = util.itemIndexInArr(paramId,mthis.geometrySelectedEventIds);
+                if(index === -1){
+                    mthis.$data.geometrySelectedEventIds.push(paramId);
+                }
+            })
+        },
+        mapRemoveFeature(feature){  //mapRemoveFeature方法是在map中彻底删除feature，包括删除所有痕迹（删除列表、各种选中列表，反选列表等）
+            var mthis = this;
+            var id = feature.getId();
+            var layerId = mthis.AllLayerList_conf[id.split('_')[0]].layerId;
+            var source = mthis.getLayerById(layerId).getSource();
+            var existFeatures = source.getFeatures();
+            var isHas = false;
+            for(let j = 0; j < existFeatures.length; j++){
+                var existFId = existFeatures[j].getId();
+                if(id === existFId){
+                    isHas = true;
+                    break;
+                }
+            }
+            
+            var params = feature.get('Params');
+            var fid = feature.getId()
+            for(let i = 0; i < params.length; i++){
+                var paramId = params[i].id;
+                //var isExallList = mthis.allEventIdsToFeaturesIdsList.hasOwnProperty(paramId)
+                if(mthis.allEventIdsToFeaturesIdsList[paramId]){  //如果allEventIdsToFeaturesIdsList中存在该id及其属性，则删除
+                    //mthis.$delete(mthis.allEventIdsToFeaturesIdsList,paramId)
+                    delete mthis.allEventIdsToFeaturesIdsList[paramId]
+                }
+                //var isExremoveList = mthis.removeEventIdList.hasOwnProperty(paramId)
+                if(mthis.removeEventIdList[paramId]){  //如果removeEventIdList中存在该id及其属性，则删除
+                    //mthis.$delete(mthis.removeEventIdList,paramId)
+                    delete mthis.removeEventIdList[paramId]
+                }
+                var index = util.itemIndexInArr(paramId,mthis.SelectedIds);
+                if(index !== -1){ //如果SelectedIds中存在该id，则删除
+                    mthis.$data.SelectedIds.splice(index,1)
+                }
+                var index_geometry = util.itemIndexInArr(paramId,mthis.geometrySelectedEventIds);
+                if(index_geometry !== -1){ //如果geometrySelectedEventIds中存在该id，则删除
+                    mthis.$data.geometrySelectedEventIds.splice(index_geometry,1)
+                }
+                var index_time = util.itemIndexInArr(paramId,mthis.timeSelectedEventIds);
+                if(index_time !== -1){ //如果timeSelectedEventIds中存在该id，则删除
+                    mthis.$data.timeSelectedEventIds.splice(index_time,1)
+                }
+                var index_statics = util.itemIndexInArr(paramId,mthis.staticsSelectedEventIds);
+                if(index_statics !== -1){ //如果staticsSelectedEventIds中存在该id，则删除
+                    mthis.$data.staticsSelectedEventIds.splice(index_statics,1)
+                }
+                var index_invert = util.itemIndexInArr(paramId,mthis.invertSelectedEventIds);
+                if(index_invert !== -1){ //如果staticsSelectedEventIds中存在该id，则删除
+                    mthis.$data.invertSelectedEventIds.splice(index_invert,1)
+                }
+            }
+            if(isHas){
+                source.removeFeature(source.getFeatureById(fid));
+            }
+        },
         explore(){
             var mthis = this;
-            var geometry = mthis.getLayerById('HLAreaLayer').getSource().getFeatures()[0].getGeometry();
-            var geometryStr = new GeoJSON().writeGeometry(geometry)
-            mthis.$http.post('http://localhost:5000/exploreOrg/', {
-           //mthis.$http.post('http://10.60.1.141:5001/exploreOrg/', {
-                'geometry':geometryStr
-            }).then(response => {
-                var OrgGeojson = response.body.data.OrgFeatures;
-                var features = (new GeoJSON()).readFeatures(OrgGeojson);
-                mthis.getLayerById('OrgLayer').getSource().addFeatures(features);
-            })
+            var areaFeatures = mthis.getLayerById('HLAreaLayer').getSource().getFeatures();
+            var geometryArr = [];
+            if(areaFeatures.length > 0){
+                areaFeatures.forEach(function(areaFeature){
+                    if(areaFeature.getId() !== undefined){
+                        var geometry = areaFeature.getGeometry()
+                        var geometryStr = new GeoJSON().writeGeometry(geometry);
+                        geometryArr.push(geometryStr);
+                    }
+                    
+                })
+            }
+            mthis.orgsSpatialQuery(geometryArr);
         },
         
         clearAll(){
             var mthis = this;
             mthis.getLayerById('eventsPointsLayer').getSource().clear();
             mthis.getLayerById('HLAreaLayer').getSource().clear();
+            mthis.getLayerById('OrgLayer').getSource().clear();
             mthis.geometrySelectedEventIds = [];
             mthis.timeSelectedEventIds = [];
             mthis.staticsSelectedEventIds = [];
@@ -411,52 +523,86 @@ export default {
         },
         selectAll(){
             var mthis = this;
-            //debugger
             mthis.geometrySelectedEventIds.length = 0;
             mthis.timeSelectedEventIds.length = 0;
             mthis.staticsSelectedEventIds.length = 0;
-            var features = mthis.getLayerById('eventsPointsLayer').getSource().getFeatures();
-            features.forEach(function(item){
-                var num = item.get('Events').length;
-                item.set('selectedEventsNum',num);
-                mthis.addEventIdsToSelectedIds(item);
-                mthis.setSelectedEventFeatureParam(item,true);
-            });
+            
+            Object.keys(mthis.AllLayerList_conf).forEach(function(itemId){
+                var layerId = mthis.AllLayerList_conf[itemId].layerId;
+                var features = mthis.getLayerById(layerId).getSource().getFeatures();
+                features.forEach(function(item){
+                    var num = item.get('Params').length;
+                    item.set('selectedNum',num);
+                    mthis.addEventIdsToSelectedIds(item);
+                    mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
+                });
+            })
+            
         },
         returnToAllPoints(){
             var mthis = this;
-            //debugger
             if($.isEmptyObject(mthis.removeEventIdList)){
                 return;
             }
-            mthis.geometrySelectedEventIds.length = 0;
+            mthis.geometrySelectedEventIds = [];
             mthis.timeSelectedEventIds.length = 0;
             mthis.staticsSelectedEventIds.length = 0;
-            var source = mthis.getLayerById('eventsPointsLayer').getSource();
+            //mthis.SelectedIds = [];
             if(mthis.removeFeaturesArr.length > 0){
-                source.addFeatures(mthis.removeFeaturesArr);
+                mthis.removeFeaturesArr.forEach(function(feature){
+                    var featureId = feature.getId();
+                    var featureType = featureId.split('_')[0]
+                    var layerId = mthis.AllLayerList_conf[featureType].layerId
+                    var source = mthis.getLayerById(layerId).getSource();
+                    source.addFeature(feature);
+                })
+                //source.addFeatures(mthis.removeFeaturesArr);
                 mthis.removeFeaturesArr = [];
             }
             var keys = Object.keys(mthis.removeEventIdList);
-            if(keys.length > 0){
+            if(keys.length > 0){   //将删除的数据添加到feature中
                 keys.forEach(function(item){
+                    var featureId = mthis.removeEventIdList[item].featureId
+                    var featureType = featureId.split('_')[0];
+                    var layerId = mthis.getLayerIdByFeatureIdOrParamId(featureId);
+                    var source = mthis.getLayerById(layerId).getSource();
                     var feature = source.getFeatureById(mthis.removeEventIdList[item].featureId);
-                    var addEvent = {"id":item,"time":mthis.removeEventIdList[item].time};
-                    var oldEvent = feature.get('Events');
-                    var events = oldEvent.push(addEvent)
-                    feature.set('Events',oldEvent,false);
+                    var addParam = {'id':item};
+                    mthis.AllLayerList_conf[featureType].paramAttrs.forEach(function(param){
+                        if(param !== 'id'){
+                            addParam[param] = mthis.removeEventIdList[item][param]
+                        }
+                    })
+                    var oldParam = feature.get('Params');
+                    var events = oldParam.push(addParam)
+                    feature.set('Params',oldParam,false);
                     mthis.$delete(mthis.removeEventIdList,item);
                 })
             }
-            var features = source.getFeatures();
+
+            Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+                var layerId = mthis.AllLayerList_conf[key].layerId;
+                var features = mthis.getLayerById(layerId).getSource().getFeatures();
+                if(features.length > 0){
+                    features.forEach(function(item){
+                        var num = item.get('Params').length;
+                        item.set('selectedNum',num);
+                        
+                        mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
+                        mthis.addEventIdsToAEITFIdsListFromFeature(item);
+                        mthis.addEventIdsToSelectedIds(item);
+                    });
+                }
+            })
+            /* var features = source.getFeatures();
             if(features.length > 0){
                 features.forEach(function(item){
-                    item.set('selectedEventsNum',item.get('Events').length,false);
+                    item.set('selectedNum',item.get('Params').length,false);
                     mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
                     mthis.addEventIdsToAEITFIdsListFromFeature(item);
                     mthis.addEventIdsToSelectedIds(item);
                 })
-            }
+            } */
         },
         legendItemClick(legendItemOpera){
             var mthis = this;
@@ -523,30 +669,13 @@ export default {
         },
         OrgStyleFun(feature){
             var mthis = this;
-            var iconStyle
-            if(feature.get('dispStatus') === 'life'){
-                iconStyle = new Style({
+            var iconStyle = new Style({
                     image: new Icon(({
-                        src: require('../../dist/assets/images/geo/Organization.png')
-                    }))
-                });
-            } else if(feature.get('dispStatus') === 'die'){
-                iconStyle = new Style({
-                    image: new Icon(({
-                        src: require('../../dist/assets/images/geo/Organization.png')
-                    }))
-                });
-            } else {
-                iconStyle = new Style({
-                    image: new Icon(({
-                        src: require('../../dist/assets/images/geo/Organization.png')
+                        src: require('../../dist/assets/images/geo/Organization.png'),
+                        opacity:1
                     }))
                 }); 
-            }
-            
-
             return iconStyle;
-
         },
         pointerMoveselectfilterFun(feature,layer){
             var mthis = this;
@@ -557,11 +686,14 @@ export default {
                     return false
                 }
             } else {
-                return true
+                if(feature.getStyle().getImage().getOpacity() === 1){
+                    return true
+                } else {
+                    return false
+                }
             }
         },
         selectfilterStyleFun(feature,resolution){
-            //debugger
             var iconStyle = new Style({
                 image: new Icon(({
                     src: require('../../dist/assets/images/geo/Organization_Selected.png')
@@ -670,43 +802,26 @@ export default {
                     }
                 });
                 mthis.selectClick.on('select', function(e) {
-                    //debugger
                     var Gfeatures = e.selected;
                     if(Gfeatures.length > 0){
                         var source = mthis.getLayerById('HLAreaLayer').getSource();
                         Gfeatures.forEach(function(item){
-                            //debugger
                             var id = item.getId();
-                            var index;
-                            for(let i = 0; i < mthis.AreaIds.length; i++){
-                                if(id === mthis.AreaIds[i]){
-                                    index = i
+                            if(id !== undefined){
+                                var index = -1;
+                                for(let i = 0; i < mthis.AreaIds.length; i++){
+                                    if(id === mthis.AreaIds[i]){
+                                        index = i
+                                    }
+                                }
+                                if(index !== -1){
+                                    mthis.$data.AreaIds.splice(index,1);
                                 }
                             }
-                            mthis.$data.AreaIds.splice(index,1);
                             source.removeFeature(item);
                         })
                     }
-                    
-
                 });
-                /* var features = (new GeoJSON()).readFeatures(mthis.test_mapData.data);
-                features.forEach(function(item){
-                    mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
-                    //mthis.getFeatrueAllEventIds(feature)
-                    item.get('Events').forEach(function(Iitem){
-                        var eventId = Iitem.id;
-                        mthis.allEventIds.push(eventId);
-                        mthis.allEventIdsToFeaturesIdsList[eventId] = item.getId();
-                    });
-                }); */
-                //mthis.returnSelectedEventIds(mthis.EventsDatas.data); //将所有ids返回给全局被选中的节点变量，为了统计时间轴和右侧菜单
-                //mthis.routeMap.addlayer(selectedPointsLayer) 
-               //mthis.creatPicSlider();//图片轮播
-                //mthis.locationPoints()  //空间查询出点所在地信息
-                //mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight])
-                //mthis.routeMap.map.setSize([0,100])
-                //setTimeout( function() {mthis.routeMap.map.setSize([mthis.routeMap.map.getViewport().offsetWidth,mthis.routeMap.map.getViewport().offsetHeight]);}, 2);
             }  
         },
         location_cilck(){
@@ -724,14 +839,18 @@ export default {
             var conLabel = document.createElement('div');
             conLabel.style = 'padding: 5px 10px;';
             ovdiv.appendChild(conLabel);
-            var Lp = document.createElement('p');
-            conLabel.appendChild(Lp);
-            Lp.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
-            Lp.innerHTML = feature.get('OrgName');
-            /* var Ap = document.createElement('p');
+            var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
-            Ap.innerHTML = "事件：" + feature.get('selectedEventsNum'); */
+            
+            var orgNum = feature.get('Params').length;
+            
+            if(orgNum === 1){
+                Ap.innerHTML = "机构名：" + feature.get('Params')[0].OrgName;
+            } else {
+                Ap.innerHTML = "机构数：" + feature.get('selectedNum');
+            }
+            
             var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,ovdiv,overlayId,'top-left');
             mthis.routeMap.map.addOverlay(overlayId);
         },
@@ -750,7 +869,7 @@ export default {
             var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
-            Ap.innerHTML = "事件：" + feature.get('selectedEventsNum');
+            Ap.innerHTML = "事件：" + feature.get('selectedNum');
             var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,ovdiv,overlayId,'top-left');
             mthis.routeMap.map.addOverlay(overlayId);
         },
@@ -1075,8 +1194,114 @@ export default {
                 });
             }
         },
+        drawExplore(object){
+            var mthis = this
+            var mapDiv = document.getElementById('locationRoute_Map')
+            mapDiv.style.cursor = 'crosshair';
+            var map = mthis.routeMap.map
+            //map.removeInteraction(mthis.draw);
+            map.removeInteraction(mthis.selectPointerMove);
+            map.removeInteraction(mthis.selectClick);
+            //矢量图层是用来渲染矢量数据的图层类型，在OpenLayers里，它是可以定制的，可以控制它的透明度，颜色，以及加载在上面的要素形状等。
+            var Vecsource = new VectorSource({
+                features : new Collection()
+            });
+            var polygonLayer = new VectorLayer({
+                source : Vecsource
+            });
+            var drawExploreSource = mthis.getLayerById('HLAreaLayer').getSource();
+            map.addLayer(polygonLayer);
+            var opt = object.currentTarget;
+            var id = opt.id.split('_')[0];
+            var typeValue = '';
+            var geometryFunction;
+            if(opt.id === 'RectangleExplore_AT'){
+                typeValue = 'rectangle';
+            } else if(opt.id === 'CircleExplore_AT'){
+                typeValue = 'Circle';
+            } else {
+                typeValue = 'Polygon'
+            }
+            if (typeValue != "None") {
+                if (typeValue == "rectangle") {
+                    typeValue = 'Circle'; // 设置绘制类型为LineString
+                    geometryFunction = createBox();
+                }
+                // 实例化图形绘制控件对象并添加到地图容器中
+                var exploreDraw = new Draw({
+                    source: Vecsource,
+                    type: typeValue,                                // 几何图形类型
+                    geometryFunction: geometryFunction,              // 几何信息变更时的回调函数
+                    style: new Style({
+                        fill: new Fill({ //矢量图层填充颜色，以及透明度
+                            color: 'rgba(51, 255, 255, 0.3)',
+                            
+                        }),
+                        stroke: new Stroke({ //边界样式
+                            color: 'rgba(51, 255, 255, 1)',
+                            width: 3
+                        })
+                    })
+                });
+                mthis.drawExploreGeo(exploreDraw)
+                map.addInteraction(exploreDraw);
+            } 
+            map.removeLayer(polygonLayer);
+        },
+        orgsSpatialQuery(geometryArr){
+            var mthis = this;
+            //mthis.$http.post('http://localhost:5000/exploreOrg/', {
+                mthis.$http.post('http://10.60.1.141:5001/exploreOrg/', {
+                    'geometry':geometryArr
+                }).then(response => {
+                    var OrgGeojson = response.body.data.OrgFeatures;
+                    var addfeatures = (new GeoJSON()).readFeatures(OrgGeojson);
+                    var OrgSource = mthis.getLayerById('OrgLayer').getSource();
+                    var existFeatures = OrgSource.getFeatures();
+                    mthis.geometrySelectedEventIds = [];
+                    mthis.timeSelectedEventIds.length = 0;
+                    mthis.staticsSelectedEventIds.length = 0;
+                    for(let j = 0; j < existFeatures.length; j++){
+                        mthis.setLifeOrDieEventsPointStyleByValue(existFeatures[j],'die');
+                    }
+                    for(let i = 0; i < addfeatures.length; i++){
+                        mthis.mapRemoveFeature(addfeatures[i])
+                        mthis.mapAddFeature(addfeatures[i]);
+                    }
+                })
+        },
+        drawExploreGeo(draw){
+            var mthis = this;
+            draw.on('drawend', function(obj) {
+                var feature = obj.feature;
+                var source = mthis.getLayerById('HLAreaLayer').getSource();
+                var geometry = feature.getGeometry();
+                if(geometry.getType() === 'Circle'){
+                    geometry = fromCircle(geometry,64)
+                }
+                var geometryStr = new GeoJSON().writeGeometry(geometry)
+                var drawFeature = new Feature({
+                    geometry: new Polygon(geometry.getCoordinates()),
+                });
+                source.addFeature(drawFeature);
+                mthis.orgsSpatialQuery([geometryStr]);
+                
+                /* mthis.timeSelectedEventIds = [];
+                mthis.staticsSelectedEventIds = []; */
+                mthis.routeMap.map.removeInteraction(draw);
+                mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
+                mthis.routeMap.map.addInteraction(mthis.selectClick);
+                mthis.routeMap.map.getView().animate({
+                    center: getCenter(geometry.getExtent()),
+                    duration: 1000
+                });
+                mthis.routeMap.map.render();
+            });
+        },
         changedrawType(object){
             var mthis = this
+            var mapDiv = document.getElementById('locationRoute_Map')
+            mapDiv.style.cursor = 'crosshair';
             var map = mthis.routeMap.map
             map.removeInteraction(mthis.draw);
             map.removeInteraction(mthis.selectPointerMove);
@@ -1126,7 +1351,6 @@ export default {
             });
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
-                //debugger
                 var geometry = feature.getGeometry();
                 //mthis.geometrySelectedEventIds = [1,2]
                 mthis.selectEventPointsByGeometry_test(geometry);
@@ -1172,7 +1396,7 @@ export default {
                     //item.setStyle(mthis.selectedstyle);
                     //mthis.setSelectedEventFeatureParam(item,true);
                     mthis.geometrySelectedFeatures.push(item);
-                    item.get('Events').forEach(function(Iitem){
+                    item.get('Params').forEach(function(Iitem){
                         frameselectedEventIds.push(Iitem.id);
                     })
                     
@@ -1187,21 +1411,40 @@ export default {
             //var frameselectedEventIds = [];
             //mthis.geometrySelectedFeatures = [];
             var num = 0;
-            var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
+            var selectingEventsPointFeatures = mthis.getLayerById("eventsPointsLayer").getSource().getFeatures();
+            var selectingOrgsPointFeatures = mthis.getLayerById("OrgLayer").getSource().getFeatures();
             //mthis.selectedPointsSource.clear();
             mthis.geometrySelectedEventIds = [];
-            selectingPointSource.getFeatures().forEach(function(item) {
-                var coord = item.getGeometry().getCoordinates();
-                var isIn = geometry.intersectsCoordinate(coord);
-                mthis.setLifeOrDieEventsPointStyleByValue(item,'die');
-                if (isIn) {
-                    item.get('Events').forEach(function(Iitem){
-                        mthis.$set(mthis.geometrySelectedEventIds,num,Iitem.id);
-                        num++;
-                    })
-                    mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
-                } 
-            });
+            if(selectingEventsPointFeatures.length !== 0){
+                selectingEventsPointFeatures.forEach(function(item) {
+                    var coord = item.getGeometry().getCoordinates();
+                    var isIn = geometry.intersectsCoordinate(coord);
+                    mthis.setLifeOrDieEventsPointStyleByValue(item,'die');
+                    if (isIn) {
+                        item.get('Params').forEach(function(Iitem){
+                            mthis.$set(mthis.geometrySelectedEventIds,num,Iitem.id);
+                            num++;
+                        })
+                        mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
+                    }
+                });
+            }
+
+            if(selectingOrgsPointFeatures.length !== 0){
+                selectingOrgsPointFeatures.forEach(function(item) {
+                    var coord = item.getGeometry().getCoordinates();
+                    var isIn = geometry.intersectsCoordinate(coord);
+                    mthis.setLifeOrDieEventsPointStyleByValue(item,'die');
+                    if (isIn) {
+                        item.get('Params').forEach(function(Iitem){
+                            mthis.$set(mthis.geometrySelectedEventIds,num,Iitem.id);
+                            num++;
+                        })
+                        mthis.setLifeOrDieEventsPointStyleByValue(item,'life');
+                    }
+                });
+            }
+            
             //return frameselectedEventIds
         },
 
@@ -1220,44 +1463,70 @@ export default {
         //setLifeOrDieOrgPointStyleByValue(){},
         setLifeOrDieEventsPointStyleByValue(feature,pointStatus){  //pointStatus参数目前一共有三种情况，life、halflife、die
             var mthis = this;
-            var eventNum = feature.get('selectedEventsNum');
-            var fRadius = 3;
-            /* if(eventNum > 10){
-                fRadius = 13;
+            var id = feature.getId();
+            var lifeSelectedstyle;
+            var halflifeSelectedstyle;
+            var dieSelectedstyle;
+            if(id.split('_')[0] ==='event'){
+                //var eventNum = feature.get('selectedEventsNum');
+                var fRadius = 5;
+                /* if(eventNum > 10){
+                    fRadius = 13;
+                } else {
+                    fRadius = eventNum + 2;
+                } */
+                lifeSelectedstyle = new Style({
+                    image : new CircleStyle({
+                        radius : fRadius,
+                        fill : new Fill({
+                            color : mthis.lifePointColor //'#33ffff'
+                        })
+                    })
+                });
+                halflifeSelectedstyle = new Style({
+                    image : new CircleStyle({
+                        radius : fRadius,
+                        fill : new Fill({
+                            color : mthis.halflifePointColor //'#33ffff'
+                        })
+                    })
+                });
+                dieSelectedstyle = new Style({
+                    image : new CircleStyle({
+                        radius : 3,
+                        fill : new Fill({
+                            color : mthis.diePointColor //'#33ffff'
+                        })
+                    })
+                });
+                
             } else {
-                fRadius = eventNum + 2;
-            } */
-            var lifeSelectedstyle = new Style({
-                image : new CircleStyle({
-                    radius : fRadius,
-                    fill : new Fill({
-                        color : mthis.lifePointColor //'#33ffff'
-                    })
-                })
-            });
-            var halflifeSelectedstyle = new Style({
-                image : new CircleStyle({
-                    radius : fRadius,
-                    fill : new Fill({
-                        color : mthis.halflifePointColor //'#33ffff'
-                    })
-                })
-            });
-            var dieSelectedstyle = new Style({
-                image : new CircleStyle({
-                    radius : 3,
-                    fill : new Fill({
-                        color : mthis.diePointColor //'#33ffff'
-                    })
-                })
-            });
-            if(pointStatus === 'life'){
-                feature.setStyle(lifeSelectedstyle);
-            } else if(pointStatus === 'die') {
-                feature.setStyle(dieSelectedstyle);
-            } else {
-                feature.setStyle(halflifeSelectedstyle);
+                lifeSelectedstyle = new Style({
+                    image: new Icon(({
+                        src: require('../../dist/assets/images/geo/Organization.png'),
+                        opacity:1
+                    }))
+                });
+                halflifeSelectedstyle = new Style({
+                    image: new Icon(({
+                        src: require('../../dist/assets/images/geo/halfOrganization.png'),
+                        opacity:0.9
+                    }))
+                });
+                dieSelectedstyle = new Style({
+                    image: new Icon(({
+                        src: require('../../dist/assets/images/geo/orgNoSelected.png'),
+                        opacity:0.8
+                    }))
+                });
             }
+            if(pointStatus === 'life'){
+                    feature.setStyle(lifeSelectedstyle);
+                } else if(pointStatus === 'die') {
+                    feature.setStyle(dieSelectedstyle);
+                } else {
+                    feature.setStyle(halflifeSelectedstyle);
+                }
             
         },
         //==========================================================================
@@ -1438,7 +1707,7 @@ export default {
                     heatFeature.setId(featureId);
                     heatFeature.setStyle(null);
                     heatSource.addFeature(heatFeature);
-                    var num = heatFeature.get('selectedEventsNum');
+                    var num = heatFeature.get('selectedNum');
                     if(num > mthis.maxEventsNum){
                         mthis.maxEventsNum = num;
                     }
@@ -1447,7 +1716,7 @@ export default {
         },
         weightFunction(feature){
             var mthis = this;
-            var weight = feature.get('selectedEventsNum') / mthis.maxEventsNum;
+            var weight = feature.get('selectedNum') / mthis.maxEventsNum;
             return weight
         },
         getWfsData(type,id) {
@@ -1478,7 +1747,6 @@ export default {
                 return response.json();
             }).then(function (data) {
                 //查询结果
-                //debugger
                 var features = new GeoJSON().readFeatures(data);
                 var map = mthis.routeMap.map;
                 var source = mthis.getLayerById('HLAreaLayer').getSource();
@@ -1549,45 +1817,47 @@ export default {
         */
         deletePoints(){
             var mthis = this;
-            var source = mthis.getLayerById('eventsPointsLayer').getSource();
-            var selectedEventIds = mthis.getSelectedEventIds().ids;
-            if(selectedEventIds.length > 0){
-                selectedEventIds.forEach(function(item){
+            //var source = mthis.getLayerById('eventsPointsLayer').getSource();
+            var SelectedIds = mthis.getSelectedEventIds().ids;
+            if(SelectedIds.length > 0){
+                SelectedIds.forEach(function(item){
                     mthis.$set(mthis.removeEventIdList,item,mthis.allEventIdsToFeaturesIdsList[item]);
                     mthis.deleteEventInFeaturesById(item);
                     mthis.$delete(mthis.allEventIdsToFeaturesIdsList,item)
                 })
             }
-            mthis.geometrySelectedEventIds.length = 0;
+            mthis.geometrySelectedEventIds = [];
             mthis.timeSelectedEventIds.length = 0;
             mthis.staticsSelectedEventIds.length = 0;
-            mthis.selectedIds = [];
-            
+            //mthis.selectedIds = [];
         },
-        getBelongFeatureByEventId(id){
-            var mthis = this;
-            var featureId = mthis.allEventIdsToFeaturesIdsList[id].featureId;
-            return mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
-        },
+        
         deleteEventInFeaturesById(id){
             var mthis = this;
-            var source = mthis.getLayerById('eventsPointsLayer').getSource();
-            var feature = mthis.getBelongFeatureByEventId(id);
-            var event = feature.get('Events');
+             /* Object.keys(mthis.AllLayerList_conf).forEach(function(itemId){
+                if(id.split('_')[0] === itemId){
+                    var layerId = mthis.AllLayerList_conf[itemId].layerId;
+                    source = mthis.getLayerById(layerId).getSource();
+                }
+            }) */
+            var layerId = mthis.getLayerIdByFeatureIdOrParamId(id);
+            var source = mthis.getLayerById(layerId).getSource();
+            var feature = mthis.getBelongFeatureByParamId(id);
+            var event = feature.get('Params');
             for(let i = event.length - 1; i >= 0; i--){
                 if(event[i].id === id){
                     event.splice(i,1) ;
                     break;
                 }
             }
-            var selectedEventsNum = feature.get('selectedEventsNum');
-            feature.set('selectedEventsNum',selectedEventsNum - 1,false);
-            if(feature.get('Events').length === 0){
+            var selectedEventsNum = feature.get('selectedNum');
+            feature.set('selectedNum',selectedEventsNum - 1,false);
+            if(feature.get('Params').length === 0){
                 mthis.removeFeaturesArr.push(feature);
                 source.removeFeature(feature);
-            } else if(feature.get('Events').length !== 0 > 0 && feature.get('selectedEventsNum') <= 0){
+            } else if(feature.get('Params').length !== 0  && feature.get('selectedNum') <= 0){
                 mthis.setSelectedEventFeatureParam(feature,false);
-            } else if(feature.get('Events').length !== 0 > 0 && feature.get('selectedEventsNum') > 0){
+            } else if(feature.get('Params').length !== 0  && feature.get('selectedNum') > 0){
                 mthis.setSelectedEventFeatureParam(feature,true);
             }
         },
@@ -1600,28 +1870,29 @@ export default {
         invertSelection(){
             var mthis = this
             //mthis.invertSelectedEventIds = [];
-            var SelectedEventIds = mthis.getSelectedEventIds();
-            var ids = SelectedEventIds.ids;
-            var type = SelectedEventIds.type;
+            var SelectedIds = mthis.getSelectedEventIds();
+            var ids = SelectedIds.ids;
+            var type = SelectedIds.type;
             var invertIds = [];
             var HighUpSelectedParam = mthis.getHighUpSelectedIds();
             ids.forEach(function(item){ //将原来选中的事件取消
                 var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
-                var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
+                var layerId = mthis.AllLayerList_conf[item.split('_')[0]].layerId;
+                var feature = mthis.getLayerById(layerId).getSource().getFeatureById(featureId);
                 mthis.setSelectedEventFeatureParam(feature,false);
             })
             //找到未被选中的事件并高亮
             //mthis.invertSelectedEventIds = [];
             if(type === 'All'){
                 Object.keys(mthis.allEventIdsToFeaturesIdsList).forEach(function(key){
-                    if(mthis.itemIndexInArr(key,ids) === -1){
+                    if(util.itemIndexInArr(key,ids) === -1){
                         mthis.invertSelectedEventIds.push(key);
                     }
                 })
             } else if(type === 'GeoView'){
                 mthis.geometrySelectedEventIds = [];
                 HighUpSelectedParam.ids.forEach(function(key){
-                    if(mthis.itemIndexInArr(key,ids) === -1){
+                    if(util.itemIndexInArr(key,ids) === -1){
                         invertIds.push(key);
                     }
                 })
@@ -1629,7 +1900,7 @@ export default {
             } else if(type === 'GeoTime'){
                 mthis.timeSelectedEventIds = [];
                 HighUpSelectedParam.ids.forEach(function(key){
-                    if(mthis.itemIndexInArr(key,ids) === -1){
+                    if(util.itemIndexInArr(key,ids) === -1){
                         invertIds.push(key);
                     }
                 })
@@ -1637,7 +1908,7 @@ export default {
             } else {
                 mthis.staticsSelectedEventIds = [];
                 HighUpSelectedParam.ids.forEach(function(key){
-                    if(mthis.itemIndexInArr(key,ids) === -1){
+                    if(util.itemIndexInArr(key,ids) === -1){
                         invertIds.push(key);
                     }
                 })
@@ -1677,7 +1948,54 @@ export default {
                     }
         },
         //=======================================================================================
-        //通用函数
+        //Geo通用函数
+        getLayerIdByFeatureIdOrParamId(featureId){
+            var mthis = this;
+            var type = featureId.split('_')[0];
+            var layerId = mthis.AllLayerList_conf[type].layerId;
+            return layerId
+        },
+        getBelongFeatureByParamId(id){
+            var mthis = this;
+            var featureId = mthis.allEventIdsToFeaturesIdsList[id].featureId;
+            var layerId = mthis.getLayerIdByFeatureIdOrParamId(id);
+            var source = mthis.getLayerById(layerId).getSource();
+            return source.getFeatureById(featureId);
+        },
+        getLayerById(layerId){  //根据id获取layer
+            var mthis = this
+            var layers = mthis.routeMap.map.getLayers().getArray();
+            for(var i = 0; i<layers.length; i++){
+                if(layers[i].getProperties().id == layerId){
+                    return layers[i];
+                }
+            }
+        },
+        deleteArrItem(arr,item){
+            var index = arr.indexOf(item);
+            if(index > -1){
+                arr.splice(index, 1);
+            }
+        },
+        /* itemIndexInArr(item,arr){
+            if(arr.length > 0){
+                for(var i = 0; i < arr.length; i++){
+                    if(item == arr[i]){
+                        return i;
+                    }
+                    if(i == arr.length-1){
+                        return -1;
+                    }
+                }
+            } else {
+                return -1;
+            }
+        }, */
+        //=======================================================================================
+
+
+
+
         /**
          * @param 创建overlay
          *  coor：放置坐标, element：overlay中放置的节点, id：overlay的id, positioning：放置方式（bottom-left、bottom-center、bottom-right 、center-left、center-center、center-right、top-left、top-center、top-right，默认是 top-left，也就是 element 左上角与 position 重合r等）
@@ -1723,22 +2041,8 @@ export default {
                 }
             });  
         },
-        //根据id获取layer
-        getLayerById(layerId){
-            var mthis = this
-            var layers = mthis.routeMap.map.getLayers().getArray();
-            for(var i = 0; i<layers.length; i++){
-                if(layers[i].getProperties().id == layerId){
-                    return layers[i];
-                }
-            }
-        },
-        deleteArrItem(arr,item){
-            var index = arr.indexOf(item);
-            if(index > -1){
-                arr.splice(index, 1);
-            }
-        },
+        
+        
         isPointAnimation(point){
             var mthis = this
             var overlayId = 'pointAnimation_' + point.getProperties().properties.belongId + 
@@ -1828,29 +2132,15 @@ export default {
                 //m
             }
         },
-        itemIndexInArr(item,arr){
-            if(arr.length > 0){
-                for(var i = 0; i < arr.length; i++){
-                    if(item == arr[i]){
-                        return i;
-                    }
-                    if(i == arr.length-1){
-                        return -1;
-                    }
-                }
-            } else {
-                return -1;
-            }
-            
-        },
         changeEveryFeatureSelectedEventsNumAndStyleByids(ids){
             var mthis = this;
             var featureIds = [];
             var selectedNum = [];
-            var source = mthis.getLayerById('eventsPointsLayer').getSource();
+            var eventsSource = mthis.getLayerById('eventsPointsLayer').getSource();
+            var orgsSource = mthis.getLayerById('OrgLayer').getSource();
             ids.forEach(function(item){
                 var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
-                var index = mthis.itemIndexInArr(featureId,featureIds);
+                var index = util.itemIndexInArr(featureId,featureIds);
                 if(index === -1){
                     featureIds.push(featureId);
                     selectedNum.push(1);
@@ -1859,10 +2149,17 @@ export default {
                 }
             })
             featureIds.forEach(function(Item,index){
-                var feature = source.getFeatureById(Item);
-                feature.set('selectedEventsNum',selectedNum[index],false);
+                var feature
+                if(Item.split('_')[0] === 'event'){
+                    feature = eventsSource.getFeatureById(Item);
+                    feature.set('selectedNum',selectedNum[index],false);
+                } else {
+                    feature = orgsSource.getFeatureById(Item);
+                    feature.set('selectedNum',selectedNum[index],false);
+                }
                 //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',true);
-                mthis.setSelectedEventFeatureParam(feature,true);
+                //mthis.setSelectedEventFeatureParam(feature,true);
+                mthis.setLifeOrDieEventsPointStyleByValue(feature,'life');
             })
         },
         getallEventIdsFromallEventIdsToFeaturesIds(){
@@ -1878,22 +2175,26 @@ export default {
          */
         addEventIdsToAEITFIdsListFromFeature(feature){  
             var mthis = this;
-            feature.get('Events').forEach(function(Iitem){
-                var eventId = Iitem.id;
+            var featureId = feature.getId();
+            feature.get('Params').forEach(function(param){
+                var paramId = param.id;
+                var type = paramId.split('_')[0];
                 //mthis.allEventIds.push(eventId);
-                var param = {
-                        'featureId':feature.getId(),
-                        'time':Iitem.time
-                    };
-                mthis.$set(mthis.allEventIdsToFeaturesIdsList,eventId,param)
+                var Listparam = {'featureId':featureId}
+                var attrArr = mthis.AllLayerList_conf[type].paramAttrs;
+                attrArr.forEach(function(attrName){
+                    if(attrName !== 'id'){
+                        Listparam[attrName] = param[attrName]
+                    }
+                })
+                mthis.$set(mthis.allEventIdsToFeaturesIdsList,paramId,Listparam)
             });
         },
         addEventIdsToSelectedIds(eventFeature){
-            //debugger
             var mthis = this;
-            eventFeature.get('Events').forEach(function(Iitem){
+            eventFeature.get('Params').forEach(function(Iitem){
                 var eventId = Iitem.id;
-                mthis.$data.SelectedEventIds.push(eventId);
+                mthis.$data.geometrySelectedEventIds.push(eventId);
             });
         },
         /**
@@ -1901,7 +2202,6 @@ export default {
          */
         addFeaturesToEventLayer(addFeatures){
             var mthis = this;
-            //debugger
             var eventLayerSource = mthis.getLayerById('eventsPointsLayer').getSource();
             if(eventLayerSource.getFeatures().length === 0){                          //判断地图中是否原本有数据
                 addFeatures.forEach(function(item){
@@ -1912,13 +2212,12 @@ export default {
                 mthis.returnSelectedEventIds(mthis.EventsDatas.data);
                 eventLayerSource.addFeatures(addFeatures);
             } else { //若地图中原本有数据
-                mthis.geometrySelectedEventIds.length = 0;
+                mthis.geometrySelectedEventIds = [];
                 mthis.timeSelectedEventIds.length = 0;
                 mthis.staticsSelectedEventIds.length = 0;
-                mthis.SelectedEventIds = []
                 var mapFeatures = eventLayerSource.getFeatures();
                 mapFeatures.forEach(function(feature){
-                    feature.set('selectedEventsNum',0);
+                    feature.set('selectedNum',0);
                     mthis.setLifeOrDieEventsPointStyleByValue(feature,'die');
                 })
                 addFeatures.forEach(function(additem){
@@ -1928,17 +2227,17 @@ export default {
                         var featureId = additem.getId();
                         var mapFeature = eventLayerSource.getFeatureById(featureId);
                         if(mapFeature === null){  //判断地图原有数据中改地点是否有数据
-                            var addevents = additem.get('Events');
+                            var addevents = additem.get('Params');
                             addevents.forEach(function(event){
                                 mthis.geometrySelectedEventIds.push(event.id);
                             })
                             mthis.setLifeOrDieEventsPointStyleByValue(additem,'life');
                             eventLayerSource.addFeature(additem);
                         } else {  //若地图原有数据中没有该地点数据
-                            var addevents = additem.get('Events');
+                            var addevents = additem.get('Params');
                             addevents.forEach(function(event){
                                 mthis.geometrySelectedEventIds.push(event.id);
-                                var mapEvents = mapFeature.get('Events');
+                                var mapEvents = mapFeature.get('Params');
                                 for(let i = 0; i < mapEvents.length; i++){
                                     if(event.id === mapEvents[i].id){
                                         break;
@@ -1946,8 +2245,8 @@ export default {
                                     if(i === mapEvents.length - 1){
                                         mapEvents.push(event);
                                         //mapFeature.set('Events',evs);
-                                        var num = mapFeature.get('selectedEventsNum')
-                                        mapFeature.set('selectedEventsNum',++num);
+                                        var num = mapFeature.get('selectedNum')
+                                        mapFeature.set('selectedNum',++num);
                                         //mthis.setSelectedEventFeatureParam(feature,false);
                                     }
                                 }
@@ -1962,7 +2261,6 @@ export default {
         },
         isOperateButtonsHLOrDim(){
             var mthis = this;
-            //debugger
             if($.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
                 mthis.changeButtonParam=[
                         {
@@ -2004,7 +2302,7 @@ export default {
                         'isOpen':true
                     }
                 ]
-                if(mthis.SelectedEventIds.length > 0){
+                if(mthis.SelectedIds.length > 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HSD',
                         'isOpen':true
@@ -2042,12 +2340,11 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult','HLlocationIds'
+      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult','HLlocationIds','geoStaticsSelectedIds'
     ]),
     
     watch:{
         AreaIds:function(){
-            //debugger
             var mthis = this;
             mthis.isOperateButtonsHLOrDim();
         },
@@ -2078,6 +2375,7 @@ export default {
         searchGeoEventResult:function(){
             var mthis = this;
             mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-to-GIS/', {
+            //mthis.$http.post("http://127.0.0.1/node2GIS/", {
                 "nodeIds": mthis.$store.state.searchGeoEventResult.ids
             }).then(response => {
                 var eventGeoJson = response.body.data[0].eventGeoJson;
@@ -2094,38 +2392,88 @@ export default {
                 /* 根据ids请求数据
                 ..
                 .. */
-                //debugger
                 mthis.eventGeoJson = mthis.test_mapData;
             }
         },
-        SelectedEventIds:function(){
+        /* halfSelectedIds:function(){
             var mthis = this;
-            //debugger
-            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.SelectedEventIds);
+        }, */
+        SelectedIds:function(){
+            var mthis = this;
+            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.SelectedIds);
             mthis.isOperateButtonsHLOrDim();
             
         },
+        geoStaticsSelectedIds:function(){
+            var mthis = this;
+            //if(mthis.staticsSelectedEventIds.length === 0 || mthis.staticsSelectedEventIds.length !== mthis.SelectedIds.length){
+                mthis.halfSelectedIds = mthis.SelectedIds;
+                var ids = [];
+                if(mthis.geoStaticsSelectedIds.length > 0){
+                    mthis.geoStaticsSelectedIds.forEach(function(item){
+                        if(item.indexOf('_') === -1){
+                            var id = 'org_'+item;
+                            ids.push(id)
+                        }
+                    })
+                }
+                mthis.staticsSelectedEventIds = ids;
+                if(mthis.halfSelectedIds.length > 0){
+                    mthis.halfSelectedIds.forEach(function(paramid){
+                        var layerId = mthis.getLayerIdByFeatureIdOrParamId(paramid);
+                        var featureId = mthis.allEventIdsToFeaturesIdsList[paramid].featureId;
+                        var feature = mthis.getLayerById(layerId).getSource().getFeatureById(featureId);
+                        mthis.setLifeOrDieEventsPointStyleByValue(feature,'halflife')
+                    })
+                }
+
+
+
+
+                //mthis.SelectedIds = mthis.geoStaticsSelectedIds;
+            //}
+        },
+        staticsSelectedEventIds:function(){
+            var mthis = this;
+            var dealSelectedIds = [];
+            if(mthis.staticsSelectedEventIds.length > 0){
+                mthis.staticsSelectedEventIds.forEach(function(Lid){
+                    dealSelectedIds.push(Lid.split('_')[1])
+                })
+            }
+            // mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
+            var selectedEventsParam = {
+                type:'GeoStatics',
+                paramIds:dealSelectedIds
+            };
+            mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
+            mthis.SelectedIds = mthis.staticsSelectedEventIds
+        },
         timeSelectedEventIds:function(){
             var mthis = this;
-            //debugger
-            mthis.SelectedEventIds = mthis.timeSelectedEventIds
+            mthis.SelectedIds = mthis.timeSelectedEventIds
             //mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.timeSelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoTime',
-                eventId:mthis.timeSelectedEventIds
+                paramIds:mthis.timeSelectedEventIds
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
         },
         geometrySelectedEventIds:function(){
             var mthis = this;
-            //debugger
-            mthis.SelectedEventIds = mthis.geometrySelectedEventIds
+            var dealSelectedIds = [];
+            if(mthis.geometrySelectedEventIds.length > 0){
+                mthis.geometrySelectedEventIds.forEach(function(Lid){
+                    dealSelectedIds.push(Lid.split('_')[1])
+                })
+            }
             // mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoView',
-                eventId:mthis.geometrySelectedEventIds
+                paramIds:dealSelectedIds
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
+            mthis.SelectedIds = mthis.geometrySelectedEventIds
         },
         geoTimeCondition:function(){
             var mthis = this;
@@ -2152,7 +2500,7 @@ export default {
                 var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
                 var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
                 var eventTime = '';
-                var featrueEvents = feature.get('Events');
+                var featrueEvents = feature.get('Params');
                 if(idsIsAllIds){  //判断ids是否是全量，如果是全量的话，则说明是第一步选择，所有的点先变成die的状态
                     mthis.setLifeOrDieEventsPointStyleByValue(feature,'die');
                 } else {
@@ -2176,7 +2524,6 @@ export default {
         },
         tmss:function(){
             var mthis = this
-            //debugger
             if(mthis.tmss == 'geo'){
                 this.$nextTick(function(){
                     var mthis = this

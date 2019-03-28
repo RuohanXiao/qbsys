@@ -252,6 +252,7 @@ var store = new Vuex.Store({
     selectNetNodes:[],   //点击net节点，将节点id返回到event
     selectGeoNodes:[],
     selectContentNodes:[],
+    geoStaticsSelectedIds:[],
     netModalDetailData: {},
     netModalDetailNodeId: '',
     contentHeight: 0,
@@ -364,6 +365,9 @@ var store = new Vuex.Store({
     },
     setGeoToNetData(state,val){
       state.geoToNetData = val
+    },
+    setGeoStaticsSelectedIds(state,val){
+      state.geoStaticsSelectedIds = val
     },
     // 地图与文本传输
     setContentToGeoData(state,val){

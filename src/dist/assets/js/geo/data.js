@@ -435,9 +435,9 @@ var test_mapData = {
 			"id":'event_Feature_天津',
 			"geometry": {"type": "Point", "coordinates": [ 117.00559998, 36.6670723 ]},
 			"properties": {
-				'Events': [{"id":'V101','time':"1991-01-02"}],
+				'Params': [{"id":'event_V101','time':"1991-01-02"}],
 				'locationName':'天津',
-				'selectedEventsNum':1
+				'selectedNum':1
 			}
 			
 		},
@@ -445,90 +445,90 @@ var test_mapData = {
 			"id":'event_Feature_北京',
 			"geometry": {"type": "Point", "coordinates": [ 114.48977661, 38.04512787 ]},
 			"properties": {
-				'Events': [{"id":'V160','time':"1991-01-02"},{"id":'V103','time':"1992-01-02"}],
+				'Params': [{"id":'event_V160','time':"1991-01-02"},{"id":'event_V103','time':"1992-01-02"}],
 				'locationName':'北京',
-				'selectedEventsNum':2
+				'selectedNum':2
 			}
 		},
 		{ "type": "Feature",
 			"id":'event_Feature_河北',
 			"geometry": {"type": "Point", "coordinates": [ 116.3809433, 39.9236145 ]},
 			"properties": {
-				'Events': [{"id":'V158','time':"1993-01-02"},{"id":'V159','time':"1993-01-02"},{"id":'V099','time':"1993-01-02"}],
+				'Params': [{"id":'event_V158','time':"1993-01-02"},{"id":'event_V159','time':"1993-01-02"},{"id":'event_V099','time':"1993-01-02"}],
 				'locationName':'河北',
-				'selectedEventsNum':3
+				'selectedNum':3
 			}
 		},
 		{ "type": "Feature",
 			"id":'event_Feature_吉林',
 			"geometry": {"type": "Point", "coordinates": [ 123.41168213, 41.7966156 ]},
 			"properties": {
-				'Events': [{"id":'V161','time':"1993-01-02"},{"id":'V107','time':"1994-01-02"},{"id":'V162','time':"1995-01-02"}],
+				'Params': [{"id":'event_V161','time':"1993-01-02"},{"id":'event_V107','time':"1994-01-02"},{"id":'event_V162','time':"1995-01-02"}],
 				'locationName':'吉林',
-				'selectedEventsNum':3
+				'selectedNum':3
 			}
 		},
 		{ "type": "Feature",
 			"id":'event_Feature_新疆',
 			"geometry": {"type": "Point", "coordinates": [ 87.62695, 43.90137 ]},
 			"properties": {
-				'Events': [{"id":'V163','time':"1996-01-02"},{"id":'V110','time':"1997-01-02"},{"id":'V111','time':"1998-01-02"},{"id":'V112','time':"2018-01-02"}],
+				'Params': [{"id":'event_V163','time':"1996-01-02"},{"id":'event_V110','time':"1997-01-02"},{"id":'event_V111','time':"1998-01-02"},{"id":'event_V112','time':"2018-01-02"}],
 				'locationName':'新疆',
-				'selectedEventsNum':4
+				'selectedNum':4
 			}
 		},
 		{ "type": "Feature",
 			"id":'event_Feature_西藏',
 			"geometry": {"type": "Point", "coordinates": [ 91.14258, 29.75098 ]},
 			"properties": {
-				'Events': [{"id":'V113','time':"1995-01-02"},{"id":'V114','time':"1996-01-02"},{"id":'V115','time':"1995-01-02"},{"id":'V116','time':"1995-01-02"},{"id":'V117','time':"2018-01-02"}],
+				'Params': [{"id":'event_V113','time':"1995-01-02"},{"id":'event_V114','time':"1996-01-02"},{"id":'event_V115','time':"1995-01-02"},{"id":'event_V116','time':"1995-01-02"},{"id":'event_V117','time':"2018-01-02"}],
 				'locationName':'西藏',
-				'selectedEventsNum':5
+				'selectedNum':5
 			}
 		},
 		{ "type": "Feature",
 			"id":'event_Feature_广州',
 			"geometry": {"type": "Point", "coordinates": [ 113.55469, 22.28027 ]},
 			"properties": {
-				'Events': [{"id":'V118','time':"1999-01-02"},{"id":'V119','time':"2003-01-02"},{"id":'V164','time':"2010-01-02"},{"id":'V165','time':"1991-01-02"},{"id":'V122','time':"2005-01-02"},{"id":'V123','time':"2018-01-02"}],
+				'Params': [{"id":'event_V118','time':"1999-01-02"},{"id":'event_V119','time':"2003-01-02"},{"id":'event_V164','time':"2010-01-02"},{"id":'event_V165','time':"1991-01-02"},{"id":'event_V122','time':"2005-01-02"},{"id":'event_V123','time':"2018-01-02"}],
 				'locationName':'广州',
-				'selectedEventsNum':6
+				'selectedNum':6
 			}
 		},
 		{ "type": "Feature",
 			"id":'event_Feature_青海',
 			"geometry": {"type": "Point", "coordinates": [ 101.77734, 36.60645 ]},
 			"properties": {
-				'Events': [{"id":'V124','time':"2008-01-02"},{"id":'V125','time':"2001-01-02"},{"id":'V126','time':"2002-01-02"},{"id":'V127','time':"2004-01-02"},{"id":'V128','time':"2006-01-02"},{"id":'V129','time':"2007-01-02"},{"id":'V130','time':"2009-01-02"}],
+				'Params': [{"id":'event_V124','time':"2008-01-02"},{"id":'event_V125','time':"2001-01-02"},{"id":'event_V126','time':"2002-01-02"},{"id":'event_V127','time':"2004-01-02"},{"id":'event_V128','time':"2006-01-02"},{"id":'event_V129','time':"2007-01-02"},{"id":'event_V130','time':"2009-01-02"}],
 				'locationName':'青海',
-				'selectedEventsNum':7
+				'selectedNum':7
 			}
 		},
 		{ "type": "Feature",
 			"id":'event_Feature_黑龙江',
 			"geometry": {"type": "Point", "coordinates": [ 126.65039, 45.83496 ]},
 			"properties": {
-				'Events': [{"id":'V131','time':"2009-01-02"},{"id":'V132','time':"2000-01-02"},{"id":'V133','time':"2005-01-02"},{"id":'V134','time':"1999-01-02"},{"id":'V135','time':"1997-01-02"},{"id":'V136','time':"2003-01-02"},{"id":'V137','time':"2010-01-02"},{"id":'V138','time':"2009-01-02"}],
+				'Params': [{"id":'event_V131','time':"2009-01-02"},{"id":'event_V132','time':"2000-01-02"},{"id":'event_V133','time':"2005-01-02"},{"id":'event_V134','time':"1999-01-02"},{"id":'event_V135','time':"1997-01-02"},{"id":'event_V136','time':"2003-01-02"},{"id":'event_V137','time':"2010-01-02"},{"id":'event_V138','time':"2009-01-02"}],
 				'locationName':'黑龙江',
-				'selectedEventsNum':8
+				'selectedNum':8
 			}
 		},
 		{ "type": "Feature",
 			"id":'event_Feature_波兰',
 			"geometry": {"type": "Point", "coordinates": [ 17.62695, 52.90137 ]},
 			"properties": {
-				'Events': [{"id":'V139','time':"2002-01-02"},{"id":'V140','time':"2000-01-02"},{"id":'V141','time':"1992-01-02"},{"id":'V142','time':"2007-01-02"},{"id":'V143','time':"2004-01-02"},{"id":'V144','time':"2001-01-02"},{"id":'V145','time':"2008-01-02"},{"id":'V146','time':"1998-01-02"},{"id":'V147','time':"1995-01-02"}],
+				'Params': [{"id":'event_V139','time':"2002-01-02"},{"id":'event_V140','time':"2000-01-02"},{"id":'event_V141','time':"1992-01-02"},{"id":'event_V142','time':"2007-01-02"},{"id":'event_V143','time':"2004-01-02"},{"id":'event_V144','time':"2001-01-02"},{"id":'event_V145','time':"2008-01-02"},{"id":'event_V146','time':"1998-01-02"},{"id":'event_V147','time':"1995-01-02"}],
 				'locationName':'波兰',
-				'selectedEventsNum':9
+				'selectedNum':9
 			}
 		},
 		{ "type": "Feature",
 			"id":'event_Feature_ss',
 			"geometry": {"type": "Point", "coordinates": [ 151.77734, 26.60645 ]},
 			"properties": {
-				'Events': [{"id":'V148','time':"1996-01-02"},{"id":'V149','time':"2006-01-02"},{"id":'V150','time':"2018-01-02"},{"id":'V151','time':"2010-01-02"},{"id":'V152','time':"2009-01-02"},{"id":'V153','time':"2000-01-02"},{"id":'V154','time':"1997-01-02"},{"id":'V155','time':"1998-01-02"},{"id":'V156','time':"1999-01-02"},{"id":'V157','time':"2018-01-02"}],
+				'Params': [{"id":'event_V148','time':"1996-01-02"},{"id":'event_V149','time':"2006-01-02"},{"id":'event_V150','time':"2018-01-02"},{"id":'event_V151','time':"2010-01-02"},{"id":'event_V152','time':"2009-01-02"},{"id":'event_V153','time':"2000-01-02"},{"id":'event_V154','time':"1997-01-02"},{"id":'event_V155','time':"1998-01-02"},{"id":'event_V156','time':"1999-01-02"},{"id":'event_V157','time':"2018-01-02"}],
 				'locationName':'ss',
-				'selectedEventsNum':10
+				'selectedNum':10
 			}
 		}
 	]
