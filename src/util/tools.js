@@ -72,6 +72,22 @@ export default {
     }
   },
 
+  //判断item是否存在于arr数组中，若存在，则返回第一个位置，若不存在，则返回-1
+  itemIndexInArr(item,arr){
+    if(arr.length > 0){
+        for(var i = 0; i < arr.length; i++){
+            if(item == arr[i]){
+                return i;
+            }
+            if(i == arr.length-1){
+                return -1;
+            }
+        }
+    } else {
+        return -1;
+    }
+},
+
   // date yy-mm-dd 转 时间戳 (秒)
   getTimestamp(time) {
     return Date.parse(new Date(time)) / 1000;

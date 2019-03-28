@@ -96,28 +96,28 @@ export default {
             'isOpen':false
           },
           {
-            'id':'createWorkSpace_HDD',
+            'id':'createWorkSpace_HSD',
             'name':'创建集合',
-            'imgClass':'icon-refresh',
+            'imgClass':'icon-add',
             'isOpen':false
           },
           {'id':'separate'},
           {
             'id':'RectangleExplore_AT',
             'name':'矩形探索',
-            'imgClass':'icon-selection-round',
+            'imgClass':'icon-tansuo',
             'isOpen':true
           },
           {
             'id':'CircleExplore_AT',
             'name':'圆形探索',
-            'imgClass':'icon-selection-round',
+            'imgClass':'icon-tansuo2',
             'isOpen':true
           },
           {
             'id':'customExplore_AT',
             'name':'自定义探索',
-            'imgClass':'icon-selection-round',
+            'imgClass':'icon-tansuo1',
             'isOpen':true
           },
           {
@@ -173,7 +173,6 @@ export default {
     methods:{
         divClick(obj){
             var mthis = this;
-            //debugger
             var operationObj = obj;
             if(operationObj.currentTarget.className === 'button-none'){
               return
