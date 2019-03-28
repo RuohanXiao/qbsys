@@ -1,4 +1,5 @@
 <template>
+  <!-- 图集弹框 -->
   <div>
     <Modal class="modalDiv" width='80vw' footer-hide loading='loading' v-model="modal1" id='md'>
       <p slot="close" style="color:#f60;text-align:center;top: -2px !important;right:-4px !important}" class='iconP'>
@@ -8,17 +9,6 @@
         <div class='modalLeftDiv'>
           <div class='lefttop'>
             <div class="inputTitle">
-              <!-- <input style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="titleName"
-                      placeholder=''  @on-open-change="lightIcon">
-                    </input> -->
-              <!-- <Form :label-width="80">
-                      <FormItem>
-                        <Input :model="workspaceTitle" placeholder="Enter your name"></Input>
-                      </FormItem>
-                      <FormItem>
-                        <Input :model="workspaceDes" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
-                      </FormItem>
-                    </Form> -->
               <Input class='inputT' v-model="workspaceTitle" placeholder="集合名" />
             </div>
             <div class="inputTitle">
@@ -30,11 +20,11 @@
               <Input class='inputTbottom' v-model="searchWorkspaceTitle" @on-change="v=>{searchInfo(v)}" placeholder="搜索实体" />
             </div>
             <div class='scrollBarAble' style='margin-bottom: 20px;height: 36vh;'>
-            <div class='resList '>
-              <div class='resli' v-for='op in options1' style='padding:10px auto'>
-                {{op.label}}</div>
+              <div class='resList '>
+                <div class='resli' v-for='op in options1' style='padding:10px auto'>
+                  {{op.label}}</div>
+              </div>
             </div>
-          </div>
           </div>
         </div>
         <div class='modalRightDiv'>
@@ -62,87 +52,6 @@
         <Button class='buttonCannle'>Success</Button>
       </div>
     </Modal>
-    <!-- <Row type="flex" justify="center" v-if="item.available" class="itemDiv"> -->
-    <Row type="flex" justify="center" class="itemDiv">
-      <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
-      <div class="cardDiv">
-        <div :style="{display: 'flex'}">
-          <span class='titleFront'>{{item.name}}</span>
-          <Icon v-if="item.type === 'human'" class="icon iconfont icon-ren padd8 color515" size="20" />
-          <Icon v-if="item.type === 'organization'" class="icon iconfont icon-zuzhi padd8 color515" size="20" />
-          <Icon v-if="item.type === 'weapon'" class="icon iconfont icon-shouqiang padd8 color515" size="20" />
-          <Icon v-if="item.type === 'administrative'" class="icon iconfont icon-diqu padd8 color515" size="20" />
-          <Icon v-if="item.type === 'event'" class="icon iconfont icon-shijian padd8 color515" size="20" />
-          <Icon v-if="item.type === 'document'" class="icon iconfont icon-wendang padd8 color515" size="20" />
-          <Icon v-if="item.type === 'mix'" class="icon iconfont icon-star1 padd8 color515" size="20" />
-        </div>
-        <div class="lineheight25">
-          <span class='cardFront'>描述:&nbsp;{{item.des}}</span>
-        </div>
-        <div class="lineheight25">
-          <span class='cardFront'>创建时间:&nbsp;{{item.create_time}}</span> &nbsp;&nbsp;&nbsp;
-          <span class='cardFront'>创建人:&nbsp;{{item.create_user}}</span>
-        </div>
-        <div class="lineheight25">
-          <span class='cardFront'>修改时间:&nbsp;{{item.modify_time}}</span> &nbsp;&nbsp;&nbsp;
-          <span class='cardFront'>修改人:&nbsp;{{item.modify_user}}</span>
-        </div>
-        <div class="lineheight25">
-         <span class='cardFront'>数量:&nbsp;({{item.nodeIds.length}})</span>
-        </div>
-      </div>
-      </Col>
-      <Col :sm="6" align="right" :style="{flexDirection: 'column'}">
-      <div class="cardButD">
-        <div class="cd">
-          <Icon class="icon iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="importData(item.nodeIds)" />
-          <Icon class="icon iconfont icon-edit DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="modData(item.nodeIds)" />
-          <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="del(item.nodeIds)" />
-          <!-- <Poptip placement="left"
-                                confirm
-                                title="Are you sure you want to delete this item?"
-                                @on-ok="ok"
-                                @on-cancel="cancel">
-                                <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="del(item.id)"/>
-                            </Poptip> -->
-        </div>
-      </div>
-      </Col>
-    </Row>
-    <!--
-    <Row type="flex" justify="center" v-else class="itemDivDisable">
-      <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
-      <div class="cardDiv">
-        <div :style="{display: 'flex'}">
-          <span class='titleFront'>{{item.title}}</span>
-          <Icon v-if="item.groupType === 'human'" class="icon iconfont icon-ren padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'organization'" class="icon iconfont icon-zuzhi padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'weapon'" class="icon iconfont icon-shouqiang padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'administrative'" class="icon iconfont icon-diqu padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'event'" class="icon iconfont icon-shijian padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'document'" class="icon iconfont icon-wendang padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'mix'" class="icon iconfont icon-star1 padd8 color515" size="14" />
-        </div>
-        <div class="lineheight25">
-          <span class='cardFront'>描述:{{item.disc}}</span>
-        </div>
-        <div class="lineheight25">
-          <span class='cardFront'>{{item.time}}</span> &nbsp;&nbsp;&nbsp;
-          <span class='cardFront'>数量:{{item.num}}</span>
-        </div>
-      </div>
-      </Col>
-      <Col :sm="6" align="right" :style="{flexDirection: 'column'}">
-      <div class="cardButD">
-        <div class="cd">
-          <Icon class="icon iconfont icon-tianjia DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()" />
-          <Icon class="icon iconfont icon-edit DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()" />
-          <Icon class="icon iconfont icon-shanchu DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()" />
-        </div>
-      </div>
-      </Col>
-    </Row>
-    -->
   </div>
 </template>
 <script>
@@ -156,7 +65,7 @@
         modal1: false,
         workspaceTitle: '台D人员',
         workspaceDes: '描述:包含台湾地区领导人',
-        searchWorkspaceTitle:'',
+        searchWorkspaceTitle: '',
         items: [{
             type: 'entity',
             num: 3,
@@ -255,7 +164,7 @@
             ]
           }
         ],
-        clearFlag:false,
+        clearFlag: false,
         options1: [],
         loading1: false,
         timer: null,
@@ -322,7 +231,7 @@
           }]) */
         }
         if (this.$store.state.tmss === 'geo') {
-          if(a && a.value){
+          if (a && a.value) {
             if (a.type === 'human') {
               mthis.$store.commit('setSearchGeoEventResult', {
                 ids: [a.value]
@@ -408,15 +317,13 @@
       },
       importData(id) {
         this.$emit('workSpaceModal', true)
-        console.log('-------id--------')
-        console.log(id)
-        this.$store.commit('setWorkSpaceAddData', id)
+        this.addToChart(id)
       },
       addToChart(id) {
         var mthis = this
-        // mock.get("/getWorkSpaceAddData").then(function(res) {
-        mthis.$store.commit('setWorkSpaceAddData', id)
-        // })
+        mock.get("/getWorkSpaceAddData").then(function(res) {
+          mthis.$store.commit('setWorkSpaceAddData', res.data.data[0])
+        })
       },
       cantClick() {
         alert(
@@ -425,20 +332,16 @@
       }
     },
     props: {
-      item: Object
+      workatlastData: Object,
+       type: String,
+      flag: Boolean
     }
   }
 </script>
 <style scoped>
-  .cd{
-    height: 100%;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-around;
-  }
-  .resli{
+  .resli {
     height: 24px;
-	  background-color: rgba(51,255,255,0.5);
+    background-color: rgba(51, 255, 255, 0.5);
     font-family: MicrosoftYaHei;
     font-size: 14px;
     font-weight: normal;
@@ -448,7 +351,7 @@
     color: #ccffff;
     padding: 0 10px;
   }
-  .resList{
+  .resList {
     margin: 1vh auto;
   }
   .resList div:nth-child(even) {
@@ -457,7 +360,6 @@
   .resList div:nth-child(odd) {
     background-color: rgba(51, 255, 255, 0.2);
   }
-  
   .selectDic {
     line-height: 50px;
     display: inline-block;
@@ -467,12 +369,12 @@
     padding-top: 2px;
     padding-right: 10px;
     font-size: 18px;
-    text-indent:3rem;
+    text-indent: 3rem;
     min-height: 40px;
   }
   /* .modalDiv {
-                    min-height: 50vh;
-                  } */
+                      min-height: 50vh;
+                    } */
   .inputTitle {
     justify-content: center;
     display: flex;
@@ -521,7 +423,7 @@
     text-overflow: ellipsis;
     /* padding-left: 40px; */
     /* padding-top: 2px;
-        padding-right: 10px; */
+          padding-right: 10px; */
     height: 16vh;
     max-height: 16vh;
     padding: 7px;
@@ -585,8 +487,8 @@
     height: 70vh;
     background-image: linear-gradient(8deg, rgba(102, 255, 153, 0.3) -10%, rgba(102, 128, 204, 0.3) 65%, rgba(102, 0, 255, 0.3) 100%), linear-gradient(#000000, #000000);
     background-blend-mode: normal, normal;
-    border-top-left-radius:20px;
-    border-bottom-left-radius:20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
     margin-bottom: 20px;
   }
   .modalLeftDiv_firstchild {
@@ -610,7 +512,7 @@
     border-bottom: 1px solid rgba(51, 255, 255, 0.3);
   }
   .leftbottom {
-        height: 44vh;
+    height: 44vh;
     overflow-x: auto;
     overflow-y: hidden;
     margin-top: 1vh;
@@ -658,9 +560,9 @@
     color: #ccffff;
   }
   /* .touxiangImg:hover img{
-              /* background-image:url('http://10.60.1.140/assets/images/organization.png');
-              background-image:url(../../dist/assets/images/circle.png);
-            }  */
+                /* background-image:url('http://10.60.1.140/assets/images/organization.png');
+                background-image:url(../../dist/assets/images/circle.png);
+              }  */
   .top,
   .bottom {
     text-align: center;
@@ -725,7 +627,7 @@
   }
   .titleFront {
     font-size: 14px;
-    line-height: 36px;
+    line-height: 30px;
     display: inline;
   }
   .padd8 {
@@ -773,16 +675,6 @@
   }
   .inputTitle>input {
     width: 90%;
-  }
-  .lineheight25{
-    font-family: MicrosoftYaHei;
-    font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
-    color: #ccffff;
-    opacity: 0.5;
   }
 </style>
 

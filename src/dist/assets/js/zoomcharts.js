@@ -15908,8 +15908,8 @@ var ZoomCharts = ZoomCharts || {};
                                 t.y < 100 && this.zoomMove(t)
                             }, e.prototype.zoomMove = function (t) {
                                 var e = t.y - 10;
-                                e = Math.max(0, Math.min(80, e)), this.handle.style.top = e + "px";
-                                var i = this.getZoomValue(e / 80);
+                                e = Math.max(0, Math.min(180, e)), this.handle.style.top = e + "px";
+                                var i = this.getZoomValue(e / 180);
                                 this.chart.autoZoom.manualZoom(i / this.scene.zoom), this.events.notifySceneChanges({
                                     position: !0
                                 }), t.consumed = !0
@@ -15928,7 +15928,7 @@ var ZoomCharts = ZoomCharts || {};
                                 return Math.exp(r)
                             }, e.prototype.doAnimations = function (t) {
                                 var e = this.getSliderPosition();
-                                this.handle.style.top = 80 * e + "px"
+                                this.handle.style.top = 180 * e + "px"
                             }, e.prototype.remove = function () {
                                 this.mouse.remove()
                             }, e

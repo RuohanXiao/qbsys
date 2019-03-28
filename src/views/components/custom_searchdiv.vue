@@ -24,7 +24,7 @@
               </OptionGroup>
             </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoContent" filterable
-          v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}" @blur="lightIcon" @focus="lightIcon" @keyup.enter.native="enterContentOption(options3[0].data[0])">
+          v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}"  @on-open-change="lightIcon" @keyup.enter.native="enterContentOption(options3[0].data[0])">
               <OptionGroup :label="opt.title" v-for="opt in options3">
                 <Option v-for="(option, index) in opt.data" :value="option.value" :key="index"  @click.native="()=>{setOption(opt.data[index])}">
                   <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
@@ -187,44 +187,49 @@
       },
       searchInfoNet(query) {
         var mthis = this;
+        let timestamp = new Date().getTime()
         this.loading1 = true;
         if (query !== "") {
           if (this.timer) {
             clearTimeout(this.timer)
           }
           this.timer = setTimeout(function() {
-            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, {
+            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query+'&timestamp=' + timestamp, {
                 emulateJSON: true
               })
               .then(response => {
-                console.log('=======pattern======')
-                // console.log(response)
-                mthis.options1 = []
-                // let optionWord = {}
-                // let optionWordArr = []
-                let optionList = {}
-                let optionListArr = []
-                console.log(response.body)
-                // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
-                for (let i = 0; i < response.body.data.nodes.length; i++) {
-                  // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
-                  optionListArr.push({
-                    // "label": name,
-                    "label": response.body.data.nodes[i].name,
-                    // "value": response.body.data.nodes[i].id,
-                    "value": query,
-                    "id": response.body.data.nodes[i].id,
-                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image.png'),
-                    "type": response.body.data.nodes[i].type
-                  })
+                if(response.body.timestamp == timestamp){
+                  console.log('=======pattern======')
+                  // console.log(response)
+                  mthis.options1 = []
+                  // let optionWord = {}
+                  // let optionWordArr = []
+                  let optionList = {}
+                  let optionListArr = []
+                  console.log(response.body)
+                  // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
+                  for (let i = 0; i < response.body.data.nodes.length; i++) {
+                    // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
+                    optionListArr.push({
+                      // "label": name,
+                      "label": response.body.data.nodes[i].name,
+                      // "value": response.body.data.nodes[i].id,
+                      "value": query,
+                      "id": response.body.data.nodes[i].id,
+                      "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image.png'),
+                      "type": response.body.data.nodes[i].type
+                    })
+                  }
+                  optionList.title = '实体检索'
+                  optionList.data = optionListArr
+                  // mthis.optionNet.push(optionList)
+                  // mthis.options1 = mthis.optionNet;
+                  mthis.options1 = new Array(optionList)
+                  console.log(mthis.options1)
+                  mthis.loading1 = false;
+                } else {
+                  console.log('---------error time-----')
                 }
-                optionList.title = '实体检索'
-                optionList.data = optionListArr
-                // mthis.optionNet.push(optionList)
-                // mthis.options1 = mthis.optionNet;
-                mthis.options1 = new Array(optionList)
-                console.log(mthis.options1)
-                mthis.loading1 = false;
               })
           }, 200);
         } else {

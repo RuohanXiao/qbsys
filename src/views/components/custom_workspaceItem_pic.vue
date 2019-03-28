@@ -1,26 +1,14 @@
 <template>
   <div class="itemDiv">
-    <div class="titleDiv">
-      <p class='titleFront'>{{item.title}}</p>
-    </div>
     <div class="itemContentDiv">
-      <div class="buttonFront-add ">
-        <Icon class="icon iconfont icon-delete-point iconHover1 deg45" size="20" @click="importData(item.id)"></Icon>
-      </div>
-      <div class="buttonFront-del ">
-        <Icon class="icon iconfont icon-delete-point iconHover" size="20" @click="del(item.id)"></Icon>
+      <div class="buttonFront">
+        <Icon class="con iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" size="20" @click="importData(item.id)"></Icon>
+        <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="20" @click="del(item.id)"></Icon>
       </div>
       <div class="imgDiv">
-        <img :src=item.img :style="{width:'100%',height:'auto',maxHeight:'200px'}" />
+        <img :src=item.img :style="{width:'18vw',height:'18vh'}" />
+        <p class='titleFront'>{{item.title}}</p>
       </div>
-      <!--  <div class="buttonDiv">
-          <Button type="primary" class="DVSL-bar-btn-new DVSL-bar-btn-back">
-          <p class='buttonFront-detail'> 详情 </p>
-      </Button>
-      <Button type="primary"  class="DVSL-bar-btn-new DVSL-bar-btn-back">
-          <p  class='buttonFront-del'> 删除 </p>
-      </Button>
-        </div> -->
     </div>
   </div>
 </template>
@@ -67,11 +55,12 @@
     letter-spacing: 0px;
     color: #ccffff;
     position: absolute;
-    z-index: 99;
+    z-index: 98;
     right: auto;
     width: 21vw;
     background-color: rgba(0, 0, 0, 0.5);
-    line-height: 30px;
+    line-height: 20px;
+    opacity: 0.5;
   }
   /* 工作集样式 */
   .itemDiv {
@@ -89,7 +78,7 @@
   }
   /* 工作集图片样式 */
   .imgDiv {
-    background-color: antiquewhite;
+    /* background-color: antiquewhite; */
     width: 21vw;
     height: auto;
     max-height: 200px;
@@ -162,17 +151,13 @@
     transition: all 1s;
     /* transition: font-size 0.2s ease, transform 0.2s ease; */
   }
-  .buttonFront-del {
-    position: absolute;
-    z-index: 99;
-    right: 15px;
-    top: 15px;
-  }
-  .buttonFront-add {
+  .buttonFront {
     position: absolute;
     z-index: 99;
     right: 45px;
     top: 15px;
+    flex-flow: column nowrap;
+    display: flex;
   }
 </style>
 
