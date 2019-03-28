@@ -1250,7 +1250,6 @@ export default {
         },
         orgsSpatialQuery(geometryArr){
             var mthis = this;
-            debugger
             //mthis.$http.post('http://localhost:5000/exploreOrg/', {
                 mthis.$http.post('http://10.60.1.141:5001/exploreOrg/', {
                     'geometry':geometryArr
@@ -2407,8 +2406,7 @@ export default {
         },
         geoStaticsSelectedIds:function(){
             var mthis = this;
-            debugger
-            if(mthis.staticsSelectedEventIds.length === 0 || mthis.staticsSelectedEventIds.length !== mthis.SelectedIds.length){
+            //if(mthis.staticsSelectedEventIds.length === 0 || mthis.staticsSelectedEventIds.length !== mthis.SelectedIds.length){
                 mthis.halfSelectedIds = mthis.SelectedIds;
                 var ids = [];
                 if(mthis.geoStaticsSelectedIds.length > 0){
@@ -2433,13 +2431,10 @@ export default {
 
 
                 //mthis.SelectedIds = mthis.geoStaticsSelectedIds;
-            }
-            /* debugger
-            var  */
+            //}
         },
         staticsSelectedEventIds:function(){
             var mthis = this;
-            debugger
             var dealSelectedIds = [];
             if(mthis.staticsSelectedEventIds.length > 0){
                 mthis.staticsSelectedEventIds.forEach(function(Lid){
@@ -2466,7 +2461,6 @@ export default {
         },
         geometrySelectedEventIds:function(){
             var mthis = this;
-            debugger
             var dealSelectedIds = [];
             if(mthis.geometrySelectedEventIds.length > 0){
                 mthis.geometrySelectedEventIds.forEach(function(Lid){

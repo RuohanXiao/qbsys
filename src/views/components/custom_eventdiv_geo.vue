@@ -146,7 +146,6 @@
     methods: {
       clickLeftStatics(staticsClick){
         var mthis = this;
-        debugger
         mthis.$store.commit('setGeoStaticsSelectedIds', staticsClick)
         
 
