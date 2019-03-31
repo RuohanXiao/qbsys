@@ -1,55 +1,50 @@
 <template>
-  <!-- 图集弹框 -->
+  <!-- 集合弹框 -->
   <div>
-    <Modal class="modalDiv" width='80vw' footer-hide loading='loading' v-model="modal1" id='md'>
+    <Modal class="modalDiv" width='80vw' footer-hide loading='loading' v-model="showFlag" id='md'>
       <p slot="close" style="color:#f60;text-align:center;top: -2px !important;right:-4px !important}" class='iconP'>
         <Icon type="icon iconfont icon-quxiaocancel color515" size="60"></Icon>
       </p>
       <div class='mainModal'>
         <div class='modalLeftDiv'>
-          <div class='lefttop'>
+          <div class='lefttop' v-if="type==='import'">
             <div class="inputTitle">
-              <Input class='inputT' v-model="workspaceTitle" placeholder="集合名" />
-            </div>
-            <div class="inputTitle">
-              <textarea rows="8" cols="20" class='inputD' v-model="workspaceDes" />
-            </div>
-          </div>
-          <div class='leftbottom'>
-            <div class="inputTitle">
-              <Input class='inputTbottom' v-model="searchWorkspaceTitle" @on-change="v=>{searchInfo(v)}" placeholder="搜索实体" />
+              <Input class='inputTbottom' v-model="searchWorkspaceTitle" @on-change="v=>{searchInfo(v)}" placeholder="图集搜索" prefix="ios-search" />
             </div>
             <div class='scrollBarAble' style='margin-bottom: 20px;height: 36vh;'>
               <div class='resList '>
-                <div class='resli' v-for='op in options1' style='padding:10px auto'>
-                  {{op.label}}</div>
+                <div class='resli' v-for='op in options1' style="padding:'10px auto';line-height:4vh;">
+                  <p>{{op.name}}
+                    <Icon class="icon iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" :style="{float: 'right',lineHeight: '4vh',height: '4vh'}" size="20" @click="addDataToTemp(op)" />
+                  </p>
+                </div>
               </div>
+            </div>
+          </div>
+          <div class='lefttop' v-else>
+            <div class="inputTitle">
+              <Input class='inputT' v-model="workspaceTitle" placeholder="图集名" />
+            </div>
+            <div class="inputTitle">
+              <Input v-model="workspaceDes" type="textarea" class='inputD scrollBarAble' :rows='8' :cols="20" placeholder="图集描述" />
             </div>
           </div>
         </div>
-        <div class='modalRightDiv'>
-          <div class="scrollBarAble">
-            <div class='rightdiv' v-for='item in items'>
-              <div class="type-title lefttop">
-                <div class="type-title-d"></div>
-                <p class="type-title-p">{{item.type}}({{item.data.length}})</p>
-              </div>
-              <div class="type-content">
-                <Row type="flex" justify="start">
-                  <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" v-for='itemObj in item.data'>
-                  <!-- <Avatar class="circle-img touxiangImg" icon="icon-delete-point" :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" /> -->
-                  <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
-                  <p class='nametext'>{{itemObj.name}}</p>
-                  </Col>
-                </Row>
-              </div>
-            </div>
-          </div>
+        <div class='modalRightDiv' v-if="type==='import'">
+          <!-- 导入图集 -->
+          <!-- 导入图集应包含搜索图集,预览图集(drawable) -->
+          <div id='demo' />
+        </div>
+        <div class='modalRightDiv' v-else>
+          <!-- 导出图 -->
+          <!-- 导出图集应包含预览图集(disdrawable)-->
+          <div id='demo' />
         </div>
       </div>
       <div class="rightbottom">
-        <Button class='buttonOK'>Info</Button>
-        <Button class='buttonCannle'>Success</Button>
+        <Button class='buttonOK' v-if="type==='import'" @click='modifySet'>导入图集</Button>
+        <Button class='buttonOK' v-else @click='createSet'>导出集合</Button>
+        <Button class='buttonCannle' @click="back">返回</Button>
       </div>
     </Modal>
   </div>
@@ -57,118 +52,42 @@
 <script>
   import mock from '../../mock/index.js'
   import util from '../../util/tools.js'
+  import configer from '../../util/configContrl.js'
+  // import { Store } from 'vuex';
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   mock.test = 1
   export default {
     data() {
       return {
+        showFlag: false,
+        lightIconFlag: false,
         loading: false,
         modal1: false,
-        workspaceTitle: '台D人员',
-        workspaceDes: '描述:包含台湾地区领导人',
+        workspaceTitle: '',
+        workspaceDes: '',
         searchWorkspaceTitle: '',
-        items: [{
-            type: 'entity',
-            num: 3,
-            data: [{
-              id: '1',
-              img: 'http://10.60.1.143/pic_lib/entity/Q22368.png',
-              name: '陈水扁'
-            }, {
-              id: '2',
-              img: 'http://10.60.1.143/pic_lib/entity/Q315528.png',
-              name: '李登辉'
-            }, {
-              id: '3',
-              img: 'http://10.60.1.143/pic_lib/entity/Q233984.png',
-              name: '蔡英文'
-            }, {
-              id: '4',
-              img: 'http://10.60.1.143/pic_lib/entity/Q22368.png',
-              name: '陈水扁'
-            }, {
-              id: '5',
-              img: 'http://10.60.1.143/pic_lib/entity/Q315528.png',
-              name: '李登辉'
-            }]
-          },
-          {
-            type: 'document',
-            num: 1,
-            data: [{
-              id: 'd1',
-              img: 'http://10.60.1.140/assets/images/content_node.png',
-              name: '陈水扁文档'
-            }]
-          },
-          {
-            type: 'event',
-            num: 6,
-            data: [{
-                id: 'e1',
-                img: 'http://10.60.1.140/assets/images/jianchuan.png',
-                name: '陈水扁事件1'
-              }, {
-                id: 'e2',
-                img: 'http://10.60.1.140/assets/images/feiji.png',
-                name: '李登辉事件1'
-              }, {
-                id: 'e3',
-                img: 'http://10.60.1.140/assets/images/daodan.png',
-                name: '蔡英文事件1'
-              }, {
-                id: 'e4',
-                img: 'http://10.60.1.140/assets/images/administrative.png',
-                name: '陈水扁事件2'
-              }, {
-                id: 'e5',
-                img: 'http://10.60.1.140/assets/images/weapon.png',
-                name: '李登辉事件2'
-              }, {
-                id: 'e6',
-                img: 'http://10.60.1.140/assets/images/organization.png',
-                name: '蔡英文事件2'
-              },
-              {
-                id: 'e7',
-                img: 'http://10.60.1.140/assets/images/jianchuan.png',
-                name: '陈水扁事件1'
-              }, {
-                id: 'e8',
-                img: 'http://10.60.1.140/assets/images/feiji.png',
-                name: '李登辉事件1'
-              }, {
-                id: 'e9',
-                img: 'http://10.60.1.140/assets/images/daodan.png',
-                name: '蔡英文事件1'
-              }, {
-                id: 'e10',
-                img: 'http://10.60.1.140/assets/images/administrative.png',
-                name: '陈水扁事件2'
-              }, {
-                id: 'e11',
-                img: 'http://10.60.1.140/assets/images/weapon.png',
-                name: '李登辉事件2'
-              }, {
-                id: 'e12',
-                img: 'http://10.60.1.140/assets/images/organization.png',
-                name: '蔡英文事件2'
-              }, {
-                id: 'e13',
-                img: 'http://10.60.1.140/assets/images/jianchuan.png',
-                name: '陈水扁事件1'
-              }, {
-                id: 'e14',
-                img: 'http://10.60.1.140/assets/images/feiji.png',
-                name: '李登辉事件1'
-              }
-            ]
-          }
-        ],
         clearFlag: false,
         options1: [],
         loading1: false,
         timer: null,
         inputInfo: "",
+        modalType: '',
+        dicMap: {
+          entity: '实体',
+          document: '文本',
+          event: '事件',
+        },
+        worksetData: [{
+          title: '',
+          des: '',
+          data: {
+            nodes: [],
+            links: []
+          }
+        }],
         itemsObj: [{
           name: '实体节点',
           num: 6
@@ -178,73 +97,303 @@
         }, {
           name: '文档节点',
           num: 6
-        }]
+        }],
+        workatlastChart:null
+        // workatlastChart: new NetChart({
+        //   container: "demo",
+        //   area: {
+        //     height: 350
+        //   },
+        //   data: {
+        //     preloaded: {
+        //       "nodes": [],
+        //       "links": []
+        //     }
+        //   }
+        // })
       }
     },
     mounted() {
-      // $('.touxiangImg')
+      var mthis = this
+      mthis.workatlastChart = mthis.$store.getters.netData
+      mthis.initChart()
+    },
+    watch: {
+      flag: function() {
+        this.showFlag = true
+        this.workatlastChart.replaceData({ "nodes": [], "links": [] })
+      },
+      type: function() {
+        // this.worksetData = new Array()
+        if (this.type === 'import') {
+        } else if (this.type === 'export') {
+        } else {
+        }
+      },
+      workatlastData:function(){
+        var mthis = this
+        console.log('=============================change data=======================')
+        console.log(this.workatlastData)
+        // setTimeout(function() {
+        // mthis.workatlastChart.reloadData() 
+        mthis.initChart()
+        mthis.workatlastChart.replaceData(mthis.workatlastData[0].data)
+        // },200)
+        // this.workatlastChart.updateStyle()
+      }
     },
     methods: {
-      setOption(a) {
-        var mthis = this;
-        if (this.$store.state.tmss === 'net') {
-          // if (this.timer) {
-          //   clearTimeout(this.timer)
-          // }
-          // this.timer = setTimeout(function() {
-          //   // 新增防抖功能
-          let arr = []
-          arr.push(a.id)
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
-            'nodeIds': arr
-          }).then(response => {
-            if (response.body.code === 0) {
-              mthis.$store.commit('setSearchNetResult', {
-                // id: response.body.data[0].nodes[0].id,
-                // name: response.body.data[0].nodes[0].name,
-                // nodes:response.body.data[0],
-                data: response.body.data[0].nodes[0]
-              })
-            } else {
-              alert('entity-detail接口异常')
-            }
-          })
-          // }, 100);
-        }
-        if (this.$store.state.tmss === 'content') {
-          mthis.$store.commit('setSearchContentResult', a.value)
-          mthis.$store.commit('setConditionContent', a.value)
-          var query = a.value;
-          mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/doc-statistics/?query=" + a.value, {
-              emulateJSON: true
-            })
-            .then(response => {
-              mthis.$store.commit('setContentStatisticsResult', response.body)
-            });
-          /* mthis.inputInfoContent = a.value
-          mthis.$store.commit('setSearchContentResult', [{
-            node: {
-              nodes: []
+      initChart(){
+        var mthis= this
+        let canvansHeight = document.documentElement.clientHeight * 0.6
+        let canvansWidth = document.documentElement.clientWidth * 0.5
+        this.workatlastChart = new NetChart({
+        navigation: {
+          focusNodeExpansionRadius: 1,
+          initialNodes: ["node1"],
+          mode: "showall",
+          expandOnClick: false
+        },
+        legend: {
+          enabled: true,
+          width: 900,
+          panel: {
+            side: "top",
+            align: "center"
+          }
+        },
+        interaction: {
+          resizing: {
+            enabled: false
+          }
+        },
+        advanced: {
+          assets: [
+            "https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
+          ],
+          exportProxyURL: 'https://echo.zoomcharts-cloud.com/download',
+          crossOrigin: "true"
+        },
+        layout: {
+          mode: "static",
+          twoRingRadialLayout: true,
+          nodeSpacing: 100,
+          rowSpacing: 100
+        },
+        style: {
+          nodeLabel: {
+            textStyle: {
+              fillColor: '#ccffff'
             },
-            id: '',
-            label: a.value
-          }]) */
-        }
-        if (this.$store.state.tmss === 'geo') {
-          if (a && a.value) {
-            if (a.type === 'human') {
-              mthis.$store.commit('setSearchGeoEventResult', {
-                ids: [a.value]
-              })
-            } else if (a.type === 'location') {
-              mthis.$store.commit('setHLlocationIds', [a.value])
+            backgroundStyle: {
+              fillColor: "rgba(0,0,0,0)",
+              lineColor: "rgba(0,0,0,0)"
+            }
+          },
+          linkLabel: {
+            textStyle: {
+              fillColor: '#006666'
+            },
+            backgroundStyle: {
+              fillColor: "rgba(0,0,0,0)",
+              lineColor: "rgba(51, 255, 255, 0.4)"
+            },
+            aspectRatio: 1
+          },
+          node: {
+            display: "image",
+            lineWidth: 2,
+            imageCropping: true
+          },
+          selection: {
+            fillColor: 'rgba(51,255,255,0.1)',
+            lineWidth: 5
+          },
+          nodeStyleFunction: function(node) {
+            if (node.selected) {
+              node.lineColor = "#ccffff";
+              node.shadowColor = "#33ffff";
+              node.fillColor = "#003333";
+              node.shadowBlur = 25;
+              node.lineWidth = 5;
+              if (node.hightLight) {
+                node.shadowColor = "#009999";
+                node.shadowBlur = 20;
+                node.fillColor = "#003333";
+                node.lineColor = "#009999";
+                node.lineWidth = 5
+              }
+            } else if (node.hovered) {
+              node.lineWidth = 5
+              node.shadowColor = "#009999";
+              node.shadowBlur = 20;
+              node.fillColor = "#003333";
+              node.lineColor = "#009999";
             } else {
-              mthis.$store.commit('setSearchGeoEntityResult', {
-                ids: [a.value]
-              })
+              node.fillColor = "#003333";
+              node.lineColor = "#006666";
+              node.lineWidth = 5;
+              node.shadowColor = "rgba(0,0,0,0)";
+              node.shadowBlur = 20;
+            }
+            if (node.data.entity_type === 'event') {
+              node.display = 'text'
+              node.radius = 15
+              node.borderRadius = 300
+              node.image = 'http://10.60.1.140/assets/images/content_node.png'
+            } else if (node.data.entity_type === 'content') {
+              node.display = 'rectangle'
+              node.image = 'http://10.60.1.140/assets/images/content_node.png'
+              node.backgroundStyle = {}
+            } else {
+              node.display = 'image'
+              if (util.checkImgExists("http://10.60.1.143/pic_lib/entity/" + node.id + ".png")) {
+                node.image = "http://10.60.1.143/pic_lib/entity/" + node.id + ".png"
+              } else {
+                node.image = 'http://10.60.1.140/assets/images/' + node.data.entity_type + '.png';
+              }
+            }
+            node.cursor = "pointer";
+            node.label = node.data.name;
+            mthis.workatlastChart.updateSettings()
+          },
+          linkStyleFunction: function(link) {
+            link.length = 1;
+            link.cursor = "pointer";
+            link.position = 'absolute';
+            link.strength = 1;
+            link.fillColor = "#336666";
+            if (link.hovered) {
+              link.shadowColor = "#33ffff";
+              link.shadowBlur = 5;
+              link.radius = 2;
+              link.lineWidth = 3;
+              link.fillColor = "#006666";
+            }
+            if (link.selected) {
+              link.lineColor = "#33ffff";
+              link.fillColor = "#33ffff";
+              link.radius = 3;
+              link.lineWidth = 3;
+              if (link.hightLight) {
+                link.shadowColor = "#006666";
+                link.shadowBlur = 5;
+                link.radius = 3;
+                link.lineWidth = 3;
+              }
+            } else {
+              link.fillColor = "#006666";
+              link.radius = 2;
+              link.lineWidth = 3;
+            }
+            if (link.data.type !== undefined && link.data.type !== "") {
+              link.items = [{ // Default item places just as the regular label.
+                text: link.data.type,
+                scaleWithZoom: false,
+                textStyle: {
+                  font: '10px MicrosoftYaHei',
+                  fillColor: '#669999',
+                },
+                backgroundStyle: {
+                  fillColor: "rgba(0,0,0,0.8)"
+                }
+              }]
+            } else {
+              link.direction = [100, 100, 100, 100]
+              link.fromDecoration = "arrow";
+              link.toDecoration = "arrow";
+              link.items = [{ // Default item places just as the regular label.
+                rotateWithLink: true,
+                scaleWithZoom: true,
+                align: 'center',
+                text: link.data.num,
+                imageSlicing: [0, 0, 20, 20],
+                textStyle: {
+                  font: '12px MicrosoftYaHei',
+                  fillColor: '#669999',
+                }
+              }]
             }
           }
-        }
+        },
+        data: {},
+        container: "demo",
+        area: {
+          height: canvansHeight,
+          width:canvansWidth
+        },
+        toolbar: {
+          zoomControl: true,
+          cssClass: 'zoomButtonClass',
+          items: [{
+            item: "zoomcontrol",
+            side: "right",
+            align: "top"
+          }]
+        },
+        interaction: {
+          resizing: {
+            enabled: false
+          }
+        },
+        theme: NetChart.themes.dark
+      });
+      },
+      deletItem(id, index) {
+        // this.worksetData[index].data = this.worksetData[index].data.filter(item => {
+        //   return item.id !== id
+        // })
+      },
+      modifySet() {
+        this.$store.commit('setAtlastData',this.workatlastChart.exportData())
+        this.showFlag = false
+      },
+      createSet() {
+        var mthis = this
+        console.log(mthis.workatlastChart.exportData())
+        let timestamp = new Date().getTime()
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/index-project-data/', {
+          "timestamp": timestamp,
+          "data": {
+            "id": "",
+            "name": (mthis.workspaceTitle === '') ? ('默认标题' + timestamp) : mthis.workspaceTitle,
+            "des": (mthis.workspaceDes === '') ? ('这家伙很懒，什么都没有写') : mthis.workspaceDes,
+            "modify_time": util.getNowFormatDate(),
+            "modify_user": "XiaoRuohan",
+            "create_time": util.getNowFormatDate(),
+            "create_user": "XiaoRuohan",
+            "type": "human",
+            "image": "",
+		        "data":mthis.workatlastChart.exportData()
+          }
+        }).then(response => {
+          if (response.body.code === 0) {
+            alert('导出成功！')
+            mthis.$store.commit('setRefAtlast', !mthis.$store.state.refAtlast)
+            this.showFlag = false
+          } else {
+            alert('导出失败！')
+          }
+        })
+      },
+      back() {
+        this.showFlag = false;
+        this.workspaceTitle = ''
+        this.workspaceDes = ''
+        this.searchWorkspaceTitle = ''
+        this.options1 = []
+        this.worksetData = [{
+          title: '',
+          des: '',
+          data: {
+            nodes: [],
+            links: []
+          }
+        }]
+      },
+      addDataToTemp(item) {
+        console.log(item)
+        this.workatlastChart.replaceData(item.data)
       },
       searchInfo(query) {
         var mthis = this;
@@ -254,32 +403,22 @@
             clearTimeout(this.timer)
           }
           this.timer = setTimeout(function() {
-            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + mthis.searchWorkspaceTitle, {
-                emulateJSON: true
-              })
-              .then(response => {
-                mthis.options1 = []
-                // let optionWord = {}
-                // let optionWordArr = []
-                let optionList = {}
-                let optionListArr = []
-                console.log(response.body)
-                // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
-                for (let i = 0; i < response.body.data.nodes.length; i++) {
-                  // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
-                  optionListArr.push({
-                    // "label": name,
-                    "label": response.body.data.nodes[i].name,
-                    "value": response.body.data.nodes[i].id,
-                    "id": response.body.data.nodes[i].id,
-                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image.png'),
-                    "type": response.body.data.nodes[i].type
-                  })
+            let time = new Date().getTime()
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/load-set-data/', {
+              "timestamp": time,
+              "idlist": '',
+              "label": "project",
+              "page": 1,
+              "pagesize": 30
+            }).then(response => {
+              console.log('=======response111============')
+              console.log(response)
+              if (response.body.code === 0) {
+                if (time = response.body.timestamp) {
+                  mthis.options1 = response.body.data;
                 }
-                console.log(optionListArr)
-                mthis.options1 = optionListArr;
-                console.log(mthis.options1)
-              })
+              }
+            })
           }, 200);
         } else {
           mthis.options1 = [];
@@ -332,21 +471,31 @@
       }
     },
     props: {
-      workatlastData: Object,
-       type: String,
-      flag: Boolean
+      workatlastData: Array,
+      type: String,
+      flag: Number
     }
   }
 </script>
 <style scoped>
+  .resli>p {
+    height: 4vh;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 4vh;
+    letter-spacing: 0px;
+    color: #ccffff;
+  }
   .resli {
-    height: 24px;
+    height: 4vh;
     background-color: rgba(51, 255, 255, 0.5);
     font-family: MicrosoftYaHei;
     font-size: 14px;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 24px;
+    line-height: 4vh;
     letter-spacing: 0px;
     color: #ccffff;
     padding: 0 10px;
@@ -358,7 +507,7 @@
     background-color: rgba(51, 255, 255, 0.05);
   }
   .resList div:nth-child(odd) {
-    background-color: rgba(51, 255, 255, 0.2);
+    background-color: rgba(51, 255, 255, 0);
   }
   .selectDic {
     line-height: 50px;
@@ -373,9 +522,10 @@
     min-height: 40px;
   }
   /* .modalDiv {
-                      min-height: 50vh;
-                    } */
+                                min-height: 50vh;
+                              } */
   .inputTitle {
+    margin-bottom: 10px;
     justify-content: center;
     display: flex;
   }
@@ -386,17 +536,9 @@
     text-overflow: ellipsis;
     /* padding-left: 40px; */
     padding-top: 2px;
-    height: 5vh;
-    margin: 1vh auto;
-    color: #ccffff;
+    height: 4vh;
+    margin: 2vh auto 1vh auto;
     /* border-radius: 20px; */
-    border: none;
-    font-family: MicrosoftYaHei;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
   }
   .inputTbottom {
     width: 90%;
@@ -405,7 +547,7 @@
     text-overflow: ellipsis;
     /* padding-left: 40px; */
     padding-top: 2px;
-    height: 5vh;
+    height: 4vh;
     color: #ccffff;
     /* border-radius: 20px; */
     border: none;
@@ -413,33 +555,12 @@
     font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
-    line-height: 20px;
+    line-height: 4vh;
     letter-spacing: 0px;
+    margin: 2vh auto 1vh auto;
   }
   .inputD {
-    resize: none;
-    display: inline-block;
-    vertical-align: middle;
-    text-overflow: ellipsis;
-    /* padding-left: 40px; */
-    /* padding-top: 2px;
-          padding-right: 10px; */
-    height: 16vh;
-    max-height: 16vh;
-    padding: 7px;
-    margin: 1vh auto;
-    color: #ccffff;
-    background-color: rgba(51, 255, 255, 0.2);
     width: 90%;
-    color: #ccffff;
-    font-family: MicrosoftYaHei;
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
-    border: none;
-    border-radius: 20px;
   }
   .buttonOK {
     width: 10em;
@@ -496,31 +617,32 @@
   }
   .modalRightDiv {
     display: flex;
-    min-height: 66vh;
-    max-height: 66vh;
+    min-height: 60vh;
+    max-height: 60vh;
     overflow-x: auto;
     overflow-y: hidden;
-    height: 66vh;
+    height: 60vh;
     flex-flow: column wrap;
     margin: 0 60px;
     padding: 2vh 0px 0 0px;
   }
   .lefttop {
-    height: 25vh;
+    height: 65vh;
     overflow-x: auto;
     overflow-y: hidden;
-    border-bottom: 1px solid rgba(51, 255, 255, 0.3);
+    /* border-bottom: 1px solid rgba(51, 255, 255, 0.3); */
   }
-  .leftbottom {
-    height: 44vh;
-    overflow-x: auto;
-    overflow-y: hidden;
-    margin-top: 1vh;
-  }
+  /* .leftbottom {
+        height: 44vh;
+        overflow-x: auto;
+        overflow-y: hidden;
+        margin-top: 1vh;
+      } */
   .rightbottom {
-    height: 4vh;
+    height: 10vh;
     float: right;
     margin-right: 90px;
+    line-height: 10vh;
   }
   .rightdiv {
     padding: 20px;
@@ -560,9 +682,9 @@
     color: #ccffff;
   }
   /* .touxiangImg:hover img{
-                /* background-image:url('http://10.60.1.140/assets/images/organization.png');
-                background-image:url(../../dist/assets/images/circle.png);
-              }  */
+                          /* background-image:url('http://10.60.1.140/assets/images/organization.png');
+                          background-image:url(../../dist/assets/images/circle.png);
+                        }  */
   .top,
   .bottom {
     text-align: center;
@@ -636,6 +758,9 @@
   .color515 {
     color: rgba(51, 255, 255, 0.5);
   }
+  .touxiangImg {
+    background-color: #003333
+  }
 </style>
 <style>
   #md>.ivu-modal-wrap>.ivu-modal>.ivu-modal-content>.ivu-modal-close {
@@ -647,7 +772,23 @@
     height: 70vh;
   }
   .inputT>input {
-     color: rgba(204, 255, 255, 0.5);
+    color: rgba(204, 255, 255, 0.5);
+    background-color: rgba(51, 255, 255, 0.2);
+    border: none;
+    box-shadow: none !important;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 4vh;
+    letter-spacing: 0px;
+    font-family: MicrosoftYaHei;
+    height: 4vh;
+    border-radius: 20px;
+    padding: 0 20px;
+    text-overflow: ellipsis;
+  }
+  .inputTbottom>input {
+    color: rgba(204, 255, 255, 0.5);
     background-color: rgba(51, 255, 255, 0.2);
     border: none;
     box-shadow: none !important;
@@ -660,22 +801,58 @@
     height: 4vh;
     border-radius: 20px;
   }
-  .inputTbottom>input {
-    color: #ccffff;
-    background-color: rgba(51, 255, 255, 0.2);
-    font-family: MicrosoftYaHei;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 20px;
-    letter-spacing: 0px;
-    border: none;
-    height: 4vh;
-    border-radius: 20px;
-  }
   .inputTitle>input {
     width: 90%;
   }
+  .inputD>textarea {
+    border: none;
+    box-shadow: none !important;
+    resize: none;
+    display: inline-block;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    height: 16vh;
+    max-height: 16vh;
+    padding: 7px;
+    color: rgba(204, 255, 255, 0.5);
+    background-color: rgba(51, 255, 255, 0.2);
+    font-family: MicrosoftYaHei;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 3vh;
+    letter-spacing: 0px;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+  }
+  .inputTbottom>.ivu-input-prefix>i {
+    font-size: 20px !important;
+    line-height: 4vh !important;
+    color: rgba(204, 255, 255, 0.3);
+  }
+  .resli>p>i {
+    opacity: 0.3;
+  }
+  .resli:hover>p>i {
+    opacity: 0.6;
+  }
+  .delItemDiv {
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  .delItemDiv:hover {
+    opacity: 1;
+  }
+  .DVSL-NC-zoom {
+    height: 200px !important;
+  }
+  .zoomButtonClass {
+    top: 20px !important;
+    right: 30px !important;
+  }
 </style>
-
-

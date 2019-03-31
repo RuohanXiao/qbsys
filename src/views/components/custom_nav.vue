@@ -16,6 +16,10 @@
         </div>
       </div>
     </div>
+    <div  v-if="spinRight" :style="{height:contentHeight,width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
+    <Spin size="large" fix></Spin>
+    </div>
+    <div v-else>
     <div class="scrollBarAble" aria-autocomplete="true" v-if="modalFlag == 'gongzuoji'" :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
        <div class="setTitleDiv">
         <p class="setTitle">我的集合</p>
@@ -23,7 +27,8 @@
       <div :style="{margin:'30px 10px 0 20px'}">
       <Row type="flex" justify="center">
         <Col :sm="24" align="middle" v-for="item in items_gongzuoji">
-          <workspace-item :item="item" @delId='delMethod'></workspace-item>
+          <!-- <workspace-item :item="item" @ref='showGongzuoji'></workspace-item> -->
+           <workspace-item :item="item"></workspace-item>
         </Col>
       </Row>
       </div>
@@ -35,7 +40,7 @@
       <div :style="{marginTop:'30px'}">
       <Row type="flex" justify="center">
         <Col :sm="24" align="middle" v-for="item in items_tuji">
-          <workspaceItemPic :item="item" @delId='delMethod'></workspaceItemPic>
+          <workspaceItemPic :item="item" ></workspaceItemPic>
         </Col>
       </Row>
       </div>
@@ -52,6 +57,7 @@
       </Row>
       </div>
     </div>
+      </div>
   </div>
 </template>
 <script>
@@ -63,12 +69,17 @@
   // import workspaceItem from "./custom_workspaceItem_pic";
   import workspaceItemPic from "./custom_workspaceItem_pic";
   import $ from "jquery";
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   // import $ from "jquery";
   mock.test = 1;
   export default {
     data() {
       return {
         modalFlag:'',
+        spinRight:false,
         contentHeight:0,
          items_shuoming:[{
           
@@ -141,6 +152,14 @@
         }]
       }
     },
+    computed: mapState([
+      'refSet'
+    ]),
+    watch: {
+      refSet:function(){
+        this.showGongzuoji()
+      }
+    },
     mounted() {
       this.contentHeight = this.$store.getters.getViewHeight
     },
@@ -153,6 +172,7 @@
         alert('触发删除工作集方法')
        },
        showGongzuoji(){
+         this.spinRight = true
          var mthis = this
         //  alert('gongzuoji');
          mthis.modalFlag = 'gongzuoji'
@@ -164,9 +184,8 @@
             "page": 1,
             "pagesize": 30
           }).then(response => {
-            // console.log('load-set-data')
-            // console.log(response.body.data)
             mthis.items_gongzuoji = response.body.data
+            this.spinRight = false
           })
        },
        showTuji(){

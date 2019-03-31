@@ -1,68 +1,5 @@
 <template>
   <div>
-    <Modal class="modalDiv" width='80vw' footer-hide loading='loading' v-model="modal1" id='md'>
-      <p slot="close" style="color:#f60;text-align:center;top: -2px !important;right:-4px !important}" class='iconP'>
-        <Icon type="icon iconfont icon-quxiaocancel color515" size="60"></Icon>
-      </p>
-      <div class='mainModal'>
-        <div class='modalLeftDiv'>
-          <div class='lefttop'>
-            <div class="inputTitle">
-              <!-- <input style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="titleName"
-                      placeholder=''  @on-open-change="lightIcon">
-                    </input> -->
-              <!-- <Form :label-width="80">
-                      <FormItem>
-                        <Input :model="workspaceTitle" placeholder="Enter your name"></Input>
-                      </FormItem>
-                      <FormItem>
-                        <Input :model="workspaceDes" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
-                      </FormItem>
-                    </Form> -->
-              <Input class='inputT' v-model="workspaceTitle" placeholder="集合名" />
-            </div>
-            <div class="inputTitle">
-              <textarea rows="8" cols="20" class='inputD' v-model="workspaceDes" />
-            </div>
-          </div>
-          <div class='leftbottom'>
-            <div class="inputTitle">
-              <Input class='inputTbottom' v-model="searchWorkspaceTitle" @on-change="v=>{searchInfo(v)}" placeholder="搜索实体" />
-            </div>
-            <div class='scrollBarAble' style='margin-bottom: 20px;height: 36vh;'>
-            <div class='resList '>
-              <div class='resli' v-for='op in options1' style='padding:10px auto'>
-                {{op.label}}</div>
-            </div>
-          </div>
-          </div>
-        </div>
-        <div class='modalRightDiv'>
-          <div class="scrollBarAble">
-            <div class='rightdiv' v-for='item in items'>
-              <div class="type-title lefttop">
-                <div class="type-title-d"></div>
-                <p class="type-title-p">{{item.type}}({{item.data.length}})</p>
-              </div>
-              <div class="type-content">
-                <Row type="flex" justify="start">
-                  <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" v-for='itemObj in item.data'>
-                  <!-- <Avatar class="circle-img touxiangImg" icon="icon-delete-point" :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" /> -->
-                  <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
-                  <p class='nametext'>{{itemObj.name}}</p>
-                  </Col>
-                </Row>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="rightbottom">
-        <Button class='buttonOK'>Info</Button>
-        <Button class='buttonCannle'>Success</Button>
-      </div>
-    </Modal>
-    <!-- <Row type="flex" justify="center" v-if="item.available" class="itemDiv"> -->
     <Row type="flex" justify="center" class="itemDiv">
       <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
       <div class="cardDiv">
@@ -88,7 +25,7 @@
           <span class='cardFront'>修改人:&nbsp;{{item.modify_user}}</span>
         </div>
         <div class="lineheight25">
-         <span class='cardFront'>数量:&nbsp;({{item.nodeIds.length}})</span>
+          <span class='cardFront'>数量:&nbsp;({{item.nodeIds.length}})</span>
         </div>
       </div>
       </Col>
@@ -96,166 +33,63 @@
       <div class="cardButD">
         <div class="cd">
           <Icon class="icon iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="importData(item.nodeIds)" />
-          <Icon class="icon iconfont icon-edit DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="modData(item.nodeIds)" />
-          <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="del(item.nodeIds)" />
-          <!-- <Poptip placement="left"
-                                confirm
-                                title="Are you sure you want to delete this item?"
-                                @on-ok="ok"
-                                @on-cancel="cancel">
-                                <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="del(item.id)"/>
-                            </Poptip> -->
+          <Icon class="icon iconfont icon-edit DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="openModifyGroupModal(item.id)" />
+          <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="del(item.id)" />
         </div>
       </div>
       </Col>
     </Row>
     <!--
-    <Row type="flex" justify="center" v-else class="itemDivDisable">
-      <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
-      <div class="cardDiv">
-        <div :style="{display: 'flex'}">
-          <span class='titleFront'>{{item.title}}</span>
-          <Icon v-if="item.groupType === 'human'" class="icon iconfont icon-ren padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'organization'" class="icon iconfont icon-zuzhi padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'weapon'" class="icon iconfont icon-shouqiang padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'administrative'" class="icon iconfont icon-diqu padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'event'" class="icon iconfont icon-shijian padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'document'" class="icon iconfont icon-wendang padd8 color515" size="14" />
-          <Icon v-if="item.groupType === 'mix'" class="icon iconfont icon-star1 padd8 color515" size="14" />
+      <Row type="flex" justify="center" v-else class="itemDivDisable">
+        <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
+        <div class="cardDiv">
+          <div :style="{display: 'flex'}">
+            <span class='titleFront'>{{item.title}}</span>
+            <Icon v-if="item.groupType === 'human'" class="icon iconfont icon-ren padd8 color515" size="14" />
+            <Icon v-if="item.groupType === 'organization'" class="icon iconfont icon-zuzhi padd8 color515" size="14" />
+            <Icon v-if="item.groupType === 'weapon'" class="icon iconfont icon-shouqiang padd8 color515" size="14" />
+            <Icon v-if="item.groupType === 'administrative'" class="icon iconfont icon-diqu padd8 color515" size="14" />
+            <Icon v-if="item.groupType === 'event'" class="icon iconfont icon-shijian padd8 color515" size="14" />
+            <Icon v-if="item.groupType === 'document'" class="icon iconfont icon-wendang padd8 color515" size="14" />
+            <Icon v-if="item.groupType === 'mix'" class="icon iconfont icon-star1 padd8 color515" size="14" />
+          </div>
+          <div class="lineheight25">
+            <span class='cardFront'>描述:{{item.disc}}</span>
+          </div>
+          <div class="lineheight25">
+            <span class='cardFront'>{{item.time}}</span> &nbsp;&nbsp;&nbsp;
+            <span class='cardFront'>数量:{{item.num}}</span>
+          </div>
         </div>
-        <div class="lineheight25">
-          <span class='cardFront'>描述:{{item.disc}}</span>
+        </Col>
+        <Col :sm="6" align="right" :style="{flexDirection: 'column'}">
+        <div class="cardButD">
+          <div class="cd">
+            <Icon class="icon iconfont icon-tianjia DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()" />
+            <Icon class="icon iconfont icon-edit DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()" />
+            <Icon class="icon iconfont icon-shanchu DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()" />
+          </div>
         </div>
-        <div class="lineheight25">
-          <span class='cardFront'>{{item.time}}</span> &nbsp;&nbsp;&nbsp;
-          <span class='cardFront'>数量:{{item.num}}</span>
-        </div>
-      </div>
-      </Col>
-      <Col :sm="6" align="right" :style="{flexDirection: 'column'}">
-      <div class="cardButD">
-        <div class="cd">
-          <Icon class="icon iconfont icon-tianjia DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()" />
-          <Icon class="icon iconfont icon-edit DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()" />
-          <Icon class="icon iconfont icon-shanchu DVSL-bar-btndisHover lineH20" size="16" @click="cantClick()" />
-        </div>
-      </div>
-      </Col>
-    </Row>
-    -->
+        </Col>
+      </Row>
+      -->
   </div>
 </template>
 <script>
   import mock from '../../mock/index.js'
   import util from '../../util/tools.js'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   mock.test = 1
   export default {
     data() {
       return {
         loading: false,
         modal1: false,
-        workspaceTitle: '台D人员',
-        workspaceDes: '描述:包含台湾地区领导人',
-        searchWorkspaceTitle:'',
-        items: [{
-            type: 'entity',
-            num: 3,
-            data: [{
-              id: '1',
-              img: 'http://10.60.1.143/pic_lib/entity/Q22368.png',
-              name: '陈水扁'
-            }, {
-              id: '2',
-              img: 'http://10.60.1.143/pic_lib/entity/Q315528.png',
-              name: '李登辉'
-            }, {
-              id: '3',
-              img: 'http://10.60.1.143/pic_lib/entity/Q233984.png',
-              name: '蔡英文'
-            }, {
-              id: '4',
-              img: 'http://10.60.1.143/pic_lib/entity/Q22368.png',
-              name: '陈水扁'
-            }, {
-              id: '5',
-              img: 'http://10.60.1.143/pic_lib/entity/Q315528.png',
-              name: '李登辉'
-            }]
-          },
-          {
-            type: 'document',
-            num: 1,
-            data: [{
-              id: 'd1',
-              img: 'http://10.60.1.140/assets/images/content_node.png',
-              name: '陈水扁文档'
-            }]
-          },
-          {
-            type: 'event',
-            num: 6,
-            data: [{
-                id: 'e1',
-                img: 'http://10.60.1.140/assets/images/jianchuan.png',
-                name: '陈水扁事件1'
-              }, {
-                id: 'e2',
-                img: 'http://10.60.1.140/assets/images/feiji.png',
-                name: '李登辉事件1'
-              }, {
-                id: 'e3',
-                img: 'http://10.60.1.140/assets/images/daodan.png',
-                name: '蔡英文事件1'
-              }, {
-                id: 'e4',
-                img: 'http://10.60.1.140/assets/images/administrative.png',
-                name: '陈水扁事件2'
-              }, {
-                id: 'e5',
-                img: 'http://10.60.1.140/assets/images/weapon.png',
-                name: '李登辉事件2'
-              }, {
-                id: 'e6',
-                img: 'http://10.60.1.140/assets/images/organization.png',
-                name: '蔡英文事件2'
-              },
-              {
-                id: 'e7',
-                img: 'http://10.60.1.140/assets/images/jianchuan.png',
-                name: '陈水扁事件1'
-              }, {
-                id: 'e8',
-                img: 'http://10.60.1.140/assets/images/feiji.png',
-                name: '李登辉事件1'
-              }, {
-                id: 'e9',
-                img: 'http://10.60.1.140/assets/images/daodan.png',
-                name: '蔡英文事件1'
-              }, {
-                id: 'e10',
-                img: 'http://10.60.1.140/assets/images/administrative.png',
-                name: '陈水扁事件2'
-              }, {
-                id: 'e11',
-                img: 'http://10.60.1.140/assets/images/weapon.png',
-                name: '李登辉事件2'
-              }, {
-                id: 'e12',
-                img: 'http://10.60.1.140/assets/images/organization.png',
-                name: '蔡英文事件2'
-              }, {
-                id: 'e13',
-                img: 'http://10.60.1.140/assets/images/jianchuan.png',
-                name: '陈水扁事件1'
-              }, {
-                id: 'e14',
-                img: 'http://10.60.1.140/assets/images/feiji.png',
-                name: '李登辉事件1'
-              }
-            ]
-          }
-        ],
-        clearFlag:false,
+        searchWorkspaceTitle: '',
+        clearFlag: false,
         options1: [],
         loading1: false,
         timer: null,
@@ -276,6 +110,14 @@
       // $('.touxiangImg')
     },
     methods: {
+      openModifyGroupModal(setId) {
+        console.log(setId)
+        this.$store.commit('setOpenWorkSetFlag',{
+          id:setId,
+          type:'modify',
+          time:new Date().getTime()
+        })
+      },
       setOption(a) {
         var mthis = this;
         if (this.$store.state.tmss === 'net') {
@@ -322,7 +164,7 @@
           }]) */
         }
         if (this.$store.state.tmss === 'geo') {
-          if(a && a.value){
+          if (a && a.value) {
             if (a.type === 'human') {
               mthis.$store.commit('setSearchGeoEventResult', {
                 ids: [a.value]
@@ -378,32 +220,32 @@
         mthis.loading1 = false;
       },
       del(id) {
-        this.$emit('delId', id)
+        var mthis = this
+        // this.$emit('delId', id)
+        // alert(id)
+        let timestamp = new Date().getTime()
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/delete-set-data/', {
+          "timestamp": timestamp,
+          "idlist": new Array(id),
+          "label": "set",
+          "type": "set"
+        }).then(response => {
+          console.log(response)
+          if (response.body.code === 0) {
+            alert('删除成功！')
+            // mthis.$emit('ref', timestamp)
+            mthis.$store.commit('setRefSet', !mthis.$store.state.refSet)
+          } else {
+            alert('删除异常，请查询控制台，错误编码' + response.body.code)
+          }
+        })
       },
       modData(id) {
-        // alert('modify');
-        // this.$store.commit('setWorkSpaceModal', {
-        //   "id":id,
-        //   "flag":true
-        // })
-        this.modal1 = !this.modal1;
-        this.loading = true;
-        let oldimg = ''
-        $('.touxiangImg').mouseover(function(item) {
-          oldimg = item.target.src
-          item.target.src = 'http://10.60.1.140/assets/images/geo/delete_HL.png'
-        })
-        $('.touxiangImg').mouseout(function(item) {
-          item.target.src = oldimg
-        })
-        $('.touxiangImg').click(function(item) {
-          //  this.data
-          console.log(item.target.parentNode.id)
-          // item.filter(function (obj) {
-          //   return obj.id!==item.target.id
-          // })
-          alert('调用删除接口，调用id为' + item.target.parentNode.id)
-          //  item.target.id
+        console.log('modify');
+        console.log(id);
+        this.$store.commit('setWorkSpaceModal', {
+          "id":id,
+          "flag":true
         })
       },
       importData(id) {
@@ -430,15 +272,15 @@
   }
 </script>
 <style scoped>
-  .cd{
+  .cd {
     height: 100%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-around;
   }
-  .resli{
+  .resli {
     height: 24px;
-	  background-color: rgba(51,255,255,0.5);
+    background-color: rgba(51, 255, 255, 0.5);
     font-family: MicrosoftYaHei;
     font-size: 14px;
     font-weight: normal;
@@ -448,7 +290,7 @@
     color: #ccffff;
     padding: 0 10px;
   }
-  .resList{
+  .resList {
     margin: 1vh auto;
   }
   .resList div:nth-child(even) {
@@ -457,7 +299,6 @@
   .resList div:nth-child(odd) {
     background-color: rgba(51, 255, 255, 0.2);
   }
-  
   .selectDic {
     line-height: 50px;
     display: inline-block;
@@ -467,12 +308,12 @@
     padding-top: 2px;
     padding-right: 10px;
     font-size: 18px;
-    text-indent:3rem;
+    text-indent: 3rem;
     min-height: 40px;
   }
   /* .modalDiv {
-                    min-height: 50vh;
-                  } */
+                      min-height: 50vh;
+                    } */
   .inputTitle {
     justify-content: center;
     display: flex;
@@ -521,7 +362,7 @@
     text-overflow: ellipsis;
     /* padding-left: 40px; */
     /* padding-top: 2px;
-        padding-right: 10px; */
+          padding-right: 10px; */
     height: 16vh;
     max-height: 16vh;
     padding: 7px;
@@ -585,8 +426,8 @@
     height: 70vh;
     background-image: linear-gradient(8deg, rgba(102, 255, 153, 0.3) -10%, rgba(102, 128, 204, 0.3) 65%, rgba(102, 0, 255, 0.3) 100%), linear-gradient(#000000, #000000);
     background-blend-mode: normal, normal;
-    border-top-left-radius:20px;
-    border-bottom-left-radius:20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
     margin-bottom: 20px;
   }
   .modalLeftDiv_firstchild {
@@ -610,7 +451,7 @@
     border-bottom: 1px solid rgba(51, 255, 255, 0.3);
   }
   .leftbottom {
-        height: 44vh;
+    height: 44vh;
     overflow-x: auto;
     overflow-y: hidden;
     margin-top: 1vh;
@@ -658,9 +499,9 @@
     color: #ccffff;
   }
   /* .touxiangImg:hover img{
-              /* background-image:url('http://10.60.1.140/assets/images/organization.png');
-              background-image:url(../../dist/assets/images/circle.png);
-            }  */
+                /* background-image:url('http://10.60.1.140/assets/images/organization.png');
+                background-image:url(../../dist/assets/images/circle.png);
+              }  */
   .top,
   .bottom {
     text-align: center;
@@ -745,7 +586,7 @@
     height: 70vh;
   }
   .inputT>input {
-     color: rgba(204, 255, 255, 0.5);
+    color: rgba(204, 255, 255, 0.5);
     background-color: rgba(51, 255, 255, 0.2);
     border: none;
     box-shadow: none !important;
@@ -774,7 +615,7 @@
   .inputTitle>input {
     width: 90%;
   }
-  .lineheight25{
+  .lineheight25 {
     font-family: MicrosoftYaHei;
     font-size: 12px;
     font-weight: normal;

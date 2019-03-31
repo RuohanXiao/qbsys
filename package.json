@@ -15,8 +15,10 @@
   "author": "Aresn",
   "license": "MIT",
   "dependencies": {
+    "@turf/circle": "^6.0.1",
     "axios": "^0.18.0",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
+    "canvas2image": "^1.0.5",
     "echarts": "^4.2.0-rc.2",
     "echarts-gl": "^1.1.1",
     "element-ui": "^2.4.11",

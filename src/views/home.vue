@@ -10,9 +10,10 @@
   <Layout>
     <Header :style="{position: 'fixed', width: '100vw', background:'black',zIndex:'99'}">
       <top-menu/>
+      <!-- <button @click='cutScreen'>sss</button> -->
     </Header>
     <Layout :style="{width: '100vw', overflowY:'hidden'}">
-      <Content id="content">
+      <Content id="content" :style="{background:'url(http://10.60.1.140/assets/images/bg.jpg)'}">
         <nav-div/>
         <net-main v-show="($store.state.tmss === 'net')"></net-main>
         <geo-main v-show="($store.state.tmss === 'geo')"></geo-main>
@@ -40,6 +41,7 @@
   import "../dist/assets/styles/common.css"
   import nav from "../dist/assets/js/nav.js";
   import mock from "../mock/index.js";
+  import html2canvas from '../util/html2canvas.min.js'
   import {
     mapState,
     mapMutations
@@ -68,6 +70,33 @@
       // }
       // workSpaceModal(flag) {
       //   this.workSpaceModalFlag = true
+      // },
+      // cutScreen(){
+      //   html2canvas(document.querySelector('#content'),{useCORS:true}).then(function (canvas) {
+      //           //获取年月日作为文件名
+      //           var timers=new Date();
+      //           var fullYear=timers.getFullYear();
+      //           var month=timers.getMonth()+1;
+      //           var date=timers.getDate();
+      //           var randoms=Math.random()+'';
+      //           //年月日加上随机数
+      //           var numberFileName=fullYear+''+month+date+randoms.slice(3,10);
+      //           var imgData=canvas.toDataURL();
+      //           //保存图片
+      //           var saveFile = function(data, filename){
+      //               var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+      //               save_link.href = data;
+      //               save_link.download = filename;
+ 
+      //               var event = document.createEvent('MouseEvents');
+      //               event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      //               save_link.dispatchEvent(event);
+      //           };
+      //           //最终文件名+文件格式
+      //           var filename = numberFileName + '.png';
+      //           saveFile(imgData,filename);
+      //           //document.body.appendChild(canvas);  把截的图显示在网页上
+      //       })
       // },
       ok() {
         this.$Message.info('Clicked ok');
@@ -103,8 +132,7 @@
       }
     },
     mounted() {
-      // var ob = configer.loadxmlDoc("../src/util/configer.xml");
-      var ob = configer.loadxmlDoc("http://10.60.1.140/assets/configer.xml");
+      var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/configer.xml");
       var imgItem = ob.getElementsByTagName("imgItem");
       let arr = []
       var myMap = new Map();
@@ -258,7 +286,7 @@
   #content {
     margin: 64px 0 0 0;
     width: 100vw;
-    background: url(../dist/assets/images/bg.jpg);
+    /* background: url('http://10.60.1.140/assets/images/bg.jpg'); */
     height: auto;
     overflow: hidden;
     filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";

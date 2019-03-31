@@ -39,7 +39,7 @@
               </div>
               <div class="type-content">
                 <Row type="flex" justify="start">
-                  <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" v-for='itemObj in item.data'>
+                  <Col :xs="4" :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" v-for='itemObj in item.data'>
                   <!-- <Avatar class="circle-img touxiangImg" icon="icon-delete-point" :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" /> -->
                   <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
                   <p class='nametext'>{{itemObj.name}}</p>
@@ -51,7 +51,7 @@
         </div>
         <div class='modalRightDiv' v-else>
           <div class="scrollBarAble">
-            <div class='rightdiv' v-for='item in worksetData'>
+            <div class='rightdiv' v-for='(item,index) in worksetData'>
               <div class="type-title lefttop">
                 <div class="type-title-d"></div>
                 <p class="type-title-p">{{dicMap[item.type]}}({{item.data.length}})</p>
@@ -62,6 +62,9 @@
                   <!-- <Avatar class="circle-img touxiangImg" icon="icon-delete-point" :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" /> -->
                   <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
                   <p class='nametext'>{{itemObj.name}}</p>
+                  <div class='delItemDiv' @click="deletItem(itemObj.id,index)">
+                    <Icon type="icon iconfont icon-shanchu color515" :style="{padding:'20px 0px'}" size="40"></Icon>
+                  </div>
                   </Col>
                 </Row>
               </div>
@@ -70,7 +73,7 @@
         </div>
       </div>
       <div class="rightbottom">
-        <Button class='buttonOK' v-if="type==='modify'"  @click='modifySet'>修改集合</Button>
+        <Button class='buttonOK' v-if="type==='modify'" @click='modifySet'>修改集合</Button>
         <Button class='buttonOK' v-else @click='createSet'>创建集合</Button>
         <Button class='buttonCannle' @click="back">返回</Button>
       </div>
@@ -81,6 +84,11 @@
   import mock from '../../mock/index.js'
   import util from '../../util/tools.js'
   import configer from '../../util/configContrl.js'
+  // import { Store } from 'vuex';
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   mock.test = 1
   export default {
     data() {
@@ -147,62 +155,67 @@
       }
     },
     methods: {
-      modifySet(){
-
+      deletItem(id,index){
+        this.worksetData[index].data = this.worksetData[index].data.filter(item => {
+          return item.id !== id
+        })
       },
-      createSet(){
-        var mthis= this
+      modifySet() {
+      },
+      createSet() {
+        var mthis = this
         let timestamp = new Date().getTime()
-        let human = mthis.worksetData[0].data.filter(item=>{
+        let human = mthis.worksetData[0].data.filter(item => {
           return item.type === 'human'
-        }).map(it=>{
+        }).map(it => {
           return it.id
         })
-        let administrative = mthis.worksetData[0].data.filter(item=>{
+        let administrative = mthis.worksetData[0].data.filter(item => {
           return item.type === 'administrative'
-        }).map(it=>{
+        }).map(it => {
           return it.id
         })
-        let organization =  mthis.worksetData[0].data.filter(item=>{
+        let organization = mthis.worksetData[0].data.filter(item => {
           return item.type === 'organization'
-        }).map(it=>{
+        }).map(it => {
           return it.id
         })
-        let weapon =   mthis.worksetData[0].data.filter(item=>{
+        let weapon = mthis.worksetData[0].data.filter(item => {
           return item.type === 'weapon'
-        }).map(it=>{
+        }).map(it => {
           return it.id
         })
-        let events =  mthis.worksetData[2].data.map(it=>{
+        let events = mthis.worksetData[2].data.map(it => {
           return it.id
         })
-        let documents =  mthis.worksetData[1].data.map(it=>{
+        let documents = mthis.worksetData[1].data.map(it => {
           return it.id
         })
-        console.log('---------------------------set------------------------')
-        console.log(human)
-        console.log(administrative)
-        console.log(organization)
-        console.log(weapon)
-        console.log(documents)
-        console.log(events)
-        console.log('------------------------------------------------------')
-        // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/index-set-data/', {
-        //   "timestamp":timestamp,
-        //   "data": {
-        //     "Id": "",
-        //     "name": mthis.workspaceTitle,
-        //     "des": mthis.workspaceDes,
-        //     "nodeIds":["Q233984", "Q315528", "Q19216","Q22368","Q313598","Q16574"],
-        //     "modify_time": "2019-3-27",
-        //     "modify_user": "XiaoRuohan",
-        //     "create_time": "2019-3-27",
-        //     "create_user": "XiaoRuohan",
-        //     "type": "human"
-        //   }
-        // }).then(response => {
-          
-        // })
+        let setIds = mthis.worksetData[0].data.map(item => {
+          return item.id
+        })
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/index-set-data/', {
+          "timestamp": timestamp,
+          "data": {
+            "Id": "",
+            "name": (mthis.workspaceTitle==='')?('默认标题'+timestamp):mthis.workspaceTitle,
+            "des": (mthis.workspaceDes==='')?('这家伙很懒，什么都没有写'):mthis.workspaceDes,
+            "nodeIds": setIds,
+            "modify_time": util.getNowFormatDate(),
+            "modify_user": "XiaoRuohan",
+            "create_time": util.getNowFormatDate(),
+            "create_user": "XiaoRuohan",
+            "type": "human"
+          }
+        }).then(response => {
+          if (response.body.code === 0) {
+            alert('新增成功！')
+            mthis.$store.commit('setRefSet', !mthis.$store.state.refSet)
+            this.showFlag = false
+          } else {
+            alert('新增失败！')
+          }
+        })
       },
       back() {
         this.showFlag = false;
@@ -227,8 +240,7 @@
       addDataToTemp(item) {
         console.log(this.worksetData)
         var mthis = this
-        // var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
-        var ob = configer.loadxmlDoc("http://10.60.1.140/assets/entityTypeTable.xml");
+        var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
         var entityMainType = ob.getElementsByTagName("entityMainType");
         let arr = []
         mthis.myMap = new Map();
@@ -254,6 +266,8 @@
         } else {
           alert('选择节点类型异常，节点ID是' + item.id)
         }
+        console.log('addDataToTemp')
+        console.log(mthis.worksetData)
       },
       setOption(a) {
         var mthis = this;
@@ -454,8 +468,8 @@
     min-height: 40px;
   }
   /* .modalDiv {
-                        min-height: 50vh;
-                      } */
+                          min-height: 50vh;
+                        } */
   .inputTitle {
     margin-bottom: 10px;
     justify-content: center;
@@ -613,9 +627,9 @@
     color: #ccffff;
   }
   /* .touxiangImg:hover img{
-                  /* background-image:url('http://10.60.1.140/assets/images/organization.png');
-                  background-image:url(../../dist/assets/images/circle.png);
-                }  */
+                    /* background-image:url('http://10.60.1.140/assets/images/organization.png');
+                    background-image:url(../../dist/assets/images/circle.png);
+                  }  */
   .top,
   .bottom {
     text-align: center;
@@ -763,9 +777,20 @@
     color: rgba(204, 255, 255, 0.3);
   }
   .resli>p>i {
-    opacity: 0;
+    opacity: 0.3;
   }
   .resli:hover>p>i {
+    opacity: 0.6;
+  }
+  .delItemDiv{
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    background-color: rgba(0,0,0,0.8);
+  }
+  .delItemDiv:hover{
     opacity: 1;
   }
 </style>

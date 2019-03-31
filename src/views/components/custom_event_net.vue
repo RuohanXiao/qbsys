@@ -51,14 +51,14 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.date_of_birth'>
+          <div class="e-content-d" v-if='detailData.date_of_birth'>
             <p class="e-content-p w5em">出生日期</p>
             <p class="e-content-p">{{detailData.date_of_birth}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"   v-if='detailData.date_of_death'>
+          <div class="e-content-d" v-if='detailData.date_of_death'>
             <p class="e-content-p w5em">死亡日期</p>
             <p class="e-content-p">{{detailData.date_of_death}}</p>
             <div class="buttonD">
@@ -79,28 +79,28 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.country_of_citizenship'>
+          <div class="e-content-d" v-if='detailData.country_of_citizenship'>
             <p class="e-content-p w5em">国籍</p>
             <p class="e-content-p">{{detailData.country_of_citizenship}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.ethic_group'>
+          <div class="e-content-d" v-if='detailData.ethic_group'>
             <p class="e-content-p w5em">所属民族</p>
             <p class="e-content-p">{{detailData.ethic_group}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.religion'>
+          <div class="e-content-d" v-if='detailData.religion'>
             <p class="e-content-p w5em">宗教信仰</p>
             <p class="e-content-p">{{detailData.religion}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.occupation'>
+          <div class="e-content-d" v-if='detailData.occupation'>
             <p class="e-content-p w5em">从事职业</p>
             <p class="e-content-p">{{detailData.occupation}}</p>
             <div class="buttonD">
@@ -121,21 +121,21 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.member_of_political_party'>
+          <div class="e-content-d" v-if='detailData.member_of_political_party'>
             <p class="e-content-p w5em">所属政党</p>
             <p class="e-content-p">{{detailData.member_of_political_party}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.award_received'>
+          <div class="e-content-d" v-if='detailData.award_received'>
             <p class="e-content-p w5em">荣誉</p>
             <p class="e-content-p">{{detailData.award_received}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"   v-if='detailData.e_mail'>
+          <div class="e-content-d" v-if='detailData.e_mail'>
             <p class="e-content-p w5em">邮箱</p>
             <p class="e-content-p">{{detailData.e_mail}}</p>
             <div class="buttonD">
@@ -228,14 +228,14 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.official_website'>
+          <div class="e-content-d" v-if='detailData.official_website'>
             <p class="e-content-p w5em">官网</p>
             <p class="e-content-p">{{detailData.official_website}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.telephone_number'>
+          <div class="e-content-d" v-if='detailData.telephone_number'>
             <p class="e-content-p w5em">电话</p>
             <p class="e-content-p">{{detailData.telephone_number}}</p>
             <div class="buttonD">
@@ -265,7 +265,7 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.official_name'>
+          <div class="e-content-d" v-if='detailData.official_name'>
             <p class="e-content-p w5em">全名</p>
             <p class="e-content-p">{{detailData.official_name}}</p>
             <div class="buttonD">
@@ -328,7 +328,7 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.country'>
+          <div class="e-content-d" v-if='detailData.country'>
             <p class="e-content-p w5em">所属国家</p>
             <p class="e-content-p">{{detailData.country}}</p>
             <div class="buttonD">
@@ -342,7 +342,7 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.located_in_or_next_to_body_of_water'>
+          <div class="e-content-d" v-if='detailData.located_in_or_next_to_body_of_water'>
             <p class="e-content-p w5em">水域</p>
             <p class="e-content-p">{{detailData.located_in_or_next_to_body_of_water}}</p>
             <div class="buttonD">
@@ -356,7 +356,7 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.GDP'>
+          <div class="e-content-d" v-if='detailData.GDP'>
             <p class="e-content-p w5em">GDP</p>
             <p class="e-content-p">{{detailData.GDP}}</p>
             <div class="buttonD">
@@ -435,14 +435,14 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.native_label'>
+          <div class="e-content-d" v-if='detailData.native_label'>
             <p class="e-content-p w5em">母语名</p>
             <p class="e-content-p">{{detailData.native_label}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.short_name'>
+          <div class="e-content-d" v-if='detailData.short_name'>
             <p class="e-content-p w5em">简称</p>
             <p class="e-content-p">{{detailData.short_name}}</p>
             <div class="buttonD">
@@ -510,270 +510,272 @@
           <div class="e-title-d"></div>
           <p class="e-title-p">相关实体</p>
         </div>
-        <div class="e-content" v-if="detailData.entity_type === 'human'">
-          <div class="e-content-d"  v-if='detailData.member_of'>
-            <p class="e-content-p w5em">组织</p>
-            <p class="e-content-p">{{detailData.member_of}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+        <div v-for='entityItem in xianggaunentity'>
+          <div class="e-content" v-if="entityItem.entity_type === 'human'">
+            <div class="e-content-d" v-if='entityItem.member_of'>
+              <p class="e-content-p w5em">组织</p>
+              <p class="e-content-p">{{entityItem.member_of}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.employer'>
+              <p class="e-content-p w5em">雇主</p>
+              <p class="e-content-p">{{entityItem.employer}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.educated_at'>
+              <p class="e-content-p w5em">学习经历</p>
+              <p class="e-content-p">{{entityItem.educated_at}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.work_at'>
+              <p class="e-content-p w5em">工作经历</p>
+              <p class="e-content-p">{{entityItem.work_at}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.father'>
+              <p class="e-content-p w5em">父亲</p>
+              <p class="e-content-p">{{entityItem.father}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.mother'>
+              <p class="e-content-p w5em">母亲</p>
+              <p class="e-content-p">{{entityItem.mother}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.spouse'>
+              <p class="e-content-p w5em">配偶</p>
+              <p class="e-content-p">{{entityItem.spouse}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.child'>
+              <p class="e-content-p w5em">子女</p>
+              <p class="e-content-p">{{entityItem.child}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.sibling'>
+              <p class="e-content-p w5em">兄弟姐妹</p>
+              <p class="e-content-p">{{entityItem.sibling}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="e-content-d" v-if='detailData.employer'>
-            <p class="e-content-p w5em">雇主</p>
-            <p class="e-content-p">{{detailData.employer}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+          <div class="e-content" v-if="entityItem.entity_type === 'organization'">
+            <div class="e-content-d" v-if='entityItem.founded_by'>
+              <p class="e-content-p w5em">创办者</p>
+              <p class="e-content-p">{{entityItem.founded_by}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.chairperson'>
+              <p class="e-content-p w5em">领袖</p>
+              <p class="e-content-p">{{entityItem.chairperson}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.chief_executive_officer'>
+              <p class="e-content-p w5em">首席执行官</p>
+              <p class="e-content-p">{{entityItem.chief_executive_officer}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.business_division'>
+              <p class="e-content-p w5em">业务部门</p>
+              <p class="e-content-p">{{entityItem.business_division}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.parent_organization'>
+              <p class="e-content-p w5em">上级部门</p>
+              <p class="e-content-p">{{entityItem.parent_organization}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.subsidiary'>
+              <p class="e-content-p w5em">下级部门</p>
+              <p class="e-content-p">{{entityItem.subsidiary}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="e-content-d" v-if='detailData.educated_at'>
-            <p class="e-content-p w5em">学习经历</p>
-            <p class="e-content-p">{{detailData.educated_at}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+          <div class="e-content" v-if="entityItem.entity_type === 'administrative'">
+            <div class="e-content-d" v-if='entityItem.head_of_state'>
+              <p class="e-content-p w5em">国家元首</p>
+              <p class="e-content-p">{{entityItem.head_of_state}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.head_of_government'>
+              <p class="e-content-p w5em">政府首脑</p>
+              <p class="e-content-p">{{entityItem.head_of_government}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.office_held_by_head_of_government'>
+              <p class="e-content-p w5em">政府机构</p>
+              <p class="e-content-p">{{entityItem.office_held_by_head_of_government}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.head_of_government'>
+              <p class="e-content-p w5em">政府首长</p>
+              <p class="e-content-p">{{entityItem.head_of_government}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.legislative_body'>
+              <p class="e-content-p w5em">立法机构</p>
+              <p class="e-content-p">{{entityItem.legislative_body}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.executive_body'>
+              <p class="e-content-p w5em">执行政府</p>
+              <p class="e-content-p">{{entityItem.executive_body}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.highest_judicial_authority'>
+              <p class="e-content-p w5em">最高司法机关</p>
+              <p class="e-content-p">{{entityItem.highest_judicial_authority}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.located_in_the_administrative_territorial_entity'>
+              <p class="e-content-p w5em">位于</p>
+              <p class="e-content-p">{{entityItem.located_in_the_administrative_territorial_entity}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.contains_administrative_territorial_entity'>
+              <p class="e-content-p w5em">下属地区</p>
+              <p class="e-content-p">{{entityItem.contains_administrative_territorial_entity}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.diplomatic_relation'>
+              <p class="e-content-p w5em">邦交国家</p>
+              <p class="e-content-p">{{entityItem.diplomatic_relation}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.twinned_administrative_body'>
+              <p class="e-content-p w5em">友好城市</p>
+              <p class="e-content-p">{{entityItem.twinned_administrative_body}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
+            </div>
+            <div class="e-content-d" v-if='entityItem.shares_border_with'>
+              <p class="e-content-p w5em">接壤于</p>
+              <p class="e-content-p">{{entityItem.shares_border_with}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="e-content-d" v-if='detailData.work_at'>
-            <p class="e-content-p w5em">工作经历</p>
-            <p class="e-content-p">{{detailData.work_at}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+          <div class="e-content" v-if="entityItem.entity_type === 'weapon'">
+            <div class="e-content-d" v-if='entityItem.country_of_origin'>
+              <p class="e-content-p w5em">原产国</p>
+              <p class="e-content-p">{{entityItem.country_of_origin}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.father'>
-            <p class="e-content-p w5em">父亲</p>
-            <p class="e-content-p">{{detailData.father}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            <div class="e-content-d" v-if='entityItem.country'>
+              <p class="e-content-p w5em">服役国家</p>
+              <p class="e-content-p">{{entityItem.country}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.mother'>
-            <p class="e-content-p w5em">母亲</p>
-            <p class="e-content-p">{{detailData.mother}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            <div class="e-content-d" v-if='entityItem.manufacturer'>
+              <p class="e-content-p w5em">生产商</p>
+              <p class="e-content-p">{{entityItem.manufacturer}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.spouse'>
-            <p class="e-content-p w5em">配偶</p>
-            <p class="e-content-p">{{detailData.spouse}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            <div class="e-content-d" v-if='entityItem.developer'>
+              <p class="e-content-p w5em">开发者</p>
+              <p class="e-content-p">{{entityItem.developer}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.child'>
-            <p class="e-content-p w5em">子女</p>
-            <p class="e-content-p">{{detailData.child}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            <div class="e-content-d" v-if='entityItem.designed_by'>
+              <p class="e-content-p w5em">设计者</p>
+              <p class="e-content-p">{{entityItem.designed_by}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.sibling'>
-            <p class="e-content-p w5em">兄弟姐妹</p>
-            <p class="e-content-p">{{detailData.sibling}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            <div class="e-content-d" v-if='entityItem.operator'>
+              <p class="e-content-p w5em">使用者</p>
+              <p class="e-content-p">{{entityItem.operator}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="e-content" v-if="detailData.entity_type === 'organization'">
-          <div class="e-content-d" v-if='detailData.founded_by'>
-            <p class="e-content-p w5em">创办者</p>
-            <p class="e-content-p">{{detailData.founded_by}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            <div class="e-content-d" v-if='entityItem.guidance_system'>
+              <p class="e-content-p w5em">制导系统</p>
+              <p class="e-content-p">{{entityItem.guidance_system}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.chairperson'>
-            <p class="e-content-p w5em">领袖</p>
-            <p class="e-content-p">{{detailData.chairperson}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            <div class="e-content-d" v-if='entityItem.ammunition'>
+              <p class="e-content-p w5em">弹药</p>
+              <p class="e-content-p">{{entityItem.ammunition}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.chief_executive_officer'>
-            <p class="e-content-p w5em">首席执行官</p>
-            <p class="e-content-p">{{detailData.chief_executive_officer}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            <div class="e-content-d" v-if='entityItem.powerplant'>
+              <p class="e-content-p w5em">发动机</p>
+              <p class="e-content-p">{{entityItem.powerplant}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.business_division'>
-            <p class="e-content-p w5em">业务部门</p>
-            <p class="e-content-p">{{detailData.business_division}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.parent_organization'>
-            <p class="e-content-p w5em">上级部门</p>
-            <p class="e-content-p">{{detailData.parent_organization}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.subsidiary'>
-            <p class="e-content-p w5em">下级部门</p>
-            <p class="e-content-p">{{detailData.subsidiary}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-        </div>
-        <div class="e-content" v-if="detailData.entity_type === 'administrative'">
-          <div class="e-content-d" v-if='detailData.head_of_state'>
-            <p class="e-content-p w5em">国家元首</p>
-            <p class="e-content-p">{{detailData.head_of_state}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.head_of_government'>
-            <p class="e-content-p w5em">政府首脑</p>
-            <p class="e-content-p">{{detailData.head_of_government}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.office_held_by_head_of_government'>
-            <p class="e-content-p w5em">政府机构</p>
-            <p class="e-content-p">{{detailData.office_held_by_head_of_government}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.head_of_government'>
-            <p class="e-content-p w5em">政府首长</p>
-            <p class="e-content-p">{{detailData.head_of_government}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.legislative_body'>
-            <p class="e-content-p w5em">立法机构</p>
-            <p class="e-content-p">{{detailData.legislative_body}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.executive_body'>
-            <p class="e-content-p w5em">执行政府</p>
-            <p class="e-content-p">{{detailData.executive_body}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.highest_judicial_authority'>
-            <p class="e-content-p w5em">最高司法机关</p>
-            <p class="e-content-p">{{detailData.highest_judicial_authority}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.located_in_the_administrative_territorial_entity'>
-            <p class="e-content-p w5em">位于</p>
-            <p class="e-content-p">{{detailData.located_in_the_administrative_territorial_entity}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.contains_administrative_territorial_entity'>
-            <p class="e-content-p w5em">下属地区</p>
-            <p class="e-content-p">{{detailData.contains_administrative_territorial_entity}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.diplomatic_relation'>
-            <p class="e-content-p w5em">邦交国家</p>
-            <p class="e-content-p">{{detailData.diplomatic_relation}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.twinned_administrative_body'>
-            <p class="e-content-p w5em">友好城市</p>
-            <p class="e-content-p">{{detailData.twinned_administrative_body}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.shares_border_with'>
-            <p class="e-content-p w5em">接壤于</p>
-            <p class="e-content-p">{{detailData.shares_border_with}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-        </div>
-        <div class="e-content" v-if="detailData.entity_type === 'weapon'">
-          <div class="e-content-d" v-if='detailData.country_of_origin'>
-            <p class="e-content-p w5em">原产国</p>
-            <p class="e-content-p">{{detailData.country_of_origin}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.country'>
-            <p class="e-content-p w5em">服役国家</p>
-            <p class="e-content-p">{{detailData.country}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d"  v-if='detailData.manufacturer'>
-            <p class="e-content-p w5em">生产商</p>
-            <p class="e-content-p">{{detailData.manufacturer}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.developer'>
-            <p class="e-content-p w5em">开发者</p>
-            <p class="e-content-p">{{detailData.developer}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d"  v-if='detailData.designed_by'>
-            <p class="e-content-p w5em">设计者</p>
-            <p class="e-content-p">{{detailData.designed_by}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.operator'>
-            <p class="e-content-p w5em">使用者</p>
-            <p class="e-content-p">{{detailData.operator}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d"  v-if='detailData.guidance_system'>
-            <p class="e-content-p w5em">制导系统</p>
-            <p class="e-content-p">{{detailData.guidance_system}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.ammunition'>
-            <p class="e-content-p w5em">弹药</p>
-            <p class="e-content-p">{{detailData.ammunition}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d" v-if='detailData.powerplant'>
-            <p class="e-content-p w5em">发动机</p>
-            <p class="e-content-p">{{detailData.powerplant}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
-            </div>
-          </div>
-          <div class="e-content-d"  v-if='detailData.avionics'>
-            <p class="e-content-p w5em">航空电子设备</p>
-            <p class="e-content-p">{{detailData.avionics}}</p>
-            <div class="buttonD">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+            <div class="e-content-d" v-if='entityItem.avionics'>
+              <p class="e-content-p w5em">航空电子设备</p>
+              <p class="e-content-p">{{entityItem.avionics}}</p>
+              <div class="buttonD">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
+              </div>
             </div>
           </div>
         </div>
@@ -781,13 +783,23 @@
           <div class="e-title-d"></div>
           <p class="e-title-p">相关文档</p>
         </div>
-        <div class="e-content" v-if="myMap.get(detailData.entity_type) === 'entity'">
-          <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-            <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanDoc" v-if="(xiangguanDoc.length>0)">
-              <p class="e-content-p">{{item.title}}</p>
+        <div v-if='xiangguanDoc.length>0'>
+          <div v-for='docItem in xiangguanDoc'>
+            <div class="e-content" v-if="myMap.get(docItem.entity_type) === 'document'">
+              <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+                <div class="e-content-d pointIcon">
+                  <p class="e-content-p">{{item.title}}</p>
+                </div>
+              </div>
             </div>
-            <div class="e-content-d">
-              <p class="e-content-p">暂无相关文档</p>
+          </div>
+        </div>
+        <div v-else>
+          <div class="e-content">
+            <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+              <div class="e-content-d-dis">
+                <p class="e-content-p">暂无相关文档</p>
+              </div>
             </div>
           </div>
         </div>
@@ -796,13 +808,23 @@
           <p class="e-title-p">相关事件</p>
         </div>
       </div>
-      <div class="e-content" v-if="myMap.get(detailData.entity_type) === 'entity'">
-        <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" v-for="(ite,inde) in xiangguanEvent" v-if="(xiangguanEvent.length>0)">
-            <p class="e-content-p">{{item.title}}</p>
+      <div v-if='xiangguanEvent.length>0'>
+        <div v-for='eventItem in xiangguanEvent'>
+          <div class="e-content" v-if="myMap.get(eventItem.entity_type) === 'event'">
+            <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+              <div class="e-content-d pointIcon">
+                <p class="e-content-p">{{item.title}}</p>
+              </div>
+            </div>
           </div>
-          <div class="e-content-d">
-            <p class="e-content-p">暂无相关事件</p>
+        </div>
+      </div>
+      <div v-else>
+        <div class="e-content">
+          <div class="scrollBarAble e-content" :style="{backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+            <div class="e-content-d-dis">
+              <p class="e-content-p">暂无相关事件</p>
+            </div>
           </div>
         </div>
       </div>
@@ -812,7 +834,7 @@
           <div class="e-title-d"></div>
           <p class="e-title-p">事件属性</p>
         </div>
-        <div class="e-content"  v-if='detailData.chinese_name'>
+        <div class="e-content" v-if='detailData.chinese_name'>
           <div class="e-content-d">
             <p class="e-content-p w5em">全名</p>
             <p class="e-content-p">{{detailData.chinese_name}}</p>
@@ -834,7 +856,7 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.date_of_birth'>
+          <div class="e-content-d" v-if='detailData.date_of_birth'>
             <p class="e-content-p w5em">出生日期</p>
             <p class="e-content-p">{{detailData.date_of_birth}}</p>
             <div class="buttonD">
@@ -876,7 +898,7 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.religion'>
+          <div class="e-content-d" v-if='detailData.religion'>
             <p class="e-content-p w5em">宗教信仰</p>
             <p class="e-content-p">{{detailData.religion}}</p>
             <div class="buttonD">
@@ -904,14 +926,14 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.member_of_political_party'>
+          <div class="e-content-d" v-if='detailData.member_of_political_party'>
             <p class="e-content-p w5em">所属政党</p>
             <p class="e-content-p">{{detailData.member_of_political_party}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.award_received'>
+          <div class="e-content-d" v-if='detailData.award_received'>
             <p class="e-content-p w5em">荣誉</p>
             <p class="e-content-p">{{detailData.award_received}}</p>
             <div class="buttonD">
@@ -925,7 +947,7 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.official_blog'>
+          <div class="e-content-d" v-if='detailData.official_blog'>
             <p class="e-content-p w5em">博客</p>
             <p class="e-content-p">{{detailData.official_blog}}</p>
             <div class="buttonD">
@@ -939,7 +961,7 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.summary'>
+          <div class="e-content-d" v-if='detailData.summary'>
             <p class="e-content-p w5em">简介</p>
             <p class="e-content-p">{{detailData.summary}}</p>
             <div class="buttonD">
@@ -954,7 +976,7 @@
           <p class="e-title-p">文档属性</p>
         </div>
         <div class="e-content">
-          <div class="e-content-d"  v-if='detailData.title'>
+          <div class="e-content-d" v-if='detailData.title'>
             <p class="e-content-p w5em">标题</p>
             <p class="e-content-p">{{detailData.title}}</p>
             <div class="buttonD">
@@ -968,14 +990,14 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.from'>
+          <div class="e-content-d" v-if='detailData.from'>
             <p class="e-content-p w5em">作者</p>
             <p class="e-content-p">{{detailData.from}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.time'>
+          <div class="e-content-d" v-if='detailData.time'>
             <p class="e-content-p w5em">时间</p>
             <p class="e-content-p">{{detailData.time}}</p>
             <div class="buttonD">
@@ -989,7 +1011,7 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d"  v-if='detailData.type'>
+          <div class="e-content-d" v-if='detailData.type'>
             <p class="e-content-p w5em">类型</p>
             <p class="e-content-p">{{detailData.type}}</p>
             <div class="buttonD">
@@ -997,13 +1019,13 @@
             </div>
           </div>
           <!--
-            <div class="e-content-d">
-              <p class="e-content-p w5em">文档内容</p>
-              <p class="e-content-p">{{detailData.text}}</p>
-              <div class="buttonD">
-                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
-              </div>
-            </div>-->
+                      <div class="e-content-d">
+                        <p class="e-content-p w5em">文档内容</p>
+                        <p class="e-content-p">{{detailData.text}}</p>
+                        <div class="buttonD">
+                          <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+                        </div>
+                      </div>-->
         </div>
       </div>
     </div>
@@ -1044,9 +1066,10 @@
         entDivH: '',
         entityT: '',
         myMap: new Map(),
+        xianggaunentity: [],
         xiangguanDoc: [],
         xiangguanEvent: [],
-        timer:null
+        timer: null
       }
     },
     props: ['evetdata'],
@@ -1060,8 +1083,7 @@
     watch: {
       evetdata: function() {
         var mthis = this
-        // var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
-        var ob = configer.loadxmlDoc("http://10.60.1.140/assets/entityTypeTable.xml");
+        var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
         var entityMainType = ob.getElementsByTagName("entityMainType");
         if (this.timer) {
           clearTimeout(this.timer)
@@ -1102,34 +1124,6 @@
               //   console.log(response.body.data[0])
               //   // mthis.xiangguanDoc = response.body.data[0].children.data
               // })
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
-                "nodeIds": a,
-                "TypeLabel": 'entity'
-              }).then(response => {
-                console.log('=============related entity=============')
-                console.log(response)
-                if (response.body.code == 0) {
-                  // let ids = response.body.data[0].nodes.map(item=>{
-                  //   return item.id
-                  // })
-                  let objArr = new Array()
-                  for (let i = 0; i < response.body.data[0].nodes.length; i++) {
-                    let itemid = response.body.data[0].nodes[i].id
-                    let itemObj = response.body.data[0].links.filter(item => {
-                      return item.from == detailId && item.to == itemid
-                    })
-                    if (itemObj.length > 0) {
-                      objArr.push({
-                        relation: itemObj[0].type,
-                        id: detailId,
-                        relationTo: itemid
-                      })
-                    }
-                  }
-                } else {
-                  alert('相关实体查询接口异常')
-                }
-              })
             } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
               let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
               mthis.selectTag = detailId
@@ -1142,34 +1136,6 @@
               }).then(response => {
                 mthis.detailData = response.body.data[0]
                 mthis.detailData.entity_type = 'event'
-              })
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
-                "nodeIds": a,
-                "TypeLabel": 'event'
-              }).then(response => {
-                console.log('=============related event=============')
-                console.log(response)
-                if (response.body.code == 0) {
-                  // let ids = response.body.data[0].nodes.map(item=>{
-                  //   return item.id
-                  // })
-                  let objArr = new Array()
-                  for (let i = 0; i < response.body.data[0].nodes.length; i++) {
-                    let itemid = response.body.data[0].nodes[i].id
-                    let itemObj = response.body.data[0].links.filter(item => {
-                      return item.from == detailId && item.to == itemid
-                    })
-                    if (itemObj.length > 0) {
-                      objArr.push({
-                        relation: itemObj[0].type,
-                        id: detailId,
-                        relationTo: itemid
-                      })
-                    }
-                  }
-                } else {
-                  alert('相关事件查询接口异常')
-                }
               })
             } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'document') {
               let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
@@ -1186,43 +1152,112 @@
                 mthis.detailData.entity_type = 'document'
                 console.log(mthis.detailData)
               })
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
-                "nodeIds": a,
-                "TypeLabel": 'document'
-              }).then(response => {
-                console.log('=============related document=============')
-                console.log(response)
-                if (response.body.code == 0) {
-                  // let ids = response.body.data[0].nodes.map(item=>{
-                  //   return item.id
-                  // })
-                  let objArr = new Array()
-                  for (let i = 0; i < response.body.data[0].nodes.length; i++) {
-                    let itemid = response.body.data[0].nodes[i].id
-                    let itemObj = response.body.data[0].links.filter(item => {
-                      return item.from == detailId && item.to == itemid
-                    })
-                    if (itemObj.length > 0) {
-                      objArr.push({
-                        relation: itemObj[0].type,
-                        id: detailId,
-                        relationTo: itemid
-                      })
-                    }
-                  }
-                  console.log('objArr')
-                  console.log(objArr)
-                } else {
-                  alert('相关文档查询接口异常')
-                }
-              })
             }
           }
         }, 200);
       }
     },
     methods: {
-      errorImg(){
+      xiangguan(id) {
+        let a = new Array(id)
+        var mthis = this
+        mthis.xiangguanDoc = []
+        mthis.xiangguanEvent = []
+        mthis.xianggaunentity = []
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
+          "nodeIds": a,
+          "TypeLabel": 'entity'
+        }).then(response => {
+          console.log('=============related entity=============')
+          console.log(response)
+          if (response.body.code == 0) {
+            // let ids = response.body.data[0].nodes.map(item=>{
+            //   return item.id
+            // })
+            let objArr = new Array()
+            for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+              let itemid = response.body.data[0].nodes[i].id
+              let itemObj = response.body.data[0].links.filter(item => {
+                return item.from == detailId && item.to == itemid
+              })
+              if (itemObj.length > 0) {
+                objArr.push({
+                  relation: itemObj[0].type,
+                  id: detailId,
+                  relationTo: itemid
+                })
+              }
+            }
+            mthis.xianggaunentity = objArr
+          } else {
+            alert('相关实体查询接口异常')
+            mthis.xianggaunentity = []
+          }
+        })
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
+          "nodeIds": a,
+          "TypeLabel": 'event'
+        }).then(response => {
+          console.log('=============related event=============')
+          console.log(response)
+          if (response.body.code == 0) {
+            // let ids = response.body.data[0].nodes.map(item=>{
+            //   return item.id
+            // })
+            let objArr = new Array()
+            for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+              let itemid = response.body.data[0].nodes[i].id
+              let itemObj = response.body.data[0].links.filter(item => {
+                return item.from == detailId && item.to == itemid
+              })
+              if (itemObj.length > 0) {
+                objArr.push({
+                  relation: itemObj[0].type,
+                  id: detailId,
+                  relationTo: itemid
+                })
+              }
+            }
+            mthis.xiangguanEvent = objArr
+          } else {
+            alert('相关事件查询接口异常')
+            mthis.xiangguanEvent = []
+          }
+        })
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
+          "nodeIds": a,
+          "TypeLabel": 'document'
+        }).then(response => {
+          console.log('=============related document=============')
+          console.log(response)
+          if (response.body.code == 0) {
+            // let ids = response.body.data[0].nodes.map(item=>{
+            //   return item.id
+            // })
+            let objArr = new Array()
+            for (let i = 0; i < response.body.data[0].nodes.length; i++) {
+              let itemid = response.body.data[0].nodes[i].id
+              let itemObj = response.body.data[0].links.filter(item => {
+                return item.from == detailId && item.to == itemid
+              })
+              if (itemObj.length > 0) {
+                objArr.push({
+                  relation: itemObj[0].type,
+                  id: detailId,
+                  relationTo: itemid
+                })
+              }
+            }
+            mthis.xiangguanDoc = objArr
+            console.log('objArr')
+            console.log(objArr)
+          } else {
+            alert('相关文档查询接口异常')
+            mthis.xiangguanDoc = []
+          }
+        })
+      },
+      errorImg() {
         this.detailData.img = 'http://10.60.1.140/assets/images/image.png'
       },
       changeDetailDiv(id, type) {
@@ -1238,7 +1273,7 @@
             "nodeIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/image.png'
+            res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
             this.detailData = res
           })
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
@@ -1279,7 +1314,7 @@
           }).then(response => {
             // this.detailData = response.body.data[0]
             let res = response.body.data[0]
-            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/image.png'
+            res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
             this.detailData = res
             this.detailData.entity_type = 'event'
           })
@@ -1298,8 +1333,8 @@
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
             "docIds": arr
           }).then(response => {
-             let res = response.body.data[0]
-            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/image.png'
+            let res = response.body.data[0]
+            res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
             this.detailData = res
             mthis.detailData.entity_type = 'document'
           })
@@ -1422,6 +1457,13 @@
     min-height: 30px;
     position: relative;
   }
+  .e-content-d-dis {
+    padding: 0 0 0 18px;
+    display: flex;
+    height: auto;
+    min-height: 30px;
+    position: relative;
+  }
   .w5em {
     width: 5em;
     min-width: 5em;
@@ -1465,7 +1507,7 @@
   }
   .selectedTag {
     /* color:red !important;
-            background-color: blue !important; */
+                      background-color: blue !important; */
     /* opacity: 0.5 !important; */
     background-color: rgba(51, 255, 255, 0.5) !important;
     ;
