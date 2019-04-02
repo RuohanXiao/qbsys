@@ -3,7 +3,7 @@
     <div>
       <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}" class="inputDiv">
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
-          v-show="type==='net'"  placeholder='' :remote='true' loading-text='加载中···' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true"  @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
+           v-show="type==='net'"  placeholder='' :remote='true' loading-text='加载中···' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true"  @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
               <!-- <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
               v-show="type==='net'" remote placeholder='' :loading="loading1" :label-in-value="true" @change.native="searchInfoNet" @keyup.enter.native="enterNetOption(options1[0].data[0])"> -->
               <OptionGroup :label="opt1.title" v-for="(opt1) in options1" class="optionTitle">
@@ -14,7 +14,7 @@
               </OptionGroup>
             </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoGeo" :remote='begeoSea' clearable filterable
-          v-show="type==='geo'"  placeholder='' :remote-method="searchInfoGeo" :loading="loading2" :label-in-value="false" @on-change="v=>{setOption(v)}" @keyup.enter.native="enterGeoOption(options2[0].data[0])" @on-open-change="lightIcon">
+          class="scrollBarAble" v-show="type==='geo'"  placeholder='' :remote-method="searchInfoGeo" :loading="loading2" :label-in-value="false" @on-change="v=>{setOption(v)}" @keyup.enter.native="enterGeoOption(options2[0].data[0])" @on-open-change="lightIcon">
               <OptionGroup :label="opt.title" v-for="opt in options2" class="optionTitle">
                 <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
                   <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
@@ -24,7 +24,7 @@
               </OptionGroup>
             </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoContent" filterable
-          v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}"  @on-open-change="lightIcon" @keyup.enter.native="enterContentOption(options3[0].data[0])">
+          class="scrollBarAble" v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}"  @on-open-change="lightIcon" @keyup.enter.native="enterContentOption(options3[0].data[0])">
               <OptionGroup :label="opt.title" v-for="opt in options3">
                 <Option v-for="(option, index) in opt.data" :value="option.value" :key="index"  @click.native="()=>{setOption(opt.data[index])}">
                   <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
@@ -216,7 +216,7 @@
                       // "value": response.body.data.nodes[i].id,
                       "value": query,
                       "id": response.body.data.nodes[i].id,
-                      "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image.png'),
+                      "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/default.png'),
                       "type": response.body.data.nodes[i].type
                     })
                   }
@@ -361,6 +361,53 @@
   }
 </style>
 <style>
+  /* 滚动条样式 */
+  #queryInput>.ivu-select-dropdown {
+    overflow-y: hidden;
+  }
+  #queryInput>.ivu-select-dropdown::-webkit-scrollbar {
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    position: absolute;
+  }
+  #queryInput>.ivu-select-dropdown::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+  }
+  #queryInput>.ivu-select-dropdown::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+  }
+  #queryInput>.ivu-select-dropdown:hover {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  #queryInput>.ivu-select-dropdown:hover::-webkit-scrollbar {
+    opacity: 1;
+    width: 5px;
+    height: 5px;
+  }
+  #queryInput>.ivu-select-dropdown:hover::-webkit-scrollbar-thumb {
+    opacity: 1;
+    border: 5px solid transparent;
+    padding-right: 5px !important;
+    border-radius: 10px;
+    min-height: 20px;
+    background-color: #3cc;
+    box-shadow: 1px 1px 3px #3cc inset;
+  }
+  #queryInput>.ivu-select-dropdown:hover::-webkit-scrollbar-track {
+    opacity: 0;
+    border-radius: 2.5px !important;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
+    background: rgba(0, 0, 0, 0);
+  }
   .ivu-select-group-title {
     color: rgba(204, 255, 255, 0.5) !important;
     line-height: 20px !important;

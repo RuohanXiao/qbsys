@@ -42,9 +42,9 @@
         </div>
       </div>
       <div class="rightbottom">
-        <Button class='buttonOK' v-if="type==='import'" @click='modifySet'>导入图集</Button>
-        <Button class='buttonOK' v-else @click='createSet'>导出集合</Button>
-        <Button class='buttonCannle' @click="back">返回</Button>
+        <Button class='buttonCannle' @click="back">取消</Button>
+        <Button class='buttonOK' v-if="type==='import'" @click='modifySet'>导入图</Button>
+        <Button class='buttonOK' v-else @click='createSet'>导出图</Button>
       </div>
     </Modal>
   </div>
@@ -323,14 +323,17 @@
           width:canvansWidth
         },
         toolbar: {
-          zoomControl: true,
-          cssClass: 'zoomButtonClass',
-          items: [{
-            item: "zoomcontrol",
-            side: "right",
-            align: "top"
-          }]
+          enabled:false
         },
+        //  toolbar: {
+        //   zoomControl: true,
+        //   cssClass: 'zoomButtonClass',
+        //   items: [{
+        //     item: "zoomcontrol",
+        //     side: "right",
+        //     align: "top"
+        //   }]
+        // },
         interaction: {
           resizing: {
             enabled: false
@@ -563,38 +566,35 @@
     width: 90%;
   }
   .buttonOK {
-    width: 10em;
-    color: #025455 !important;
-    background-color: rgba(51, 255, 255, 0.8) !important;
-    height: 30px;
+    width: 6em;
+    color: rgb(204,255,255,0.8) !important;
+    background-color: rgba(51,255,255,0.5) !important;
+    /* box-shadow: 0px 0px 62px 0px #33ffff; */
+    height: 25px;
     border-radius: 5px;
     margin: 0 10px;
-    font-size: 16px;
+    font-size: 14px;
+    line-height:25px;
   }
   .buttonOK:hover {
-    width: 10em;
-    color: rgba(51, 255, 255, 0.8) !important;
-    background-color: #025455 !important;
-    height: 30px;
-    border-radius: 5px;
-    margin: 0 10px;
+    color: #ccffff !important;
+    background-color:rgba(51,255,255,0.7) !important;
   }
   .buttonCannle {
-    width: 10em;
-    color: #025455 !important;
-    background-color: #E5FFFF !important;
-    height: 30px;
+    width: 6em;
+    color: rgba(204,255,255,0.5) !important;
+    background-color: rgba(204,255,255,0.3) !important;
+    /* box-shadow: 0px 0px 62px 0px #33ffff; */
+    height: 25px;
     border-radius: 5px;
     margin: 0 10px;
-    font-size: 16px;
+    font-size: 14px;
+    line-height:25px;
   }
   .buttonCannle:hover {
-    width: 10em;
-    color: #E5FFFF !important;
-    background-color: #025455 !important;
-    height: 30px;
-    border-radius: 5px;
-    margin: 0 10px;
+    color: rgba(204,255,255,0.8) !important;
+    background-color: rgba(204,255,255,0.5) !important;
+    /* box-shadow: 0px 0px 62px 0px #33ffff; */
   }
   .mainModal {
     margin: 0 0px 45px 20px 20px;
@@ -787,6 +787,20 @@
     padding: 0 20px;
     text-overflow: ellipsis;
   }
+  /* .inputTbottom>input {
+    color: rgba(204, 255, 255, 0.5);
+    background-color: rgba(51, 255, 255, 0.2);
+    border: none;
+    box-shadow: none !important;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 4vh;
+    letter-spacing: 0px;
+    font-family: MicrosoftYaHei;
+    height: 4vh;
+    border-radius: 20px;
+  } */
   .inputTbottom>input {
     color: rgba(204, 255, 255, 0.5);
     background-color: rgba(51, 255, 255, 0.2);

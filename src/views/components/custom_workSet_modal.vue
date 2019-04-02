@@ -19,7 +19,7 @@
             <div class="inputTitle">
               <Input class='inputTbottom' v-model="searchWorkspaceTitle" @on-change="v=>{searchInfo(v)}" placeholder="搜索实体" prefix="ios-search" />
             </div>
-            <div class='scrollBarAble' style='margin-bottom: 20px;height: 36vh;'>
+            <div class='scrollBarAble' style='margin-bottom: 20px;height: 39vh;'>
               <div class='resList '>
                 <div class='resli' v-for='op in options1' style="padding:'10px auto';line-height:4vh;">
                   <p>{{op.name}}
@@ -30,26 +30,7 @@
             </div>
           </div>
         </div>
-        <div class='modalRightDiv' v-if="type==='modify'">
-          <div class="scrollBarAble">
-            <div class='rightdiv' v-for='item in worksetData'>
-              <div class="type-title lefttop">
-                <div class="type-title-d"></div>
-                <p class="type-title-p">{{item.type}}({{item.data.length}})</p>
-              </div>
-              <div class="type-content">
-                <Row type="flex" justify="start">
-                  <Col :xs="4" :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" v-for='itemObj in item.data'>
-                  <!-- <Avatar class="circle-img touxiangImg" icon="icon-delete-point" :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" /> -->
-                  <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
-                  <p class='nametext'>{{itemObj.name}}</p>
-                  </Col>
-                </Row>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class='modalRightDiv' v-else>
+        <div class='modalRightDiv'>
           <div class="scrollBarAble">
             <div class='rightdiv' v-for='(item,index) in worksetData'>
               <div class="type-title lefttop">
@@ -71,11 +52,32 @@
             </div>
           </div>
         </div>
+        <!-- <div class='modalRightDiv' v-else>
+          <div class="scrollBarAble">
+            <div class='rightdiv' v-for='(item,index) in worksetData'>
+              <div class="type-title lefttop">
+                <div class="type-title-d"></div>
+                <p class="type-title-p">{{dicMap[item.type]}}({{item.data.length}})</p>
+              </div>
+              <div class="type-content">
+                <Row type="flex" justify="start">
+                  <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" v-for='itemObj in item.data'>
+                  <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
+                  <p class='nametext'>{{itemObj.name}}</p>
+                  <div class='delItemDiv' @click="deletItem(itemObj.id,index)">
+                    <Icon type="icon iconfont icon-shanchu color515" :style="{padding:'20px 0px'}" size="40"></Icon>
+                  </div>
+                  </Col>
+                </Row>
+              </div>
+            </div>
+          </div>
+        </div> -->
       </div>
       <div class="rightbottom">
+        <Button class='buttonCannle' @click="back">取消</Button>
         <Button class='buttonOK' v-if="type==='modify'" @click='modifySet'>修改集合</Button>
         <Button class='buttonOK' v-else @click='createSet'>创建集合</Button>
-        <Button class='buttonCannle' @click="back">返回</Button>
       </div>
     </Modal>
   </div>
@@ -93,6 +95,7 @@
   export default {
     data() {
       return {
+        workspaceId: '',
         showFlag: false,
         lightIconFlag: false,
         loading: false,
@@ -111,19 +114,19 @@
           document: '文本',
           event: '事件',
         },
-        worksetData: [{
-            type: 'entity',
-            data: []
-          },
-          {
-            type: 'document',
-            data: []
-          },
-          {
-            type: 'event',
-            data: []
-          }
-        ],
+        // worksetData: [{
+        //     type: 'entity',
+        //     data: []
+        //   },
+        //   {
+        //     type: 'document',
+        //     data: []
+        //   },
+        //   {
+        //     type: 'event',
+        //     data: []
+        //   }
+        // ],
         itemsObj: [{
           name: '实体节点',
           num: 6
@@ -140,6 +143,16 @@
       // $('.touxiangImg')
     },
     watch: {
+      worksetData:function(){
+        console.log('---------------------------this.worksetInfo')
+        console.log(this.worksetInfo)
+        
+      },
+      worksetInfo:function(){
+        this.workspaceTitle = this.worksetInfo.title
+        this.workspaceDes = this.worksetInfo.des
+        this.workspaceId = this.worksetInfo.id
+      },
       flag: function() {
         this.showFlag = true
       },
@@ -156,11 +169,67 @@
     },
     methods: {
       deletItem(id,index){
+        alert(id+ '   '+index)
         this.worksetData[index].data = this.worksetData[index].data.filter(item => {
           return item.id !== id
         })
       },
       modifySet() {
+        // this.workspaceTitle = 
+        var mthis = this
+        let timestamp = new Date().getTime()
+        let human = mthis.worksetData[0].data.filter(item => {
+          return item.type === 'human'
+        }).map(it => {
+          return it.id
+        })
+        let administrative = mthis.worksetData[0].data.filter(item => {
+          return item.type === 'administrative'
+        }).map(it => {
+          return it.id
+        })
+        let organization = mthis.worksetData[0].data.filter(item => {
+          return item.type === 'organization'
+        }).map(it => {
+          return it.id
+        })
+        let weapon = mthis.worksetData[0].data.filter(item => {
+          return item.type === 'weapon'
+        }).map(it => {
+          return it.id
+        })
+        let events = mthis.worksetData[2].data.map(it => {
+          return it.id
+        })
+        let documents = mthis.worksetData[1].data.map(it => {
+          return it.id
+        })
+        let setIds = mthis.worksetData[0].data.map(item => {
+          return item.id
+        })
+        mthis.$http.put(mthis.$store.state.ipConfig.api_url + '/index-set-data/', {
+          "timestamp": timestamp,
+          "data": {
+            "id": mthis.workspaceId,
+            "name": (mthis.workspaceTitle==='')?('默认标题'+timestamp):mthis.workspaceTitle,
+            "des": (mthis.workspaceDes==='')?('这家伙很懒，什么都没有写'):mthis.workspaceDes,
+            "nodeIds": setIds,
+            "modify_time": util.getNowFormatDate(),
+            "modify_user": "XiaoRuohan",
+            // "create_time": util.getNowFormatDate(),
+            // "create_user": "XiaoRuohan",
+            "type": "human"
+          }
+        }).then(response => {
+          console.log(response)
+          if (response.body.code === 0) {
+            alert('修改成功！')
+            mthis.$store.commit('setRefSet', !mthis.$store.state.refSet)
+            this.showFlag = false
+          } else {
+            alert('修改失败！')
+          }
+        })
       },
       createSet() {
         var mthis = this
@@ -400,16 +469,6 @@
           //  item.target.id
         })
       },
-      importData(id) {
-        this.$emit('workSpaceModal', true)
-        this.addToChart(id)
-      },
-      addToChart(id) {
-        var mthis = this
-        mock.get("/getWorkSpaceAddData").then(function(res) {
-          mthis.$store.commit('setWorkSpaceAddData', res.data.data[0])
-        })
-      },
       cantClick() {
         alert(
           '不可用工作集，不可导入'
@@ -419,7 +478,8 @@
     props: {
       worksetData: Array,
       type: String,
-      flag: Number
+      flag: Number,
+      worksetInfo:Object
     }
   }
 </script>
@@ -470,11 +530,7 @@
   /* .modalDiv {
                           min-height: 50vh;
                         } */
-  .inputTitle {
-    margin-bottom: 10px;
-    justify-content: center;
-    display: flex;
-  }
+  
   .inputT {
     width: 90%;
     display: inline-block;
@@ -508,38 +564,35 @@
     width: 90%;
   }
   .buttonOK {
-    width: 10em;
-    color: #025455 !important;
-    background-color: rgba(51, 255, 255, 0.8) !important;
-    height: 30px;
+    width: 6em;
+    color: rgb(204,255,255,0.8) !important;
+    background-color: rgba(51,255,255,0.5) !important;
+    /* box-shadow: 0px 0px 62px 0px #33ffff; */
+    height: 25px;
     border-radius: 5px;
     margin: 0 10px;
-    font-size: 16px;
+    font-size: 14px;
+    line-height:25px;
   }
   .buttonOK:hover {
-    width: 10em;
-    color: rgba(51, 255, 255, 0.8) !important;
-    background-color: #025455 !important;
-    height: 30px;
-    border-radius: 5px;
-    margin: 0 10px;
+    color: #ccffff !important;
+    background-color:rgba(51,255,255,0.7) !important;
   }
   .buttonCannle {
-    width: 10em;
-    color: #025455 !important;
-    background-color: #E5FFFF !important;
-    height: 30px;
+    width: 6em;
+    color: rgba(204,255,255,0.5) !important;
+    background-color: rgba(204,255,255,0.3) !important;
+    /* box-shadow: 0px 0px 62px 0px #33ffff; */
+    height: 25px;
     border-radius: 5px;
     margin: 0 10px;
-    font-size: 16px;
+    font-size: 14px;
+    line-height:25px;
   }
   .buttonCannle:hover {
-    width: 10em;
-    color: #E5FFFF !important;
-    background-color: #025455 !important;
-    height: 30px;
-    border-radius: 5px;
-    margin: 0 10px;
+    color: rgba(204,255,255,0.8) !important;
+    background-color: rgba(204,255,255,0.5) !important;
+    /* box-shadow: 0px 0px 62px 0px #33ffff; */
   }
   .mainModal {
     margin: 0 0px 45px 20px 20px;
@@ -748,6 +801,11 @@
   }
   .inputTitle>input {
     width: 90%;
+  }
+  .inputTitle {
+    margin-bottom: 10px;
+    justify-content: center;
+    display: flex;
   }
   .inputD>textarea {
     border: none;

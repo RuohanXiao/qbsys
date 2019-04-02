@@ -549,7 +549,7 @@
     color: #ccffff;
   }
   .itemDiv {
-    background-color: rgba(51, 255, 255, 0.3);
+    background-color: rgba(51, 255, 255, 0.1);
     padding: 5px;
     margin: 5px 5px 5px 0;
     font-family: MicrosoftYaHei;
@@ -559,6 +559,9 @@
     /* line-height: 42px; */
     letter-spacing: 0px;
     color: #ccffff;
+  }
+  .itemDiv:hover {
+    background-color: rgba(51, 255, 255, 0.2);
   }
   .cardFront {
     font-size: 12px;

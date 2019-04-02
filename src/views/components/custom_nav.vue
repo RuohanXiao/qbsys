@@ -16,15 +16,15 @@
         </div>
       </div>
     </div>
-    <div  v-if="spinRight" :style="{height:contentHeight,width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
+    <div  v-if="spinRight" :style="{height:contentHeight,width:'22vw',backgroundColor:'rgba(0,0,0,1)'}">
     <Spin size="large" fix></Spin>
     </div>
     <div v-else>
-    <div class="scrollBarAble" aria-autocomplete="true" v-if="modalFlag == 'gongzuoji'" :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
+    <div class="scrollBarAble" aria-autocomplete="true" v-if="modalFlag == 'gongzuoji'" :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,1)'}">
        <div class="setTitleDiv">
         <p class="setTitle">我的集合</p>
       </div>
-      <div :style="{margin:'30px 10px 0 20px'}">
+      <div :style="{margin:'30px 5px 0px 0px'}">
       <Row type="flex" justify="center">
         <Col :sm="24" align="middle" v-for="item in items_gongzuoji">
           <!-- <workspace-item :item="item" @ref='showGongzuoji'></workspace-item> -->
@@ -33,7 +33,7 @@
       </Row>
       </div>
     </div>
-    <div class="scrollBarAble" aria-autocomplete="true" v-if="modalFlag == 'tuji'" :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
+    <div class="scrollBarAble" aria-autocomplete="true" v-if="modalFlag == 'tuji'" :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,1)'}">
       <div class="setTitleDiv">
         <p class="setTitle">收藏图片</p>
       </div>
@@ -45,7 +45,7 @@
       </Row>
       </div>
     </div>
-    <div class="scrollBarAble" aria-autocomplete="true" v-if="modalFlag == 'shuoming'" :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,0.8)'}">
+    <div class="scrollBarAble" aria-autocomplete="true" v-if="modalFlag == 'shuoming'" :style="{height:contentHeight,overflowY:'scroll',width:'22vw',backgroundColor:'rgba(0,0,0,1)'}">
        <div class="setTitleDiv">
         <p class="setTitle">说明</p>
       </div>
@@ -225,7 +225,7 @@
     width: 22vw;
     text-align: center;
     z-index: 99;
-    background-color: rgba(0,0,0,0.9);
+    background-color: rgba(0,0,0,1);
   }
 </style>
 

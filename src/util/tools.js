@@ -181,5 +181,25 @@ getNowFormatDate() {
         }
       }
     }
-  }
+  },
+
+  // //xml转json
+  // Xml2Json(xml) {
+  //   let jsonobj;
+  //   for(var i = 0;i<xml.children.length;i++){
+  //     var nodes = xml.children;
+  //     console.log(nodes)
+  //     for
+  //     // jsonobj.name = xml.getAttribute("name");
+  //     // //属性还是要根据实际情况设置
+  //     // jsonobj.children = [];
+  //     // for(var x = 0;x<nodes.length;x++){
+  //     //   jsonobj.children.push(nodes[x]);
+  //     // }
+  //     // if(nodes[i].hasChildNodes()){
+  //     //   Xml2Json(nodes[i],jsonobj.children[i]);
+  //     // }
+  //   }
+  //   return jsonobj
+  // }
 }
