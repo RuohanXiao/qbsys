@@ -568,7 +568,7 @@
           arr.push(this.selectionIdByType.enentIds[j])
         }
         for (let k = 0; k < this.selectionIdByType.contentIds.length; k++) {
-          arr.push(this.selectionIdByType.enentIds[k])
+          arr.push(this.selectionIdByType.contentIds[k])
         }
         /* arr.push(this.selectionIdByType.nodeIds)
         arr.push(this.selectionIdByType.enentIds)
