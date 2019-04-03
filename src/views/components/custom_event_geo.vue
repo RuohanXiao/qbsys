@@ -1383,6 +1383,7 @@
     top: 0;
     right: 0;
     opacity: 0;
+    position: relative;
   }
   .e-content-p {
     /* height: 14px; */

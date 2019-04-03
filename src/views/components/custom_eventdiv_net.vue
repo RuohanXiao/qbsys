@@ -114,8 +114,8 @@
         var mthis = this;
         if (mthis.selectNetNodes[0].ids.length > 0) {
           // 新增防抖功能
+          mthis.evetdata = []
           mthis.timer = setTimeout(function() {
-            mthis.evetdata = []
             if (mthis.selectionIdByType.nodeIds.length > 0) {
               let nodeOb = {}
               nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
@@ -264,6 +264,7 @@
         mthis.detailModalFlag = true
         let nodeIdsArry = []
         nodeIdsArry.push(id)
+        alert('01')
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
