@@ -1512,8 +1512,8 @@ export default {
             } else if(type === 'Org'){
                 url = 'http://localhost:5000/exploreOrg/'
             }
-            mthis.$http.post(url, {
-            //mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
+            // mthis.$http.post(url, {
+            mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
                     'geometry':geometryArr
                 }).then(response => {
                     debugger

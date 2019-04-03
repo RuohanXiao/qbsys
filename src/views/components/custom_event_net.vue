@@ -1227,7 +1227,7 @@
           </div>
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" v-for="(item,index) in evetdata" @click="changeDetailDiv(item.id,item.entity_type)" :class="(selectTag===item.id)?'selectedTag':''">
+          <div class="e-content-d pointIcon" v-for="(item,index) in evetdata" @click="changeDetailDiv(item.id,item.entity_type)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
             <p class="e-content-p">{{item.name}}</p>
           </div>
         </div>
@@ -1278,81 +1278,88 @@
     },
     components: {},
     watch: {
-      detailData: function(){
+      detailData: function() {
+        console.log('this.detailData')
         console.log(this.detailData)
+      },
+      xiangguanEntity: function() {
+        console.log('this.xiangguanEntity')
+        console.log(this.xiangguanEntity)
       },
       evetdata: function() {
         var mthis = this
-        console.log(mthis.evetdata)
-        console.log(mthis.evetdata[0].entity_type)
-        var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
-        var entityMainType = ob.getElementsByTagName("entityMainType");
-        if (this.timer) {
-          clearTimeout(this.timer)
-        }
-        this.timer = setTimeout(function() {
-          let arr = []
-          mthis.myMap = new Map();
-          for (var i = 0; i < entityMainType.length; i++) {
-            let typeName = entityMainType[i].children[0].textContent;
-            let typeChild = []
-            for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
-              // typeChild.push(entityMainType[i].children[1].children[n].textContent)
-              mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
-            }
+        if (mthis.evetdata.length > 0) {
+          console.log('============mthis.evetdata===============')
+          console.log(mthis.evetdata[0])
+          var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
+          var entityMainType = ob.getElementsByTagName("entityMainType");
+          if (this.timer) {
+            clearTimeout(this.timer)
           }
-          if (mthis.evetdata[0] !== undefined) {
-            if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
-              // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
-              // let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
-              let detailId = (mthis.evetdata[0].id)
-              mthis.selectTag = detailId
-              let a = []
-              a.push(detailId)
-              // mthis.detailData = {}
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
-                "nodeIds": a
-              }).then(response => {
-                mthis.detailData = response.body.data[0]
-              })
-            } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
-              let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
-              mthis.selectTag = detailId
-              let detailType = 'event';
-              let a = []
-              a.push(detailId)
-              // mthis.detailData = {}
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
-                "EventIds": a
-              }).then(response => {
-                console.log('==========/event-detail/==========')
-                console.log(response)
-                if(response.body.code === 0){
+          this.timer = setTimeout(function() {
+            let arr = []
+            mthis.myMap = new Map();
+            for (var i = 0; i < entityMainType.length; i++) {
+              let typeName = entityMainType[i].children[0].textContent;
+              let typeChild = []
+              for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
+                // typeChild.push(entityMainType[i].children[1].children[n].textContent)
+                mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
+              }
+            }
+            if (mthis.evetdata[0] !== undefined) {
+              if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
+                // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
+                // let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
+                let detailId = (mthis.evetdata[0].id)
+                mthis.selectTag = detailId
+                let a = []
+                a.push(detailId)
+                // mthis.detailData = {}
+                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
+                  "nodeIds": a
+                }).then(response => {
                   mthis.detailData = response.body.data[0]
-                  console.log( mthis.detailData )
-                  mthis.detailData.entity_type = 'event'
-                  console.log( mthis.detailData )
-                } else {
-                  alert('/entity-detail/接口异常')
-                }
-              })
-            } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'document') {
-              let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
-              mthis.selectTag = detailId
-              let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
-              let a = []
-              a.push(detailId)
-              // mthis.detailData = {}
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
-                "docIds": a
-              }).then(response => {
-                mthis.detailData = response.body.data[0]
-                mthis.detailData.entity_type = 'document'
-              })
+                })
+              } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
+                let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
+                mthis.selectTag = detailId
+                let detailType = 'event';
+                let a = []
+                a.push(detailId)
+                // mthis.detailData = {}
+                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
+                  "EventIds": a
+                }).then(response => {
+                  console.log('==========/event-detail/==========')
+                  console.log(response)
+                  if (response.body.code === 0) {
+                    mthis.detailData = response.body.data[0]
+                    console.log(mthis.detailData)
+                    mthis.detailData.entity_type = 'event'
+                    console.log(mthis.detailData)
+                  } else {
+                    alert('/event-detail/接口异常')
+                  }
+                })
+              } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'document') {
+                let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
+                mthis.selectTag = detailId
+                let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
+                let a = []
+                a.push(detailId)
+                // mthis.detailData = {}
+                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+                  "docIds": a
+                }).then(response => {
+                  mthis.detailData = response.body.data[0]
+                  mthis.detailData.entity_type = 'document'
+                })
+              }
+              mthis.xiangguan((mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id), mthis.myMap.get(mthis.evetdata[0].entity_type))
             }
-            mthis.xiangguan((mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id), mthis.myMap.get(mthis.evetdata[0].entity_type))
-          }
-        }, 200);
+          }, 200);
+        }
       }
     },
     methods: {
@@ -1382,7 +1389,7 @@
           links: []
         }
         mthis.xiangguanDoc = mthis.xiangguanEvent = mthis.xiangguanEntity = []
-        if(type === 'event') {
+        if (type === 'event') {
           // 事件的 相关类型接口
           mthis.xiangguanEvent = []
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-event2entity/', {
@@ -1405,12 +1412,12 @@
               mthis.xiangguanDoc = []
             }
           })
-        } else if(type === 'document'){
+        } else if (type === 'document') {
           mthis.xiangguanDoc = []
           // 文档的 相关类型接口
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-entity/', {
             "NodeIds": a,
-	          "TypeLabel": "entity"
+            "TypeLabel": "entity"
           }).then(response => {
             if (response.body.code == 0) {
               mthis.xiangguanEntity = response.body.data
@@ -1432,43 +1439,42 @@
         } else {
           // 实体的 相关类型接口
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-entity/', {
-          "NodeIds": a,
-          "TypeLabel": 'entity'
-        }).then(response => {
-          if (response.body.code === 0) {
-            mthis.allRelatedEntity = {
-              nodes: response.body.data[0].nodes,
-              links: response.body.data[0].links
+            "NodeIds": a,
+            "TypeLabel": 'entity'
+          }).then(response => {
+            if (response.body.code === 0) {
+              mthis.allRelatedEntity = {
+                nodes: response.body.data[0].nodes,
+                links: response.body.data[0].links
+              }
+              mthis.xiangguanEntity = response.body.data[0].Data[a[0]]
+            } else {
+              alert('实体相关实体接口异常')
             }
-            mthis.xiangguanEntity = response.body.data[0].Data[a[0]]
-          } else {
-            alert('实体相关实体接口异常')
-          }
-        })
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
-          "NodeIds": a,
-          "TypeLabel": 'event'
-        }).then(response => {
-          if (response.body.code == 0) {
-            mthis.xiangguanEvent = response.body.data
-          } else {
-            alert('实体相关事件查询接口异常')
-            mthis.xiangguanEvent = []
-          }
-        })
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
-          "NodeIds": a,
-          "TypeLabel": 'document'
-        }).then(response => {
-          if (response.body.code == 0) {
-            mthis.xiangguanDoc = response.body.data
-          } else {
-            alert('实体相关文档查询接口异常')
-            mthis.xiangguanDoc = []
-          }
-        })
+          })
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
+            "NodeIds": a,
+            "TypeLabel": 'event'
+          }).then(response => {
+            if (response.body.code == 0) {
+              mthis.xiangguanEvent = response.body.data
+            } else {
+              alert('实体相关事件查询接口异常')
+              mthis.xiangguanEvent = []
+            }
+          })
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
+            "NodeIds": a,
+            "TypeLabel": 'document'
+          }).then(response => {
+            if (response.body.code == 0) {
+              mthis.xiangguanDoc = response.body.data
+            } else {
+              alert('实体相关文档查询接口异常')
+              mthis.xiangguanDoc = []
+            }
+          })
         }
-        
       },
       errorImg(type) {
         if (type === 'event') {
@@ -1490,7 +1496,7 @@
           }).then(response => {
             let res = response.body.data[0]
             // res.img = 'http://10.60.1.140/assets/images/image.png'
-            res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
+            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
             this.detailData = res
           })
           // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
@@ -1616,7 +1622,8 @@
     margin: 0px 10px;
     opacity: 0;
     float: right;
-    background-color: rgba(0,0,0,0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    position: relative;
   }
   .e-content-p {
     /* height: 14px; */
@@ -1653,7 +1660,8 @@
     white-space: nowrap;
     width: 70%;
   }
-  .e-content-d,.e-content-d-dis {
+  .e-content-d,
+  .e-content-d-dis {
     padding: 0 0 0 18px;
     display: flex;
     height: auto;
@@ -1709,7 +1717,7 @@
   }
   .selectedTag {
     /* color:red !important;
-                                        background-color: blue !important; */
+                                          background-color: blue !important; */
     /* opacity: 0.5 !important; */
     background-color: rgba(51, 255, 255, 0.5) !important;
     ;

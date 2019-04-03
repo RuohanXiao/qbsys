@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <dictionary> 
+  <eventRole>
+    <roleType>be-born</roleType>
+    <roleNames>
+      <roleItem>
+        <erolename>Person</erolename>
+        <chrolename>人物</chrolename>
+      </roleItem>
+      <roleItem>
+        <erolename>Time</erolename>
+        <chrolename>时间</chrolename>
+      </roleItem>
+    </roleNames>
+  </eventRole>
   <event2chinese> 
     <eventType>life</eventType>  
     <eventNames> 

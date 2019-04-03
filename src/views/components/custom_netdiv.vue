@@ -568,7 +568,7 @@
           arr.push(this.selectionIdByType.enentIds[j])
         }
         for (let k = 0; k < this.selectionIdByType.contentIds.length; k++) {
-          arr.push(this.selectionIdByType.enentIds[k])
+          arr.push(this.selectionIdByType.contentIds[k])
         }
         /* arr.push(this.selectionIdByType.nodeIds)
         arr.push(this.selectionIdByType.enentIds)
@@ -668,18 +668,12 @@
         let arr = []
         let entitRes,eventRes,docRes = null
         if (mthis.selectionId.length > 0) {
+          mthis.spinShow = true
+          mthis.zIndex = 999
           mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
           for (let i = 0; i < mthis.selectionId.length; i++) {
             arr.push((mthis.selectionId[i].id) ? mthis.selectionId[i].id : mthis.selectionId[i])
           }
-          mthis.spinShow = true
-          mthis.zIndex = 999
-          console.log('====================mthis.selectionIdByType====================')
-          console.log(mthis.selectionIdByType)
-          let entityArr = mthis.selectionIdByType.nodeIds
-          let eventArr = mthis.selectionIdByType.eventIds
-          let docArr = mthis.selectionIdByType.contentIds
-          console.log('==========================res==========================')
           if (mthis.selectionIdByType.nodeIds.length>0){
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/neighbor-datas/', {
               'ClassName': 'knowledge',
@@ -694,7 +688,13 @@
                 entitRes.nodes[m].imageCropping = true
                 arr.push(entitRes.nodes[m].id)
               }
-              mthis.netchart.addData(entitRes)
+              mthis.netchart.addData({nodes:entitRes.nodes,links:entitRes.links})
+              setTimeout(function() {
+                let ar = util.unique(arr)
+                mthis.netchart.selection(ar)
+                mthis.spinShow = false
+                mthis.zIndex = 0
+              }, 500)
             })
           }
           if(mthis.selectionIdByType.eventIds.length>0){
@@ -709,7 +709,7 @@
                 eventRes.nodes[m].imageCropping = true
                 arr.push(eventRes.nodes[m].id)
               }
-              mthis.netchart.addData(eventRes)
+              mthis.netchart.addData({nodes:eventRes.nodes,links:eventRes.links})
             })
           }
           if(mthis.selectionIdByType.contentIds.length>0) {
@@ -724,26 +724,22 @@
                 docRes.nodes[m].imageCropping = true
                 arr.push(docRes.nodes[m].id)
               }
-              mthis.netchart.addData(docRes)
+              console.log({nodes:docRes.nodes,links:(docRes.links)?docRes.links:[]})
+              mthis.netchart.addData({nodes:docRes.nodes,links:(docRes.links)?docRes.links:[]})
             })
           }
-          console.log('==========================res==========================')
-          console.log(entitRes)
-          console.log(eventRes)
-          console.log(docRes)
-          console.log('=======================================================')
-          setTimeout(function() {
-            let ar = util.unique(arr)
-            mthis.netchart.selection(ar)
-            mthis.spinShow = false
-            mthis.zIndex = 0
-          }, 200)
+          mthis.spinShow = false
+          mthis.zIndex = 0
           mthis.getStatistics()
         } else {
           // mthis.$Message.error('请至少选择一个节点进行拓展操作！')
           mthis.setMessage('请至少选择一个节点进行拓展操作！')
         }
         mthis.expandFlag = 'knowledge'
+      },
+      closeModal(){
+        mthis.spinShow = false
+        mthis.zIndex = 0
       },
       newCanvans() {
         this.netchart.replaceData({
@@ -777,14 +773,13 @@
           }
           mthis.spinShow = true
           mthis.zIndex = 999
-          var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
-          var eventNames = ob.getElementsByTagName("eventNames");
-          mthis.myMap = new Map();
-          for(let eventNameitem of eventNames) {
-            for(let items of eventNameitem.children){
-              mthis.myMap.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
-            }
-          }
+          // var roleNames = ob.getElementsByTagName("roleNames");
+          // mthis.myMapRole = new Map();
+          // for(let roleNameitem of roleNames) {
+          //   for(let items of roleNameitem.children){
+          //     mthis.myMapRole.set(items.getElementsByTagName('erolename')[0].textContent, {name:items.getElementsByTagName('chrolename')[0].textContent})
+          //   }
+          // }
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-2-events/', {
             'EntityIds': arr
           }).then(response => {
@@ -799,16 +794,16 @@
                   nodes: [],
                   links: []
                 };
+                let idarr = []
                 for (let eitems of eventItems) {
-                  console.log('==============for=================')
-                  console.log(mthis.myMap)
-                  console.log(eitems.event_subtype.toLowerCase())
+                  console.log('+==========+')
+                  console.log(eitems)
                   let type = eitems.event_subtype.toLowerCase().replace(/-/, "_")
-                  console.log(type)
                   let img = mthis.myMap.get(type).img
-                  console.log(img)
                   let name = mthis.myMap.get(type).name
-                  console.log(name)
+                  idarr.push(eitems.entity_list.map(item=>{
+                    return item.id
+                  }))
                   dataItems.nodes.push({
                     id: eitems.id,
                     entity_name: name,
@@ -816,6 +811,7 @@
                     event_type: eitems.event_type,
                     event_subtype: type,
                     entity_type: "event",
+                    label:name,
                     img: img,
                     loaded: true,
                     name: name
@@ -823,7 +819,7 @@
                   for (let linksItem of eitems.entity_list) {
                     otherNodesIds.push(linksItem.id)
                     dataItems.links.push({
-                      id: 'links' + linksItem.id,
+                      id: eitems.id + linksItem.id,
                       type: linksItem.role,
                       from: eitems.id,
                       to: linksItem.id,
@@ -831,15 +827,18 @@
                     })
                   }
                 }
-                console.log('===========================')
                 console.log(dataItems)
                 console.log(otherNodesIds)
-                console.log(util.unique(otherNodesIds))
+                console.log(idarr)
+                console.log('===========dataItems================')
+                // console.log(dataItems)
+                // console.log(otherNodesIds)
+                // console.log(util.unique(otherNodesIds))
                 mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
                   'nodeIds': util.unique(otherNodesIds)
                 }).then(result => {
-                  console.log(result.body.data)
-                  mthis.netchart.addData(result.body.data)
+                  // console.log(result.body.data)
+                  mthis.netchart.addData({nodes:result.body.data[0].nodes,links:[]})
                 })
                 mthis.netchart.addData(dataItems)
                 setTimeout(function() {
@@ -889,30 +888,39 @@
             console.log(response)
             if (response.body.code == 0 && response.body.data.length > 0) {
               res = response.body.data
+              console.log(res)
               let resNodes = new Object()
               resNodes.nodes = []
               resNodes.links = []
-              for (let m = 0; m < res.length; m++) {
+              for (let m =0;m<res.length;m++) {
+                console.log('000000000-------------------------000000000000000')
                 let resNodeItem = new Object()
                 resNodeItem.id = res[m].id
                 resNodeItem.entity_type = 'content'
                 resNodeItem.loaded = true
                 resNodeItem.img = ''
-                resNodeItem.name = [...res[m].title].length>20?res[m].title.substring(0,19)+'...':res[m].title,
-                resNodeItem.namimageCroppinge = true
+                resNodeItem.label = resNodeItem.name = [...res[m].title].length>20?res[m].title.substring(0,19)+'...':res[m].title,
+                resNodeItem.imageCropping = true
                 resNodes.nodes.push(resNodeItem)
-                resNodes.links.push({
-                  id: 'content' + m + rearr,
-                  from: rearr,
-                  to: res[m].id,
-                  type: '关联',
-                  relation_id: 'guanlian'
-                })
+
+                // resNodes.links.push({
+                //   id: rearr + res[m].id,
+                //   from: rearr[0],  //这里写的不对!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //   to: res[m].id,
+                //   type: '关联',
+                //   relation_id: 'guanlian'
+                // })
                 arr.push(res[m].id)
               }
+              
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/docs-expand-entity/', {
+                'docIds': arr
+              }).then(response => {
+                mthis.netchart.addData({nodes:response.body.data[0].nodes,links:response.body.data[0].links})
+              })
+              
               mthis.zIndex = 0
               mthis.spinShow = false
-              mthis.changeMode('radial')
               mthis.netchart.addData(resNodes)
               setTimeout(function() {
                 let ar = util.unique(resNodes.nodes.map(item=>{
@@ -1550,9 +1558,9 @@
             'action': 'remove',
             'other': '反选'
           })
-          sessionStorage.setItem('netChartLog', JSON.stringify({
-            data: netChartLogJson
-          }));
+          // sessionStorage.setItem('netChartLog', JSON.stringify({
+          //   data: netChartLogJson
+          // }));
           mthis.getStatistics()
           // 反选结果
         } else {
@@ -1608,9 +1616,9 @@
           // 删除最后一条日志
           netChartLogJson = netChartLogJson.slice(0, -1);
           // 将改动过的日志写回session
-          sessionStorage.setItem('netChartLog', JSON.stringify({
-            data: netChartLogJson
-          }));
+          // sessionStorage.setItem('netChartLog', JSON.stringify({
+          //   data: netChartLogJson
+          // }));
         } else {
           // this.$Message.error('无法后退')
           this.setMessage('无法后退！')
@@ -2063,6 +2071,7 @@
               // infoElement.style.display = infoElementVisible ? "block" : "none";
             },
             onSelectionChange(event) {
+              console.log(event.selection)
               // this.selectionEventObj = event.selection
               if (timer) {
                 clearTimeout(timer)
@@ -2091,7 +2100,7 @@
                   // console.log(linkarr)
                   let linksArr = []
                   for (let n = 0; n < selectNIds.length; n++) {
-                    mthis.netchart.getNode(selectNIds[n])
+                    console.log(mthis.netchart.getNode(selectNIds[n]))
                     linksArr.push(mthis.netchart.getNode(selectNIds[n]).links.map(item => {
                       if ((selectNIds.indexOf(item.from.id) > -1) && (selectNIds.indexOf(item.to.id) > -1)) {
                         return item.id
@@ -2438,7 +2447,7 @@
               }, 200);
             }, 100)
           } else {
-            alert('entity-detail接口异常')
+            mthis.setMessage('entity-detail接口异常')
           }
           mthis.spinShow = false
         })
@@ -2492,6 +2501,39 @@
       geoToNetData: function() {
         // 调用查询接口，查询id对应数据
         // this.netchart.addData()
+        var mthis = this
+        console.log(mthis.geoToNetData)
+        if(mthis.geoToNetData.nodeIds.length>0){
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
+            'nodeIds': mthis.geoToNetData.nodeIds
+          }).then(response => {
+            mthis.netchart.addData({nodes:result.body.data[0].nodes,links:[]})
+          })
+        }
+        if(mthis.geoToNetData.eventIds.length>0) {
+          mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
+            'EventIds': mthis.geoToNetData.eventIds
+          }).then(res => {
+            if(res.body.code === 0) {
+              let nodes = new Array();
+              let type = eitems.event_subtype.toLowerCase().replace(/-/, "_")
+              let img = mthis.myMap.get(type).img
+              let name = mthis.myMap.get(type).name
+              for(let re  in res.body.data) {
+                nodes.push({
+                  id: re.id,
+                  img: img,
+                  entity_type: 'event',
+                  name: name,
+                  loaded: true
+                })
+              }
+            } else {
+              mthis.setMessage('/event-detail/接口异常')
+            }
+            
+          })
+        }
       },
       contentToNetData: function() {
         console.log('this.contentToNetData')
@@ -2595,14 +2637,22 @@
       }
     },
     mounted() {
-      sessionStorage.setItem('netChartLog', JSON.stringify({
-        data: []
-      }));
+      // sessionStorage.setItem('netChartLog', JSON.stringify({
+      //   data: []
+      // }));
       var mthis = this
       mthis.nh = document.documentElement.clientHeight - 64 - 20 + 'px'
       mthis.nh_50 = document.documentElement.clientHeight - 64 - 20 - 55 + 'px'
       mthis.initCharts();
       mthis.netData = mthis.$store.getters.netData
+      var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
+      var eventNames = ob.getElementsByTagName("eventNames");
+      mthis.myMap = new Map();
+      for(let eventNameitem of eventNames) {
+        for(let items of eventNameitem.children){
+          mthis.myMap.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
+        }
+      }
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();
       //   mthis.netchart.addData(res.data.data[0]);
