@@ -1242,12 +1242,7 @@
       // },
       evetdata: function() {
         var mthis = this
-<<<<<<< HEAD
-        var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
-        //var ob = configer.loadxmlDoc("http://10.60.1.140/assets/entityTypeTable.xml");
-=======
         var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
->>>>>>> 20da9a0855dfb4958c14daa2996ae4a4a90b0d21
         var entityMainType = ob.getElementsByTagName("entityMainType");
         if (this.timer) {
           clearTimeout(this.timer)

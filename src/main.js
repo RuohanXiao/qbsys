@@ -182,6 +182,13 @@ const RouterConfig = {
     mode: 'hash',
     routes: Routers
 };
+var hostName = window.location.hostname;
+var xml_url = ''
+if(hostName === 'localhost' || hostName === '127.0.0.1'){
+  xml_url = './src/dist/assets';
+} else {
+  xml_url = 'http://10.60.1.140/assets';
+}
 var store = new Vuex.Store({
   state: {
     eventImg:null,
@@ -193,8 +200,8 @@ var store = new Vuex.Store({
       api_url:'http://10.60.1.140:5001', //部署服务器api地址
       api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
       map_url:'http://10.60.1.142:8082', //地图脚本服务地址
-      xml_url:'http://10.60.1.140/assets' // 部署路径
-      // xml_url:'./dist/assets' // 本地路径
+      //xml_url:'http://10.60.1.140/assets' // 部署路径
+      xml_url:xml_url // 本地路径
     },
     // 联动监听
     netWatcher:{ // 网络关系模块监听
