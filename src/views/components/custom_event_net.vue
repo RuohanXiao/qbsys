@@ -1,21 +1,61 @@
 <template>
   <div :style="{height:eDivH}">
-    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}">
+    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}" v-if="myMap.get(detailData.entity_type) === 'event'">
       <Row type="flex" justify="center">
         <!-- 头像 + 名字 div -->
         <Col span="8" align="center" :style="{display:'flex',flexFlow:'row nowarp',justifyContent:'center'}">
         <!-- <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="!(detailData && detailData.img)" /> -->
-        <Avatar class="circle-img" :src="detailData.img" :style="{width:'50px',height:'50px'}" @error="errorImg()" />
+        <Avatar class="circle-img" src="http://10.60.1.140/assets/images/event.png" :style="{width:'50px',height:'50px'}" />
         </Col>
         <Col span="16" align="left">
         <div :style="{margin:'0 10px'}" class="event-title">
           <!-- 名字 -->
-          <p :style="{lineHeight:'28px',fontSize:'16px'}">{{detailData.name}}</p>
+          <p :style="{lineHeight:'28px',fontSize:'16px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}">{{detailData.event_subtype}}</p>
         </div>
         <div :style="{margin:'0 10px'}" class="event-content">
           <!-- 描述 -->
-          <p :style="{lineHeight:'22px'}" v-if="detailData.description">{{detailData.summary}}</p>
-          <p :style="{lineHeight:'22px'}" v-else class="e-content-p">暂无简介</p>
+          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-if="detailData.description">{{detailData.event_content}}</p>
+          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-else class="e-content-p">暂无简介</p>
+        </div>
+        </Col>
+      </Row>
+    </div>
+    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}" v-if="myMap.get(detailData.entity_type) === 'document'">
+      <Row type="flex" justify="center">
+        <!-- 头像 + 名字 div -->
+        <Col span="8" align="center" :style="{display:'flex',flexFlow:'row nowarp',justifyContent:'center'}">
+        <!-- <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="!(detailData && detailData.img)" /> -->
+        <Avatar class="circle-img" src='http://10.60.1.140/assets/images/content_node.png' :style="{width:'50px',height:'50px'}" />
+        </Col>
+        <Col span="16" align="left">
+        <div :style="{margin:'0 10px'}" class="event-title">
+          <!-- 名字 -->
+          <p :style="{lineHeight:'28px',fontSize:'16px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}">{{detailData.title}}</p>
+        </div>
+        <div :style="{margin:'0 10px'}" class="event-content">
+          <!-- 描述 -->
+          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-if="detailData.description">{{detailData.i_sn}}</p>
+          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-else class="e-content-p">暂无简介</p>
+        </div>
+        </Col>
+      </Row>
+    </div>
+    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}" v-if="myMap.get(detailData.entity_type) === 'entity'">
+      <Row type="flex" justify="center">
+        <!-- 头像 + 名字 div -->
+        <Col span="8" align="center" :style="{display:'flex',flexFlow:'row nowarp',justifyContent:'center'}">
+        <!-- <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="!(detailData && detailData.img)" /> -->
+        <Avatar class="circle-img" :src="checkImg(this.detailData.img) ? (this.detailData.img) : ('http://10.60.1.140/assets/images/image_group.png')" :style="{width:'50px',height:'50px'}" />
+        </Col>
+        <Col span="16" align="left">
+        <div :style="{margin:'0 10px'}" class="event-title">
+          <!-- 名字 -->
+          <p :style="{lineHeight:'28px',fontSize:'16px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}">{{detailData.name}}</p>
+        </div>
+        <div :style="{margin:'0 10px'}" class="event-content">
+          <!-- 描述 -->
+          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-if="detailData.description">{{detailData.summary}}</p>
+          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-else class="e-content-p">暂无简介</p>
         </div>
         </Col>
       </Row>
@@ -697,14 +737,6 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <!--
-                                      <div class="e-content-d">
-                                        <p class="e-content-p w5em">文档内容</p>
-                                        <p class="e-content-p">{{detailData.text}}</p>
-                                        <div class="buttonD">
-                                          <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
-                                        </div>
-                                      </div>-->
         </div>
       </div>
       <div class="e-title">
@@ -714,7 +746,7 @@
       <div class="xiangguanshitiDiv">
         <!-- <div  v-for='entityItem in xiangguanEntity'> -->
         <div class="e-content" v-if="detailData.entity_type === 'human'">
-          <div class="e-content-d" v-if='xiangguanEntity.member_of&&xiangguanEntity.member_of.length'>
+          <div class="e-content-d-dis" v-if='xiangguanEntity.member_of&&xiangguanEntity.member_of.length'>
             <p class="e-content-p w5em">组织</p>
             <div class='w100'>
               <div class='flexDiv' v-for="it in xiangguanEntity.member_of">
@@ -726,7 +758,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.employer&&xiangguanEntity.employer.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.employer&&xiangguanEntity.employer.length'>
           <p class="e-content-p w5em">雇主</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.employer">
@@ -737,7 +769,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.educated_at&&xiangguanEntity.educated_at.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.educated_at&&xiangguanEntity.educated_at.length'>
           <p class="e-content-p w5em">学习经历</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.educated_at">
@@ -748,7 +780,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.work_at&&xiangguanEntity.work_at.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.work_at&&xiangguanEntity.work_at.length'>
           <p class="e-content-p w5em">工作经历</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.xiangguanEntity">
@@ -759,7 +791,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.father&&xiangguanEntity.father.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.father&&xiangguanEntity.father.length'>
           <p class="e-content-p w5em">父亲</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.father">
@@ -770,7 +802,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.mother&&xiangguanEntity.mother.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.mother&&xiangguanEntity.mother.length'>
           <p class="e-content-p w5em">母亲</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.mother">
@@ -781,7 +813,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.spouse&&xiangguanEntity.spouse.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.spouse&&xiangguanEntity.spouse.length'>
           <p class="e-content-p w5em">配偶</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.spouse">
@@ -792,7 +824,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.child&&xiangguanEntity.child.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.child&&xiangguanEntity.child.length'>
           <p class="e-content-p w5em">子女</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.child">
@@ -803,7 +835,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.sibling&&xiangguanEntity.sibling.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.sibling&&xiangguanEntity.sibling.length'>
           <p class="e-content-p w5em">兄弟姐妹</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.sibling">
@@ -815,8 +847,8 @@
           </div>
         </div>
       </div>
-      <div class="e-content" v-if="xiangguanEntity.entity_type === 'organization'">
-        <div class="e-content-d" v-if='xiangguanEntity.founded_by&&xiangguanEntity.founded_by.length'>
+      <div class="e-content" v-if="detailData.entity_type === 'organization'">
+        <div class="e-content-d-dis" v-if='xiangguanEntity.founded_by&&xiangguanEntity.founded_by.length'>
           <p class="e-content-p w5em">创办者</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.founded_by">
@@ -827,7 +859,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.chairperson&&xiangguanEntity.chairperson.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.chairperson&&xiangguanEntity.chairperson.length'>
           <p class="e-content-p w5em">领袖</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.chairperson">
@@ -838,7 +870,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.chief_executive_officer&&xiangguanEntity.chief_executive_officer.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.chief_executive_officer&&xiangguanEntity.chief_executive_officer.length'>
           <p class="e-content-p w5em">首席执行官</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.chief_executive_officer">
@@ -849,7 +881,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.business_division&&xiangguanEntity.business_division.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.business_division&&xiangguanEntity.business_division.length'>
           <p class="e-content-p w5em">业务部门</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.business_division">
@@ -860,7 +892,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.parent_organization&&xiangguanEntity.parent_organization.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.parent_organization&&xiangguanEntity.parent_organization.length'>
           <p class="e-content-p w5em">上级部门</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.parent_organization">
@@ -871,7 +903,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.subsidiary&&xiangguanEntity.subsidiary.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.subsidiary&&xiangguanEntity.subsidiary.length'>
           <p class="e-content-p w5em">下级部门</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.subsidiary">
@@ -883,8 +915,8 @@
           </div>
         </div>
       </div>
-      <div class="e-content" v-if="xiangguanEntity.entity_type === 'administrative'">
-        <div class="e-content-d" v-if='xiangguanEntity.head_of_state&&xiangguanEntity.head_of_state.length'>
+      <div class="e-content" v-if="detailData.entity_type === 'administrative'">
+        <div class="e-content-d-dis" v-if='xiangguanEntity.head_of_state&&xiangguanEntity.head_of_state.length'>
           <p class="e-content-p w5em">国家元首</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.head_of_state">
@@ -895,7 +927,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.head_of_government&&xiangguanEntity.head_of_government.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.head_of_government&&xiangguanEntity.head_of_government.length'>
           <p class="e-content-p w5em">政府首脑</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.head_of_government">
@@ -906,7 +938,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.office_held_by_head_of_government&&xiangguanEntity.office_held_by_head_of_government.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.office_held_by_head_of_government&&xiangguanEntity.office_held_by_head_of_government.length'>
           <p class="e-content-p w5em">政府机构</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.office_held_by_head_of_government">
@@ -917,7 +949,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.head_of_government&&xiangguanEntity.head_of_government.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.head_of_government&&xiangguanEntity.head_of_government.length'>
           <p class="e-content-p w5em">政府首长</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.head_of_government">
@@ -928,7 +960,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.legislative_body&&xiangguanEntity.legislative_body.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.legislative_body&&xiangguanEntity.legislative_body.length'>
           <p class="e-content-p w5em">立法机构</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.legislative_body">
@@ -939,7 +971,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.executive_body&&xiangguanEntity.executive_body.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.executive_body&&xiangguanEntity.executive_body.length'>
           <p class="e-content-p w5em">执行政府</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.executive_body">
@@ -950,7 +982,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.highest_judicial_authority&&xiangguanEntity.highest_judicial_authority.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.highest_judicial_authority&&xiangguanEntity.highest_judicial_authority.length'>
           <p class="e-content-p w5em">最高司法机关</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.highest_judicial_authority">
@@ -961,7 +993,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.located_in_the_administrative_territorial_entity&&xiangguanEntity.located_in_the_administrative_territorial_entity.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.located_in_the_administrative_territorial_entity&&xiangguanEntity.located_in_the_administrative_territorial_entity.length'>
           <p class="e-content-p w5em">位于</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.located_in_the_administrative_territorial_entity">
@@ -972,7 +1004,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.contains_administrative_territorial_entity&&xiangguanEntity.contains_administrative_territorial_entity.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.contains_administrative_territorial_entity&&xiangguanEntity.contains_administrative_territorial_entity.length'>
           <p class="e-content-p w5em">下属地区</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.contains_administrative_territorial_entity">
@@ -983,7 +1015,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.diplomatic_relation&&xiangguanEntity.diplomatic_relation.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.diplomatic_relation&&xiangguanEntity.diplomatic_relation.length'>
           <p class="e-content-p w5em">邦交国家</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.diplomatic_relation">
@@ -994,7 +1026,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.twinned_administrative_body&&xiangguanEntity.twinned_administrative_body.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.twinned_administrative_body&&xiangguanEntity.twinned_administrative_body.length'>
           <p class="e-content-p w5em">友好城市</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.twinned_administrative_body">
@@ -1005,7 +1037,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.shares_border_with&&xiangguanEntity.shares_border_with.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.shares_border_with&&xiangguanEntity.shares_border_with.length'>
           <p class="e-content-p w5em">接壤于</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.shares_border_with">
@@ -1017,8 +1049,8 @@
           </div>
         </div>
       </div>
-      <div class="e-content" v-if="xiangguanEntity.entity_type === 'weapon'">
-        <div class="e-content-d" v-if='xiangguanEntity.country_of_origin&&xiangguanEntity.country_of_origin.length'>
+      <div class="e-content" v-if="detailData.entity_type === 'weapon'">
+        <div class="e-content-d-dis" v-if='xiangguanEntity.country_of_origin&&xiangguanEntity.country_of_origin.length'>
           <p class="e-content-p w5em">原产国</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.country_of_origin">
@@ -1029,7 +1061,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.country&&xiangguanEntity.country.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.country&&xiangguanEntity.country.length'>
           <p class="e-content-p w5em">服役国家</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.country">
@@ -1040,7 +1072,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.manufacturer&&xiangguanEntity.manufacturer.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.manufacturer&&xiangguanEntity.manufacturer.length'>
           <p class="e-content-p w5em">生产商</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.manufacturer">
@@ -1051,7 +1083,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.developer&&xiangguanEntity.developer.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.developer&&xiangguanEntity.developer.length'>
           <p class="e-content-p w5em">开发者</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.developer">
@@ -1062,7 +1094,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.designed_by&&xiangguanEntity.designed_by.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.designed_by&&xiangguanEntity.designed_by.length'>
           <p class="e-content-p w5em">设计者</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.designed_by">
@@ -1073,7 +1105,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.operator&&xiangguanEntity.operator.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.operator&&xiangguanEntity.operator.length'>
           <p class="e-content-p w5em">使用者</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.operator">
@@ -1084,7 +1116,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.guidance_system&&xiangguanEntity.guidance_system.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.guidance_system&&xiangguanEntity.guidance_system.length'>
           <p class="e-content-p w5em">制导系统</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.guidance_system">
@@ -1095,7 +1127,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.ammunition&&xiangguanEntity.ammunition.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.ammunition&&xiangguanEntity.ammunition.length'>
           <p class="e-content-p w5em">弹药</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.ammunition">
@@ -1106,7 +1138,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.powerplant&&xiangguanEntity.powerplant.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.powerplant&&xiangguanEntity.powerplant.length'>
           <p class="e-content-p w5em">发动机</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.powerplant">
@@ -1117,7 +1149,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content-d" v-if='xiangguanEntity.avionics&&xiangguanEntity.avionics.length'>
+        <div class="e-content-d-dis" v-if='xiangguanEntity.avionics&&xiangguanEntity.avionics.length'>
           <p class="e-content-p w5em">航空电子设备</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.avionics">
@@ -1226,6 +1258,14 @@
         allRelatedEntity: {
           nodes: [],
           links: []
+        },
+        allRelatedDoc: {
+          nodes: [],
+          links: []
+        },
+        allRelatedEvent: {
+          nodes: [],
+          links: []
         }
       }
     },
@@ -1238,10 +1278,13 @@
     },
     components: {},
     watch: {
-      // detailData: function(){
-      // },
+      detailData: function(){
+        console.log(this.detailData)
+      },
       evetdata: function() {
         var mthis = this
+        console.log(mthis.evetdata)
+        console.log(mthis.evetdata[0].entity_type)
         var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
         var entityMainType = ob.getElementsByTagName("entityMainType");
         if (this.timer) {
@@ -1258,43 +1301,40 @@
               mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
             }
           }
-          // console.log('mthis.evetdata[0].entity_type')
-          // console.log(mthis.evetdata[0].entity_type)
-          // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
           if (mthis.evetdata[0] !== undefined) {
             if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
               // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
               // let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
               let detailId = (mthis.evetdata[0].id)
               mthis.selectTag = detailId
-              // let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
               let a = []
               a.push(detailId)
-              mthis.detailData = {}
+              // mthis.detailData = {}
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
                 "nodeIds": a
               }).then(response => {
-                // console.log(response.body.data[0])
                 mthis.detailData = response.body.data[0]
               })
-              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
-              //   "entityIds": a
-              // }).then(response => {
-              //   console.log(response.body.data[0])
-              //   // mthis.xiangguanDoc = response.body.data[0].children.data
-              // })
             } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
               let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
               mthis.selectTag = detailId
-              let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
+              let detailType = 'event';
               let a = []
               a.push(detailId)
-              mthis.detailData = {}
+              // mthis.detailData = {}
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
                 "EventIds": a
               }).then(response => {
-                mthis.detailData = response.body.data[0]
-                mthis.detailData.entity_type = 'event'
+                console.log('==========/event-detail/==========')
+                console.log(response)
+                if(response.body.code === 0){
+                  mthis.detailData = response.body.data[0]
+                  console.log( mthis.detailData )
+                  mthis.detailData.entity_type = 'event'
+                  console.log( mthis.detailData )
+                } else {
+                  alert('/entity-detail/接口异常')
+                }
               })
             } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'document') {
               let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
@@ -1302,14 +1342,12 @@
               let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
               let a = []
               a.push(detailId)
-              mthis.detailData = {}
+              // mthis.detailData = {}
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
                 "docIds": a
               }).then(response => {
-                console.log('response=====================')
                 mthis.detailData = response.body.data[0]
                 mthis.detailData.entity_type = 'document'
-                console.log(mthis.detailData)
               })
             }
             mthis.xiangguan((mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id), mthis.myMap.get(mthis.evetdata[0].entity_type))
@@ -1318,17 +1356,16 @@
       }
     },
     methods: {
-      addXiangguanDoc(ids) {
+      checkImg(img) {
+        return util.checkImgExists(img)
       },
-      addXiangguanEvent(ids) {
-      },
+      addXiangguanDoc(ids) {},
+      addXiangguanEvent(ids) {},
       addXiangguanShiti(id) {
         var mthis = this
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
           "nodeIds": new Array(id)
         }).then(response => {
-          console.log('==================addXiangguanShiti================')
-          console.log(response)
           let items = {
             nodes: new Array(response.body.data[0]),
             links: []
@@ -1340,43 +1377,82 @@
         // alert(type)
         let a = new Array(id)
         var mthis = this
-        mthis.allRelatedEntity = {
+        mthis.allRelatedEntity = mthis.allRelatedEvent = mthis.allRelatedDoc = {
           nodes: [],
           links: []
         }
-        mthis.xiangguanDoc = []
-        mthis.xiangguanEvent = []
-        mthis.xiangguanEntity = []
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-entity/', {
+        mthis.xiangguanDoc = mthis.xiangguanEvent = mthis.xiangguanEntity = []
+        if(type === 'event') {
+          // 事件的 相关类型接口
+          mthis.xiangguanEvent = []
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-event2entity/', {
+            "EventIds": a,
+          }).then(response => {
+            if (response.body.code == 0) {
+              mthis.xiangguanEntity = response.body.data
+            } else {
+              alert('事件相关实体查询接口异常')
+              mthis.xiangguanEntity = []
+            }
+          })
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-event2doc/', {
+            "EventIds": a,
+          }).then(response => {
+            if (response.body.code == 0) {
+              mthis.xiangguanDoc = response.body.data
+            } else {
+              alert('事件相关文档查询接口异常')
+              mthis.xiangguanDoc = []
+            }
+          })
+        } else if(type === 'document'){
+          mthis.xiangguanDoc = []
+          // 文档的 相关类型接口
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-entity/', {
+            "NodeIds": a,
+	          "TypeLabel": "entity"
+          }).then(response => {
+            if (response.body.code == 0) {
+              mthis.xiangguanEntity = response.body.data
+            } else {
+              alert('事件相关实体查询接口异常')
+              mthis.xiangguanEntity = []
+            }
+          })
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-doc2event/', {
+            "EventIds": a,
+          }).then(response => {
+            if (response.body.code == 0) {
+              mthis.xiangguanEvent = response.body.data
+            } else {
+              alert('文档相关事件查询接口异常')
+              mthis.xiangguanEvent = []
+            }
+          })
+        } else {
+          // 实体的 相关类型接口
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-entity/', {
           "NodeIds": a,
           "TypeLabel": 'entity'
         }).then(response => {
           if (response.body.code === 0) {
-            // (response.body.data[0].Data
             mthis.allRelatedEntity = {
               nodes: response.body.data[0].nodes,
               links: response.body.data[0].links
             }
             mthis.xiangguanEntity = response.body.data[0].Data[a[0]]
-            console.log('=============related entity=============')
-            console.log(mthis.allRelatedEntity)
-            console.log(mthis.xiangguanEntity)
-            // console.log(mthis.xiangguanEntity.get('father'))
-            // console.log(mthis.xiangguanEntity.get('father1'))
-            console.log(mthis.xiangguanEntity['father'])
-            console.log(mthis.xiangguanEntity.father)
-          } else {}
+          } else {
+            alert('实体相关实体接口异常')
+          }
         })
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
           "NodeIds": a,
           "TypeLabel": 'event'
         }).then(response => {
-          console.log('=============related event=============')
-          console.log(response)
           if (response.body.code == 0) {
             mthis.xiangguanEvent = response.body.data
           } else {
-            alert('相关事件查询接口异常')
+            alert('实体相关事件查询接口异常')
             mthis.xiangguanEvent = []
           }
         })
@@ -1384,36 +1460,24 @@
           "NodeIds": a,
           "TypeLabel": 'document'
         }).then(response => {
-          console.log('=============related document=============')
-          console.log(response)
           if (response.body.code == 0) {
             mthis.xiangguanDoc = response.body.data
-            // let objArr = new Array()
-            // for (let i = 0; i < response.body.data[0].nodes.length; i++) {
-            //   let itemid = response.body.data[0].nodes[i].id
-            //   let itemObj = response.body.data[0].links.filter(item => {
-            //     return item.from == detailId && item.to == itemid
-            //   })
-            //   if (itemObj.length > 0) {
-            //     objArr.push({
-            //       relation: itemObj[0].type,
-            //       id: detailId,
-            //       relationTo: itemid
-            //     })
-            //   }
-            // }
-            // mthis.xiangguanDoc = objArr
-            // console.log('objArr')
-            // console.log(objArr)
           } else {
-            alert('相关文档查询接口异常')
+            alert('实体相关文档查询接口异常')
             mthis.xiangguanDoc = []
           }
         })
+        }
+        
       },
-      errorImg() {
-        this.detailData.img = util.checkImgExists(this.detailData.img) ? (this.detailData.img) : ('http://10.60.1.140/assets/images/image_group.png')
-        // this.detailData.img = 'http://10.60.1.140/assets/images/image.png'
+      errorImg(type) {
+        if (type === 'event') {
+          this.detailData.img = 'http://10.60.1.140/assets/images/event.png'
+        } else if (type === 'document') {
+          this.detailData.img = 'http://10.60.1.140/assets/images/content_node.png'
+        } else {
+          this.detailData.img = util.checkImgExists(this.detailData.img) ? (this.detailData.img) : ('http://10.60.1.140/assets/images/image_group.png')
+        }
       },
       changeDetailDiv(id, type) {
         var mthis = this
@@ -1425,8 +1489,6 @@
             "nodeIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            console.log('-------------------------------------------')
-            console.log(res)
             // res.img = 'http://10.60.1.140/assets/images/image.png'
             res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
             this.detailData = res
@@ -1549,13 +1611,12 @@
     background-color: rgba(0, 0, 0, 0.05);
   }
   .buttonD {
-    width: 30%;
     height: 20px;
     min-width: 20px;
     margin: 0px 10px;
     opacity: 0;
-    position: relative;
     float: right;
+    background-color: rgba(0,0,0,0) !important;
   }
   .e-content-p {
     /* height: 14px; */
@@ -1569,10 +1630,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: auto;
-    min-width: 70%;
-    max-width: 70%;
     white-space: nowrap;
-    /* margin-right: 40px; */
+    min-width: 5em;
+    max-width: 70%;
     width: 70%;
   }
   .wspace {
@@ -1593,14 +1653,7 @@
     white-space: nowrap;
     width: 70%;
   }
-  .e-content-d {
-    padding: 0 0 0 18px;
-    display: flex;
-    height: auto;
-    min-height: 30px;
-    position: relative;
-  }
-  .e-content-d-dis {
+  .e-content-d,.e-content-d-dis {
     padding: 0 0 0 18px;
     display: flex;
     height: auto;
@@ -1656,7 +1709,7 @@
   }
   .selectedTag {
     /* color:red !important;
-                                      background-color: blue !important; */
+                                        background-color: blue !important; */
     /* opacity: 0.5 !important; */
     background-color: rgba(51, 255, 255, 0.5) !important;
     ;

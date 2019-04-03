@@ -579,8 +579,12 @@
         //this.$store.commit('changeTMSS', 'geo')
       },
       toContent() {
-        this.$store.commit('setNetToContent', this.selectionIdByType)
-        this.$store.commit('changeTMSS', 'content')
+        if(this.selectionIdByType.contentIds.length>0){
+          this.$store.commit('setNetToContentData', this.selectionIdByType)
+          this.$store.commit('changeTMSS', 'content')
+        } else {
+          this.setMessage('非文档节点不能推送至文档!')
+        }
       },
       spread() {
         var mthis = this
@@ -662,44 +666,79 @@
       expandNodeKnowledge() {
         var mthis = this;
         let arr = []
+        let entitRes,eventRes,docRes = null
         if (mthis.selectionId.length > 0) {
           mthis.saveData(mthis.netchart._impl.data.default.nodes, mthis.netchart._impl.data.default.links, this.saveNum)
-          let res = null
-          // arr.push(mthis.selectionId[0].id)
-          // if(mthis.selectionId.length == 1) {
-          //   arr.push(mthis.selectionId[0].id)
-          // } else {
-          //   arr =  mthis.selectionId
-          // }
           for (let i = 0; i < mthis.selectionId.length; i++) {
             arr.push((mthis.selectionId[i].id) ? mthis.selectionId[i].id : mthis.selectionId[i])
           }
           mthis.spinShow = true
           mthis.zIndex = 999
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/neighbor-datas/', {
-            'ClassName': 'knowledge',
-            'nodeIds': arr
-          }).then(response => {
-            res = response.body.data[0]
-            for (let m = 0; m < res.nodes.length; m++) {
-              res.nodes[m].type = res.nodes[m].entity_type
-              res.nodes[m].imageCropping = true
-              arr.push(res.nodes[m].id)
-            }
+          console.log('====================mthis.selectionIdByType====================')
+          console.log(mthis.selectionIdByType)
+          let entityArr = mthis.selectionIdByType.nodeIds
+          let eventArr = mthis.selectionIdByType.eventIds
+          let docArr = mthis.selectionIdByType.contentIds
+          console.log('==========================res==========================')
+          if (mthis.selectionIdByType.nodeIds.length>0){
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/neighbor-datas/', {
+              'ClassName': 'knowledge',
+              // 'nodeIds': arr
+              'nodeIds': mthis.selectionIdByType.nodeIds
+            }).then(response => {
+              entitRes = response.body.data[0]
+              console.log('++++++++++1')
+              console.log(response)
+              for (let m = 0; m < entitRes.nodes.length; m++) {
+                entitRes.nodes[m].type = entitRes.nodes[m].entity_type
+                entitRes.nodes[m].imageCropping = true
+                arr.push(entitRes.nodes[m].id)
+              }
+              mthis.netchart.addData(entitRes)
+            })
+          }
+          if(mthis.selectionIdByType.eventIds.length>0){
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-2-entity/', {
+              'EventIds': mthis.selectionIdByType.eventIds
+            }).then(response => {
+              eventRes = response.body.data[0]
+              console.log('++++++++++2')
+              console.log(response)
+              for (let m = 0; m < eventRes.nodes.length; m++) {
+                eventRes.nodes[m].type = eventRes.nodes[m].entity_type
+                eventRes.nodes[m].imageCropping = true
+                arr.push(eventRes.nodes[m].id)
+              }
+              mthis.netchart.addData(eventRes)
+            })
+          }
+          if(mthis.selectionIdByType.contentIds.length>0) {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/docs-expand-entity/', {
+              'docIds': mthis.selectionIdByType.contentIds
+            }).then(response => {
+              docRes = response.body.data[0]
+              console.log(docRes.nodes)
+              console.log('++++++++++3')
+              for (let m = 0; m < docRes.nodes.length; m++) {
+                docRes.nodes[m].type = docRes.nodes[m].entity_type
+                docRes.nodes[m].imageCropping = true
+                arr.push(docRes.nodes[m].id)
+              }
+              mthis.netchart.addData(docRes)
+            })
+          }
+          console.log('==========================res==========================')
+          console.log(entitRes)
+          console.log(eventRes)
+          console.log(docRes)
+          console.log('=======================================================')
+          setTimeout(function() {
+            let ar = util.unique(arr)
+            mthis.netchart.selection(ar)
             mthis.spinShow = false
             mthis.zIndex = 0
-            // mthis.changeMode('radial')
-            mthis.netchart.addData(res)
-            setTimeout(function() {
-              let ar = util.unique(arr)
-              mthis.netchart.selection(ar)
-              // mthis.changeMode('radial')
-              // lock
-              // mthis.netchart.unlockNode(ar);
-              // mthis.netchart.lockNode(ar);
-            }, 200)
-            mthis.getStatistics()
-          })
+          }, 200)
+          mthis.getStatistics()
         } else {
           // mthis.$Message.error('请至少选择一个节点进行拓展操作！')
           mthis.setMessage('请至少选择一个节点进行拓展操作！')
@@ -859,7 +898,7 @@
                 resNodeItem.entity_type = 'content'
                 resNodeItem.loaded = true
                 resNodeItem.img = ''
-                resNodeItem.name = res[m].title
+                resNodeItem.name = [...res[m].title].length>20?res[m].title.substring(0,19)+'...':res[m].title,
                 resNodeItem.namimageCroppinge = true
                 resNodes.nodes.push(resNodeItem)
                 resNodes.links.push({
@@ -1644,6 +1683,8 @@
             // },
             // NetChart.settings.style.dragSelection 通过该属性可以设置框选颜色和背景等属性
             nodeLabel: {
+              maxWidth:10,
+              // textOverflow:ellipsis,
               textStyle: {
                 fillColor: '#ccffff'
               },
@@ -1707,7 +1748,13 @@
               lineWidth: 5
             },
             nodeStyleFunction: function(node) {
-              if (node.selected) {
+              // node.labelStyle.maxWidth = 3
+              // node.labelStyle.margin = 2
+              
+              // ---------------------------------------
+              // 具体类型节点样式
+              if (node.data.entity_type === 'event') {
+                if (node.selected) {
                 node.lineColor = "#ccffff";
                 node.shadowColor = "#33ffff";
                 node.fillColor = "#003333";
@@ -1734,22 +1781,71 @@
                 node.shadowColor = "rgba(0,0,0,0)";
                 node.shadowBlur = 20;
               }
-              // ---------------------------------------
-              // 具体类型节点样式
-              if (node.data.entity_type === 'event') {
                 node.display = 'text'
                 node.radius = 15
                 node.borderRadius = 5
                 node.image = util.checkImgExists(node.data.img)?node.data.img:'http://10.60.1.140/assets/images/event.png'
-                // node.display = 'customShape'
-                // node.radius = 15
-                // 自定义形状 http://jsfiddle.net/j27ok36s/30/
                 
               } else if (node.data.entity_type === 'content') {
+                if (node.selected) {
+                node.lineColor = "#ccffff";
+                node.shadowColor = "#33ffff";
+                node.fillColor = "#003333";
+                node.shadowBlur = 25;
+                node.lineWidth = 5;
+                if (node.hightLight) {
+                  node.shadowColor = "#009999";
+                  node.shadowBlur = 20;
+                  node.fillColor = "#003333";
+                  node.lineColor = "#009999";
+                  // node.lineDash= [10,5,2,5];
+                  node.lineWidth = 5
+                }
+              } else if (node.hovered) {
+                node.lineWidth = 5
+                node.shadowColor = "#009999";
+                node.shadowBlur = 20;
+                node.fillColor = "#003333";
+                node.lineColor = "#009999";
+              } else {
+                node.fillColor = "rgba(0,0,0,0)";
+                node.lineColor = "rgba(0,0,0,0)";
+                node.lineWidth = 5;
+                node.shadowColor = "rgba(0,0,0,0)";
+                node.shadowBlur = 20;
+              }
                 node.display = 'rectangle'
                 node.image = 'http://10.60.1.140/assets/images/content_node.png'
                 node.backgroundStyle = {}
+                node.radius = 20
               } else {
+                if (node.selected) {
+                node.lineColor = "#ccffff";
+                node.shadowColor = "#33ffff";
+                node.fillColor = "#003333";
+                node.shadowBlur = 25;
+                node.lineWidth = 5;
+                if (node.hightLight) {
+                  node.shadowColor = "#009999";
+                  node.shadowBlur = 20;
+                  node.fillColor = "#003333";
+                  node.lineColor = "#009999";
+                  // node.lineDash= [10,5,2,5];
+                  node.lineWidth = 5
+                }
+              } else if (node.hovered) {
+                node.lineWidth = 5
+                node.shadowColor = "#009999";
+                node.shadowBlur = 20;
+                node.fillColor = "#003333";
+                node.lineColor = "#009999";
+              } else {
+                node.fillColor = "#003333";
+                node.lineColor = "#006666";
+                node.lineWidth = 5;
+                node.shadowColor = "rgba(0,0,0,0)";
+                node.shadowBlur = 20;
+              }
                 node.display = 'image'
                 //判断图片资源是否存在
                 if (util.checkImgExists("http://10.60.1.143/pic_lib/entity/" + node.id + ".png")) {
@@ -1758,6 +1854,7 @@
                   node.image = 'http://10.60.1.140/assets/images/' + node.data.entity_type + '.png';
                   // node.image = './src/dist/assets/images/' + node.data.entity_type + '.png';
                 }
+                
               }
               node.cursor = "pointer";
               node.label = node.data.name;
