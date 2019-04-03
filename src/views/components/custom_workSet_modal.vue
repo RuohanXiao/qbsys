@@ -227,6 +227,7 @@
       addDataToTemp(item) {
         console.log(this.worksetData)
         var mthis = this
+        // var ob = configer.loadxmlDoc("http://10.60.1.140/assets/entityTypeTable.xml");
         var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
         var entityMainType = ob.getElementsByTagName("entityMainType");
         let arr = []

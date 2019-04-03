@@ -252,6 +252,7 @@ var store = new Vuex.Store({
     selectNetNodes:[],   //点击net节点，将节点id返回到event
     selectGeoNodes:[],
     selectContentNodes:[],
+    clickSelectedGeoIds:[],
     geoStaticsSelectedIds:[],
     netModalDetailData: {},
     netModalDetailNodeId: '',
@@ -339,6 +340,9 @@ var store = new Vuex.Store({
     // 从工作及导入到网络关系画布
     setWorkSpaceAddData(state,val){
       state.workSpaceAddData = val
+    },
+    setClickSelectedGeoIds(state,val){
+      state.clickSelectedGeoIds = val
     },
     setSelectionIdByType(state,val){
       state.selectionIdByType = val

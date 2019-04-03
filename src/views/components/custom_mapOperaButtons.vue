@@ -143,7 +143,7 @@ export default {
           {'id':'separate'},
           {
             'id':'toNet_HSD',
-            'name':'网络(推送)',
+            'name':'推送网络',
             'imgClass':'icon-tuisongzhiwangluo',
             'isOpen':false
           },

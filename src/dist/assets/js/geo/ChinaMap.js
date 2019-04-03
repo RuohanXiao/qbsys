@@ -8,7 +8,6 @@ import {defaults as defaultControls, ScaleLine, FullScreen,ZoomSlider} from 'ol/
 
 var map = function(target){
 	var bounds = [75, 6,140, 55];//范围
-    //var scaleLineControl = new ScaleLine();
 	//世界地图
     var wmsTileLayer = new TileLayer({
 	    visible: true,
@@ -72,16 +71,35 @@ var map = function(target){
     	this.map.addLayer(layer);
     };
     this.map.on('movestart',function(evt){
-        //alert(34);
         evt.map.getTargetElement().style.cursor = 'move';
     });
     this.map.on('moveend',function(evt){
-        //alert(34);
         evt.map.getTargetElement().style.cursor = 'auto';
     })
+    
+    this.addRightClickInLayer = function(layer,callBack){
+        var mthis = this;
+        //var RClickLayer = layer;
+        var mapDiv = mthis.map.getViewport();
+        mapDiv.addEventListener("contextmenu", function(event){
+            event.preventDefault();//屏蔽自带的右键事件
+            var RClickLayer = layer;
+            var coordinate = mthis.map.getEventCoordinate(event);
+            callBack(layer,coordinate);
+            //callBack(rcL,)
 
+        })
+        /* $(this.map.getViewport()).on("contextmenu", function(event){
+            debugger
+            event.preventDefault();//屏蔽自带的右键事件
+            var rcL = RClickLayer;
+            var coordinate = mthis.map.getEventCoordinate(event);
+            debugger
+            //callBack(rcL,)
+
+        }); */
+    };
     //地图显示
     this.map.getView().fit(bounds, this.map.getSize());
-    //this.map.render();
 };
 export  {map}

@@ -9,7 +9,8 @@
 #leftStatics{
     color: #ccffff;
     /* font-family: */
-    font-family:"微软雅黑"
+    font-family:"微软雅黑";
+    overflow: scroll;
 }
 /* #EntityAttrName, #NodeTypeName{
     background-color: rgba(51,255,255,0.1);
@@ -116,7 +117,7 @@ trClick{
 
 
 <template>
-<div id='leftStatics'>
+<div id='leftStatics' :style="{height:eDivH}">
     <div :id='staticsData.firstLevelId' v-for='(staticsData,index) in staticsDatas'>
         <div :id="staticsData.firstLevelId + 'Name'">
             <span class="separateLine"></span>
@@ -127,7 +128,7 @@ trClick{
                 <span :id="staticsPanel.secondLevelId + '/countSpan'">{{staticsPanel.secondLevelName + '（' + staticsPanel.typecount + '）'}}</span>
                 <table slot="content" :id="staticsPanel.secondLevelId + '/entityattr'">
                     <tr  :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
-                        <td class="NameTd">   <!--  @mouseover='trHover($event.currentTarget,index)' -->
+                        <td class="NameTd">
                             <p>{{specificStatics.thirdLevelName}}</p>
                         </td>
                         <td :id="specificStatics.thirdLevelId + '/StaticsPer'" class="StaticsPerTd">
@@ -152,14 +153,13 @@ export default {
         return{
             openPanelNames:[],
             type:'',
-            //Statisticsdata:[]
+            eDivH:'',
             staticsdatas:[],
         }
     },
-    /* mounted(){
-        var mthis = this;
-        mthis.setOpenPanelNames();
-    }, */
+    mounted(){
+        this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
+    },
     props:['staticsDatas'],
     components: {
       percentBar,
@@ -183,12 +183,6 @@ export default {
         }
     },
     methods:{
-        /* trHover(el,index){
-            var mthis = this;
-            if(index % 2 === 0){
-                el.className = 
-            }
-        }, */
         selectedIds(el,ids){
             var mthis = this;
             //trClick

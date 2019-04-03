@@ -112,6 +112,13 @@ top: 3px;
 top: 232px;
 }
 
+#rightClickMenuTable td{
+    min-width: 25px !important;
+}
+#rightClickMenuTable tr:hover{
+    color:#30f2f2;
+    background-color: rgba(255,255,255,0.2);
+}
 
 </style>
 
@@ -160,7 +167,7 @@ import WFS from 'ol/format/WFS'
 import GeoJSON from 'ol/format/GeoJSON'
 import LineString from'ol/geom/LineString'
 import Icon from 'ol/style/Icon'
-import {click, pointerMove} from 'ol/events/condition.js';
+import {click, pointerMove,mouseOnly} from 'ol/events/condition.js';
 import Select from 'ol/interaction/Select.js';
 import {easeOut} from 'ol/easing.js';
 import {unByKey} from 'ol/Observable.js';
@@ -207,6 +214,7 @@ export default {
         draw:null,
         selectPointerMove : null,
         selectClick : null,
+        mouseOnly:null,
         legend:null,
         BezierPointsObjsArr:[],
         routeColors:['#616f39','#88A2AA','#509aaf'],
@@ -229,6 +237,7 @@ export default {
         halfSelectedIds:{},
         invertSelectedEventIds:[], //反选存储
         AreaIds:[],  //行政区划ids
+        violentFeatureIds:[],//狂暴点的featureId，（地图上被click选中的点）
         //selectedOrgIds:[],  //被选中的组织机构ids
         changeButtonParam:[],
         pointMoveListenerKey:null,
@@ -296,8 +305,8 @@ export default {
             if(mapOperationId == 'location_AT'){
                 mthis.location_cilck();
             } else if(mapOperationId == 'heatMap_HSD'){
-                mthis.heatMap_cilck();
-                //mthis.disHeatMap();
+                //mthis.heatMap_cilck();
+                mthis.disHeatMap();
             } else if(mapOperationId == 'route_HSD'){
                 mthis.route_cilck();
             } else if(mapOperationId == 'Circle_HD' || mapOperationId == 'Polygon_HD' || mapOperationId == 'rectangle_HD'){
@@ -352,6 +361,9 @@ export default {
         },
         disHeatMap(){
             var mthis = this;
+            var heatMapLayer = mthis.getLayerById('heatmapLayer');
+            mthis.click_heatMap(heatMapLayer);
+            heatMapLayer.setVisible(true)
             
         },
         mapAddFeature(feature){
@@ -363,19 +375,27 @@ export default {
             var params = feature.get('Params');
             params.forEach(function(param){
                 var paramId = param.id;
+                var OId = mthis.getOIdFromId(paramId);
                 var listParam = {'featureId':featureId};
                 var paramAttrs = mthis.AllLayerList_conf[featureId.split('_')[0]].paramAttrs;
                 paramAttrs.forEach(function(attr){
-                    if(attr !== 'id'){
-                        listParam[attr] = param[attr]
-                    }
+                    //if(attr !== 'id'){
+                    listParam[attr] = param[attr]
+                    //}
                 })
-                mthis.$set(mthis.allEventIdsToFeaturesIdsList,paramId,listParam);
+                mthis.$set(mthis.allEventIdsToFeaturesIdsList,OId,listParam);
                 var index = util.itemIndexInArr(paramId,mthis.geometrySelectedEventIds);
                 if(index === -1){
                     mthis.$data.geometrySelectedEventIds.push(paramId);
                 }
             })
+        },
+        getOIdFromId(id){
+            if(id.indexOf('_') === -1){
+                return id
+            } else {
+                return id.split('_')[1]
+            }
         },
         mapRemoveFeature(feature){  //mapRemoveFeature方法是在map中彻底删除feature，包括删除所有痕迹（删除列表、各种选中列表，反选列表等）
             var mthis = this;
@@ -396,14 +416,12 @@ export default {
             var fid = feature.getId()
             for(let i = 0; i < params.length; i++){
                 var paramId = params[i].id;
-                //var isExallList = mthis.allEventIdsToFeaturesIdsList.hasOwnProperty(paramId)
-                if(mthis.allEventIdsToFeaturesIdsList[paramId]){  //如果allEventIdsToFeaturesIdsList中存在该id及其属性，则删除
-                    //mthis.$delete(mthis.allEventIdsToFeaturesIdsList,paramId)
-                    delete mthis.allEventIdsToFeaturesIdsList[paramId]
+                var OId = mthis.getOIdFromId(paramId);
+                if(paramId)
+                if(mthis.allEventIdsToFeaturesIdsList[OId]){  //如果allEventIdsToFeaturesIdsList中存在该id及其属性，则删除
+                    delete mthis.allEventIdsToFeaturesIdsList[OId]
                 }
-                //var isExremoveList = mthis.removeEventIdList.hasOwnProperty(paramId)
                 if(mthis.removeEventIdList[paramId]){  //如果removeEventIdList中存在该id及其属性，则删除
-                    //mthis.$delete(mthis.removeEventIdList,paramId)
                     delete mthis.removeEventIdList[paramId]
                 }
                 var index = util.itemIndexInArr(paramId,mthis.SelectedIds);
@@ -462,10 +480,24 @@ export default {
         },
         pushToNet(){
             var mthis = this;
-            var ids = mthis.getSelectedEventIds().ids;
+            var eventIds = [];
+            var nodeIds = [];
+            var metalworkIds = mthis.SelectedIds;
+            if(metalworkIds.length > 0){
+                metalworkIds.forEach(function(id){
+                    if(id.indexOf('_') !== -1){
+                        if(id.split('_')[0] === 'event'){
+                            eventIds.push(id.split('_')[1])
+                        } else if(id.split('_')[0] === 'org'){
+                            nodeIds.push(id.split('_')[1])
+                        }
+                    }
+                })
+            }
+            //var ids = mthis.getSelectedEventIds().ids;
             var GeoToNetData = {
-                nodeIds:[],
-                eventIds:ids,
+                nodeIds:nodeIds,
+                eventIds:eventIds,
                 contentIds:[]
             };
             mthis.$store.commit('setGeoToNetData',GeoToNetData);
@@ -667,6 +699,111 @@ export default {
                 mthis.deleteArrItem(mthis.onImgIds,imgItemOpera.id);
             }
         },
+        rightClickEvent(feature){
+            var mthis = this;
+            var geometry = feature.getGeometry();
+            var geometryArr = new GeoJSON().writeGeometry(geometry)
+            mthis.orgsSpatialQuery([geometryArr]);
+        },
+        rightClickOrg(feature){
+            var mthis = this;
+            var geometry = feature.getGeometry();
+            var geometryArr = new GeoJSON().writeGeometry(geometry)
+            mthis.orgsSpatialQuery([geometryArr]);
+        },
+        rightClickLoc(feature){
+            var mthis = this;
+            var geometry = feature.getGeometry();
+            var geometryArr = new GeoJSON().writeGeometry(geometry)
+            mthis.orgsSpatialQuery([geometryArr]);
+        },
+        rightClickDM(feature){
+            var mthis = this;
+            var source = mthis.getLayerById('HLAreaLayer').getSource();
+            var fid = feature.getId();
+            var index = -1;
+            for(let i = 0; i < mthis.AreaIds.length; i++){
+                if(fid === mthis.AreaIds[i]){
+                    index = i
+                }
+            }
+            if(index !== -1){
+                mthis.$data.AreaIds.splice(index,1);
+            }
+            source.removeFeature(feature);
+            var map = mthis.routeMap.map;
+            var overlayId = 'rightClickMenu_Area';
+            var overlay = map.getOverlayById(overlayId);
+            if(overlay){
+                map.removeOverlay(overlay)
+            }
+        },
+        setRightClickMenu_Area(feature,coordinate){
+            var mthis = this;
+            var overlayId = 'rightClickMenu_Area';
+            var ovdiv = document.createElement('div');
+            ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer';
+            ovdiv.id='rightClickMenu';
+            ovdiv.addEventListener("mouseleave", function(){
+                setTimeout(function(){
+                    var map = mthis.routeMap.map;
+                    var overlayId = 'rightClickMenu_Area';
+                    var overlay = map.getOverlayById(overlayId);
+                    if(overlay){
+                        map.removeOverlay(overlay)
+                    }
+                },100)
+            });
+            var table = document.createElement('table');
+            table.id = 'rightClickMenuTable';
+            table.style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;';
+            ovdiv.appendChild(table);
+            var rightClickConf = [
+                {'name':'探索事件','id':'eventExplore','iconClassName':'icon-ren','funName':'mthis.rightClickEvent'},
+                {'name':'探索组织','id':'orgExplore','iconClassName':'icon-ren','funName':'mthis.rightClickOrg'},
+                {'name':'探索地点','id':'locExplore','iconClassName':'icon-ren','funName':'mthis.rightClickLoc'},
+                {'name':'删除边框','id':'menuDelete','iconClassName':'icon-ren','funName':'mthis.rightClickDM'}
+            ];
+            rightClickConf.forEach(function(item){
+                var tr = document.createElement('tr');
+                tr.id = item.id;
+                tr.addEventListener('click',function(){
+                    var func=eval(item.funName);
+                    func.call(mthis,feature);
+                })
+                var iconTd = document.createElement('td');
+                iconTd.style='padding-left: 5px;';
+                iconTd.classList.add('icon','iconfont',item.iconClassName);
+                tr.appendChild(iconTd);
+                var nameTd = document.createElement('td');
+                nameTd.style = 'padding-right: 5px;';
+                nameTd.innerHTML=item.name;
+                tr.appendChild(nameTd);
+                table.appendChild(tr);
+            })
+            
+            var overlayId = mthis.setOverlay(coordinate,ovdiv,overlayId,'top-left');
+            mthis.routeMap.map.addOverlay(overlayId);
+
+            /* setTimeout(function(){
+                table.addEventListener("mouseover", function(){
+                var map = mthis.routeMap.map;
+                var overlayId = 'rightClickMenu_Area';
+                var overlay = map.getOverlayById(overlayId);
+                if(overlay){
+                    map.removeOverlay(overlay)
+                }
+            });
+            table.addEventListener("mouseout", function(){
+                var map = mthis.routeMap.map;
+                var overlayId = 'rightClickMenu_Area';
+                var overlay = map.getOverlayById(overlayId);
+                if(overlay){
+                    map.removeOverlay(overlay)
+                }
+            });
+            },1000) */
+        },
         OrgStyleFun(feature){
             var mthis = this;
             var iconStyle = new Style({
@@ -704,6 +841,26 @@ export default {
         clickselectfilterFun(feature,layer){
             return true
         },
+        rightClickFilterFun(layer){
+            var mthis = this;
+            if(layer.get('id') === "HLAreaLayer"){
+                return true;
+            }
+            return false;
+        },
+        rightClickFun(layer,coordinate){
+            var mthis = this;
+            var map = mthis.routeMap.map;
+            var pixel = map.getPixelFromCoordinate(coordinate);
+            map.forEachFeatureAtPixel(pixel,function(feature,layer){
+                var overlayId = 'rightClickMenu_Area';
+                var overlay = map.getOverlayById(overlayId);
+                if(overlay){
+                    map.removeOverlay(overlay)
+                }
+                mthis.setRightClickMenu_Area(feature,coordinate)
+            },{'layerFilter':mthis.rightClickFilterFun})
+        },
         addlocationLayer(){
             var mthis = this;
             if(mthis.routeMap == null){
@@ -716,9 +873,7 @@ export default {
                         width: 1
                     })
                 });
-
                 mthis.routeMap = new map('locationRoute_Map')
-                
                 var HLArealayer = new VectorLayer({  //高亮地区图层
                     source: new VectorSource({
                     }),
@@ -759,7 +914,7 @@ export default {
                 });
                 mthis.selectClick = new Select({
                     condition: click,
-                    layers:[HLArealayer],
+                    layers:[Orglayer,Eventslayer],
                     filter:mthis.clickselectfilterFun,
                     style:new Style({
                         fill: new Fill({ //矢量图层填充颜色，以及透明度
@@ -772,6 +927,7 @@ export default {
                     })
 
                 });
+                mthis.routeMap.addRightClickInLayer(HLArealayer,mthis.rightClickFun);  //添加HLArealayers上的右键点击事件
                 mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
                 mthis.routeMap.map.addInteraction(mthis.selectClick);
                 mthis.selectPointerMove.on('select', function(e) {
@@ -785,7 +941,10 @@ export default {
                                 }
                                 mthis.removeOverlays('pointMoveOverlay_Event');
                             } else {
-                                mthis.removeOverlays('pointMoveOverlay_Org');
+                                setTimeout(function(){
+                                    mthis.removeOverlays('pointMoveOverlay_Org');
+                                    //mthis.setLifeOrDieEventsPointStyleByValue(deselectFeatures[i],'life')
+                                },100)
                             }
                         }
                     }
@@ -796,30 +955,76 @@ export default {
                                 //鼠标悬浮时的信息框
                                 mthis.setPointMoveOverlay_Event(selectFeatures[i]);
                             } else {
-                                mthis.setPointMoveOverlay_Org(selectFeatures[i]);
+                                setTimeout(function(){
+                                    mthis.setPointMoveOverlay_Org(selectFeatures[i]);
+                                    //mthis.setLifeOrDieEventsPointStyleByValue(selectFeatures[i],'violent')
+                                },100)
                             }
                         }
                     }
                 });
                 mthis.selectClick.on('select', function(e) {
-                    var Gfeatures = e.selected;
-                    if(Gfeatures.length > 0){
-                        var source = mthis.getLayerById('HLAreaLayer').getSource();
-                        Gfeatures.forEach(function(item){
-                            var id = item.getId();
-                            if(id !== undefined){
-                                var index = -1;
-                                for(let i = 0; i < mthis.AreaIds.length; i++){
-                                    if(id === mthis.AreaIds[i]){
-                                        index = i
+                    var selectFeatures = e.selected;
+                    var deselectFeatures = e.deselected
+                   
+                    if(selectFeatures.length > 0){
+                        var SelectedIds = mthis.SelectedIds;
+                        var needIds = [];
+                        var isHas = false;
+                        for(var i = 0; i < selectFeatures.length; i++){
+                            var params = selectFeatures[i].get('Params');
+                            for(var j = 0; j < params.length; j++){
+                                var paramId = params[j].id;
+                                for(var v = 0; v < SelectedIds.length; v++){
+                                    if(paramId === SelectedIds[v]){
+                                        needIds.push(paramId);
+                                        isHas = true;
+                                        break;
                                     }
                                 }
+                            }
+                            if(isHas){
+                                var featureId = selectFeatures[i].getId();
+                                mthis.violentFeatureIds.push(featureId);
+                                mthis.setLifeOrDieEventsPointStyleByValue(selectFeatures[i],'violent')
+                            }
+                        }
+                        mthis.$store.commit('setClickSelectedGeoIds',needIds)
+                         if(deselectFeatures.length > 0){
+                            for(var i = 0; i < deselectFeatures.length; i++){
+                                var featureId = deselectFeatures[i].getId();
+                                var index = util.itemIndexInArr(featureId,mthis.violentFeatureIds);
                                 if(index !== -1){
-                                    mthis.$data.AreaIds.splice(index,1);
+                                    mthis.$delete(mthis.violentFeatureIds,index);
+                                }
+                                mthis.setLifeOrDieEventsPointStyleByValue(deselectFeatures[i],'life')
+                            }
+                        }
+                    } else {
+                        if(deselectFeatures.length > 0){
+                            var featureIds = mthis.violentFeatureIds;
+                            if(featureIds.length > 0){
+                                featureIds.forEach(function(Fid){
+                                    var layerId = mthis.getLayerIdByFeatureIdOrParamId(Fid);
+                                    var feature = mthis.getLayerById(layerId).getSource().getFeatureById(Fid);
+                                    mthis.setLifeOrDieEventsPointStyleByValue(feature,'life')
+                                })
+                            }
+                            mthis.violentFeatureIds = [];
+                            mthis.$store.commit('setClickSelectedGeoIds',[])
+                        }
+                        if(deselectFeatures.length === 0){
+                            for(var i = 0; i < deselectFeatures.length; i++){
+                                var featureIds = mthis.violentFeatureIds;
+                                if(featureIds.length > 0){
+                                    featureIds.forEach(function(Fid){
+                                        var layerId = mthis.getLayerIdByFeatureIdOrParamId(Fid);
+                                        var feature = mthis.getLayerById(layerId).getSource().getFeatureById(Fid);
+                                        mthis.setLifeOrDieEventsPointStyleByValue(feature,'life')
+                                    })
                                 }
                             }
-                            source.removeFeature(item);
-                        })
+                        }
                     }
                 });
             }  
@@ -843,10 +1048,24 @@ export default {
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
             
-            var orgNum = feature.get('Params').length;
+            var orgNum = feature.get('selectedNum');
             
             if(orgNum === 1){
-                Ap.innerHTML = "机构名：" + feature.get('Params')[0].OrgName;
+                var name = ''
+                var params =feature.get('Params');
+                for(let i = 0; i < params.length; i++){
+                    for(let j = 0; j < mthis.SelectedIds.length; j++){
+                        if(params[i].id === mthis.SelectedIds[j]){
+                            name = params[i].OrgName;
+                            break;
+                        }
+                    }
+                    if(name !== ''){
+                        Ap.innerHTML = "机构名：" + name;
+                        break;
+                    }
+                }
+                //Ap.innerHTML = "机构名：" + feature.get('Params')[0].OrgName;
             } else {
                 Ap.innerHTML = "机构数：" + feature.get('selectedNum');
             }
@@ -1251,7 +1470,7 @@ export default {
         orgsSpatialQuery(geometryArr){
             var mthis = this;
             //mthis.$http.post('http://localhost:5000/exploreOrg/', {
-                mthis.$http.post('http://10.60.1.141:5001/exploreOrg/', {
+                mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
                     'geometry':geometryArr
                 }).then(response => {
                     var OrgGeojson = response.body.data.OrgFeatures;
@@ -1284,7 +1503,7 @@ export default {
                     geometry: new Polygon(geometry.getCoordinates()),
                 });
                 source.addFeature(drawFeature);
-                mthis.orgsSpatialQuery([geometryStr]);
+                //mthis.orgsSpatialQuery([geometryStr]);
                 
                 /* mthis.timeSelectedEventIds = [];
                 mthis.staticsSelectedEventIds = []; */
@@ -1467,6 +1686,7 @@ export default {
             var lifeSelectedstyle;
             var halflifeSelectedstyle;
             var dieSelectedstyle;
+            var violentSelectedstyle;
             if(id.split('_')[0] ==='event'){
                 //var eventNum = feature.get('selectedEventsNum');
                 var fRadius = 5;
@@ -1499,6 +1719,14 @@ export default {
                         })
                     })
                 });
+                violentSelectedstyle = new Style({
+                    image : new CircleStyle({
+                        radius : 7,
+                        fill : new Fill({
+                            color : mthis.lifePointColor //'#33ffff'
+                        })
+                    })
+                });
                 
             } else {
                 lifeSelectedstyle = new Style({
@@ -1510,13 +1738,19 @@ export default {
                 halflifeSelectedstyle = new Style({
                     image: new Icon(({
                         src: require('../../dist/assets/images/geo/halfOrganization.png'),
-                        opacity:0.9
+                        opacity:0.99
                     }))
                 });
                 dieSelectedstyle = new Style({
                     image: new Icon(({
                         src: require('../../dist/assets/images/geo/orgNoSelected.png'),
-                        opacity:0.8
+                        opacity:0.98
+                    }))
+                });
+                violentSelectedstyle = new Style({
+                    image: new Icon(({
+                        src: require('../../dist/assets/images/geo/violentOrganization.png'),
+                        opacity:0.97
                     }))
                 });
             }
@@ -1524,8 +1758,10 @@ export default {
                     feature.setStyle(lifeSelectedstyle);
                 } else if(pointStatus === 'die') {
                     feature.setStyle(dieSelectedstyle);
-                } else {
+                } else if(pointStatus === 'halflife') {
                     feature.setStyle(halflifeSelectedstyle);
+                } else if(pointStatus === 'violent'){
+                    feature.setStyle(violentSelectedstyle);
                 }
             
         },
@@ -1700,7 +1936,8 @@ export default {
             var heatSource = layer.getSource();
             var selectedIds = mthis.getSelectedEventIds().ids;
             selectedIds.forEach(function(item){
-                var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
+                var OId = mthis.getOIdFromId(item);
+                var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
                 var feature = heatSource.getFeatureById(featureId);
                 if(feature === null){
                     var heatFeature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId).clone();
@@ -1821,9 +2058,10 @@ export default {
             var SelectedIds = mthis.getSelectedEventIds().ids;
             if(SelectedIds.length > 0){
                 SelectedIds.forEach(function(item){
-                    mthis.$set(mthis.removeEventIdList,item,mthis.allEventIdsToFeaturesIdsList[item]);
+                    var OId = mthis.getOIdFromId(item);
+                    mthis.$set(mthis.removeEventIdList,item,mthis.allEventIdsToFeaturesIdsList[OId]);
                     mthis.deleteEventInFeaturesById(item);
-                    mthis.$delete(mthis.allEventIdsToFeaturesIdsList,item)
+                    mthis.$delete(mthis.allEventIdsToFeaturesIdsList,OId)
                 })
             }
             mthis.geometrySelectedEventIds = [];
@@ -1876,7 +2114,8 @@ export default {
             var invertIds = [];
             var HighUpSelectedParam = mthis.getHighUpSelectedIds();
             ids.forEach(function(item){ //将原来选中的事件取消
-                var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
+                var OId = mthis.getOIdFromId(item);
+                var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
                 var layerId = mthis.AllLayerList_conf[item.split('_')[0]].layerId;
                 var feature = mthis.getLayerById(layerId).getSource().getFeatureById(featureId);
                 mthis.setSelectedEventFeatureParam(feature,false);
@@ -1885,7 +2124,7 @@ export default {
             //mthis.invertSelectedEventIds = [];
             if(type === 'All'){
                 Object.keys(mthis.allEventIdsToFeaturesIdsList).forEach(function(key){
-                    if(util.itemIndexInArr(key,ids) === -1){
+                    if(util.itemIndexInArr(mthis.allEventIdsToFeaturesIdsList[key].id,ids) === -1){
                         mthis.invertSelectedEventIds.push(key);
                     }
                 })
@@ -1957,7 +2196,8 @@ export default {
         },
         getBelongFeatureByParamId(id){
             var mthis = this;
-            var featureId = mthis.allEventIdsToFeaturesIdsList[id].featureId;
+            var OId = mthis.getOIdFromId(id);
+            var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
             var layerId = mthis.getLayerIdByFeatureIdOrParamId(id);
             var source = mthis.getLayerById(layerId).getSource();
             return source.getFeatureById(featureId);
@@ -2005,7 +2245,7 @@ export default {
             var overlay = new Overlay(({
                 element: element,
                 id:id,
-                stopEvent:false,
+                stopEvent:true,
                 position:coor,
                 positioning:positioning,
                 autoPan: false,
@@ -2126,7 +2366,8 @@ export default {
         },
         differentiateLifeAndDiePointByEventId(id){
             var mthis = this;
-            var featureId = mthis.allEventIdsToFeaturesIdsList[id].featureId;
+            var OId = mthis.getOIdFromId(id);
+            var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
             var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
             if(feature.getStyle().getImage().getFill().getColor() !== mthis.lifePointColor){
                 //m
@@ -2139,7 +2380,8 @@ export default {
             var eventsSource = mthis.getLayerById('eventsPointsLayer').getSource();
             var orgsSource = mthis.getLayerById('OrgLayer').getSource();
             ids.forEach(function(item){
-                var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
+                var OId = mthis.getOIdFromId(item);
+                var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
                 var index = util.itemIndexInArr(featureId,featureIds);
                 if(index === -1){
                     featureIds.push(featureId);
@@ -2166,7 +2408,7 @@ export default {
             var mthis = this;
             var ids = []
             Object.keys(mthis.allEventIdsToFeaturesIdsList).forEach(function(key){
-                ids.push(key)
+                ids.push(mthis.allEventIdsToFeaturesIdsList[key].id)
             })
             return ids;
         },
@@ -2178,16 +2420,17 @@ export default {
             var featureId = feature.getId();
             feature.get('Params').forEach(function(param){
                 var paramId = param.id;
+                var id = paramId.split('_')[1];
                 var type = paramId.split('_')[0];
                 //mthis.allEventIds.push(eventId);
                 var Listparam = {'featureId':featureId}
                 var attrArr = mthis.AllLayerList_conf[type].paramAttrs;
                 attrArr.forEach(function(attrName){
-                    if(attrName !== 'id'){
-                        Listparam[attrName] = param[attrName]
-                    }
+                    //if(attrName !== 'id'){
+                    Listparam[attrName] = param[attrName]
+                    //}
                 })
-                mthis.$set(mthis.allEventIdsToFeaturesIdsList,paramId,Listparam)
+                mthis.$set(mthis.allEventIdsToFeaturesIdsList,id,Listparam)
             });
         },
         addEventIdsToSelectedIds(eventFeature){
@@ -2402,7 +2645,6 @@ export default {
             var mthis = this;
             mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.SelectedIds);
             mthis.isOperateButtonsHLOrDim();
-            
         },
         geoStaticsSelectedIds:function(){
             var mthis = this;
@@ -2414,6 +2656,8 @@ export default {
                         if(item.indexOf('_') === -1){
                             var id = 'org_'+item;
                             ids.push(id)
+                        } else {
+                            ids.push(item)
                         }
                     })
                 }
@@ -2421,17 +2665,12 @@ export default {
                 if(mthis.halfSelectedIds.length > 0){
                     mthis.halfSelectedIds.forEach(function(paramid){
                         var layerId = mthis.getLayerIdByFeatureIdOrParamId(paramid);
-                        var featureId = mthis.allEventIdsToFeaturesIdsList[paramid].featureId;
+                        var OId = mthis.getOIdFromId(paramid);
+                        var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
                         var feature = mthis.getLayerById(layerId).getSource().getFeatureById(featureId);
                         mthis.setLifeOrDieEventsPointStyleByValue(feature,'halflife')
                     })
                 }
-
-
-
-
-                //mthis.SelectedIds = mthis.geoStaticsSelectedIds;
-            //}
         },
         staticsSelectedEventIds:function(){
             var mthis = this;
@@ -2497,7 +2736,8 @@ export default {
                 ids = mthis.staticsSelectedEventIds;
             }
             ids.forEach(function(item){
-                var featureId = mthis.allEventIdsToFeaturesIdsList[item].featureId;
+                var OId = mthis.getOIdFromId(item);
+                var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
                 var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
                 var eventTime = '';
                 var featrueEvents = feature.get('Params');
