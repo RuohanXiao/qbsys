@@ -39,11 +39,6 @@
     mapState,
     mapMutations
   } from 'vuex'
-  import cTree from './custom_tree'
-  import entityDetailsTableHuman from './custom_entityDetailsTable_human'
-  import entityDetailsTableAdministrative from './custom_entityDetailsTable_administrative'
-  import entityDetailsTableOrganization from './custom_entityDetailsTable_organization'
-  import {netStaticsAttr} from '../../dist/assets/js/geo/data.js'
   /* eslint-disable */
   var timer = null;
   export default {
@@ -91,28 +86,6 @@
         eventItemHeight: 0,
         closable: true,
         staticsDatas:[],
-        /* firstClassify: [{
-            id: 'ObjectsType',
-            disName: '对象类型'
-          },
-          {
-            id: 'EntityAttr',
-            disName: '实体属性'
-          },
-          {
-            id: 'EventsAttr',
-            disName: '事件属性'
-          },
-          {
-            id: 'ContentsAttr',
-            disName: '文档属性'
-          },
-          {
-            id: 'EntityRelationship',
-            disName: '实体关系'
-          }
-        ], */
-        
         nodeTypedata: null,
         staticsIds: [],
         single: false,
@@ -123,10 +96,6 @@
       modalChartDetail,
       percentBar,
       leftStatics,
-      cTree,
-      entityDetailsTableHuman,
-      entityDetailsTableAdministrative,
-      entityDetailsTableOrganization,
       eventNet
     },
     // computed: {
@@ -235,7 +204,7 @@
       selectNetNodes: function() {
         var mthis = this;
         if(mthis.selectNetNodes[0].ids.length > 1){
-          mthis.$http.post('http://10.60.1.140:5001/graph-attr/', {
+          mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
           'nodeIds': mthis.selectNetNodes[0].ids
           }).then(response => {
               mthis.staticsDatas = response.body.data;

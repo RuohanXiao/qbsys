@@ -182,6 +182,13 @@ const RouterConfig = {
     mode: 'hash',
     routes: Routers
 };
+var hostName = window.location.hostname;
+var xml_url = ''
+if(hostName === 'localhost' || hostName === '127.0.0.1'){
+  xml_url = './src/dist/assets';
+} else {
+  xml_url = 'http://10.60.1.140/assets';
+}
 var store = new Vuex.Store({
   state: {
     eventImg:null,
@@ -195,8 +202,8 @@ var store = new Vuex.Store({
       api_search:'http://10.60.1.140:5001', //查询接口采用原地址
       api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
       map_url:'http://10.60.1.142:8082', //地图脚本服务地址
-      // xml_url:'http://10.60.1.140/assets' // 部署路径
-      xml_url:'./src/dist/assets' // 本地路径
+      //xml_url:'http://10.60.1.140/assets' // 部署路径
+      xml_url:xml_url // 本地路径
     },
     // 联动监听
     netWatcher:{ // 网络关系模块监听
@@ -263,6 +270,7 @@ var store = new Vuex.Store({
     selectNetNodes:[],   //点击net节点，将节点id返回到event
     selectGeoNodes:[],
     selectContentNodes:[],
+    clickSelectedGeoIds:[],
     geoStaticsSelectedIds:[],
     netModalDetailData: {},
     netModalDetailNodeId: '',
@@ -364,6 +372,9 @@ var store = new Vuex.Store({
     // 从工作及导入到网络关系画布
     setWorkSpaceAddData(state,val){
       state.workSpaceAddData = val
+    },
+    setClickSelectedGeoIds(state,val){
+      state.clickSelectedGeoIds = val
     },
     setSelectionIdByType(state,val){
       state.selectionIdByType = val
