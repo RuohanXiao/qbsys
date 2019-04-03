@@ -105,15 +105,55 @@
       },
       geo_selected_param:function(){
         var mthis = this;
+        debugger
         if(mthis.geo_selected_param.type !== 'GeoStatics'){
           if(mthis.geo_selected_param.paramIds.length > 0){
-            var nodeOb = {};
-            nodeOb.nodeIds = mthis.geo_selected_param.paramIds;
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
-                  mthis.evetdata = response.body.data[0].nodes;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                  mthis.saveSelectedIds = mthis.evetdata;
-                  mthis.evetdataFlag = true
-                })
+            var OrgIds = [];
+            var EventIds = [];
+            mthis.geo_selected_param.paramIds.forEach(function(id){
+              var type = id.split('_')[0];
+              var sIds = id.split('_');
+              var nId = "";
+              for(var i = 1; i < sIds.length; i++){
+                if(nId === ""){
+                  nId += sIds[i];
+                } else {
+                  nId += '_' + sIds[i];
+                }
+                
+              }
+              if(type === 'event'){
+                EventIds.push(nId);
+              } else {
+                OrgIds.push(nId);
+              }
+            })
+            if(OrgIds.length > 0){
+              var nodeOb = {};
+              nodeOb.nodeIds = OrgIds;
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
+                    mthis.evetdata = response.body.data[0].nodes;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                    mthis.saveSelectedIds = mthis.evetdata;
+                    mthis.evetdataFlag = true
+                  })
+            } 
+            if(EventIds.length > 0){
+              var eventeOb = {};
+              eventeOb.EventIds = EventIds;
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
+                    var EventDetail = response.body.data[0];//util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                    var eventD = {};
+                    eventD.entity_type = 'event';
+                    eventD.id = EventDetail.id;
+                    eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
+                    eventD.loaded = true;
+                    eventD.name = EventDetail.event_content;
+                    mthis.evetdata  = eventD;
+                    mthis.saveSelectedIds = mthis.evetdata;
+                    mthis.evetdataFlag = true
+                  })
+            }
+            
           } else {
             mthis.evetdata = [];
             mthis.evetdataFlag = false;

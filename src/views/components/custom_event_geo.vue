@@ -1060,8 +1060,9 @@
     watch: {
       evetdata: function() {
         var mthis = this
-        var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
-        //var ob = configer.loadxmlDoc("http://10.60.1.140/assets/entityTypeTable.xml");
+        debugger
+        //var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
+        var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url +  "/entityTypeTable.xml");
         var entityMainType = ob.getElementsByTagName("entityMainType");
         if (this.timer) {
           clearTimeout(this.timer)

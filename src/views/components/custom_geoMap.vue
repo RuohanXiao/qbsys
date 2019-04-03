@@ -703,19 +703,19 @@ export default {
             var mthis = this;
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
-            mthis.orgsSpatialQuery([geometryArr]);
+            mthis.orgsSpatialQuery([geometryArr],'Event');
         },
         rightClickOrg(feature){
             var mthis = this;
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
-            mthis.orgsSpatialQuery([geometryArr]);
+            mthis.orgsSpatialQuery([geometryArr],'Org');
         },
         rightClickLoc(feature){
             var mthis = this;
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
-            mthis.orgsSpatialQuery([geometryArr]);
+            mthis.orgsSpatialQuery([geometryArr],'Org');
         },
         rightClickDM(feature){
             var mthis = this;
@@ -891,7 +891,7 @@ export default {
                 var Eventslayer = new VectorLayer({  //事件图层
                     source: new VectorSource({
                     }),
-                    style:mthis.noSelectedstyle,
+                    //style:mthis.noSelectedstyle,
                     id:'eventsPointsLayer'
                 });
                 mthis.routeMap.addlayer(Eventslayer);
@@ -1467,14 +1467,30 @@ export default {
             } 
             map.removeLayer(polygonLayer);
         },
-        orgsSpatialQuery(geometryArr){
+        orgsSpatialQuery(geometryArr,type){
             var mthis = this;
-            //mthis.$http.post('http://localhost:5000/exploreOrg/', {
-                mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
+            var url = '';
+            if(type === 'Event'){
+                url = 'http://localhost:5000/exploreEvent/'
+            } else if(type === 'Org'){
+                url = 'http://localhost:5000/exploreOrg/'
+            }
+            mthis.$http.post(url, {
+            //mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
                     'geometry':geometryArr
                 }).then(response => {
-                    var OrgGeojson = response.body.data.OrgFeatures;
+                    debugger
+                    var OrgGeojson = response.body.data.Features;
                     var addfeatures = (new GeoJSON()).readFeatures(OrgGeojson);
+                    var vectorSource = new VectorSource({
+                    });
+
+                    var vectorLayer = new VectorLayer({
+                        source : vectorSource
+                    });
+                    vectorSource.addFeatures(addfeatures);
+                    //mthis.routeMap.map.addLayer(vectorLayer);
+                    //mthis.getLayerById('eventsPointsLayer').getSource().addFeatures(addfeatures);
                     var OrgSource = mthis.getLayerById('OrgLayer').getSource();
                     var existFeatures = OrgSource.getFeatures();
                     mthis.geometrySelectedEventIds = [];
@@ -1484,7 +1500,7 @@ export default {
                         mthis.setLifeOrDieEventsPointStyleByValue(existFeatures[j],'die');
                     }
                     for(let i = 0; i < addfeatures.length; i++){
-                        mthis.mapRemoveFeature(addfeatures[i])
+                        //mthis.mapRemoveFeature(addfeatures[i])
                         mthis.mapAddFeature(addfeatures[i]);
                     }
                 })
@@ -1701,6 +1717,13 @@ export default {
                         fill : new Fill({
                             color : mthis.lifePointColor //'#33ffff'
                         })
+                    }),
+                    stroke: new Stroke({
+                        width: 3,
+                        color: [255, 0, 0, 1]
+                    }),
+                    fill: new Fill({
+                        color: [255, 0, 0, 1]
                     })
                 });
                 halflifeSelectedstyle = new Style({
@@ -1709,6 +1732,13 @@ export default {
                         fill : new Fill({
                             color : mthis.halflifePointColor //'#33ffff'
                         })
+                    }),
+                    stroke: new Stroke({
+                        width: 3,
+                        color: [255, 0, 0, 1]
+                    }),
+                    fill: new Fill({
+                        color: [255, 0, 0, 1]
                     })
                 });
                 dieSelectedstyle = new Style({
@@ -1717,6 +1747,13 @@ export default {
                         fill : new Fill({
                             color : mthis.diePointColor //'#33ffff'
                         })
+                    }),
+                    stroke: new Stroke({
+                        width: 3,
+                        color: [255, 0, 0, 1]
+                    }),
+                    fill: new Fill({
+                        color: [255, 0, 0, 1]
                     })
                 });
                 violentSelectedstyle = new Style({
@@ -1725,6 +1762,13 @@ export default {
                         fill : new Fill({
                             color : mthis.lifePointColor //'#33ffff'
                         })
+                    }),
+                    stroke: new Stroke({
+                        width: 3,
+                        color: [255, 0, 0, 1]
+                    }),
+                    fill: new Fill({
+                        color: [255, 0, 0, 1]
                     })
                 });
                 
@@ -1750,7 +1794,7 @@ export default {
                 violentSelectedstyle = new Style({
                     image: new Icon(({
                         src: require('../../dist/assets/images/geo/violentOrganization.png'),
-                        opacity:0.97
+                        opacity:1
                     }))
                 });
             }
@@ -2674,16 +2718,16 @@ export default {
         },
         staticsSelectedEventIds:function(){
             var mthis = this;
-            var dealSelectedIds = [];
+            /* var dealSelectedIds = [];
             if(mthis.staticsSelectedEventIds.length > 0){
                 mthis.staticsSelectedEventIds.forEach(function(Lid){
                     dealSelectedIds.push(Lid.split('_')[1])
                 })
-            }
+            } */
             // mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoStatics',
-                paramIds:dealSelectedIds
+                paramIds:mthis.staticsSelectedEventIds//dealSelectedIds
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
             mthis.SelectedIds = mthis.staticsSelectedEventIds
@@ -2700,16 +2744,16 @@ export default {
         },
         geometrySelectedEventIds:function(){
             var mthis = this;
-            var dealSelectedIds = [];
+            /* var dealSelectedIds = [];
             if(mthis.geometrySelectedEventIds.length > 0){
                 mthis.geometrySelectedEventIds.forEach(function(Lid){
                     dealSelectedIds.push(Lid.split('_')[1])
                 })
-            }
+            } */
             // mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoView',
-                paramIds:dealSelectedIds
+                paramIds:mthis.geometrySelectedEventIds//dealSelectedIds
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
             mthis.SelectedIds = mthis.geometrySelectedEventIds
