@@ -48,6 +48,7 @@
       eventChartDivNet
     },
     methods: {
+      
       // selectNodes(opt) {
       //   let mthis = this
       //   if (mthis.timer) {

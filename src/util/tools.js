@@ -87,7 +87,22 @@ export default {
         return -1;
     }
 },
-
+// 获取当前日期
+getNowFormatDate() {
+  var date = new Date();
+  var seperator1 = "-";
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var strDate = date.getDate();
+  if (month >= 1 && month <= 9) {
+      month = "0" + month;
+  }
+  if (strDate >= 0 && strDate <= 9) {
+      strDate = "0" + strDate;
+  }
+  var currentdate = year + seperator1 + month + seperator1 + strDate;
+  return currentdate;
+},
   // date yy-mm-dd 转 时间戳 (秒)
   getTimestamp(time) {
     return Date.parse(new Date(time)) / 1000;
@@ -166,5 +181,25 @@ export default {
         }
       }
     }
-  }
+  },
+
+  // //xml转json
+  // Xml2Json(xml) {
+  //   let jsonobj;
+  //   for(var i = 0;i<xml.children.length;i++){
+  //     var nodes = xml.children;
+  //     console.log(nodes)
+  //     for
+  //     // jsonobj.name = xml.getAttribute("name");
+  //     // //属性还是要根据实际情况设置
+  //     // jsonobj.children = [];
+  //     // for(var x = 0;x<nodes.length;x++){
+  //     //   jsonobj.children.push(nodes[x]);
+  //     // }
+  //     // if(nodes[i].hasChildNodes()){
+  //     //   Xml2Json(nodes[i],jsonobj.children[i]);
+  //     // }
+  //   }
+  //   return jsonobj
+  // }
 }

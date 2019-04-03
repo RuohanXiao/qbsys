@@ -1,10 +1,10 @@
 <template>
   <div class="itemDiv">
     <div class="itemContentDiv">
-      <div class="buttonFront">
-        <Icon class="con iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" size="20" @click="importData(item.id)"></Icon>
-        <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="20" @click="del(item.id)"></Icon>
-      </div>
+      <!-- <div class="buttonFront">
+          <Icon class="con iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" size="20" @click="importData(item.id)"></Icon>
+          <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="20" @click="del(item.id)"></Icon>
+        </div> -->
       <div class="imgDiv">
         <img :src=item.img :style="{width:'18vw',height:'18vh'}" />
         <p class='titleFront'>{{item.title}}</p>
@@ -13,28 +13,27 @@
   </div>
 </template>
 <script>
- import mock from '../../mock/index.js'
- mock.test = 1
+  import mock from '../../mock/index.js'
+  mock.test = 1
   export default {
     data() {
       return {
-
       }
     },
     methods: {
       del(id) {
-        this.$emit('delId',id)
+        this.$emit('delId', id)
       },
-      importData(id){
-         this.$emit('workSpaceModal', true)
-         this.addToChart(id)
-       },
-       addToChart(id) {
+      importData(id) {
+        this.$emit('workSpaceModal', true)
+        this.addToChart(id)
+      },
+      addToChart(id) {
         var mthis = this
         mock.get("/getWorkSpaceAddData").then(function(res) {
           mthis.$store.commit('setWorkSpaceAddData', res.data.data[0])
         })
-       },
+      },
     },
     props: {
       item: Object
@@ -106,28 +105,28 @@
     /* color: #ccffff; */
     color: rgba(51, 255, 255, 0.8);
   }
-   .itemDiv:hover .buttonFront-add {
+  .itemDiv:hover .buttonFront-add {
     /* color: #ccffff; */
     color: rgba(51, 255, 255, 0.8);
   }
   .iconHover {
     opacity: 0;
   }
-   .iconHover1 {
+  .iconHover1 {
     opacity: 0;
   }
-  .deg45{
+  .deg45 {
     transform: rotate(45deg);
   }
   .itemDiv:hover {
     /* transform: translateX(10px);
-    transform: translateY(-10px); */
+      transform: translateY(-10px); */
     /* box-shadow: 4px 4px 10px #ccffff; */
     /* border: 1px solid #ccffff; */
     transition: all 1s;
     -moz-transition: all 1s;
     /* 　　-webkit-transition: all 1s;
-  　　-o-transition: all 1s; */
+    　　-o-transition: all 1s; */
   }
   .itemDiv:hover .iconHover1 {
     transition: opacity 1s;

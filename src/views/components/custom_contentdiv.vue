@@ -388,9 +388,13 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition','netToContent'
     ]),
     watch: {
+      netToContent: function() {
+        alert('文档接受到了')
+        console.log(this.netToContent)
+      },
       contentTimeCondition: function(va) {
         var mthis = this
         if (timer) {

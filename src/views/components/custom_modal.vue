@@ -300,7 +300,7 @@
     background-color: rgba(0, 0, 0, 0.5) !important;
   }
   .ivu-modal-content {
-    background-color: rgba(0, 0, 0, 0.7) !important;
+    background-color: rgba(0, 0, 0, 0.85) !important;
     border-radius: 20px !important;
     box-shadow: 1px 1px 18px rgba(51, 255, 255, 0.5) !important;
     border: solid 1px rgba(51, 255, 255, 0.5) !important;

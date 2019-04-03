@@ -190,8 +190,11 @@ var store = new Vuex.Store({
     workSpaceAddData: {},
     // 配置ip
     ipConfig: {
-      api_url:'http://10.60.1.140:5001',
-      map_url:'http://10.60.1.142:8082'
+      api_url:'http://10.60.1.140:5001', //部署服务器api地址
+      api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
+      map_url:'http://10.60.1.142:8082', //地图脚本服务地址
+      xml_url:'http://10.60.1.140/assets' // 部署路径
+      // xml_url:'./dist/assets' // 本地路径
     },
     // 联动监听
     netWatcher:{ // 网络关系模块监听
@@ -210,6 +213,10 @@ var store = new Vuex.Store({
       id:'',
       label:'',
       node:{}
+    },
+    atlastData:{
+      nodes:[],
+      links:[]
     },
     searchNetResult: {
       id:'',
@@ -237,6 +244,8 @@ var store = new Vuex.Store({
     contentTimeCondition: [],
     netTimeCondition: [],
     geoTimeCondition: [],
+    refSet:false,
+    refAtlast:false,
     viewHeight: 0,
     viewHeight_20:0,
     viewHeight_20_geo:0,
@@ -320,6 +329,11 @@ var store = new Vuex.Store({
       nodeIds:[],
       eventIds:[],
       contentIds:[]
+    },
+    openWorkSetFlag:{
+      id:'',
+      type:'',
+      time:''
     }
   },
   mutations:{
@@ -329,6 +343,15 @@ var store = new Vuex.Store({
       // 组件想调用方法，可以使用   this.$store.commit('XXX')
       // 第一个参数始终为state,第二个可以传参（只能支持一个参数，可以通过对象或者数组传多值）
       state.tmss = newStatus
+    },
+    setAtlastData(state,val){
+      state.atlastData = val
+    },
+    setRefSet(state,val){
+      state.refSet = val
+    },
+    setRefAtlast(state,val){
+      state.refAtlast = val
     },
     setHLlocationIds(state,val){
       state.HLlocationIds = val
@@ -349,6 +372,9 @@ var store = new Vuex.Store({
     },
     setNetStaticsSelectedIds(state,val){
       state.netStaticsSelectedIds = val
+    },
+    setOpenWorkSetFlag(state,val){
+      state.openWorkSetFlag = val
     },
     setEventImg(state,val){
       state.eventImg = val
