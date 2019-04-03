@@ -773,15 +773,6 @@
           }
           mthis.spinShow = true
           mthis.zIndex = 999
-          var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
-          var eventNames = ob.getElementsByTagName("eventNames");
-          mthis.myMap = new Map();
-          for(let eventNameitem of eventNames) {
-            for(let items of eventNameitem.children){
-              mthis.myMap.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
-            }
-          }
-
           // var roleNames = ob.getElementsByTagName("roleNames");
           // mthis.myMapRole = new Map();
           // for(let roleNameitem of roleNames) {
@@ -2523,6 +2514,23 @@
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             'EventIds': mthis.geoToNetData.eventIds
           }).then(res => {
+            if(res.body.code === 0) {
+              let nodes = new Array();
+              let type = eitems.event_subtype.toLowerCase().replace(/-/, "_")
+              let img = mthis.myMap.get(type).img
+              let name = mthis.myMap.get(type).name
+              for(let re  in res.body.data) {
+                nodes.push({
+                  id: re.id,
+                  img: img,
+                  entity_type: 'event',
+                  name: name,
+                  loaded: true
+                })
+              }
+            } else {
+              mthis.setMessage('/event-detail/接口异常')
+            }
             
           })
         }
@@ -2637,6 +2645,14 @@
       mthis.nh_50 = document.documentElement.clientHeight - 64 - 20 - 55 + 'px'
       mthis.initCharts();
       mthis.netData = mthis.$store.getters.netData
+      var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
+      var eventNames = ob.getElementsByTagName("eventNames");
+      mthis.myMap = new Map();
+      for(let eventNameitem of eventNames) {
+        for(let items of eventNameitem.children){
+          mthis.myMap.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
+        }
+      }
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();
       //   mthis.netchart.addData(res.data.data[0]);
