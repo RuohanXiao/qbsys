@@ -3,21 +3,59 @@
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px'}">
       <div class='divStyle'>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="removeAll">
+            <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">清空</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click='fanxuan'>
+            <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">反选</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
-            <Icon class="icon iconfont icon-rectangle DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">分组</p>
+            <Icon class="icon iconfont icon-delete-name DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">删除</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div">
+            <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">创建集合</p>
+          </div>
+        </Tooltip>
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div">
+            <Icon class="icon iconfont icon-zhaiyaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">摘要图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click='toContentDiv'>
-            <Icon class="icon iconfont icon-fanhui DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <Icon class="icon iconfont icon-suolvetu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">缩略图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click='showAsList'>
-            <Icon class="icon iconfont icon-list DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">列表</p>
+            <Icon class="icon iconfont icon-liebiaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">列表图</p>
+          </div>
+        </Tooltip>
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click='orderTimeUp'>
+            <Icon class="icon iconfont icon-paixu--guanlian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">相关性排序</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click='orderTimeDown'>
+            <Icon class="icon iconfont icon-paixu--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">时间排序</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
@@ -28,43 +66,8 @@
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='orderTimeUp'>
-            <Icon class="icon iconfont icon-up DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">时间升</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='orderTimeDown'>
-            <Icon class="icon iconfont icon-down DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">时间降</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='orderDefalut'>
-            <Icon class="icon iconfont icon-fanhui DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">热度</p>
-          </div>
-        </Tooltip>
+
         <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-up DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">截图</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-cut DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">保存</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">添加目标</p>
-          </div>
-        </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="toNet">
             <Icon class="icon iconfont icon-tuisongzhiwangluo  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -388,12 +391,21 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition','netToContent'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition','netToContentData'
     ]),
     watch: {
-      netToContent: function() {
-        alert('文档接受到了')
-        console.log(this.netToContent)
+      netToContentData: function() {
+        var mthis = this
+        // alert('文档接受到了')
+        // console.log(this.netToContentData)
+        mthis.items = []
+        let contentIds = this.netToContentData.contentIds
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+            'docIds': contentIds
+          }).then(response => {
+            $('.item-selected').removeClass('item-selected')
+            mthis.items = response.body.data
+          })
       },
       contentTimeCondition: function(va) {
         var mthis = this
@@ -408,6 +420,7 @@
           let etime = util.getTimestamp(va[1])
           mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
             if (response.body.data.length > 0) {
+              $('.item-selected').removeClass('item-selected')
               mthis.items = response.body.data
             } else {
               mthis.items = []
@@ -428,6 +441,7 @@
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
+            $('.item-selected').removeClass('item-selected')
             mthis.items = response.body.data
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
@@ -464,6 +478,16 @@
     },
     props: ['contentData'],
     methods: {
+      fanxuan(){
+        // document.getElementsByClassName("box");
+        let selectDom = $('.item-selected')
+        let disselectDom = $('.contentDiv:not(.item-selected)')
+        selectDom.removeClass('item-selected')
+        disselectDom.addClass('item-selected')
+      },
+      removeAll(){
+        this.items = []
+      },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
           title: titleStr,
@@ -478,7 +502,7 @@
             id: selectList[m].id,
             entity_type: 'content',
             img: '',
-            name: selectList[m].title,
+            name: [...selectList[m].title].length>20?selectList[m].title.substring(0,19)+'...':selectList[m].title,
             label: selectList[m].title,
             loaded: true
           })
@@ -550,6 +574,7 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -561,6 +586,7 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -570,6 +596,7 @@
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -589,6 +616,7 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -600,6 +628,7 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -609,6 +638,7 @@
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -633,6 +663,7 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -644,6 +675,7 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -653,6 +685,7 @@
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -672,6 +705,7 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -683,6 +717,7 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 mthis.alertNotice('无匹配数据', true)
@@ -692,6 +727,7 @@
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 mthis.alertNotice('无匹配数据', true)

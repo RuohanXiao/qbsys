@@ -194,7 +194,7 @@
             clearTimeout(this.timer)
           }
           this.timer = setTimeout(function() {
-            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query+'&timestamp=' + timestamp, {
+            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_search + "/fuzzy-match/?pattern=" + query+'&timestamp=' + timestamp, {
                 emulateJSON: true
               })
               .then(response => {
@@ -243,7 +243,7 @@
           mthis.loading2 = true;
           //mthis.options2 = [];
           /* let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, { */
-          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, {
+          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_search + "/fuzzy-match/?pattern=" + query, {
               emulateJSON: true
             })
             .then(response => {
