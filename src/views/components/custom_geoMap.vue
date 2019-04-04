@@ -480,18 +480,42 @@ export default {
         },
         pushToNet(){
             var mthis = this;
+            debugger
             var eventIds = [];
             var nodeIds = [];
             var metalworkIds = mthis.SelectedIds;
             if(metalworkIds.length > 0){
                 metalworkIds.forEach(function(id){
-                    if(id.indexOf('_') !== -1){
+
+
+                    var type = id.split('_')[0];
+                    var sIds = id.split('_');
+                    var nId = "";
+                    for(var i = 1; i < sIds.length; i++){
+                        if(nId === ""){
+                        nId += sIds[i];
+                        } else {
+                        nId += '_' + sIds[i];
+                        }
+                        
+                    }
+                    if(type === 'event'){
+                        eventIds.push(nId);
+                    } else {
+                        nodeIds.push(nId);
+                    }
+
+
+
+
+
+                    /* if(id.indexOf('_') !== -1){
                         if(id.split('_')[0] === 'event'){
                             eventIds.push(id.split('_')[1])
                         } else if(id.split('_')[0] === 'org'){
                             nodeIds.push(id.split('_')[1])
                         }
-                    }
+                    } */
                 })
             }
             //var ids = mthis.getSelectedEventIds().ids;
@@ -817,7 +841,7 @@ export default {
         pointerMoveselectfilterFun(feature,layer){
             var mthis = this;
             if(layer.get('id') === "eventsPointsLayer"){
-                if(feature.getGeometry().getType !== "MultiLineString" && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
+                if(feature.getGeometry().getType() !== "MultiLineString" && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     return true
                 } else {
                     return false
@@ -1508,12 +1532,14 @@ export default {
             var mthis = this;
             var url = '';
             if(type === 'Event'){
-                url = 'http://localhost:5000/exploreEvent/'
+                //url = 'http://localhost:5000/exploreEvent/'
+                url = 'http://10.60.1.140:5001/exploreEvent/'
             } else if(type === 'Org'){
-                url = 'http://localhost:5000/exploreOrg/'
+                //url = 'http://localhost:5000/exploreOrg/'
+                url = 'http://10.60.1.140:5001/exploreOrg/'
             }
-            // mthis.$http.post(url, {
-            mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
+             mthis.$http.post(url, {
+            //mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
                     'geometry':geometryArr
                 }).then(response => {
                     debugger
@@ -2709,14 +2735,31 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
+            debugger
             var data = mthis.$store.state.netToGeoData;
             if(data.length<= 0){
                 return
             } else {
-                /* 根据ids请求数据
-                ..
-                .. */
-                mthis.eventGeoJson = mthis.test_mapData;
+                debugger
+                //mthis.eventGeoJson = mthis.test_mapData;
+                //mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-to-GIS/', {
+                //mthis.$http.post("http://localhost:5000/getOrgByIds/", {
+                mthis.$http.post("http://10.60.1.140:5001/getOrgByIds/", {
+                    "ids": data
+                }).then(response => {
+                    var eventGeoJson_Org = response.body.data.Features;
+                    var addFeatures_Org = (new GeoJSON()).readFeatures(eventGeoJson_Org);
+                    mthis.addFeaturesToEventLayer(addFeatures_Org);
+
+                    //mthis.$http.post("http://localhost:5000/getEventByIds/", {
+                    mthis.$http.post("http://10.60.1.140:5001/getEventByIds/", {
+                        "ids": data
+                    }).then(response => {
+                        var eventGeoJson_Event = response.body.data.Features;
+                        var addFeatures_Event = (new GeoJSON()).readFeatures(eventGeoJson_Event);
+                        mthis.addFeaturesToEventLayer(addFeatures_Event);
+                    })
+                })
             }
         },
         /* halfSelectedIds:function(){

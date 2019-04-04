@@ -2501,13 +2501,14 @@
       geoToNetData: function() {
         // 调用查询接口，查询id对应数据
         // this.netchart.addData()
+        debugger
         var mthis = this
         console.log(mthis.geoToNetData)
         if(mthis.geoToNetData.nodeIds.length>0){
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
             'nodeIds': mthis.geoToNetData.nodeIds
           }).then(response => {
-            mthis.netchart.addData({nodes:result.body.data[0].nodes,links:[]})
+            mthis.netchart.addData({nodes:response.body.data[0].nodes,links:[]})
           })
         }
         if(mthis.geoToNetData.eventIds.length>0) {
