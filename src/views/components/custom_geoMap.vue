@@ -266,7 +266,7 @@ export default {
         AllLayerList_conf:{
             'event':{
                 'layerId':'eventsPointsLayer',
-                'paramAttrs':['id','time']    //除id外的所有属性都应该写在allEventIdsToFeaturesIdsList中，
+                'paramAttrs':['id','time','eventType','completeEvent']    //除id外的所有属性都应该写在allEventIdsToFeaturesIdsList中，
             },
             'org':{
                 'layerId':'OrgLayer',
@@ -817,7 +817,7 @@ export default {
         pointerMoveselectfilterFun(feature,layer){
             var mthis = this;
             if(layer.get('id') === "eventsPointsLayer"){
-                if(feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
+                if(feature.getGeometry().getType !== "MultiLineString" && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     return true
                 } else {
                     return false
@@ -1088,7 +1088,44 @@ export default {
             var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
-            Ap.innerHTML = "事件：" + feature.get('selectedNum');
+
+            var orgNum = feature.get('selectedNum');
+            debugger
+            if(orgNum === 1){
+                var name = ''
+                var Entitites = '';
+                var eventType = '';
+                var locationName = feature.get('locationName') ? feature.get('locationName') : '';
+                var params =feature.get('Params');
+                for(let i = 0; i < params.length; i++){
+                    var isHas = false;
+                    for(let j = 0; j < mthis.SelectedIds.length; j++){
+                        if(params[i].id === mthis.SelectedIds[j]){
+                            //name = params[i].OrgName;
+                            /* if(params[0].relatedEntities.length > 0){
+                                Entitites = params[0].relatedEntities.join(' and ');
+                            } */
+                            eventType = params[i].eventType;
+                            isHas = true
+                            break;
+                        }
+                    }
+                    /* var completeEvent = ''
+                    if(locationName !== ''){
+                        completeEvent = Entitites + ' ' + eventType + ' in ' + locationName
+                    } else {
+                        completeEvent = Entitites + ' ' + eventType
+                    } */
+                     
+                    if(isHas){
+                        Ap.innerHTML = "事件：" + params[i].completeEvent;
+                        break;
+                    }
+                }
+            } else {
+                Ap.innerHTML = "事件数：" + feature.get('selectedNum');
+            }
+            //Ap.innerHTML = "事件：" + feature.get('selectedNum');
             var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,ovdiv,overlayId,'top-left');
             mthis.routeMap.map.addOverlay(overlayId);
         },
@@ -1720,10 +1757,10 @@ export default {
                     }),
                     stroke: new Stroke({
                         width: 3,
-                        color: [255, 0, 0, 1]
+                        color: mthis.lifePointColor
                     }),
                     fill: new Fill({
-                        color: [255, 0, 0, 1]
+                        color: mthis.lifePointColor
                     })
                 });
                 halflifeSelectedstyle = new Style({
@@ -1735,10 +1772,10 @@ export default {
                     }),
                     stroke: new Stroke({
                         width: 3,
-                        color: [255, 0, 0, 1]
+                        color: mthis.halflifePointColor
                     }),
                     fill: new Fill({
-                        color: [255, 0, 0, 1]
+                        color: mthis.halflifePointColor
                     })
                 });
                 dieSelectedstyle = new Style({
@@ -1750,10 +1787,10 @@ export default {
                     }),
                     stroke: new Stroke({
                         width: 3,
-                        color: [255, 0, 0, 1]
+                        color: mthis.diePointColor
                     }),
                     fill: new Fill({
-                        color: [255, 0, 0, 1]
+                        color: mthis.diePointColor
                     })
                 });
                 violentSelectedstyle = new Style({
@@ -1765,10 +1802,10 @@ export default {
                     }),
                     stroke: new Stroke({
                         width: 3,
-                        color: [255, 0, 0, 1]
+                        color: 'red'
                     }),
                     fill: new Fill({
-                        color: [255, 0, 0, 1]
+                        color: 'red'
                     })
                 });
                 

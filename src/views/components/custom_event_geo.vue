@@ -1132,6 +1132,7 @@
                 }
               })
             } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
+              debugger
               let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
               mthis.selectTag = detailId
               let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);

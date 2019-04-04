@@ -141,14 +141,18 @@
               var eventeOb = {};
               eventeOb.EventIds = EventIds;
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
-                    var EventDetail = response.body.data[0];//util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                    var eventD = {};
-                    eventD.entity_type = 'event';
-                    eventD.id = EventDetail.id;
-                    eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
-                    eventD.loaded = true;
-                    eventD.name = EventDetail.event_content;
-                    mthis.evetdata  = eventD;
+                    var EventDetail = response.body.data;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                    var eventDs = [];
+                    for(var i = 0; i < EventDetail.length; i++){
+                      var eventD = {};
+                      eventD.entity_type = 'event';
+                      eventD.id = EventDetail[i].id;
+                      eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
+                      eventD.loaded = true;
+                      eventD.name = EventDetail[i].event_content;
+                      eventDs.push(eventD)
+                    }
+                    mthis.evetdata  = eventDs;
                     mthis.saveSelectedIds = mthis.evetdata;
                     mthis.evetdataFlag = true
                   })
