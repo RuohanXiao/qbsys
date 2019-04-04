@@ -1055,29 +1055,29 @@
       this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 10 + "px";
       this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
       this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 30 + "px";
+      var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url +  "/entityTypeTable.xml");
+      var entityMainType = ob.getElementsByTagName("entityMainType");
+      this.myMap = new Map();
+      for (var i = 0; i < entityMainType.length; i++) {
+        let typeName = entityMainType[i].children[0].textContent;
+        let typeChild = []
+        for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
+          // typeChild.push(entityMainType[i].children[1].children[n].textContent)
+          this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
+        }
+      }
     },
     components: {},
     watch: {
       evetdata: function() {
         var mthis = this
-        debugger
         //var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
-        var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url +  "/entityTypeTable.xml");
-        var entityMainType = ob.getElementsByTagName("entityMainType");
+        
         if (this.timer) {
           clearTimeout(this.timer)
         }
         this.timer = setTimeout(function() {
           let arr = []
-          mthis.myMap = new Map();
-          for (var i = 0; i < entityMainType.length; i++) {
-            let typeName = entityMainType[i].children[0].textContent;
-            let typeChild = []
-            for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
-              // typeChild.push(entityMainType[i].children[1].children[n].textContent)
-              mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
-            }
-          }
           // console.log('mthis.evetdata[0].entity_type')
           // console.log(mthis.evetdata[0].entity_type)
           // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
