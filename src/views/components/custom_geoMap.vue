@@ -463,7 +463,7 @@ export default {
                     
                 })
             }
-            mthis.orgsSpatialQuery(geometryArr);
+            mthis.orgsSpatialQuery(geometryArr,'Org');
         },
         
         clearAll(){
@@ -1533,10 +1533,10 @@ export default {
             var url = '';
             if(type === 'Event'){
                 //url = 'http://localhost:5000/exploreEvent/'
-                url = 'http://10.60.1.140:5001/exploreEvent/'
+                url = 'http://10.60.1.140:5100/exploreEvent/'
             } else if(type === 'Org'){
                 //url = 'http://localhost:5000/exploreOrg/'
-                url = 'http://10.60.1.140:5001/exploreOrg/'
+                url = 'http://10.60.1.140:5100/exploreOrg/'
             }
              mthis.$http.post(url, {
             //mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
@@ -2744,7 +2744,7 @@ export default {
                 //mthis.eventGeoJson = mthis.test_mapData;
                 //mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-to-GIS/', {
                 //mthis.$http.post("http://localhost:5000/getOrgByIds/", {
-                mthis.$http.post("http://10.60.1.140:5001/getOrgByIds/", {
+                mthis.$http.post("http://10.60.1.140:5100/getOrgByIds/", {
                     "ids": data
                 }).then(response => {
                     var eventGeoJson_Org = response.body.data.Features;
@@ -2752,7 +2752,7 @@ export default {
                     mthis.addFeaturesToEventLayer(addFeatures_Org);
 
                     //mthis.$http.post("http://localhost:5000/getEventByIds/", {
-                    mthis.$http.post("http://10.60.1.140:5001/getEventByIds/", {
+                    mthis.$http.post("http://10.60.1.140:5100/getEventByIds/", {
                         "ids": data
                     }).then(response => {
                         var eventGeoJson_Event = response.body.data.Features;
