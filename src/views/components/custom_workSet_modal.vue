@@ -141,6 +141,16 @@
     },
     mounted() {
       // $('.touxiangImg')
+      var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
+      var entityMainType = ob.getElementsByTagName("entityMainType");
+      this.myMap = new Map();
+      for (var i = 0; i < entityMainType.length; i++) {
+        let typeName = entityMainType[i].children[0].textContent;
+        let typeChild = []
+        for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
+          this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
+        }
+      }
     },
     watch: {
       worksetData:function(){
@@ -309,17 +319,7 @@
       addDataToTemp(item) {
         console.log(this.worksetData)
         var mthis = this
-        var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
-        var entityMainType = ob.getElementsByTagName("entityMainType");
         let arr = []
-        mthis.myMap = new Map();
-        for (var i = 0; i < entityMainType.length; i++) {
-          let typeName = entityMainType[i].children[0].textContent;
-          let typeChild = []
-          for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
-            mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
-          }
-        }
         if (mthis.myMap.get(item.type) === 'entity') {
           if (!util.ifInArr(new Array(item), mthis.worksetData[0].data)) {
             mthis.worksetData[0].data.push(item)

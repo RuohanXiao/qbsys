@@ -565,11 +565,11 @@
           arr.push(this.selectionIdByType.nodeIds[i])
         }
         for (let j = 0; j < this.selectionIdByType.eventIds.length; j++) {
-          arr.push(this.selectionIdByType.enentIds[j])
+          arr.push(this.selectionIdByType.eventIds[j])
         }
-        for (let k = 0; k < this.selectionIdByType.contentIds.length; k++) {
-          arr.push(this.selectionIdByType.contentIds[k])
-        }
+        // for (let k = 0; k < this.selectionIdByType.contentIds.length; k++) {
+        //   arr.push(this.selectionIdByType.contentIds[k])
+        // }
         /* arr.push(this.selectionIdByType.nodeIds)
         arr.push(this.selectionIdByType.enentIds)
         arr.push(this.selectionIdByType.contentIds) */
@@ -2615,6 +2615,9 @@
         // }, 200);
       },
       addNetNodes: function(va) {
+        console.log('=======addNetNodes============================')
+        console.log(this.addNetNodes)
+        console.log(va)
         var mthis = this
         if (mthis.$store.state.tmss === 'net') {
           mthis.netchart.addData(va)

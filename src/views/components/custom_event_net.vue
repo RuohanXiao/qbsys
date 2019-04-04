@@ -1251,6 +1251,7 @@
         entDivH: '',
         entityT: '',
         myMap: new Map(),
+        myMap1: new Map(),
         xiangguanEntity: [],
         xiangguanDoc: [],
         xiangguanEvent: [],
@@ -1275,6 +1276,27 @@
       this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 10 + "px";
       this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
       this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 30 + "px";
+      
+      // var ob1 = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
+      // var eventNames1 = ob1.getElementsByTagName("eventNames");
+      // mthis.myMap1 = new Map();
+      // for(let eventNameitem of eventNames1) {
+      //   for(let items of eventNameitem.children){
+      //     mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
+      //   }
+      // }
+
+
+      var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
+      var entityMainType = ob.getElementsByTagName("entityMainType");
+      this.myMap = new Map();
+      for (var i = 0; i < entityMainType.length; i++) {
+        let typeName = entityMainType[i].children[0].textContent;
+        let typeChild = []
+        for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
+          this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
+        }
+      }
     },
     components: {},
     watch: {
@@ -1289,24 +1311,11 @@
       evetdata: function() {
         var mthis = this
         if (mthis.evetdata.length > 0) {
-          console.log('============mthis.evetdata===============')
-          console.log(mthis.evetdata[0])
-          var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
-          var entityMainType = ob.getElementsByTagName("entityMainType");
           if (this.timer) {
             clearTimeout(this.timer)
           }
           this.timer = setTimeout(function() {
             let arr = []
-            mthis.myMap = new Map();
-            for (var i = 0; i < entityMainType.length; i++) {
-              let typeName = entityMainType[i].children[0].textContent;
-              let typeChild = []
-              for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
-                // typeChild.push(entityMainType[i].children[1].children[n].textContent)
-                mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
-              }
-            }
             if (mthis.evetdata[0] !== undefined) {
               if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
                 // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
@@ -1366,8 +1375,65 @@
       checkImg(img) {
         return util.checkImgExists(img)
       },
-      addXiangguanDoc(ids) {},
-      addXiangguanEvent(ids) {},
+      addXiangguanDoc(ids) {
+        var mthis = this
+        if(ids.length>0) {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+            "docIds": ids
+          }).then(response => {
+            console.log(response)
+            if(response.body.code === 0) {
+              let nodesItem = new Array()
+              for(let n = 0; n<response.body.data.length;n++) {
+                nodesItem.push({
+                  id: response.body.data[n].id,
+                  img: 'http://10.60.1.140/assets/images/content_node.png',
+                  entity_type: 'content',
+                  name: [...response.body.data[n].title].length>20?response.body.data[n].title.substring(0,19)+'...':response.body.data[n].title,
+                  loaded: true
+                })
+              }
+              mthis.$store.commit('setAddNetNodes', {nodes:nodesItem,links:[]})
+            }
+          })
+        }
+        
+
+      },
+      addXiangguanEvent(ids) {
+        var mthis =this
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/',{
+          'EventIds': ids
+        }).then(response => {
+          console.log(response)
+          if(response.body.code === 0) {
+            var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
+            var eventNames = ob.getElementsByTagName("eventNames");
+            mthis.myMap1 = new Map();
+            for(let eventNameitem of eventNames) {
+              for(let items of eventNameitem.children){
+                mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
+              }
+            }
+            let eventsItem = new Array()
+            for(let n = 0; n<response.body.data.length;n++) {
+              console.log(response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_"))
+              console.log(mthis.myMap1.get(response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_")).img)
+              // let type = response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_")
+              // let img = mthis.myMap1.get(type).img
+              // let name = mthis.myMap1.get(type).name
+              eventsItem.push({
+                id: response.body.data[n].id,
+                img: mthis.myMap1.get(response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_")).img,
+                entity_type: 'event',
+                name: response.body.data[n].event_subtype,
+                loaded: true
+              })
+            }
+            mthis.$store.commit('setAddNetNodes', {nodes:eventsItem,links:[]})
+          }
+        })
+      },
       addXiangguanShiti(id) {
         var mthis = this
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
