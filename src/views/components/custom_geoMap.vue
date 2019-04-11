@@ -216,6 +216,7 @@ export default {
         selectClick : null,
         mouseOnly:null,
         legend:null,
+        evt:null,
         BezierPointsObjsArr:[],
         routeColors:['#616f39','#88A2AA','#509aaf'],
         n :500,//曲线的粒度（曲线是由几个点组成）
@@ -239,6 +240,7 @@ export default {
         invertSelectedEventIds:[], //反选存储
         AreaIds:[],  //行政区划ids
         violentFeatureIds:[],//狂暴点的featureId，（地图上被click选中的点）
+        AnimationFun:{},
         //selectedOrgIds:[],  //被选中的组织机构ids
         changeButtonParam:[],
         pointMoveListenerKey:null,
@@ -467,7 +469,6 @@ export default {
         },
         pushToNet(){
             var mthis = this;
-            debugger
             var eventIds = [];
             var nodeIds = [];
             var metalworkIds = mthis.SelectedIds;
@@ -589,6 +590,10 @@ export default {
                     var layerId = mthis.AllLayerList_conf[featureType].layerId
                     var source = mthis.getLayerById(layerId).getSource();
                     source.addFeature(feature);
+                    var type = feature.getGeometry().getType();
+                    if(type === 'MultiLineString'){
+                        mthis.routeMap.map.on('postcompose', mthis.AnimationFun[featureId])
+                    }
                 })
                 //source.addFeatures(mthis.removeFeaturesArr);
                 mthis.removeFeaturesArr = [];
@@ -703,7 +708,6 @@ export default {
         },
         rightClickEvent(feature){
             var mthis = this;
-            debugger
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
             mthis.orgsSpatialQuery([geometryArr],'Event');
@@ -939,7 +943,7 @@ export default {
                 mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
                 mthis.routeMap.map.addInteraction(mthis.selectClick);
                 mthis.selectPointerMove.on('select', function(e) {
-                    var selectFeatures = e.selected;
+                    var selectFeatures = e.selected
                     var deselectFeatures = e.deselected
                     if(deselectFeatures.length > 0){
                         for(let i = 0; i < deselectFeatures.length; i++){
@@ -973,6 +977,7 @@ export default {
                 });
                 mthis.selectClick.on('select', function(e) {
                     var selectFeatures = e.selected;
+                    mthis.evt = e;
                     var deselectFeatures = e.deselected;
                     var isIN = function(feature){
                         let isIn = false;
@@ -1144,7 +1149,6 @@ export default {
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
 
             var orgNum = feature.get('selectedNum');
-            debugger
             if(orgNum === 1){
                 var name = ''
                 var Entitites = '';
@@ -1589,17 +1593,15 @@ export default {
             var mthis = this;
             var url = '';
             if(type === 'Event'){
-                url = 'http://localhost:5000/exploreEvent/'
-                //url = 'http://10.60.1.140:5100/exploreEvent/'
+                //url = 'http://localhost:5000/exploreEvent/'
+                url = 'http://10.60.1.140:5100/exploreEvent/'
             } else if(type === 'Org'){
-                url = 'http://localhost:5000/exploreOrg/'
-                //url = 'http://10.60.1.140:5100/exploreOrg/'
+                //url = 'http://localhost:5000/exploreOrg/'
+                url = 'http://10.60.1.140:5100/exploreOrg/'
             }
              mthis.$http.post(url, {
-            //mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
                     'geometry':geometryArr
                 }).then(response => {
-                    debugger
                     var OrgGeojson = response.body.data.Features;
                     var addfeatures = (new GeoJSON()).readFeatures(OrgGeojson);
                     mthis.geometrySelectedEventIds = [];
@@ -1612,9 +1614,11 @@ export default {
                             mthis.setFeatureStatus(existFeatures[j],'die');
                         }
                     })
+                    mthis.AnimationFun = {};
                     for(let i = 0; i < addfeatures.length; i++){
                         var feature = addfeatures[i];
                         if(feature.getGeometry().getType() === 'MultiLineString'){
+                            
                             mthis.startAnimation(feature)
                         }
                         mthis.mapAddFeature(feature);
@@ -1742,37 +1746,34 @@ export default {
                     })
                 });
                 lineStringArr.forEach(function(Item) {
-                    //var RoutePointsArr = Item.getCoordinates();
-                    //RoutePointsArr.forEach(function(item) {
-                        var item = Item.getCoordinates();
-                        /* if (index > 1) {
-                            var dx = item[index -1][0] - item[index - 2][0];
-                            var dy = item[index -1][1] - item[index - 2][1];
-                            var rotation = -Math.atan2(dy, dx);
-                            //pointmoveTailStyle.carStyle.getImage().setRotation(rotation);
-                            var currentPoint = new Point(item[index]);
-                            var feature = new Feature(currentPoint);
-                            vectorContext.drawFeature(feature, pointmoveTailStyle.TailStyle);
-                        } */
-                        var a = (index > 10) ? 10 : index;
-                        for(var i=0; i<a; i++){
-                            var radius = 2-20*i/n;
-                            //pointmoveTailStyle.TailStyle.getImage().setRadius(radius);
-                            var currentPoint = new Point(item[index - i]);
-                            var feature = new Feature(currentPoint);
-                            var style = pointmoveTailStyle['TailStyle_'+ i]
-                            vectorContext.drawFeature(feature, style);
-                        }
-                    });
-                //});
+                    var item = Item.getCoordinates();
+                    /* if (index > 1) {
+                        var dx = item[index -1][0] - item[index - 2][0];
+                        var dy = item[index -1][1] - item[index - 2][1];
+                        var rotation = -Math.atan2(dy, dx);
+                        //pointmoveTailStyle.carStyle.getImage().setRotation(rotation);
+                        var currentPoint = new Point(item[index]);
+                        var feature = new Feature(currentPoint);
+                        vectorContext.drawFeature(feature, pointmoveTailStyle.TailStyle);
+                    } */
+                    var a = (index > 10) ? 10 : index;
+                    for(var i=0; i<a; i++){
+                        var radius = 2-20*i/n;
+                        //pointmoveTailStyle.TailStyle.getImage().setRadius(radius);
+                        var currentPoint = new Point(item[index - i]);
+                        var feature = new Feature(currentPoint);
+                        var style = pointmoveTailStyle['TailStyle_'+ i]
+                        vectorContext.drawFeature(feature, style);
+                    }
+                });
                 map.render();
             }
-
-            map.on('postcompose', moveFeature);
+            var id = feature.getId();
+            mthis.AnimationFun[id] = moveFeature
+            map.on('postcompose', mthis.AnimationFun[id]);
         },
         changedrawType(object){
             var mthis = this
-            debugger
             var mapDiv = document.getElementById('locationRoute_Map')
             mapDiv.style.cursor = 'crosshair';
             var map = mthis.routeMap.map
@@ -2435,8 +2436,15 @@ export default {
         */
         deletePoints(){
             var mthis = this;
-            debugger
             //var source = mthis.getLayerById('eventsPointsLayer').getSource();
+            if(mthis.selectClick.getFeatures().getArray().length > 0){
+                let features = mthis.selectClick.getFeatures().getArray();
+                for(let i = 0; i < features.length; i++){
+                    let feature = features[i]
+                    mthis.deleteLineEventAnimation(feature);
+                }
+                mthis.selectClick.getFeatures().clear();
+            }
             var SelectedIds = mthis.getSelectedEventIds().ids;
             if(SelectedIds.length > 0){
                 SelectedIds.forEach(function(item){
@@ -2450,7 +2458,14 @@ export default {
             mthis.timeSelectedEventIds.length = 0;
             mthis.staticsSelectedEventIds.length = 0;
         },
-        
+        deleteLineEventAnimation(feature){
+            var mthis = this;
+            let type = feature.getGeometry().getType();
+            if(type === 'MultiLineString'){
+                let id = feature.getId();
+                mthis.routeMap.map.un('postcompose', mthis.AnimationFun[id])
+            }
+        },
         deleteEventInFeaturesById(id){
             var mthis = this;
              /* Object.keys(mthis.AllLayerList_conf).forEach(function(itemId){
@@ -2472,6 +2487,7 @@ export default {
             var selectedEventsNum = feature.get('selectedNum');
             feature.set('selectedNum',selectedEventsNum - 1,false);
             if(feature.get('Params').length === 0){
+                mthis.deleteLineEventAnimation(feature);
                 mthis.removeFeaturesArr.push(feature);
                 source.removeFeature(feature);
             } else if(feature.get('Params').length !== 0  && feature.get('selectedNum') <= 0){
@@ -2981,8 +2997,8 @@ export default {
             //source.clear();
             var feature;
             for(let i = 0; i < ids.length; i++){
-                var type = ids[i].split('&')[1];
-                var id = ids[i].split('&')[0];
+                var type = ids[i].split('_')[1];
+                var id = ids[i].split('_')[0];
                 mthis.getWfsData(type,id);
             }
 
@@ -3011,12 +3027,10 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
-            debugger
             var data = mthis.$store.state.netToGeoData;
             if(data.length<= 0){
                 return
             } else {
-                debugger
                 //mthis.eventGeoJson = mthis.test_mapData;
                 //mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-to-GIS/', {
                 //mthis.$http.post("http://localhost:5000/getOrgByIds/", {
@@ -3101,7 +3115,6 @@ export default {
         },
         geometrySelectedEventIds:function(){
             var mthis = this;
-            debugger
             /* var dealSelectedIds = [];
             if(mthis.geometrySelectedEventIds.length > 0){
                 mthis.geometrySelectedEventIds.forEach(function(Lid){

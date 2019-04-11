@@ -2501,7 +2501,6 @@
       geoToNetData: function() {
         // 调用查询接口，查询id对应数据
         // this.netchart.addData()
-        debugger
         var mthis = this
         console.log(mthis.geoToNetData)
         if(mthis.geoToNetData.nodeIds.length>0){

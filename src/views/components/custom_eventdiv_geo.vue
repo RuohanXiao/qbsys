@@ -134,7 +134,6 @@
       },
       geo_selected_param:function(){
         var mthis = this;
-        debugger
         var OrgIds = [];
         var EventIds = [];
         mthis.geo_selected_param.paramIds.forEach(function(id){
@@ -183,8 +182,13 @@
             mthis.evetdataFlag = false;
           }
           if(mthis.geo_selected_param.paramIds.length > 1){
-            var nodeIds = OrgIds;
-            nodeIds.concat(EventIds);
+            var nodeIds = [];
+            for(let i = 0; i < OrgIds.length; i++){
+              nodeIds.push(OrgIds[i])
+            }
+            for(let i = 0; i < EventIds.length; i++){
+              nodeIds.push(EventIds[i])
+            }
             mthis.$http.post(mthis.$store.state.ipConfig.api_url+'/graph-attr/', {
             'nodeIds': nodeIds
             }).then(response => {
@@ -201,7 +205,6 @@
     methods: {
       clickLeftStatics(staticsClick){
         var mthis = this;
-        debugger
         mthis.$store.commit('setGeoStaticsSelectedIds', staticsClick)
       },
       changTab(a) {
