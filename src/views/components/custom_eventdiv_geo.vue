@@ -87,22 +87,13 @@
         if(mthis.clickSelectedGeoIds.length > 0){
             var OrgIds = [];
             var EventIds = [];
-            mthis.geo_selected_param.paramIds.forEach(function(id){
-              var type = id.split('_')[0];
-              var sIds = id.split('_');
-              var nId = "";
-              for(var i = 1; i < sIds.length; i++){
-                if(nId === ""){
-                  nId += sIds[i];
-                } else {
-                  nId += '_' + sIds[i];
-                }
-                
-              }
+            mthis.clickSelectedGeoIds.forEach(function(id){
+              var type = id.split('&')[0];
+              var Id = id.split('&')[1];
               if(type === 'event'){
-                EventIds.push(nId);
+                EventIds.push(Id);
               } else {
-                OrgIds.push(nId);
+                OrgIds.push(Id);
               }
             })
             if(OrgIds.length > 0){
@@ -134,21 +125,6 @@
                     mthis.evetdataFlag = true
                   })
             }
-
-
-
-
-            /* var nodeOb = {};
-            var ids = [];
-            mthis.clickSelectedGeoIds.forEach(function(id){
-              var OId = id.split('_')[1];
-              ids.push(OId);
-            })
-            nodeOb.nodeIds = ids;
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
-                  mthis.evetdata = response.body.data[0].nodes;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                  mthis.evetdataFlag = true
-                }) */
           } else {
             mthis.evetdata = mthis.saveSelectedIds;
           }
@@ -158,28 +134,20 @@
       },
       geo_selected_param:function(){
         var mthis = this;
+        debugger
+        var OrgIds = [];
+        var EventIds = [];
+        mthis.geo_selected_param.paramIds.forEach(function(id){
+          var type = id.split('&')[0];
+          var Id = id.split('&')[1];
+          if(type === 'event'){
+            EventIds.push(Id);
+          } else {
+            OrgIds.push(Id);
+          }
+        })
         if(mthis.geo_selected_param.type !== 'GeoStatics'){
           if(mthis.geo_selected_param.paramIds.length > 0){
-            var OrgIds = [];
-            var EventIds = [];
-            mthis.geo_selected_param.paramIds.forEach(function(id){
-              var type = id.split('_')[0];
-              var sIds = id.split('_');
-              var nId = "";
-              for(var i = 1; i < sIds.length; i++){
-                if(nId === ""){
-                  nId += sIds[i];
-                } else {
-                  nId += '_' + sIds[i];
-                }
-                
-              }
-              if(type === 'event'){
-                EventIds.push(nId);
-              } else {
-                OrgIds.push(nId);
-              }
-            })
             if(OrgIds.length > 0){
               var nodeOb = {};
               nodeOb.nodeIds = OrgIds;
@@ -215,8 +183,10 @@
             mthis.evetdataFlag = false;
           }
           if(mthis.geo_selected_param.paramIds.length > 1){
+            var nodeIds = OrgIds;
+            nodeIds.concat(EventIds);
             mthis.$http.post(mthis.$store.state.ipConfig.api_url+'/graph-attr/', {
-            'nodeIds': mthis.geo_selected_param.paramIds
+            'nodeIds': nodeIds
             }).then(response => {
                 mthis.staticsDatas = response.body.data;
               })
@@ -231,6 +201,7 @@
     methods: {
       clickLeftStatics(staticsClick){
         var mthis = this;
+        debugger
         mthis.$store.commit('setGeoStaticsSelectedIds', staticsClick)
       },
       changTab(a) {

@@ -1062,7 +1062,6 @@
         let typeName = entityMainType[i].children[0].textContent;
         let typeChild = []
         for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
-          // typeChild.push(entityMainType[i].children[1].children[n].textContent)
           this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
         }
       }
@@ -1071,48 +1070,32 @@
     watch: {
       evetdata: function() {
         var mthis = this
-        //var ob = configer.loadxmlDoc("../src/util/entityTypeTable.xml");
-        
+        debugger
         if (this.timer) {
           clearTimeout(this.timer)
         }
         this.timer = setTimeout(function() {
           let arr = []
-          // console.log('mthis.evetdata[0].entity_type')
-          // console.log(mthis.evetdata[0].entity_type)
-          // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
           if (mthis.evetdata[0] !== undefined) {
             if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
-              // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
-              // let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
               let detailId = (mthis.evetdata[0].id)
               mthis.selectTag = detailId
-              // let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
-              let a = []
+              let a = [];
+              let t = [];
               a.push(detailId)
+              t.push("entity")
               mthis.detailData = {}
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
                 "nodeIds": a
               }).then(response => {
-                // console.log(response.body.data[0])
                 mthis.detailData = response.body.data[0]
               })
-              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
-              //   "entityIds": a
-              // }).then(response => {
-              //   console.log(response.body.data[0])
-              //   // mthis.xiangguanDoc = response.body.data[0].children.data
-              // })
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
-                "nodeIds": a,
-                "TypeLabel": 'entity'
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+                /* "NodeIds": a,
+	              "NodeTypes": ,
+	              "TypeLabel": "all" */
               }).then(response => {
-                console.log('=============related entity=============')
-                console.log(response)
                 if (response.body.code == 0) {
-                  // let ids = response.body.data[0].nodes.map(item=>{
-                  //   return item.id
-                  // })
                   let objArr = new Array()
                   for (let i = 0; i < response.body.data[0].nodes.length; i++) {
                     let itemid = response.body.data[0].nodes[i].id
@@ -1137,6 +1120,8 @@
               mthis.selectTag = detailId
               let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
               let a = []
+              let t = [];
+              t.push("event")
               a.push(detailId)
               mthis.detailData = {}
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
@@ -1152,9 +1137,6 @@
                 console.log('=============related event=============')
                 console.log(response)
                 if (response.body.code == 0) {
-                  // let ids = response.body.data[0].nodes.map(item=>{
-                  //   return item.id
-                  // })
                   let objArr = new Array()
                   for (let i = 0; i < response.body.data[0].nodes.length; i++) {
                     let itemid = response.body.data[0].nodes[i].id
@@ -1183,21 +1165,14 @@
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
                 "docIds": a
               }).then(response => {
-                console.log('response=====================')
                 mthis.detailData = response.body.data[0]
                 mthis.detailData.entity_type = 'document'
-                console.log(mthis.detailData)
               })
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
                 "nodeIds": a,
                 "TypeLabel": 'document'
               }).then(response => {
-                console.log('=============related document=============')
-                console.log(response)
                 if (response.body.code == 0) {
-                  // let ids = response.body.data[0].nodes.map(item=>{
-                  //   return item.id
-                  // })
                   let objArr = new Array()
                   for (let i = 0; i < response.body.data[0].nodes.length; i++) {
                     let itemid = response.body.data[0].nodes[i].id
