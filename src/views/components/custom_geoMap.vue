@@ -824,7 +824,7 @@ export default {
         pointerMoveselectfilterFun(feature,layer){
             var mthis = this;
             if(layer.get('id') === "eventsPointsLayer"){
-                if(feature.getGeometry().getType() !== "MultiLineString" && feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
+                if(feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
                     return true
                 } else {
                     return false
@@ -943,6 +943,7 @@ export default {
                 mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
                 mthis.routeMap.map.addInteraction(mthis.selectClick);
                 mthis.selectPointerMove.on('select', function(e) {
+                    debugger
                     var selectFeatures = e.selected
                     var deselectFeatures = e.deselected
                     if(deselectFeatures.length > 0){
