@@ -480,7 +480,7 @@ export default {
         },
         pushToNet(){
             var mthis = this;
-            debugger
+            
             var eventIds = [];
             var nodeIds = [];
             var metalworkIds = mthis.SelectedIds;
@@ -1114,7 +1114,7 @@ export default {
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
 
             var orgNum = feature.get('selectedNum');
-            debugger
+            
             if(orgNum === 1){
                 var name = ''
                 var Entitites = '';
@@ -1542,7 +1542,7 @@ export default {
             //mthis.$http.post('http://10.60.1.140:5001/exploreOrg/', {
                     'geometry':geometryArr
                 }).then(response => {
-                    debugger
+                    
                     var OrgGeojson = response.body.data.Features;
                     var addfeatures = (new GeoJSON()).readFeatures(OrgGeojson);
                     var vectorSource = new VectorSource({
@@ -2735,12 +2735,12 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
-            debugger
+            
             var data = mthis.$store.state.netToGeoData;
             if(data.length<= 0){
                 return
             } else {
-                debugger
+                
                 //mthis.eventGeoJson = mthis.test_mapData;
                 //mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-to-GIS/', {
                 //mthis.$http.post("http://localhost:5000/getOrgByIds/", {

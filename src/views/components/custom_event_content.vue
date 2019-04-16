@@ -3,7 +3,7 @@
     <!-- topdiv 头像, 名字, 简介 -->
     <div :style="{display:'flex'}">
       <div class='avatarStyle'>
-        <Avatar class="circle-img" :src="detailData.img" :style="{width:'50px',height:'50px'}" on-error="defaultImg(this)"  />
+        <Avatar class="circle-img" :src="detailData.img" :style="{width:'50px',height:'50px'}" on-error="defaultImg(this)" />
       </div>
       <div class="contentStyle">
         <div>
@@ -23,11 +23,11 @@
         <p class="e-title-p">节点信息</p>
       </div>
         <human-entity-table v-show="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table>
-        <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
-        <organization-entity-table v-show="detailData.entity_type==='organization'" :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
-        <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table>
-        <event-entity-table v-show="detailData.entity_type==='event'" :tableData="detailData" :entDivH='entDivH'></event-entity-table>
-        <doc-entity-table v-show="detailData.entity_type==='document'" :tableData="detailData" :entDivH='entDivH'></doc-entity-table>
+        <administrative-entity-table v-if="detailData.entity_type==='administrative'" :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
+        <organization-entity-table v-else-if="detailData.entity_type==='organization'" :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
+        <weapon-entity-table v-else-if="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table>
+        <event-entity-table v-else-if="detailData.entity_type==='event'" :tableData="detailData" :entDivH='entDivH'></event-entity-table>
+        <doc-entity-table v-else-if="detailData.entity_type==='document'" :tableData="detailData" :entDivH='entDivH'></doc-entity-table>
     </div>
     <!-- 选中详情 -->
     <div class="selectDiv" :style="{height:selectDivHeight}">
@@ -38,15 +38,13 @@
           <p class="e-title-p">当前选择({{eventdata.length}})</p>
         </div>
         <div class="e-content" v-if="eventdata.length == undefined" :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" @click="changeDetailDiv(eventdata.id,eventdata.entity_type,eventdata)">
+          <div class="e-content-d pointIcon" @click="changeDetailDiv(eventdata.id,eventdata.entity_type)">
             <p class="e-content-p">{{eventdata.name}}</p>
           </div>
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" v-for="(item,index) in eventdata" @click="changeDetailDiv(item.id,item.entity_type,eventdata)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
-            <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.name.toLowerCase().replace(/-/, "_")).name}}</p>
-            <!-- <p v-if="item.entity_type==='event'" class="e-content-p">{{item.name}}</p> -->
-            <p v-else class="e-content-p">{{item.name}}</p>
+          <div class="e-content-d pointIcon" v-for="(item,index) in eventdata" @click="changeDetailDiv(item.id,item.entity_type)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
+            <p class="e-content-p">{{item.name}}</p>
           </div>
         </div>
       </div>
@@ -111,7 +109,7 @@
         // console.log('ob')
         // console.log(ob)
       },
-      changeDetailDiv(id, type,ob) {
+      changeDetailDiv(id, type) {
         var mthis = this
         let arr = []
         arr.push(id)
@@ -128,11 +126,10 @@
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {
-            let img = mthis.myMap1.get(response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")).img
-            let name = mthis.myMap1.get(response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")).name
+            // console.log(response)
+            // this.detailData = response.body.data[0]
             let res = response.body.data[0]
-            res.img = util.checkImgExists(img) ? img : 'http://10.60.1.140/assets/images/image.png'
-            res.name = name
+            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
             this.detailData = res
             this.detailData.entity_type = 'event'
           })
@@ -149,7 +146,7 @@
             "docIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/content_node.png'
+            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
             this.detailData = res
             mthis.detailData.entity_type = 'document'
           })
@@ -161,9 +158,17 @@
       humanEntityTable,administrativeEntityTable,organizationEntityTable,weaponEntityTable,eventEntityTable,docEntityTable
     },
     watch: {
+      // detailData: function() {
+      // },
+      // xiangguanEntity: function() {
+      // },
       eventdata: function() {
+        // alert()
         var mthis = this
+        // console.log('mthis.eventdata')
+        // console.log(mthis.eventdata)
         if (typeof(mthis.eventdata) === "object" && mthis.eventdata.concat && mthis.eventdata.length > 0) {
+          // console.log(mthis.eventdata[0].entity_type)
           if (mthis.timer) {
             clearTimeout(mthis.timer)
           }
@@ -179,17 +184,33 @@
               }).then(response => {
                 let result = new Object();
                 result = response.body.data[0]
+                // console.log('util.checkImgExists(result.img)')
+                // console.log(util.checkImgExists(result.img))
+                // console.log(result.img)
                 result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/human.png'
+                // console.log('=========detailData============')
+                // console.log(mthis.detailData)
                 mthis.detailData = result
               })
             } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'event') {
               let detailId =(mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
               mthis.selectTag = detailId
-              let result = new Object();
-              result = mthis.eventdata[0]
-              // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
-              result.img = util.checkImgExists(mthis.detailData.img) ? (mthis.detailData.img) : 'http://10.60.1.140/assets/images/event.png'
-              mthis.detailData = result
+              // mthis.selectTag = detailId
+              // let a = []
+              // a.push(detailId)
+              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
+              //   "EventIds": a
+              // }).then(response => {
+              //   if (response.body.code === 0) {
+                let result = new Object();
+                result = mthis.eventdata[0]
+                result.img = util.checkImgExists(mthis.detailData.img) ? (mthis.detailData.img) : 'http://10.60.1.140/assets/images/event.png'
+                // result.entity_type = 'event'
+                mthis.detailData = result
+                // } else {
+                //   alert('/event-detail/接口异常')
+                // }
+              // })
             } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'document') {
               let detailId =(mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
               mthis.selectTag = detailId
@@ -199,16 +220,11 @@
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
                 "docIds": a
               }).then(response => {
-                console.log(response.body.data[0])
                 let result = new Object();
                 result = response.body.data[0]
                 result.img = util.checkImgExists(mthis.detailData.img) ? (mthis.detailData.img) : 'http://10.60.1.140/assets/images/content_node.png'
                 result.entity_type = 'document'
-                result.label = response.body.data[0].title
-                result.name = response.body.data[0].title.substring(0, 19)+'...'
                 mthis.detailData = result
-                console.log('mthis.detailData')
-                console.log(mthis.detailData)
               })
             } else {
               // console.log('未找到匹配的类型')
@@ -225,27 +241,10 @@
       this.dicMap.set('entity','实体');
       this.dicMap.set('document','文档');
       this.dicMap.set('event','事件');
-      var mthis = this
-      var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
-      var eventNames = ob.getElementsByTagName("eventNames");
-      mthis.myMap1 = new Map();
-      for(let eventNameitem of eventNames) {
-        for(let items of eventNameitem.children){
-          mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
-        }
-      }
-      mthis.myMap = new Map();
-      for (var i = 0; i < entityMainType.length; i++) {
-        let typeName = entityMainType[i].children[0].textContent;
-        let typeChild = []
-        for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
-          mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
-        }
-      }
     },
     mounted() {
       this.selectDivHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 8 + 30 + "px";
-      this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 12  + "px";
+      this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 10 + "px";
       this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
       this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 60 + "px";
       var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
@@ -263,9 +262,6 @@
   }
 </script>
 <style scope>
-  .circle-img>img{
-    background-color: rgba(51,255,255,0.2)
-  }
   .avatarStyle {
     width: 50px;
     margin-left: 20px;

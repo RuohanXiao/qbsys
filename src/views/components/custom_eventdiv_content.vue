@@ -1,47 +1,26 @@
 <template>
-  <div :style="{fontSize: '18px',height:viewHeight_20_content}">
+  <div :style="{fontSize: '18px',height:viewHeight_20}">
     <Col>
     <div>
-      <div id="tab1" :style="{margin:'0',height:viewHeight_20_content}">
-        <Tabs :value=$store.state.tabSelectContent>
-          <Tab-pane label="选中详情" name= 'mubiaoxiangqingContent' :style="{fontSize: '18px',height:viewHeight_20_content}" id='mubiaoxiangqingContent'  @click="changTab('mubiaoxiangqingContent')">
-            <div>
-              <Row type="flex" justify="start" class="code-row-bg" :style="{margin:'0',padding:'0'}" v-show="!singlePerson">
-                <div :style="{borderBottom:'0px solid rgba(54, 102, 116, 0.5)',margin:'0 10px 0 10px',width:'100%'}" style="cursor:default">
-                  <p style="color:#ccffff;font-family: MicrosoftYaHei;font-size: 16px;">
-                    <span style="margin:0 4px;background-color:rgba(51, 255, 255, .4);width:3px;">&nbsp;</span> 数据实体(<span v-if="selectNetNodes != null&&selectNetNodes[0]!==undefined">{{selectNetNodes[0].ids.length}}</span>)
-                    <i class="icon iconfont icon-more" style="float:right"></i>
-                  </p>
-                </div>
-                <div class='scrollBarAble' :style="{width:'100%',height:eventheight,margin:'0px 5px 0 10px',paddingRight:'5px'}">
-                <div class="p-collapse-modal" :style="{width:'100%'}" v-for="data in evetdata" @click="detail(data.id)">{{data.name}}
-                  <p class="p-collapse-modal-small">{{data.type}}</p>
-                </div>
-                </div>
-              </Row>
-              <Card dis-hover style="width:100%,background-color:rgba(0,0,0,0);" :style="{overflowY:'scroll',height:eventheight}" v-show="singlePerson" v-if="evetdata!== undefined && evetdata!==null">
-                <Row type="flex" justify="end">
-                  <Icon class="cardIcon icon iconfont icon-fangda process-img DVSL-bar-btn DVSL-bar-btn-back" size="20" @click="detail(evetdata.id)" />
-                </Row>
-                <div :style="{padding:'0 5px'}">
-                  <Row type="flex" justify="center">
-                    <span class="infoTitle">{{evetdata.name}}</span>
-                  </Row>
-                  <Row type="flex" justify="center" :style="{margin:'5px 0 '}">
-                    <Avatar class="circle-img" icon="ios-person" :style="{width:'50px',height:'50px'}" v-if="evetdata.img==''" />
-                    <Avatar class="circle-img" v-else :src="evetdata.img" :style="{width:'50px',height:'50px'}" />
-                  </Row>
-                  <div class='entityDetail'>
-                    <entityDetailsTableHuman :Entitydetail="evetdata" v-if="evetdata.type =='human'" ></entityDetailsTableHuman>
-                    <entityDetailsTableAdministrative :Entitydetail="evetdata" v-if="evetdata.type =='administrative'"></entityDetailsTableAdministrative>
-                    <entityDetailsTableOrganization :Entitydetail="evetdata" v-if="evetdata.type =='organization'"></entityDetailsTableOrganization>
-                  </div>
-                </div>
-              </Card>
+      <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
+        <Tabs :value=$store.state.tabSelectNet>
+          <Tab-pane label="选中详情" name='mubiaoxiangqingContent' :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqingContent' @click="changTab('mubiaoxiangqingContent')">
+            <eventContent :resArr='resArr' :eventdata='evetdata' v-show='evetdataFlag'></eventContent>
+            <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
+              <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
+                <img src="../../dist/assets/images/need_select.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
+                <p class="selectP">请选择左边节点，查看目标详情</p>
+              </div>
             </div>
           </Tab-pane>
-          <Tab-pane label="数据透视" name= 'toushi' :style="{fontSize: '18px',height:viewHeight_20_content}" id='toushi'  @click="changTab('toushi')">
-            <left-statics :staticsIds='staticsIds' :nodeTypedata='nodeTypedata' :SecondAttrClassify='EntityAttrClassify' :firstClassify='firstClassify' :nodeTypeClassify='nodeTypeClassify' v-if=" $store.state.tmss === 'content' && nodeTypedata !== null"></left-statics>
+          <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('toushi')">
+            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' v-if=" $store.state.tmss === 'content' && staticsDatas.length > 0"></left-statics>
+            <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
+              <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
+                <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
+                <p class="selectP">请选择两个以上节点，查看数据透视</p>
+              </div>
+            </div>
           </Tab-pane>
         </Tabs>
       </div>
@@ -51,35 +30,41 @@
   </div>
 </template>
 <script>
+  import util from '../../util/tools.js'
   import modalChartDetail from './custom_modal_detail'
   import percentBar from './custom_percentBar'
   import leftStatics from './custom_leftStatics'
-  import { mapState,mapMutations } from 'vuex'
-  import cTree from './custom_tree'
-  import entityDetailsTableHuman from './custom_entityDetailsTable_human'
-  import entityDetailsTableAdministrative from './custom_entityDetailsTable_administrative'
-  import entityDetailsTableOrganization from './custom_entityDetailsTable_organization'
+  import eventContent from './custom_event_content'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   /* eslint-disable */
   var timer = null;
   export default {
     data() {
       return {
-        timer:null,
-        tabSelectContent:'mubiaoxiangqingContent',
+        eDiv: '',
+        vh20: 0,
+        selectTime: false,
+        timer: null,
+        // tabSelect: '数据透视',
+        tabSelectNet: 'mubiaoxiangqingContent',
         modalNodeId: '',
-        contentStatisticsdata:{},
-        statisticsNameList:{
-          'entity':'实体',
-          'human':'人物',
-          'politician':'政治人物',
-          'administrative':'管理',
-          'organization':'机构',
-          'political party':'政党',
-          'else':'其他'
+        contentStatisticsdata: {},
+        evetdataFlag:false,
+        statisticsNameList: {
+          'entity': '实体',
+          'human': '人物',
+          'politician': '政治人物',
+          'administrative': '管理',
+          'organization': '机构',
+          'political party': '政党',
+          'else': '其他'
         },
-        evetdata: null,
+        evetdata: [],
         detailModalFlag: false,
-        dataStatistics:[],
+        //dataStatistics: [],
         value4: '1-1',
         myList: [{
           name: 'aaaaa',
@@ -94,136 +79,162 @@
         detail_data: null,
         show: [],
         value3: '1',
-                value4: '1-1',
+        value4: '1-1',
         eheight: 0,
         eventheightdiv: 0,
         eventheight: 0,
+        eventItemHeight: 0,
         closable: true,
-        firstClassify : [
-                {
-                    id:'NodeType',
-                    disName:'统计类型'
-                },
-                {
-                    id:'EntityAttr',
-                    disName:'统计属性'
-                }
-            ],
-        nodeTypeClassify : [
-                {
-                    id:'pass',
-                    disName:'通道'
-                },
-                {
-                    id:'topic',
-                    disName:'话题'
-                }
-            ],
-            EntityAttrClassify:{
-              "pass":[{
-                    id:'overseas_news_media',
-                    disName:'境外新闻媒体'
-                },
-                {
-                    id:'overseas_social_media',
-                    disName:'境外社交媒体'
-                },
-                {
-                    id:'domestic_news media',
-                    disName:'境内新闻媒体'
-                },
-                {
-                    id:'domestic_social_media',
-                    disName:'境内社交媒体'
-                }],
-              "topic":[
-                {
-                    id:'type',
-                    disName:'类型'
-                },
-                {
-                    id:'headquarters_location',
-                    disName:'总部'
-                },
-                {
-                    id:'torchbearer',
-                    disName:'领导人'
-                }
-              ]
-            },
-            nodeTypedata:{
-                code:0,
-                data:[
-                    {
-                        id:'event',
-                        count: 1,
-                        per: 8,
-                        
-                    },
-                    {
-                        id:'organization',
-                        count: 3,
-                        per: 8,
- 
-                    },
-                ]
-            },
-            staticsIds:[],
+        staticsDatas:[],
+        nodeTypedata: null,
+        staticsIds: [],
+        single: false,
+        resArr: []
       };
     },
     components: {
       modalChartDetail,
       percentBar,
       leftStatics,
-      cTree,
-      entityDetailsTableHuman,
-      entityDetailsTableAdministrative,
-      entityDetailsTableOrganization
+      eventContent
     },
     // computed: {
-      //   menuitemClasses: function() {
-        //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
+    //   menuitemClasses: function() {
+    //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['selectNetNodes', 'singlePerson', 'viewHeight', 'dataStatisticsEvent','contentStatisticsResult','viewHeight_20_content']),
+    computed: mapState(['selectContentNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType']),
     watch: {
-      contentStatisticsResult:function(){
+      // contentStatisticsResult:function(){
+      //   var mthis = this;
+      //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
+      // },
+      selectionIdByType: function() {
+        // // console.log(this.selectionIdByType)
         var mthis = this;
-        mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
+        mthis.evetdataFlag = false
+        if (mthis.selectContentNodes[0].ids.length > 0) {
+          // 新增防抖功能
+          mthis.evetdata = []
+          mthis.timer = setTimeout(function() {
+            if (mthis.selectionIdByType.nodeIds.length > 0) {
+              let nodeOb = {}
+              nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
+                // mthis.evetdata = response.body.data[0].nodes
+                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                mthis.evetdataFlag = true
+                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                // mthis.$set(mthis.evetdata,0,response.body.data[0].nodes)
+              })
+            }
+            if (mthis.selectionIdByType.eventIds.length > 0) {
+              // let nodeIdsArry = mthis.selectContentNodes[0].ids.map(item => {
+              //   return item.id;
+              // });
+              let eventOb = {}
+              eventOb.EventIds = mthis.selectionIdByType.eventIds
+              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-info/', eventOb).then(response => {
+              //   // mthis.evetdataFlag = true
+              //   // mthis.evetdata = response.body.data[0].nodes
+              //   util.hebing(mthis.evetdata,response.body.data[0].nodes)
+              // })
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventOb).then(response => {
+                // mthis.evetdataFlag = true
+                // mthis.evetdata = response.body.data[0].nodes
+                for(let i = 0; i < response.body.data.length;i++){
+                  response.body.data[i].id = response.body.data[i].doc_id
+                  // response.body.data[i].entity_type = response.body.data[i].event_type
+                  response.body.data[i].entity_type = 'event'
+                  response.body.data[i].name = response.body.data[i].event_subtype
+                }
+                // // console.log(util.hebing(mthis.evetdata,response.body.data))
+                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                mthis.evetdataFlag = true
+              })
+            }
+            if (mthis.selectionIdByType.contentIds.length > 0) {
+              // let nodeIdsArry = mthis.selectContentNodes[0].ids.map(item => {
+              //   return item.id;
+              // });
+              let docOb = {}
+              docOb.docIds = mthis.selectionIdByType.contentIds
+              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
+              //   // mthis.evetdataFlag = true
+              //   // mthis.evetdata = response.body.data[0].nodes
+              // })
+               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
+                // mthis.evetdataFlag = true
+                // mthis.evetdata = response.body.data[0].nodes
+                for(let i = 0; i < response.body.data.length;i++){
+                  response.body.data[i].entity_type = 'document'
+                  response.body.data[i].name = response.body.data[i].title
+                }
+                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                // // console.log(util.hebing(mthis.evetdata,response.body.data))
+                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                mthis.evetdataFlag = true
+              })
+            }
+          }, 200);
+        } else {
+          // mthis.$set(mthis.evetdata,0,null)
+          mthis.$set(mthis.evetdata,0,[])
+          mthis.evetdata =  []
+          mthis.evetdataFlag = false
+        }
+      },
+      singlePerson: function() {
+        this.single = this.singlePerson
       },
       dataStatisticsEvent: function() {
         var mthis = this;
-        mthis.dataStatistics = mthis.dataStatisticsEvent.data;
+        mthis.staticsIds = mthis.$store.state.StaticsIds;
+        mthis.nodeTypedata = mthis.$store.state.dataStatisticsEvent
+        //mthis.dataStatistics = mthis.EntityAttrInformation.data;
+        //mthis.dataStatistics = mthis.dataStatisticsEvent.data;  //这是测试数据，正式数据接通后，应删除EntityAttrInformation变量
       },
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
-      // selectNetNodes: function(va) {
-      //   var mthis = this;
-      //     let nodeIdsArry = va[0].ids.map(item => {
-      //       return item.id;
-      //     });
-      //     if (this.timer) {
-      //       clearTimeout(this.timer)
-      //     }
-      //     this.timer = setTimeout(function() {
-      //     // 新增防抖功能
-      //     mthis.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
-      //       'nodeIds': nodeIdsArry
-      //     }).then(response => {
-      //       mthis.evetdata = mthis.singlePerson?response.body.data[0].nodes[0]:response.body.data[0].nodes
-      //     })
-      //     }, 100);
-      //   // let qu = (mthis.singlePerson) ? mthis.selectNetNodes[0].ids[0] : mthis.selectNetNodes[0].ids
-      //   // mthis.evetdata = 
-      // }
+      netTimeCondition: function(va) {
+        this.selectTime = true
+        this.tabSelectNet = 'mubiaoxiangqingContent'
+      },
+      selectContentNodes: function() {
+        var mthis = this;
+        if(mthis.selectContentNodes[0].ids.length > 1){
+          //调用统计接口
+          mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
+          'nodeIds': mthis.selectContentNodes[0].ids
+          }).then(response => {
+              mthis.staticsDatas = response.body.data;
+          })
+          // 调用详情接口
+          mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
+          'nodeIds': mthis.selectContentNodes[0].ids
+          }).then(response => {
+            mthis.staticsDatas = response.body.data;
+          })
+        } else {
+          mthis.staticsDatas = [];
+        }
+          
+      }
     },
     methods: {
+      clickLeftStatics(staticsClick){
+        var mthis = this;
+        // // console.log(staticsClick)
+        mthis.$store.commit('setContentStaticsSelectedIds',staticsClick);
+      },
+      hightLight(id) {},
       changTab(a) {
-        alert(a)
+        // alert(a)
         this.$store.commit('setTabSelectContent', a)
       },
-      setFlagToFalse(detailModalFlag){
+      setFlagToFalse(detailModalFlag) {
         var mthis = this;
         mthis.detailModalFlag = detailModalFlag;
       },
@@ -255,13 +266,15 @@
       detail(id) {
         var mthis = this
         mthis.modalNodeId = id
+        mthis.detailModalFlag = true
         let nodeIdsArry = []
         nodeIdsArry.push(id)
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
           'nodeIds': nodeIdsArry
         }).then(response => {
-          mthis.selectNetNodes = response.body.data[0].nodes[0]
-          mthis.detailModalFlag = true
+          //mthis.selectContentNodes = response.body.data[0]//.nodes[0]
+          //mthis.$store.commit('setSelectContentNodes',response.body.data);
+          // mthis.detailModalFlag = true
         })
         //查询详细信息
       }
@@ -272,23 +285,26 @@
       window.onresize = function() {
         this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
         this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
+        this.eventItemHeight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16 - 40) + "px";
+        this.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
       };
       this.eventheight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16) + "px";
+      this.eventItemHeight = (document.documentElement.clientHeight - 64 - 10 - 32 - 16 - 40) + "px";
       this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
       this.eheight = this.eventheightdiv - 32 - 16 + 'px'
+      this.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
       this.changeLimit()
     }
   };
 </script>
 <style scoped>
-
   .ivu-card {
     background-color: rgba(0, 0, 0, 0) !important;
     background: rgba(0, 0, 0, 0) !important;
   }
   .infoTitle {
     font-family: MicrosoftYaHei;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: normal;
     font-stretch: normal;
     line-height: 26px;
@@ -302,18 +318,42 @@
 </style>
 
 <style>
-.entityDetail>.organization_detailTable tr{
-  border-bottom: none !important;
-}
-.entityDetail>.administrative_detailTable tr{
-  border-bottom: none !important;
-}
-.entityDetail>.human_detailTable tr{
-  border-bottom: none !important;
-}
-#toushi>.toushiItems>.ivu-collapse-item>.ivu-collapse-content>.ivu-collapse-content-box>div>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-header>i{
-  margin-left:10px
-}
+  #tab1 .ivu-tabs-nav-wrap {
+    overflow: hidden;
+    margin-bottom: 0px;
+    border-bottom: 1px solid #447272;
+    background-color: rgba(51, 255, 255, 0.1);
+  }
+  #tab1 .ivu-tabs-nav .ivu-tabs-tab {
+    margin-right: 0px;
+    border-right: 1px solid #447272;
+    font-family: 'Microsoft Yahei';
+  }
+  #tab1 .ivu-tabs-ink-bar {
+    bottom: 0px;
+    height: 0px;
+    background-color: rgba(51, 255, 255, 0.2)
+  }
+  #tab1 .ivu-tabs-tab-focused {
+    border-color: #57a3f3 !important;
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+  #tab1 .ivu-tabs-tab {
+    border-color: #447272 !important;
+    color: #ccffff !important;
+  }
+  .entityDetail>.organization_detailTable tr {
+    border-bottom: none !important;
+  }
+  .entityDetail>.administrative_detailTable tr {
+    border-bottom: none !important;
+  }
+  .entityDetail>.human_detailTable tr {
+    border-bottom: none !important;
+  }
+  #toushi>.toushiItems>.ivu-collapse-item>.ivu-collapse-content>.ivu-collapse-content-box>div>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-header>i {
+    margin-left: 10px
+  }
   .content_header {
     font-family: MicrosoftYaHei;
     font-size: 14px;
@@ -416,15 +456,15 @@
   .circle-img {
     border-radius: 50% !important;
   }
-  .ivu-collapse{
+  .ivu-collapse {
     background-color: rgba(0, 0, 0, 0) !important;
     border: none !important;
     color: #cff !important;
   }
-  .ivu-collapse-header span{
+  .ivu-collapse-header span {
     font-size: 14px !important;
   }
-  .ivu-collapse-content-box>.ivu-collapse{
+  .ivu-collapse-content-box>.ivu-collapse {
     margin: 5px 0 !important;
   }
   #toushi>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-content,
@@ -442,7 +482,10 @@
     background-color: rgba(0, 0, 0, 0) !important;
   }
   #toushi .ivu-collapse-content-box p {
-    font-size: 14px !important;
+    font-size: 12px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .ivu-collapse-item-active>.ivu-collapse-content {
     background-color: rgba(0, 0, 0, 0) !important;
@@ -456,5 +499,18 @@
   #toushi {
     /* overflow-y: scroll; */
     overflow-y: auto;
+  }
+  .selectP {
+    width: 100%;
+    text-align: center;
+    height: 17px;
+    font-family: MicrosoftYaHei;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 32px;
+    letter-spacing: 0px;
+    color: #ccffff;
+    opacity: 0.5;
   }
 </style>

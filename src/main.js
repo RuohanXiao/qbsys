@@ -202,8 +202,8 @@ var store = new Vuex.Store({
       api_search:'http://10.60.1.140:5001', //查询接口采用原地址
       api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
       map_url:'http://10.60.1.142:8082', //地图脚本服务地址
-      xml_url:'http://10.60.1.140/assets' // 部署路径
-      // xml_url:'./src/dist/assets' // 本地路径
+      // xml_url:'http://10.60.1.140/assets' // 部署路径
+      xml_url:'./src/dist/assets' // 本地路径
     },
     // 联动监听
     netWatcher:{ // 网络关系模块监听
@@ -267,9 +267,13 @@ var store = new Vuex.Store({
     netDivHeight: 0,
     netData: null,
     returnStatisticsId:[],  //目标详情点击统计量返回的节点id
-    selectNetNodes:[],   //点击net节点，将节点id返回到event
+    selectNetNodes:[{
+      ids:[]
+    }],   //点击net节点，将节点id返回到event
     selectGeoNodes:[],
-    selectContentNodes:[],
+    selectContentNodes:[{
+      ids:[]
+    }],
     clickSelectedGeoIds:[],
     geoStaticsSelectedIds:[],
     netModalDetailData: {},
@@ -288,7 +292,16 @@ var store = new Vuex.Store({
     singlePerson:true,
     dataStatisticsEvent: {},
     changenetpx: true,
-    selectionIdByType:{},
+    selectionIdByType:{
+      nodeIds: [],
+      eventIds: [],
+      contentIds: []
+    },
+    contentStaticsSelectedIds:{
+      nodeIds: [],
+      eventIds: [],
+      contentIds: []
+    },
     dataexpand: [{
       name:'',
       img:'',
@@ -382,6 +395,10 @@ var store = new Vuex.Store({
     setNetStaticsSelectedIds(state,val){
       state.netStaticsSelectedIds = val
     },
+    setContentStaticsSelectedIds(state,val){
+      state.contentStaticsSelectedIds = val
+    },
+    
     setOpenWorkSetFlag(state,val){
       state.openWorkSetFlag = val
     },

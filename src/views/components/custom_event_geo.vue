@@ -1078,9 +1078,9 @@
         }
         this.timer = setTimeout(function() {
           let arr = []
-          // console.log('mthis.evetdata[0].entity_type')
-          // console.log(mthis.evetdata[0].entity_type)
-          // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
+          // // console.log('mthis.evetdata[0].entity_type')
+          // // console.log(mthis.evetdata[0].entity_type)
+          // // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
           if (mthis.evetdata[0] !== undefined) {
             if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
               // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
@@ -1094,21 +1094,21 @@
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
                 "nodeIds": a
               }).then(response => {
-                // console.log(response.body.data[0])
+                // // console.log(response.body.data[0])
                 mthis.detailData = response.body.data[0]
               })
               // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/context-by-entity-ids/', {
               //   "entityIds": a
               // }).then(response => {
-              //   console.log(response.body.data[0])
+              //   // console.log(response.body.data[0])
               //   // mthis.xiangguanDoc = response.body.data[0].children.data
               // })
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
                 "nodeIds": a,
                 "TypeLabel": 'entity'
               }).then(response => {
-                console.log('=============related entity=============')
-                console.log(response)
+                // console.log('=============related entity=============')
+                // console.log(response)
                 if (response.body.code == 0) {
                   // let ids = response.body.data[0].nodes.map(item=>{
                   //   return item.id
@@ -1132,7 +1132,6 @@
                 }
               })
             } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
-              debugger
               let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
               mthis.selectTag = detailId
               let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
@@ -1149,8 +1148,8 @@
                 "nodeIds": a,
                 "TypeLabel": 'event'
               }).then(response => {
-                console.log('=============related event=============')
-                console.log(response)
+                // console.log('=============related event=============')
+                // console.log(response)
                 if (response.body.code == 0) {
                   // let ids = response.body.data[0].nodes.map(item=>{
                   //   return item.id
@@ -1183,17 +1182,17 @@
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
                 "docIds": a
               }).then(response => {
-                console.log('response=====================')
+                // console.log('response=====================')
                 mthis.detailData = response.body.data[0]
                 mthis.detailData.entity_type = 'document'
-                console.log(mthis.detailData)
+                // console.log(mthis.detailData)
               })
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
                 "nodeIds": a,
                 "TypeLabel": 'document'
               }).then(response => {
-                console.log('=============related document=============')
-                console.log(response)
+                // console.log('=============related document=============')
+                // console.log(response)
                 if (response.body.code == 0) {
                   // let ids = response.body.data[0].nodes.map(item=>{
                   //   return item.id
@@ -1212,8 +1211,8 @@
                       })
                     }
                   }
-                  console.log('objArr')
-                  console.log(objArr)
+                  // console.log('objArr')
+                  // console.log(objArr)
                 } else {
                   alert('相关文档查询接口异常')
                 }
@@ -1247,8 +1246,8 @@
             "nodeIds": arr,
             "TypeLabel": 'entity'
           }).then(response => {
-            console.log('=============related entity=============')
-            console.log(response)
+            // console.log('=============related entity=============')
+            // console.log(response)
             if (response.body.code == 0) {
               // let ids = response.body.data[0].nodes.map(item=>{
               //   return item.id
@@ -1289,8 +1288,8 @@
             "nodeIds": arr,
             "TypeLabel": 'event'
           }).then(response => {
-            console.log('=============related event=============')
-            console.log(response)
+            // console.log('=============related event=============')
+            // console.log(response)
           })
           // mock.get("/getXiangguanshijian",{id:id}).then(function(res) {
           //   //  获取相关实体
@@ -1309,8 +1308,8 @@
             "nodeIds": arr,
             "TypeLabel": 'document'
           }).then(response => {
-            console.log('=============related doc=============')
-            console.log(response)
+            // console.log('=============related doc=============')
+            // console.log(response)
           })
           // mock.get("/getXianguanwendang",{id:id}).then(function(res) {
           //   //  获取相关实体

@@ -1,6 +1,6 @@
 <template>
   <div :style="{height:netheightdiv}">
-    <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px'}">
+    <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px',border:'solid 1px #336666'}">
       <div class='divStyle'>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="removeAll">
@@ -65,7 +65,7 @@
             <p class="img-content">翻译</p>
           </div>
         </Tooltip>
-        <div class="divSplitLine"></div>
+        <!-- <div class="divSplitLine"></div> -->
 
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -82,8 +82,7 @@
         </Tooltip>
       </div>
     </div>
-    
-    <div :style="{border:'1px solid rgba(54, 102, 116, 0.5)',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
+    <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div :style="{margin:'0,5px'}">
         <div v-if="!showList">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
@@ -91,48 +90,22 @@
               <Spin size="large" fix v-if="spinShow"></Spin>
             </div>
             <div id="contentchart" class="scrollBarAble" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex'}">
-              <!--  <div class="container select-box-container" :style="{width:'100%'}">
-                      <Row type="flex" justify="start" align="middle">
-                      <Col :sm="8" :lg="4" class="fileDiv select-item"  v-for="item in items"  type="flex" justify="start" align="middle" >
-                        <div align="middle" class="contentDiv fileDiv select-item" @dblclick="showContent(item.id)" :id=item.id :title=item.title>
-                          <p class="contentTitle">{{item.title}}</p>
-                          <p class="contentText">{{item.text}}</p>
-                          <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
-                        </div>
-                      </Col>
-                      <Col span=24 v-if="items.length>0">
-                        <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
-                      </Col>
-                      </Row>
-                    </div> -->
               <Row type="flex" justify="start" align="middle">
                 <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items">
-                <div>
-                
-                <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id)">
-                  <!-- <Tooltip  placement="bottom" :content="item.title" :delay="1000" :style="{width:'90%'}">
-                    <a class="contentTitle" @click="showContent(item.id)">{{item.title}}</a>
-                  </Tooltip> -->
-                  <!-- <a class="contentTitle" @click="showContent(item.id)">{{item.title}}</a> -->
-                  <p class="contentTitle">{{item.title}}</p>
-                  <!-- <div id="titleWrap" @click="showContent(item.id)">
-                    <div id="titleContent">{{item.title}}</div>
-                  </div> -->
-                  <!-- <p class="contentTitle">{{item.title}}</p>
-                    <div class="showContentButton">
-                      <Icon class="cardIcon icon iconfont icon-fangda process-img DVSL-bar-btn DVSL-bar-btn-back" size="20"/>
-                    </div> -->
-                  <p class="contentText">{{item.text}}</p>
-                  <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
-                </div>
-                <div class="contentItem">
-                  <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back" :style="{padding:'0 !important'}" size="35"></Icon>
-                  <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
-                </div>
-                </div>
-                </Col>
-                <Col span=24 v-if="items.length>0">
-                <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
+                  <div>
+                    <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id)">
+                      <p class="contentTitle">{{item.title}}</p>
+                      <p class="contentText">{{item.text}}</p>
+                      <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
+                    </div>
+                    <div class="contentItem">
+                      <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 hoverStyle" :style="{padding:'0 !important'}" size="35" @click="selectThis(item.id)"></Icon>
+                      <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
+                    </div>
+                  </div>
+                  </Col>
+                  <Col span=24 v-if="items.length>0">
+                  <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
                 </Col>
               </Row>
             </div>
@@ -167,13 +140,16 @@
     mapState,
     mapMutations
   } from 'vuex'
+// import func from '../../../vue-temp/vue-editor-bridge';
   mock.test = 1
   var timer = null;
+  var tthis = this;
   /* eslint-disable */
   export default {
     name: "App",
     data() {
       return {
+        watchSelectCounter: 0,
         translateButton:false,
         spinShow: false,
         markedItem: false,
@@ -282,6 +258,7 @@
           }
         ],
         initSelectBox: function(selector, selectCallback) {
+          var mthis = this
           function clearBubble(e) {
             if (e.stopPropagation) {
               e.stopPropagation();
@@ -370,12 +347,8 @@
                 $(this).removeClass('item-selected');
               } else {
                 $(this).addClass('item-selected');
-                let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-                this.selectArr = []
-                for (let m = 0; m < selectList.length; m++) {
-                  this.selectArr.push(selectList[m].id)
-                }
               }
+              mthis.watchSelectCounter++;
             })
           //  点选全选全不选
           // .on('click', '.toggle-all-btn', function() {
@@ -394,18 +367,31 @@
       'searchContentResult', 'contentHeight', 'contentTimeCondition','netToContentData'
     ]),
     watch: {
+      watchSelectCounter: function() {
+        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        this.selectArr = []
+        for (let m = 0; m < selectList.length; m++) {
+          this.selectArr.push(selectList[m].id)
+        }
+        // console.log('==============++++++++++==============')
+        // console.log(this.selectArr)
+        this.$store.commit('setSelectContentNodes', [{
+          ids: this.selectArr
+        }])
+      },
       netToContentData: function() {
         var mthis = this
         // alert('文档接受到了')
-        // console.log(this.netToContentData)
+        // // console.log(this.netToContentData)
         mthis.items = []
         let contentIds = this.netToContentData.contentIds
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
-            'docIds': contentIds
-          }).then(response => {
-            $('.item-selected').removeClass('item-selected')
-            mthis.items = response.body.data
-          })
+          'docIds': contentIds
+        }).then(response => {
+          $('.item-selected').removeClass('item-selected')
+          mthis.items = response.body.data
+        })
+        mthis.watchSelectCounter ++;
       },
       contentTimeCondition: function(va) {
         var mthis = this
@@ -453,6 +439,7 @@
         })
         // }
         // }
+        mthis.watchSelectCounter ++;
       },
       // netHeight: function() {
       //   var mthis = this;
@@ -478,15 +465,23 @@
     },
     props: ['contentData'],
     methods: {
+      selectThis(id){
+        // 添加：document.getElementById("id").classList.add("类名")；
+        // 删除：document.getElementById("id").classList.remove("类名")；
+        (document.getElementById(id).getAttribute("class").indexOf('item-selected') > 0) ? (document.getElementById(id).classList.remove("item-selected")):(document.getElementById(id).classList.add("item-selected"))
+        this.watchSelectCounter ++;
+      },
       fanxuan(){
         // document.getElementsByClassName("box");
         let selectDom = $('.item-selected')
         let disselectDom = $('.contentDiv:not(.item-selected)')
         selectDom.removeClass('item-selected')
         disselectDom.addClass('item-selected')
+        this.watchSelectCounter ++;
       },
       removeAll(){
         this.items = []
+        this.watchSelectCounter ++;
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
@@ -736,6 +731,7 @@
             })
           }
         });
+        this.watchSelectCounter ++;
       },
       toContentDiv() {
         this.showList = false
@@ -755,7 +751,7 @@
         // document.getElementById('contentsTime').innerHTML = ''
       },
       scrollBottom() {
-        //  ALERT('sss')
+        alert('ssss')
         // 滚动到页面底部时，请求前一天的文章内容
         if (((window.screen.height + document.body.scrollTop) > (document.body.clientHeight)) && this.REQUIRE) {
           // 请求的数据未加载完成时，滚动到底部不再请求前一天的数据
@@ -1028,6 +1024,17 @@
   }
 </style>
 <style scoped>
+  .zindex99{
+    z-index: 99
+  }
+  .contentItem:hover .hoverStyle{
+    opacity: 1;
+    color:rgba(51, 255, 255, 0.2);
+  }
+  .contentItem:hover .icon-right{
+    opacity: 1;
+    color:#ccffff;
+  }
   .select-box-container {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
