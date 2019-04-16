@@ -2935,11 +2935,26 @@ export default {
           allNodIds.push(nod.id);
           nod.hightLight = false;
         }
+<<<<<<< HEAD
         for (let i = 0; i < mthis.netStaticsSelectedIds.length; i++) {
           arr.push(mthis.netStaticsSelectedIds[i]);
           mthis.netchart.getNode(
             mthis.netStaticsSelectedIds[i]
           ).hightLight = true;
+=======
+      },
+      geoToNetData: function() {
+        // 调用查询接口，查询id对应数据
+        // this.netchart.addData()
+        var mthis = this
+        console.log(mthis.geoToNetData)
+        if(mthis.geoToNetData.nodeIds.length>0){
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
+            'nodeIds': mthis.geoToNetData.nodeIds
+          }).then(response => {
+            mthis.netchart.addData({nodes:response.body.data[0].nodes,links:[]})
+          })
+>>>>>>> 05dd6f283b59818a772b0b52de35c20f959ef264
         }
         mthis.netchart.updateStyle(allNodIds);
         // mthis.netchart.updateStyle(arr)

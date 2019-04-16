@@ -53,7 +53,7 @@ class BezierLinePoints{
 	constructor(line){
 		this.line = line;
 	};
-	getBezierPoints(t){   //t�ǵ�ĸ���
+	getBezierPoints(t){   
 		var BezierPoints = [];
 		for(var i=0; i<=1; i+=1/t){
 			var BL = new BezierSinglePoint(this.line,i);
