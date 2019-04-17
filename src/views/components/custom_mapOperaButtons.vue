@@ -52,7 +52,7 @@ export default {
     data() {
       return {
         buttonParamArr:[//AT(AllTime)：永远点亮； HD(HaveData):有数据时点亮； HSD(HavaSelectedData):当有数据被选中时点亮； HDD(HaveDeleteData):当有被删除的数据时被点亮； 
-                        // HL(HaveLocation):当有高亮的行政区时被点亮； NT(NoTime):永远不被点亮
+                        // HL(HaveLocation):当有高亮的行政区时被点亮； NT(NoTime):永远不被点亮  HCD(HaveClearData):当有数据（包括地图上高亮的面数据）时被点亮
           /* {
             'id':'location_AT',
             'name':'定位',
@@ -60,7 +60,7 @@ export default {
             'isOpen':true
           }, */
           {
-            'id':'clearAll_HD',
+            'id':'clearAll_HCD',
             'name':'清空',
             'imgClass':'icon-qingchu',
             'isOpen':false
