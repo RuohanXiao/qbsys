@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<entityTypeTable> 
+  <entityMainType> 
+    <tyeName>entity</tyeName>  
+    <includeType> 
+      <tyeName>administrative</tyeName>  
+      <tyeName>human</tyeName>  
+      <tyeName>organization</tyeName>  
+      <tyeName>weapon</tyeName> 
+    </includeType> 
+  </entityMainType>  
+  <entityMainType> 
+    <tyeName>event</tyeName>  
+    <includeType> 
+      <tyeName>event</tyeName> 
+    </includeType> 
+  </entityMainType>  
+  <entityMainType> 
+    <tyeName>document</tyeName>  
+    <includeType> 
+      <tyeName>document</tyeName> 
+    </includeType> 
+  </entityMainType> 
+</entityTypeTable>
