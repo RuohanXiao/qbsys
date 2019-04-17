@@ -4,44 +4,44 @@
       <panel name="1">
         <span>实体属性</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanHuman.founded_by'>
+          <div class="econtent" v-if='tableData.founded_by'>
             <p class="econtentp w5em">创办者</p>
-            <p class="econtentp">{{xiangguanHuman.founded_by}}</p>
+            <p class="econtentp">{{tableData.founded_by}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='xiangguanHuman.chairperson'>
+          <div class="econtent" v-if='tableData.chairperson'>
             <p class="econtentp w5em">领袖</p>
-            <p class="econtentp">{{xiangguanHuman.chairperson}}</p>
+            <p class="econtentp">{{tableData.chairperson}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='xiangguanHuman.chief_executive_officer'>
+          <div class="econtent" v-if='tableData.chief_executive_officer'>
             <p class="econtentp w5em">首席执行官</p>
-            <p class="econtentp">{{xiangguanHuman.chief_executive_officer}}</p>
+            <p class="econtentp">{{tableData.chief_executive_officer}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='xiangguanHuman.business_division'>
+          <div class="econtent" v-if='tableData.business_division'>
             <p class="econtentp w5em">业务部门</p>
-            <p class="econtentp">{{xiangguanHuman.business_division}}</p>
+            <p class="econtentp">{{tableData.business_division}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='xiangguanHuman.parent_organization'>
+          <div class="econtent" v-if='tableData.parent_organization'>
             <p class="econtentp w5em">上级部门</p>
-            <p class="econtentp">{{xiangguanHuman.parent_organization}}</p>
+            <p class="econtentp">{{tableData.parent_organization}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='xiangguanHuman.subsidiary'>
+          <div class="econtent" v-if='tableData.subsidiary'>
             <p class="econtentp w5em">下级部门</p>
-            <p class="econtentp">{{xiangguanHuman.subsidiary}}</p>
+            <p class="econtentp">{{tableData.subsidiary}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>

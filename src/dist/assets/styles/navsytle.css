@@ -1,0 +1,32 @@
+
+.bgDiv{
+    width: 100%;
+    height: 100%;
+    position:fixed;
+    display: none;
+    z-index: 99;
+    bottom: 0;
+  background-color: rgba(0,0,0,0);
+}
+.rightNav{
+    width: 24vw;
+    background-color: rgba(0,0,0,0.3);
+    position: fixed;
+    z-index: 999;
+    top: 64px;
+    right: -22vw;
+}
+.navStyle {
+  background-color:black;
+  opacity: 0.8;
+}
+.navStyleTitle {
+  background-color: rgba(0,0,0,1);
+}
+.floater {
+  height: 30vh;
+  margin-top: 25vh;
+}
+
+
+
