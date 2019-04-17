@@ -1543,11 +1543,11 @@ export default {
             var mthis = this;
             var url = '';
             if(type === 'Event'){
-                url = 'http://localhost:5000/exploreEvent/'
-                //url = 'http://10.60.1.140:5100/exploreEvent/'
+                //url = 'http://localhost:5000/exploreEvent/'
+                url = 'http://10.60.1.140:5100/exploreEvent/'
             } else if(type === 'Org'){
-                url = 'http://localhost:5000/exploreOrg/'
-                //url = 'http://10.60.1.140:5100/exploreOrg/'
+                //url = 'http://localhost:5000/exploreOrg/'
+                url = 'http://10.60.1.140:5100/exploreOrg/'
             }
              mthis.$http.post(url, {
                     'geometry':geometryArr
