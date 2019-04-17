@@ -1,4 +1,11 @@
 export default {
+  //判断空对象
+  isEmptyObject(obj){
+    for(var key in obj){
+      return false
+    };
+    return true
+  },
   //验证图片资源是否存在（404）
   checkImgExists(imgurl) {
     var ImgObj = new Image(); //判断图片是否存在  
@@ -142,8 +149,8 @@ getNowFormatDate() {
   },
   //树形递归遍历
   traverseNode(node) {
-    console.log('----node-----')
-    console.log(node)
+    // console.log('----node-----')
+    // console.log(node)
   },
   traverseTree(node) {
     if (!node) {
@@ -159,9 +166,9 @@ getNowFormatDate() {
   },
   //非递归遍历
   traverseNode2(node) {
-    console.log('------')
-    console.log(node)
-    console.log('------')
+    // console.log('------')
+    // console.log(node)
+    // console.log('------')
   },
   traverseTree2(node) {
     if (!node) {
@@ -188,7 +195,7 @@ getNowFormatDate() {
   //   let jsonobj;
   //   for(var i = 0;i<xml.children.length;i++){
   //     var nodes = xml.children;
-  //     console.log(nodes)
+  //     // console.log(nodes)
   //     for
   //     // jsonobj.name = xml.getAttribute("name");
   //     // //属性还是要根据实际情况设置

@@ -267,9 +267,13 @@ var store = new Vuex.Store({
     netDivHeight: 0,
     netData: null,
     returnStatisticsId:[],  //目标详情点击统计量返回的节点id
-    selectNetNodes:[],   //点击net节点，将节点id返回到event
+    selectNetNodes:[{
+      ids:[]
+    }],   //点击net节点，将节点id返回到event
     selectGeoNodes:[],
-    selectContentNodes:[],
+    selectContentNodes:[{
+      ids:[]
+    }],
     clickSelectedGeoIds:[],
     geoStaticsSelectedIds:[],
     netModalDetailData: {},
@@ -288,7 +292,16 @@ var store = new Vuex.Store({
     singlePerson:true,
     dataStatisticsEvent: {},
     changenetpx: true,
-    selectionIdByType:{},
+    selectionIdByType:{
+      nodeIds: [],
+      eventIds: [],
+      contentIds: []
+    },
+    contentStaticsSelectedIds:{
+      nodeIds: [],
+      eventIds: [],
+      contentIds: []
+    },
     dataexpand: [{
       name:'',
       img:'',
@@ -382,6 +395,10 @@ var store = new Vuex.Store({
     setNetStaticsSelectedIds(state,val){
       state.netStaticsSelectedIds = val
     },
+    setContentStaticsSelectedIds(state,val){
+      state.contentStaticsSelectedIds = val
+    },
+    
     setOpenWorkSetFlag(state,val){
       state.openWorkSetFlag = val
     },

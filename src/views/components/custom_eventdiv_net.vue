@@ -5,7 +5,7 @@
       <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
         <Tabs :value=$store.state.tabSelectNet>
           <Tab-pane label="选中详情" name='mubiaoxiangqingNet' :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqingNet' @click="changTab('mubiaoxiangqingNet')">
-            <eventNet :resArr='resArr' :evetdata='evetdata' v-show='evetdataFlag'></eventNet>
+            <eventNet :resArr='resArr' :eventdata='evetdata' v-show='evetdataFlag'></eventNet>
             <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_select.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -110,8 +110,10 @@
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
       selectionIdByType: function() {
-        // console.log(this.selectionIdByType)
+        console.log('00000000000----------------------')
+        console.log(this.selectionIdByType)
         var mthis = this;
+        mthis.evetdataFlag = false
         if (mthis.selectNetNodes[0].ids.length > 0) {
           // 新增防抖功能
           mthis.evetdata = []
@@ -142,12 +144,12 @@
                 // mthis.evetdataFlag = true
                 // mthis.evetdata = response.body.data[0].nodes
                 for(let i = 0; i < response.body.data.length;i++){
-                  response.body.data[i].id = response.body.data[i].doc_id
+                  // response.body.data[i].id = response.body.data[i].id
                   // response.body.data[i].entity_type = response.body.data[i].event_type
                   response.body.data[i].entity_type = 'event'
                   response.body.data[i].name = response.body.data[i].event_subtype
                 }
-                // console.log(util.hebing(mthis.evetdata,response.body.data))
+                // // console.log(util.hebing(mthis.evetdata,response.body.data))
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdataFlag = true
@@ -171,7 +173,7 @@
                   response.body.data[i].name = response.body.data[i].title
                 }
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-                // console.log(util.hebing(mthis.evetdata,response.body.data))
+                // // console.log(util.hebing(mthis.evetdata,response.body.data))
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdataFlag = true
               })
@@ -221,7 +223,7 @@
     methods: {
       clickLeftStatics(staticsClick){
         var mthis = this;
-        // console.log(staticsClick)
+        // // console.log(staticsClick)
         mthis.$store.commit('setNetStaticsSelectedIds',staticsClick);
       },
       hightLight(id) {},
@@ -264,7 +266,6 @@
         mthis.detailModalFlag = true
         let nodeIdsArry = []
         nodeIdsArry.push(id)
-        alert('01')
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
           'nodeIds': nodeIdsArry
         }).then(response => {

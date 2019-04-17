@@ -1132,8 +1132,8 @@
                 "nodeIds": a,
                 "TypeLabel": 'event'
               }).then(response => {
-                console.log('=============related event=============')
-                console.log(response)
+                // console.log('=============related event=============')
+                // console.log(response)
                 if (response.body.code == 0) {
                   let objArr = new Array()
                   for (let i = 0; i < response.body.data[0].nodes.length; i++) {
@@ -1185,8 +1185,8 @@
                       })
                     }
                   }
-                  console.log('objArr')
-                  console.log(objArr)
+                  // console.log('objArr')
+                  // console.log(objArr)
                 } else {
                   alert('相关文档查询接口异常')
                 }
@@ -1220,8 +1220,8 @@
             "nodeIds": arr,
             "TypeLabel": 'entity'
           }).then(response => {
-            console.log('=============related entity=============')
-            console.log(response)
+            // console.log('=============related entity=============')
+            // console.log(response)
             if (response.body.code == 0) {
               // let ids = response.body.data[0].nodes.map(item=>{
               //   return item.id
@@ -1262,8 +1262,8 @@
             "nodeIds": arr,
             "TypeLabel": 'event'
           }).then(response => {
-            console.log('=============related event=============')
-            console.log(response)
+            // console.log('=============related event=============')
+            // console.log(response)
           })
           // mock.get("/getXiangguanshijian",{id:id}).then(function(res) {
           //   //  获取相关实体
@@ -1282,8 +1282,8 @@
             "nodeIds": arr,
             "TypeLabel": 'document'
           }).then(response => {
-            console.log('=============related doc=============')
-            console.log(response)
+            // console.log('=============related doc=============')
+            // console.log(response)
           })
           // mock.get("/getXianguanwendang",{id:id}).then(function(res) {
           //   //  获取相关实体
