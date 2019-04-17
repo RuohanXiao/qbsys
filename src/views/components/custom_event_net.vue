@@ -8,7 +8,7 @@
       <div class="contentStyle">
         <div>
           <p :style="{lineHeight:'28px',fontSize:'16px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" class="titleStyle">{{detailData.name}}</p>
-          <p :style="{lineHeight:'28px',fontSize:'16px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" class="titleStyle">{{detailData.title}}</p>
+          <!-- <p :style="{lineHeight:'28px',fontSize:'16px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" class="titleStyle">{{detailData.title}}</p> -->
         </div>
         <div>
           <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-if="detailData.description">{{detailData.event_content}}</p>

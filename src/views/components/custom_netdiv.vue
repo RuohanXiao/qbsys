@@ -888,31 +888,36 @@ export default {
               TypeLabel: "entity"
             })
             .then(response => {
-              console.log("*******************");
-              console.log(response);
               if (response.body.code === 0) {
                 entitRes = response.body.data[0].RelatedEntity;
                 let items = { nodes: [], links: [] };
                 let ids = mthis.selectionId;
                 for (let n = 0; n < arrList_net.length; n++) {
-                  items.nodes = items.nodes.concat(
-                    entitRes[arrList_net[n]].nodes
-                  );
-                  items.links = items.links.concat(
-                    entitRes[arrList_net[n]].links
-                  );
-                  ids = ids.concat(
-                    entitRes[arrList_net[n]].nodes.map(it => {
-                      it.type = it.entity_type;
-                      it.imageCropping = true;
-                      return it.id;
-                    })
-                  );
-                  ids = ids.concat(
-                    entitRes[arrList_net[n]].links.map(it => {
-                      return it.id;
-                    })
-                  );
+                  if(entitRes[arrList_net[n]]!==undefined){
+                    console.log("*******************");
+                    console.log(arrList_net[n])
+                    console.log(entitRes)
+                    console.log(entitRes[arrList_net[n]])
+                    items.nodes = items.nodes.concat(
+                      entitRes[arrList_net[n]].nodes
+                    );
+                  
+                    items.links = items.links.concat(
+                      entitRes[arrList_net[n]].links
+                    );
+                    ids = ids.concat(
+                      entitRes[arrList_net[n]].nodes.map(it => {
+                        it.type = it.entity_type;
+                        it.imageCropping = true;
+                        return it.id;
+                      })
+                    );
+                    ids = ids.concat(
+                      entitRes[arrList_net[n]].links.map(it => {
+                        return it.id;
+                      })
+                    );
+                  }
                 }
                 mthis.netchart.addData(items);
                 setTimeout(function() {
@@ -1940,8 +1945,8 @@ export default {
         let allNodes = this.netchart.nodes();
         let temp01 = [];
         let temp02 = [];
-        let netChartLog = sessionStorage.getItem("netChartLog");
-        let netChartLogJson = JSON.parse(netChartLog).data;
+        // let netChartLog = sessionStorage.getItem("netChartLog");
+        // let netChartLogJson = JSON.parse(netChartLog).data;
         let ids = [];
         for (var i in selectNodes) {
           temp01[selectNodes[i].id] = true;
@@ -1966,11 +1971,11 @@ export default {
           }
           mthis.netchart.selection(ids);
         }
-        netChartLogJson.push({
-          id: ids,
-          action: "remove",
-          other: "反选"
-        });
+        // netChartLogJson.push({
+        //   id: ids,
+        //   action: "remove",
+        //   other: "反选"
+        // });
         // sessionStorage.setItem('netChartLog', JSON.stringify({
         //   data: netChartLogJson
         // }));
@@ -2935,26 +2940,11 @@ export default {
           allNodIds.push(nod.id);
           nod.hightLight = false;
         }
-<<<<<<< HEAD
         for (let i = 0; i < mthis.netStaticsSelectedIds.length; i++) {
           arr.push(mthis.netStaticsSelectedIds[i]);
           mthis.netchart.getNode(
             mthis.netStaticsSelectedIds[i]
           ).hightLight = true;
-=======
-      },
-      geoToNetData: function() {
-        // 调用查询接口，查询id对应数据
-        // this.netchart.addData()
-        var mthis = this
-        console.log(mthis.geoToNetData)
-        if(mthis.geoToNetData.nodeIds.length>0){
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
-            'nodeIds': mthis.geoToNetData.nodeIds
-          }).then(response => {
-            mthis.netchart.addData({nodes:response.body.data[0].nodes,links:[]})
-          })
->>>>>>> 05dd6f283b59818a772b0b52de35c20f959ef264
         }
         mthis.netchart.updateStyle(allNodIds);
         // mthis.netchart.updateStyle(arr)
@@ -3005,22 +2995,25 @@ export default {
             EventIds: mthis.geoToNetData.eventIds
           })
           .then(res => {
-            // console.log('*********************------')
-            // console.log(res)
             if (res.body.code === 0) {
               let nodes = new Array();
-              let type = eitems.event_subtype.toLowerCase().replace(/-/, "_");
-              let img = mthis.myMap.get(type).img;
-              let name = mthis.myMap.get(type).name;
-              for (let re in res.body.data) {
+              console.log(res)
+              for(let i = 0;i<res.body.data.length;i++) {
+                let type = res.body.data[i].event_subtype.toLowerCase().replace(/-/, "_");
+                let img = mthis.myMap.get(type).img;
+                let name = mthis.myMap.get(type).name;
                 nodes.push({
-                  id: re.id,
+                  id: res.body.data[i].id,
                   img: img,
                   entity_type: "event",
                   name: name,
                   loaded: true
                 });
               }
+              mthis.netchart.addData({
+                nodes: nodes,
+                links: []
+              });
             } else {
               mthis.setMessage("/event-detail/接口异常");
             }
@@ -3033,28 +3026,33 @@ export default {
       let contentIdsArry = mthis.contentToNetData.nodes.map(item => {
         return item.id;
       });
-      // let rowNum = Math.ceil(Math.sqrt(mthis.contentToNetData.nodes.length));
-      // for (let i = 0; i < mthis.contentToNetData.nodes.length; i++) {
-      //   let col = i % rowNum;
-      //   let row = parseInt(i / rowNum);
-      //   console.log('***************************************')
-      //   console.log(mthis.contentToNetData.nodes[i])
-      //   let no = mthis.contentToNetData.nodes[i]
-      //   mthis.contentToNetData.nodes[i]["x"] = 0 + col * 150;
-      //   mthis.contentToNetData.nodes[i]["y"] = 0 + row * 150;
-      // }
-      mthis.netchart.addData(mthis.contentToNetData);
+      var addData2chart=function(data) {
+       return new Promise(function(resolve){
+         mthis.netchart.addData(data);
+         resolve(); 
+       })
+      }
+      // addData2chart(mthis.contentToNetData).then(()=>{
+      //   mthis.netchart.selection(contentIdsArry)
+      // }).then(()=>{
+      //   mthis.square()
+      // }).then(()=>{
+      //   mthis.netchart.lockNode(contentIdsArry)
+      //   mthis.netchart.scrollIntoView(contentIdsArry)
+      // })
+      mthis.netchart.addData(mthis.contentToNetData)
       mthis.netchart.scrollIntoView(contentIdsArry);
       mthis.netchart.lockNode(contentIdsArry);
       // mthis.netchart.updateStyle(contentIdsArry)
       // mthis.netchart.updateSettings()
       // mthis.netchart.updateSize()
       setTimeout(() => {
-        mthis.square();
         mthis.netchart.selection(contentIdsArry);
+        mthis.square();
         mthis.spinShow = false;
       }, 300);
     },
+    
     netTimeCondition: function() {
       if (this.netTimeCondition) {
         // 选中了时间，令links高亮
