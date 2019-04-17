@@ -127,7 +127,7 @@ trClick{
             <panel v-for="(staticsPanel,index) in staticsData.subStatisticsAttr" :name="staticsPanel.secondLevelId">
                 <span :id="staticsPanel.secondLevelId + '/countSpan'">{{staticsPanel.secondLevelName + '（' + staticsPanel.typecount + '）'}}</span>
                 <table slot="content" :id="staticsPanel.secondLevelId + '/entityattr'">
-                    <tr  :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
+                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
                         <td class="NameTd">
                             <p>{{specificStatics.thirdLevelName}}</p>
                         </td>
@@ -183,6 +183,10 @@ export default {
         }
     },
     methods:{
+        rightClickShow(eve,ids){
+            var mthis = this;
+            debugger
+        },
         selectedIds(el,ids){
             var mthis = this;
             //trClick
