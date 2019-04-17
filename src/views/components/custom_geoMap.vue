@@ -235,6 +235,7 @@ export default {
         timeSelectedEventIds:[],
         staticsSelectedEventIds:[],
         mouseSelectedEventIds:[],
+        onlyLookItIds:[],
         SelectedIds:[],//被选中的事件或组织机构ids
         halfSelectedIds:{},
         invertSelectedEventIds:[], //反选存储
@@ -474,7 +475,6 @@ export default {
         },
         pushToNet(){
             var mthis = this;
-            debugger
             var eventIds = [];
             var nodeIds = [];
             var metalworkIds = mthis.SelectedIds;
@@ -949,7 +949,6 @@ export default {
                 mthis.routeMap.map.addInteraction(mthis.selectPointerMove);
                 mthis.routeMap.map.addInteraction(mthis.selectClick);
                 mthis.selectPointerMove.on('select', function(e) {
-                    debugger
                     var selectFeatures = e.selected
                     var deselectFeatures = e.deselected
                     if(deselectFeatures.length > 0){
@@ -1526,7 +1525,6 @@ export default {
                 var drawFeature = new Feature({
                     geometry: new Polygon(geometry.getCoordinates()),
                 });
-                debugger
                 var id = 'custom.' + drawFeature.ol_uid;
                 drawFeature.setId(id);
                 source.addFeature(drawFeature);
@@ -1713,7 +1711,6 @@ export default {
             });
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
-                debugger
                 var geometry = feature.getGeometry();
                 
                 mthis.selectEventPointsByGeometry_test(geometry);
@@ -2650,8 +2647,6 @@ export default {
                     feature = orgsSource.getFeatureById(Item);
                     feature.set('selectedNum',selectedNum[index],false);
                 }
-                //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',true);
-                //mthis.setSelectedEventFeatureParam(feature,true);
                 mthis.setFeatureStatus(feature,'life');
             })
         },
@@ -2848,7 +2843,7 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult','HLlocationIds','geoStaticsSelectedIds'
+      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult','HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds'
     ]),
     
     watch:{
@@ -2899,16 +2894,16 @@ export default {
             } else {
                 //mthis.eventGeoJson = mthis.test_mapData;
                 //mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-to-GIS/', {
-                //mthis.$http.post("http://localhost:5000/getOrgByIds/", {
-                mthis.$http.post("http://10.60.1.140:5100/getOrgByIds/", {
+                mthis.$http.post("http://localhost:5000/getOrgByIds/", {
+                //mthis.$http.post("http://10.60.1.140:5100/getOrgByIds/", {
                     "ids": data
                 }).then(response => {
                     var eventGeoJson_Org = response.body.data.Features;
                     var addFeatures_Org = (new GeoJSON()).readFeatures(eventGeoJson_Org);
                     mthis.addFeaturesToEventLayer(addFeatures_Org);
 
-                    //mthis.$http.post("http://localhost:5000/getEventByIds/", {
-                    mthis.$http.post("http://10.60.1.140:5100/getEventByIds/", {
+                    mthis.$http.post("http://localhost:5000/getEventByIds/", {
+                    //mthis.$http.post("http://10.60.1.140:5100/getEventByIds/", {
                         "ids": data
                     }).then(response => {
                         var eventGeoJson_Event = response.body.data.Features;
@@ -2922,6 +2917,29 @@ export default {
             var mthis = this;
             mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.SelectedIds);
             mthis.isOperateButtonsHLOrDim();
+        },
+        geoStaticsOnlyLookSelectedIds(){
+            var mthis = this;
+            var ids = [];
+            if(mthis.geoStaticsOnlyLookSelectedIds.length > 0){
+                mthis.geoStaticsOnlyLookSelectedIds.forEach(function(item){
+                    if(item.indexOf('&') === -1){
+                        var id = 'org&'+item;
+                        ids.push(id)
+                    } else {
+                        ids.push(item)
+                    }
+                })
+            }
+            Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+                var layerId = mthis.AllLayerList_conf[key].layerId;
+                var features = mthis.getLayerById(layerId).getSource().getFeatures();
+                for(let i = 0; i < features.length; i++){
+                    mthis.setFeatureStatus(features[i],'die');
+                }
+            })
+            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(ids);
+            mthis.geometrySelectedEventIds = ids;
         },
         geoStaticsSelectedIds:function(){
             var mthis = this;
@@ -2981,13 +2999,6 @@ export default {
         },
         geometrySelectedEventIds:function(){
             var mthis = this;
-            /* var dealSelectedIds = [];
-            if(mthis.geometrySelectedEventIds.length > 0){
-                mthis.geometrySelectedEventIds.forEach(function(Lid){
-                    dealSelectedIds.push(Lid.split('_')[1])
-                })
-            } */
-            // mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoView',
                 paramIds:mthis.geometrySelectedEventIds//dealSelectedIds

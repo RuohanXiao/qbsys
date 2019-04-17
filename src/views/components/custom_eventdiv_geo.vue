@@ -15,7 +15,7 @@
             </div>
           </Tab-pane>
           <Tab-pane label="数据透视" name= 'toushi' :style="{fontSize: '18px',height:viewHeight_20_geo}" id='toushi' @click="changTab('toushi')">
-            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' @rightCilckIds='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
           </Tab-pane>
         </Tabs>
       </div>
@@ -203,6 +203,10 @@
       }
     },
     methods: {
+      clickRightMenu(rightCilckIds){
+        var mthis = this;
+        mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', rightCilckIds)
+      },
       clickLeftStatics(staticsClick){
         var mthis = this;
         mthis.$store.commit('setGeoStaticsSelectedIds', staticsClick)

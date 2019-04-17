@@ -127,7 +127,7 @@ trClick{
             <panel v-for="(staticsPanel,index) in staticsData.subStatisticsAttr" :name="staticsPanel.secondLevelId">
                 <span :id="staticsPanel.secondLevelId + '/countSpan'">{{staticsPanel.secondLevelName + '（' + staticsPanel.typecount + '）'}}</span>
                 <table slot="content" :id="staticsPanel.secondLevelId + '/entityattr'">
-                    <tr  :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
+                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
                         <td class="NameTd">
                             <p>{{specificStatics.thirdLevelName}}</p>
                         </td>
@@ -183,6 +183,54 @@ export default {
         }
     },
     methods:{
+        onlyLookIt(ids){
+            var mthis = this;
+            mthis.$emit('rightCilckIds', ids)
+        },
+        rightClickShow(eve,ids){
+            var mthis = this;
+            var leftStatics = document.getElementById('leftStatics');
+            var x = eve.clientX;
+            var y = eve.clientY;
+            
+            var ovdiv = document.createElement('div');
+            ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer;position:absolute';
+            ovdiv.id='rightClickStatics';
+            ovdiv.style.top = y + "px";
+            ovdiv.style.left = x + "px";
+            document.body.appendChild(ovdiv);
+            ovdiv.addEventListener("mouseleave", function(){
+                setTimeout(function(){
+                    var div = document.getElementById('rightClickStatics');
+                    document.body.removeChild(div);
+                    
+                },100)
+            });
+            var table = document.createElement('table');
+            table.id = 'rightClickMenuTable';
+            table.style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;';
+            ovdiv.appendChild(table);
+            var rightClickConf = [
+                {'name':'只看它','id':'onlylookit','iconClassName':'icon-ren','funName':'mthis.onlyLookIt'},
+            ];
+            rightClickConf.forEach(function(item){
+                var tr = document.createElement('tr');
+                tr.id = item.id;
+                tr.addEventListener('click',function(){
+                    var func=eval(item.funName);
+                    func.call(mthis,ids);
+                })
+                var iconTd = document.createElement('td');
+                iconTd.style='padding-left: 5px;';
+                iconTd.classList.add('icon','iconfont',item.iconClassName);
+                tr.appendChild(iconTd);
+                var nameTd = document.createElement('td');
+                nameTd.style = 'padding-right: 5px;';
+                nameTd.innerHTML=item.name;
+                tr.appendChild(nameTd);
+                table.appendChild(tr);
+            })
+        },
         selectedIds(el,ids){
             var mthis = this;
             //trClick
