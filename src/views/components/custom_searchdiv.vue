@@ -170,6 +170,7 @@
           }]) */
         }
         if (this.$store.state.tmss === 'geo') {
+          debugger
           if(a && a.value){
             if (a.type === 'human') {
               mthis.$store.commit('setSearchGeoEventResult', {

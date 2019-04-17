@@ -10,7 +10,8 @@ var map = function(target){
 	var bounds = [75, 6,140, 55];//范围
 	//世界地图
     var wmsTileLayer = new TileLayer({
-	    visible: true,
+        visible: true,
+        id:'worldImgBaseMapGroup',
 	    source: new TileWMS({
 			url: 'http://10.60.1.142:8082/geoserver/gwc/service/wms?',
 			params: {
@@ -24,7 +25,8 @@ var map = function(target){
 
     //世界底图标注图层
     var countriesAndProvinces_labelLayer = new TileLayer({
-	    visible: true,
+        visible: true,
+        id:'countriesAndProvinces_label',
 	    source: new TileWMS({
             url: 'http://10.60.1.142:8082/geoserver/gwc/service/wms?',
 			params: {
@@ -76,7 +78,6 @@ var map = function(target){
     this.map.on('moveend',function(evt){
         evt.map.getTargetElement().style.cursor = 'auto';
     })
-    
     this.addRightClickInLayer = function(layer,callBack){
         var mthis = this;
         //var RClickLayer = layer;
