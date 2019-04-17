@@ -166,6 +166,9 @@ import element from 'element-ui';
 //   Vue.prototype.$message = Message;
   
   import VueResource from 'vue-resource'
+  // import infiniteScroll from 'v-infinite-scroll'
+  import InfiniteLoading from 'vue-infinite-loading';
+  Vue.use(InfiniteLoading);
   Vue.use(VueResource);
 //   Vue.component(Select.name, Select)
   

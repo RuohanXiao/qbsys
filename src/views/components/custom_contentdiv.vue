@@ -66,7 +66,6 @@
           </div>
         </Tooltip>
         <!-- <div class="divSplitLine"></div> -->
-
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="toNet">
@@ -89,24 +88,27 @@
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow"></Spin>
             </div>
-            <div id="contentchart" class="scrollBarAble" aria-autocomplete="true" :style="{height:ContentHeight,display:'flex'}">
-              <Row type="flex" justify="start" align="middle">
-                <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items">
-                  <div>
-                    <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id)">
-                      <p class="contentTitle">{{item.title}}</p>
-                      <p class="contentText">{{item.text}}</p>
-                      <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
-                    </div>
-                    <div class="contentItem">
-                      <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 hoverStyle" :style="{padding:'0 !important'}" size="35" @click="selectThis(item.id)"></Icon>
-                      <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
-                    </div>
+            <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}">
+              <Row type="flex" justify="start">
+                <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items" :key="index">
+                <div>
+                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id)">
+                    <p class="contentTitle">{{item.title}}</p>
+                    <p class="contentText">{{item.text.substring(0,34)}}</p>
+                    <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
                   </div>
-                  </Col>
-                  <Col span=24 v-if="items.length>0">
-                  <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
+                  <div class="contentItem">
+                    <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 hoverStyle" :style="{padding:'0 !important'}" size="35" @click="selectThis(item.id)"></Icon>
+                    <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
+                  </div>
+                </div>
                 </Col>
+                <Col span=24 v-if="items.length>0" style="margin-bottom:'20px'" id='jiazaiDiv'>
+                <div style="margin-bottom:'20px'"></div>
+                </Col>
+                <!-- <Col span=24 v-if="items.length>0">
+                      <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
+                    </Col> -->
               </Row>
             </div>
           </Scroll>
@@ -134,13 +136,13 @@
   import mock from '../../mock/index.js'
   // import liM from '../../dist/assets/js/jquery.liMarquee.js'
   import modalChart from './custom_modal.vue'
+  import InfiniteLoading from 'vue-infinite-loading';
   import $ from "jquery";
-  
   import {
     mapState,
     mapMutations
   } from 'vuex'
-// import func from '../../../vue-temp/vue-editor-bridge';
+  // import func from '../../../vue-temp/vue-editor-bridge';
   mock.test = 1
   var timer = null;
   var tthis = this;
@@ -149,8 +151,13 @@
     name: "App",
     data() {
       return {
+        goodsList: [],
+        sortFlag: true, //默认升序
+        page: 1,
+        pageSize: 8,
+        busy: true,
         watchSelectCounter: 0,
-        translateButton:false,
+        translateButton: false,
         spinShow: false,
         markedItem: false,
         ifInfo: false,
@@ -364,7 +371,7 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition','netToContentData'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData'
     ]),
     watch: {
       watchSelectCounter: function() {
@@ -391,7 +398,7 @@
           $('.item-selected').removeClass('item-selected')
           mthis.items = response.body.data
         })
-        mthis.watchSelectCounter ++;
+        mthis.watchSelectCounter++;
       },
       contentTimeCondition: function(va) {
         var mthis = this
@@ -399,25 +406,25 @@
           clearTimeout(timer)
         }
         timer = setTimeout(function() {
-        mthis.page = 1
-        if (va.length === 2) {
-          mthis.spinShow = true
-          let stime = util.getTimestamp(va[0])
-          let etime = util.getTimestamp(va[1])
-          mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
-            if (response.body.data.length > 0) {
-              $('.item-selected').removeClass('item-selected')
-              mthis.items = response.body.data
-            } else {
-              mthis.items = []
-            }
-            mthis.spinShow = false
-          })
-        } else if (va.length === 1) {
-          alert('aaa')
-        } else {
-          alert('bbbb')
-        }
+          mthis.page = 1
+          if (va.length === 2) {
+            mthis.spinShow = true
+            let stime = util.getTimestamp(va[0])
+            let etime = util.getTimestamp(va[1])
+            mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
+              if (response.body.data.length > 0) {
+                $('.item-selected').removeClass('item-selected')
+                mthis.items = response.body.data
+              } else {
+                mthis.items = []
+              }
+              mthis.spinShow = false
+            })
+          } else if (va.length === 1) {
+            alert('aaa')
+          } else {
+            alert('bbbb')
+          }
         }, 500);
       },
       searchContentResult: function(va) {
@@ -439,7 +446,7 @@
         })
         // }
         // }
-        mthis.watchSelectCounter ++;
+        mthis.watchSelectCounter++;
       },
       // netHeight: function() {
       //   var mthis = this;
@@ -450,38 +457,50 @@
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
         mthis.ContentHeightList = mthis.$store.state.contentHeight - 75 + 22 + 'px';
       },
-      ContentHeightList:function(){
+      ContentHeightList: function() {
         var mthis = this;
         var Ele = document.getElementById('translatedDiv');
         var contentDiv = document.getElementById('contentInfo');
         if (Ele !== null) {
           Ele.style.height = mthis.ContentHeightList;
         }
-        
       }
     },
     components: {
-      modalChart
+      InfiniteLoading,modalChart
     },
     props: ['contentData'],
     methods: {
-      selectThis(id){
+      //无限滚动加载触发方法
+      infiniteHandler($state) {
+        alert()
+      setTimeout(() => {
+        const temp = [];
+        for (let i = this.list.length + 1; i <= this.list.length + 20; i++) {
+          temp.push(i);
+        }
+        this.list = this.list.concat(temp);
+        $state.loaded();
+      }, 1000);
+    },
+
+      selectThis(id) {
         // 添加：document.getElementById("id").classList.add("类名")；
         // 删除：document.getElementById("id").classList.remove("类名")；
-        (document.getElementById(id).getAttribute("class").indexOf('item-selected') > 0) ? (document.getElementById(id).classList.remove("item-selected")):(document.getElementById(id).classList.add("item-selected"))
-        this.watchSelectCounter ++;
+        (document.getElementById(id).getAttribute("class").indexOf('item-selected') > 0) ? (document.getElementById(id).classList.remove("item-selected")) : (document.getElementById(id).classList.add("item-selected"))
+        this.watchSelectCounter++;
       },
-      fanxuan(){
+      fanxuan() {
         // document.getElementsByClassName("box");
         let selectDom = $('.item-selected')
         let disselectDom = $('.contentDiv:not(.item-selected)')
         selectDom.removeClass('item-selected')
         disselectDom.addClass('item-selected')
-        this.watchSelectCounter ++;
+        this.watchSelectCounter++;
       },
-      removeAll(){
+      removeAll() {
         this.items = []
-        this.watchSelectCounter ++;
+        this.watchSelectCounter++;
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
@@ -497,7 +516,7 @@
             id: selectList[m].id,
             entity_type: 'content',
             img: '',
-            name: [...selectList[m].title].length>20?selectList[m].title.substring(0,19)+'...':selectList[m].title,
+            name: [...selectList[m].title].length > 20 ? selectList[m].title.substring(0, 19) + '...' : selectList[m].title,
             label: selectList[m].title,
             loaded: true
           })
@@ -690,7 +709,7 @@
           }
         });
       },
-      handleReachBottom(status) {
+      handleReachBottom() {
         var mthis = this
         mthis.page = mthis.page + 1
         mthis.moreLoading = true
@@ -725,13 +744,13 @@
                 $('.item-selected').removeClass('item-selected')
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('已全部加载', true)
               }
               resolve();
             })
           }
         });
-        this.watchSelectCounter ++;
+        this.watchSelectCounter++;
       },
       toContentDiv() {
         this.showList = false
@@ -745,10 +764,23 @@
           contentDiv.style.display = 'none';
           contentDiv.style.borderRight = 'none';
         }
-        
         // document.getElementById('contents').innerHTML = ''
         // document.getElementById('contentsTitle').innerHTML = ''
         // document.getElementById('contentsTime').innerHTML = ''
+      },
+      jiazai(){
+        var mthis= this
+        console.log($('#jiazaiDiv').offset())
+        if (timer) {
+          clearTimeout(timer)
+        }
+        timer = setTimeout(function() {
+          while($('#jiazaiDiv').offset().top < 1000){
+            mthis.handleReachBottom()
+            console.log('===============')
+            break;
+          }
+        }, 500);
       },
       scrollBottom() {
         alert('ssss')
@@ -834,9 +866,9 @@
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
-      //   // 跳转过来的
+        //   // 跳转过来的
       //   mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
-      //     mthis.items = response.body.data
+        //     mthis.items = response.body.data
       //     // mthis.dataexpand = response.body.data
       //     // mthis.singlePerson = (opt[1]>1)?false:true
       //   })
@@ -846,8 +878,8 @@
       window.divLength = 0;
       this.initSelectBox('#contentchart')
       
-
-      // $('.str1').liMarquee();
+      // console.log($('#jiazaiDiv').offset())
+      // window.addEventListener('scroll', this.handleScroll)
     }
   };
 </script>
@@ -870,7 +902,7 @@
     padding-top: 20px;
     cursor: pointer;
     /* 自定义鼠标样式
-    cursor:url(url图片地址) */
+        cursor:url(url图片地址) */
   }
   .contentDiv:hover {
     /* 右角标 */
@@ -884,21 +916,21 @@
   }
   /* 角标折角 */
   /* .contentDiv ::before {
-            content: "";
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            border-width: 0 16px 16px 0;
-            border-style: solid;
-            border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(51, 255, 255, 0.5) rgba(51, 255, 255, 0.5);
-            background: rgba(51, 255, 255, 0.5);
-            display: block;
-            width: 0;
-            background: linear-gradient(-135deg, transparent 10px, rgba(51, 255, 255, 0.4) 0);
-            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
-            -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
-            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
-          } */
+                content: "";
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                border-width: 0 16px 16px 0;
+                border-style: solid;
+                border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(51, 255, 255, 0.5) rgba(51, 255, 255, 0.5);
+                background: rgba(51, 255, 255, 0.5);
+                display: block;
+                width: 0;
+                background: linear-gradient(-135deg, transparent 10px, rgba(51, 255, 255, 0.4) 0);
+                -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
+                -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
+              } */
   .contentTitle {
     padding: 0 25px 0 5px;
     text-align: center;
@@ -1024,16 +1056,16 @@
   }
 </style>
 <style scoped>
-  .zindex99{
+  .zindex99 {
     z-index: 99
   }
-  .contentItem:hover .hoverStyle{
+  .contentItem:hover .hoverStyle {
     opacity: 1;
-    color:rgba(51, 255, 255, 0.2);
+    color: rgba(51, 255, 255, 0.2);
   }
-  .contentItem:hover .icon-right{
+  .contentItem:hover .icon-right {
     opacity: 1;
-    color:#ccffff;
+    color: #ccffff;
   }
   .select-box-container {
     -webkit-touch-callout: none;
@@ -1047,17 +1079,17 @@
     margin-bottom: 25px;
   }
   /* .select-item {
-                    display: inline-block;
-                    width: 100px;
-                    height: 100px;
-                    text-align: center;
-                    line-height: 100px;
-                    font-size: 12px;
-                    border: 1px solid #ccc;
-                    margin-right: 10px;
-                    margin-bottom: 10px;
-                    cursor: pointer;
-                } */
+                        display: inline-block;
+                        width: 100px;
+                        height: 100px;
+                        text-align: center;
+                        line-height: 100px;
+                        font-size: 12px;
+                        border: 1px solid #ccc;
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+                        cursor: pointer;
+                    } */
   .select-item {
     border: 1px solid rgba(51, 255, 255, 0);
   }
@@ -1071,9 +1103,9 @@
     background-color: rgba(51, 255, 255, 0.2);
   }
   /* .select-item.item-selected,
-        .select-item.temp-selected {
-          background-color: rgba(51, 255, 255, 0.2);
-        } */
+            .select-item.temp-selected {
+              background-color: rgba(51, 255, 255, 0.2);
+            } */
   .select-box-dashed {
     position: absolute;
     display: none;
@@ -1094,27 +1126,27 @@
   }
   .contentItem {
     position: absolute;
-    background-color: rgba(0,0,0,0);
-    top:12px;
-    left:12px;
+    background-color: rgba(0, 0, 0, 0);
+    top: 12px;
+    left: 12px;
     width: 15px;
     height: 15px;
   }
   contentItem:hover {
     opacity: 1;
   }
-  .color255-back{
+  .color255-back {
     color: rgba(51, 255, 255, 0.1);
     background-color: rgba(51, 255, 255, 0);
   }
-  .item-selected+.contentItem>.color255-back{
+  .item-selected+.contentItem>.color255-back {
     color: rgba(51, 255, 255, 0.3);
   }
   .color255 {
     color: rgba(51, 255, 255, 0.1);
   }
-  .item-selected+.contentItem>.color255{
-    color: rgba(204,255,255,1);
+  .item-selected+.contentItem>.color255 {
+    color: rgba(204, 255, 255, 1);
   }
   .top {
     padding: 10px;
@@ -1129,16 +1161,20 @@
     right: 15px;
   }
   .deg180 {
-    transform:rotate(180deg);
-    -ms-transform:rotate(180deg); 	/* IE 9 */
-    -moz-transform:rotate(180deg); 	/* Firefox */
-    -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
-    -o-transform:rotate(180deg); 	/* Opera */
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    /* IE 9 */
+    -moz-transform: rotate(180deg);
+    /* Firefox */
+    -webkit-transform: rotate(180deg);
+    /* Safari 和 Chrome */
+    -o-transform: rotate(180deg);
+    /* Opera */
     position: absolute;
-    top: -5px;  
+    top: -5px;
     left: -4px;
   }
-  .lightUp{
+  .lightUp {
     color: #ccffff;
   }
 </style>

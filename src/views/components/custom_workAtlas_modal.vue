@@ -360,7 +360,7 @@
           "data": {
             "id": "",
             "name": (mthis.workspaceTitle === '') ? ('默认标题' + timestamp) : mthis.workspaceTitle,
-            "des": (mthis.workspaceDes === '') ? ('这家伙很懒，什么都没有写') : mthis.workspaceDes,
+            "des": (mthis.workspaceDes === '') ? ('暂无描述') : mthis.workspaceDes,
             "modify_time": util.getNowFormatDate(),
             "modify_user": "XiaoRuohan",
             "create_time": util.getNowFormatDate(),

@@ -289,6 +289,8 @@ import {
           mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
         }
       }
+      var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
+      var entityMainType = ob1.getElementsByTagName("entityMainType");
       mthis.myMap = new Map();
       for (var i = 0; i < entityMainType.length; i++) {
         let typeName = entityMainType[i].children[0].textContent;
