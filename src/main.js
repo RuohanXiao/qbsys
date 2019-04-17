@@ -276,6 +276,7 @@ var store = new Vuex.Store({
     }],
     clickSelectedGeoIds:[],
     geoStaticsSelectedIds:[],
+    geoStaticsOnlyLookSelectedIds:[],
     netModalDetailData: {},
     netModalDetailNodeId: '',
     contentHeight: 0,
@@ -421,6 +422,9 @@ var store = new Vuex.Store({
     },
     setGeoToNetData(state,val){
       state.geoToNetData = val
+    },
+    setGeoStaticsOnlyLookSelectedIds(state,val){
+      state.geoStaticsOnlyLookSelectedIds = val
     },
     setGeoStaticsSelectedIds(state,val){
       state.geoStaticsSelectedIds = val
