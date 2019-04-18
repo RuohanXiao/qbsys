@@ -2893,16 +2893,16 @@ export default {
             if(data.length<= 0){
                 return
             } else {
-                mthis.$http.post("http://localhost:5000/getOrgByIds/", {
-                //mthis.$http.post("http://10.60.1.140:5100/getOrgByIds/", {
+                //mthis.$http.post("http://localhost:5000/getOrgByIds/", {
+                mthis.$http.post("http://10.60.1.140:5100/getOrgByIds/", {
                     "ids": data
                 }).then(response => {
                     var eventGeoJson_Org = response.body.data.Features;
                     var addFeatures_Org = (new GeoJSON()).readFeatures(eventGeoJson_Org);
                     mthis.addFeaturesToEventLayer(addFeatures_Org);
 
-                    mthis.$http.post("http://localhost:5000/getEventByIds/", {
-                    //mthis.$http.post("http://10.60.1.140:5100/getEventByIds/", {
+                    //mthis.$http.post("http://localhost:5000/getEventByIds/", {
+                    mthis.$http.post("http://10.60.1.140:5100/getEventByIds/", {
                         "ids": data
                     }).then(response => {
                         var eventGeoJson_Event = response.body.data.Features;
