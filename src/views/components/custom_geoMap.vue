@@ -2748,6 +2748,65 @@ export default {
                 })
             }
         },
+        addFeaturesToOrgLayer(addFeatures){
+            var mthis = this;
+            var eventLayerSource = mthis.getLayerById('OrgLayer').getSource();
+            if(eventLayerSource.getFeatures().length === 0){                          //判断地图中是否原本有数据
+                addFeatures.forEach(function(item){
+                    mthis.setFeatureStatus(item,'life');
+                    mthis.addEventIdsToAEITFIdsListFromFeature(item);
+                    mthis.addEventIdsToSelectedIds(item)
+                });
+                mthis.returnSelectedEventIds(mthis.EventsDatas.data);
+                eventLayerSource.addFeatures(addFeatures);
+            } else { //若地图中原本有数据
+                mthis.geometrySelectedEventIds = [];
+                mthis.timeSelectedEventIds.length = 0;
+                mthis.staticsSelectedEventIds.length = 0;
+                var mapFeatures = eventLayerSource.getFeatures();
+                mapFeatures.forEach(function(feature){
+                    feature.set('selectedNum',0);
+                    mthis.setFeatureStatus(feature,'die');
+                })
+                addFeatures.forEach(function(additem){
+                    mthis.addEventIdsToAEITFIdsListFromFeature(additem);
+                    mthis.addEventIdsToSelectedIds(additem)
+                    if(additem.getId() !== null && additem.getId() !== undefined){
+                        var featureId = additem.getId();
+                        var mapFeature = eventLayerSource.getFeatureById(featureId);
+                        if(mapFeature === null){  //判断地图原有数据中改地点是否有数据
+                            var addevents = additem.get('Params');
+                            addevents.forEach(function(event){
+                                mthis.geometrySelectedEventIds.push(event.id);
+                            })
+                            mthis.setFeatureStatus(additem,'life');
+                            eventLayerSource.addFeature(additem);
+                        } else {  //若地图原有数据中没有该地点数据
+                            var addevents = additem.get('Params');
+                            addevents.forEach(function(event){
+                                mthis.geometrySelectedEventIds.push(event.id);
+                                var mapEvents = mapFeature.get('Params');
+                                for(let i = 0; i < mapEvents.length; i++){
+                                    if(event.id === mapEvents[i].id){
+                                        break;
+                                    }
+                                    if(i === mapEvents.length - 1){
+                                        mapEvents.push(event);
+                                        //mapFeature.set('Events',evs);
+                                        var num = mapFeature.get('selectedNum')
+                                        mapFeature.set('selectedNum',++num);
+                                        //mthis.setSelectedEventFeatureParam(feature,false);
+                                    }
+                                }
+                                mthis.setFeatureStatus(mapFeature,'life');
+                            })
+                        }
+                    } else {
+                        alert('数据没有id');
+                    }
+                })
+            }
+        },
         isOperateButtonsHLOrDim(){
             var mthis = this;
             if($.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
@@ -2888,7 +2947,6 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
-            debugger
             var data = mthis.$store.state.netToGeoData;
             if(data.length<= 0){
                 return
@@ -2899,7 +2957,7 @@ export default {
                 }).then(response => {
                     var eventGeoJson_Org = response.body.data.Features;
                     var addFeatures_Org = (new GeoJSON()).readFeatures(eventGeoJson_Org);
-                    mthis.addFeaturesToEventLayer(addFeatures_Org);
+                    mthis.addFeaturesToOrgLayer(addFeatures_Org);
 
                     //mthis.$http.post("http://localhost:5000/getEventByIds/", {
                     mthis.$http.post("http://10.60.1.140:5100/getEventByIds/", {

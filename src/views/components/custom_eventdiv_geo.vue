@@ -84,6 +84,7 @@
       // },
       clickSelectedGeoIds:function(){
         var mthis = this;
+        debugger
         if(mthis.clickSelectedGeoIds.length > 0){
             var OrgIds = [];
             var EventIds = [];
