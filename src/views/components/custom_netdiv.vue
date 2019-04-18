@@ -641,23 +641,18 @@
       },
       toGeo() {
         this.$store.commit("changeTMSS", "geo");
-        let arr = [];
+        let arr = {
+          'orgIds':[],
+          'eventIds':[]
+        };
         for (let i = 0; i < this.selectionIdByType.nodeIds.length; i++) {
-          arr.push(this.selectionIdByType.nodeIds[i]);
+          arr.orgIds.push(this.selectionIdByType.nodeIds[i]);
         }
         for (let j = 0; j < this.selectionIdByType.eventIds.length; j++) {
-          arr.push(this.selectionIdByType.eventIds[j]);
+          arr.eventIds.push(this.selectionIdByType.eventIds[j]);
         }
-        // for (let k = 0; k < this.selectionIdByType.contentIds.length; k++) {
-        //   arr.push(this.selectionIdByType.contentIds[k])
-        // }
-        /* arr.push(this.selectionIdByType.nodeIds)
-          arr.push(this.selectionIdByType.enentIds)
-          arr.push(this.selectionIdByType.contentIds) */
-        arr = util.unique(arr);
+        //arr = util.unique(arr);
         this.$store.commit("setNetToGeoData", arr);
-        /* alert('已经推送，结果请参阅控制台') */
-        //this.$store.commit('changeTMSS', 'geo')
       },
       toContent() {
         if (this.selectionIdByType.contentIds.length > 0) {

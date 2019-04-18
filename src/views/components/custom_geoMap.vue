@@ -120,6 +120,35 @@ top: 232px;
     background-color: rgba(255,255,255,0.2);
 }
 
+/*v-enter 是进入之前，元素的起始状态*/
+/*v-leave-to 离开之后动画的终止状态*/
+.prompt-enter{
+    opacity:  1;/*透明度*/
+}
+.prompt-leave-to{
+    opacity:  0;/*透明度*/
+}
+    /*入场(离场)动画的时间段   */
+.prompt-enter-active,.prompt-leave-active{
+    transition: all 2s ease;
+}
+
+.promptmessage{
+    position: absolute;
+    color: #ccffff;
+    top: 75px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 4vh;
+    letter-spacing: 0px;
+    font-family: MicrosoftYaHei;
+    height: 4vh;
+    text-align: center;
+    z-index: 999999;
+}
+
 </style>
 
 <template>
@@ -127,11 +156,7 @@ top: 232px;
         <imgItemOpera :changeButton='changeButtonParam' @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
-                <div id='legendDiv'>
-                    <table id="legendBodyTable" style='border-collapse:separate;border-spacing:5;'>
-                        <routeLegend :legendItem='legendItem' @legendItemOpera='legendItemClick' v-for="legendItem in legend"></routeLegend>
-                    </table>
-                </div>
+                <transition name="prompt"><div v-if="promptflag" class='promptmessage'>{{promptMessage}}</div></transition>
             </div>
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
         </div>
@@ -197,6 +222,8 @@ export default {
         mapDivbuttonIds : ['location_AT','heatMap_HSD','route_HSD'],
         mapHeight:'0px',
         imgTopVules:'',
+        promptMessage:'',
+        promptflag:false,
         test_Route:test_Route,
         test_HeatMap:test_HeatMap,
         EventsDatas:EventsDatas,
@@ -263,10 +290,6 @@ export default {
                 })
             })
         }),
-        /* idTypeToLayerList:{
-            'event':'eventsPointsLayer',
-            'org':'OrgLayer'
-        } */
         AllLayerList_conf:{
             'event':{
                 'layerId':'eventsPointsLayer',
@@ -703,21 +726,25 @@ export default {
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
             mthis.orgsSpatialQuery([geometryArr],'Event');
+            mthis.deleteRightMenu();
         },
         rightClickOrg(feature){
             var mthis = this;
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
             mthis.orgsSpatialQuery([geometryArr],'Org');
+            mthis.deleteRightMenu();
         },
         rightClickLoc(feature){
             var mthis = this;
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
             mthis.orgsSpatialQuery([geometryArr],'Org');
+            mthis.deleteRightMenu();
         },
         rightClickDM(feature){
             var mthis = this;
+            mthis.deleteRightMenu();
             var source = mthis.getLayerById('HLAreaLayer').getSource();
             var fid = feature.getId();
             var index = -1;
@@ -737,14 +764,9 @@ export default {
                 map.removeOverlay(overlay)
             }
         },
-        setRightClickMenu_Area(feature,coordinate){
+        deleteRightMenu(){
             var mthis = this;
-            var overlayId = 'rightClickMenu_Area';
-            var ovdiv = document.createElement('div');
-            ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer';
-            ovdiv.id='rightClickMenu';
-            ovdiv.addEventListener("mouseleave", function(){
-                setTimeout(function(){
+            setTimeout(function(){
                     var map = mthis.routeMap.map;
                     var overlayId = 'rightClickMenu_Area';
                     var overlay = map.getOverlayById(overlayId);
@@ -752,6 +774,15 @@ export default {
                         map.removeOverlay(overlay)
                     }
                 },100)
+        },
+        setRightClickMenu_Area(feature,coordinate){
+            var mthis = this;
+            var overlayId = 'rightClickMenu_Area';
+            var ovdiv = document.createElement('div');
+            ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer';
+            ovdiv.id='rightClickMenu';
+            ovdiv.addEventListener("mouseleave", function(){
+                mthis.deleteRightMenu();
             });
             var table = document.createElement('table');
             table.id = 'rightClickMenuTable';
@@ -1542,13 +1573,16 @@ export default {
         orgsSpatialQuery(geometryArr,type){
             var mthis = this;
             var url = '';
+            var promptType = ''
+            var num = 0;
             if(type === 'Event'){
-                //url = 'http://localhost:5000/exploreEvent/'
                 url = 'http://10.60.1.140:5100/exploreEvent/'
+                promptType = '事件数';
             } else if(type === 'Org'){
-                //url = 'http://localhost:5000/exploreOrg/'
                 url = 'http://10.60.1.140:5100/exploreOrg/'
+                promptType = '组织机构数';
             }
+            mthis.waiting();
              mthis.$http.post(url, {
                     'geometry':geometryArr
                 }).then(response => {
@@ -1567,12 +1601,19 @@ export default {
                     mthis.AnimationFun = {};
                     for(let i = 0; i < addfeatures.length; i++){
                         var feature = addfeatures[i];
+                        var params = feature.get('Params');
+                        num += params.length;
                         if(feature.getGeometry().getType() === 'MultiLineString'){
                             
                             mthis.startAnimation(feature)
                         }
+                        
                         mthis.mapAddFeature(feature);
                     }
+                    var promptMess = '增加' + promptType + ': ' + num;
+                    mthis.Message(promptMess);
+                    mthis.hide();
+                    
                 })
         },
         startAnimation(feature) { 
@@ -2689,22 +2730,23 @@ export default {
         /**
          * @param 将feature追加进入eventsLayer，并将原来已经选中的事件变为不选中状态，新追加的事件为选中状态
          */
-        addFeaturesToEventLayer(addFeatures){
+        addFeaturesToLayer(addFeatures,type){
             var mthis = this;
-            var eventLayerSource = mthis.getLayerById('eventsPointsLayer').getSource();
-            if(eventLayerSource.getFeatures().length === 0){                          //判断地图中是否原本有数据
+            var layerId = mthis.AllLayerList_conf[type].layerId;
+            var LayerSource = mthis.getLayerById(layerId).getSource();
+            if(LayerSource.getFeatures().length === 0){                          //判断地图中是否原本有数据
                 addFeatures.forEach(function(item){
                     mthis.setFeatureStatus(item,'life');
                     mthis.addEventIdsToAEITFIdsListFromFeature(item);
                     mthis.addEventIdsToSelectedIds(item)
                 });
                 mthis.returnSelectedEventIds(mthis.EventsDatas.data);
-                eventLayerSource.addFeatures(addFeatures);
+                LayerSource.addFeatures(addFeatures);
             } else { //若地图中原本有数据
                 mthis.geometrySelectedEventIds = [];
                 mthis.timeSelectedEventIds.length = 0;
                 mthis.staticsSelectedEventIds.length = 0;
-                var mapFeatures = eventLayerSource.getFeatures();
+                var mapFeatures = LayerSource.getFeatures();
                 mapFeatures.forEach(function(feature){
                     feature.set('selectedNum',0);
                     mthis.setFeatureStatus(feature,'die');
@@ -2714,14 +2756,14 @@ export default {
                     mthis.addEventIdsToSelectedIds(additem)
                     if(additem.getId() !== null && additem.getId() !== undefined){
                         var featureId = additem.getId();
-                        var mapFeature = eventLayerSource.getFeatureById(featureId);
+                        var mapFeature = LayerSource.getFeatureById(featureId);
                         if(mapFeature === null){  //判断地图原有数据中改地点是否有数据
                             var addevents = additem.get('Params');
                             addevents.forEach(function(event){
                                 mthis.geometrySelectedEventIds.push(event.id);
                             })
                             mthis.setFeatureStatus(additem,'life');
-                            eventLayerSource.addFeature(additem);
+                            LayerSource.addFeature(additem);
                         } else {  //若地图原有数据中没有该地点数据
                             var addevents = additem.get('Params');
                             addevents.forEach(function(event){
@@ -2748,65 +2790,39 @@ export default {
                 })
             }
         },
-        addFeaturesToOrgLayer(addFeatures){
+        Message(mes){
             var mthis = this;
-            var eventLayerSource = mthis.getLayerById('OrgLayer').getSource();
-            if(eventLayerSource.getFeatures().length === 0){                          //判断地图中是否原本有数据
-                addFeatures.forEach(function(item){
-                    mthis.setFeatureStatus(item,'life');
-                    mthis.addEventIdsToAEITFIdsListFromFeature(item);
-                    mthis.addEventIdsToSelectedIds(item)
-                });
-                mthis.returnSelectedEventIds(mthis.EventsDatas.data);
-                eventLayerSource.addFeatures(addFeatures);
-            } else { //若地图中原本有数据
-                mthis.geometrySelectedEventIds = [];
-                mthis.timeSelectedEventIds.length = 0;
-                mthis.staticsSelectedEventIds.length = 0;
-                var mapFeatures = eventLayerSource.getFeatures();
-                mapFeatures.forEach(function(feature){
-                    feature.set('selectedNum',0);
-                    mthis.setFeatureStatus(feature,'die');
-                })
-                addFeatures.forEach(function(additem){
-                    mthis.addEventIdsToAEITFIdsListFromFeature(additem);
-                    mthis.addEventIdsToSelectedIds(additem)
-                    if(additem.getId() !== null && additem.getId() !== undefined){
-                        var featureId = additem.getId();
-                        var mapFeature = eventLayerSource.getFeatureById(featureId);
-                        if(mapFeature === null){  //判断地图原有数据中改地点是否有数据
-                            var addevents = additem.get('Params');
-                            addevents.forEach(function(event){
-                                mthis.geometrySelectedEventIds.push(event.id);
-                            })
-                            mthis.setFeatureStatus(additem,'life');
-                            eventLayerSource.addFeature(additem);
-                        } else {  //若地图原有数据中没有该地点数据
-                            var addevents = additem.get('Params');
-                            addevents.forEach(function(event){
-                                mthis.geometrySelectedEventIds.push(event.id);
-                                var mapEvents = mapFeature.get('Params');
-                                for(let i = 0; i < mapEvents.length; i++){
-                                    if(event.id === mapEvents[i].id){
-                                        break;
-                                    }
-                                    if(i === mapEvents.length - 1){
-                                        mapEvents.push(event);
-                                        //mapFeature.set('Events',evs);
-                                        var num = mapFeature.get('selectedNum')
-                                        mapFeature.set('selectedNum',++num);
-                                        //mthis.setSelectedEventFeatureParam(feature,false);
-                                    }
-                                }
-                                mthis.setFeatureStatus(mapFeature,'life');
-                            })
-                        }
-                    } else {
-                        alert('数据没有id');
-                    }
-                })
-            }
+            mthis.promptMessage = mes;
+            mthis.promptflag = true;
+            setTimeout(function(){
+                mthis.promptflag = false;
+            },2000);
         },
+        waiting(){  
+            var mthis = this;
+            mthis.hide();
+            var procbg = document.createElement("div"); //首先创建一个div    
+            procbg.setAttribute("id","WaitCover"); //定义该div的id    
+            procbg.style.background = "#000000";    
+            procbg.style.width = "100%";    
+            procbg.style.height = "100%";    
+            procbg.style.position = "fixed";    
+            procbg.style.top = "0";    
+            procbg.style.left = "0";    
+            procbg.style.zIndex = "500000";    
+            procbg.style.opacity = "0.6";  
+            procbg.style.cursor='wait';  
+            procbg.style.filter = "Alpha(opacity=70)";    
+            document.body.appendChild(procbg);    
+        },
+    //取消遮罩    
+        hide() {    
+            var mybg = document.getElementById("WaitCover");
+            if(mybg){
+                var body = document.getElementsByTagName("body");
+                body[0].removeChild(mybg)
+            }   
+        }, 
         isOperateButtonsHLOrDim(){
             var mthis = this;
             if($.isEmptyObject(mthis.allEventIdsToFeaturesIdsList)){
@@ -2942,30 +2958,59 @@ export default {
             }).then(response => {
                 var eventGeoJson = response.body.data[0].eventGeoJson;
                 var addFeatures = (new GeoJSON()).readFeatures(eventGeoJson);
-                mthis.addFeaturesToEventLayer(addFeatures);
+                mthis.addFeaturesToLayer(addFeatures,'event');
             })
         },
         netToGeoData:function(){
             var mthis = this;
             var data = mthis.$store.state.netToGeoData;
+            
             if(data.length<= 0){
                 return
             } else {
-                //mthis.$http.post("http://localhost:5000/getOrgByIds/", {
+                mthis.waiting();
                 mthis.$http.post("http://10.60.1.140:5100/getOrgByIds/", {
-                    "ids": data
+                    "ids": data.orgIds
                 }).then(response => {
+                    var orgNum = 0;
+                    debugger
+                    var mes = [];
                     var eventGeoJson_Org = response.body.data.Features;
                     var addFeatures_Org = (new GeoJSON()).readFeatures(eventGeoJson_Org);
-                    mthis.addFeaturesToOrgLayer(addFeatures_Org);
-
-                    //mthis.$http.post("http://localhost:5000/getEventByIds/", {
+                    mthis.addFeaturesToLayer(addFeatures_Org,'org');
+                    for(let i = 0; i < addFeatures_Org.length; i++){
+                        let Params = addFeatures_Org[i].get('Params');
+                        let paramsNum = Params.length;
+                        orgNum += paramsNum;
+                    }
+                    if(orgNum > 0){
+                        mes.push('组织机构：' + orgNum + ' 处');
+                        if(data.eventIds.length === 0){
+                            var promess_ = '增加' + mes.join(',');
+                            mthis.Message(promess_);
+                            mthis.hide()
+                        }
+                    }
                     mthis.$http.post("http://10.60.1.140:5100/getEventByIds/", {
-                        "ids": data
+                        "ids": data.eventIds
                     }).then(response => {
+                        var eventNum = 0
                         var eventGeoJson_Event = response.body.data.Features;
                         var addFeatures_Event = (new GeoJSON()).readFeatures(eventGeoJson_Event);
-                        mthis.addFeaturesToEventLayer(addFeatures_Event);
+                        mthis.addFeaturesToLayer(addFeatures_Event,'event');
+                        for(let i = 0; i < addFeatures_Event.length; i++){
+                            let Params = addFeatures_Event[i].get('Params');
+                            let paramsNum = Params.length;
+                            eventNum += paramsNum;
+                        }
+                        if(eventNum > 0){
+                            mes.push('事件：' + eventNum + ' 件');
+                        }
+                        if((eventNum + orgNum) > 0){
+                            var promess = '增加' + mes.join(' , ');
+                            mthis.Message(promess);
+                        }
+                        mthis.hide()
                     })
                 })
             }
