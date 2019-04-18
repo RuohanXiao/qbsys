@@ -2888,12 +2888,11 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
+            debugger
             var data = mthis.$store.state.netToGeoData;
             if(data.length<= 0){
                 return
             } else {
-                //mthis.eventGeoJson = mthis.test_mapData;
-                //mthis.$http.post(this.$store.state.ipConfig.api_url + '/node-to-GIS/', {
                 mthis.$http.post("http://localhost:5000/getOrgByIds/", {
                 //mthis.$http.post("http://10.60.1.140:5100/getOrgByIds/", {
                     "ids": data
