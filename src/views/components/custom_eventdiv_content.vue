@@ -3,7 +3,7 @@
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
-        <Tabs :value=$store.state.tabSelectNet>
+        <Tabs :value=$store.state.tabSelectContent>
           <Tab-pane label="选中详情" name='mubiaoxiangqingContent' :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqingContent' @click="changTab('mubiaoxiangqingContent')">
             <eventContent :resArr='resArr' :eventdata='evetdata' v-show='evetdataFlag'></eventContent>
             <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
@@ -105,86 +105,82 @@
     // },
     computed: mapState(['selectContentNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType']),
     watch: {
-      // contentStatisticsResult:function(){
+      // selectionIdByType: function() {
+      //   // // console.log(this.selectionIdByType)
       //   var mthis = this;
-      //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
+      //   mthis.evetdataFlag = false
+      //   if (mthis.selectContentNodes[0].ids.length > 0) {
+      //     // 新增防抖功能
+      //     mthis.evetdata = []
+      //     mthis.timer = setTimeout(function() {
+      //       if (mthis.selectionIdByType.nodeIds.length > 0) {
+      //         let nodeOb = {}
+      //         nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
+      //         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
+      //           // mthis.evetdata = response.body.data[0].nodes
+      //           mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
+      //           mthis.evetdataFlag = true
+      //           // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
+      //           // mthis.$set(mthis.evetdata,0,response.body.data[0].nodes)
+      //         })
+      //       }
+      //       if (mthis.selectionIdByType.eventIds.length > 0) {
+      //         // let nodeIdsArry = mthis.selectContentNodes[0].ids.map(item => {
+      //         //   return item.id;
+      //         // });
+      //         let eventOb = {}
+      //         eventOb.EventIds = mthis.selectionIdByType.eventIds
+      //         // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-info/', eventOb).then(response => {
+      //         //   // mthis.evetdataFlag = true
+      //         //   // mthis.evetdata = response.body.data[0].nodes
+      //         //   util.hebing(mthis.evetdata,response.body.data[0].nodes)
+      //         // })
+      //         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventOb).then(response => {
+      //           // mthis.evetdataFlag = true
+      //           // mthis.evetdata = response.body.data[0].nodes
+      //           for(let i = 0; i < response.body.data.length;i++){
+      //             response.body.data[i].id = response.body.data[i].doc_id
+      //             // response.body.data[i].entity_type = response.body.data[i].event_type
+      //             response.body.data[i].entity_type = 'event'
+      //             response.body.data[i].name = response.body.data[i].event_subtype
+      //           }
+      //           // // console.log(util.hebing(mthis.evetdata,response.body.data))
+      //           // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+      //           mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+      //           mthis.evetdataFlag = true
+      //         })
+      //       }
+      //       if (mthis.selectionIdByType.contentIds.length > 0) {
+      //         // let nodeIdsArry = mthis.selectContentNodes[0].ids.map(item => {
+      //         //   return item.id;
+      //         // });
+      //         let docOb = {}
+      //         docOb.docIds = mthis.selectionIdByType.contentIds
+      //         // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
+      //         //   // mthis.evetdataFlag = true
+      //         //   // mthis.evetdata = response.body.data[0].nodes
+      //         // })
+      //          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
+      //           // mthis.evetdataFlag = true
+      //           // mthis.evetdata = response.body.data[0].nodes
+      //           for(let i = 0; i < response.body.data.length;i++){
+      //             response.body.data[i].entity_type = 'document'
+      //             response.body.data[i].name = response.body.data[i].title
+      //           }
+      //           // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+      //           // // console.log(util.hebing(mthis.evetdata,response.body.data))
+      //           mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+      //           mthis.evetdataFlag = true
+      //         })
+      //       }
+      //     }, 200);
+      //   } else {
+      //     // mthis.$set(mthis.evetdata,0,null)
+      //     mthis.$set(mthis.evetdata,0,[])
+      //     mthis.evetdata =  []
+      //     mthis.evetdataFlag = false
+      //   }
       // },
-      selectionIdByType: function() {
-        // // console.log(this.selectionIdByType)
-        var mthis = this;
-        mthis.evetdataFlag = false
-        if (mthis.selectContentNodes[0].ids.length > 0) {
-          // 新增防抖功能
-          mthis.evetdata = []
-          mthis.timer = setTimeout(function() {
-            if (mthis.selectionIdByType.nodeIds.length > 0) {
-              let nodeOb = {}
-              nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
-                // mthis.evetdata = response.body.data[0].nodes
-                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                mthis.evetdataFlag = true
-                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                // mthis.$set(mthis.evetdata,0,response.body.data[0].nodes)
-              })
-            }
-            if (mthis.selectionIdByType.eventIds.length > 0) {
-              // let nodeIdsArry = mthis.selectContentNodes[0].ids.map(item => {
-              //   return item.id;
-              // });
-              let eventOb = {}
-              eventOb.EventIds = mthis.selectionIdByType.eventIds
-              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-info/', eventOb).then(response => {
-              //   // mthis.evetdataFlag = true
-              //   // mthis.evetdata = response.body.data[0].nodes
-              //   util.hebing(mthis.evetdata,response.body.data[0].nodes)
-              // })
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventOb).then(response => {
-                // mthis.evetdataFlag = true
-                // mthis.evetdata = response.body.data[0].nodes
-                for(let i = 0; i < response.body.data.length;i++){
-                  response.body.data[i].id = response.body.data[i].doc_id
-                  // response.body.data[i].entity_type = response.body.data[i].event_type
-                  response.body.data[i].entity_type = 'event'
-                  response.body.data[i].name = response.body.data[i].event_subtype
-                }
-                // // console.log(util.hebing(mthis.evetdata,response.body.data))
-                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-                mthis.evetdataFlag = true
-              })
-            }
-            if (mthis.selectionIdByType.contentIds.length > 0) {
-              // let nodeIdsArry = mthis.selectContentNodes[0].ids.map(item => {
-              //   return item.id;
-              // });
-              let docOb = {}
-              docOb.docIds = mthis.selectionIdByType.contentIds
-              // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
-              //   // mthis.evetdataFlag = true
-              //   // mthis.evetdata = response.body.data[0].nodes
-              // })
-               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
-                // mthis.evetdataFlag = true
-                // mthis.evetdata = response.body.data[0].nodes
-                for(let i = 0; i < response.body.data.length;i++){
-                  response.body.data[i].entity_type = 'document'
-                  response.body.data[i].name = response.body.data[i].title
-                }
-                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-                // // console.log(util.hebing(mthis.evetdata,response.body.data))
-                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-                mthis.evetdataFlag = true
-              })
-            }
-          }, 200);
-        } else {
-          // mthis.$set(mthis.evetdata,0,null)
-          mthis.$set(mthis.evetdata,0,[])
-          mthis.evetdata =  []
-          mthis.evetdataFlag = false
-        }
-      },
       singlePerson: function() {
         this.single = this.singlePerson
       },
@@ -202,25 +198,56 @@
         this.selectTime = true
         this.tabSelectNet = 'mubiaoxiangqingContent'
       },
+
+      
+      // selectContentNodes: function() {
+      //   var mthis = this;
+      //   if(mthis.selectContentNodes[0].ids.length > 0 ){
+      //     console.log(mthis.selectContentNodes)
+      //     mthis.evetdata = mthis.selectContentNodes[0].ids
+      //   }
+      //   if(mthis.selectContentNodes[0].ids.length > 1){
+      //     //调用统计接口
+      //     mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
+      //     'nodeIds': mthis.selectContentNodes[0].ids
+      //     }).then(response => {
+      //         mthis.staticsDatas = response.body.data;
+      //     })
+      //     // 调用详情接口
+      //     mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
+      //     'nodeIds': mthis.selectContentNodes[0].ids
+      //     }).then(response => {
+      //       mthis.staticsDatas = response.body.data;
+      //     })
+      //   } else {
+      //     mthis.staticsDatas = [];
+      //   }
+          
+      // }
       selectContentNodes: function() {
         var mthis = this;
-        if(mthis.selectContentNodes[0].ids.length > 1){
-          //调用统计接口
-          mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
-          'nodeIds': mthis.selectContentNodes[0].ids
-          }).then(response => {
-              mthis.staticsDatas = response.body.data;
-          })
-          // 调用详情接口
-          mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
-          'nodeIds': mthis.selectContentNodes[0].ids
-          }).then(response => {
-            mthis.staticsDatas = response.body.data;
-          })
+        mthis.evetdataFlag = false
+        if (mthis.selectContentNodes[0].ids.length > 0) {
+          // 新增防抖功能
+          mthis.evetdata = []
+          mthis.timer = setTimeout(function() {
+              let docOb = {}
+              docOb.docIds = mthis.selectContentNodes[0].ids
+               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
+                for(let i = 0; i < response.body.data.length;i++){
+                  response.body.data[i].entity_type = 'document'
+                  response.body.data[i].name = response.body.data[i].title
+                }
+                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                mthis.evetdataFlag = true
+              })
+          }, 200);
         } else {
-          mthis.staticsDatas = [];
+          // mthis.$set(mthis.evetdata,0,null)
+          mthis.$set(mthis.evetdata,0,[])
+          mthis.evetdata =  []
+          mthis.evetdataFlag = false
         }
-          
       }
     },
     methods: {

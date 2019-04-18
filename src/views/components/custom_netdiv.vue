@@ -338,6 +338,7 @@
     name: "App",
     data() {
       return {
+        updateStyleCounter:0,
         worksetInfo: {
           title: "",
           des: "",
@@ -965,6 +966,13 @@
           name: ""
         }]);
         this.selectionId = [];
+        this.selectionIdByType = new Object({
+                    nodeIds: [],
+                    eventIds: [],
+                    contentIds: []
+                  });
+
+        this.$store.commit("setSelectionIdByType", this.selectionIdByType)
         this.ifSelectNode = false;
         this.getStatistics();
       },
@@ -1504,22 +1512,27 @@
         var mthis = this;
         if (mthis.selectionId.length > 0) {
           var mthis = this;
-          mthis.$http
-            .post(
-              mthis.$store.state.ipConfig.api_url +
-              "/hierarchical-node-structure/", {
-                nodeIds: mthis.selectionId,
-                RootNodeId: mthis.selectionId[0],
-                edge_from_backend: true
-              }
-            )
-            .then(response => {
+          let nodesIDS = mthis.netchart.nodes().map(item=>{
+            return item.id
+                })
+          let rootIds= (typeof mthis.selectionId[0] === 'string')?(mthis.selectionId):(mthis.selectionId.map(it=>{
+            return it.id
+          }))
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url +"/hierarchical-node-structure/", {
+            nodeIds: nodesIDS,
+            RootNodeIdList: rootIds,
+            edge_from_backend: true
+          }).then(response => {
               if (response.body.code == 0) {
-                let initNode = mthis.netchart.getNode(mthis.selectionId[0])
+                let initNode = new Object()
+                if(typeof mthis.selectionId[0] === 'string'){
+                  initNode = mthis.netchart.getNode(mthis.selectionId[0])
+                } else {
+                  initNode =  mthis.selectionId[0]
+                }
                 let x0 = initNode.x
                 let y0 = initNode.y
                 let arrids = []
-                console.log('*****-----****')
                 //非递归广度优先实现
                 var iterator1 = function(treeNodes) {
                   if (!treeNodes || !treeNodes.length) return;
@@ -1535,17 +1548,21 @@
                     nodeObj['x'] = item.order * 200 + x0
                     nodeObj['y'] = item.depth * 300 + y0
                     arrids.push(item.id)
+                    mthis.netchart.lockNode(item.id)
                     //如果该节点有子节点，继续添加进入栈底
                     if (item.children && item.children.length) {
                       stack = stack.concat(item.children);
                     }
                   }
-                  mthis.netchart.updateStyle(arrids);
+                  // setTimeout(function() {
+                  //   console.log(nodesIDS)
+                  // mthis.netchart.updateStyle(nodesIDS);
                   mthis.netchart.updateSettings();
-                  mthis.netchart.updateSize();
-                  mthis.netchart.lockNode(arrids)
+                  // mthis.netchart.updateSize();
+                  //   mthis.netchart.lockNode(nodesIDS)
+                  // }, 200);
+                  
                 };
-                console.log('------------- 非递归广度优先实现 ------------------');
                 iterator1(response.body.data[0]);
               }
             });
@@ -1955,7 +1972,7 @@
           navigation: {
             // 初始化展示层级
             focusNodeExpansionRadius: 1,
-            initialNodes: ["node1"],
+            // initialNodes: null,
             mode: "showall",
             // mode: "focusnodes" ,
             expandOnClick: false
@@ -2345,17 +2362,31 @@
             },
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
-                if (event.clickNode) {}
-                mthis.selectItem = event;
-                mthis.selectionId = [];
-                for (
-                  let selectNum = 0; selectNum < event.selection.length; selectNum++
-                ) {
-                  mthis.selectionId.push(event.selection[selectNum]);
-                }
+                // if (event.clickNode) {}
+                // mthis.selectItem = event;
+                // mthis.selectionId = [];
+                // for (
+                //   let selectNum = 0; selectNum < event.selection.length; selectNum++
+                // ) {
+                //   mthis.selectionId.push(event.selection[selectNum]);
+                // }
+
               } else {
                 mthis.selectionId = [];
                 mthis.selectItem = null;
+                mthis.selectionIdByType = new Object({
+                    nodeIds: [],
+                    eventIds: [],
+                    contentIds: []
+                  });
+                mthis.$store.commit("setSelectNetNodes", [{
+                  ids: mthis.selectionId
+                }]);
+                mthis.$store.commit(
+                  "setSelectionIdByType",
+                  mthis.selectionIdByType
+                );
+                mthis.updateStyleCounter++;
               }
               // event.preventDefault();
             },
@@ -2404,7 +2435,8 @@
               // infoElement.style.display = infoElementVisible ? "block" : "none";
             },
             onSelectionChange(event) {
-              // console.log('=======================event.selection')
+              console.log('=======================event')
+              console.log(event.selection)
               // console.log(event.selection)
               // this.selectionEventObj = event.selection
               if (timer) {
@@ -2418,17 +2450,20 @@
                       return item.data;
                     })
                   };
-                  let selectNIds = event.selection.map(item => {
+                  mthis.selectionId = event.selection.filter(it=>{
+                    return it.isNode
+                  }).map(item => {
                     return item.id;
                   });
+                  console.log(mthis.selectionId)
                   let linksArr = [];
-                  for (let n = 0; n < selectNIds.length; n++) {
-                    if(mthis.netchart.getNode(selectNIds[n])){
+                  for (let n = 0; n <  mthis.selectionId.length; n++) {
+                    if(mthis.netchart.getNode( mthis.selectionId[n])){
                       linksArr.push(
-                        mthis.netchart.getNode(selectNIds[n]).links.map(item => {
+                        mthis.netchart.getNode( mthis.selectionId[n]).links.map(item => {
                           if (
-                            selectNIds.indexOf(item.from.id) > -1 &&
-                            selectNIds.indexOf(item.to.id) > -1
+                             mthis.selectionId.indexOf(item.from.id) > -1 &&
+                             mthis.selectionId.indexOf(item.to.id) > -1
                           ) {
                             return item.id;
                           } else {
@@ -2443,9 +2478,9 @@
                     c = c.concat(linksArr[nn]);
                   }
                   let uniquec = util.unique(c);
-                  mthis.netchart.selection(uniquec.concat(selectNIds));
+                  mthis.netchart.selection(uniquec.concat( mthis.selectionId));
                   // 有选中节点或者link
-                  mthis.selectionId = selectNIds;
+                  mthis.selectionId =  mthis.selectionId;
                   mthis.selectionIdByType = {
                     nodeIds: [],
                     eventIds: [],
@@ -2494,16 +2529,15 @@
                       //   }
                     }
                   }
-                  mthis.selectionId = selectNIds;
                   mthis.$store.commit("setSelectNetNodes", [{
-                    ids: selectNIds
+                    ids:  mthis.selectionId
                   }]);
                   mthis.$store.commit(
                     "setSelectionIdByType",
                     mthis.selectionIdByType
                   );
                   mthis.$store.commit(
-                    "setSinglePerson", !(selectNIds.length > 1)
+                    "setSinglePerson", !( mthis.selectionId.length > 1)
                   );
                 } else {
                   mthis.selectionId = [];
@@ -2596,6 +2630,10 @@
       "atlastData"
     ]),
     watch: {
+      updateStyleCounter: function() {
+        this.netchart.updateStyle()
+        this.netchart.updateSettings()
+      },
       atlastData: function() {
         var mthis = this;
         // console.log('------------dao ru cao zuo------------------')
@@ -2925,7 +2963,10 @@
         // })
         mthis.netchart.addData(mthis.contentToNetData)
         mthis.netchart.scrollIntoView(contentIdsArry);
-        mthis.netchart.lockNode(contentIdsArry);
+        contentIdsArry.map(it=>{
+          mthis.netchart.lockNode(it);
+          return it
+        })
         // mthis.netchart.updateStyle(contentIdsArry)
         // mthis.netchart.updateSettings()
         // mthis.netchart.updateSize()
@@ -2997,12 +3038,13 @@
         // })
         setTimeout(function() {
           let arr = new Array(va.data.id);
+          mthis.netchart.selection(arr);
           mthis.netchart.scrollIntoView(arr);
-          mthis.netchart.selection(new Array(va.data.id));
+          mthis.netchart.updateSettings()
           // alert(8)
           // mthis.netchart.selection(util.unique(arr))
           // mthis.netchart.lockNode(util.unique(arr))
-        }, 20);
+        }, 200);
         // let ar = va.data.id
         // setTimeout(() => {
         //   mthis.netchart.selection(ar)
@@ -3058,6 +3100,10 @@
       mthis.nh = document.documentElement.clientHeight - 64 - 20 + "px";
       mthis.nh_50 = document.documentElement.clientHeight - 64 - 20 - 55 + "px";
       mthis.initCharts();
+      mthis.netchart.replaceData({
+        nodes: [],
+        links: []
+      });
       mthis.netData = mthis.$store.getters.netData;
       // mock.get("/getNodeData").then(function(res) {
       //   mthis.initCharts();

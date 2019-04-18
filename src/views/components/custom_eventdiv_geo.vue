@@ -6,7 +6,7 @@
         <Tabs :value=$store.state.tabSelectGeo>
           
           <Tab-pane label="选中详情" name= 'mubiaoxiangqingGeo'  :style="{fontSize: '18px',height:viewHeight_20_geo}" id='mubiaoxiangqingGeo' @click="changTab('mubiaoxiangqingGeo')">
-            <eventgeo :evetdata='evetdata' v-show='evetdataFlag'></eventgeo>
+            <eventgeo :resArr='resArr' :eventdata='evetdata' v-show='evetdataFlag'></eventgeo>
             <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_select.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -63,7 +63,11 @@
         staticsDatas:[],
         evetdataFlag:false,
         eventItemHeight:0,
-        saveSelectedIds:[]
+        saveSelectedIds:[],
+        nodeTypedata: null,
+        staticsIds: [],
+        single: false,
+        resArr: []
       };
     },
     components: {
