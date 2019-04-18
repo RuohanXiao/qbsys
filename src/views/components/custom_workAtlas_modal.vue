@@ -11,7 +11,7 @@
             <div class="inputTitle">
               <Input class='inputTbottom' v-model="searchWorkspaceTitle" @on-change="v=>{searchInfo(v)}" placeholder="图集搜索" prefix="ios-search" />
             </div>
-            <div class='scrollBarAble' style='margin-bottom: 20px;height: 36vh;'>
+            <div class='scrollBarAble1' style='margin-bottom: 20px;height: 60vh;'>
               <div class='resList '>
                 <div class='resli' v-for='op in options1' style="padding:'10px auto';line-height:4vh;">
                   <p>{{op.name}}
@@ -481,6 +481,53 @@
   }
 </script>
 <style scoped>
+
+
+.scrollBarAble1 {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/* .scrollBarAble1::-webkit-scrollbar {
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+  position: absolute;
+}
+.scrollBarAble1::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+}
+.scrollBarAble1::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+} */
+/* .scrollBarAble1:hover {
+  overflow-y: auto;
+  overflow-x: hidden;
+} */
+.scrollBarAble1::-webkit-scrollbar {
+  opacity: 1;
+  width: 5px;
+  height: 5px;
+}
+.scrollBarAble1::-webkit-scrollbar-thumb {
+  opacity: 1;
+  border: 5px solid transparent;
+  padding-right: 5px !important;
+  border-radius: 10px;
+  min-height: 20px;
+  background-color: #3cc;
+  box-shadow: 1px 1px 3px #3cc inset;
+}
+.scrollBarAble1::-webkit-scrollbar-track {
+  opacity: 0;
+  border-radius: 2.5px !important;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0) inset;
+  background: rgba(0, 0, 0, 0);
+}
   .resli>p {
     height: 4vh;
     font-family: MicrosoftYaHei;
@@ -605,12 +652,12 @@
     flex-flow: column nowrap;
     width: 25%;
     border-right: 1px solid rgba(51, 255, 255, 0.3);
-    height: 70vh;
+    height: 69.8vh;
     background-image: linear-gradient(8deg, rgba(102, 255, 153, 0.3) -10%, rgba(102, 128, 204, 0.3) 65%, rgba(102, 0, 255, 0.3) 100%), linear-gradient(#000000, #000000);
     background-blend-mode: normal, normal;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
   }
   .modalLeftDiv_firstchild {
     margin-top: 20px;
@@ -627,7 +674,7 @@
     padding: 2vh 0px 0 0px;
   }
   .lefttop {
-    height: 65vh;
+    height: 68vh;
     overflow-x: auto;
     overflow-y: hidden;
     /* border-bottom: 1px solid rgba(51, 255, 255, 0.3); */
