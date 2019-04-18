@@ -151,7 +151,7 @@ import {
                 response.body.data[i].entity_list.map(oitem=>{
                   if(oitem.id === this.tableData.id) {
                     links.push({
-                      id: this.tableData.id + response.body.data[i].id,
+                      id: (this.tableData.id>response.body.data[i].id)?(this.tableData.id+'-'+response.body.data[i].id):(response.body.data[i].id+'-'+this.tableData.id),
                       type: oitem.role,
                       from: this.tableData.id,
                       to: response.body.data[i].id,
@@ -183,8 +183,9 @@ import {
                   label: response.body.data[i].title.substring(0, 19)+'...',
                   loaded: true
                 })
+                let idstr = (this.tableData.id>response.body.data[i].id)?('content_'+this.tableData.id+'-'+response.body.data[i].id):('content_'+response.body.data[i].id+'-'+this.tableData.id)
                 links.push({
-                  id: 'content_'+response.body.data[i].id,
+                  id: idstr,
                   type: '包含',
                   from: this.tableData.id,
                   to: response.body.data[i].id,

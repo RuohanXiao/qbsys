@@ -73,12 +73,12 @@
             <p class="img-content">网络</p>
           </div>
         </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div">
             <Icon class="icon iconfont icon-tuisongzhikongjian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">空间</p>
           </div>
-        </Tooltip>
+        </Tooltip> -->
       </div>
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">

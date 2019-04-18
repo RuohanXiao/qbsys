@@ -803,7 +803,10 @@
                         entitRes[arrList_net[n]].nodes
                       );
                       items.links = items.links.concat(
-                        entitRes[arrList_net[n]].links
+                        entitRes[arrList_net[n]].links.map(item=>{
+                          item.id = (item.from>item.to)?(item.from+'-'+item.to):(item.to+'-'+item.from)
+                          return item
+                        })
                       );
                       ids = ids.concat(
                         entitRes[arrList_net[n]].nodes.map(it => {
@@ -850,7 +853,10 @@
                       entitRes[arrList_event[n]].nodes
                     );
                     items.links = items.links.concat(
-                      entitRes[arrList_event[n]].links
+                      entitRes[arrList_event[n]].links.map(item=>{
+                        item.id = (item.from>item.to)?(item.from+'-'+item.to):(item.to+'-'+item.from)
+                        return item
+                      })
                     );
                     ids = ids.concat(
                       entitRes[arrList_event[n]].nodes.map(it => {
@@ -897,7 +903,10 @@
                       entitRes[arrList_doc[n]].nodes
                     );
                     items.links = items.links.concat(
-                      entitRes[arrList_doc[n]].links
+                      entitRes[arrList_doc[n]].links.map(item=>{
+                        item.id = (item.from>item.to)?('content_'+item.from+'-'+item.to):('content_'+item.to+'-'+item.from)
+                        return item
+                      })
                     );
                     ids = ids.concat(
                       entitRes[arrList_doc[n]].nodes.map(it => {
@@ -1047,7 +1056,7 @@
                                   otherNodesIds.push(linksItem.id);
                                   sids.push(linksItem.id);
                                   dataItems.links.push({
-                                    id: eitems.id + linksItem.id,
+                                    id: (eitems.id>linksItem.id)?(eitems.id+'-'+linksItem.id):(linksItem.id+'-'+eitems.id),
                                     type: linksItem.role,
                                     from: eitems.id,
                                     to: linksItem.id,
@@ -1147,6 +1156,7 @@
                   let sList = arrList;
                   let sids = docList;
                   for (let n = 0; n < arrList.length; n++) {
+                     docList = [];
                     docRes[arrList[n]].map(item => {
                       if (item.ids.length > 0) {
                         docList = docList.concat(item.ids);
@@ -1175,8 +1185,9 @@
                                 img: "http://10.60.1.140/assets/images/content_node.png",
                                 loaded: true
                               });
+                              let idstr = (eitems.id>arrList[n])?('content_'+eitems.id+'-'+arrList[n]):('content_'+arrList[n]+'-'+eitems.id)
                               dataItems.links.push({
-                                id: "content_" + eitems.id,
+                                id: idstr,
                                 type: "包含",
                                 from: eitems.id,
                                 to: arrList[n],
@@ -1549,6 +1560,11 @@
       },
       //截屏
       cutScreen() {
+        console.log('================')
+        console.log(this.netchart.nodes())
+        console.log(this.netchart.links())
+
+
         // html2canvas(document.getElementById('netchart')).then(function(canvas) {
         //   var pageData = canvas.toDataURL('image/jpeg', 1.0);
         //   // console.log(pageData)
@@ -2402,19 +2418,20 @@
                   });
                   let linksArr = [];
                   for (let n = 0; n < selectNIds.length; n++) {
-                    // console.log(mthis.netchart.getNode(selectNIds[n]))
-                    linksArr.push(
-                      mthis.netchart.getNode(selectNIds[n]).links.map(item => {
-                        if (
-                          selectNIds.indexOf(item.from.id) > -1 &&
-                          selectNIds.indexOf(item.to.id) > -1
-                        ) {
-                          return item.id;
-                        } else {
-                          return "";
-                        }
-                      })
-                    );
+                    if(mthis.netchart.getNode(selectNIds[n])){
+                      linksArr.push(
+                        mthis.netchart.getNode(selectNIds[n]).links.map(item => {
+                          if (
+                            selectNIds.indexOf(item.from.id) > -1 &&
+                            selectNIds.indexOf(item.to.id) > -1
+                          ) {
+                            return item.id;
+                          } else {
+                            return "";
+                          }
+                        })
+                      );
+                    }
                   }
                   let c = [];
                   for (let nn = 0; nn < linksArr.length; nn++) {
@@ -2969,7 +2986,7 @@
         // 清空画布后添加节点
         // this.reloadNetData(va.data)
         // 不清空画布，直接添加节点
-        this.addNetData(va.data);
+        mthis.addNetData(va.data);
         // let arr = va.data.nodes.map(item => {
         //   return item.id
         // })
