@@ -185,6 +185,11 @@ export default {
     methods:{
         onlyLookIt(ids){
             var mthis = this;
+            var tmss = mthis.$store.state.tmss;
+            if(tmss !== 'geo'){
+                alert('请期待...');
+                return;
+            }
             mthis.$emit('rightCilckIds', ids)
         },
         rightClickShow(eve,ids){
