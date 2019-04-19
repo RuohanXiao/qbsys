@@ -107,12 +107,13 @@
       //   util.checkImgExists(src)
       // },
       defaultImg(type, img) {
-        var mthis  = this
-        console.log('==============defaultImg=====================')
-        console.log(type)
-        console.log(img)
-        if (this.myMap.get(type) === 'entity') {
-           if (mthis.eventdata[0].entity_type === 'administrative') {
+        var mthis = this
+        if (mthis.eventdata[0]) {
+          console.log('==============defaultImg=====================')
+          console.log(type)
+          console.log(img)
+          if (this.myMap.get(type) === 'entity') {
+            if (mthis.eventdata[0].entity_type === 'administrative') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/administrative.png'
             } else if (mthis.eventdata[0].entity_type === 'human') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/human.png'
@@ -123,38 +124,37 @@
             } else {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image.png'
             }
-        } else if (this.myMap.get(type) === 'event') {
-          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
-        } else if (this.myMap.get(type) === 'document') {
-          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
-        } else {
-          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image.png'
+          } else if (this.myMap.get(type) === 'event') {
+            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
+          } else if (this.myMap.get(type) === 'document') {
+            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
+          } else {
+            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image.png'
+          }
         }
       },
       changeDetailDiv(id, type, ob) {
         var mthis = this
         let arr = []
         arr.push(id)
-        if (this.myMap.get(type) === 'entity') {
+        if (mthis.myMap.get(type) === 'entity') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
             "nodeIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
-            this.detailData = res
+            res.img = mthis.defaultImg(type, res.img)
+            mthis.detailData = res
           })
         }
-        if (this.myMap.get(type) === 'event') {
+        if (mthis.myMap.get(type) === 'event') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {
-            let img = mthis.myMap1.get(response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")).img
-            let name = mthis.myMap1.get(response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")).name
             let res = response.body.data[0]
-            res.img = util.checkImgExists(img) ? img : 'http://10.60.1.140/assets/images/image.png'
-            res.name = name
-            this.detailData = res
-            this.detailData.entity_type = 'event'
+            res.img = mthis.myMap1.get(res.event_subtype.toLowerCase().replace(/-/, "_")).img
+            res.name = mthis.myMap1.get(res.event_subtype.toLowerCase().replace(/-/, "_")).name
+            mthis.detailData = res
+            mthis.detailData.entity_type = 'event'
           })
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
             "NodeIds": arr,
@@ -164,17 +164,18 @@
             // console.log(response)
           })
         }
-        if (this.myMap.get(type) === 'document') {
+        if (mthis.myMap.get(type) === 'document') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
             "docIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/content_node.png'
-            this.detailData = res
+            // res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/content_node.png'
+            res.img = 'http://10.60.1.140/assets/images/content_node.png'
+            mthis.detailData = res
             mthis.detailData.entity_type = 'document'
           })
         }
-        this.selectTag = id
+        mthis.selectTag = id
       }
     },
     components: {
@@ -306,8 +307,8 @@
   }
 </script>
 <style scope>
-  .circle-img>img{
-    background-color: rgba(51,255,255,0.2)
+  .circle-img>img {
+    background-color: rgba(51, 255, 255, 0.2)
   }
   .avatarStyle {
     width: 50px;
@@ -367,47 +368,44 @@
     background-color: #009999;
     margin: 6px 6px;
   }
-  .NameTdss{
+  .NameTdss {
     color: #ccffff;
-    font-family:"微软雅黑";
+    font-family: "微软雅黑";
     display: table-cell;
     vertical-align: middle;
-    text-align: center; 
+    text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  
-  #nodeAttr > .ivu-collapse-item > .ivu-collapse-header > i{
-      margin-right:0px !important;
+  #nodeAttr>.ivu-collapse-item>.ivu-collapse-header>i {
+    margin-right: 0px !important;
   }
   #nodeAttr .ivu-icon-ios-arrow-forward::before {
-      content: url("../../dist/assets/images/treeRightIcon.png") !important;
+    content: url("../../dist/assets/images/treeRightIcon.png") !important;
   }
-  #nodeAttr > .ivu-collapse-item > .ivu-collapse-header{
-      height:30px !important;
-      line-height: 30px !important;
-      cursor: default !important;
+  #nodeAttr>.ivu-collapse-item>.ivu-collapse-header {
+    height: 30px !important;
+    line-height: 30px !important;
+    cursor: default !important;
   }
   #nodeAttr table tr:nth-child(odd):hover {
-    background-color: rgba(51,255,255,0.2);
+    background-color: rgba(51, 255, 255, 0.2);
   }
-  #nodeAttr table tr:nth-child(odd){
-      background-color: rgba(51,255,255,0.05);
+  #nodeAttr table tr:nth-child(odd) {
+    background-color: rgba(51, 255, 255, 0.05);
   }
   /* #NodeTypeInfo >tr>td>span{
-      padding-left:20px;
-      text-align:left;
-  } */
-  #nodeAttr p{
-      padding-left:1em;
-      text-align:left;
+        padding-left:20px;
+        text-align:left;
+    } */
+  #nodeAttr p {
+    padding-left: 1em;
+    text-align: left;
   }
-  .tableStyle{
-    width:100%
+  .tableStyle {
+    width: 100%
   }
-
-
   .e-content-p {
     /* height: 14px; */
     font-family: MicrosoftYaHei;
@@ -421,7 +419,7 @@
     text-overflow: ellipsis;
     width: auto;
     /* max-width: 70%;
-    margin-right: 40px; */
+      margin-right: 40px; */
     padding: 0 10px;
     white-space: nowrap;
   }

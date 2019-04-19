@@ -135,26 +135,24 @@
         var mthis = this
         let arr = []
         arr.push(id)
-        if (this.myMap.get(type) === 'entity') {
+        if (mthis.myMap.get(type) === 'entity') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
             "nodeIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
-            this.detailData = res
+            res.img = mthis.defaultImg(type, res.img)
+            mthis.detailData = res
           })
         }
-        if (this.myMap.get(type) === 'event') {
+        if (mthis.myMap.get(type) === 'event') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {
-            let img = mthis.myMap1.get(response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")).img
-            let name = mthis.myMap1.get(response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")).name
             let res = response.body.data[0]
-            res.img = util.checkImgExists(img) ? img : 'http://10.60.1.140/assets/images/image.png'
-            res.name = name
-            this.detailData = res
-            this.detailData.entity_type = 'event'
+            res.img = mthis.myMap1.get(res.event_subtype.toLowerCase().replace(/-/, "_")).img
+            res.name = mthis.myMap1.get(res.event_subtype.toLowerCase().replace(/-/, "_")).name
+            mthis.detailData = res
+            mthis.detailData.entity_type = 'event'
           })
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
             "NodeIds": arr,
@@ -164,17 +162,18 @@
             // console.log(response)
           })
         }
-        if (this.myMap.get(type) === 'document') {
+        if (mthis.myMap.get(type) === 'document') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
             "docIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/content_node.png'
-            this.detailData = res
+            // res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/content_node.png'
+            res.img = 'http://10.60.1.140/assets/images/content_node.png'
+            mthis.detailData = res
             mthis.detailData.entity_type = 'document'
           })
         }
-        this.selectTag = id
+        mthis.selectTag = id
       }
     },
     components: {
