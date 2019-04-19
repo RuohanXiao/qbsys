@@ -169,6 +169,7 @@
             let res = response.body.data[0]
             // res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/content_node.png'
             res.img = 'http://10.60.1.140/assets/images/content_node.png'
+            res.name = res.title
             mthis.detailData = res
             mthis.detailData.entity_type = 'document'
           })
