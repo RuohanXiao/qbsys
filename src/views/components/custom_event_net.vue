@@ -22,7 +22,7 @@
         <div class="e-title-d"></div>
         <p class="e-title-p">节点信息</p>
       </div>
-      <human-entity-table v-show="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table>
+      <human-entity-table v-if="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table>
       <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
       <organization-entity-table v-show="detailData.entity_type==='organization'" :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
       <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table>
@@ -67,6 +67,7 @@
   export default {
     data() {
       return {
+        ifShown: true,
         value1: ['1', '2', '3', '4'],
         selectTag: '',
         detailData: new Object(),
@@ -188,6 +189,9 @@
       docEntityTable
     },
     watch: {
+      detailData:  function() {
+
+      },
       eventdata: function() {
         var mthis = this
         if (typeof(mthis.eventdata) === "object" && mthis.eventdata.concat && mthis.eventdata.length > 0) {
@@ -197,61 +201,63 @@
           mthis.timer = setTimeout(function() {
             let arr = []
             let detailId;
-            if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'entity') {
-              detailId = (mthis.eventdata[0].id)
-              mthis.selectTag = detailId
-              let a = []
-              a.push(detailId)
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
-                "nodeIds": a
-              }).then(response => {
+            if(mthis.eventdata[0]){
+              if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'entity') {
+                detailId = (mthis.eventdata[0].id)
+                mthis.selectTag = detailId
+                let a = []
+                a.push(detailId)
+                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
+                  "nodeIds": a
+                }).then(response => {
+                  let result = new Object();
+                  result = response.body.data[0]
+                  if (mthis.eventdata[0].entity_type === 'administrative') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/administrative.png'
+                  } else if (mthis.eventdata[0].entity_type === 'human') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/human.png'
+                  } else if (mthis.eventdata[0].entity_type === 'organization') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/organization.png'
+                  } else if (mthis.eventdata[0].entity_type === 'weapon') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                  } else {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image.png'
+                  }
+                  mthis.detailData = result
+                })
+                // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
+              } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'event') {
+                detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
+                mthis.selectTag = detailId
                 let result = new Object();
-                result = response.body.data[0]
-                if (mthis.eventdata[0].entity_type === 'administrative') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/administrative.png'
-                } else if (mthis.eventdata[0].entity_type === 'human') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/human.png'
-                } else if (mthis.eventdata[0].entity_type === 'organization') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/organization.png'
-                } else if (mthis.eventdata[0].entity_type === 'weapon') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
-                } else {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image.png'
-                }
+                result = mthis.eventdata[0]
+                // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
+                result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
                 mthis.detailData = result
-              })
-              // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
-            } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'event') {
-              detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
-              mthis.selectTag = detailId
-              let result = new Object();
-              result = mthis.eventdata[0]
-              // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
-              result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
-              mthis.detailData = result
-              // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
-            } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'document') {
-              detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
-              mthis.selectTag = detailId
-              let detailType = (mthis.eventdata.length !== undefined) ? (mthis.eventdata[0].entity_type) : (mthis.eventdata.entity_type);
-              let a = []
-              a.push(detailId)
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
-                "docIds": a
-              }).then(response => {
-                console.log(response.body.data[0])
-                let result = new Object();
-                result = response.body.data[0]
-                result.entity_type = 'document'
-                result.label = response.body.data[0].title
-                result.name = response.body.data[0].title.substring(0, 19) + '...'
-                result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/content_node.png'
-                mthis.detailData = result
-                console.log('mthis.detailData')
-                console.log(mthis.detailData)
-              })
-            } else {
-              // console.log('未找到匹配的类型')
+                // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
+              } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'document') {
+                detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
+                mthis.selectTag = detailId
+                let detailType = (mthis.eventdata.length !== undefined) ? (mthis.eventdata[0].entity_type) : (mthis.eventdata.entity_type);
+                let a = []
+                a.push(detailId)
+                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+                  "docIds": a
+                }).then(response => {
+                  console.log(response.body.data[0])
+                  let result = new Object();
+                  result = response.body.data[0]
+                  result.entity_type = 'document'
+                  result.label = response.body.data[0].title
+                  result.name = response.body.data[0].title.substring(0, 19) + '...'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/content_node.png'
+                  mthis.detailData = result
+                  console.log('mthis.detailData')
+                  console.log(mthis.detailData)
+                })
+              } else {
+                // console.log('未找到匹配的类型')
+              }
             }
             // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
           }, 200);
@@ -313,11 +319,11 @@
   }
   .avatarStyle {
     width: 50px;
-    margin-left: 20px;
+    margin: 0 20px;
   }
   .contentStyle {
     width: 100%;
-    text-align: center;
+    text-align: left;
     margin-bottom: 16px;
     overflow-x: hidden;
   }

@@ -170,9 +170,13 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
             </div>
           </div>
-          <div class="econtent" v-if='!xiangguanEntityItems.length>0'>
-            <p class="econtentp">暂无相关实体</p>
+          <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
+            <p class="econtentp" v-show="spinWaiting">相关实体加载中···</p>
+            <p class="econtentp" v-show="!spinWaiting">暂无相关实体</p>
           </div>
+          <!-- <div class="econtent" v-else>
+            <p class="econtentp">暂无相关实体</p>
+          </div> -->
         </div>
       </panel>
       <!-- ============================================相关事件================================================== -->
@@ -186,8 +190,9 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
             </div>
           </div>
-          <div class="econtent" v-if='!xiangguanEvent.length>0' >
-            <p class="econtentp">暂无相关事件</p>
+          <div class="econtent" v-if='xiangguanEvent.length ==0'>
+            <p class="econtentp" v-show="spinWaiting">相关事件加载中···</p>
+            <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
           </div>
         </div>
       </panel>
@@ -202,8 +207,9 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
             </div>
           </div>
-          <div class="econtent" v-if='!xiangguanDoc.length>0'>
-            <p class="econtentp">暂无相关文档</p>
+           <div class="econtent" v-if='xiangguanDoc.length ==0'>
+            <p class="econtentp" v-show="spinWaiting">文档事件加载中···</p>
+            <p class="econtentp" v-show="!spinWaiting">暂无相关文档</p>
           </div>
         </div>
       </panel>
@@ -220,6 +226,7 @@
   export default {
     data() {
       return {
+        spinWaiting:false,
         value1: ['1', '2', '3', '4'],
         xiangguanEntityItems: new Array(),
         xiangguanEntitys: new Object(),
@@ -231,8 +238,57 @@
       }
     },
     props: ['tableData', 'entDivH'],
-    beforeDestroy() {
-      this.tableData = new Object()
+    created(){
+        let mthis = this
+        mthis.xiangguanEntityItems = new Array()
+        mthis.xiangguanEntitys = new Object()
+        mthis.xiangguanEvent = new Array()
+        mthis.xiangguanDoc = new Array()
+        mthis.spinWaiting = true
+        if (this.tableData.isArray) {
+          if (this.tableData.length > 0) {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+              "NodeIds": mthis.tableData.map(item => {
+                return item.id
+              }),
+              "NodeTypes": mthis.tableData.map(item => {
+                return item.entity_type
+              }),
+              "TypeLabel": "all"
+            }).then(response => {
+              mthis.spinWaiting = false
+            })
+          } else {
+            alert('长度为0')
+            mthis.spinWaiting = false
+          }
+        } else {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+            "NodeIds": new Array(mthis.tableData.id),
+            "NodeTypes": new Array('entity'),
+            "TypeLabel": "all"
+          }).then(response => {
+            response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
+              item.type = item.undirected_type
+              return item
+            })
+            // mthis.xiangguanEntityItems = new Array()
+            // mthis.xiangguanEntitys = new Object()
+            // mthis.xiangguanEvent = new Array()
+            // mthis.xiangguanDoc = new Array()
+            mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+            mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+            mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
+            mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
+            mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+            if (response.body.data[0].unknown !== new Object()) {
+              // console.log('------------有未知类型的节点--------------------')
+              // console.log(response.body.data[0].unknown)
+              // console.log('-----------------------------------------------')
+            }
+            mthis.spinWaiting = false
+          })
+        }
     },
     mounted() {
       var mthis = this
@@ -348,12 +404,20 @@
     },
     computed: mapState(['searchNetResult']),
     watch: {
-      searchNetResult: function() {
-      },
+      // searchNetResult: function() {
+      // },
       tableData: function() {
-        // console.log('===========custom_event_humanEntityTable --------tableData')
-        // console.log(this.tableData)
+        console.log('===========custom_event_humanEntityTable --------tableData')
+        console.log(new Date())
+        console.log(this.tableData)
         let mthis = this
+        mthis.xiangguanEntityItems = new Array()
+        mthis.xiangguanEntitys = new Object()
+        mthis.xiangguanEvent = new Array()
+        mthis.xiangguanDoc = new Array()
+        console.log(new Date())
+
+        mthis.spinWaiting = true
         if (this.tableData.isArray) {
           if (this.tableData.length > 0) {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
@@ -364,10 +428,12 @@
                 return item.entity_type
               }),
               "TypeLabel": "all"
-            }).then(response => {})
+            }).then(response => {
+            })
           } else {
             alert('长度为0')
           }
+          mthis.spinWaiting = false
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
@@ -378,10 +444,10 @@
               item.type = item.undirected_type
               return item
             })
-            mthis.xiangguanEntityItems = new Array()
-            mthis.xiangguanEntitys = new Object()
-            mthis.xiangguanEvent = new Array()
-            mthis.xiangguanDoc = new Array()
+            // mthis.xiangguanEntityItems = new Array()
+            // mthis.xiangguanEntitys = new Object()
+            // mthis.xiangguanEvent = new Array()
+            // mthis.xiangguanDoc = new Array()
             mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
             mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
             mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
@@ -392,7 +458,9 @@
               // console.log(response.body.data[0].unknown)
               // console.log('-----------------------------------------------')
             }
+            mthis.spinWaiting = false
           })
+          // mthis.spinWaiting = false
         }
       }
     }

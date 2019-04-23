@@ -311,11 +311,11 @@
   }
   .avatarStyle {
     width: 50px;
-    margin-left: 20px;
+    margin: 0 20px;
   }
   .contentStyle {
     width: 100%;
-    text-align: center;
+    text-align: left;
     margin-bottom: 16px;
     overflow-x: hidden;
   }
