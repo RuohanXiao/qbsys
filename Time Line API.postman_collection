@@ -1,0 +1,92 @@
+{
+	"id": "225c855c-c817-94fe-e2a2-7c2e4fb52256",
+	"name": "Time Line API",
+	"description": "",
+	"order": [],
+	"folders": [
+		{
+			"id": "453ad110-0fec-4200-edd0-89189fa81b2d",
+			"name": "event",
+			"description": "",
+			"order": [
+				"3a657d6a-e8e9-3402-c30a-ecf25997df72",
+				"a0791994-350a-44d8-e15b-798dff95dc0f"
+			],
+			"folders_order": [],
+			"owner": 0,
+			"collectionId": "225c855c-c817-94fe-e2a2-7c2e4fb52256"
+		}
+	],
+	"folders_order": [
+		"453ad110-0fec-4200-edd0-89189fa81b2d"
+	],
+	"timestamp": 1556004845495,
+	"owner": 0,
+	"public": false,
+	"requests": [
+		{
+			"id": "3a657d6a-e8e9-3402-c30a-ecf25997df72",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "10.60.1.141:5100/time-2-event/",
+			"folder": "453ad110-0fec-4200-edd0-89189fa81b2d",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1555991523016,
+			"name": "Time to Event",
+			"description": "",
+			"collectionId": "225c855c-c817-94fe-e2a2-7c2e4fb52256",
+			"responses": [],
+			"isFromCollection": true,
+			"collectionRequestId": "797a9885-57b4-edd4-7b6b-9af8b13f768d",
+			"rawModeData": "{\n\t\"selectedIds\":[\"5c6d59975ee5d656ce92301b_d4\",\n\t\"5c6c0e069c2b888d83ba7d37_d0\",\"5c6cef9d5ee5d656cdf3f97a_d0\",\n\t\"5c65f5d05ee5d656cdf3f68c_d0\",\"5c645d509c2b888d7abb2302_d0\",\"5c645d509c2b888d7abb2302_d1\"\n\t],\n\t\"startTime\":\"2019-02-13\",\n\t\"endTime\":\"2019-02-19\"\n}\n"
+		},
+		{
+			"id": "a0791994-350a-44d8-e15b-798dff95dc0f",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "10.60.1.141:5100/event-2-time/",
+			"folder": "453ad110-0fec-4200-edd0-89189fa81b2d",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1555991477888,
+			"name": "Event to Time",
+			"description": "Given a list of event id, return the time info\n统计事件的时间轴信息",
+			"collectionId": "225c855c-c817-94fe-e2a2-7c2e4fb52256",
+			"responses": [],
+			"isFromCollection": true,
+			"collectionRequestId": "aa6f821d-0a30-0244-49fb-d8c11b3f4035",
+			"rawModeData": "{\n\t\"eventids\":[\"5c6d59975ee5d656ce92301b_d4\",\n\t\"5c6c0e069c2b888d83ba7d37_d0\",\"5c6cef9d5ee5d656cdf3f97a_d0\",\n\t\"5c65f5d05ee5d656cdf3f68c_d0\",\"5c645d509c2b888d7abb2302_d0\",\"5c645d509c2b888d7abb2302_d1\"\n\t]\n}\n"
+		}
+	]
+}
