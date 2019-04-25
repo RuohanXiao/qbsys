@@ -309,8 +309,7 @@ var store = new Vuex.Store({
     singlePerson:true,
     dataStatisticsEvent: {},
     changenetpx: true,
-    // 时间轴点击，返回数据透视
-    netTime2staticEventIds:[],
+    
     selectionIdByType:{
       nodeIds: [],
       eventIds: [],
@@ -408,9 +407,7 @@ var store = new Vuex.Store({
     setClickSelectedGeoIds(state,val){
       state.clickSelectedGeoIds = val
     },
-    setNetTime2staticEventIds(state,val){
-      state.netTime2staticEventIds = val
-    },
+    
     setSelectionIdByType(state,val){
       state.selectionIdByType = val
     },

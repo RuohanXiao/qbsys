@@ -1,6 +1,6 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
-  <div :id="timechartdivId">
+  <div :id="timechartdivId" @click='hideDiv()'>
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
@@ -28,8 +28,8 @@
       <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
-    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="this.$store.commit('setNetTime2staticEventIds',this.clickEventIds)">选中分析</div>
-    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="this.$store.commit('setNetTime2staticEventIds',this.boxSelEventIds)">选中分析</div>
+    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="this.$store.commit('setGeoTimeCondition',this.clickEventIds)">选中分析</div>
+    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="this.$store.commit('setGeoTimeCondition',this.boxSelEventIds)">选中分析</div>
   </div>
 </template>
  
@@ -78,10 +78,16 @@
         boxSelShowDiv:false,
         boxdivLeft:'',
         clickEventIds:[],
-        boxSelEventIds:[]
+        boxSelEventIds:[],
+        isBrush:[]
       };
     },
     methods: {
+      hideDiv(){
+        
+        this.clcikShowDiv = false;
+        this.boxSelShowDiv = false;
+      },
       loadEcharts(flag){
         var mthis = this
         if(flag === 1){
@@ -94,13 +100,13 @@
             padding:10,
             barBorderRadius:8,
             
-            formatter: function(datas){
-              var res = datas[0].axisValue + '<br/>',val;
-              var m = datas[0].dataIndex;
-              val = '事件:' + mthis.dataBySeries.num[m];
-              res += val;
-              return res
-            }
+            // formatter: function(datas){
+            //   var res = datas[0].axisValue + '<br/>',val;
+            //   var m = datas[0].dataIndex;
+            //   val = '事件:' + mthis.dataBySeries.num[m];
+            //   res += val;
+            //   return res
+            // }
           },
          
           grid: {
@@ -176,6 +182,11 @@
           yAxis:[{
             type:"value",
             show:true,
+            min:0,
+            max:function(value){
+                return value.max
+            },
+            minInterval: 1,
             axisLabel:{
               show:true,
               
@@ -190,38 +201,102 @@
               }
             }
           }],
+          // dataZoom: [{
+          //     type: "slider",
+          //     startValue: 0,
+          //     endValue: 100,
+          //     realtime: true, //是否实时加载
+          //     show: false,
+              
+          //     fillerColor: "rgba(51, 255, 255, 0.2)",
+              
+          //     borderColor: "rgba(0,0,0,0)", //边框颜色
+          //     cursor: "move",
+          //     xAxisIndex: [0],
+          //     minValueSpan:1,
+          //     handleSize: "80%",
+          //     cursor: "pointer"
+          //   },
+          //   {
+          //     type: "inside",
+          //     realtime: true,
+          //     show: true,
+          //     xAxisIndex: [0],
+              
+          //   }
+          // ],
           dataZoom: [{
               type: "slider",
               startValue: 0,
               endValue: 100,
+              // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: false,
-              
+              textStyle: {
+                color: "#33ffff",
+                fontFamily: 'Microsoft YaHei'
+              },
               fillerColor: "rgba(51, 255, 255, 0.2)",
-              
+              dataBackground: { //数据阴影的样式。
+                // lineStyle:mylineStyle,              //阴影的线条样式
+                areaStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 0,
+                    y2: 1,
+                    colorStops: [{
+                      offset: 1,
+                      color: '#33ffff' // 100% 处的颜色
+                    }, {
+                      offset: 0,
+                      color: '#9999ff' // 0% 处的颜色
+                    }],
+                    globalCoord: false // 缺省为 false
+                  }
+                }, //阴影的填充样式
+              },
+              // backgroundColor: "rgba(51, 255, 255, 0.2)",
+              // backgroundColor: "rgba(51, 255, 255, 0.2)",
+              // dataBackground: "rgba(51, 255, 255, 0.8)",
+              // borderColor:"rgba(51, 255, 255, 0.2)", //边框颜色
               borderColor: "rgba(0,0,0,0)", //边框颜色
               cursor: "move",
               xAxisIndex: [0],
-              minValueSpan:1,
+              // startValue: 10,
+              // endValue: 20,
+              minValueSpan: 3,
+              handleIcon: "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
               handleSize: "80%",
+              handleStyle: {
+                color: "rgb(51, 255, 255)",
+                shadowBlur: 3,
+                shadowColor: "rgba(0, 0, 0, 1)",
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+              },
               cursor: "pointer"
             },
             {
               type: "inside",
-              realtime: true,
+              // start: 0,
+              // end: 10,
               show: true,
               xAxisIndex: [0],
-              
+              // startValue: 0,
+              // endValue: 5,
+              minValueSpan: 3
             }
           ],
-          
           series: [{
             name: "事件",
             type: "bar",
             barGap:"-100%",
+            // barWidth:'10px',
+            barMaxWidth: '30%',
             barWidth:'10px',
-            // barMaxWidth: '10%',
-            // barMinHeight: '1px',
+            barMinHeight: '1px',
             itemStyle: {
               // 柱形图默认颜色
               normal: {
@@ -260,10 +335,11 @@
         mthis.option.series[0].data = mthis.dataBySeries.num;
         mthis.charts.setOption(mthis.option)
         this.charts.on('brushSelected', function(params) {
-          
+          var wholeChart = document.getElementById(mthis.timechartdivId);
+            wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-            var boxSelectLeftWid = params.batch[0].areas[0].range[1]
+             mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
             
           }
           // mthis.timeTitle = '请选择节点'
@@ -277,7 +353,8 @@
               startAndEnd[1] = mthis.dataBySeries.date.length - 1
             }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
-            var timeArr = []
+            let timeArr = []
+            mthis.isBrush = timeArr
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
@@ -286,34 +363,29 @@
                 "endTime":timeArr[1]
             }).then(response =>{
                 if(response.body.code == 0){
+                  mthis.boxSelEventIds = response.body.data.eventIds
                   mthis.$store.commit('setNetTimeCondition',response.body.data.eventIds)
                 }
                 
             })
            
             mthis.selectTime = true
-          }
-            let myChart1 = document.getElementById(mthis.main1Id)
-        
-            myChart1.oncontextmenu = () => false;
-            document.oncontextmenu = function(){
             
-            mthis.boxdivLeft = boxSelectLeftWid +20 + "px"
-            mthis.boxSelShowDiv = true
-            mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                "selectedIds":mthis.selectionIdByType.eventIds,
-                "startTime":timeArr[0],
-                "endTime":timeArr[1]
-            }).then(response =>{
-                if(response.body.code == 0){
-                  mthis.boxSelEventIds = response.body.data.eventIds
-                  // console.log(mthis.boxSelEventIds)
-                }
-                
-            })
+            
+            
+           
           }
+            
           
         })
+        
+        this.charts.dispatchAction({
+          type: "takeGlobalCursor",
+          key: "brush",
+          brushOption: {
+            brushType: "lineX"
+          }
+        });
         this.charts.on('click', function(params) {
           mthis.timeTitle = params.name
           let timeArr = []
@@ -322,28 +394,23 @@
         //   mthis.$store.commit('setNetTimeCondition', timeArr)
           mthis.clcikShowDiv = false;
           mthis.boxSelShowDiv = false;
+          mthis.isBrush = false;
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
             dataIndex: params.dataIndex
           })
-        })
-        this.charts.dispatchAction({
-          type: "takeGlobalCursor",
-          key: "brush",
-          brushOption: {
-            brushType: "lineX"
-          }
+         
         });
-        let myChart = document.getElementById(mthis.main1Id)
-        
+        let myChart = document.getElementById(mthis.main1Id);
+        var wholeChart = document.getElementById(mthis.timechartdivId);
         myChart.oncontextmenu = () => false;
-        document.oncontextmenu = () =>false;
+        // wholeChart.oncontextmenu = () =>false;
         mthis.charts.on('contextmenu',function(params){
-            document.oncontextmenu = () =>false;
+            // wholeChart.oncontextmenu = () =>false;
             let leftWid = params.event.offsetX+20 + "px"
             var clickTime = params.name
-            console.log(clickTime)
+            
             mthis.clcikShowDiv = true
             mthis.clickdivLeft = leftWid
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
@@ -360,20 +427,69 @@
             })
             
           })
+          wholeChart.oncontextmenu = function(){
+               
+                if(mthis.isBrush.length>0){
+                  //  mthis.boxdivLeft = boxSelectLeftWid +20 + "px"
+                   mthis.boxSelShowDiv = true
+                   
+                }
+                mthis.isBrush = []
+            }
         }else if(flag ==2){
           
           mthis.timeTitle = '时间轴'
           mthis.option.xAxis.data = mthis.dataBySeries.date;
-          mthis.option.series[0].data = mthis.dataBySeries.num;
+          // mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.option.series =  [{
+                    name: "事件",
+                    type: "bar",
+                    barGap:"-100%",
+                    // barWidth:'10px',
+                    // barMaxWidth: '10%',
+                    // barMinHeight: '1px',
+                    barMaxWidth: '30%',
+                    barWidth:'10px',
+                    barMinHeight: '1px',
+                    itemStyle: {
+                    // 柱形图默认颜色
+                    normal: {
+                        cursor: "default",
+                        barBorderRadius: [3, 3, 3, 3],
+                        color: "rgba(51,204,153,1)"
+                    },
+                    // 柱形图悬浮颜色
+                    emphasis: {
+                        cursor: "pointer",
+                        barBorderRadius: [3, 3, 3, 3],
+                        color: "rgba(51,204,153,0.6)"
+                        
+                    },
+                    
+                    
+                    },
+                    animationDelay: function(idx) {
+                    return 0;
+                    //return idx * 1000;
+                    },
+                    animationDurationUpdate: function(idx) {
+                    // 越往后的数据延迟越大
+                    return 1;
+                    },
+                    data: mthis.dataBySeries.num
+                }]
           mthis.charts.setOption(mthis.option)
         }else{
           mthis.option.series =  [{
                     name: "事件",
                     type: "bar",
                     barGap:"-100%",
-                    barWidth:'10px',
+                    // barWidth:'10px',
                     // barMaxWidth: '10%',
                     // barMinHeight: '1px',
+                    barMaxWidth: '30%',
+                    barWidth:'10px',
+                    barMinHeight: '1px',
                     itemStyle: {
                     // 柱形图默认颜色
                     normal: {
@@ -402,7 +518,10 @@
                     data: mthis.dataBySeries.num
                 },{
                     type:'bar',
+                    // barWidth:'10px',
+                    barMaxWidth: '30%',
                     barWidth:'10px',
+                    barMinHeight: '1px',
                     data:mthis.dataBySeries.clickNum,
                     itemStyle:{
                         color:'#33ddff',
@@ -495,7 +614,7 @@
           }).then(response => {
             // mthis.dataBySeries.date = ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31','2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28']
             // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
-            // mthis.loadEcharts(1)
+            // mthis.loadEcharts(2)
             if(response.body.code === 0){
               mthis.dataBySeries.date = response.body.data.time
               mthis.dataBySeries.num = response.body.data.count
@@ -597,7 +716,7 @@
   }
   .clcikShowDiv{
     position: absolute;
-    top:650px;
+    top:620px;
     width:60px;
     height:20px;
     text-align: center;
@@ -608,12 +727,13 @@
   }
   .boxSelShowDiv{
     position: absolute;
-    top:650px;
+    top:620px;
     width:60px;
     height:20px;
     text-align: center;
     line-height: 20px;
     background-color:rgba(51,204,153,0.7);
+    /* background-color:red; */
     /* z-index:999999; */
     border-radius: 10px;
   }
