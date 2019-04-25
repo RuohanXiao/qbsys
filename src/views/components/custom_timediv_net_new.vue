@@ -201,38 +201,102 @@
               }
             }
           }],
+          // dataZoom: [{
+          //     type: "slider",
+          //     startValue: 0,
+          //     endValue: 100,
+          //     realtime: true, //是否实时加载
+          //     show: false,
+              
+          //     fillerColor: "rgba(51, 255, 255, 0.2)",
+              
+          //     borderColor: "rgba(0,0,0,0)", //边框颜色
+          //     cursor: "move",
+          //     xAxisIndex: [0],
+          //     minValueSpan:1,
+          //     handleSize: "80%",
+          //     cursor: "pointer"
+          //   },
+          //   {
+          //     type: "inside",
+          //     realtime: true,
+          //     show: true,
+          //     xAxisIndex: [0],
+              
+          //   }
+          // ],
           dataZoom: [{
               type: "slider",
               startValue: 0,
               endValue: 100,
+              // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: false,
-              
+              textStyle: {
+                color: "#33ffff",
+                fontFamily: 'Microsoft YaHei'
+              },
               fillerColor: "rgba(51, 255, 255, 0.2)",
-              
+              dataBackground: { //数据阴影的样式。
+                // lineStyle:mylineStyle,              //阴影的线条样式
+                areaStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 0,
+                    y2: 1,
+                    colorStops: [{
+                      offset: 1,
+                      color: '#33ffff' // 100% 处的颜色
+                    }, {
+                      offset: 0,
+                      color: '#9999ff' // 0% 处的颜色
+                    }],
+                    globalCoord: false // 缺省为 false
+                  }
+                }, //阴影的填充样式
+              },
+              // backgroundColor: "rgba(51, 255, 255, 0.2)",
+              // backgroundColor: "rgba(51, 255, 255, 0.2)",
+              // dataBackground: "rgba(51, 255, 255, 0.8)",
+              // borderColor:"rgba(51, 255, 255, 0.2)", //边框颜色
               borderColor: "rgba(0,0,0,0)", //边框颜色
               cursor: "move",
               xAxisIndex: [0],
-              minValueSpan:1,
+              // startValue: 10,
+              // endValue: 20,
+              minValueSpan: 3,
+              handleIcon: "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
               handleSize: "80%",
+              handleStyle: {
+                color: "rgb(51, 255, 255)",
+                shadowBlur: 3,
+                shadowColor: "rgba(0, 0, 0, 1)",
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+              },
               cursor: "pointer"
             },
             {
               type: "inside",
-              realtime: true,
+              // start: 0,
+              // end: 10,
               show: true,
               xAxisIndex: [0],
-              
+              // startValue: 0,
+              // endValue: 5,
+              minValueSpan: 3
             }
           ],
-          
           series: [{
             name: "事件",
             type: "bar",
             barGap:"-100%",
+            // barWidth:'10px',
+            barMaxWidth: '30%',
             barWidth:'10px',
-            // barMaxWidth: '10%',
-            // barMinHeight: '1px',
+            barMinHeight: '1px',
             itemStyle: {
               // 柱形图默认颜色
               normal: {
@@ -376,16 +440,56 @@
           
           mthis.timeTitle = '时间轴'
           mthis.option.xAxis.data = mthis.dataBySeries.date;
-          mthis.option.series[0].data = mthis.dataBySeries.num;
+          // mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.option.series =  [{
+                    name: "事件",
+                    type: "bar",
+                    barGap:"-100%",
+                    // barWidth:'10px',
+                    // barMaxWidth: '10%',
+                    // barMinHeight: '1px',
+                    barMaxWidth: '30%',
+                    barWidth:'10px',
+                    barMinHeight: '1px',
+                    itemStyle: {
+                    // 柱形图默认颜色
+                    normal: {
+                        cursor: "default",
+                        barBorderRadius: [3, 3, 3, 3],
+                        color: "rgba(51,204,153,1)"
+                    },
+                    // 柱形图悬浮颜色
+                    emphasis: {
+                        cursor: "pointer",
+                        barBorderRadius: [3, 3, 3, 3],
+                        color: "rgba(51,204,153,0.6)"
+                        
+                    },
+                    
+                    
+                    },
+                    animationDelay: function(idx) {
+                    return 0;
+                    //return idx * 1000;
+                    },
+                    animationDurationUpdate: function(idx) {
+                    // 越往后的数据延迟越大
+                    return 1;
+                    },
+                    data: mthis.dataBySeries.num
+                }]
           mthis.charts.setOption(mthis.option)
         }else{
           mthis.option.series =  [{
                     name: "事件",
                     type: "bar",
                     barGap:"-100%",
-                    barWidth:'10px',
+                    // barWidth:'10px',
                     // barMaxWidth: '10%',
                     // barMinHeight: '1px',
+                    barMaxWidth: '30%',
+                    barWidth:'10px',
+                    barMinHeight: '1px',
                     itemStyle: {
                     // 柱形图默认颜色
                     normal: {
@@ -414,7 +518,10 @@
                     data: mthis.dataBySeries.num
                 },{
                     type:'bar',
+                    // barWidth:'10px',
+                    barMaxWidth: '30%',
                     barWidth:'10px',
+                    barMinHeight: '1px',
                     data:mthis.dataBySeries.clickNum,
                     itemStyle:{
                         color:'#33ddff',
@@ -609,7 +716,7 @@
   }
   .clcikShowDiv{
     position: absolute;
-    top:650px;
+    top:620px;
     width:60px;
     height:20px;
     text-align: center;
