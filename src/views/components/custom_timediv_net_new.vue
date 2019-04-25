@@ -28,8 +28,8 @@
       <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
-    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="this.$store.commit('setNetTime2staticEventIds',this.clickEventIds)">选中分析</div>
-    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="this.$store.commit('setNetTime2staticEventIds',this.boxSelEventIds)">选中分析</div>
+    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="this.$store.commit('setGeoTimeCondition',this.clickEventIds)">选中分析</div>
+    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="this.$store.commit('setGeoTimeCondition',this.boxSelEventIds)">选中分析</div>
   </div>
 </template>
  
@@ -296,7 +296,8 @@
             let myChart1 = document.getElementById(mthis.main1Id)
         
             myChart1.oncontextmenu = () => false;
-            document.oncontextmenu = function(){
+            let wholeChart = document.getElementById(mthis.timechartdivId)
+            wholeChart.oncontextmenu = function(){
             
             mthis.boxdivLeft = boxSelectLeftWid +20 + "px"
             mthis.boxSelShowDiv = true
@@ -336,11 +337,11 @@
           }
         });
         let myChart = document.getElementById(mthis.main1Id)
-        
+        var wholeChart = document.getElementById(mthis.timechartdivId)
         myChart.oncontextmenu = () => false;
-        document.oncontextmenu = () =>false;
+        wholeChart.oncontextmenu = () =>false;
         mthis.charts.on('contextmenu',function(params){
-            document.oncontextmenu = () =>false;
+            wholeChart.oncontextmenu = () =>false;
             let leftWid = params.event.offsetX+20 + "px"
             var clickTime = params.name
             console.log(clickTime)
