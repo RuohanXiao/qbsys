@@ -72,8 +72,9 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
             </div>
           </div>
-          <div class="econtent" v-if='!xiangguanEvent.length>0' >
-            <p class="econtentp">暂无相关事件</p>
+          <div class="econtent" v-if='xiangguanEvent.length ==0'>
+            <p class="econtentp" v-show="spinWaiting">相关事件加载中···</p>
+            <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
           </div>
         </div>
       </panel>
@@ -88,8 +89,9 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
             </div>
           </div>
-          <div class="econtent" v-if='!xiangguanDoc.length>0'>
-            <p class="econtentp">暂无相关文档</p>
+          <div class="econtent" v-if='xiangguanDoc.length ==0'>
+            <p class="econtentp" v-show="spinWaiting">文档事件加载中···</p>
+            <p class="econtentp" v-show="!spinWaiting">暂无相关文档</p>
           </div>
         </div>
       </panel>
@@ -106,6 +108,7 @@ import {
   export default {
     data() {
       return {
+        spinWaiting:false,
         value1: ['1', '2', '3', '4'],
         xiangguanEntityItems: new Array(),
         xiangguanEntitys: new Object(),
@@ -236,6 +239,11 @@ import {
       tableData: function() {
         // console.log('===========custom_event_humanEntityTable --------tableData')
         let mthis = this
+        mthis.spinWaiting = true
+        mthis.xiangguanEntityItems = new Array()
+        mthis.xiangguanEntitys = new Object()
+        mthis.xiangguanEvent = new Array()
+        mthis.xiangguanDoc = new Array()
         if (this.tableData.isArray) {
           if (this.tableData.length > 0) {
             // let node
@@ -253,6 +261,7 @@ import {
           } else {
             alert('长度为0')
           }
+          mthis.spinWaiting = false
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
@@ -277,6 +286,7 @@ import {
               // console.log(response.body.data[0].unknown)
               // console.log('-----------------------------------------------')
             }
+            mthis.spinWaiting = false
           })
         }
       }
