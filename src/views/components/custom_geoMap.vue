@@ -124,6 +124,9 @@ top: 232px;
     color:rgba(51,255,255,1);
     background-color: rgba(51,255,255,0.2);
 }
+.ringRightMenu{
+    cursor:pointer;
+}
 
 /*v-enter 是进入之前，元素的起始状态*/
 /*v-leave-to 离开之后动画的终止状态*/
@@ -177,6 +180,7 @@ import {getGradientColors} from '../../dist/assets/js/geo/GradientColors.js'
 import {BezierSinglePoint, BezierLinePoints} from '../../dist/assets/js/geo/geometryType/BezierLine.js'
 import {getThirdPoint} from '../../dist/assets/js/geo/geometryType/Arc.js'
 import util from '../../util/tools.js'
+import {rightMenu} from '../../dist/assets/js/rightMenu.js'
 
 import VectorSource from 'ol/source/Vector'
 import VectorLayer from 'ol/layer/Vector'
@@ -276,6 +280,7 @@ export default {
         violentFeatureIds:[],//狂暴点的featureId，（地图上被click选中的点）
         AnimationFun:{},
         heatMapVisible:false,
+        oparAreaFeature:null,
         //selectedOrgIds:[],  //被选中的组织机构ids
         changeButtonParam:[],
         pointMoveListenerKey:null,
@@ -739,30 +744,34 @@ export default {
                 mthis.deleteArrItem(mthis.onImgIds,imgItemOpera.id);
             }
         },
-        rightClickEvent(feature){
+        rightClickEvent(){
             var mthis = this;
             debugger
+            var feature = mthis.oparAreaFeature;
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
             mthis.orgsSpatialQuery([geometryArr],'Event');
             mthis.deleteRightMenu();
         },
-        rightClickOrg(feature){
+        rightClickOrg(){
             var mthis = this;
+            var feature = mthis.oparAreaFeature;
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
             mthis.orgsSpatialQuery([geometryArr],'Org');
             mthis.deleteRightMenu();
         },
-        rightClickLoc(feature){
+        rightClickLoc(){
             var mthis = this;
+            var feature = mthis.oparAreaFeature;
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
             mthis.orgsSpatialQuery([geometryArr],'Org');
             mthis.deleteRightMenu();
         },
-        rightClickDM(feature){
+        rightClickDM(){
             var mthis = this;
+            var feature = mthis.oparAreaFeature;
             mthis.deleteRightMenu();
             var source = mthis.getLayerById('HLAreaLayer').getSource();
             var fid = feature.getId();
@@ -796,80 +805,21 @@ export default {
         },
         setRightClickMenu_Area(feature,coordinate){
             var mthis = this;
-            echarts
             var overlayId = 'rightClickMenu_Area';
             var ovdiv = document.createElement('div');
-            ovdiv.style = 'width:100px;height:100px';
-            ovdiv.class = 'rightMenuDiv';
-            ovdiv.id='rightClickMenu';
-            var myChart = echarts.init(ovdiv);
-            var option = {
-                /* tooltip: {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b}: {c} ({d}%)"
-                }, */
-                
-                series: [
-                    {
-                        name:'访问来源',
-                        type:'pie',
-                        radius: ['30%', '50%'],
-                        avoidLabelOverlap: false,
-                        label: {
-                            normal: {
-                                //position: 'inner'
-                                show: false
-                            }
-                            
-                        },
-                        labelLine: {
-                            normal: {
-                                show: false
-                            }
-                        },
-                        data:[
-                            {value:1, name:'直接访问'},
-                            {value:1, name:'邮件营销'},
-                            {value:1, name:'联盟广告'},
-                            {value:1, name:'视频广告'},
-                            {value:1, name:'搜索引擎'}
-                        ]
-                    }
-                ]
-            };
-            myChart.setOption(option);
-            myChart.on('click', function (params) {
-                option.series = [{
-                        name:'访问来源',
-                        type:'pie',
-                        radius: ['60%', '80%'],
-                        avoidLabelOverlap: false,
-                        label: {
-                            normal: {
-                                 show: false
-                                /* position: 'inner',
-                                textStyle : {
-                                    fontSize : 10    //文字的字体大小
-                                }, */
-                            }
-                            
-                        },
-                        labelLine: {
-                            normal: {
-                                show: false
-                            }
-                        },
-                        data:[
-                            {value:1, name:'直接访问'},
-                            {value:1, name:'邮件营销'},
-                            {value:1, name:'联盟广告'},
-                            {value:1, name:'视频广告'},
-                            {value:1, name:'搜索引擎'}
-                        ]
-                    }]
-                    myChart.setOption(option);
-                //myChart.dispose();
-            });
+            ovdiv.style = 'width:400px;height:400px';
+            ovdiv.class = 'ringRightMenu';
+            ovdiv.id='ringRightMenu';
+            var config = [
+                {'Id':1,'parentId':0,'name':'探索事件','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':''},
+                {'Id':2,'parentId':0,'name':'探索组织','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':''},
+                {'Id':3,'parentId':0,'name':'探索地名','hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':''},
+                {'Id':4,'parentId':0,'name':'删除区域','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':''},
+                {'Id':301,'parentId':3,'name':'aa','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
+                {'Id':302,'parentId':3,'name':'bb','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
+            ]
+            mthis.oparAreaFeature = feature;
+            var routeMap = new rightMenu(mthis,ovdiv,config);
             //ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer';
             /*ovdiv.class = 'rightMenuDiv';
             ovdiv.id='rightClickMenu';
@@ -904,7 +854,7 @@ export default {
                 table.appendChild(tr);
             }) */
             
-            var overlayId = mthis.setOverlay(coordinate,ovdiv,overlayId,'center-center');
+            var overlayId = mthis.setOverlay(coordinate,ovdiv,overlayId,'top-left');
             mthis.routeMap.map.addOverlay(overlayId);
         },
         OrgStyleFun(feature){
@@ -2609,6 +2559,7 @@ export default {
                 stopEvent:true,
                 position:coor,
                 positioning:positioning,
+                offset:[-200,-200],
                 autoPan: false,
                 autoPanAnimation: {
                     duration: 250

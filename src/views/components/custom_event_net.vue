@@ -22,7 +22,7 @@
         <div class="e-title-d"></div>
         <p class="e-title-p">节点信息</p>
       </div>
-      <human-entity-table v-show="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table>
+      <human-entity-table v-if="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table>
       <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
       <organization-entity-table v-show="detailData.entity_type==='organization'" :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
       <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table>
@@ -67,6 +67,7 @@
   export default {
     data() {
       return {
+        ifShown: true,
         value1: ['1', '2', '3', '4'],
         selectTag: '',
         detailData: new Object(),
@@ -107,12 +108,13 @@
       //   util.checkImgExists(src)
       // },
       defaultImg(type, img) {
-        var mthis  = this
-        console.log('==============defaultImg=====================')
-        console.log(type)
-        console.log(img)
-        if (this.myMap.get(type) === 'entity') {
-           if (mthis.eventdata[0].entity_type === 'administrative') {
+        var mthis = this
+        if (mthis.eventdata[0]) {
+          console.log('==============defaultImg=====================')
+          console.log(type)
+          console.log(img)
+          if (this.myMap.get(type) === 'entity') {
+            if (mthis.eventdata[0].entity_type === 'administrative') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/administrative.png'
             } else if (mthis.eventdata[0].entity_type === 'human') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/human.png'
@@ -123,38 +125,37 @@
             } else {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image.png'
             }
-        } else if (this.myMap.get(type) === 'event') {
-          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
-        } else if (this.myMap.get(type) === 'document') {
-          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
-        } else {
-          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image.png'
+          } else if (this.myMap.get(type) === 'event') {
+            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
+          } else if (this.myMap.get(type) === 'document') {
+            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
+          } else {
+            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image.png'
+          }
         }
       },
       changeDetailDiv(id, type, ob) {
         var mthis = this
         let arr = []
         arr.push(id)
-        if (this.myMap.get(type) === 'entity') {
+        if (mthis.myMap.get(type) === 'entity') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/entity-detail/', {
             "nodeIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
-            this.detailData = res
+            res.img = mthis.defaultImg(type, res.img)
+            mthis.detailData = res
           })
         }
-        if (this.myMap.get(type) === 'event') {
+        if (mthis.myMap.get(type) === 'event') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {
-            let img = mthis.myMap1.get(response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")).img
-            let name = mthis.myMap1.get(response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")).name
             let res = response.body.data[0]
-            res.img = util.checkImgExists(img) ? img : 'http://10.60.1.140/assets/images/image.png'
-            res.name = name
-            this.detailData = res
-            this.detailData.entity_type = 'event'
+            res.img = mthis.myMap1.get(res.event_subtype.toLowerCase().replace(/-/, "_")).img
+            res.name = mthis.myMap1.get(res.event_subtype.toLowerCase().replace(/-/, "_")).name
+            mthis.detailData = res
+            mthis.detailData.entity_type = 'event'
           })
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
             "NodeIds": arr,
@@ -164,17 +165,19 @@
             // console.log(response)
           })
         }
-        if (this.myMap.get(type) === 'document') {
+        if (mthis.myMap.get(type) === 'document') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
             "docIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/content_node.png'
-            this.detailData = res
+            // res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/content_node.png'
+            res.img = 'http://10.60.1.140/assets/images/content_node.png'
+            res.name = res.title
+            mthis.detailData = res
             mthis.detailData.entity_type = 'document'
           })
         }
-        this.selectTag = id
+        mthis.selectTag = id
       }
     },
     components: {
@@ -186,6 +189,9 @@
       docEntityTable
     },
     watch: {
+      detailData:  function() {
+
+      },
       eventdata: function() {
         var mthis = this
         if (typeof(mthis.eventdata) === "object" && mthis.eventdata.concat && mthis.eventdata.length > 0) {
@@ -195,62 +201,63 @@
           mthis.timer = setTimeout(function() {
             let arr = []
             let detailId;
-            if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'entity') {
-              detailId = (mthis.eventdata[0].id)
-              mthis.selectTag = detailId
-              let a = []
-              a.push(detailId)
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
-                "nodeIds": a
-              }).then(response => {
+            if(mthis.eventdata[0]){
+              if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'entity') {
+                detailId = (mthis.eventdata[0].id)
+                mthis.selectTag = detailId
+                let a = []
+                a.push(detailId)
+                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
+                  "nodeIds": a
+                }).then(response => {
+                  let result = new Object();
+                  result = response.body.data[0]
+                  if (mthis.eventdata[0].entity_type === 'administrative') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/administrative.png'
+                  } else if (mthis.eventdata[0].entity_type === 'human') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/human.png'
+                  } else if (mthis.eventdata[0].entity_type === 'organization') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/organization.png'
+                  } else if (mthis.eventdata[0].entity_type === 'weapon') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                  } else {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image.png'
+                  }
+                  mthis.detailData = result
+                })
+                // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
+              } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'event') {
+                detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
+                mthis.selectTag = detailId
                 let result = new Object();
-                result = response.body.data[0]
-                if (mthis.eventdata[0].entity_type === 'administrative') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/administrative.png'
-                } else if (mthis.eventdata[0].entity_type === 'human') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/human.png'
-                } else if (mthis.eventdata[0].entity_type === 'organization') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/organization.png'
-                } else if (mthis.eventdata[0].entity_type === 'weapon') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
-                } else {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image.png'
-                }
+                result = mthis.eventdata[0]
+                // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
+                result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
                 mthis.detailData = result
-              })
-              // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
-            } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'event') {
-              detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
-              mthis.selectTag = detailId
-              let result = new Object();
-              result = mthis.eventdata[0]
-              alert(result.name)
-              // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
-              result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
-              mthis.detailData = result
-              // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
-            } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'document') {
-              detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
-              mthis.selectTag = detailId
-              let detailType = (mthis.eventdata.length !== undefined) ? (mthis.eventdata[0].entity_type) : (mthis.eventdata.entity_type);
-              let a = []
-              a.push(detailId)
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
-                "docIds": a
-              }).then(response => {
-                console.log(response.body.data[0])
-                let result = new Object();
-                result = response.body.data[0]
-                result.entity_type = 'document'
-                result.label = response.body.data[0].title
-                result.name = response.body.data[0].title.substring(0, 19) + '...'
-                result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/content_node.png'
-                mthis.detailData = result
-                console.log('mthis.detailData')
-                console.log(mthis.detailData)
-              })
-            } else {
-              // console.log('未找到匹配的类型')
+                // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
+              } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'document') {
+                detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
+                mthis.selectTag = detailId
+                let detailType = (mthis.eventdata.length !== undefined) ? (mthis.eventdata[0].entity_type) : (mthis.eventdata.entity_type);
+                let a = []
+                a.push(detailId)
+                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+                  "docIds": a
+                }).then(response => {
+                  console.log(response.body.data[0])
+                  let result = new Object();
+                  result = response.body.data[0]
+                  result.entity_type = 'document'
+                  result.label = response.body.data[0].title
+                  result.name = response.body.data[0].title.substring(0, 19) + '...'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/content_node.png'
+                  mthis.detailData = result
+                  console.log('mthis.detailData')
+                  console.log(mthis.detailData)
+                })
+              } else {
+                // console.log('未找到匹配的类型')
+              }
             }
             // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
           }, 200);
@@ -307,16 +314,16 @@
   }
 </script>
 <style scope>
-  .circle-img>img{
-    background-color: rgba(51,255,255,0.2)
+  .circle-img>img {
+    background-color: rgba(51, 255, 255, 0.2)
   }
   .avatarStyle {
     width: 50px;
-    margin-left: 20px;
+    margin: 0 20px;
   }
   .contentStyle {
     width: 100%;
-    text-align: center;
+    text-align: left;
     margin-bottom: 16px;
     overflow-x: hidden;
   }
@@ -368,47 +375,44 @@
     background-color: #009999;
     margin: 6px 6px;
   }
-  .NameTdss{
+  .NameTdss {
     color: #ccffff;
-    font-family:"微软雅黑";
+    font-family: "微软雅黑";
     display: table-cell;
     vertical-align: middle;
-    text-align: center; 
+    text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  
-  #nodeAttr > .ivu-collapse-item > .ivu-collapse-header > i{
-      margin-right:0px !important;
+  #nodeAttr>.ivu-collapse-item>.ivu-collapse-header>i {
+    margin-right: 0px !important;
   }
   #nodeAttr .ivu-icon-ios-arrow-forward::before {
-      content: url("../../dist/assets/images/treeRightIcon.png") !important;
+    content: url("../../dist/assets/images/treeRightIcon.png") !important;
   }
-  #nodeAttr > .ivu-collapse-item > .ivu-collapse-header{
-      height:30px !important;
-      line-height: 30px !important;
-      cursor: default !important;
+  #nodeAttr>.ivu-collapse-item>.ivu-collapse-header {
+    height: 30px !important;
+    line-height: 30px !important;
+    cursor: default !important;
   }
   #nodeAttr table tr:nth-child(odd):hover {
-    background-color: rgba(51,255,255,0.2);
+    background-color: rgba(51, 255, 255, 0.2);
   }
-  #nodeAttr table tr:nth-child(odd){
-      background-color: rgba(51,255,255,0.05);
+  #nodeAttr table tr:nth-child(odd) {
+    background-color: rgba(51, 255, 255, 0.05);
   }
   /* #NodeTypeInfo >tr>td>span{
-      padding-left:20px;
-      text-align:left;
-  } */
-  #nodeAttr p{
-      padding-left:1em;
-      text-align:left;
+        padding-left:20px;
+        text-align:left;
+    } */
+  #nodeAttr p {
+    padding-left: 1em;
+    text-align: left;
   }
-  .tableStyle{
-    width:100%
+  .tableStyle {
+    width: 100%
   }
-
-
   .e-content-p {
     /* height: 14px; */
     font-family: MicrosoftYaHei;
@@ -422,7 +426,7 @@
     text-overflow: ellipsis;
     width: auto;
     /* max-width: 70%;
-    margin-right: 40px; */
+      margin-right: 40px; */
     padding: 0 10px;
     white-space: nowrap;
   }
