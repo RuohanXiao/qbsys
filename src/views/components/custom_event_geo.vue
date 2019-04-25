@@ -44,9 +44,9 @@
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
           <div class="e-content-d pointIcon" v-for="(item,index) in eventdata" @click="changeDetailDiv(item.id,item.entity_type,eventdata)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
-            <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.name.toLowerCase().replace(/-/, "_")).name}}</p>
+            <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.event_subtype.toLowerCase().replace(/-/, "_")).name}}</p>
             <!-- <p v-if="item.entity_type==='event'" class="e-content-p">{{item.name}}</p> -->
-            <p v-else class="e-content-p">{{item.name}}</p>
+            <p v-else class="e-content-p">{{item.event_subtype}}</p>
           </div>
         </div>
       </div>
@@ -132,6 +132,8 @@
         }
       },
       changeDetailDiv(id, type, ob) {
+        console.log('-------------------ob')
+        console.log(ob)
         var mthis = this
         let arr = []
         arr.push(id)
@@ -224,8 +226,8 @@
               mthis.selectTag = detailId
               let result = new Object();
               result = mthis.eventdata[0]
-              // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
-              result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
+              result.name = mthis.myMap1.get(result.event_subtype.toLowerCase().replace(/-/, "_")).name
+              result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.event_subtype.toLowerCase().replace(/-/, "_")).img
               mthis.detailData = result
               // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
             } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'document') {

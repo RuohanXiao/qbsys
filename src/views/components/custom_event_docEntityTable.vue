@@ -65,11 +65,11 @@
       <panel name="3">
         <span>相关事件</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEvent.length>0' v-for='items in xiangguanEvent'>
+          <div class="econtent" v-if='xiangguanEvent.length>0' v-for='items in xiangguanEvent.statistics'>
             <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addmultNodeToCanvans(xiangguanEvent,'event',items.type)"></Button>
             </div>
           </div>
           <div class="econtent" v-if='xiangguanEvent.length ==0'>
@@ -82,11 +82,11 @@
       <panel name="4">
         <span>相关文档</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanDoc.length>0' v-for='items in xiangguanDoc'>
+          <div class="econtent" v-if='xiangguanDoc.length>0' v-for='items in xiangguanDoc.statistics'>
             <p class="econtentp w5em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addmultNodeToCanvans(xiangguanDoc,'document','')"></Button>
             </div>
           </div>
           <div class="econtent" v-if='xiangguanDoc.length ==0'>
@@ -145,6 +145,12 @@ import {
       this.tableData = new Object()
     },
     methods: {
+      addmultNodeToCanvans(obj,type,subType) {
+        mthis.$store.commit('setAddNetNodes', {
+          nodes:obj.nodes,
+          links:obj.links
+        })
+      },
       addSingleNodeToCanvans(id,type,subType) {
         var mthis = this
         if(type === 'entity') {
@@ -163,7 +169,7 @@ import {
             })
           })
         }
-        if(type === 'event') {
+        else if(type === 'event') {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds":id
           }).then(response => {
@@ -201,7 +207,7 @@ import {
             }
           })
         }
-        if(type === 'document') {
+        else if(type === 'document') {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
             "docIds":id
           }).then(response => {
@@ -232,6 +238,9 @@ import {
               })
             }
           })
+        }
+        else {
+
         }
       }
     },
@@ -268,19 +277,26 @@ import {
             "NodeTypes": new Array('document'),
             "TypeLabel": "all"
           }).then(response => {
-            response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
+            
+            // mthis.xiangguanEntityItems = new Array()
+            // mthis.xiangguanEntitys = new Object()
+            // mthis.xiangguanEvent = new Array()
+            // mthis.xiangguanDoc = new Array()
+            if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
+              response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
               item.type = item.undirected_type
               return item
             })
-            mthis.xiangguanEntityItems = new Array()
-            mthis.xiangguanEntitys = new Object()
-            mthis.xiangguanEvent = new Array()
-            mthis.xiangguanDoc = new Array()
-            mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
-            mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
-            mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
-            mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
-            mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+              mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+              mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+              mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+              mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
+              mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+            }
             if (response.body.data[0].unknown !== new Object()) {
               // console.log('------------有未知类型的节点--------------------')
               // console.log(response.body.data[0].unknown)

@@ -236,19 +236,25 @@ import {
             "NodeTypes": new Array('entity'),
             "TypeLabel": "all"
           }).then(response => {
-            response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
+            // mthis.xiangguanEntityItems = new Array()
+            // mthis.xiangguanEntitys = new Object()
+            // mthis.xiangguanEvent = new Array()
+            // mthis.xiangguanDoc = new Array()
+             if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
+               response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
               item.type = item.undirected_type
               return item
             })
-            mthis.xiangguanEntityItems = new Array()
-            mthis.xiangguanEntitys = new Object()
-            mthis.xiangguanEvent = new Array()
-            mthis.xiangguanDoc = new Array()
-            mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
-            mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
-            mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
-            mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
-            mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+              mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+              mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+              mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+              mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
+              mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+            }
             if (response.body.data[0].unknown !== new Object()) {
               // console.log('------------有未知类型的节点--------------------')
               // console.log(response.body.data[0].unknown)
