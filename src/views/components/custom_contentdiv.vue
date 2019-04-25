@@ -551,7 +551,7 @@
               contentDiv.style.borderRight = '2px #366674 solid';
               var data = response.body.data;
               var translatedTitle = data.title;
-              var translatedTime = data.time;
+              var translatedTime = util.transformPHPTimeMS(data.time);
               var translatedText = data.text.ch;
               var translatedHtml = /* "<div  id='translateContentInfo' class='scrollBarAble' style='height: 607px; overflow-y: scroll; width: 50%; border-right: 2px solid rgb(54, 102, 116);'>" */
                 "<h2 id='translateContentsTitle'class='contentInfoTitle'>" + translatedTitle +

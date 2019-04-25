@@ -388,14 +388,20 @@ export default {
             var id = 'heatMap_HSD';
             var button = document.getElementById(id)
             var heatMapLayer = mthis.getLayerById('heatmapLayer');
+            var eventLayer = mthis.getLayerById('eventsPointsLayer');
+            var orgLayer = mthis.getLayerById('OrgLayer');
             if(button.className === 'button-div-click'){
                 button.className ='button-div';
                 mthis.heatMapVisible = false;
                 heatMapLayer.setVisible(false);
+                /* eventLayer.setVisible(true);
+                orgLayer.setVisible(true); */
             } else {
                  button.className = 'button-div-click';
                  mthis.heatMapVisible = true;
                  heatMapLayer.setVisible(true);
+                 /* eventLayer.setVisible(false);
+                 orgLayer.setVisible(false); */
             }
             /* var heatMapLayer = mthis.getLayerById('heatmapLayer');
             mthis.click_heatMap(heatMapLayer);
@@ -746,7 +752,6 @@ export default {
         },
         rightClickEvent(){
             var mthis = this;
-            debugger
             var feature = mthis.oparAreaFeature;
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
@@ -2703,7 +2708,6 @@ export default {
                     ++selectedNum[index];
                 }
             })
-            debugger
             Object.keys(mthis.AllLayerList_conf).forEach(function(key){
                 var layerId = mthis.AllLayerList_conf[key].layerId;
                 var features = mthis.getLayerById(layerId).getSource().getFeatures();
@@ -2724,7 +2728,6 @@ export default {
                         feature.set('selectedNum',selectedNum[index],false);
                         if(key === 'event'){
                             var geometry = feature.getGeometry();
-                            debugger
                             if(geometry.getType() !== "MultiLineString"){
                                 var heatFeature = feature.clone();
                                 heatFeature.setId(id);
@@ -2745,7 +2748,6 @@ export default {
                                         var coor = 'event&' + pointCoor[0] + '' + pointCoor[1];
                                         var index = util.itemIndexInArr(coor,lineEventBeloneLocals);
                                         if(index === -1){
-                                            debugger
                                             if(heatSource.getFeatureById(coor)){
                                                 var fFeature = heatSource.getFeatureById(coor);
                                                 var num = fFeature.get('selectedNum');
@@ -3069,7 +3071,6 @@ export default {
                     "ids": data.orgIds
                 }).then(response => {
                     var orgNum = 0;
-                    debugger
                     var mes = [];
                     var eventGeoJson_Org = response.body.data.Features;
                     var addFeatures_Org = (new GeoJSON()).readFeatures(eventGeoJson_Org);

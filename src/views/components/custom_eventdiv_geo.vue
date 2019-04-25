@@ -145,6 +145,7 @@
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];
+        debugger
         mthis.geo_selected_param.paramIds.forEach(function(id){
           var type = id.split('&')[0];
           var Id = id.split('&')[1];

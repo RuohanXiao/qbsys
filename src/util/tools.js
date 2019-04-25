@@ -122,13 +122,13 @@ getNowFormatDate() {
   //时间戳转(毫秒) yy-mm-dd
   transformPHPTimeMS(time) {
     var date = new Date(time * 1000);
-    Y = date.getFullYear() + '-';
-    M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-    D = date.getDate();
-    space = ' ';
-    h = date.getHours() + ':';
-    m = date.getMinutes() + ':';
-    s = date.getSeconds();
+    let Y = date.getFullYear() + '-';
+    let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    let D = date.getDate();
+    let space = ' ';
+    let h = date.getHours() + ':';
+    let m = date.getMinutes() + ':';
+    let s = date.getSeconds();
 
     // return Y + M + D + space + h + m + s;
     return Y + M + D;
@@ -136,13 +136,13 @@ getNowFormatDate() {
   //时间戳转(秒) yy-mm-dd
   transformPHPTime(time) {
     var date = new Date(time);
-    Y = date.getFullYear() + '-';
-    M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-    D = date.getDate();
-    space = ' ';
-    h = date.getHours() + ':';
-    m = date.getMinutes() + ':';
-    s = date.getSeconds();
+    let Y = date.getFullYear() + '-';
+    let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    let D = date.getDate();
+    let space = ' ';
+    let h = date.getHours() + ':';
+    let m = date.getMinutes() + ':';
+    let s = date.getSeconds();
 
     // return Y + M + D + space + h + m + s;
     return Y + M + D;
