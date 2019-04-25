@@ -224,6 +224,7 @@
               mthis.selectTag = detailId
               let result = new Object();
               result = mthis.eventdata[0]
+              alert(result.name)
               // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
               result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
               mthis.detailData = result

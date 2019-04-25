@@ -111,13 +111,18 @@ top: 3px;
 #HeatMap_Map .ol-zoom-out.ol-has-tooltip:focus [role=tooltip] {
 top: 232px;
 }
-
+#rightClickMenu {
+    background-color:rgba(0, 0, 0, 0.9);
+    border: 1px solid #2a6464;
+    cursor:pointer;
+}
 #rightClickMenuTable td{
-    min-width: 25px !important;
+    min-width: 30px !important;
+    line-height: 28px;
 }
 #rightClickMenuTable tr:hover{
-    color:#30f2f2;
-    background-color: rgba(255,255,255,0.2);
+    color:rgba(51,255,255,1);
+    background-color: rgba(51,255,255,0.2);
 }
 
 /*v-enter 是进入之前，元素的起始状态*/
@@ -199,6 +204,7 @@ import {unByKey} from 'ol/Observable.js';
 import {getCenter} from 'ol/extent.js';
 import Heatmap from 'ol/layer/Heatmap';
 import Circle from '@turf/circle'
+import echarts from 'echarts'
 
 
 import flexslider from 'flexslider'
@@ -269,6 +275,7 @@ export default {
         AreaIds:[],  //行政区划ids
         violentFeatureIds:[],//狂暴点的featureId，（地图上被click选中的点）
         AnimationFun:{},
+        heatMapVisible:false,
         //selectedOrgIds:[],  //被选中的组织机构ids
         changeButtonParam:[],
         pointMoveListenerKey:null,
@@ -318,7 +325,6 @@ export default {
             if(mapOperationId == 'location_AT'){
                 mthis.location_cilck();
             } else if(mapOperationId == 'heatMap_HSD'){
-                //mthis.heatMap_cilck();
                 mthis.disHeatMap();
             } else if(mapOperationId == 'route_HSD'){
                 mthis.route_cilck();
@@ -374,9 +380,21 @@ export default {
         },
         disHeatMap(){
             var mthis = this;
+            var id = 'heatMap_HSD';
+            var button = document.getElementById(id)
             var heatMapLayer = mthis.getLayerById('heatmapLayer');
+            if(button.className === 'button-div-click'){
+                button.className ='button-div';
+                mthis.heatMapVisible = false;
+                heatMapLayer.setVisible(false);
+            } else {
+                 button.className = 'button-div-click';
+                 mthis.heatMapVisible = true;
+                 heatMapLayer.setVisible(true);
+            }
+            /* var heatMapLayer = mthis.getLayerById('heatmapLayer');
             mthis.click_heatMap(heatMapLayer);
-            heatMapLayer.setVisible(true)
+            heatMapLayer.setVisible(true) */
             
         },
         mapAddFeature(feature){
@@ -723,6 +741,7 @@ export default {
         },
         rightClickEvent(feature){
             var mthis = this;
+            debugger
             var geometry = feature.getGeometry();
             var geometryArr = new GeoJSON().writeGeometry(geometry)
             mthis.orgsSpatialQuery([geometryArr],'Event');
@@ -777,16 +796,89 @@ export default {
         },
         setRightClickMenu_Area(feature,coordinate){
             var mthis = this;
+            echarts
             var overlayId = 'rightClickMenu_Area';
             var ovdiv = document.createElement('div');
-            ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer';
+            ovdiv.style = 'width:100px;height:100px';
+            ovdiv.class = 'rightMenuDiv';
+            ovdiv.id='rightClickMenu';
+            var myChart = echarts.init(ovdiv);
+            var option = {
+                /* tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                }, */
+                
+                series: [
+                    {
+                        name:'访问来源',
+                        type:'pie',
+                        radius: ['30%', '50%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                //position: 'inner'
+                                show: false
+                            }
+                            
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data:[
+                            {value:1, name:'直接访问'},
+                            {value:1, name:'邮件营销'},
+                            {value:1, name:'联盟广告'},
+                            {value:1, name:'视频广告'},
+                            {value:1, name:'搜索引擎'}
+                        ]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+            myChart.on('click', function (params) {
+                option.series = [{
+                        name:'访问来源',
+                        type:'pie',
+                        radius: ['60%', '80%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            normal: {
+                                 show: false
+                                /* position: 'inner',
+                                textStyle : {
+                                    fontSize : 10    //文字的字体大小
+                                }, */
+                            }
+                            
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data:[
+                            {value:1, name:'直接访问'},
+                            {value:1, name:'邮件营销'},
+                            {value:1, name:'联盟广告'},
+                            {value:1, name:'视频广告'},
+                            {value:1, name:'搜索引擎'}
+                        ]
+                    }]
+                    myChart.setOption(option);
+                //myChart.dispose();
+            });
+            //ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer';
+            /*ovdiv.class = 'rightMenuDiv';
             ovdiv.id='rightClickMenu';
             ovdiv.addEventListener("mouseleave", function(){
                 mthis.deleteRightMenu();
             });
             var table = document.createElement('table');
             table.id = 'rightClickMenuTable';
-            table.style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;';
+            table.style = 'font-size: 12px;color: rgba(51,255,255,0.4);margin: 3px 0px;';
             ovdiv.appendChild(table);
             var rightClickConf = [
                 {'name':'探索事件','id':'eventExplore','iconClassName':'icon-ren','funName':'mthis.rightClickEvent'},
@@ -806,33 +898,14 @@ export default {
                 iconTd.classList.add('icon','iconfont',item.iconClassName);
                 tr.appendChild(iconTd);
                 var nameTd = document.createElement('td');
-                nameTd.style = 'padding-right: 5px;';
+                nameTd.style = 'padding-right: 10px;';
                 nameTd.innerHTML=item.name;
                 tr.appendChild(nameTd);
                 table.appendChild(tr);
-            })
+            }) */
             
-            var overlayId = mthis.setOverlay(coordinate,ovdiv,overlayId,'top-left');
+            var overlayId = mthis.setOverlay(coordinate,ovdiv,overlayId,'center-center');
             mthis.routeMap.map.addOverlay(overlayId);
-
-            /* setTimeout(function(){
-                table.addEventListener("mouseover", function(){
-                var map = mthis.routeMap.map;
-                var overlayId = 'rightClickMenu_Area';
-                var overlay = map.getOverlayById(overlayId);
-                if(overlay){
-                    map.removeOverlay(overlay)
-                }
-            });
-            table.addEventListener("mouseout", function(){
-                var map = mthis.routeMap.map;
-                var overlayId = 'rightClickMenu_Area';
-                var overlay = map.getOverlayById(overlayId);
-                if(overlay){
-                    map.removeOverlay(overlay)
-                }
-            });
-            },1000) */
         },
         OrgStyleFun(feature){
             var mthis = this;
@@ -1313,7 +1386,6 @@ export default {
                     } else {
                         classname = 'button-none';
                     }
-                    //classname = 'button-div';
                 }
                 button.className = classname
             })
@@ -2208,7 +2280,7 @@ export default {
         //===========================================================================
         //热力图
         click_heatMap(layer){
-            var mthis = this
+            /* var mthis = this
             mthis.maxEventsNum = 0;
             var heatSource = layer.getSource();
             var selectedIds = mthis.getSelectedEventIds().ids;
@@ -2226,7 +2298,7 @@ export default {
                         mthis.maxEventsNum = num;
                     }
                 }
-            })
+            }) */
         },
         weightFunction(feature){
             var mthis = this;
@@ -2442,7 +2514,7 @@ export default {
                 })
                 mthis.staticsSelectedEventIds = invertIds;
             }
-            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(invertIds);
+            //mthis.setFeatureStatusByIds(invertIds);
         },
         getHighUpSelectedIds(){  //获取此时选择的上一级选择
             var mthis = this;
@@ -2662,12 +2734,13 @@ export default {
                 //m
             }
         },
-        changeEveryFeatureSelectedEventsNumAndStyleByids(ids){
+        setFeatureStatusByIds(ids){
             var mthis = this;
+            mthis.getLayerById('heatmapLayer').getSource().clear();
             var featureIds = [];
             var selectedNum = [];
-            var eventsSource = mthis.getLayerById('eventsPointsLayer').getSource();
-            var orgsSource = mthis.getLayerById('OrgLayer').getSource();
+            mthis.maxEventsNum = 0;
+            var heatSource = mthis.getLayerById('heatmapLayer').getSource();
             ids.forEach(function(item){
                 var OId = mthis.getOIdFromId(item);
                 var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
@@ -2679,16 +2752,88 @@ export default {
                     ++selectedNum[index];
                 }
             })
-            featureIds.forEach(function(Item,index){
-                var feature
-                if(Item.split('&')[0] === 'event'){
-                    feature = eventsSource.getFeatureById(Item);
-                    feature.set('selectedNum',selectedNum[index],false);
-                } else {
-                    feature = orgsSource.getFeatureById(Item);
-                    feature.set('selectedNum',selectedNum[index],false);
+            debugger
+            Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+                var layerId = mthis.AllLayerList_conf[key].layerId;
+                var features = mthis.getLayerById(layerId).getSource().getFeatures();
+                for(let i = 0; i < features.length; i++){
+                    let feature = features[i];
+                    let id = feature.getId();
+                    let isSelected = false;
+                    let index = -1;
+                    for(let j = 0; j < featureIds.length; j++){
+                        if(id === featureIds[j]){
+                            isSelected = true;
+                            index = j;
+                            break;
+                        }
+                    }
+                    if(isSelected){
+                        
+                        feature.set('selectedNum',selectedNum[index],false);
+                        if(key === 'event'){
+                            var geometry = feature.getGeometry();
+                            debugger
+                            if(geometry.getType() !== "MultiLineString"){
+                                var heatFeature = feature.clone();
+                                heatFeature.setId(id);
+                                heatFeature.setStyle(null);
+                                heatSource.addFeature(heatFeature);
+                                var num = heatFeature.get('selectedNum');
+                                if(num > mthis.maxEventsNum){
+                                    mthis.maxEventsNum = num;
+                                }
+                            } else {
+                                var multiLines = geometry.getCoordinates();
+                                var lineEventBeloneLocals = [];
+                                for(let v = 0; v < multiLines.length; v++){
+                                    var line = multiLines[v];
+                                    var length = line.length;
+                                    var rLine = [line[0],line[length - 1]];
+                                    rLine.forEach(function(pointCoor){
+                                        var coor = 'event&' + pointCoor[0] + '' + pointCoor[1];
+                                        var index = util.itemIndexInArr(coor,lineEventBeloneLocals);
+                                        if(index === -1){
+                                            debugger
+                                            if(heatSource.getFeatureById(coor)){
+                                                var fFeature = heatSource.getFeatureById(coor);
+                                                var num = fFeature.get('selectedNum');
+                                                fFeature.set('selectedNum',num+1,false);
+                                                if((num + 1) > mthis.maxEventsNum){
+                                                    mthis.maxEventsNum = num + 1;
+                                                }
+                                            } else {
+                                                var feature = new Feature({
+                                                    geometry: new Point(pointCoor)
+                                                });
+                                                feature.setId(coor);
+                                                feature.set('selectedNum',1,false);
+                                                heatSource.addFeature(feature);
+                                                lineEventBeloneLocals.push(coor);
+                                            }
+                                        } 
+                                    })
+                                }
+                                /* var feature = new Feature({
+                                    geometry: new Point()
+                                    }); */
+                            }
+                            
+                        }
+                        /* var heatFeature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId).clone();
+                        heatFeature.setId(featureId);
+                        heatFeature.setStyle(null);
+                        heatSource.addFeature(heatFeature);
+                        var num = heatFeature.get('selectedNum');
+                        if(num > mthis.maxEventsNum){
+                            mthis.maxEventsNum = num;
+                        } */
+                        mthis.setFeatureStatus(feature,'life');
+                    } else {
+                        feature.set('selectedNum',0,false);
+                        mthis.setFeatureStatus(feature,'die');
+                    }
                 }
-                mthis.setFeatureStatus(feature,'life');
             })
         },
         getallEventIdsFromallEventIdsToFeaturesIds(){
@@ -3017,7 +3162,17 @@ export default {
         },
         SelectedIds:function(){
             var mthis = this;
-            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.SelectedIds);
+            mthis.setFeatureStatusByIds(mthis.SelectedIds);
+            if(mthis.heatMapVisible){
+                /* var heatFeature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId).clone();
+                    heatFeature.setId(featureId);
+                    heatFeature.setStyle(null);
+                    heatSource.addFeature(heatFeature);
+                    var num = heatFeature.get('selectedNum');
+                    if(num > mthis.maxEventsNum){
+                        mthis.maxEventsNum = num;
+                    } */
+            }
             mthis.isOperateButtonsHLOrDim();
         },
         geoStaticsOnlyLookSelectedIds(){
@@ -3040,7 +3195,7 @@ export default {
                     mthis.setFeatureStatus(features[i],'die');
                 }
             })
-            mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(ids);
+            //mthis.setFeatureStatusByIds(ids);
             mthis.geometrySelectedEventIds = ids;
         },
         geoStaticsSelectedIds:function(){
@@ -3081,7 +3236,7 @@ export default {
                     dealSelectedIds.push(Lid.split('_')[1])
                 })
             } */
-            // mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.geometrySelectedEventIds);
+            // mthis.setFeatureStatusByIds(mthis.geometrySelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoStatics',
                 paramIds:mthis.staticsSelectedEventIds//dealSelectedIds
@@ -3092,7 +3247,7 @@ export default {
         timeSelectedEventIds:function(){
             var mthis = this;
             mthis.SelectedIds = mthis.timeSelectedEventIds
-            //mthis.changeEveryFeatureSelectedEventsNumAndStyleByids(mthis.timeSelectedEventIds);
+            //mthis.setFeatureStatusByIds(mthis.timeSelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoTime',
                 paramIds:mthis.timeSelectedEventIds

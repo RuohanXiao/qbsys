@@ -531,6 +531,7 @@
       },
       contentTranslate() {
         this.translateButton = true
+        debugger
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);

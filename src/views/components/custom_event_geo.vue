@@ -219,12 +219,15 @@
                 mthis.detailData = result
               })
               // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
-            } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'event') {
+             } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'event') {
               detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
               mthis.selectTag = detailId
-              let result = new Object();
-              result = mthis.eventdata[0]
-              // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
+              let result = mthis.eventdata[0]
+              result.name = result.name.replace(/ /,'_')
+              console.log('**************')
+              console.log(mthis.eventdata[0])
+              alert(result.name)
+              result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
               result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
               mthis.detailData = result
               // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
