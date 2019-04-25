@@ -206,9 +206,21 @@ var store = new Vuex.Store({
       api_search:'http://10.60.1.140:5001', //查询接口采用原地址
       api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
       map_url:'http://10.60.1.142:8082', //地图脚本服务地址
+      api_event_test_url:'http://10.60.1.141:5100',//事件时间轴测试接口
       // xml_url:'http://10.60.1.140/assets' // 部署路径
       xml_url:'./src/dist/assets' // 本地路径
     },
+    // ipConfig: {
+    //   // api_url:'http://10.60.1.140:5001', //部署服务器api地址
+    //   api_url:'http://10.60.1.141:5100', //真实数据部署服务器api地址
+    //   // api_url:'http://10.60.1.140:5100', //真实数据部署服务器api地址
+    //   api_search:'http://10.60.1.140:5001', //查询接口采用原地址
+    //   api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
+    //   map_url:'http://10.60.1.142:8082', //地图脚本服务地址
+    //   // xml_url:'http://10.60.1.140/assets' // 部署路径
+    //   xml_url:'./src/dist/assets' // 本地路径
+    // },
+    
     // 联动监听
     netWatcher:{ // 网络关系模块监听
       type: '',
@@ -297,6 +309,7 @@ var store = new Vuex.Store({
     singlePerson:true,
     dataStatisticsEvent: {},
     changenetpx: true,
+    
     selectionIdByType:{
       nodeIds: [],
       eventIds: [],
@@ -394,6 +407,7 @@ var store = new Vuex.Store({
     setClickSelectedGeoIds(state,val){
       state.clickSelectedGeoIds = val
     },
+    
     setSelectionIdByType(state,val){
       state.selectionIdByType = val
     },

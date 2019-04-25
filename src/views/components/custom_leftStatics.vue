@@ -160,7 +160,7 @@ export default {
     mounted(){
         this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
     },
-    props:['staticsDatas'],
+    props:['staticsDatas','rightMenuConf'],
     components: {
       percentBar,
     },
@@ -183,54 +183,52 @@ export default {
         }
     },
     methods:{
-        onlyLookIt(ids){
+        clickRightButton(buttonId,nsIds){
             var mthis = this;
-            var tmss = mthis.$store.state.tmss;
-            if(tmss !== 'geo'){
-                alert('请期待...');
-                return;
+            var data = {
+                'buttonId':buttonId,
+                'nsIds':nsIds
             }
-            mthis.$emit('rightCilckIds', ids)
+            mthis.$emit('rightCilckArgu', data)
         },
         rightClickShow(eve,ids){
             var mthis = this;
+            if(mthis.rightMenuConf.length === 0){
+                return;
+            }
             var leftStatics = document.getElementById('leftStatics');
             var x = eve.clientX;
             var y = eve.clientY;
             
             var ovdiv = document.createElement('div');
-            ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer;position:absolute';
-            ovdiv.id='rightClickStatics';
+            ovdiv.style ='position:absolute';
+            ovdiv.class = 'rightMenuDiv';
+            ovdiv.id='rightClickMenu';
             ovdiv.style.top = y + "px";
             ovdiv.style.left = x + "px";
             document.body.appendChild(ovdiv);
             ovdiv.addEventListener("mouseleave", function(){
                 setTimeout(function(){
-                    var div = document.getElementById('rightClickStatics');
+                    var div = document.getElementById('rightClickMenu');
                     document.body.removeChild(div);
-                    
                 },100)
             });
             var table = document.createElement('table');
             table.id = 'rightClickMenuTable';
             table.style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;';
             ovdiv.appendChild(table);
-            var rightClickConf = [
-                {'name':'只看它','id':'onlylookit','iconClassName':'icon-ren','funName':'mthis.onlyLookIt'},
-            ];
-            rightClickConf.forEach(function(item){
+            mthis.rightMenuConf.forEach(function(item){
                 var tr = document.createElement('tr');
                 tr.id = item.id;
                 tr.addEventListener('click',function(){
-                    var func=eval(item.funName);
-                    func.call(mthis,ids);
+                    mthis.clickRightButton(tr.id,ids);
                 })
                 var iconTd = document.createElement('td');
                 iconTd.style='padding-left: 5px;';
                 iconTd.classList.add('icon','iconfont',item.iconClassName);
                 tr.appendChild(iconTd);
                 var nameTd = document.createElement('td');
-                nameTd.style = 'padding-right: 5px;';
+                nameTd.style = 'padding-right: 10px;';
                 nameTd.innerHTML=item.name;
                 tr.appendChild(nameTd);
                 table.appendChild(tr);
@@ -353,27 +351,6 @@ export default {
         setOpenPanelNames(){
             var mthis = this;
             mthis.openPanelNames = [];
-                /* ["out__country_of_citizenship_names",
-                "out__occupation_names",
-                "address",
-                "out__member_of_political_party_names",
-                "religion",
-                "e-mail",
-                "headquarters_location",
-                "founded_by",
-                "chairperson",
-                "chief_executive_officer",
-                "political_ideology",
-                "capital",
-                "head_of_state",
-                "head_of_government",
-                "continent",
-                "gini_coefficient",
-                "Human_Development_Index",
-                "top-level_Internet_domain" ] */
-            /* mthis.SecondAttrClassify[mthis.type].forEach(function(item,index){
-                mthis.openPanelNames.push(item.id);
-            }) */
             Object.keys(mthis.SecondAttrClassify).forEach(function(type){
                 mthis.SecondAttrClassify[type].forEach(function(item){
                     mthis.openPanelNames.push(item.id);

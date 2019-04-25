@@ -22,7 +22,7 @@
 <script>
   import "../dist/assets/styles/net_main.css";
   import netChartDiv from "./components/custom_netdiv";
-  import timeChartDiv from "./components/custom_timediv_net";
+  import timeChartDiv from "./components/custom_timediv_net_new";
   import eventChartDivNet from "./components/custom_eventdiv_net";
   import {
     mapState,

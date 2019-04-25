@@ -205,9 +205,11 @@
       },
       selectNetNodes: function() {
         var mthis = this;
+        debugger
         if(mthis.selectNetNodes[0].ids.length > 1){
           mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
-          'nodeIds': mthis.selectNetNodes[0].ids
+          'nodeIds': mthis.selectNetNodes[0].ids,
+          'type':'net'
           }).then(response => {
               mthis.staticsDatas = response.body.data;
           //mthis.$data.staticsDatas.splice(0,0,response.body.data);
@@ -223,6 +225,7 @@
     methods: {
       clickLeftStatics(staticsClick){
         var mthis = this;
+        debugger
         // // console.log(staticsClick)
         mthis.$store.commit('setNetStaticsSelectedIds',staticsClick);
       },

@@ -15,7 +15,7 @@
             </div>
           </Tab-pane>
           <Tab-pane label="数据透视" name= 'toushi' :style="{fontSize: '18px',height:viewHeight_20_geo}" id='toushi' @click="changTab('toushi')">
-            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' @rightCilckIds='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
           </Tab-pane>
         </Tabs>
       </div>
@@ -67,7 +67,11 @@
         nodeTypedata: null,
         staticsIds: [],
         single: false,
-        resArr: []
+        resArr: [],
+        rightClickConf : [
+            {'name':'只选中它','id':'onlylookit','iconClassName':'icon-ren'},
+            {'name':'删除','id':'delete','iconClassName':'icon-ren'}
+        ]
       };
     },
     components: {
@@ -141,6 +145,7 @@
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];
+        debugger
         mthis.geo_selected_param.paramIds.forEach(function(id){
           var type = id.split('&')[0];
           var Id = id.split('&')[1];
@@ -195,7 +200,8 @@
               nodeIds.push(EventIds[i])
             }
             mthis.$http.post(mthis.$store.state.ipConfig.api_url+'/graph-attr/', {
-            'nodeIds': nodeIds
+            'nodeIds': nodeIds,
+            'type':'geo'
             }).then(response => {
                 mthis.staticsDatas = response.body.data;
               })
@@ -208,9 +214,15 @@
       }
     },
     methods: {
-      clickRightMenu(rightCilckIds){
+      clickRightMenu(rightCilckArgu){
         var mthis = this;
-        mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', rightCilckIds)
+        var buttonId = rightCilckArgu.buttonId;
+        var ids = rightCilckArgu.nsIds;
+        if(buttonId === 'onlylookit'){
+          mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', ids)
+        } else if(buttonId === 'delete'){
+          alert('delete')
+        }
       },
       clickLeftStatics(staticsClick){
         var mthis = this;
