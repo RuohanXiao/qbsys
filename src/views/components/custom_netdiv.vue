@@ -828,42 +828,26 @@
                     nodes: [],
                     links: []
                   };
+                  // let ids = mthis.selectionId;
+                  let nodes=[]
+                  let links=[]
                   let ids = mthis.selectionId;
                   for (let n = 0; n < arrList_net.length; n++) {
-                    if (entitRes[arrList_net[n]] !== undefined) {
-                      console.log("*******************");
-                      console.log(arrList_net[n])
-                      console.log(entitRes)
-                      console.log(entitRes[arrList_net[n]])
-                      items.nodes = items.nodes.concat(
-                        entitRes[arrList_net[n]].nodes
-                      );
-                      items.links = items.links.concat(
-                        entitRes[arrList_net[n]].links.map(item => {
-                          item.id = (item.from > item.to) ? (item.from + '-' + item.to) : (item.to + '-' + item.from)
-                          return item
-                        })
-                      );
-                      ids = ids.concat(
-                        entitRes[arrList_net[n]].nodes.map(it => {
-                          it.type = it.entity_type;
-                          it.imageCropping = true;
-                          return it.id;
-                        })
-                      );
-                      ids = ids.concat(
-                        entitRes[arrList_net[n]].links.map(it => {
-                          return it.id;
-                        })
-                      );
-                    }
+                    if(entitRes[arrList_net[n]]){
+                    nodes = nodes.concat(entitRes[arrList_net[n]].nodes)
+                    links= links.concat(entitRes[arrList_net[n]].links)
+                    ids= ids.concat(entitRes[arrList_net[n]].nodes.map(it=>{
+                      return it.id
+                    }))
                   }
-                  mthis.netchart.addData(items);
+                  }
+                   mthis.netchart.addData({
+                     'nodes':nodes,
+                     'links':links
+                   });
                   setTimeout(function() {
                     mthis.netchart.selection(ids);
-                    mthis.spinShow = false;
-                    mthis.zIndex = 0;
-                  }, 500);
+                  }, 100);
                 } else {
                   mthis.setMessage("related-all 接口异常！");
                 }
@@ -883,37 +867,56 @@
                     nodes: [],
                     links: []
                   };
+                  // let ids = mthis.selectionId;
+                  // for (let n = 0; n < arrList_event.length; n++) {
+                  //   items.nodes = items.nodes.concat(
+                  //     entitRes[arrList_event[n]].nodes
+                  //   );
+                  //   items.links = items.links.concat(
+                  //     entitRes[arrList_event[n]].links.map(item => {
+                  //       item.id = (item.from > item.to) ? (item.from + '-' + item.to) : (item.to + '-' + item.from)
+                  //       return item
+                  //     })
+                  //   );
+                  //   ids = ids.concat(
+                  //     entitRes[arrList_event[n]].nodes.map(it => {
+                  //       it.type = it.type;
+                  //       it.img = "http://10.60.1.140/assets/images/event.png";
+                  //       it.imageCropping = true;
+                  //       return it.id;
+                  //     })
+                  //   );
+                  //   ids = ids.concat(
+                  //     entitRes[arrList_event[n]].links.map(it => {
+                  //       return it.id;
+                  //     })
+                  //   );
+                  // }
+                  // mthis.netchart.addData(items);
+                  // setTimeout(function() {
+                  //   mthis.netchart.selection(ids);
+                  //   mthis.spinShow = false;
+                  //   mthis.zIndex = 0;
+                  // }, 500);
+                  let nodes=[]
+                  let links=[]
                   let ids = mthis.selectionId;
                   for (let n = 0; n < arrList_event.length; n++) {
-                    items.nodes = items.nodes.concat(
-                      entitRes[arrList_event[n]].nodes
-                    );
-                    items.links = items.links.concat(
-                      entitRes[arrList_event[n]].links.map(item => {
-                        item.id = (item.from > item.to) ? (item.from + '-' + item.to) : (item.to + '-' + item.from)
-                        return item
-                      })
-                    );
-                    ids = ids.concat(
-                      entitRes[arrList_event[n]].nodes.map(it => {
-                        it.type = it.type;
-                        it.img = "http://10.60.1.140/assets/images/event.png";
-                        it.imageCropping = true;
-                        return it.id;
-                      })
-                    );
-                    ids = ids.concat(
-                      entitRes[arrList_event[n]].links.map(it => {
-                        return it.id;
-                      })
-                    );
+                    if(entitRes[arrList_event[n]]){
+                      nodes = nodes.concat(entitRes[arrList_event[n]].nodes)
+                      links= links.concat(entitRes[arrList_event[n]].links)
+                      ids= ids.concat(entitRes[arrList_event[n]].nodes.map(it=>{
+                        return it.id
+                      }))
+                    }
                   }
-                  mthis.netchart.addData(items);
+                   mthis.netchart.addData({
+                     'nodes':nodes,
+                     'links':links
+                   });
                   setTimeout(function() {
                     mthis.netchart.selection(ids);
-                    mthis.spinShow = false;
-                    mthis.zIndex = 0;
-                  }, 500);
+                  }, 100);
                 } else {
                   mthis.setMessage("related-all 接口异常！");
                 }
@@ -934,37 +937,66 @@
                     links: []
                   };
                   let ids = mthis.selectionId;
+                  // for (let n = 0; n < arrList_doc.length; n++) {
+                  //   items.nodes = items.nodes.concat(
+                  //     entitRes[arrList_doc[n]].nodes
+                  //   );
+                  //   items.links = items.links.concat(
+                  //     entitRes[arrList_doc[n]].links.map(item => {
+                  //       item.id = (item.from > item.to) ? ('content_' + item.from + '-' + item.to) : ('content_' + item.to + '-' + item.from)
+                  //       return item
+                  //     })
+                  //   );
+                  //   ids = ids.concat(
+                  //     entitRes[arrList_doc[n]].nodes.map(it => {
+                  //       it.type = it.type;
+                  //       it.img =
+                  //         "http://10.60.1.140/assets/images/content_node.png";
+                  //       it.imageCropping = true;
+                  //       return it.id;
+                  //     })
+                  //   );
+                  //   ids = ids.concat(
+                  //     entitRes[arrList_doc[n]].links.map(it => {
+                  //       return it.id;
+                  //     })
+                  //   );
+                  // }
+                  // mthis.netchart.addData(items);
+                  // setTimeout(function() {
+                  //   mthis.netchart.selection(ids);
+                  //   mthis.spinShow = false;
+                  //   mthis.zIndex = 0;
+                  // }, 500);
+                  let nodes=[]
+                  let links=[]
+                  // let ids= []
                   for (let n = 0; n < arrList_doc.length; n++) {
-                    items.nodes = items.nodes.concat(
-                      entitRes[arrList_doc[n]].nodes
-                    );
-                    items.links = items.links.concat(
-                      entitRes[arrList_doc[n]].links.map(item => {
-                        item.id = (item.from > item.to) ? ('content_' + item.from + '-' + item.to) : ('content_' + item.to + '-' + item.from)
-                        return item
-                      })
-                    );
-                    ids = ids.concat(
-                      entitRes[arrList_doc[n]].nodes.map(it => {
-                        it.type = it.type;
-                        it.img =
-                          "http://10.60.1.140/assets/images/content_node.png";
-                        it.imageCropping = true;
-                        return it.id;
-                      })
-                    );
-                    ids = ids.concat(
-                      entitRes[arrList_doc[n]].links.map(it => {
-                        return it.id;
-                      })
-                    );
+                    if(entitRes[arrList_doc[n]]){
+                      nodes = nodes.concat(entitRes[arrList_doc[n]].nodes)
+                      links= links.concat(entitRes[arrList_doc[n]].links)
+                      ids= ids.concat(entitRes[arrList_doc[n]].nodes.map(it=>{
+                        return it.id
+                      }))
+                    }
                   }
-                  mthis.netchart.addData(items);
+                  // nodes.map(ite=>{
+                  //   ite.img=(ite.img)?ite.img:''
+                  //   ite.loaded = true
+                  //   ite.name = ite.event_subtype
+                  //   return ite
+                  // })
+                  // links.map(ite=>{
+                  //   ite.type = ite.relation_name
+                  //   return ite
+                  // })
+                   mthis.netchart.addData({
+                     'nodes':nodes,
+                     'links':links
+                   });
                   setTimeout(function() {
                     mthis.netchart.selection(ids);
-                    mthis.spinShow = false;
-                    mthis.zIndex = 0;
-                  }, 500);
+                  }, 100);
                 } else {
                   mthis.setMessage("related-all 接口异常！");
                 }
@@ -1056,88 +1088,35 @@
                   eventRes = response.body.data[0].RelatedEvent;
                   let eventList = [];
                   let sList = arrList;
+                  let nodes=[]
+                  let links=[]
+                  let ids = mthis.selectionId;
                   for (let n = 0; n < arrList.length; n++) {
-                    eventRes[arrList[n]].map(item => {
-                      if (item.ids.length > 0) {
-                        eventList = eventList.concat(item.ids);
-                        sList = sList.concat(item.ids);
-                        mthis.$http
-                          .post(
-                            mthis.$store.state.ipConfig.api_url +
-                            "/event-detail/", {
-                              EventIds: eventList
-                            }
-                          )
-                          .then(response => {
-                            let eventItems = response.body.data;
-                            let otherNodesIds = [];
-                            let sids = eventList;
-                            let dataItems = {
-                              nodes: [],
-                              links: []
-                            };
-                            let idarr = [];
-                            for (let eitems of eventItems) {
-                              let type = eitems.event_subtype
-                                .toLowerCase()
-                                .replace(/-/, "_");
-                              let img = mthis.myMap.get(type).img;
-                              let name = mthis.myMap.get(type).name;
-                              sids.push(eitems.id);
-                              dataItems.nodes.push({
-                                id: eitems.id,
-                                entity_name: name,
-                                chinese_name: name,
-                                event_type: eitems.event_type,
-                                event_subtype: type,
-                                entity_type: "event",
-                                label: name,
-                                img: img,
-                                loaded: true,
-                                name: name
-                              });
-                              for (let linksItem of eitems.entity_list) {
-                                if (eventList.indexOf(linksItem.id)) {
-                                  otherNodesIds.push(linksItem.id);
-                                  sids.push(linksItem.id);
-                                  dataItems.links.push({
-                                    id: (eitems.id > linksItem.id) ? (eitems.id + '-' + linksItem.id) : (linksItem.id + '-' + eitems.id),
-                                    type: linksItem.role,
-                                    from: eitems.id,
-                                    to: linksItem.id,
-                                    direct: false
-                                  });
-                                }
-                              }
-                            }
-                            // console.log(dataItems)
-                            // console.log('===============================')
-                            mthis.$http
-                              .post(
-                                mthis.$store.state.ipConfig.api_url +
-                                "/entity-info/", {
-                                  nodeIds: util.unique(otherNodesIds)
-                                }
-                              )
-                              .then(result => {
-                                // // console.log(result.body.data)
-                                mthis.netchart.addData({
-                                  nodes: result.body.data[0].nodes,
-                                  links: []
-                                });
-                              });
-                            mthis.netchart.addData(dataItems);
-                            setTimeout(function() {
-                              mthis.netchart.selection(sids);
-                            }, 100);
-                          });
-                      }
-                      return item.ids;
-                    });
+                    if(eventRes[arrList[n]]){
+                      nodes = nodes.concat(eventRes[arrList[n]].nodes)
+                      links= links.concat(eventRes[arrList[n]].links)
+                      ids= ids.concat(eventRes[arrList[n]].nodes.map(it=>{
+                        return it.id
+                      }))
+                    }
                   }
-                  // console.log('eventList')
-                  // console.log(eventList)
-                  // console.log(sList)
+                  nodes.map(ite=>{
+                    ite.img=(ite.img)?ite.img:''
+                    ite.loaded = true
+                    ite.name = ite.event_subtype
+                    return ite
+                  })
+                  links.map(ite=>{
+                    ite.type = ite.relation_name
+                    return ite
+                  })
+                   mthis.netchart.addData({
+                     'nodes':nodes,
+                     'links':links
+                   });
+                  setTimeout(function() {
+                    mthis.netchart.selection(ids);
+                  }, 100);
                 } else {
                   mthis.setMessage("related-all 接口异常！");
                 }
@@ -1200,70 +1179,35 @@
                   let docList = [];
                   let sList = arrList;
                   let sids = docList;
+                  let nodes=[]
+                  let links=[]
+                  let ids = mthis.selectionId;
                   for (let n = 0; n < arrList.length; n++) {
-                    docList = [];
-                    docRes[arrList[n]].map(item => {
-                      if (item.ids.length > 0) {
-                        docList = docList.concat(item.ids);
-                        sList = sList.concat(item.ids);
-                        mthis.$http
-                          .post(
-                            mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
-                              docIds: docList
-                            }
-                          )
-                          .then(response => {
-                            let docItems = response.body.data;
-                            let otherNodesIds = [];
-                            let dataItems = {
-                              nodes: [],
-                              links: []
-                            };
-                            let idarr = [];
-                            for (let eitems of docItems) {
-                              sids.push(eitems.id);
-                              dataItems.nodes.push({
-                                id: eitems.id,
-                                entity_type: "content",
-                                label: eitems.title,
-                                name: eitems.title.substring(0, 19) + "...",
-                                img: "http://10.60.1.140/assets/images/content_node.png",
-                                loaded: true
-                              });
-                              let idstr = (eitems.id > arrList[n]) ? ('content_' + eitems.id + '-' + arrList[n]) : ('content_' + arrList[n] + '-' + eitems.id)
-                              dataItems.links.push({
-                                id: idstr,
-                                type: "包含",
-                                from: eitems.id,
-                                to: arrList[n],
-                                direct: false
-                              });
-                            }
-                            // console.log(dataItems)
-                            // console.log('===============================')
-                            mthis.$http
-                              .post(
-                                mthis.$store.state.ipConfig.api_url +
-                                "/entity-info/", {
-                                  nodeIds: util.unique(otherNodesIds)
-                                }
-                              )
-                              .then(result => {
-                                // // console.log(result.body.data)
-                                mthis.netchart.addData({
-                                  nodes: result.body.data[0].nodes,
-                                  links: []
-                                });
-                              });
-                            mthis.netchart.addData(dataItems);
-                            setTimeout(function() {
-                              mthis.netchart.selection(sids);
-                            }, 100);
-                          });
-                      }
-                      return item.ids;
-                    });
+                    if(docRes[arrList[n]]){
+                    nodes = nodes.concat(docRes[arrList[n]].nodes)
+                    links= links.concat(docRes[arrList[n]].links)
+                    ids= ids.concat(docRes[arrList[n]].nodes.map(it=>{
+                      return it.id
+                    }))
+                    }
                   }
+                  nodes.map(ite=>{
+                    ite.img=(ite.img)?ite.img:''
+                    ite.loaded = true
+                    ite.name = (ite.name)?ite.name:(ite.title.substring(0,19)+'...')
+                    return ite
+                  })
+                  links.map(ite=>{
+                    ite.type = (ite.type)?ite.type:ite.relation_name
+                    return ite
+                  })
+                   mthis.netchart.addData({
+                     'nodes':nodes,
+                     'links':links
+                   });
+                  setTimeout(function() {
+                    mthis.netchart.selection(ids);
+                  }, 100);
                 } else {
                   mthis.setMessage("related-all 接口异常！");
                 }
@@ -1287,7 +1231,8 @@
       },
       // 显示路径
       showPathKnowledge() {
-        var mthis = this(this.selectionId.length === 1) ?
+        var mthis = this;
+        (this.selectionId.length === 1) ?
           (this.pathHoverFlag = true) :
           this.selectionId.length > 0 ?
           this.setMessage("请选择单一节点进行路径显示") :
@@ -1386,8 +1331,8 @@
       gongzhiEvent() {
         console.log(this.selectionId)
         this.expandFlag_gongzhi = 'event_gongzhi'
-        mthis.spinShow = true;
         var mthis = this
+        mthis.spinShow = true;
         if(this.selectionId.length>1) {
           this.$http.post(mthis.$store.state.ipConfig.api_url + "/commonAll/", {
             "NodeIds": mthis.selectionId,
@@ -2299,7 +2244,7 @@
                 node.image = util.checkImgExists(node.data.img) ?
                   node.data.img :
                   "http://10.60.1.140/assets/images/event.png";
-              } else if (node.data.entity_type === "content") {
+              } else if (node.data.entity_type === "content"||node.data.entity_type === "document") {
                 if (node.selected) {
                   node.lineColor = "#ccffff";
                   node.shadowColor = "#33ffff";
@@ -2331,6 +2276,36 @@
                 node.image = "http://10.60.1.140/assets/images/content_node.png";
                 node.backgroundStyle = {};
                 node.radius = 20;
+              } else if (node.data.entity_type === "other") {
+                if (node.selected) {
+                  node.lineColor = "#ccffff";
+                  node.shadowColor = "#33ffff";
+                  node.fillColor = "#003333";
+                  node.shadowBlur = 25;
+                  node.lineWidth = 5;
+                  if (node.hightLight) {
+                    node.shadowColor = "#009999";
+                    node.shadowBlur = 20;
+                    node.fillColor = "#003333";
+                    node.lineColor = "#009999";
+                    // node.lineDash= [10,5,2,5];
+                    node.lineWidth = 5;
+                  }
+                } else if (node.hovered) {
+                  node.lineWidth = 5;
+                  node.shadowColor = "#009999";
+                  node.shadowBlur = 20;
+                  node.fillColor = "#003333";
+                  node.lineColor = "#009999";
+                } else {
+                  node.fillColor = "#003333";
+                  node.lineColor = "#006666";
+                  node.lineWidth = 5;
+                  node.shadowColor = "rgba(0,0,0,0)";
+                  node.shadowBlur = 20;
+                }
+                node.display = "image";
+                node.image ="http://10.60.1.140/assets/images/images.png";
               } else {
                 if (node.selected) {
                   node.lineColor = "#ccffff";
@@ -2674,7 +2649,7 @@
                     if (event.selection[nu].isNode) {
                       // mthis.netchart.lockNode(event.selection[nu].data.id)
                       //有三种情况，实体，事件，文档
-                      if (event.selection[nu].data.entity_type === "content") {
+                      if (event.selection[nu].data.entity_type === "content"||event.selection[nu].data.entity_type === "document") {
                         mthis.selectionIdByType.contentIds.push(
                           event.selection[nu].data.id
                         );
@@ -3141,11 +3116,11 @@
           mthis.netchart.lockNode(it);
           return it
         })
-        // mthis.netchart.updateStyle(contentIdsArry)
-        // mthis.netchart.updateSettings()
-        // mthis.netchart.updateSize()
+        // contentIdsArry = contentIdsArry.concat(mthis.selectionId)
         setTimeout(() => {
           mthis.netchart.selection(contentIdsArry);
+          console.log('==============contentIdsArry================')
+          console.log(contentIdsArry)
           mthis.square();
           mthis.spinShow = false;
         }, 300);
@@ -3197,6 +3172,8 @@
         //     // this.message={text:'netTimeCondition出错,格式不正确,netTimeCondition长度为' + this.netTimeCondition.length,time:new Date().getTime()}
         //   }
         // }
+        console.log('==================================>this.netTimeCondition')
+        console.log(this.netTimeCondition)
       },
       searchNetResult: function(va) {
         var mthis = this;

@@ -4,83 +4,269 @@
       <panel name="1">
         <span>实体属性</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='tableData.description'>
-            <p class="econtentp w5em">描述</p>
-            <p class="econtentp">{{tableData.description}}</p>
+          <div class="econtent" v-if='tableData.country_of_origin'>
+            <p class="econtentp w5em">原产国</p>
+            <p class="econtentp">{{tableData.country_of_origin}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.native_label'>
-            <p class="econtentp w5em">母语名</p>
-            <p class="econtentp">{{tableData.native_label}}</p>
+          <div class="econtent" v-if='tableData.country'>
+            <p class="econtentp w5em">服役国家</p>
+            <p class="econtentp">{{tableData.country}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.short_name'>
-            <p class="econtentp w5em">简称</p>
-            <p class="econtentp">{{tableData.short_name}}</p>
+          <div class="econtent" v-if='tableData.vessel_class'>
+            <p class="econtentp w5em">舰级</p>
+            <p class="econtentp">{{tableData.vessel_class}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.headquarters_location'>
-            <p class="econtentp w5em">组织总部</p>
-            <p class="econtentp">{{tableData.headquarters_location}}</p>
+          <div class="econtent" v-if='tableData.location_of_final_assembly'>
+            <p class="econtentp w5em">总装地点</p>
+            <p class="econtentp">{{tableData.location_of_final_assembly}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.type'>
-            <p class="econtentp w5em">组织类型</p>
-            <p class="econtentp">{{tableData.type}}</p>
+          <div class="econtent" v-if='tableData.manufacturer'>
+            <p class="econtentp w5em">生产商</p>
+            <p class="econtentp">{{tableData.manufacturer}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.total_produced'>
+            <p class="econtentp w5em">总产量</p>
+            <p class="econtentp">{{tableData.total_produced}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.developer'>
+            <p class="econtentp w5em">开发者</p>
+            <p class="econtentp">{{tableData.developer}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.designed_by'>
+            <p class="econtentp w5em">设计者</p>
+            <p class="econtentp">{{tableData.designed_by}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.operator'>
+            <p class="econtentp w5em">使用者</p>
+            <p class="econtentp">{{tableData.operator}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="econtent" v-if='tableData.inception'>
-            <p class="econtentp w5em">成立</p>
+            <p class="econtentp w5em">诞生时间</p>
             <p class="econtentp">{{tableData.inception}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.member_count'>
-            <p class="econtentp w5em">成员数</p>
-            <p class="econtentp">{{tableData.member_count}}</p>
+          <div class="econtent" v-if='tableData.first_flight'>
+            <p class="econtentp w5em">首航日期</p>
+            <p class="econtentp">{{tableData.first_flight}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.employees'>
-            <p class="econtentp w5em">员工数</p>
-            <p class="econtentp">{{tableData.employees}}</p>
+
+
+
+
+
+          <div class="econtent" v-if='tableData.service_entry'>
+            <p class="econtentp w5em">入役时间</p>
+            <p class="econtentp">{{tableData.service_entry}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.political_ideology'>
-            <p class="econtentp w5em">意识形态</p>
-            <p class="econtentp">{{tableData.political_ideology}}</p>
+          <div class="econtent" v-if='tableData.service_retirement'>
+            <p class="econtentp w5em">退役时间</p>
+            <p class="econtentp">{{tableData.service_retirement}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.use'>
+            <p class="econtentp w5em">飞行用途</p>
+            <p class="econtentp">{{tableData.use}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.cost'>
+            <p class="econtentp w5em">造价</p>
+            <p class="econtentp">{{tableData.cost}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.guidance_system'>
+            <p class="econtentp w5em">制导系统</p>
+            <p class="econtentp">{{tableData.guidance_system}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.ammunition'>
+            <p class="econtentp w5em">弹药</p>
+            <p class="econtentp">{{tableData.ammunition}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.muzzle_velocity'>
+            <p class="econtentp w5em">枪口初速度</p>
+            <p class="econtentp">{{tableData.muzzle_velocity}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.length'>
+            <p class="econtentp w5em">长度(现在需要替换关键词)</p>
+            <p class="econtentp">{{tableData.length}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.width'>
+            <p class="econtentp w5em">宽度</p>
+            <p class="econtentp">{{tableData.width}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.height'>
+            <p class="econtentp w5em">高度</p>
+            <p class="econtentp">{{tableData.height}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.mass'>
+            <p class="econtentp w5em">武器重量</p>
+            <p class="econtentp">{{tableData.mass}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.bore'>
+            <p class="econtentp w5em">枪支口径</p>
+            <p class="econtentp">{{tableData.bore}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.diameter'>
+            <p class="econtentp w5em">武器直径</p>
+            <p class="econtentp">{{tableData.diameter}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.powerplant'>
+            <p class="econtentp w5em">发动机</p>
+            <p class="econtentp">{{tableData.powerplant}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.wingspan'>
+            <p class="econtentp w5em">翼展</p>
+            <p class="econtentp">{{tableData.wingspan}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+
+          <div class="econtent" v-if='tableData.takeoff_and_landing_capability'>
+            <p class="econtentp w5em">降落方式</p>
+            <p class="econtentp">{{tableData.takeoff_and_landing_capability}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.avionics'>
+            <p class="econtentp w5em">航空电子设备</p>
+            <p class="econtentp">{{tableData.avionics}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.conflict'>
+            <p class="econtentp w5em">参与事件</p>
+            <p class="econtentp">{{tableData.conflict}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.significant_event'>
+            <p class="econtentp w5em">参与事件</p>
+            <p class="econtentp">{{tableData.significant_event}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+
+
+          <div class="econtent" v-if='tableData.participant_of'>
+            <p class="econtentp w5em">参与事件</p>
+            <p class="econtentp">{{tableData.participant_of}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.armament'>
+            <p class="econtentp w5em">装载武器</p>
+            <p class="econtentp">{{tableData.armament}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.coordinate_location'>
+            <p class="econtentp w5em">驻扎点</p>
+            <p class="econtentp">{{tableData.coordinate_location}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.call_sign'>
+            <p class="econtentp w5em">船舶信号</p>
+            <p class="econtentp">{{tableData.call_sign}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.pennant_number'>
+            <p class="econtentp w5em">舷号</p>
+            <p class="econtentp">{{tableData.pennant_number}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="econtent" v-if='tableData.official_website'>
-            <p class="econtentp w5em">官网</p>
+            <p class="econtentp w5em">官方网站</p>
             <p class="econtentp">{{tableData.official_website}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.telephone_number'>
-            <p class="econtentp w5em">电话</p>
-            <p class="econtentp">{{tableData.telephone_number}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
-            </div>
-          </div>
+
+
+
         </div>
       </panel>
      <!-- ============================================相关实体================================================== -->
@@ -104,14 +290,14 @@
       <panel name="3">
         <span>相关事件</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEvent.length>0' v-for='items in xiangguanEvent'>
+          <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
             <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
             </div>
           </div>
-          <div class="econtent" v-if='xiangguanEvent.length ==0'>
+          <div class="econtent" v-if='!(xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0)' >
             <p class="econtentp" v-show="spinWaiting">相关事件加载中···</p>
             <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
           </div>
@@ -121,14 +307,14 @@
       <panel name="4">
         <span>相关文档</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanDoc.length>0' v-for='items in xiangguanDoc'>
+          <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0' v-for='items in xiangguanDoc.statistics'>
             <p class="econtentp w5em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
             </div>
           </div>
-         <div class="econtent" v-if='xiangguanDoc.length ==0'>
+          <div class="econtent" v-if='!(xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">文档事件加载中···</p>
             <p class="econtentp" v-show="!spinWaiting">暂无相关文档</p>
           </div>
@@ -296,7 +482,7 @@ import {
           } else {
             alert('长度为0')
           }
-          mthis.spinWaiting = false
+          // mthis.spinWaiting = false
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds":  new Array(mthis.tableData.id),
@@ -328,9 +514,9 @@ import {
               // console.log(response.body.data[0].unknown)
               // console.log('-----------------------------------------------')
             }
-            mthis.spinWaiting = false
           })
         }
+        mthis.spinWaiting = false
       }
     }
   }

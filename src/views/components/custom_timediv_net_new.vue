@@ -606,6 +606,8 @@
           }
       },
       selectionIdByType:function(){
+        console.log('======================================================')
+        console.log(this.selectionIdByType) 
         var mthis = this
         
         if(this.selectionIdByType.eventIds.length>0){

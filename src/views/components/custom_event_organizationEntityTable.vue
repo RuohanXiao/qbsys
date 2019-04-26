@@ -4,6 +4,46 @@
       <panel name="1">
         <span>实体属性</span>
         <div slot="content" class="tableLine">
+
+
+
+
+
+          <div class="econtent" v-if='tableData.native_label'>
+            <p class="econtentp w5em">母语名</p>
+            <p class="econtentp">{{tableData.native_label}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.short_name'>
+            <p class="econtentp w5em">简称</p>
+            <p class="econtentp">{{tableData.short_name}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.headquarters_location'>
+            <p class="econtentp w5em">组织总部</p>
+            <p class="econtentp">{{tableData.headquarters_location}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.type'>
+            <p class="econtentp w5em">组织类型</p>
+            <p class="econtentp">{{tableData.type}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.inception'>
+            <p class="econtentp w5em">成立时间</p>
+            <p class="econtentp">{{tableData.inception}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
           <div class="econtent" v-if='tableData.founded_by'>
             <p class="econtentp w5em">创办者</p>
             <p class="econtentp">{{tableData.founded_by}}</p>
@@ -25,6 +65,27 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
+          <div class="econtent" v-if='tableData.member_count'>
+            <p class="econtentp w5em">组织成员数</p>
+            <p class="econtentp">{{tableData.member_count}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.employees'>
+            <p class="econtentp w5em">组织员工数</p>
+            <p class="econtentp">{{tableData.employees}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.political_ideology'>
+            <p class="econtentp w5em">意识形态</p>
+            <p class="econtentp">{{tableData.political_ideology}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
           <div class="econtent" v-if='tableData.business_division'>
             <p class="econtentp w5em">业务部门</p>
             <p class="econtentp">{{tableData.business_division}}</p>
@@ -42,6 +103,20 @@
           <div class="econtent" v-if='tableData.subsidiary'>
             <p class="econtentp w5em">下级部门</p>
             <p class="econtentp">{{tableData.subsidiary}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.official_website'>
+            <p class="econtentp w5em">官网</p>
+            <p class="econtentp">{{tableData.official_website}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.telephone_number'>
+            <p class="econtentp w5em">电话</p>
+            <p class="econtentp">{{tableData.telephone_number}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
@@ -69,14 +144,14 @@
       <panel name="3">
         <span>相关事件</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEvent.length>0' v-for='items in xiangguanEvent'>
+          <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
             <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
             </div>
           </div>
-         <div class="econtent" v-if='xiangguanEvent.length ==0'>
+          <div class="econtent" v-if='!(xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">相关事件加载中···</p>
             <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
           </div>
@@ -86,14 +161,14 @@
       <panel name="4">
         <span>相关文档</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanDoc.length>0' v-for='items in xiangguanDoc'>
+          <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0' v-for='items in xiangguanDoc.statistics'>
             <p class="econtentp w5em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
             </div>
           </div>
-         <div class="econtent" v-if='xiangguanDoc.length ==0'>
+          <div class="econtent"  v-if='!(xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">文档事件加载中···</p>
             <p class="econtentp" v-show="!spinWaiting">暂无相关文档</p>
           </div>
@@ -261,7 +336,7 @@ import {
           } else {
             alert('长度为0')
           }
-          mthis.spinWaiting = false
+          // mthis.spinWaiting = false
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds":  new Array(mthis.tableData.id),
@@ -289,9 +364,9 @@ import {
               // console.log(response.body.data[0].unknown)
               // console.log('-----------------------------------------------')
             }
-          mthis.spinWaiting = false
           })
         }
+        mthis.spinWaiting = false
       }
     }
   }

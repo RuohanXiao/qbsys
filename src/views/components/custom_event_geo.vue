@@ -156,13 +156,13 @@
             mthis.detailData = res
             mthis.detailData.entity_type = 'event'
           })
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
-            "NodeIds": arr,
-            "TypeLabel": 'event'
-          }).then(response => {
-            // console.log('=============related event=============')
-            // console.log(response)
-          })
+          // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
+          //   "NodeIds": arr,
+          //   "TypeLabel": 'event'
+          // }).then(response => {
+          //   // console.log('=============related event=============')
+          //   // console.log(response)
+          // })
         }
         if (mthis.myMap.get(type) === 'document') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {
