@@ -268,7 +268,7 @@ var store = new Vuex.Store({
     // 监听时间轴是否被选中
     contentTimeCondition: [],
     netTimeCondition: [],
-    geoTimeCondition: [],
+    geoTimeCondition: {},
     refSet:false,
     refAtlast:false,
     viewHeight: 0,

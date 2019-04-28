@@ -14,6 +14,10 @@
             </div>
           </Tab-pane>
           <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('toushi')">
+            <Spin size="large"  v-if="spinShow">
+               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+            </Spin>
             <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' v-if=" $store.state.tmss === 'content' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
@@ -44,6 +48,7 @@
   export default {
     data() {
       return {
+        spinShow:false,
         eDiv: '',
         vh20: 0,
         selectTime: false,

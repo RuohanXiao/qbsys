@@ -155,6 +155,7 @@ export default {
             type:'',
             eDivH:'',
             staticsdatas:[],
+            spinShow:true
         }
     },
     mounted(){

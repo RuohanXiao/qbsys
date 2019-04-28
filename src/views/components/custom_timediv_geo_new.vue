@@ -1,5 +1,4 @@
 <template>
-  <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId" @click='hideDiv()'>
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
@@ -35,20 +34,19 @@
  
 <script>
   import echarts from "echarts";
-  import {
-    mapState,
-    mapMutations
-  } from 'vuex'
+  import { mapState,mapMutations } from 'vuex'
+  import {timeStaticsData,reSetTimeStaticsData} from '../../dist/assets/js/geo/data.js'
   export default {
     name: "",
     data() {
       return {
+        timeStaticsData:timeStaticsData,
         timeTitle: '请选择节点',
-        timechartdivId: 'timechartdiv_' + this.activeId,
-        arrowDownId: 'arrowDown_' + this.activeId,
-        timechartctrlId: 'timechartctrl_' + this.activeId,
-        timedivId: 'timediv_' + this.activeId,
-        main1Id: 'main1_' + this.activeId,
+        timechartdivId:'timechartdiv_' + this.activeId,
+        arrowDownId:'arrowDown_'+ this.activeId,
+        timechartctrlId:'timechartctrl_'+ this.activeId,
+        timedivId:'timediv_'+ this.activeId,
+        main1Id:'main1_'+ this.activeId,
         pwidth: 0,
         timepxdiv: 0,
         timepx: 0,
@@ -60,19 +58,13 @@
         netHeightCount: 1,
         geoHeightCount: 1,
         contentHeightCount: 1,
-        // dataBySeries: {
-        //   num: [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,],
-        //   date: ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31',
-        //          '2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28'],
-        // clickNum:null      
-        // },
-          
         dataBySeries: {
           num: [],
           date: [],
           clickNum:[]
         },
-        selectTime: false,
+        geo_eventIds:[],
+        // selectTime: false,
         // 右键点击柱子出现选中分析
         clcikShowDiv:false,
         // 右键点击柱子出现选中分析div的left值
@@ -92,10 +84,30 @@
           eventIds:[]
         },
         // 框选时控制选中分析的显示与否
-        isBrush:[]
+        isBrush:[],
+        // 框选时间轴，给geo画布的事件IDS
+        toGeoEventIds:{
+          type:"notAnalysis",
+          eventIds:[]
+        }
       };
     },
     methods: {
+      onchangHeightCount(){
+        var mthis = this;
+        var tmss = mthis.$store.state.tmss;
+        mthis.geoHeightCount ++ ;
+      },
+      timeZoomOut() { },
+      timeZoomIn() { },
+      resize() {
+        let width = document.documentElement.clientWidth * this.$store.state.split_geo - 20 + 'px'
+        let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
+        this.charts.resize({
+          width,
+          height
+        })
+      },
       hideDiv(){
         
         this.clcikShowDiv = false;
@@ -104,7 +116,7 @@
       loadEcharts(flag){
         
         var mthis = this
-        // flag==1--->echarts初始化，mounted时加载
+        
         if(flag === 1){
           
           // var mthis = this
@@ -115,15 +127,7 @@
             trigger: "axis",
             padding:10,
             barBorderRadius:8,
-            
-            // formatter: function(datas){
-            //   var res = datas[0].axisValue + '<br/>',val;
-            //   var m = datas[0].dataIndex;
-            //   val = '事件:' + mthis.dataBySeries.num[m];
-            //   res += val;
-            //   return res
-            // }
-          },
+        },
          
           grid: {
             top: "10%",
@@ -274,10 +278,7 @@
               minValueSpan: 100
             }
           ],
-              
-          
-              
-          series: [{
+        series: [{
             name: "事件",
             type: "bar",
             barGap:"-100%",
@@ -353,20 +354,22 @@
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
             if(timeArr && selTimeArr[0] && selTimeArr[1]){
                     mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                    "selectedIds":mthis.selectionIdByType.eventIds,
+                    "selectedIds":mthis.geo_eventIds,
                     "startTime":selTimeArr[0],
                     "endTime":selTimeArr[1]
                 }).then(response =>{
                     if(response.body.code == 0){
+                      
                       for(let i=0;i<response.body.data.eventIds.length;i++){
-                        mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                        mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+                        mthis.toGeoEventIds.eventIds[i ] = "event&" + response.body.data.eventIds[i];
                       }
                       
-                      mthis.$store.commit('setNetTimeCondition',response.body.data.eventIds)
+                      mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds)
                     }
                     
                 })
-                mthis.selectTime = true
+                // mthis.selectTime = true
             }
             
            
@@ -395,7 +398,7 @@
         //   mthis.$store.commit('setNetTimeCondition', timeArr)
           mthis.clcikShowDiv = false;
           mthis.boxSelShowDiv = false;
-          mthis.isBrush = [];
+          mthis.isBrush = false;
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -415,7 +418,7 @@
             mthis.clcikShowDiv = true
             mthis.clickdivLeft = leftWid
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                "selectedIds":mthis.selectionIdByType.eventIds,
+                "selectedIds":mthis.geo_eventIds,
                 "startTime":clickTime,
                 "endTime":clickTime
                  
@@ -424,6 +427,7 @@
                   for(let i=0;i<response.body.data.eventIds.length;i++){
                     mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
                   }
+                  
                   
                 }
                 
@@ -440,7 +444,7 @@
                 mthis.isBrush = []
             }
         }else if(flag ==2){
-          // flag==2---->监听网络关系中的事件，显示数据
+          
           mthis.timeTitle = '时间轴';
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
@@ -451,7 +455,6 @@
           
         }else if(flag==3){
           mthis.resize();
-          // flag==3--->数据透视点击事件，层叠显示
           mthis.option.xAxis.boundaryGap = true;
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           mthis.option.series =  [{
@@ -508,11 +511,9 @@
                 
                 mthis.charts.setOption(mthis.option)
         }else{
-          // flag ==4--->网络关系事件节点为空，清空echarts
-          mthis.resize();
           mthis.dataBySeries.num = []
           mthis.dataBySeries.date = []
-          mthis.dataBySeries.clickNum= []
+          mthis.dataBySeries.clickNum = []
           mthis.option.xAxis.data = []
           for(let i=0;i<mthis.option.series.length;i++){
             mthis.option.series[i].data = []
@@ -522,40 +523,23 @@
           mthis.charts.setOption(mthis.option)
         }
 
-      },
-        
-      onchangHeightCount() {
-        var mthis = this;
-        var tmss = mthis.$store.state.tmss;
-        mthis.netHeightCount++;
-      },
-      timeZoomOut() {},
-      timeZoomIn() {},
-      resize() {
-        let width = document.documentElement.clientWidth * this.$store.state.split_net - 20 + 'px'
-        let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
-        this.charts.resize({
-          width,
-          height
-        })
-      },
-      
-        
-      
+      }
     },
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
       this.netHeightCount++;
       this.contentHeightCount++;
-      this.geoHeightCount += 2;
+      this.geoHeightCount+=2;
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
       this.timepxdiv =
-        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 8 + "px";
+        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -8 + "px";
+        
       /* this.iconPosition = useHeight * 0.8 + "px"; */
-      this.pwidth = document.documentElement.clientWidth * this.$store.state.split_net - 20 + 'px'
+
+      this.pwidth = document.documentElement.clientWidth * this.$store.state.split_geo - 20 + 'px'
       // this.iconPosition = useHeight - 40 + "px";
       this.loadEcharts(1);
       let that = this;
@@ -563,20 +547,11 @@
       var zoomSize = 6;
       // this.changHeightCount++
     },
-    computed: mapState([
-      'split', 'split_net','splitWidth', 'tmss', 'selectNetNodes','selectionIdByType','netStaticsSelectedIds'
+    computed:mapState ([
+      'split','split_geo','splitWidth','tmss','selectNetNodes','geo_selected_param',,'netStaticsSelectedIds'
     ]),
     watch: {
-      /* tmss: function(){
-        var mthis = this;
-        if(mthis.tmss == 'geo'){
-          mthis.changHeightCount++;
-        }
-      }, */
-      // selectTime: function() {
-      //   netSelectTime
-      // },
-      netStaticsSelectedIds:function(){
+        netStaticsSelectedIds:function(){
           var mthis = this
           
           if(this.netStaticsSelectedIds.length>0){
@@ -599,70 +574,50 @@
             mthis.dataBySeries.clickNum = []
           }
       },
-      selectionIdByType:function(){
-        var mthis = this
-        console.log(this.selectionIdByType)
-        if(this.selectionIdByType.eventIds.length>0){
-          mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "eventids":mthis.selectionIdByType.eventIds
-          }).then(response => {
-            // mthis.dataBySeries.date = ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31','2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28']
-            // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
-            // mthis.loadEcharts(2)
-            if(response.body.code === 0){
-              mthis.dataBySeries.date = response.body.data.time;
-              mthis.dataBySeries.num = response.body.data.count;
-              mthis.loadEcharts(2)
-              if(this.netStaticsSelectedIds.length>0){
-                  mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                      "eventids":mthis.netStaticsSelectedIds
-                  }).then(response =>{
-                      if(response.body.code === 0){
-                          mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
-                          for(let i=0;i<response.body.data.time.length;i++){
-                            let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
-                            mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
-                            
-                          }
-                          
-                          mthis.loadEcharts(3)
+        geo_selected_param:function(){
+           var mthis = this
+           var type = this.$store.state.geo_selected_param.type;
+           console.log(this.geo_selected_param)
+            if(type !== 'GeoTime'){
+              if(this.geo_selected_param.paramIds.length>0){
+                
+                for(let i=0;i<this.geo_selected_param.paramIds.length;i++){
+                  mthis.geo_eventIds[i] = this.geo_selected_param.paramIds[i].split("&")[1]
+                }
+                mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+                  "eventids":mthis.geo_eventIds
+                }).then(response =>{
+                  if(response.body.code === 0){
+                       mthis.dataBySeries.date = response.body.data.time;
+                       mthis.dataBySeries.num = response.body.data.count;
+
+                       mthis.loadEcharts(2);
+                       if(this.netStaticsSelectedIds.length>0){
+                          mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+                              "eventids":mthis.netStaticsSelectedIds
+                          }).then(response =>{
+                              if(response.body.code === 0){
+                                  mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
+                                  for(let i=0;i<response.body.data.time.length;i++){
+                                    let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
+                                    mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
+                                    
+                                  }
+                                  
+                                  mthis.loadEcharts(3)
+                              }
+                          })
                       }
-                  })
-              } 
+                  }
+                })
+              }
+              if(this.geo_selected_param.paramIds.length==0){
+          
+                mthis.loadEcharts(4)
+              }
             }
-            
-          })
-          
-           
-        }
-        if(this.selectionIdByType.eventIds.length==0){
-          
-          mthis.loadEcharts(4)
-        }
-        
-      },
-      split_net: function(va) {
-        let width = document.documentElement.clientWidth *  this.split_net  - 22 + 'px'
-        let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
-        this.charts.resize({
-          width,
-          height
-        })
-      },
-      selectNetNodes: function(va) {
-        var mthis = this;
-        if (mthis.tmss == 'net') {
-          // 如果包含事件，要对柱形图高亮
-          let linkArr = va[0].ids.filter(val => {
-            return val.isLink
-          })
-          //linkArr是所有link的合集
-          // let linkids= linkArr.filter(function(item){
-          //   return item.id>0;
-          // })　
-        }
-      },
-      split: function(va) {
+        },
+      split_geo: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         this.charts.resize({
@@ -671,51 +626,131 @@
         })
       },
       splitWidth: function(va) {
-        // this.pwidth = document.documentElement.clientWidth * this.$store.state.split_net - 20 + 'px'
-        let width = document.documentElement.clientWidth *  this.$store.state.split_net  - 20 + 'px'
-        let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
-        this.charts.resize({
-          width,
-          height
-        })
+        this.pwidth = document.documentElement.clientWidth * this.$store.state.split_geo - 20 + 'px'
       },
-      
+      geoHeightCount: function() {
+        var mthis = this
+        var tmss = mthis.$store.state.tmss;
+        let useHeight = document.documentElement.clientHeight - 64 - 20;
+        if (mthis.geoHeightCount % 2 === 0) {
+          /* mthis.iconPosition = useHeight - 40 + "px"; */
+          document.getElementById('arrowDown_geo').style.top = useHeight - 40 + "px";
+          //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
+          //mthis.$store.commit('setGeoHeight',useHeight * 1)
+            mthis.$store.commit('setGeoHeight',useHeight * 1)
+
+          document.getElementById('timechartctrl_geo').style.display = "none";
+          document.getElementById('main1_geo').style.display = "none";
+          document.getElementById('timediv_geo').style.display = "none";
+          document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
+          /* mthis.$store.commit('setChangenetpx',false); */
+          
+        } else {
+          
+          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
+          document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 -3 + "px";
+          /* mthis.$store.commit('setChangenetpx',true); */
+          document.getElementById('timechartctrl_geo').style.display = "block";
+          document.getElementById('main1_geo').style.display = "block";
+          document.getElementById('timediv_geo').style.display = "block";
+          document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
+          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+            mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+        }
+        document.getElementById('arrowDown_geo').style.position = "absolute";
+        document.getElementById('arrowDown_geo').style.right = "20px";
+        
+        /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+       /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
+        document.getElementById('arrowDown_geo').style.zIndex = 99;
+      },
       netHeightCount: function() {
         var mthis = this
+        
         var tmss = mthis.$store.state.tmss;
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.netHeightCount % 2 === 0) {
           /* mthis.iconPosition = useHeight - 40 + "px"; */
           document.getElementById('arrowDown_net').style.top = useHeight - 40 + "px";
-          mthis.$store.commit('setNetHeight', useHeight * 1)
+          
+            mthis.$store.commit('setNetHeight',useHeight * 1)
+
           document.getElementById('timechartctrl_net').style.display = "none";
           document.getElementById('main1_net').style.display = "none";
           document.getElementById('timediv_net').style.display = "none";
           document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
-          mthis.$store.commit('setChangenetpx', false);
+          mthis.$store.commit('setChangenetpx',false);
+          
         } else {
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight * 0.8 - 3 + "px";
-         
-          mthis.$store.commit('setChangenetpx', true);
+          document.getElementById('arrowDown_net').style.top = useHeight * 0.8 + "px";
+          // this.timepx =
+          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
+          //   30 +
+          //   "px";
+          // this.timepxdiv =
+          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+          // mthis.$emit('changenetpx', true);
+          mthis.$store.commit('setChangenetpx',true);
           document.getElementById('timechartctrl_net').style.display = "block";
           document.getElementById('main1_net').style.display = "block";
           document.getElementById('timediv_net').style.display = "block";
           document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-          mthis.$store.commit('setNetHeight', useHeight * 0.8)
+            mthis.$store.commit('setNetHeight',useHeight * 0.8)
         }
         document.getElementById('arrowDown_net').style.position = "absolute";
         document.getElementById('arrowDown_net').style.right = "20px";
-        /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+        
+/*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
         /* document.getElementById('arrowDown_net').style.top = netpxdiv; */
         document.getElementById('arrowDown_net').style.zIndex = 99;
       },
-      
+      contentHeightCount: function() {
+        var mthis = this
+        
+        var tmss = mthis.$store.state.tmss;
+        let useHeight = document.documentElement.clientHeight - 64 - 20;
+        if (mthis.contentHeightCount % 2 === 0) {
+          /* mthis.iconPosition = useHeight - 40 + "px"; */
+          document.getElementById('arrowDown_content').style.top = useHeight - 40 + "px";
+          
+          //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
+          //mthis.$store.commit('setGeoHeight',useHeight * 1)
+            mthis.$store.commit('setContentHeight',useHeight * 1)
+
+          document.getElementById('timechartctrl_content').style.display = "none";
+          document.getElementById('main1_content').style.display = "none";
+          document.getElementById('timediv_content').style.display = "none";
+          document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
+          /* mthis.$store.commit('setChangenetpx',false); */
+          
+        } else {
+          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
+          document.getElementById('arrowDown_content').style.top = useHeight * 0.8 + "px";
+          // this.timepx =
+          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
+          //   30 +
+          //   "px";
+          // this.timepxdiv =
+          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+          // mthis.$emit('changenetpx', true);
+          /* mthis.$store.commit('setChangenetpx',true); */
+          document.getElementById('timechartctrl_content').style.display = "block";
+          document.getElementById('main1_content').style.display = "block";
+          document.getElementById('timediv_content').style.display = "block";
+          document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
+          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
+            mthis.$store.commit('setContentHeight',useHeight * 0.8)
+        }
+        document.getElementById('arrowDown_content').style.position = "absolute";
+        document.getElementById('arrowDown_content').style.right = "20px";
+/*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
+        /* document.getElementById('arrowDown_content').style.top = netpxdiv; */
+        document.getElementById('arrowDown_content').style.zIndex = 99;
+      }
     },
-    props: {
-      activeId: String
-    }
+    props:{activeId:String}
   };
 </script>
 <style scoped>
@@ -726,34 +761,5 @@
   }
   #main1 {
     background-color: rgba(0, 0, 0, 0);
-  }
-  .clcikShowDiv{
-    position: absolute;
-    top:620px;
-    width:60px;
-    height:20px;
-    text-align: center;
-    line-height: 20px;
-    background-color:rgba(51,204,153,0.7);
-    /* z-index:999999; */
-    border-radius: 10px;
-  }
-  .boxSelShowDiv{
-    position: absolute;
-    top:620px;
-    width:60px;
-    height:20px;
-    text-align: center;
-    line-height: 20px;
-    background-color:rgba(51,204,153,0.7);
-    /* background-color:red; */
-    /* z-index:999999; */
-    border-radius: 10px;
-  }
-  .clcikShowDiv:hover{
-    cursor: pointer;
-  }
-  .boxSelShowDiv:hover{
-    cursor: pointer;
   }
 </style>
