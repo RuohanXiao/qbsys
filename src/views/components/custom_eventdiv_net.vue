@@ -128,7 +128,10 @@
               nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
                 // mthis.evetdata = response.body.data[0].nodes
+                console.log('\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\')
+                console.log( mthis.evetdata)
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                console.log( mthis.evetdata)
                 mthis.evetdataFlag = true
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
                 // mthis.$set(mthis.evetdata,0,response.body.data[0].nodes)

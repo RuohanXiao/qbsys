@@ -44,9 +44,9 @@
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
           <div class="e-content-d pointIcon" v-for="(item,index) in eventdata" @click="changeDetailDiv(item.id,item.entity_type,eventdata)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
-            <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.name.toLowerCase().replace(/-/, "_")).name}}</p>
+            <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.event_subtype.toLowerCase().replace(/-/, "_")).name}}</p>
             <!-- <p v-if="item.entity_type==='event'" class="e-content-p">{{item.name}}</p> -->
-            <p v-else class="e-content-p">{{item.name}}</p>
+            <p v-else class="e-content-p">{{item.event_subtype}}</p>
           </div>
         </div>
       </div>
@@ -132,6 +132,8 @@
         }
       },
       changeDetailDiv(id, type, ob) {
+        console.log('-------------------ob')
+        console.log(ob)
         var mthis = this
         let arr = []
         arr.push(id)
@@ -154,13 +156,13 @@
             mthis.detailData = res
             mthis.detailData.entity_type = 'event'
           })
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
-            "NodeIds": arr,
-            "TypeLabel": 'event'
-          }).then(response => {
-            // console.log('=============related event=============')
-            // console.log(response)
-          })
+          // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
+          //   "NodeIds": arr,
+          //   "TypeLabel": 'event'
+          // }).then(response => {
+          //   // console.log('=============related event=============')
+          //   // console.log(response)
+          // })
         }
         if (mthis.myMap.get(type) === 'document') {
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/doc-detail/', {

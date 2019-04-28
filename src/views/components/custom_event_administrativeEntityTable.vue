@@ -81,6 +81,63 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
+
+          <div class="econtent" v-if='tableData.head_of_state'>
+            <p class="econtentp w5em">国家元首</p>
+            <p class="econtentp">{{tableData.head_of_state}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.head_of_government'>
+            <p class="econtentp w5em">政府首脑</p>
+            <p class="econtentp">{{tableData.head_of_government}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.office_held_by_head_of_government'>
+            <p class="econtentp w5em">政府机构</p>
+            <p class="econtentp">{{tableData.office_held_by_head_of_government}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.head_of_government'>
+            <p class="econtentp w5em">政府首长</p>
+            <p class="econtentp">{{tableData.head_of_government}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.legislative_body'>
+            <p class="econtentp w5em">立法机构</p>
+            <p class="econtentp">{{tableData.legislative_body}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.executive_body'>
+            <p class="econtentp w5em">执行政府</p>
+            <p class="econtentp">{{tableData.executive_body}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.highest_judicial_authority'>
+            <p class="econtentp w5em">最高司法机关</p>
+            <p class="econtentp">{{tableData.highest_judicial_authority}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.located_in_the_administrative_territorial_entity'>
+            <p class="econtentp w5em">位于</p>
+            <p class="econtentp">{{tableData.located_in_the_administrative_territorial_entity}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
           <div class="econtent" v-if='tableData.continent'>
             <p class="econtentp w5em">所属大陆</p>
             <p class="econtentp">{{tableData.continent}}</p>
@@ -155,6 +212,35 @@
             </div>
           </div>
 
+
+          <div class="econtent" v-if='tableData.contains_administrative_territorial_entity'>
+            <p class="econtentp w5em">下属地区</p>
+            <p class="econtentp">{{tableData.contains_administrative_territorial_entity}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.diplomatic_relation'>
+            <p class="econtentp w5em">邦交国家</p>
+            <p class="econtentp">{{tableData.diplomatic_relation}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.twinned_administrative_body'>
+            <p class="econtentp w5em">友好城市</p>
+            <p class="econtentp">{{tableData.twinned_administrative_body}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
+          <div class="econtent" v-if='tableData.shares_border_with'>
+            <p class="econtentp w5em">接壤于</p>
+            <p class="econtentp">{{tableData.shares_border_with}}</p>
+            <div class="eButton">
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div>
           <div class="econtent" v-if='tableData.located_in_time_zone'>
             <p class="econtentp w5em">时区</p>
             <p class="econtentp">{{tableData.located_in_time_zone}}</p>
@@ -227,14 +313,14 @@
       <panel name="3">
         <span>相关事件</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEvent.length>0' v-for='items in xiangguanEvent'>
+          <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
             <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
             </div>
           </div>
-          <div class="econtent" v-if='xiangguanEvent.length ==0'>
+          <div class="econtent" v-if='!(xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">相关事件加载中···</p>
             <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
           </div>
@@ -244,14 +330,14 @@
       <panel name="4">
         <span>相关文档</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanDoc.length>0' v-for='items in xiangguanDoc'>
+          <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0' v-for='items in xiangguanDoc.statistics'>
             <p class="econtentp w5em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
             </div>
           </div>
-          <div class="econtent" v-if='xiangguanDoc.length ==0'>
+          <div class="econtent" v-if='!(xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">文档事件加载中···</p>
             <p class="econtentp" v-show="!spinWaiting">暂无相关文档</p>
           </div>
@@ -285,6 +371,11 @@ import {
     props: ['tableData', 'entDivH'],
     created() {
       var mthis = this
+      mthis.xiangguanEntityItems = new Array()
+      mthis.xiangguanEntitys = new Object()
+      mthis.xiangguanEvent = new Array()
+      mthis.xiangguanDoc = new Array()
+
       var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
       var eventNames = ob.getElementsByTagName("eventNames");
       mthis.myMap1 = new Map();
@@ -423,34 +514,41 @@ import {
           } else {
             alert('长度为0')
           }
-          mthis.spinWaiting = false
+          // mthis.spinWaiting = false
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds":  new Array(mthis.tableData.id),
             "NodeTypes":new Array('entity'),
             "TypeLabel": "all"
           }).then(response => {
-            response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
+           
+            // mthis.xiangguanEntityItems = new Array()
+            // mthis.xiangguanEntitys = new Object()
+            // mthis.xiangguanEvent = new Array()
+            // mthis.xiangguanDoc = new Array()
+            if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
+               response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
               item.type = item.undirected_type
               return item
             })
-            mthis.xiangguanEntityItems = new Array()
-            mthis.xiangguanEntitys = new Object()
-            mthis.xiangguanEvent = new Array()
-            mthis.xiangguanDoc = new Array()
-            mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
-            mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
-            mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
-            mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
-            mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+              mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+              mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+              mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+              mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
+              mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+            }
             if (response.body.data[0].unknown !== new Object()) {
               // console.log('------------有未知类型的节点--------------------')
               // console.log(response.body.data[0].unknown)
               // console.log('-----------------------------------------------')
             }
-            mthis.spinWaiting = false
           })
         }
+        mthis.spinWaiting = false
       }
     }
   }
