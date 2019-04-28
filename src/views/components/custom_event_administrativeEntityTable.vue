@@ -4,154 +4,329 @@
       <panel name="1">
         <span>实体属性</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='tableData.location_map'>
-            <p class="econtentp w5em">地图</p>
-            <p class="econtentp">{{tableData.location_map}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.location_map'>
+            <div v-if="typeof(tableData.location_map) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">地图</p>
+              <p class="econtentp">{{tableData.location_map}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.location_map_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.location_map) === 'object'" v-for="(item,index) in tableData.location_map">
+              <p class="econtentp w5em" v-if="index==0">地图</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.location_map_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.image'>
-            <p class="econtentp w5em">地标</p>
-            <p class="econtentp">{{tableData.image}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.image'>
+            <div v-if="typeof(tableData.image) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">地标</p>
+              <p class="econtentp" :title="tableData.image">{{tableData.image}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.image_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.image) === 'object'" v-for="(item,index) in tableData.image">
+              <p class="econtentp w5em" v-if="index==0">地标</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.image_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.description'>
-            <p class="econtentp w5em">描述</p>
-            <p class="econtentp">{{tableData.description}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.description'>
+            <div v-if="typeof(tableData.description) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">描述</p>
+              <p class="econtentp">{{tableData.description}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.description_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.description) === 'object'" v-for="(item,index) in tableData.description">
+              <p class="econtentp w5em" v-if="index==0">描述</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.description_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.official_name'>
-            <p class="econtentp w5em">全名</p>
-            <p class="econtentp">{{tableData.official_name}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.official_name'>
+            <div v-if="typeof(tableData.official_name) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">全名</p>
+              <p class="econtentp">{{tableData.official_name}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.official_name_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.official_name) === 'object'" v-for="(item,index) in tableData.official_name">
+              <p class="econtentp w5em" v-if="index==0">全名</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.official_name_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.name_in_native_language'>
-            <p class="econtentp w5em">母语名</p>
-            <p class="econtentp">{{tableData.name_in_native_language}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.name_in_native_language'>
+            <div v-if="typeof(tableData.name_in_native_language) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">母语名</p>
+              <p class="econtentp">{{tableData.name_in_native_language}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.name_in_native_language_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.name_in_native_language) === 'object'" v-for="(item,index) in tableData.name_in_native_language">
+              <p class="econtentp w5em" v-if="index==0">母语名</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.name_in_native_language_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.replaces'>
-            <p class="econtentp w5em">曾用名</p>
-            <p class="econtentp">{{tableData.replaces}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.replaces'>
+            <div v-if="typeof(tableData.replaces) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">曾用名</p>
+              <p class="econtentp">{{tableData.replaces}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.replaces_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.replaces) === 'object'" v-for="(item,index) in tableData.replaces">
+              <p class="econtentp w5em" v-if="index==0">曾用名</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.replaces_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.replaces_by'>
-            <p class="econtentp w5em">现用名</p>
-            <p class="econtentp">{{tableData.replaces_by}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.replaces_by'>
+            <div v-if="typeof(tableData.replaces_by) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">现用名</p>
+              <p class="econtentp">{{tableData.replaces_by}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.replaces_by_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.replaces_by) === 'object'" v-for="(item,index) in tableData.replaces_by">
+              <p class="econtentp w5em" v-if="index==0">现用名</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.replaces_by_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.nickname'>
-            <p class="econtentp w5em">昵称</p>
-            <p class="econtentp">{{tableData.nickname}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.nickname'>
+            <div v-if="typeof(tableData.nickname) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">昵称</p>
+              <p class="econtentp">{{tableData.nickname}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.nickname_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.nickname) === 'object'" v-for="(item,index) in tableData.nickname">
+              <p class="econtentp w5em" v-if="index==0">昵称</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.nickname_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.short_name'>
-            <p class="econtentp w5em">简称</p>
-            <p class="econtentp">{{tableData.short_name}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.short_name'>
+            <div v-if="typeof(tableData.short_name) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">简称</p>
+              <p class="econtentp">{{tableData.short_name}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.short_name_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.short_name) === 'object'" v-for="(item,index) in tableData.short_name">
+              <p class="econtentp w5em" v-if="index==0">简称</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.short_name_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.inception'>
-            <p class="econtentp w5em">建立时间</p>
-            <p class="econtentp">{{tableData.inception}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.inception'>
+            <div v-if="typeof(tableData.inception) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">建立时间</p>
+              <p class="econtentp">{{tableData.inception}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.inception_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.inception) === 'object'" v-for="(item,index) in tableData.inception">
+              <p class="econtentp w5em" v-if="index==0">建立时间</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.inception_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.capital'>
-            <p class="econtentp w5em">首府</p>
-            <p class="econtentp">{{tableData.capital}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.capital'>
+            <div v-if="typeof(tableData.capital) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">首府</p>
+              <p class="econtentp">{{tableData.capital}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.capital_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.capital) === 'object'" v-for="(item,index) in tableData.capital">
+              <p class="econtentp w5em" v-if="index==0">首府</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.capital_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-
-          <div class="econtent" v-if='tableData.head_of_state'>
-            <p class="econtentp w5em">国家元首</p>
-            <p class="econtentp">{{tableData.head_of_state}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.head_of_state'>
+            <div v-if="typeof(tableData.head_of_state) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">国家元首</p>
+              <p class="econtentp">{{tableData.head_of_state}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.head_of_state_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.head_of_state) === 'object'" v-for="(item,index) in tableData.head_of_state">
+              <p class="econtentp w5em" v-if="index==0">国家元首</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.head_of_state_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.head_of_government'>
-            <p class="econtentp w5em">政府首脑</p>
-            <p class="econtentp">{{tableData.head_of_government}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.head_of_government'>
+            <div v-if="typeof(tableData.head_of_government) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">政府首脑</p>
+              <p class="econtentp">{{tableData.head_of_government}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.head_of_government_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.head_of_government) === 'object'" v-for="(item,index) in tableData.head_of_government">
+              <p class="econtentp w5em" v-if="index==0">政府首脑</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.head_of_government_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.office_held_by_head_of_government'>
-            <p class="econtentp w5em">政府机构</p>
-            <p class="econtentp">{{tableData.office_held_by_head_of_government}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.office_held_by_head_of_government'>
+            <div v-if="typeof(tableData.office_held_by_head_of_government) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">政府机构</p>
+              <p class="econtentp">{{tableData.office_held_by_head_of_government}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.office_held_by_head_of_government_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.office_held_by_head_of_government) === 'object'" v-for="(item,index) in tableData.office_held_by_head_of_government">
+              <p class="econtentp w5em" v-if="index==0">政府机构</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.office_held_by_head_of_government_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.head_of_government'>
-            <p class="econtentp w5em">政府首长</p>
-            <p class="econtentp">{{tableData.head_of_government}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.head_of_government'>
+            <div v-if="typeof(tableData.head_of_government) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">政府首长</p>
+              <p class="econtentp">{{tableData.head_of_government}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.head_of_government_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.head_of_government) === 'object'" v-for="(item,index) in tableData.head_of_government">
+              <p class="econtentp w5em" v-if="index==0">政府首长</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.head_of_government_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.legislative_body'>
-            <p class="econtentp w5em">立法机构</p>
-            <p class="econtentp">{{tableData.legislative_body}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.legislative_body'>
+            <div v-if="typeof(tableData.legislative_body) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">立法机构</p>
+              <p class="econtentp">{{tableData.legislative_body}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.legislative_body_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.legislative_body) === 'object'" v-for="(item,index) in tableData.legislative_body">
+              <p class="econtentp w5em" v-if="index==0">立法机构</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.legislative_body_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.executive_body'>
-            <p class="econtentp w5em">执行政府</p>
-            <p class="econtentp">{{tableData.executive_body}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.executive_body'>
+            <div v-if="typeof(tableData.executive_body) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">执行政府</p>
+              <p class="econtentp">{{tableData.executive_body}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.executive_body_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.executive_body) === 'object'" v-for="(item,index) in tableData.executive_body">
+              <p class="econtentp w5em" v-if="index==0">执行政府</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.executive_body_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.highest_judicial_authority'>
-            <p class="econtentp w5em">最高司法机关</p>
-            <p class="econtentp">{{tableData.highest_judicial_authority}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.highest_judicial_authority'>
+            <div v-if="typeof(tableData.highest_judicial_authority) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">最高司法机关</p>
+              <p class="econtentp">{{tableData.highest_judicial_authority}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.highest_judicial_authority_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.highest_judicial_authority) === 'object'" v-for="(item,index) in tableData.highest_judicial_authority">
+              <p class="econtentp w5em" v-if="index==0">最高司法机关</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.highest_judicial_authority_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.located_in_the_administrative_territorial_entity'>
-            <p class="econtentp w5em">位于</p>
-            <p class="econtentp">{{tableData.located_in_the_administrative_territorial_entity}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.continent'>
+            <div v-if="typeof(tableData.continent) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">所属大陆</p>
+              <p class="econtentp">{{tableData.continent}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.continent_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.continent) === 'object'" v-for="(item,index) in tableData.continent">
+              <p class="econtentp w5em" v-if="index==0">所属大陆</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.continent_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.continent'>
-            <p class="econtentp w5em">所属大陆</p>
-            <p class="econtentp">{{tableData.continent}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
-            </div>
-          </div>
-          <!-- <div class="econtent" v-if='tableData.country'>
-            <p class="econtentp w5em">所属国家</p>
-            <p class="econtentp">{{tableData.country}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
-            </div>
-          </div> -->
           <div class="econtent allowWrap" v-if='tableData.country'>
             <div v-if="typeof(tableData.country) !== 'object'" :style="{display:'flex'}">
               <p class="econtentp w5em">所属国家</p>
@@ -160,134 +335,313 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.country_ids,'entity','')" size='small'></Button>
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.country) === 'object'" v-for="(co,index) in tableData.country">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.country) === 'object'" v-for="(item,index) in tableData.country">
               <p class="econtentp w5em" v-if="index==0">所属国家</p>
               <p class="econtentp w5em" v-else>&nbsp;</p>
-              <p class="econtentp">{{co}}</p>
+              <p class="econtentp" :title="item">{{item}}</p>
               <div class="eButton">
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.country_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.area'>
-            <p class="econtentp w5em">面积</p>
-            <p class="econtentp">{{tableData.area}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+
+           <div class="econtent allowWrap" v-if='tableData.area'>
+            <div v-if="typeof(tableData.area) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">面积</p>
+              <p class="econtentp">{{tableData.area}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.area_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.area) === 'object'" v-for="(item,index) in tableData.area">
+              <p class="econtentp w5em" v-if="index==0">面积</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.area_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.located_in_or_next_to_body_of_water'>
-            <p class="econtentp w5em">水域</p>
-            <p class="econtentp">{{tableData.located_in_or_next_to_body_of_water}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.located_in_or_next_to_body_of_water'>
+            <div v-if="typeof(tableData.located_in_or_next_to_body_of_water) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">水域</p>
+              <p class="econtentp">{{tableData.located_in_or_next_to_body_of_water}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.located_in_or_next_to_body_of_water_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.located_in_or_next_to_body_of_water) === 'object'" v-for="(item,index) in tableData.located_in_or_next_to_body_of_water">
+              <p class="econtentp w5em" v-if="index==0">水域</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.located_in_or_next_to_body_of_water_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.population'>
-            <p class="econtentp w5em">人口</p>
-            <p class="econtentp">{{tableData.population}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.population'>
+            <div v-if="typeof(tableData.population) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">人口</p>
+              <p class="econtentp">{{tableData.population}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.population_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.population) === 'object'" v-for="(item,index) in tableData.population">
+              <p class="econtentp w5em" v-if="index==0">人口</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.population_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.GDP'>
-            <p class="econtentp w5em">GDP</p>
-            <p class="econtentp">{{tableData.GDP}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.GDP'>
+            <div v-if="typeof(tableData.GDP) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">GDP</p>
+              <p class="econtentp">{{tableData.GDP}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.GDP_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.GDP) === 'object'" v-for="(item,index) in tableData.GDP">
+              <p class="econtentp w5em" v-if="index==0">GDP</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.GDP_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.gini_coefficient'>
-            <p class="econtentp w5em">基尼系数</p>
-            <p class="econtentp">{{tableData.gini_coefficient}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.local_dialing_code'>
+            <div v-if="typeof(tableData.gini_coefficient) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">基尼系数</p>
+              <p class="econtentp">{{tableData.gini_coefficient}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.gini_coefficient_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.gini_coefficient) === 'object'" v-for="(item,index) in tableData.gini_coefficient">
+              <p class="econtentp w5em" v-if="index==0">基尼系数</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.gini_coefficient_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.Human_Development_Index'>
-            <p class="econtentp w5em">人类发展指数</p>
-            <p class="econtentp">{{tableData.Human_Development_Index}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.Human_Development_Index'>
+            <div v-if="typeof(tableData.Human_Development_Index) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">人类发展指数</p>
+              <p class="econtentp">{{tableData.Human_Development_Index}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.Human_Development_Index_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.Human_Development_Index) === 'object'" v-for="(item,index) in tableData.Human_Development_Index">
+              <p class="econtentp w5em" v-if="index==0">人类发展指数</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.Human_Development_Index_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
 
+          <div class="econtent allowWrap" v-if='tableData.contains_administrative_territorial_entity'>
+            <div v-if="typeof(tableData.contains_administrative_territorial_entity) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">下属地区</p>
+              <p class="econtentp">{{tableData.contains_administrative_territorial_entity}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.contains_administrative_territorial_entity_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.contains_administrative_territorial_entity) === 'object'" v-for="(item,index) in tableData.contains_administrative_territorial_entity">
+              <p class="econtentp w5em" v-if="index==0">下属地区</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.contains_administrative_territorial_entity[index],'entity','')" size='small'></Button>
+              </div>
+            </div>
+          </div>
+          <div class="econtent allowWrap" v-if='tableData.diplomatic_relation'>
+            <div v-if="typeof(tableData.diplomatic_relation) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">邦交国家</p>
+              <p class="econtentp">{{tableData.diplomatic_relation}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.diplomatic_relation_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.diplomatic_relation) === 'object'" v-for="(item,index) in tableData.diplomatic_relation">
+              <p class="econtentp w5em" v-if="index==0">邦交国家</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.diplomatic_relation_ids[index],'entity','')" size='small'></Button>
+              </div>
+            </div>
+          </div>
 
-          <div class="econtent" v-if='tableData.contains_administrative_territorial_entity'>
-            <p class="econtentp w5em">下属地区</p>
-            <p class="econtentp">{{tableData.contains_administrative_territorial_entity}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+           <div class="econtent allowWrap" v-if='tableData.twinned_administrative_body'>
+            <div v-if="typeof(tableData.twinned_administrative_body) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">友好城市</p>
+              <p class="econtentp">{{tableData.twinned_administrative_body}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.twinned_administrative_body_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.twinned_administrative_body) === 'object'" v-for="(item,index) in tableData.twinned_administrative_body">
+              <p class="econtentp w5em" v-if="index==0">友好城市</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.twinned_administrative_body_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.diplomatic_relation'>
-            <p class="econtentp w5em">邦交国家</p>
-            <p class="econtentp">{{tableData.diplomatic_relation}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+           <div class="econtent allowWrap" v-if='tableData.shares_border_with'>
+            <div v-if="typeof(tableData.shares_border_with) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">接壤于</p>
+              <p class="econtentp">{{tableData.shares_border_with}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.shares_border_with_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.shares_border_with) === 'object'" v-for="(item,index) in tableData.shares_border_with">
+              <p class="econtentp w5em" v-if="index==0">邦交国家</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.shares_border_with_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.twinned_administrative_body'>
-            <p class="econtentp w5em">友好城市</p>
-            <p class="econtentp">{{tableData.twinned_administrative_body}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+
+          
+
+
+
+
+          <div class="econtent allowWrap" v-if='tableData.located_in_time_zone'>
+            <div v-if="typeof(tableData.located_in_time_zone) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">时区</p>
+              <p class="econtentp">{{tableData.located_in_time_zone}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.located_in_time_zone_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.located_in_time_zone) === 'object'" v-for="(item,index) in tableData.located_in_time_zone">
+              <p class="econtentp w5em" v-if="index==0">时区</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.located_in_time_zone_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.shares_border_with'>
-            <p class="econtentp w5em">接壤于</p>
-            <p class="econtentp">{{tableData.shares_border_with}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.coordinate_location'>
+            <div v-if="typeof(tableData.coordinate_location) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">坐标</p>
+              <p class="econtentp" :title="tableData.coordinate_location">{{tableData.coordinate_location}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.coordinate_location_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.coordinate_location) === 'object'" v-for="(item,index) in tableData.coordinate_location">
+              <p class="econtentp w5em" v-if="index==0">坐标</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.coordinate_location_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.located_in_time_zone'>
-            <p class="econtentp w5em">时区</p>
-            <p class="econtentp">{{tableData.located_in_time_zone}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.local_dialing_code'>
+            <div v-if="typeof(tableData.local_dialing_code) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">电话区号</p>
+              <p class="econtentp">{{tableData.local_dialing_code}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.local_dialing_code_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.local_dialing_code) === 'object'" v-for="(item,index) in tableData.local_dialing_code">
+              <p class="econtentp w5em" v-if="index==0">电话区号</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.local_dialing_code_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.coordinate_location'>
-            <p class="econtentp w5em">坐标</p>
-            <p class="econtentp">{{tableData.coordinate_location}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.postal_code'>
+            <div v-if="typeof(tableData.postal_code) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">邮编</p>
+              <p class="econtentp">{{tableData.postal_code}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.postal_code_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.postal_code) === 'object'" v-for="(item,index) in tableData.postal_code">
+              <p class="econtentp w5em" v-if="index==0">邮编</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.postal_code_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.local_dialing_code'>
-            <p class="econtentp w5em">电话区号</p>
-            <p class="econtentp">{{tableData.local_dialing_code}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+
+          <div class="econtent allowWrap" v-if='tableData.top_level_Internet_domain'>
+            <div v-if="typeof(tableData.top_level_Internet_domain) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">顶级域名</p>
+              <p class="econtentp">{{tableData.top_level_Internet_domain}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.top_level_Internet_domain_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.top_level_Internet_domain) === 'object'" v-for="(item,index) in tableData.top_level_Internet_domain">
+              <p class="econtentp w5em" v-if="index==0">顶级域名</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.top_level_Internet_domain[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.postal_code'>
-            <p class="econtentp w5em">邮编</p>
-            <p class="econtentp">{{tableData.postal_code}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.official_website'>
+            <div v-if="typeof(tableData.official_website) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">官网</p>
+              <p class="econtentp">{{tableData.official_website}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.official_website_ids,'entity','')" size='small'></Button>
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.official_website) === 'object'" v-for="(item,index) in tableData.official_website">
+              <p class="econtentp w5em" v-if="index==0">官网</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.official_website_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.top_level_Internet_domain'>
-            <p class="econtentp w5em">顶级域名</p>
-            <p class="econtentp">{{tableData.top_level_Internet_domain}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+
+           <div class="econtent allowWrap" v-if='tableData.office_blog'>
+            <div v-if="typeof(tableData.office_blog) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">博客</p>
+              <p class="econtentp">{{tableData.office_blog}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.office_blog_ids,'entity','')" size='small'></Button>
+              </div>
             </div>
-          </div>
-          <div class="econtent" v-if='tableData.official_website'>
-            <p class="econtentp w5em">官网</p>
-            <p class="econtentp">{{tableData.official_website}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
-            </div>
-          </div>
-          <div class="econtent" v-if='tableData.office_blog'>
-            <p class="econtentp w5em">博客</p>
-            <p class="econtentp">{{tableData.office_blog}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.office_blog) === 'object'" v-for="(item,index) in tableData.office_blog">
+              <p class="econtentp w5em" v-if="index==0">博客</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp" :title="item">{{item}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.office_blog_ids[index],'entity','')" size='small'></Button>
+              </div>
             </div>
           </div>
         </div>

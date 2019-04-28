@@ -442,7 +442,7 @@
         <span>相关实体</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
-            <p class="econtentp w5em">{{items.relation}}</p>
+            <p class="econtentp w5em" :title="items.relation">{{items.relation}}</p>
             <p class="econtentp">{{items.name}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
@@ -462,7 +462,7 @@
         <span>相关事件</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
-            <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p>
+            <p class="econtentp w5em" :title="items.type">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
@@ -479,7 +479,7 @@
         <span>相关文档</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0' v-for='items in xiangguanDoc.statistics'>
-            <p class="econtentp w5em">{{items.type}}</p>
+            <p class="econtentp w5em" :title="items.type">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
