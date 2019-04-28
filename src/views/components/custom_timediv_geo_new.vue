@@ -74,11 +74,22 @@
         // 框选时间右键点击出现选中分析div的left值
         boxdivLeft:'',
         //点击单个柱子的选中分析，要传给数据透视的事件IDS
-        clickEventIds:[],
+        clickEventIds:{
+          type:"analysis",
+          eventIds:[]
+        },
         //点击框选时间的选中分析，要传给数据透视的事件IDS
-        boxSelEventIds:[],
+        boxSelEventIds:{
+          type:"analysis",
+          eventIds:[]
+        },
         // 框选时控制选中分析的显示与否
-        isBrush:[]
+        isBrush:[],
+        // 框选时间轴，给geo画布的事件IDS
+        toGeoEventIds:{
+          type:"notAnalysis",
+          eventIds:[]
+        }
       };
     },
     methods: {
@@ -348,9 +359,13 @@
                     "endTime":selTimeArr[1]
                 }).then(response =>{
                     if(response.body.code == 0){
-                      mthis.boxSelEventIds = response.body.data.eventIds;
                       
-                      mthis.$store.commit('setNetTimeCondition',response.body.data.eventIds)
+                      for(let i=0;i<response.body.data.eventIds.length;i++){
+                        mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+                        mthis.toGeoEventIds.eventIds[i ] = "event&" + response.body.data.eventIds[i];
+                      }
+                      
+                      mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds)
                     }
                     
                 })
@@ -409,7 +424,10 @@
                  
             }).then(response =>{
                 if(response.body.code == 0){
-                  mthis.clickEventIds = response.body.data.eventIds
+                  for(let i=0;i<response.body.data.eventIds.length;i++){
+                    mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                  }
+                  
                   
                 }
                 
@@ -533,6 +551,29 @@
       'split','split_geo','splitWidth','tmss','selectNetNodes','geo_selected_param',,'netStaticsSelectedIds'
     ]),
     watch: {
+        netStaticsSelectedIds:function(){
+          var mthis = this
+          
+          if(this.netStaticsSelectedIds.length>0){
+              mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+                  "eventids":mthis.netStaticsSelectedIds
+              }).then(response =>{
+                  if(response.body.code === 0){
+                      mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
+                      for(let i=0;i<response.body.data.time.length;i++){
+                        let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
+                        mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
+                        
+                      }
+                      
+                      mthis.loadEcharts(3)
+                  }
+              })
+          }
+          if(this.netStaticsSelectedIds.length == 0){
+            mthis.dataBySeries.clickNum = []
+          }
+      },
         geo_selected_param:function(){
            var mthis = this
            var type = this.$store.state.geo_selected_param.type;
@@ -547,11 +588,32 @@
                   "eventids":mthis.geo_eventIds
                 }).then(response =>{
                   if(response.body.code === 0){
-                       mthis.dataBySeries.date = response.body.data.time
-                       mthis.dataBySeries.num = response.body.data.count
-                       mthis.loadEcharts(2)
+                       mthis.dataBySeries.date = response.body.data.time;
+                       mthis.dataBySeries.num = response.body.data.count;
+
+                       mthis.loadEcharts(2);
+                       if(this.netStaticsSelectedIds.length>0){
+                          mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+                              "eventids":mthis.netStaticsSelectedIds
+                          }).then(response =>{
+                              if(response.body.code === 0){
+                                  mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
+                                  for(let i=0;i<response.body.data.time.length;i++){
+                                    let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
+                                    mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
+                                    
+                                  }
+                                  
+                                  mthis.loadEcharts(3)
+                              }
+                          })
+                      }
                   }
                 })
+              }
+              if(this.geo_selected_param.paramIds.length==0){
+          
+                mthis.loadEcharts(4)
               }
             }
         },

@@ -82,9 +82,15 @@
         // 框选时间右键点击出现选中分析div的left值
         boxdivLeft:'',
         //点击单个柱子的选中分析，要传给数据透视的事件IDS
-        clickEventIds:[],
+        clickEventIds:{
+          type:"analysis",
+          eventIds:[]
+        },
         //点击框选时间的选中分析，要传给数据透视的事件IDS
-        boxSelEventIds:[],
+        boxSelEventIds:{
+          type:"analysis",
+          eventIds:[]
+        },
         // 框选时控制选中分析的显示与否
         isBrush:[]
       };
@@ -352,7 +358,10 @@
                     "endTime":selTimeArr[1]
                 }).then(response =>{
                     if(response.body.code == 0){
-                      mthis.boxSelEventIds = response.body.data.eventIds
+                      for(let i=0;i<response.body.data.eventIds.length;i++){
+                        mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                      }
+                      
                       mthis.$store.commit('setNetTimeCondition',response.body.data.eventIds)
                     }
                     
@@ -412,7 +421,9 @@
                  
             }).then(response =>{
                 if(response.body.code == 0){
-                  mthis.clickEventIds = response.body.data.eventIds
+                  for(let i=0;i<response.body.data.eventIds.length;i++){
+                    mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                  }
                   
                 }
                 
