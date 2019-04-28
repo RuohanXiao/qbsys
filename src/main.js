@@ -344,6 +344,7 @@ var store = new Vuex.Store({
       type: '',
       eventId: []
     },
+    geo_onlyselected_param:[],
     content_selected_param:{
       type: '',
       params: {}
@@ -592,6 +593,9 @@ var store = new Vuex.Store({
     },
     setGeoSelectedParam(state,val){
       state.geo_selected_param = val
+    },
+    setGeoOnlyselectedParam(state,val){
+      state.geo_onlyselected_param = val
     },
     setContentSelectedParam(state,val){
       state.content_selected_param = val

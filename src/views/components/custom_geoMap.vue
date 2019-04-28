@@ -295,7 +295,9 @@ export default {
         removeEventIdList:{},
         geometrySelectedEventIds:[],
         timeSelectedEventIds:[],
+        timeSelectedEventIdsOnly:[],
         staticsSelectedEventIds:[],
+        staticsSelectedEventIdsOnly:[],
         mouseSelectedEventIds:[],
         onlyLookItIds:[],
         SelectedIds:[],//被选中的事件或组织机构ids
@@ -3073,7 +3075,7 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult','HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds'
+      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','geo_onlyselected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult','HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds'
     ]),
     
     watch:{
@@ -3204,7 +3206,6 @@ export default {
                     mthis.setFeatureStatus(features[i],'die');
                 }
             })
-            //mthis.setFeatureStatusByIds(ids);
             mthis.geometrySelectedEventIds = ids;
         },
         geoStaticsSelectedIds:function(){
@@ -3239,13 +3240,7 @@ export default {
         }, */
         staticsSelectedEventIds:function(){
             var mthis = this;
-            /* var dealSelectedIds = [];
-            if(mthis.staticsSelectedEventIds.length > 0){
-                mthis.staticsSelectedEventIds.forEach(function(Lid){
-                    dealSelectedIds.push(Lid.split('_')[1])
-                })
-            } */
-            // mthis.setFeatureStatusByIds(mthis.geometrySelectedEventIds);
+            debugger
             var selectedEventsParam = {
                 type:'GeoStatics',
                 paramIds:mthis.staticsSelectedEventIds//dealSelectedIds
@@ -3256,26 +3251,59 @@ export default {
         timeSelectedEventIds:function(){
             var mthis = this;
             mthis.SelectedIds = mthis.timeSelectedEventIds
-            //mthis.setFeatureStatusByIds(mthis.timeSelectedEventIds);
             var selectedEventsParam = {
                 type:'GeoTime',
                 paramIds:mthis.timeSelectedEventIds
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
         },
+        timeSelectedEventIdsOnly:function(){
+            var mthis = this;
+            mthis.SelectedIds = mthis.timeSelectedEventIdsOnly
+            var selectedEventsParam = mthis.timeSelectedEventIdsOnly
+            mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
+        },
         geometrySelectedEventIds:function(){
             var mthis = this;
             var selectedEventsParam = {
                 type:'GeoView',
-                paramIds:mthis.geometrySelectedEventIds//dealSelectedIds
+                paramIds:mthis.geometrySelectedEventIds
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
             mthis.SelectedIds = mthis.geometrySelectedEventIds
         },
-        geoTimeCondition 
-         :function(){
+        geoTimeCondition:function(){
             var mthis = this;
-            mthis.timeCondition = [util.getTimestamp(mthis.$store.state.geoTimeCondition[0]),util.getTimestamp(mthis.$store.state.geoTimeCondition[1])];
+            debugger
+            var type = mthis.geoTimeCondition.type;
+            var timeSelectedIds = mthis.geoTimeCondition.eventIds;
+            if(type === 'notAnalysis'){
+                mthis.timeSelectedEventIds = timeSelectedIds;
+                mthis.halfSelectedIds = mthis.SelectedIds;
+                var ids = [];
+                if(mthis.timeSelectedEventIds.length > 0){
+                    mthis.timeSelectedEventIds.forEach(function(item){
+                        if(item.indexOf('&') === -1){
+                            var id = 'org&'+item;
+                            ids.push(id)
+                        } else {
+                            ids.push(item)
+                        }
+                    })
+                }
+                mthis.staticsSelectedEventIds = ids;
+                if(mthis.halfSelectedIds.length > 0){
+                    mthis.halfSelectedIds.forEach(function(paramid){
+                        var layerId = mthis.getLayerIdByFeatureIdOrParamId(paramid);
+                        var OId = mthis.getOIdFromId(paramid);
+                        var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
+                        var feature = mthis.getLayerById(layerId).getSource().getFeatureById(featureId);
+                        mthis.setFeatureStatus(feature,'halflife')
+                    })
+                }
+            } else {
+                mthis.timeSelectedEventIdsOnly = timeSelectedIds;
+            }
         },
         timeCondition:function(){
             var mthis = this;

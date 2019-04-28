@@ -6,6 +6,7 @@ var rightMenu = function(t,target,config){
     var mthis = t;
     var myChart = echarts.init(target);
     var firstMenu = [];
+    var timeout = null;
     for(let i = 0; i < config.length; i++){
         var menuItem = config[i];
         if(menuItem.parentId === 0){
@@ -30,7 +31,8 @@ var rightMenu = function(t,target,config){
             'name':dataItem.name,
             'id':dataItem.Id,
             'callback':dataItem.backcall,
-            'hasLeaf':dataItem.hasLeaf
+            'hasLeaf':dataItem.hasLeaf,
+            'selected':false
         },{
             value: 1,
             name: '',
@@ -78,19 +80,60 @@ var rightMenu = function(t,target,config){
     };
     myChart.setOption(option);
     myChart.on('click', function (params) {
-        debugger
         var hasLeaf = params.data.hasLeaf; 
         if(!hasLeaf){
-            var func=eval(params.data.callback);
-            func.call(mthis);
+            var id = params.data.id;
+            if(id === 'transparent'){
+                timeout = setTimeout(function(){
+                    mthis.deleteRightMenu();
+                },1000)
+            } else {
+                var func=eval(params.data.callback);
+                func.call(mthis);
+            }
         } else {
+            debugger
             var seriesArr = myChart.getOption().series;
             var clickedParamId = params.data.id;
             if(seriesArr.length > 1 && seriesArr[1].name === clickedParamId){
-                var option = {
-                    series: [firstSeries,null]
+                var secondData = {   
+                    name:parentId,
+                    type:'pie',
+                    radius: ['60%', '90%'],
+                    startAngle: shiftRotate,
+                    color:secondColor,
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            position: 'inner',
+                            textStyle : {
+                                fontSize : 10    //文字的字体大小
+                            }
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '12',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data:[{'value':1,
+                    'name':'',
+                    'id':'transparent',
+                    'callback':'',
+                    'hasLeaf':false}]
+                    
                 };
-                myChart.setOption(option);
+                var option = {
+                    series: [firstSeries,secondData]
+                };
+                myChart.setOption(option);  //取消掉第二级菜单
             } else {
                 var parentId = params.data.id;
                 var nextMenu = [];
@@ -111,16 +154,16 @@ var rightMenu = function(t,target,config){
                         'name':dataItem.name,
                         'id':dataItem.id,
                         'callback':dataItem.backcall,
-                        'isLeaf':dataItem.isLeaf
+                        'hasLeaf':dataItem.hasLeaf
                     })
                     secondColor.push(dataItem.color)
                 };
                 secondData.push({
                     'value':eValue,
                     'name':'',
-                    'id':'',
+                    'id':'transparent',
                     'callback':'',
-                    'isLeaf':''
+                    'hasLeaf':false
                 })
                 secondColor.push('transparent')
                 var centerRotate = rotate * (parentId - 0.5); //偏移后二级菜单的中心的角度
@@ -164,9 +207,22 @@ var rightMenu = function(t,target,config){
             }
         }
     });
-    /* myChart.on('mouseout',function(params){
-        //debugger
-        //mthis.deleteRightMenu();
-    }) */
+    myChart.on('mouseover',function(params){
+        var id = params.data.id;
+        if(id === 'transparent'){
+            timeout = setTimeout(function(){
+                mthis.deleteRightMenu();
+            },1000)
+        } else {
+            clearTimeout(timeout);
+        }
+        //var event = params.event;
+        //event.stopPropagation();
+    })
+    myChart.on('mouseout',function(params){
+        timeout = setTimeout(function(){
+            mthis.deleteRightMenu();
+        },1000)
+    })
 };
 export  {rightMenu}
