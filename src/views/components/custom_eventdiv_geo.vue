@@ -14,7 +14,11 @@
               </div>
             </div>
           </Tab-pane>
-          <Tab-pane label="数据透视" name= 'toushi' :style="{fontSize: '18px',height:viewHeight_20_geo}" id='toushi' @click="changTab('toushi')">
+          <Tab-pane label="数据透视" name= 'toushi' :style="{fontSize: '18px',height:viewHeight_20_geo}" id='toushi_geo' @click="changTab('toushi')">
+            <Spin size="large"  v-if="spinShow">
+               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+            </Spin>
             <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
           </Tab-pane>
         </Tabs>
@@ -34,6 +38,7 @@
   export default {
     data() {
       return {
+        spinShow:false,
         timer:null,
         tabSelectGeo:'mubiaoxiangqingGeo',
         modalNodeId: '',
@@ -92,7 +97,6 @@
       // },
       clickSelectedGeoIds:function(){
         var mthis = this;
-        debugger
         if(mthis.clickSelectedGeoIds.length > 0){
             var OrgIds = [];
             var EventIds = [];
@@ -145,7 +149,6 @@
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];
-        debugger
         mthis.geo_selected_param.paramIds.forEach(function(id){
           var type = id.split('&')[0];
           var Id = id.split('&')[1];
@@ -199,14 +202,20 @@
             for(let i = 0; i < EventIds.length; i++){
               nodeIds.push(EventIds[i])
             }
+            debugger
+            //mthis.waiting()
+            mthis.spinShow = true;
             mthis.$http.post(mthis.$store.state.ipConfig.api_url+'/graph-attr/', {
             'nodeIds': nodeIds,
             'type':'geo'
             }).then(response => {
                 mthis.staticsDatas = response.body.data;
+                mthis.spinShow = false;
+                //mthis.hide();
               })
             } else {
               mthis.staticsDatas = [];
+              mthis.spinShow = false;
             }
         }else{
           return;
@@ -214,6 +223,32 @@
       }
     },
     methods: {
+      waiting(){  
+            var mthis = this;
+            mthis.hide();
+            var procbg = document.createElement("div"); //首先创建一个div    
+            procbg.setAttribute("id","WaitCover"); //定义该div的id    
+            procbg.style.background = "#000000";    
+            procbg.style.width = "100%";    
+            procbg.style.height = "100%";    
+            //procbg.style.position = "fixed";    
+            procbg.style.top = "0";    
+            procbg.style.left = "0";    
+            procbg.style.zIndex = "500000";    
+            procbg.style.opacity = "0.6";  
+            procbg.style.cursor='wait';  
+            procbg.style.filter = "Alpha(opacity=70)";    
+            var toushi = document.getElementById('toushi_geo');
+            toushi.appendChild(procbg);    
+        },
+    //取消遮罩    
+        hide() {    
+            var mybg = document.getElementById("WaitCover");
+            if(mybg){
+                var toushi = document.getElementById("toushi");
+                toushi.removeChild(mybg)
+            }   
+        }, 
       clickRightMenu(rightCilckArgu){
         var mthis = this;
         var buttonId = rightCilckArgu.buttonId;
@@ -467,4 +502,17 @@
     /* overflow-y: scroll; */
     overflow-y: auto;
   }
+  .ivu-spin {
+    color: #2d8cf0;
+    vertical-align: middle;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ .demo-spin-icon-load{
+        animation: ani-demo-spin 1s linear infinite;
+    }
 </style>

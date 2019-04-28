@@ -14,6 +14,10 @@
             </div>
           </Tab-pane>
           <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('toushi')">
+            <Spin size="large"  v-if="spinShow">
+               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+            </Spin>
             <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' v-if=" $store.state.tmss === 'net' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
@@ -44,6 +48,7 @@
   export default {
     data() {
       return {
+        spinShow:false,
         eDiv: '',
         vh20: 0,
         selectTime: false,
@@ -205,19 +210,21 @@
       },
       selectNetNodes: function() {
         var mthis = this;
-        debugger
         if(mthis.selectNetNodes[0].ids.length > 1){
+          mthis.spinShow = true;
           mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
           'nodeIds': mthis.selectNetNodes[0].ids,
           'type':'net'
           }).then(response => {
               mthis.staticsDatas = response.body.data;
+              mthis.spinShow = false;
           //mthis.$data.staticsDatas.splice(0,0,response.body.data);
           /* response.body.data.forEach(function(item,index){
           mthis.$set(mthis.staticsDatas,index,item)
           }) */
             })
           } else {
+            mthis.spinShow = false;
             mthis.staticsDatas = [];
           }
       }
@@ -225,7 +232,6 @@
     methods: {
       clickLeftStatics(staticsClick){
         var mthis = this;
-        debugger
         // // console.log(staticsClick)
         mthis.$store.commit('setNetStaticsSelectedIds',staticsClick);
       },

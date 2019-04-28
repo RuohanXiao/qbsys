@@ -156,7 +156,22 @@ top: 232px;
     text-align: center;
     z-index: 999999;
 }
-
+.heatMapFormDiv{
+    position: absolute;
+    z-index: 9;
+    top: 120px;
+    left: 100px;
+    background-color: rgba(0,0,0,0.8);
+}
+.heatMapForm{
+    margin: 10px;
+}
+.heatMapForm>label{
+    color:rgba(51,255,255,0.7);
+}
+.heatSettingName{
+    color:rgba(51,255,255,1);
+}
 </style>
 
 <template>
@@ -165,6 +180,15 @@ top: 232px;
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
                 <transition name="prompt"><div v-if="promptflag" class='promptmessage'>{{promptMessage}}</div></transition>
+                <div class='heatMapFormDiv' v-if='heatMapVisible' >
+                    <div class='heatSettingName'>热力设置</div>
+                    <form class='heatMapForm'>
+                        <label>半径大小</label><br/>
+                        <input id="radius" type="range" min="1" max="50" step="1" value="5" @input='setRadius()'/><br/>
+                        <label>模糊度大小</label><br/>
+                        <input id="blur" type="range" min="1" max="50" step="1" value="15" @input='setBlur()'/>
+                    </form>
+                </div>
             </div>
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
         </div>
@@ -229,6 +253,7 @@ export default {
       return {
         //isEventPointsSelected:false,
         a:null,
+        radius:15,
         mapDivbuttonIds : ['location_AT','heatMap_HSD','route_HSD'],
         mapHeight:'0px',
         imgTopVules:'',
@@ -324,6 +349,18 @@ export default {
         mthis.geoWidth=document.documentElement.clientWidth * this.$store.state.split_geo - 20 + 'px';
     },
     methods:{
+        setBlur(){
+            var mthis = this;
+            var radius = document.getElementById('blur').value;
+            mthis.radius = parseInt(radius);
+            var heatmapLayer = mthis.getLayerById('heatmapLayer').setBlur(mthis.radius)
+        },
+        setRadius(){
+            var mthis = this;
+            var radius = document.getElementById('radius').value;
+            mthis.radius = parseInt(radius);
+            var heatmapLayer = mthis.getLayerById('heatmapLayer').setRadius(mthis.radius)
+        },
         mapOperationClick(mapOperation){
             var mthis = this;
             var mapOperationId = mapOperation.currentTarget.id;
@@ -859,7 +896,7 @@ export default {
                 table.appendChild(tr);
             }) */
             
-            var overlayId = mthis.setOverlay(coordinate,ovdiv,overlayId,'top-left');
+            var overlayId = mthis.setOverlay(coordinate,ovdiv,overlayId,'top-left',-200,-200);
             mthis.routeMap.map.addOverlay(overlayId);
         },
         OrgStyleFun(feature){
@@ -926,6 +963,18 @@ export default {
         },
         addlocationLayer(){
             var mthis = this;
+            debugger
+            /* var blurIn = document.getElementById('blur');
+            var radiusIn = document.getElementById('radius');
+            var blur = 20;
+            var radius = 15;
+            if(blurIn){
+                blur = blurIn.value;
+            }
+            if(radiusIn){
+                radius = radiusIn.value;
+            } */
+
             if(mthis.routeMap == null){
                 var HLAreaStyle = new Style({
                     fill: new Fill({ //矢量图层填充颜色，以及透明度
@@ -961,8 +1010,8 @@ export default {
                 var heatMapLayer = new Heatmap({  //热力图层
                     source: new VectorSource({
                     }),
-                    blur: 20,
-                    radius: 15,
+                    blur: 15,
+                    radius: mthis.radius,
                     weight:mthis.weightFunction,
                     renderModed:'image',
                     id:'heatmapLayer',
@@ -1655,7 +1704,7 @@ export default {
                 return;
             }
             var now = new Date().getTime();
-            var speed = 0.03;
+            var speed = 0.01;
             var n = 48;
             var lineStringArr = feature.getGeometry().getLineStrings();
             var moveFeature = function(event) {
@@ -2556,15 +2605,23 @@ export default {
          * @param 创建overlay
          *  coor：放置坐标, element：overlay中放置的节点, id：overlay的id, positioning：放置方式（bottom-left、bottom-center、bottom-right 、center-left、center-center、center-right、top-left、top-center、top-right，默认是 top-left，也就是 element 左上角与 position 重合r等）
          */
-        setOverlay(coor, element, id, positioning){
+        setOverlay(coor, element, id, positioning,offsetX,offsetY){
             var mthis = this
+            var ox = 0;
+            var oy = 0;
+            if(offsetX){
+                ox = offsetX;
+            }
+            if(offsetY){
+                oy = offsetY;
+            }
             var overlay = new Overlay(({
                 element: element,
                 id:id,
                 stopEvent:true,
                 position:coor,
                 positioning:positioning,
-                offset:[-200,-200],
+                offset:[ox,oy],
                 autoPan: false,
                 autoPanAnimation: {
                     duration: 250
@@ -3215,7 +3272,8 @@ export default {
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
             mthis.SelectedIds = mthis.geometrySelectedEventIds
         },
-        geoTimeCondition:function(){
+        geoTimeCondition 
+         :function(){
             var mthis = this;
             mthis.timeCondition = [util.getTimestamp(mthis.$store.state.geoTimeCondition[0]),util.getTimestamp(mthis.$store.state.geoTimeCondition[1])];
         },
