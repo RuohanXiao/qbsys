@@ -18,7 +18,7 @@
                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
                 <div>Loading</div>
             </Spin>
-            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' v-if=" $store.state.tmss === 'content' && staticsDatas.length > 0"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics'  v-if=" $store.state.tmss === 'content' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -256,6 +256,27 @@
       }
     },
     methods: {
+      clickRightMenu(rightCilckArgu){
+        var mthis = this;
+        var buttonId = rightCilckArgu.buttonId;
+        var oids = rightCilckArgu.nsIds;
+        var ids = []
+        for(let i = 0; i < oids.length; i++){
+          let id = oids[i];
+          let index = id.indexOf('&');
+          if(index === -1){
+            ids.push('org&'+id)
+          } else {
+            ids.push(id)
+          }
+        }
+        if(buttonId === 'onlylookit'){
+          alert(111)
+          //mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', ids)
+        } else if(buttonId === 'delete'){
+          alert('delete')
+        }
+      },
       clickLeftStatics(staticsClick){
         var mthis = this;
         // // console.log(staticsClick)

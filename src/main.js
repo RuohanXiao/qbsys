@@ -332,6 +332,10 @@ var store = new Vuex.Store({
     contentStatisticsResult:{},
     StaticsIds:[],
     netStaticsSelectedIds:[],  //net模块中点击右侧统计保存ids
+    netOnlyStaticsSelectedIds:{
+      'title':'',
+      'ids':[]
+    },
     // 三模块联动监听参数
     net_selected_param:{
       type:'', // 触发联动的模块
@@ -414,6 +418,9 @@ var store = new Vuex.Store({
     },
     setNetStaticsSelectedIds(state,val){
       state.netStaticsSelectedIds = val
+    },
+    setNetOnlyStaticsSelectedIds(state,val){
+      state.netOnlyStaticsSelectedIds = val
     },
     setContentStaticsSelectedIds(state,val){
       state.contentStaticsSelectedIds = val

@@ -1167,7 +1167,7 @@ export default {
             var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
-            
+            debugger
             var orgNum = feature.get('selectedNum');
             
             if(orgNum === 1){
@@ -1966,9 +1966,9 @@ export default {
                                 mthis.$set(mthis.geometrySelectedEventIds,num,Iitem.id);
                                 num++;
                             })
-                            mthis.setFeatureStatus(item,'life');
+                            //mthis.setFeatureStatus(item,'life');
                         } else {
-                            mthis.setFeatureStatus(item,'die');
+                            //mthis.setFeatureStatus(item,'die');
                         }
                     });
 
@@ -2472,10 +2472,25 @@ export default {
         */
         invertSelection(){
             var mthis = this
-            //mthis.invertSelectedEventIds = [];
-            /* var SelectedIds = mthis.getSelectedEventIds();
-            var ids = SelectedIds.ids;
-            var type = SelectedIds.type; */
+            debugger
+            var keys = Object.keys(mthis.allEventIdsToFeaturesIdsList);
+            var selectedIds = mthis.$store.state.geo_onlyselected_param;
+            var noSelectedIds = [];
+            if(keys.length > 0){
+                keys.forEach(function(key){
+                    var id = mthis.allEventIdsToFeaturesIdsList[key].id;
+                    var index = util.itemIndexInArr(id,selectedIds);
+                    if(index === -1){
+                        noSelectedIds.push(id)
+                    }
+                })
+            }
+            mthis.geometrySelectedEventIds = noSelectedIds;
+            /* //mthis.invertSelectedEventIds = [];
+            // var SelectedIds = mthis.getSelectedEventIds();
+            // var ids = SelectedIds.ids;
+            // var type = SelectedIds.type;
+            debugger
             var ids = mthis.SelectedIds;
             var type = mthis.$store.state.geo_selected_param.type;
             var invertIds = [];
@@ -2519,8 +2534,7 @@ export default {
                     }
                 })
                 mthis.staticsSelectedEventIds = invertIds;
-            }
-            //mthis.setFeatureStatusByIds(invertIds);
+            } */
         },
         getHighUpSelectedIds(){  //获取此时选择的上一级选择
             var mthis = this;
@@ -2826,24 +2840,13 @@ export default {
                                         } 
                                     })
                                 }
-                                /* var feature = new Feature({
-                                    geometry: new Point()
-                                    }); */
                             }
                             
                         }
-                        /* var heatFeature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId).clone();
-                        heatFeature.setId(featureId);
-                        heatFeature.setStyle(null);
-                        heatSource.addFeature(heatFeature);
-                        var num = heatFeature.get('selectedNum');
-                        if(num > mthis.maxEventsNum){
-                            mthis.maxEventsNum = num;
-                        } */
                         mthis.setFeatureStatus(feature,'life');
                     } else {
                         feature.set('selectedNum',0,false);
-                        mthis.setFeatureStatus(feature,'die');
+                        //mthis.setFeatureStatus(feature,'die');
                     }
                 }
             })
@@ -3075,7 +3078,7 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','geo_onlyselected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult','HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds'
+      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult','HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds'
     ]),
     
     watch:{

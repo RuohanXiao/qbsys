@@ -320,9 +320,18 @@
         }, 
       clickRightMenu(rightCilckArgu){
         var mthis = this;
-        debugger
         var buttonId = rightCilckArgu.buttonId;
-        var ids = rightCilckArgu.nsIds;
+        var oids = rightCilckArgu.nsIds;
+        var ids = []
+        for(let i = 0; i < oids.length; i++){
+          let id = oids[i];
+          let index = id.indexOf('&');
+          if(index === -1){
+            ids.push('org&'+id)
+          } else {
+            ids.push(id)
+          }
+        }
         if(buttonId === 'onlylookit'){
           mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', ids)
         } else if(buttonId === 'delete'){
