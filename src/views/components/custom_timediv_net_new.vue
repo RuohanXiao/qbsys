@@ -83,13 +83,13 @@
         boxdivLeft:'',
         //点击单个柱子的选中分析，要传给数据透视的事件IDS
         clickEventIds:{
-          type:"",
-          eventIds:[]
+          "title":"",
+          "ids":[]
         },
         //点击框选时间的选中分析，要传给数据透视的事件IDS
         boxSelEventIds:{
-          type:"",
-          eventIds:[]
+          "title":"",
+          "ids":[]
         },
         // 框选时控制选中分析的显示与否
         isBrush:[]
@@ -103,10 +103,10 @@
       },
       toGeoAna(flag){
         if(flag = "one"){
-          this.clickEventIds.type = "analysis"
+          this.clickEventIds.title = "analysis"
           this.$store.commit('setNetOnlyStaticsSelectedIds',this.clickEventIds)
         }else{
-          this.boxSelEventIds.type = "analysis"
+          this.boxSelEventIds.title = "analysis"
           this.$store.commit('setNetOnlyStaticsSelectedIds',this.boxSelEventIds)
         }
         
@@ -386,10 +386,10 @@
                       // for(let i=0;i<response.body.data.eventIds.length;i++){
                       //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
                       // }
-                      mthis.boxSelEventIds.eventIds = response.body.data.eventIds
+                      mthis.boxSelEventIds.ids = response.body.data.eventIds
                       mthis.$store.commit('setNetTimeCondition',response.body.data.eventIds)
-                      mthis.clickEventIds.type = "notAnalysis"
-                      mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds.eventIds)
+                      mthis.boxSelEventIds.title = "notAnalysis"
+                      mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
                     }
                     
                 })
@@ -423,12 +423,12 @@
                 }).then(response =>{
                   if(response.body.code ==0){
                       mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
-                      mthis.clickEventIds.eventIds = response.body.data.eventIds
+                      mthis.clickEventIds.ids = response.body.data.eventIds
                       // for(let i=0;i<response.body.data.eventIds.length;i++){
                       //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
                       // }
-                      mthis.clickEventIds.type = "notAnalysis"
-                      mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.clickEventIds.eventIds)
+                      mthis.clickEventIds.title = "notAnalysis"
+                      mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.clickEventIds)
                   }
                 })
           mthis.charts.dispatchAction({
@@ -461,7 +461,7 @@
                   // }
                   // mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
 
-                  mthis.clickEventIds.eventIds = response.body.data.eventIds
+                  mthis.clickEventIds.ids = response.body.data.eventIds
                 }
                 
             })

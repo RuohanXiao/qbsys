@@ -530,7 +530,11 @@
           var mthis = this
           debugger
           if(this.geo_onlyselected_param.length>0){
+<<<<<<< HEAD
              mthis.geo_only_eventIds = [];
+=======
+            mthis.geo_only_eventIds = []
+>>>>>>> 21678283e8b8335fa7bd67f40bf4fafb29861b88
             for(let i = 0;i<this.geo_onlyselected_param.length;i++){
               mthis.geo_only_eventIds[i] = this.geo_onlyselected_param[i].split("&")[1]
             }
@@ -547,8 +551,13 @@
                 })
 
           }
+<<<<<<< HEAD
           if(this.geo_onlyselected_param.length ==0){
             mthis.loadEcharts(4);
+=======
+          if(this.geo_onlyselected_param.length==0){
+            mthis.loadEcharts(4)
+>>>>>>> 21678283e8b8335fa7bd67f40bf4fafb29861b88
           }
         },
         geo_selected_param:function(){
