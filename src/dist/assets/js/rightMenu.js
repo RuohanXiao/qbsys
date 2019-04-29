@@ -85,6 +85,7 @@ var rightMenu = function(t,target,config){
     var option = {
         series: [firstSeries]
     };
+    //this.deleteRightMenu = function(){},
     myChart.setOption(option);
     myChart.on('click', function (params) {
         var hasLeaf = params.data.hasLeaf; 

@@ -252,14 +252,13 @@
           }
         } */
         var params = {
-          'type':'',
+          'title':'',
           'ids':oids
         }
         if(buttonId === 'onlylookit'){
-          alert(111)
           mthis.$store.commit('setNetOnlyStaticsSelectedIds', params)
         } else if(buttonId === 'delete'){
-          alert('delete')
+          alert('请期待...')
         }
       },
       clickLeftStatics(staticsClick){
