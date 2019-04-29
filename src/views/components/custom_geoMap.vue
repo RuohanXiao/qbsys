@@ -965,7 +965,6 @@ export default {
         },
         addlocationLayer(){
             var mthis = this;
-            debugger
             /* var blurIn = document.getElementById('blur');
             var radiusIn = document.getElementById('radius');
             var blur = 20;
@@ -1167,7 +1166,6 @@ export default {
             var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
-            debugger
             var orgNum = feature.get('selectedNum');
             
             if(orgNum === 1){
@@ -2472,7 +2470,6 @@ export default {
         */
         invertSelection(){
             var mthis = this
-            debugger
             var keys = Object.keys(mthis.allEventIdsToFeaturesIdsList);
             var selectedIds = mthis.$store.state.geo_onlyselected_param;
             var noSelectedIds = [];
@@ -2490,7 +2487,6 @@ export default {
             // var SelectedIds = mthis.getSelectedEventIds();
             // var ids = SelectedIds.ids;
             // var type = SelectedIds.type;
-            debugger
             var ids = mthis.SelectedIds;
             var type = mthis.$store.state.geo_selected_param.type;
             var invertIds = [];
@@ -3191,7 +3187,6 @@ export default {
         },
         geoStaticsOnlyLookSelectedIds(){
             var mthis = this;
-            debugger
             var ids = [];
             if(mthis.geoStaticsOnlyLookSelectedIds.length > 0){
                 mthis.geoStaticsOnlyLookSelectedIds.forEach(function(item){
@@ -3246,7 +3241,6 @@ export default {
         }, */
         staticsSelectedEventIds:function(){
             var mthis = this;
-            debugger
             var selectedEventsParam = {
                 type:'GeoStatics',
                 paramIds:mthis.staticsSelectedEventIds//dealSelectedIds
@@ -3271,7 +3265,6 @@ export default {
         },
         geometrySelectedEventIds:function(){
             var mthis = this;
-            debugger
             /* var selectedEventsParam = {
                 type:'GeoView',
                 paramIds:mthis.geometrySelectedEventIds
@@ -3284,7 +3277,6 @@ export default {
         },
         geoTimeCondition:function(){
             var mthis = this;
-            debugger
             var type = mthis.geoTimeCondition.type;
             var timeSelectedIds = mthis.geoTimeCondition.eventIds;
             if(type === 'notAnalysis'){

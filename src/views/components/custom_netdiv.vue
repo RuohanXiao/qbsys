@@ -18,6 +18,12 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="triggerMethods('selectAll')">
+            <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">全选节点</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('remove')">
             <Icon class="icon iconfont icon-delete-point DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">删除</p>
@@ -425,12 +431,32 @@
       Canvas2Image
     },
     methods: {
+      linkedKnowlage(){
+        this.setMessage('请期待下一版本的链向功能')
+      },
+      linkedKnowlageAll(){
+        this.setMessage('请期待下一版本的链向功能')
+      },
+      selectAll(){
+        if(this.netchart.nodes().length>0) {
+          this.netchart.selection(this.netchart.nodes().map(item=>{
+            return item.id
+          }))
+        } else {
+          this.setMessage('画布上还没有节点，无法全选')
+        }
+      },
       deleteRightMenu(){
             var mthis = this;
             $('#ringRightMenu').remove()
         },
       // 触发按钮事件
       triggerMethods(n) {
+        switch (n) {
+           case 'selectAll':
+              this.selectAll()
+              break;
+        }
         if (this.selectionId.length > 0) {
           switch (n) {
             case 'removeOther':
@@ -2016,51 +2042,18 @@
       removeOther() {
         var mthis = this;
         // 获取当前选中节点
-        if (this.selectionId.length > 0) {
+        if (mthis.selectionId.length > 0) {
           // 获取全部节点
-          let selectNodes = this.selectionId;
-          let allNodes = this.netchart.nodes();
-          let temp01 = [];
-          let temp02 = [];
-          // let netChartLog = sessionStorage.getItem("netChartLog");
-          // let netChartLogJson = JSON.parse(netChartLog).data;
-          let ids = [];
-          for (var i in selectNodes) {
-            temp01[selectNodes[i].id] = true;
-          }
-          for (var k in allNodes) {
-            if (!temp01[allNodes[k].id]) {
-              if (allNodes[k].isNode) {
-                ids.push(allNodes[k].id);
-                // mthis.netchart.removeData({
-                //   nodes: [{
-                //     id: allNodes[k].id
-                //   }]
-                // });
-              } else if (allNodes[k].isLink) {
-                // ids.push(allNodes[k].id);
-                // event.chart.removeData({
-                //   links: [{
-                //     id: allNodes[k].id
-                //   }]
-                // });
-              }
-            }
-            mthis.netchart.selection(ids);
-          }
-          // netChartLogJson.push({
-          //   id: ids,
-          //   action: "remove",
-          //   other: "反选"
-          // });
-          // sessionStorage.setItem('netChartLog', JSON.stringify({
-          //   data: netChartLogJson
-          // }));
+          let selectNodes = mthis.selectionId;
+          let allNodes = mthis.netchart.nodes().map((item)=>{
+            return item.id
+          });
+          let ids = allNodes.filter(function(item){return selectNodes.indexOf(item)<0})
+          mthis.netchart.selection(ids);
           mthis.getStatistics();
           // 反选结果
         } else {
-          // this.$Message.error('请选中节点！')
-          this.setMessage("请选中节点！");
+          mthis.setMessage("请选中节点！");
         }
       },
       reloadNetData(data) {
@@ -2566,22 +2559,22 @@
             ovdiv.class = 'ringRightMenu';
             ovdiv.id='ringRightMenu';
             var config = [
-                {'Id':1,'parentId':0,'name':'关联','hasLeaf':true,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
-                {'Id':2,'parentId':0,'name':'共指','hasLeaf':true,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
-                {'Id':3,'parentId':0,'name':'路径','hasLeaf':true,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
-                {'Id':4,'parentId':0,'name':'链向','hasLeaf':true,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
-                {'Id':5,'parentId':0,'name':'聚合','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
-                {'Id':6,'parentId':0,'name':'删除','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("remove")','icon':''},
-                {'Id':101,'parentId':1,'name':'实体','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("expandNodeKnowledge")','icon':''},
-                {'Id':102,'parentId':1,'name':'事件','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("expandNodeEvent")','icon':''},
-                {'Id':103,'parentId':1,'name':'文档','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("expandNodeContent")','icon':''},
-                {'Id':201,'parentId':2,'name':'实体','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("gongzhiEnitiy")','icon':''},
-                {'Id':202,'parentId':2,'name':'事件','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("gongzhiEvent")','icon':''},
-                {'Id':203,'parentId':2,'name':'文档','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("gongzhiDoc")','icon':''},
-                {'Id':301,'parentId':3,'name':'关系','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("showModalStepKnowledge")','icon':''},
-                {'Id':302,'parentId':3,'name':'所有','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("showModalStepAll")','icon':''},
-                {'Id':401,'parentId':4,'name':'关系','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("linkedKnowlage")','icon':''},
-                {'Id':402,'parentId':4,'name':'所有','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("linkedKnowlageAll")','icon':''}
+                {'Id':1,'parentId':0,'name':'关联','hasLeaf':true,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':2,'parentId':0,'name':'共指','hasLeaf':true,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':3,'parentId':0,'name':'路径','hasLeaf':true,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':4,'parentId':0,'name':'链向','hasLeaf':true,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':5,'parentId':0,'name':'聚合','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':6,'parentId':0,'name':'删除','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("remove")','icon':''},
+                {'Id':101,'parentId':1,'name':'实体','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("expandNodeKnowledge")','icon':''},
+                {'Id':102,'parentId':1,'name':'事件','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("expandNodeEvent")','icon':''},
+                {'Id':103,'parentId':1,'name':'文档','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("expandNodeContent")','icon':''},
+                {'Id':201,'parentId':2,'name':'实体','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("gongzhiEnitiy")','icon':''},
+                {'Id':202,'parentId':2,'name':'事件','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("gongzhiEvent")','icon':''},
+                {'Id':203,'parentId':2,'name':'文档','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("gongzhiDoc")','icon':''},
+                {'Id':301,'parentId':3,'name':'关系','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("showModalStepKnowledge")','icon':''},
+                {'Id':302,'parentId':3,'name':'所有','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("showModalStepAll")','icon':''},
+                {'Id':401,'parentId':4,'name':'关系','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("linkedKnowlage")','icon':''},
+                {'Id':402,'parentId':4,'name':'所有','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("linkedKnowlageAll")','icon':''}
             ]
             var routeMap = new rightMenu(mthis,ovdiv,config);
             document.getElementById('netchart').appendChild(ovdiv)
@@ -2671,16 +2664,16 @@
                 clearTimeout(timer);
               }
               timer = setTimeout(function() {
+                //   selectLineColor:'#ccffff',
+                // selectShadowColor:'#33ffff',
+                // hightlightLineColor:'#009999',
+                // hightlightShadowColor:"#009999",
+                // hightlightDocShadowColor:"#33ffff",
+                mthis.selectLineColor = '#ccffff'
+                mthis.hightlightLineColor = '#009999'
+                mthis.selectShadowColor = "#33ffff"
+                mthis.hightlightShadowColor = '#009999'
                 let netchartnodes = mthis.netchart.nodes()
-                  //   selectLineColor:'#ccffff',
-                  // selectShadowColor:'#33ffff',
-                  // hightlightLineColor:'#009999',
-                  // hightlightShadowColor:"#009999",
-                  // hightlightDocShadowColor:"#33ffff",
-                  mthis.selectLineColor = '#ccffff'
-                  mthis.hightlightLineColor = '#009999'
-                  mthis.selectShadowColor = "#33ffff"
-                  mthis.hightlightShadowColor = '#009999'
                 for (let i = 0; i < netchartnodes.length; i++) {
                   mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
                   mthis.netchart.updateStyle(netchartnodes[i].id)
@@ -3105,21 +3098,15 @@
         let arr = new Array();
         let allNodIds = new Array();
         let netchartnodes = mthis.netchart.nodes()
-        //   selectLineColor:'#ccffff',
-        // selectShadowColor:'#33ffff',
-        // hightlightLineColor:'#009999',
-        // hightlightShadowColor:"#009999",
-        // hightlightDocShadowColor:"#33ffff",
-        mthis.selectLineColor = '#009999'
-        mthis.selectShadowColor = "#009999"
-        mthis.hightlightLineColor = '#ccffff'
-        mthis.hightlightShadowColor = '#33ffff'
         for (let i = 0; i < netchartnodes.length; i++) {
           allNodIds.push(netchartnodes[i].id);
           mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
         }
         if (mthis.netStaticsSelectedIds.length > 0) {
-          
+          mthis.selectLineColor = '#009999'
+          mthis.selectShadowColor = "#009999"
+          mthis.hightlightLineColor = '#ccffff'
+          mthis.hightlightShadowColor = '#33ffff'
           for (let i = 0; i < mthis.netStaticsSelectedIds.length; i++) {
             arr.push(mthis.netStaticsSelectedIds[i]);
             mthis.netchart.getNode(
@@ -3127,26 +3114,6 @@
             ).hightLight = true;
             mthis.netchart.updateStyle(mthis.netStaticsSelectedIds[i])
           }
-          // // mthis.netchart.selection(mthis.$store.state.netStaticsSelectedIds);
-          // var obj = mthis.netchart._impl.data.default.nodes
-          // var arr = [];
-          // for (var key in obj) {
-          //   if (!obj.hasOwnProperty(key)) {
-          //     continue;
-          //   }
-          //   var item = {};
-          //   item[key] = obj[key];
-          //   arr.push(item);
-          // }
-          // // mthis.netchart._impl.settings.style.opacity = 0.5
-          // // mthis.netchart._impl.settings.style.nodeStyleFunction(true)
-          // // mthis.netchart.style.nodeStyleFunction(highLightNodes)
-          // // mthis.netchart
-          // let disarr = arr.map(item => {
-          //   return item.id
-          // })
-          // let ar = util.diff(disarr, mthis.$store.state.netStaticsSelectedIds);
-          // mthis.$store.commit('setNetStaticsSelectedIds', [])
         }
         mthis.netchart.updateStyle(allNodIds);
         mthis.netchart.updateSettings();
@@ -3156,9 +3123,11 @@
         // 调用查询接口，查询id对应数据
         // this.netchart.addData()
         var mthis = this;
+        let dataids = []
         // mthis.netchart.updateStyle
         // console.log(mthis.geoToNetData)
         if (mthis.geoToNetData.nodeIds.length > 0) {
+          dataids.concat(mthis.geoToNetData.nodeIds)
           mthis.$http
             .post(mthis.$store.state.ipConfig.api_url + "/entity-info/", {
               nodeIds: mthis.geoToNetData.nodeIds
@@ -3171,6 +3140,7 @@
             });
         }
         if (mthis.geoToNetData.eventIds.length > 0) {
+          dataids.concat(mthis.geoToNetData.eventIds)
           mthis.$http
             .post(this.$store.state.ipConfig.api_url + "/event-detail/", {
               EventIds: mthis.geoToNetData.eventIds
@@ -3198,8 +3168,8 @@
                 mthis.setMessage("/event-detail/接口异常");
               }
             });
-          mthis.netchart.selection(mthis.geoToNetData.nodeIds)
         }
+        mthis.netchart.selection(dataids)
       },
       contentToNetData: function() {
         this.spinShow = true;
@@ -3237,54 +3207,36 @@
         }, 300);
       },
       netTimeCondition: function() {
-        // if (this.netTimeCondition) {
-        //   // 选中了时间，令links高亮
-        //   var mthis = this;
-        //   let links = this.netchart._impl.data.default.links;
-        //   if (
-        //     this.netTimeCondition.length > 0 &&
-        //     this.netTimeCondition.length === 2
-        //   ) {
-        //     this.$http
-        //       .post(
-        //         this.$store.state.ipConfig.api_url + "/limit-event-by-time/", {
-        //           nodeIds: links,
-        //           startDate: this.netTimeCondition[0],
-        //           endDate: this.netTimeCondition[1]
-        //         }
-        //       )
-        //       .then(response => {
-        //         if (response.code === 0) {
-        //           mthis.netchart.selection(response.data[0].links);
-        //         }
-        //       });
-        //   } else if (
-        //     this.netTimeCondition.length > 0 &&
-        //     this.netTimeCondition.length === 1
-        //   ) {
-        //     this.$http
-        //       .post(
-        //         this.$store.state.ipConfig.api_url + "/limit-event-by-time/", {
-        //           nodeIds: links,
-        //           startDate: this.netTimeCondition[0],
-        //           endDate: this.netTimeCondition[0]
-        //         }
-        //       )
-        //       .then(response => {
-        //         if (response.code === 0) {
-        //           mthis.netchart.selection(response.data[0].links);
-        //         }
-        //       });
-        //   } else {
-        //     mthis.setMessage(
-        //       "netTimeCondition出错,格式不正确,netTimeCondition长度为" +
-        //       this.netTimeCondition.length
-        //     );
-        //     // this.message={text:'netTimeCondition出错,格式不正确,netTimeCondition长度为' + this.netTimeCondition.length,time:new Date().getTime()}
-        //   }
-        // }
-        console.log('==================================>this.netTimeCondition')
-        console.log(this.netTimeCondition)
+        var mthis = this;
+        let arr = new Array();
+        let allNodIds = new Array();
+        let netchartnodes = mthis.netchart.nodes()
+        for (let i = 0; i < netchartnodes.length; i++) {
+          allNodIds.push(netchartnodes[i].id);
+          mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
+        }
+        if (mthis.netTimeCondition.length > 0) {
+          mthis.selectLineColor = '#009999'
+          mthis.selectShadowColor = "#009999"
+          mthis.hightlightLineColor = '#ccffff'
+          mthis.hightlightShadowColor = '#33ffff'
+          
+          for (let i = 0; i < mthis.netTimeCondition.length; i++) {
+            arr.push(mthis.netTimeCondition[i]);
+            mthis.netchart.getNode(
+              mthis.netTimeCondition[i]
+            ).hightLight = true;
+            mthis.netchart.updateStyle(mthis.netTimeCondition[i])
+          }
+        } else {
+          mthis.selectLineColor = '#ccffff'
+          mthis.hightlightLineColor = '#009999'
+          mthis.selectShadowColor = "#33ffff"
+          mthis.hightlightShadowColor = '#009999'
+        }
+        mthis.netchart.updateStyle(allNodIds);
+        mthis.netchart.updateSettings();
+        mthis.netchart.updateSize();
       },
       searchNetResult: function(va) {
         var mthis = this;
@@ -3463,5 +3415,15 @@
   .mybox-leave,
   .mybox-enter-active {
     opacity: 1;
+  }
+  .ringRightMenu{
+    cursor:pointer;
+    color:#ccffff;
+    background-color: rgba(51,102,102,0.5);
+    border: 1px solid red;
+  }
+  .ringRightMenu:hover{
+    color:red;
+    background-color: rgba(51,255,255,0.3);
   }
 </style>

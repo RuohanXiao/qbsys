@@ -143,7 +143,6 @@
       },
       geo_onlyselected_param:function(){
         var mthis = this;
-        debugger
         var OrgIds = [];
         var EventIds = [];
         mthis.geo_onlyselected_param.forEach(function(id){
@@ -198,7 +197,6 @@
             for(let i = 0; i < EventIds.length; i++){
               nodeIds.push(EventIds[i])
             }
-            debugger
             //mthis.waiting()
             mthis.spinShow = true;
             mthis.$http.post(mthis.$store.state.ipConfig.api_url+'/graph-attr/', {
@@ -215,7 +213,6 @@
       },
       geo_selected_param:function(){
         var mthis = this;
-        debugger
         var OrgIds = [];
         var EventIds = [];
         mthis.geo_selected_param.paramIds.forEach(function(id){
