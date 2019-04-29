@@ -90,7 +90,8 @@
           type:"notAnalysis",
           eventIds:[]
         },
-        geoStatics_eventIds:[]
+        geoStatics_eventIds:[],
+        geo_only_eventIds:[]
       };
     },
     methods: {
@@ -369,7 +370,7 @@
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
             if(timeArr && selTimeArr[0] && selTimeArr[1]){
                     mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                    "selectedIds":mthis.geo_eventIds,
+                    "selectedIds":mthis.geo_only_eventIds,
                     "startTime":selTimeArr[0],
                     "endTime":selTimeArr[1]
                 }).then(response =>{
@@ -377,7 +378,7 @@
                       
                       for(let i=0;i<response.body.data.eventIds.length;i++){
                         mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
-                        mthis.toGeoEventIds.eventIds[i ] = "event&" + response.body.data.eventIds[i];
+                        mthis.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                       }
                       
                       mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds)
@@ -526,12 +527,12 @@
         geo_onlyselected_param:function(){
           var mthis = this
           if(this.geo_onlyselected_param.length>0){
-            var geo_only_eventIds = []
+            mthis.geo_only_eventIds = []
             for(let i = 0;i<this.geo_onlyselected_param.length;i++){
-              geo_only_eventIds[i] = this.geo_onlyselected_param[i].split("&")[1]
+              mthis.geo_only_eventIds[i] = this.geo_onlyselected_param[i].split("&")[1]
             }
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                  "eventids":geo_only_eventIds
+                  "eventids":mthis.geo_only_eventIds
                 }).then(response =>{
                   if(response.body.code === 0){
                        mthis.dataBySeries.date = response.body.data.time;
@@ -542,6 +543,9 @@
                   }
                 })
 
+          }
+          if(this.geo_onlyselected_param.length==0){
+            mthis.loadEcharts(4)
           }
         },
         geo_selected_param:function(){
