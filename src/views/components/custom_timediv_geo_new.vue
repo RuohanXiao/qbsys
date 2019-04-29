@@ -547,15 +547,7 @@
         geo_selected_param:function(){
            var mthis = this
            var type = this.$store.state.geo_selected_param.type;
-           
-            if(type == 'GeoView'){
-              if(this.geo_selected_param.paramIds.length>0){
-                
-               
-              }
-              
-            }
-            if(type == "GeoStatics"){
+           if(type == "GeoStatics"){
               if(this.geo_selected_param.paramIds.length>0){
                 mthis.geoStatics_eventIds = []
                 for(let i = 0;i<this.geo_selected_param.paramIds.length;i++){

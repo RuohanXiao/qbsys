@@ -104,10 +104,10 @@
       toGeoAna(flag){
         if(flag = "one"){
           this.clickEventIds.type = "analysis"
-          this.$store.commit('setGeoTimeCondition',this.clickEventIds)
+          this.$store.commit('setNetOnlyStaticsSelectedIds',this.clickEventIds)
         }else{
           this.boxSelEventIds.type = "analysis"
-          this.$store.commit('setGeoTimeCondition',this.boxSelEventIds)
+          this.$store.commit('setNetOnlyStaticsSelectedIds',this.boxSelEventIds)
         }
         
       },
@@ -383,13 +383,13 @@
                     "endTime":selTimeArr[1]
                 }).then(response =>{
                     if(response.body.code == 0){
-                      for(let i=0;i<response.body.data.eventIds.length;i++){
-                        mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
-                      }
-                      
+                      // for(let i=0;i<response.body.data.eventIds.length;i++){
+                      //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                      // }
+                      mthis.boxSelEventIds.eventIds = response.body.data.eventIds
                       mthis.$store.commit('setNetTimeCondition',response.body.data.eventIds)
                       mthis.clickEventIds.type = "notAnalysis"
-                      mthis.$store.commit('setGeoTimeCondition',mthis.clickEventIds.eventIds)
+                      mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds.eventIds)
                     }
                     
                 })
@@ -423,11 +423,12 @@
                 }).then(response =>{
                   if(response.body.code ==0){
                       mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
-                      for(let i=0;i<response.body.data.eventIds.length;i++){
-                        mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
-                      }
+                      mthis.clickEventIds.eventIds = response.body.data.eventIds
+                      // for(let i=0;i<response.body.data.eventIds.length;i++){
+                      //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                      // }
                       mthis.clickEventIds.type = "notAnalysis"
-                      mthis.$store.commit('setGeoTimeCondition',mthis.clickEventIds.eventIds)
+                      mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.clickEventIds.eventIds)
                   }
                 })
           mthis.charts.dispatchAction({
@@ -455,10 +456,12 @@
                  
             }).then(response =>{
                 if(response.body.code == 0){
-                  for(let i=0;i<response.body.data.eventIds.length;i++){
-                    mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
-                  }
-                  
+                  // for(let i=0;i<response.body.data.eventIds.length;i++){
+                  //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                  // }
+                  // mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
+
+                  mthis.clickEventIds.eventIds = response.body.data.eventIds
                 }
                 
             })
