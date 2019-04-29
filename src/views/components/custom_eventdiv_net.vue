@@ -239,7 +239,6 @@
     methods: {
       clickRightMenu(rightCilckArgu){
         var mthis = this;
-        debugger
         var buttonId = rightCilckArgu.buttonId;
         var oids = rightCilckArgu.nsIds;
         //var ids = []
