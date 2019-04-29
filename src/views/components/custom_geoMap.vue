@@ -1210,7 +1210,7 @@ export default {
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
 
             var orgNum = feature.get('selectedNum');
-            if(orgNum === 1){
+            /* if(orgNum === 1){
                 var name = ''
                 var Entitites = '';
                 var eventType = '';
@@ -1220,30 +1220,19 @@ export default {
                     var isHas = false;
                     for(let j = 0; j < mthis.SelectedIds.length; j++){
                         if(params[i].id === mthis.SelectedIds[j]){
-                            //name = params[i].OrgName;
-                            /* if(params[0].relatedEntities.length > 0){
-                                Entitites = params[0].relatedEntities.join(' and ');
-                            } */
                             eventType = params[i].eventType;
                             isHas = true
                             break;
                         }
                     }
-                    /* var completeEvent = ''
-                    if(locationName !== ''){
-                        completeEvent = Entitites + ' ' + eventType + ' in ' + locationName
-                    } else {
-                        completeEvent = Entitites + ' ' + eventType
-                    } */
-                     
                     if(isHas){
                         Ap.innerHTML = "事件：" + params[i].completeEvent;
                         break;
                     }
                 }
-            } else {
+            } else { */
                 Ap.innerHTML = "事件数：" + feature.get('selectedNum');
-            }
+            //}
             //Ap.innerHTML = "事件：" + feature.get('selectedNum');
             var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,ovdiv,overlayId,'top-left');
             mthis.routeMap.map.addOverlay(overlayId);
@@ -1654,10 +1643,11 @@ export default {
             var promptType = ''
             var num = 0;
             if(type === 'Event'){
-                url = 'http://10.60.1.140:5100/exploreEvent/'
+                url = 'http://10.60.1.141:5100/exploreEvent/'
+                //url = 'http://localhost:5000/exploreEvent/'
                 promptType = '事件数';
             } else if(type === 'Org'){
-                url = 'http://10.60.1.140:5100/exploreOrg/'
+                url = 'http://10.60.1.141:5100/exploreOrg/'
                 promptType = '组织机构数';
             }
             mthis.waiting();
@@ -1968,7 +1958,7 @@ export default {
                             })
                             //mthis.setFeatureStatus(item,'life');
                         } else {
-                            //mthis.setFeatureStatus(item,'die');
+                            mthis.setFeatureStatus(item,'die');
                         }
                     });
 
@@ -2482,9 +2472,18 @@ export default {
                     var index = util.itemIndexInArr(id,selectedIds);
                     if(index === -1){
                         noSelectedIds.push(id)
+                    } else {
+
                     }
                 })
             }
+            Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+                var layerId = mthis.AllLayerList_conf[key].layerId;
+                var features = mthis.getLayerById(layerId).getSource().getFeatures();
+                for(let i = 0; i < features.length; i++){
+                    mthis.setFeatureStatus(features[i],'die');
+                }
+            })
             mthis.geometrySelectedEventIds = noSelectedIds;
             /* //mthis.invertSelectedEventIds = [];
             // var SelectedIds = mthis.getSelectedEventIds();
