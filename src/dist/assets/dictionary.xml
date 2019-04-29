@@ -16,6 +16,7 @@
   </eventRole>
   <event2chinese> 
     <eventType>life</eventType>  
+    <eventCHType>生命</eventCHType>    
     <eventNames> 
       <nameItem> 
         <ename>be_born</ename>  
@@ -46,6 +47,7 @@
   </event2chinese>  
   <event2chinese> 
     <eventType>movement</eventType>  
+    <eventCHType>移动</eventCHType>    
     <eventNames> 
       <nameItem> 
         <ename>transport</ename>  
@@ -56,6 +58,7 @@
   </event2chinese>  
   <event2chinese> 
     <eventType>transaction</eventType>  
+    <eventCHType>交易</eventCHType>    
     <eventNames> 
       <nameItem> 
         <ename>transfer_ownership</ename>  
@@ -71,6 +74,7 @@
   </event2chinese>  
   <event2chinese> 
     <eventType>business</eventType>  
+    <eventCHType>商业</eventCHType>    
     <eventNames> 
       <nameItem> 
         <ename>start_org</ename>  
@@ -96,6 +100,7 @@
   </event2chinese>  
   <event2chinese> 
     <eventType>conflict</eventType>  
+    <eventCHType>冲突</eventCHType>    
     <eventNames> 
       <nameItem> 
         <ename>attack</ename>  
@@ -111,6 +116,7 @@
   </event2chinese>  
   <event2chinese> 
     <eventType>contact</eventType>  
+    <eventCHType>联系</eventCHType>    
     <eventNames> 
       <nameItem> 
         <ename>meet</ename>  
@@ -126,6 +132,7 @@
   </event2chinese>  
   <event2chinese> 
     <eventType>personell</eventType>  
+    <eventCHType>人脉</eventCHType>    
     <eventNames> 
       <nameItem> 
         <ename>start_position</ename>  
@@ -150,7 +157,8 @@
     </eventNames> 
   </event2chinese>  
   <event2chinese> 
-    <eventType>justice</eventType>  
+    <eventType>justice</eventType>
+    <eventCHType>司法</eventCHType>    
     <eventNames> 
       <nameItem> 
         <ename>arrest_jail</ename>  

@@ -77,6 +77,7 @@
         entDivH: '',
         entityT: '',
         dicMap: new Map(),
+        myMapevent: new Map(),
         // dicMap:{
         //   'entity':'实体',
         //   'document':'文档',
@@ -231,6 +232,7 @@
                 mthis.selectTag = detailId
                 let result = new Object();
                 result = mthis.eventdata[0]
+                result.name = mthis.myMapevent.get(result.name.toLowerCase().replace(/-/, "_")).name
                 // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
                 result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
                 mthis.detailData = result
@@ -309,6 +311,20 @@
         for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
           this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
         }
+      }
+
+
+      var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/dictionary.xml");
+      var eventType = ob1.getElementsByTagName("event2chinese");
+      this.myMapevent = new Map();
+      for (let items of eventType) {
+        console.log('-----mymapevent------')
+        console.log(items)
+        console.log(items.getElementsByTagName("eventType")[0].textContent)
+        console.log(items.getElementsByTagName("eventCHType")[0].textContent)
+        this.myMapevent.set(items.getElementsByTagName("eventType")[0].textContent, {
+          name: items.getElementsByTagName("eventCHType")[0].textContent
+        });
       }
     }
   }

@@ -287,7 +287,9 @@
     </div>
     <div :style="{height:nh_50,borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <!-- <div id="netchart" aria-autocomplete="true" :style="{height:nh_50}"></div> -->
+      
       <div id="netchart" :style="{height:nh_50}"></div>
+        <!-- <div id="rmenu" :style="{height:200,backgroundColor:'red'}"></div> -->
       <transition name="mybox">
         <div class="xuanfuAlert" v-show="popout">{{message.text}}</div>
       </transition>
@@ -298,7 +300,7 @@
                                                                                         cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
                                                                                       <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
           </Modal>-->
-    <Modal v-model="modalStep" width="360">
+    <!-- <Modal v-model="modalStep" width="360">
       <p slot="header" style="color:#f60;text-align:center">
         <Icon type="ios-information-circle"></Icon>
         <span>Delete confirmation</span>
@@ -309,7 +311,7 @@
       <div slot="footer">
         <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
       </div>
-    </Modal>
+    </Modal> -->
     <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     <workatlas-modal :workatlastData="workatlastData" :type="workatlasType" :flag="workatlasFlag" />
   </div>
@@ -320,7 +322,7 @@
   import modalChart from "./custom_modal_add.vue";
   import worksetModal from "./custom_workSet_modal.vue";
   import workatlasModal from "./custom_workAtlas_modal.vue";
-  // import modalChart from './custom_modal_vue.vue'
+  import {rightMenu} from '../../dist/assets/js/rightMenu.js'
   import {
     mapState,
     mapMutations
@@ -395,6 +397,7 @@
           contentIds: []
         },
         myMap: new Map(),
+        myMapevent: new Map(),
         netchart: null,
         nextId: 4,
         flag: true,
@@ -422,6 +425,10 @@
       Canvas2Image
     },
     methods: {
+      deleteRightMenu(){
+            var mthis = this;
+            $('#ringRightMenu').remove()
+        },
       // 触发按钮事件
       triggerMethods(n) {
         if (this.selectionId.length > 0) {
@@ -462,11 +469,15 @@
             case 'toContent':
               this.toContent()
               break;
-              // case 'openCreatProjectModalImport':
-              //   this.openCreatProjectModal('import')
-              //   break;
             case 'openCreatProjectModalExpend':
               this.openCreatProjectModal('expend')
+              // this.pathKnowledge()
+              break;
+            case linkedKnowlage:
+              this.linkedKnowlage()
+              break;
+            case linkedKnowlageAll:
+              this.linkedKnowlageAll()
               break;
           }
         }
@@ -486,8 +497,10 @@
         if (this.selectionId.length === 2) {
           switch (n) {
             case 'showModalStepKnowledge':
-              // this.showModalStep('knowledge')
               this.shortPath(this.selectionId)
+              break;
+            case 'showModalStepAll':
+              this.shortAllPath(this.selectionId)
               break;
           }
         }
@@ -495,25 +508,48 @@
       shortPath(ids) {
         var mthis = this
         console.log(ids);
-        mthis.$http
-          .post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
-            nodeIds1: new Array(ids[0]),
-            nodeIds2: new Array(ids[1])
-          })
-          .then(response => {
-            if (response.body.code === 0) {
-              if (response.body.data[0].nodes.length > 0) {
-                mthis.netchart.addData(response.body.data[0])
-                mthis.netchart.selection(response.body.data[0].nodes.map(item => {
-                  return item.id
-                }))
-              } else {
-                mthis.setMessage('未找到最短路径')
-              }
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
+          subjectId: ids[0],
+          objectId: ids[1]
+        })
+        .then(response => {
+          if (response.body.code === 0) {
+            if (response.body.data[0].nodes.length > 0) {
+              mthis.netchart.addData(response.body.data[0])
+              mthis.netchart.selection(response.body.data[0].nodes.map(item => {
+                return item.id
+              }))
             } else {
-              mthis.setMessage('ShortPath接口异常！')
+              mthis.setMessage('未找到最短路径')
             }
-          })
+          } else {
+            mthis.setMessage('ShortPath接口异常！')
+          }
+        })
+      },
+      shortAllPath(ids) {
+        var mthis = this
+        if(ids.length === 2) {
+          mthis.$http
+            .post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
+              subjectId: ids[0],
+              objectId: ids[1]
+            })
+            .then(response => {
+              if (response.body.code === 0) {
+                if (response.body.data[0].nodes.length > 0) {
+                  mthis.netchart.addData(response.body.data[0])
+                  mthis.netchart.selection(response.body.data[0].nodes.map(item => {
+                    return item.id
+                  }))
+                } else {
+                  mthis.setMessage('未找到最短路径')
+                }
+              } else {
+                mthis.setMessage('ShortPath接口异常！')
+              }
+            })
+        }
       },
       changeMode(type) {
         // this.netchart.replaceSettings({
@@ -2520,6 +2556,38 @@
             onSettingsChange: function(event) {},
             onRightClick: function(event) {
               event.preventDefault();
+            $('#ringRightMenu').remove()
+            var overlayId = 'rightClickMenu_Area';
+            var ovdiv = document.createElement('div');
+            ovdiv.style = 'width:400px;height:400px;';
+            ovdiv.style.position = 'absolute'; 
+            ovdiv.style.top =event.pageY -120 -200+ "px";
+            ovdiv.style.left = event.pageX-200+ "px";
+            ovdiv.class = 'ringRightMenu';
+            ovdiv.id='ringRightMenu';
+            var config = [
+                {'Id':1,'parentId':0,'name':'关联','hasLeaf':true,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
+                {'Id':2,'parentId':0,'name':'共指','hasLeaf':true,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
+                {'Id':3,'parentId':0,'name':'路径','hasLeaf':true,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
+                {'Id':4,'parentId':0,'name':'链向','hasLeaf':true,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
+                {'Id':5,'parentId':0,'name':'聚合','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'','icon':''},
+                {'Id':6,'parentId':0,'name':'删除','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("remove")','icon':''},
+                {'Id':101,'parentId':1,'name':'实体','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("expandNodeKnowledge")','icon':''},
+                {'Id':102,'parentId':1,'name':'事件','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("expandNodeEvent")','icon':''},
+                {'Id':103,'parentId':1,'name':'文档','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("expandNodeContent")','icon':''},
+                {'Id':201,'parentId':2,'name':'实体','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("gongzhiEnitiy")','icon':''},
+                {'Id':202,'parentId':2,'name':'事件','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("gongzhiEvent")','icon':''},
+                {'Id':203,'parentId':2,'name':'文档','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("gongzhiDoc")','icon':''},
+                {'Id':301,'parentId':3,'name':'关系','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("showModalStepKnowledge")','icon':''},
+                {'Id':302,'parentId':3,'name':'所有','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("showModalStepAll")','icon':''},
+                {'Id':401,'parentId':4,'name':'关系','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("linkedKnowlage")','icon':''},
+                {'Id':402,'parentId':4,'name':'所有','hasLeaf':false,'color':"rgba(51, 255, 255, 0.2)",'backcall':'mthis.triggerMethods("linkedKnowlageAll")','icon':''}
+            ]
+            var routeMap = new rightMenu(mthis,ovdiv,config);
+            document.getElementById('netchart').appendChild(ovdiv)
+            document.getElementById('ringRightMenu').oncontextmenu = function(e){
+              return false;
+            }
             },
             onError: function(event) {
               // console.log('------error-------------')
@@ -2604,19 +2672,19 @@
               }
               timer = setTimeout(function() {
                 let netchartnodes = mthis.netchart.nodes()
+                  //   selectLineColor:'#ccffff',
+                  // selectShadowColor:'#33ffff',
+                  // hightlightLineColor:'#009999',
+                  // hightlightShadowColor:"#009999",
+                  // hightlightDocShadowColor:"#33ffff",
+                  mthis.selectLineColor = '#ccffff'
+                  mthis.hightlightLineColor = '#009999'
+                  mthis.selectShadowColor = "#33ffff"
+                  mthis.hightlightShadowColor = '#009999'
                 for (let i = 0; i < netchartnodes.length; i++) {
                   mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
+                  mthis.netchart.updateStyle(netchartnodes[i].id)
                 }
-                //   selectLineColor:'#ccffff',
-                // selectShadowColor:'#33ffff',
-                // hightlightLineColor:'#009999',
-                // hightlightShadowColor:"#009999",
-                // hightlightDocShadowColor:"#33ffff",
-                mthis.selectLineColor = '#ccffff'
-                mthis.hightlightLineColor = '#009999'
-                mthis.selectShadowColor = "#33ffff"
-                mthis.hightlightShadowColor = '#009999'
-                // mthis.netchart.updateStyle()
                 if (event.selection.length > 0) {
                   let selectN = {
                     nodes: event.selection.map(item => {

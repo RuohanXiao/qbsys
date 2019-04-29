@@ -4,13 +4,13 @@
       <panel name="1">
         <span>事件属性</span>
         <div slot="content" class="tableLine">
-          <div class="econtent">
+          <div class="econtent"  v-if='tableData.event_type'>
             <p class="econtentp w5em">事件类型</p>
-            <p class="econtentp">{{tableData.event_type}}</p>
+            <p class="econtentp">{{myMapevent.get(tableData.event_type.toLowerCase().replace(/-/, "_")).name}}</p>
           </div>
           <div class="econtent" v-if='tableData.event_subtype'>
             <p class="econtentp w5em">子类</p>
-            <p class="econtentp">{{tableData.event_subtype}}</p>
+            <p class="econtentp">{{myMap1.get(tableData.event_subtype.toLowerCase().replace(/-/, "_")).name}}</p>
           </div>
         </div>
       </panel>
@@ -86,13 +86,25 @@ import {
         xiangguanDoc: new Array(),
         linkObj: new Object(),
         myMap: new Map(),
-        myMap1: new Map()
+        myMap1: new Map(),
+        myMapevent: new Map()
       }
     },
     props: ['tableData', 'entDivH'],
-    mounted() {
+    created() {
       var mthis = this
       var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
+      var eventType = ob.getElementsByTagName("event2chinese");
+      mthis.myMapevent = new Map();
+      for (let items of eventType) {
+        console.log('-----mymapevent------')
+        console.log(items)
+        console.log(items.getElementsByTagName("eventType")[0].textContent)
+        console.log(items.getElementsByTagName("eventCHType")[0].textContent)
+        mthis.myMapevent.set(items.getElementsByTagName("eventType")[0].textContent, {
+          name: items.getElementsByTagName("eventCHType")[0].textContent
+        });
+      }
       var eventNames = ob.getElementsByTagName("eventNames");
       mthis.myMap1 = new Map();
       for(let eventNameitem of eventNames) {
@@ -100,6 +112,8 @@ import {
           mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
         }
       }
+      console.log('==============================mymapevent=============')
+      console.log(mthis.myMapevent)
       var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
       var entityMainType = ob1.getElementsByTagName("entityMainType");
       mthis.myMap = new Map();
