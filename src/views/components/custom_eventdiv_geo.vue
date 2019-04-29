@@ -89,12 +89,8 @@
         //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['geo_selected_param', 'singlePerson', 'viewHeight','contentStatisticsResult','viewHeight_20_geo','clickSelectedGeoIds']),
+    computed:mapState (['geo_selected_param', 'geo_onlyselected_param', 'singlePerson', 'viewHeight','contentStatisticsResult','viewHeight_20_geo','clickSelectedGeoIds']),
     watch: {
-      // contentStatisticsResult:function(){
-      //   var mthis = this;
-      //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
-      // },
       clickSelectedGeoIds:function(){
         var mthis = this;
         if(mthis.clickSelectedGeoIds.length > 0){
@@ -145,8 +141,81 @@
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
+      geo_onlyselected_param:function(){
+        var mthis = this;
+        debugger
+        var OrgIds = [];
+        var EventIds = [];
+        mthis.geo_onlyselected_param.forEach(function(id){
+          var index = id.indexOf('&');
+          if(index === -1){
+            OrgIds.push(id);
+          } else {
+            var Id = id.split('&')[1];
+            EventIds.push(Id);
+          }
+        })
+        if(mthis.geo_onlyselected_param.length > 0){
+            if(OrgIds.length > 0){
+              var nodeOb = {};
+              nodeOb.nodeIds = OrgIds;
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
+                    mthis.evetdata = response.body.data[0].nodes;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                    mthis.saveSelectedIds = mthis.evetdata;
+                    mthis.evetdataFlag = true
+                  })
+            } 
+            if(EventIds.length > 0){
+              var eventeOb = {};
+              eventeOb.EventIds = EventIds;
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
+                    var EventDetail = response.body.data;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                    var eventDs = [];
+                    for(var i = 0; i < EventDetail.length; i++){
+                      var eventD = {};
+                      eventD.entity_type = 'event';
+                      eventD.id = EventDetail[i].id;
+                      eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
+                      eventD.loaded = true;
+                      eventD.name = EventDetail[i].event_content;
+                      eventDs.push(eventD)
+                    }
+                    mthis.evetdata  = eventDs;
+                    mthis.saveSelectedIds = mthis.evetdata;
+                    mthis.evetdataFlag = true
+                  })
+            }
+            
+          } else {
+            mthis.evetdata = [];
+            mthis.evetdataFlag = false;
+          }
+          if(mthis.geo_onlyselected_param.length > 1){
+            var nodeIds = [];
+            for(let i = 0; i < OrgIds.length; i++){
+              nodeIds.push(OrgIds[i])
+            }
+            for(let i = 0; i < EventIds.length; i++){
+              nodeIds.push(EventIds[i])
+            }
+            debugger
+            //mthis.waiting()
+            mthis.spinShow = true;
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url+'/graph-attr/', {
+            'nodeIds': nodeIds,
+            'type':'geo'
+            }).then(response => {
+                mthis.staticsDatas = response.body.data;
+                mthis.spinShow = false;
+              })
+            } else {
+              mthis.staticsDatas = [];
+              mthis.spinShow = false;
+            }
+      },
       geo_selected_param:function(){
         var mthis = this;
+        debugger
         var OrgIds = [];
         var EventIds = [];
         mthis.geo_selected_param.paramIds.forEach(function(id){
@@ -251,6 +320,7 @@
         }, 
       clickRightMenu(rightCilckArgu){
         var mthis = this;
+        debugger
         var buttonId = rightCilckArgu.buttonId;
         var ids = rightCilckArgu.nsIds;
         if(buttonId === 'onlylookit'){

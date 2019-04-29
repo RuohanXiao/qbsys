@@ -3188,6 +3188,7 @@ export default {
         },
         geoStaticsOnlyLookSelectedIds(){
             var mthis = this;
+            debugger
             var ids = [];
             if(mthis.geoStaticsOnlyLookSelectedIds.length > 0){
                 mthis.geoStaticsOnlyLookSelectedIds.forEach(function(item){
@@ -3206,7 +3207,9 @@ export default {
                     mthis.setFeatureStatus(features[i],'die');
                 }
             })
-            mthis.geometrySelectedEventIds = ids;
+            mthis.SelectedIds = mthis.geoStaticsOnlyLookSelectedIds
+            var selectedEventsParam = mthis.geoStaticsOnlyLookSelectedIds
+            mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
         geoStaticsSelectedIds:function(){
             var mthis = this;
@@ -3265,12 +3268,16 @@ export default {
         },
         geometrySelectedEventIds:function(){
             var mthis = this;
-            var selectedEventsParam = {
+            debugger
+            /* var selectedEventsParam = {
                 type:'GeoView',
                 paramIds:mthis.geometrySelectedEventIds
             };
-            mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
+            mthis.$store.commit('setGeoSelectedParam',selectedEventsParam);  */
             mthis.SelectedIds = mthis.geometrySelectedEventIds
+            var selectedEventsParam = mthis.geometrySelectedEventIds
+            mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
+            //mthis.SelectedIds = mthis.geometrySelectedEventIds
         },
         geoTimeCondition:function(){
             var mthis = this;
