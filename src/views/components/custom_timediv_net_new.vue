@@ -348,8 +348,39 @@
         mthis.option.xAxis.data = mthis.dataBySeries.date;
         mthis.option.series[0].data = mthis.dataBySeries.num;
         mthis.option.series[1].data = mthis.dataBySeries.clickNum;
-        let myOption 
+         
         mthis.charts.setOption(mthis.option)
+        // mthis.charts.on('brushSelected', function(params) {
+        //   console.log("111111111")
+        //   if (params.batch[0].areas[0] !== undefined) {
+        //     var startAndEnd = params.batch[0].areas[0].coordRanges[0];
+        //     console.log("youyouyou")
+        //   }
+        //   mthis.timeTitle = '请选择节点'
+        //   console.log("lalalal")
+        //   if (params.batch[0].areas.length === 0) {
+        //     mthis.timeTitle = '请选择节点'
+        //     console.log("hahahh")
+            
+        //   } else {
+        //     if(startAndEnd[0]<0){
+        //       startAndEnd[0] = 0
+        //     }
+        //     if(startAndEnd[1]<0){
+        //       startAndEnd[1] = mthis.dataBySeries.date.length - 1
+        //     }
+        //     mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
+        //   }
+        // })
+        // mthis.charts.on('click', function(params) {
+        //   mthis.timeTitle = params.name
+          
+        //   mthis.charts.dispatchAction({
+        //     type: 'highlight',
+        //     // 可选，数据的 index
+        //     dataIndex: params.dataIndex
+        //   })
+        // })
         this.charts.on('brushSelected', function(params) {
           var wholeChart = document.getElementById(mthis.timechartdivId);
             wholeChart.onclick = () => false;
@@ -360,7 +391,12 @@
           }
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
-            // mthis.timeTitle = '请选择节点'
+            mthis.timeTitle = '请选择节点'
+            mthis.boxSelEventIds.ids = []
+            mthis.$store.commit('setNetTimeCondition',[])
+            mthis.boxSelEventIds.title = "analysis"
+            mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
+            console.log(mthis.boxSelEventIds)
           } else {
             if(startAndEnd[0]<0){
               startAndEnd[0] = 0
@@ -408,7 +444,9 @@
           }
         });
         this.charts.on('click', function(params) {
+          console.log(params)
           mthis.timeTitle = params.name
+          
           let timeArr = []
           timeArr.push(params.name)
           timeArr.push(params.name)

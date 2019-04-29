@@ -27,8 +27,8 @@
       <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
-    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="this.$store.commit('setGeoTimeCondition',this.clickEventIds)">选中分析</div>
-    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="this.$store.commit('setGeoTimeCondition',this.boxSelEventIds)">选中分析</div>
+    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="$store.commit('setGeoTimeCondition',clickEventIds)">选中分析</div>
+    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="$store.commit('setGeoTimeCondition',boxSelEventIds)">选中分析</div>
   </div>
 </template>
  
@@ -352,7 +352,12 @@
           }
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
-            // mthis.timeTitle = '请选择节点'
+            mthis.timeTitle = '请选择节点'
+            mthis.boxSelEventIds.eventIds = []
+            mthis.toGeoEventIds.eventIds = []
+            mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds)
+            
+            mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds)
           } else {
             if(startAndEnd[0]<0){
               startAndEnd[0] = 0
@@ -403,6 +408,7 @@
         this.charts.on('click', function(params) {
           mthis.timeTitle = params.name
           let timeArr = []
+          
           timeArr.push(params.name)
           timeArr.push(params.name)
         //   mthis.$store.commit('setNetTimeCondition', timeArr)
@@ -470,6 +476,13 @@
                 }
                 mthis.isBrush = []
             }
+          wholeChart.onclick = function(){
+            mthis.clickEventIds.title = "";
+            mthis.clickEventIds.ids=[];
+            mthis.boxSelEventIds.title = "";
+            mthis.boxSelEventIds.ids = "";
+            console.log("1111111111111")
+          }
         }else if(flag ==2){
           
           mthis.timeTitle = '时间轴';
