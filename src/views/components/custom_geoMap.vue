@@ -3171,18 +3171,11 @@ export default {
         },
         SelectedIds:function(){
             var mthis = this;
-            mthis.setFeatureStatusByIds(mthis.SelectedIds);
-            if(mthis.heatMapVisible){
-                /* var heatFeature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId).clone();
-                    heatFeature.setId(featureId);
-                    heatFeature.setStyle(null);
-                    heatSource.addFeature(heatFeature);
-                    var num = heatFeature.get('selectedNum');
-                    if(num > mthis.maxEventsNum){
-                        mthis.maxEventsNum = num;
-                    } */
+            if(mthis.routeMap){
+                mthis.setFeatureStatusByIds(mthis.SelectedIds);
+                mthis.isOperateButtonsHLOrDim();
             }
-            mthis.isOperateButtonsHLOrDim();
+            
         },
         geoStaticsOnlyLookSelectedIds(){
             var mthis = this;
