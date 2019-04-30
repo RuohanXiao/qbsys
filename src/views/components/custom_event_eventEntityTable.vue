@@ -4,13 +4,33 @@
       <panel name="1">
         <span>事件属性</span>
         <div slot="content" class="tableLine">
-          <div class="econtent"  v-if='tableData.event_type'>
+          <div class="econtent" v-if='tableData.event_type'>
             <p class="econtentp w5em">事件类型</p>
             <p class="econtentp">{{myMapevent.get(tableData.event_type.toLowerCase().replace(/-/, "_")).name}}</p>
           </div>
           <div class="econtent" v-if='tableData.event_subtype'>
             <p class="econtentp w5em">子类</p>
             <p class="econtentp">{{myMap1.get(tableData.event_subtype.toLowerCase().replace(/-/, "_")).name}}</p>
+          </div>
+          <div class="econtent" v-if='tableData.nperps'>
+            <p class="econtentp w5em">恐怖分子总数</p>
+            <p class="econtentp">{{tableData.nperps}}</p>
+          </div>
+          <div class="econtent" v-if='tableData.nkill'>
+            <p class="econtentp w5em">死亡总人数</p>
+            <p class="econtentp">{{tableData.nkill}}</p>
+          </div>
+          <div class="econtent" v-if='tableData.motivate'>
+            <p class="econtentp w5em">动机 </p>
+            <p class="econtentp">{{tableData.motivate}}</p>
+          </div>
+          <div class="econtent" v-if='tableData.natlty1_txt'>
+            <p class="econtentp w5em">被攻击目标的国籍</p>
+            <p class="econtentp">{{tableData.natlty1_txt}}</p>
+          </div>
+          <div class="econtent" v-if='tableData.attacktype1_txt'>
+            <p class="econtentp w5em">攻击方法</p>
+            <p class="econtentp">{{tableData.attacktype1_txt}}</p>
           </div>
         </div>
       </panel>
@@ -69,7 +89,7 @@
   </div>
 </template>
 <script>
-import {
+  import {
     mapState,
     mapMutations
   } from 'vuex'
@@ -78,7 +98,7 @@ import {
   export default {
     data() {
       return {
-        spinWaiting:false,
+        spinWaiting: false,
         value1: ['1', '2', '3', '4'],
         xiangguanEntityItems: new Array(),
         xiangguanEntitys: new Object(),
@@ -97,23 +117,26 @@ import {
       var eventType = ob.getElementsByTagName("event2chinese");
       mthis.myMapevent = new Map();
       for (let items of eventType) {
-        console.log('-----mymapevent------')
-        console.log(items)
-        console.log(items.getElementsByTagName("eventType")[0].textContent)
-        console.log(items.getElementsByTagName("eventCHType")[0].textContent)
+        // console.log('-----mymapevent------')
+        // console.log(items)
+        // console.log(items.getElementsByTagName("eventType")[0].textContent)
+        // console.log(items.getElementsByTagName("eventCHType")[0].textContent)
         mthis.myMapevent.set(items.getElementsByTagName("eventType")[0].textContent, {
           name: items.getElementsByTagName("eventCHType")[0].textContent
         });
       }
       var eventNames = ob.getElementsByTagName("eventNames");
       mthis.myMap1 = new Map();
-      for(let eventNameitem of eventNames) {
-        for(let items of eventNameitem.children){
-          mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
+      for (let eventNameitem of eventNames) {
+        for (let items of eventNameitem.children) {
+          mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {
+            name: items.getElementsByTagName('chname')[0].textContent,
+            img: items.getElementsByTagName('img')[0].textContent
+          })
         }
       }
-      console.log('==============================mymapevent=============')
-      console.log(mthis.myMapevent)
+      // console.log('==============================mymapevent=============')
+      // console.log(mthis.myMapevent)
       var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
       var entityMainType = ob1.getElementsByTagName("entityMainType");
       mthis.myMap = new Map();
@@ -129,36 +152,36 @@ import {
       this.tableData = new Object()
     },
     methods: {
-      addSingleNodeToCanvans(id,type,subType) {
+      addSingleNodeToCanvans(id, type, subType) {
         var mthis = this
-        if(type === 'entity') {
+        if (type === 'entity') {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
-            "nodeIds":id
+            "nodeIds": id
           }).then(response => {
-            let nodeArr = response.body.data[0].nodes.map(it=>{
+            let nodeArr = response.body.data[0].nodes.map(it => {
               it.img = util.checkImgExists(it.img) ? (it.img) : 'http://10.60.1.140/assets/images/human.png'
               return it.id
             })
             mthis.$store.commit('setAddNetNodes', {
-              nodes:response.body.data[0].nodes,
-              links:mthis.linkObj.filter(item=>{
+              nodes: response.body.data[0].nodes,
+              links: mthis.linkObj.filter(item => {
                 return item.from == id || item.to == id
               })
             })
           })
         }
-        if(type === 'event') {
+        if (type === 'event') {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
-            "EventIds":id
+            "EventIds": id
           }).then(response => {
-            console.log('response.body.data')
+            // console.log('response.body.data')
             let nodes = new Array();
             let links = new Array();
-            if(response.body.code === 0) {
+            if (response.body.code === 0) {
               // let type = response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")
               let img = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).img
               let name = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).name
-              for(let i = 0;i<response.body.data.length;i++) {
+              for (let i = 0; i < response.body.data.length; i++) {
                 nodes.push({
                   id: response.body.data[i].id,
                   img: img,
@@ -166,10 +189,10 @@ import {
                   name: name,
                   loaded: true
                 })
-                response.body.data[i].entity_list.map(oitem=>{
-                  if(oitem.id === this.tableData.id) {
+                response.body.data[i].entity_list.map(oitem => {
+                  if (oitem.id === this.tableData.id) {
                     links.push({
-                      id: (this.tableData.id>response.body.data[i].id)?(this.tableData.id+'-'+response.body.data[i].id):(response.body.data[i].id+'-'+this.tableData.id),
+                      id: (this.tableData.id > response.body.data[i].id) ? (this.tableData.id + '-' + response.body.data[i].id) : (response.body.data[i].id + '-' + this.tableData.id),
                       type: oitem.role,
                       from: this.tableData.id,
                       to: response.body.data[i].id,
@@ -179,29 +202,29 @@ import {
                 })
               }
               mthis.$store.commit('setAddNetNodes', {
-                nodes:nodes,
-                links:links
+                nodes: nodes,
+                links: links
               })
             }
           })
         }
-        if(type === 'document') {
+        if (type === 'document') {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
-            "docIds":id
+            "docIds": id
           }).then(response => {
             let nodes = new Array();
             let links = new Array();
-            if(response.body.code === 0) {
-              for(let i = 0;i<response.body.data.length;i++) {
+            if (response.body.code === 0) {
+              for (let i = 0; i < response.body.data.length; i++) {
                 nodes.push({
                   id: response.body.data[i].id,
                   img: 'http://10.60.1.140/assets/images/content_node.png',
                   entity_type: 'content',
-                  name:response.body.data[i].title,
-                  label: response.body.data[i].title.substring(0, 19)+'...',
+                  name: response.body.data[i].title,
+                  label: response.body.data[i].title.substring(0, 19) + '...',
                   loaded: true
                 })
-                let idstr = (this.tableData.id>response.body.data[i].id)?('content_'+this.tableData.id+'-'+response.body.data[i].id):('content_'+response.body.data[i].id+'-'+this.tableData.id)
+                let idstr = (this.tableData.id > response.body.data[i].id) ? ('content_' + this.tableData.id + '-' + response.body.data[i].id) : ('content_' + response.body.data[i].id + '-' + this.tableData.id)
                 links.push({
                   id: idstr,
                   type: '包含',
@@ -211,8 +234,8 @@ import {
                 })
               }
               mthis.$store.commit('setAddNetNodes', {
-                nodes:nodes,
-                links:links
+                nodes: nodes,
+                links: links
               })
             }
           })
@@ -221,7 +244,7 @@ import {
     },
     watch: {
       tableData: function() {
-        // console.log('===========custom_event_humanEntityTable --------tableData')
+        // // console.log('===========custom_event_humanEntityTable --------tableData')
         let mthis = this
         mthis.spinWaiting = true
         mthis.xiangguanEntityItems = new Array()
@@ -238,8 +261,7 @@ import {
                 return item.entity_type
               }),
               "TypeLabel": "all"
-            }).then(response => {
-            })
+            }).then(response => {})
           } else {
             alert('长度为0')
           }
@@ -254,25 +276,25 @@ import {
             // mthis.xiangguanEntitys = new Object()
             // mthis.xiangguanEvent = new Array()
             // mthis.xiangguanDoc = new Array()
-             if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
-               response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
-              item.type = item.undirected_type
-              return item
-            })
+            if (response.body.data[0].RelatedEntity[mthis.tableData.id]) {
+              response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item => {
+                item.type = item.undirected_type
+                return item
+              })
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }
-            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+            if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
               mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
             }
-            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
+            if (response.body.data[0].RelatedDocument[mthis.tableData.id]) {
               mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
             }
             if (response.body.data[0].unknown !== new Object()) {
-              // console.log('------------有未知类型的节点--------------------')
-              // console.log(response.body.data[0].unknown)
-              // console.log('-----------------------------------------------')
+              // // console.log('------------有未知类型的节点--------------------')
+              // // console.log(response.body.data[0].unknown)
+              // // console.log('-----------------------------------------------')
             }
           })
         }

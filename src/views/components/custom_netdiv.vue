@@ -533,7 +533,7 @@
       },
       shortPath(ids) {
         var mthis = this
-        console.log(ids);
+        // console.log(ids);
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
           subjectId: ids[0],
           objectId: ids[1]
@@ -595,8 +595,8 @@
           },
           time: ""
         }];
-        // console.log('=====selectionId==========')
-        // console.log(mthis.selectionId)
+        // // console.log('=====selectionId==========')
+        // // console.log(mthis.selectionId)
         setTimeout(() => {
           let ddata = mthis.netchart.exportData();
           mthis.workatlastData = [{
@@ -617,7 +617,7 @@
           this.workatlasType = type;
           this.workatlasFlag = this.workatlasFlag + 1;
         }, 200);
-        // console.log(this.worksetData)
+        // // console.log(this.worksetData)
       },
       openCreateGroupModal() {
         var mthis = this;
@@ -639,8 +639,8 @@
             data: []
           }
         ];
-        // console.log('=====setSelectionIdByType==========')
-        // console.log(mthis.selectionIdByType)
+        // // console.log('=====setSelectionIdByType==========')
+        // // console.log(mthis.selectionIdByType)
         if (!(
             ((mthis.selectionIdByType.nodeIds.length ==
                 mthis.selectionIdByType.eventIds.length) ==
@@ -692,13 +692,13 @@
                   mthis.worksetData[2].data = response.body.data;
                 }
               });
-            console.log('mthis.worksetData----------')
-            console.log(mthis.worksetData)
+            // console.log('mthis.worksetData----------')
+            // console.log(mthis.worksetData)
           }
         }
         this.worksetType = "add";
         this.worksetFlag = this.worksetFlag + 1;
-        // console.log(this.worksetData)
+        // // console.log(this.worksetData)
       },
       startTimer(v) {
         var mthis = this;
@@ -1151,9 +1151,9 @@
               .then(response => {
                 if (response.body.code === 0) {
                   if (JSON.stringify(response.body.data[0].RelatedEvent) !== "{}") {
-                    console.log('if(JSON.stringify(response.body.data[0].RelatedEvent) == "{}")')
-                    console.log(JSON.stringify(response.body.data[0].RelatedEvent) !== "{}")
-                    console.log(response)
+                    // console.log('if(JSON.stringify(response.body.data[0].RelatedEvent) == "{}")')
+                    // console.log(JSON.stringify(response.body.data[0].RelatedEvent) !== "{}")
+                    // console.log(response)
                     eventRes = response.body.data[0].RelatedEvent;
                     let eventList = [];
                     let sList = arrList;
@@ -1378,7 +1378,7 @@
         };
       },
       gongzhiEnitiy() {
-        console.log(this.selectionId)
+        // console.log(this.selectionId)
         var mthis = this
         if (this.selectionId.length > 1) {
           this.expandFlag_gongzhi = 'knowledge_gongzhi'
@@ -1405,7 +1405,7 @@
         }
       },
       gongzhiEvent() {
-        console.log(this.selectionId)
+        // console.log(this.selectionId)
         this.expandFlag_gongzhi = 'event_gongzhi'
         var mthis = this
         mthis.spinShow = true;
@@ -1432,7 +1432,7 @@
         }
       },
       gongzhiDoc() {
-        console.log(this.selectionId)
+        // console.log(this.selectionId)
         var mthis = this
         mthis.expandFlag_gongzhi = 'content_gongzhi'
         mthis.spinShow = true;
@@ -1459,11 +1459,11 @@
         }
       },
       exportImg() {
-        // console.log(this.netchart)
-        // console.log(this.netchart.exportData()) //可以通过这种方法获取到节点的坐标
+        // // console.log(this.netchart)
+        // // console.log(this.netchart.exportData()) //可以通过这种方法获取到节点的坐标
         var mthis = this;
-        // // console.log('=================exportImg==================')
-        // // console.log(this.netchart.getNode("Q22368"))
+        // // // console.log('=================exportImg==================')
+        // // // console.log(this.netchart.getNode("Q22368"))
         // let nodeObj = this.netchart.getNode("Q22368")
         // nodeObj.lineColor = 'rgba(51,255,255,0.5)';
         // nodeObj.backgroundStyle = {
@@ -1672,9 +1672,9 @@
                 }
                 var item;
                 while (stack.length) {
-                  console.log('================++++++++++++++++++')
+                  // console.log('================++++++++++++++++++')
                   item = stack.shift();
-                  console.log(item.order + '    ' + item.depth)
+                  // console.log(item.order + '    ' + item.depth)
                   let nodeObj = mthis.netchart.getNode(item.id)
                   nodeObj['x'] = item.order * 200 + x0
                   nodeObj['y'] = item.depth * 300 + y0
@@ -1682,7 +1682,7 @@
                   mthis.netchart.lockNode(item.id)
                   //如果该节点有子节点，继续添加进入栈底
                   if (item.children && item.children.length) {
-                    console.log(item.children.length)
+                    // console.log(item.children.length)
                     stack = stack.concat(item.children);
                   }
                 }
@@ -1732,7 +1732,7 @@
                   }
                   // nodeObj['x'] = item.order * 200 + x0
                   // nodeObj['y'] = item.depth * 300 + y0
-                  console.log(nodeObj['x'] + ' , ' + nodeObj['y'])
+                  // console.log(nodeObj['x'] + ' , ' + nodeObj['y'])
                   arrids.push(item.id)
                   mthis.netchart.lockNode(item.id)
                   //如果该节点有子节点，继续添加进入栈顶
@@ -1741,14 +1741,14 @@
                     // for (; len; len--) {
                     //     stack.unshift(item.children[len - 1]);
                     // }
-                    // console.log(item.children.length)
+                    // // console.log(item.children.length)
                     stack = item.children.concat(stack);
                   }
                 }
               };
-              // console.log('===============guan du=====================')
+              // // console.log('===============guan du=====================')
               // iterator1(response.body.data[0]);
-              console.log('===============shen du=====================')
+              // console.log('===============shen du=====================')
               iterator2(response.body.data[0]);
             }
           });
@@ -1768,13 +1768,13 @@
       },
       //截屏
       cutScreen() {
-        console.log('================')
-        console.log(this.netchart)
-        console.log(this.netchart.nodes())
-        console.log(this.netchart.links())
+        // console.log('================')
+        // console.log(this.netchart)
+        // console.log(this.netchart.nodes())
+        // console.log(this.netchart.links())
         // html2canvas(document.getElementById('netchart')).then(function(canvas) {
         //   var pageData = canvas.toDataURL('image/jpeg', 1.0);
-        //   // console.log(pageData)
+        //   // // console.log(pageData)
         //   var saveFile = function(data, filename){
         //       var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
         //       save_link.href = data;
@@ -1953,7 +1953,7 @@
           // let netChartLogJson = JSON.parse(netChartLog).data;
           let ids = [];
           for (let num = 0; num < this.selectionId.length; num++) {
-            // console.log(typeof(mthis.selectionId[0]))
+            // // console.log(typeof(mthis.selectionId[0]))
             if (typeof mthis.selectionId[0] === "string") {
               if (mthis.netchart.getNode(mthis.selectionId[num]).isNode) {
                 mthis.netchart.removeData({
@@ -2583,8 +2583,8 @@
             }
             },
             onError: function(event) {
-              // console.log('------error-------------')
-              // console.log(event)
+              // // console.log('------error-------------')
+              // // console.log(event)
             },
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
@@ -2626,7 +2626,7 @@
                 return x.isLink;
               });
               if (event.clickNode || event.clickLink) {
-                mthis.$store.commit("setTabSelect", "mubiaoxiangqing");
+                mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
               } else {
                 // mthis.selectionId = null
               }
@@ -2689,7 +2689,7 @@
                   }).map(item => {
                     return item.id;
                   });
-                  console.log(mthis.selectionId)
+                  // console.log(mthis.selectionId)
                   let linksArr = [];
                   for (let n = 0; n < mthis.selectionId.length; n++) {
                     if (mthis.netchart.getNode(mthis.selectionId[n])) {
@@ -2729,15 +2729,15 @@
                   // let links = nodeArr.map(item=>{
                   //   return item.links
                   // })
-                  // // console.log('-----// console.log(nodeArr)-----')
-                  // // console.log(nodeArr)
-                  // // console.log(nodesId)
-                  // // console.log(links)
+                  // // // console.log('-----// // console.log(nodeArr)-----')
+                  // // // console.log(nodeArr)
+                  // // // console.log(nodesId)
+                  // // // console.log(links)
                   // let selectLinks =  links.filter(a=>{
                   //   return (util.ifInArr(nodesId,a.from)&& util.ifInArr(nodesId,a.to))
                   // })
-                  // // console.log(selectLinks)
-                  // // console.log('-----// console.log(nodeArr)-----')
+                  // // // console.log(selectLinks)
+                  // // // console.log('-----// // console.log(nodeArr)-----')
                   for (let nu = 0; nu < event.selection.length; nu++) {
                     if (event.selection[nu].isNode) {
                       // mthis.netchart.lockNode(event.selection[nu].data.id)
@@ -2787,8 +2787,8 @@
                     "setSelectionIdByType",
                     mthis.selectionIdByType
                   );
-                  // console.log('==========ssssss======================')
-                  // console.log(mthis.selectionId)
+                  // // console.log('==========ssssss======================')
+                  // // console.log(mthis.selectionId)
                   mthis.netchart.updateStyle(mthis.selectionId);
                   mthis.netchart.updateSettings();
                   mthis.netchart.updateSize();
@@ -2878,15 +2878,15 @@
       },
       atlastData: function() {
         var mthis = this;
-        // console.log('------------dao ru cao zuo------------------')
-        // console.log(this.atlastData)
+        // // console.log('------------dao ru cao zuo------------------')
+        // // console.log(this.atlastData)
         // layout: {
         //     // mode: 'hierarchy',
         //     mode: "radial",
         //     // mode: "static",
         //     // mode: "dynamic",
-        // console.log(mthis.netchart)
-        // console.log(mthis.netchart._impl.settings.layout.mode)
+        // // console.log(mthis.netchart)
+        // // console.log(mthis.netchart._impl.settings.layout.mode)
         // mthis.netchart._impl.settings.layout.mode = 'static'
         mthis.changeMode("static");
         // mthis.netchart.replaceSettings({
@@ -2897,17 +2897,17 @@
         mthis.netchart.addData(mthis.atlastData);
         setTimeout(function() {
           for (let item of mthis.atlastData.nodes) {
-            // console.log('lock--------------')
-            // console.log(item)
-            // console.log(item.id)
-            // console.log(item.x)
-            // console.log(item.y)
+            // // console.log('lock--------------')
+            // // console.log(item)
+            // // console.log(item.id)
+            // // console.log(item.x)
+            // // console.log(item.y)
             mthis.netchart.lockNode(item.id, item.x, item.y);
           }
         }, 200);
         // mthis.netchart.freezeLayout()
         // mthis.netchart.lockNode(mthis.atlastData.nodes.map(item=>{return item.id}))
-        // // console.log(mthis.netchart._impl.settings.layout.mode)
+        // // // console.log(mthis.netchart._impl.settings.layout.mode)
         // setTimeout(function(e) {
         //   mthis.changeMode('radial')
         //   // mthis.netchart.replaceSettings({
@@ -2918,9 +2918,9 @@
         // },200)
       },
       openWorkSetFlag: function() {
-        // // console.log('-----------open modify workset--------------')
-        // // console.log(this.openWorkSetFlag)
-        // // console.log('--------------------------------------------')
+        // // // console.log('-----------open modify workset--------------')
+        // // // console.log(this.openWorkSetFlag)
+        // // // console.log('--------------------------------------------')
         var mthis = this;
         this.worksetInfo = {
           title: "",
@@ -2951,8 +2951,8 @@
               pagesize: 30
             })
             .then(response => {
-              // console.log('=======response============')
-              // console.log(response)
+              // // console.log('=======response============')
+              // // console.log(response)
               if (
                 response.body.code === 0 &&
                 response.body.data[0].nodeIds.length > 0
@@ -2967,8 +2967,8 @@
                     nodeIds: response.body.data[0].nodeIds
                   })
                   .then(res => {
-                    // console.log('=======res============')
-                    // console.log(res)
+                    // // console.log('=======res============')
+                    // // console.log(res)
                     if (res.body.code === 0) {
                       mthis.worksetData[0].data = res.body.data[0].nodes;
                     }
@@ -3019,7 +3019,7 @@
           */
         this.worksetType = "modify";
         this.worksetFlag = this.worksetFlag + 1;
-        // console.log(this.worksetData)
+        // // console.log(this.worksetData)
       },
       startTimer(v) {
         var mthis = this;
@@ -3050,8 +3050,8 @@
         let nodes = [];
         let res = [];
         mthis.spinShow = true;
-        // console.log('ids')
-        // console.log(ids)
+        // // console.log('ids')
+        // // console.log(ids)
         mthis.$http
           .post(mthis.$store.state.ipConfig.api_url + "/entity-info/", {
             nodeIds: ids
@@ -3064,10 +3064,10 @@
                 item.imageCropping = true;
                 return item.id;
               });
-              // console.log('=================')
-              // console.log(nodes)
-              // console.log(arr)
-              // console.log('=================')
+              // // console.log('=================')
+              // // console.log(nodes)
+              // // console.log(arr)
+              // // console.log('=================')
               mthis.spinShow = false;
               mthis.zIndex = 0;
               mthis.netchart.addData({
@@ -3124,8 +3124,7 @@
         // this.netchart.addData()
         var mthis = this;
         let dataids = []
-        // mthis.netchart.updateStyle
-        // console.log(mthis.geoToNetData)
+        console.log(mthis.geoToNetData)
         if (mthis.geoToNetData.nodeIds.length > 0) {
           dataids.concat(mthis.geoToNetData.nodeIds)
           mthis.$http
@@ -3200,8 +3199,8 @@
         // contentIdsArry = contentIdsArry.concat(mthis.selectionId)
         setTimeout(() => {
           mthis.netchart.selection(contentIdsArry);
-          console.log('==============contentIdsArry================')
-          console.log(contentIdsArry)
+          // console.log('==============contentIdsArry================')
+          // console.log(contentIdsArry)
           mthis.square();
           mthis.spinShow = false;
         }, 300);
@@ -3268,9 +3267,9 @@
         // }, 200);
       },
       addNetNodes: function(va) {
-        // console.log('=======addNetNodes============================')
-        // console.log(this.addNetNodes)
-        // console.log(va)
+        // // console.log('=======addNetNodes============================')
+        // // console.log(this.addNetNodes)
+        // // console.log(va)
         var mthis = this;
         if (mthis.$store.state.tmss === "net") {
           mthis.netchart.addData(va);

@@ -351,16 +351,16 @@
          
         mthis.charts.setOption(mthis.option)
         // mthis.charts.on('brushSelected', function(params) {
-        //   console.log("111111111")
+        //   // console.log("111111111")
         //   if (params.batch[0].areas[0] !== undefined) {
         //     var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-        //     console.log("youyouyou")
+        //     // console.log("youyouyou")
         //   }
         //   mthis.timeTitle = '请选择节点'
-        //   console.log("lalalal")
+        //   // console.log("lalalal")
         //   if (params.batch[0].areas.length === 0) {
         //     mthis.timeTitle = '请选择节点'
-        //     console.log("hahahh")
+        //     // console.log("hahahh")
             
         //   } else {
         //     if(startAndEnd[0]<0){
@@ -396,7 +396,7 @@
             mthis.$store.commit('setNetTimeCondition',[])
             mthis.boxSelEventIds.title = "analysis"
             mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
-            console.log(mthis.boxSelEventIds)
+            // console.log(mthis.boxSelEventIds)
           } else {
             if(startAndEnd[0]<0){
               startAndEnd[0] = 0
@@ -444,7 +444,7 @@
           }
         });
         this.charts.on('click', function(params) {
-          console.log(params)
+          // console.log(params)
           mthis.timeTitle = params.name
           
           let timeArr = []

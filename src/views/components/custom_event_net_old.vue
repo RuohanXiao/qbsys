@@ -1298,17 +1298,17 @@
     components: {},
     watch: {
       detailData: function() {
-        // console.log('this.detailData')
-        // console.log(this.detailData)
+        // // console.log('this.detailData')
+        // // console.log(this.detailData)
       },
       xiangguanEntity: function() {
-        // console.log('this.xiangguanEntity')
-        // console.log(this.xiangguanEntity)
+        // // console.log('this.xiangguanEntity')
+        // // console.log(this.xiangguanEntity)
       },
       evetdata: function() {
         var mthis = this
-        // console.log('mthis.evetdata')
-        // console.log(mthis.evetdata)
+        // // console.log('mthis.evetdata')
+        // // console.log(mthis.evetdata)
         if (mthis.evetdata.length > 0) {
           if (mthis.timer) {
             clearTimeout(mthis.timer)
@@ -1326,13 +1326,13 @@
             }
             let arr = []
             if (mthis.evetdata[0] !== undefined) {
-              // console.log(mthis.myMap)
-              // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
+              // // console.log(mthis.myMap)
+              // // console.log(mthis.myMap.get(mthis.evetdata[0].entity_type))
               if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
                 // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
                 // let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
                 let detailId = (mthis.evetdata[0].id)
-                // console.log(detailId)
+                // // console.log(detailId)
                 mthis.selectTag = detailId
                 let a = []
                 a.push(detailId)
@@ -1352,13 +1352,13 @@
                 mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
                   "EventIds": a
                 }).then(response => {
-                  // console.log('==========/event-detail/==========')
-                  // console.log(response)
+                  // // console.log('==========/event-detail/==========')
+                  // // console.log(response)
                   if (response.body.code === 0) {
                     mthis.detailData = response.body.data[0]
-                    // console.log(mthis.detailData)
+                    // // console.log(mthis.detailData)
                     mthis.detailData.entity_type = 'event'
-                    // console.log(mthis.detailData)
+                    // // console.log(mthis.detailData)
                   } else {
                     alert('/event-detail/接口异常')
                   }
@@ -1393,7 +1393,7 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
             "docIds": ids
           }).then(response => {
-            // console.log(response)
+            // // console.log(response)
             if (response.body.code === 0) {
               let nodesItem = new Array()
               for (let n = 0; n < response.body.data.length; n++) {
@@ -1418,7 +1418,7 @@
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
           'EventIds': ids
         }).then(response => {
-          // console.log(response)
+          // // console.log(response)
           if (response.body.code === 0) {
             var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
             var eventNames = ob.getElementsByTagName("eventNames");
@@ -1433,8 +1433,8 @@
             }
             let eventsItem = new Array()
             for (let n = 0; n < response.body.data.length; n++) {
-              // console.log(response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_"))
-              // console.log(mthis.myMap1.get(response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_")).img)
+              // // console.log(response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_"))
+              // // console.log(mthis.myMap1.get(response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_")).img)
               // let type = response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_")
               // let img = mthis.myMap1.get(type).img
               // let name = mthis.myMap1.get(type).name
@@ -1588,15 +1588,15 @@
           //   "nodeIds": arr,
           //   "TypeLabel": 'entity'
           // }).then(response => {
-          //   // console.log('=============related entity=============')
-          //   // console.log(response)
+          //   // // console.log('=============related entity=============')
+          //   // // console.log(response)
           //   let arr = response.body.data[0].nodes
           //   // mthis.xiangguanEntity = response.body.data
           //   // if (response.body.code == 0 && response.body.data[0].nodes.length > 0) {
           //   //   mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-detail/', {
           //   //     "nodeIds": arr
           //   //   }).then(res => {
-          //   //     // console.log(res)
+          //   //     // // console.log(res)
           //   //     mthis.xiangguanEntity = res.body.data[0].nodes
           //   //   })
           //   // } else {
@@ -1619,8 +1619,8 @@
             "NodeIds": arr,
             "TypeLabel": 'event'
           }).then(response => {
-            // console.log('=============related event=============')
-            // console.log(response)
+            // // console.log('=============related event=============')
+            // // console.log(response)
           })
         }
         if (this.myMap.get(type) === 'document') {
@@ -1636,8 +1636,8 @@
             "NodeIds": arr,
             "TypeLabel": 'document'
           }).then(response => {
-            // console.log('=============related doc=============')
-            // console.log(response)
+            // // console.log('=============related doc=============')
+            // // console.log(response)
           })
         }
         this.selectTag = id

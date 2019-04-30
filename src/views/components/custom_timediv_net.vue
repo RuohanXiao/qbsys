@@ -441,9 +441,9 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/event-2-time/",{
             "EventIds":mthis.selectionIdByType.EventIds
           }).then(response => {
-            // console.log('====================this.selectionIdByType=====================')
-            // console.log(this.selectionIdByType)
-            // console.log(response)
+            // // console.log('====================this.selectionIdByType=====================')
+            // // console.log(this.selectionIdByType)
+            // // console.log(response)
           }) 
         }
       },

@@ -566,9 +566,9 @@
               mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
             }
             if (response.body.data[0].unknown !== new Object()) {
-              // console.log('------------有未知类型的节点--------------------')
-              // console.log(response.body.data[0].unknown)
-              // console.log('-----------------------------------------------')
+              // // console.log('------------有未知类型的节点--------------------')
+              // // console.log(response.body.data[0].unknown)
+              // // console.log('-----------------------------------------------')
             }
             mthis.spinWaiting = false
           })
@@ -618,7 +618,7 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds":id
           }).then(response => {
-            console.log('response.body.data')
+            // console.log('response.body.data')
             let nodes = new Array();
             let links = new Array();
             if(response.body.code === 0) {
@@ -691,15 +691,15 @@
       // searchNetResult: function() {
       // },
       tableData: function() {
-        console.log('===========custom_event_humanEntityTable --------tableData')
-        console.log(new Date())
-        console.log(this.tableData)
+        // console.log('===========custom_event_humanEntityTable --------tableData')
+        // console.log(new Date())
+        // console.log(this.tableData)
         let mthis = this
         mthis.xiangguanEntityItems = new Array()
         mthis.xiangguanEntitys = new Object()
         mthis.xiangguanEvent = new Array()
         mthis.xiangguanDoc = new Array()
-        console.log(new Date())
+        // console.log(new Date())
 
         mthis.spinWaiting = true
         if (this.tableData.isArray) {
@@ -745,9 +745,9 @@
               mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
             }
             if (response.body.data[0].unknown !== new Object()) {
-              // console.log('------------有未知类型的节点--------------------')
-              // console.log(response.body.data[0].unknown)
-              // console.log('-----------------------------------------------')
+              // // console.log('------------有未知类型的节点--------------------')
+              // // console.log(response.body.data[0].unknown)
+              // // console.log('-----------------------------------------------')
             }
           })
           // mthis.spinWaiting = false

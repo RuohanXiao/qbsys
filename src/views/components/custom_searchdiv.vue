@@ -76,8 +76,8 @@
         this.lightIconFlag = !this.lightIconFlag
       },
       setOption(a) {
-        // console.log('----setoption-----')
-        // console.log(a)
+        // // console.log('----setoption-----')
+        // // console.log(a)
         var mthis = this;
         if (this.$store.state.tmss === 'net') {
           // if (this.timer) {
@@ -87,8 +87,8 @@
           //   // 新增防抖功能
           let arr = []
           arr.push(a.id)
-          // console.log(a)
-          // console.log(arr)
+          // // console.log(a)
+          // // console.log(arr)
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
             'nodeIds': arr
           }).then(response => {
@@ -154,19 +154,19 @@
               })
               .then(response => {
                 if (response.body.timestamp == timestamp) {
-                  // console.log('=======pattern======')
-                  // // console.log(response)
+                  // // console.log('=======pattern======')
+                  // // // console.log(response)
                   mthis.options1 = []
                   // let optionWord = {}
                   // let optionWordArr = []
                   let optionList = {}
                   let optionListArr = []
-                  // console.log(response.body)
+                  // // console.log(response.body)
                   // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
                   for (let i = 0; i < response.body.data.nodes.length; i++) {
-                    // console.log('======____+++++++++')
-                    // console.log(response.body.data.nodes[i].img)
-                    // console.log(util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/default.png'))
+                    // // console.log('======____+++++++++')
+                    // // console.log(response.body.data.nodes[i].img)
+                    // // console.log(util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/default.png'))
                     // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
                     optionListArr.push({
                       // "label": name,
@@ -183,10 +183,10 @@
                   // mthis.optionNet.push(optionList)
                   // mthis.options1 = mthis.optionNet;
                   mthis.options1 = new Array(optionList)
-                  // console.log(mthis.options1)
+                  // // console.log(mthis.options1)
                   mthis.loading1 = false;
                 } else {
-                  // console.log('---------error time-----')
+                  // // console.log('---------error time-----')
                 }
               })
           }, 200);
@@ -268,10 +268,10 @@
                   // option.push(optionEvent)
                   // option.push(optionOrg)
                   // option.push(optionLocationName)
-                  //// console.log('-------option------')
-                  // // console.log(option)
+                  //// // console.log('-------option------')
+                  // // // console.log(option)
                   // mthis.options2 = option;
-                  //// console.log(mthis.options2)
+                  //// // console.log(mthis.options2)
                   mthis.loading2 = false;
                 })
             });

@@ -481,7 +481,7 @@
             mthis.clickEventIds.ids=[];
             mthis.boxSelEventIds.title = "";
             mthis.boxSelEventIds.ids = "";
-            console.log("1111111111111")
+            // console.log("1111111111111")
           }
         }else if(flag ==2){
           
