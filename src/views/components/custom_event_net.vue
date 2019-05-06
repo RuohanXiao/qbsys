@@ -111,9 +111,9 @@
       defaultImg(type, img) {
         var mthis = this
         if (mthis.eventdata[0]) {
-          console.log('==============defaultImg=====================')
-          console.log(type)
-          console.log(img)
+          // console.log('==============defaultImg=====================')
+          // console.log(type)
+          // console.log(img)
           if (this.myMap.get(type) === 'entity') {
             if (mthis.eventdata[0].entity_type === 'administrative') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/administrative.png'
@@ -162,8 +162,8 @@
           //   "NodeIds": arr,
           //   "TypeLabel": 'event'
           // }).then(response => {
-          //   // console.log('=============related event=============')
-          //   // console.log(response)
+          //   // // console.log('=============related event=============')
+          //   // // console.log(response)
           // })
         }
         if (mthis.myMap.get(type) === 'document') {
@@ -190,8 +190,7 @@
       docEntityTable
     },
     watch: {
-      detailData:  function() {
-
+      detailData: function() {
       },
       eventdata: function() {
         var mthis = this
@@ -202,7 +201,7 @@
           mthis.timer = setTimeout(function() {
             let arr = []
             let detailId;
-            if(mthis.eventdata[0]){
+            if (mthis.eventdata[0]) {
               if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'entity') {
                 detailId = (mthis.eventdata[0].id)
                 mthis.selectTag = detailId
@@ -232,7 +231,7 @@
                 mthis.selectTag = detailId
                 let result = new Object();
                 result = mthis.eventdata[0]
-                result.name = mthis.myMapevent.get(result.name.toLowerCase().replace(/-/, "_")).name
+                // result.name = mthis.myMapevent.get(result.name.toLowerCase().replace(/-/, "_")).name
                 // result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
                 result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
                 mthis.detailData = result
@@ -246,7 +245,7 @@
                 mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
                   "docIds": a
                 }).then(response => {
-                  console.log(response.body.data[0])
+                  // console.log(response.body.data[0])
                   let result = new Object();
                   result = response.body.data[0]
                   result.entity_type = 'document'
@@ -254,18 +253,18 @@
                   result.name = response.body.data[0].title.substring(0, 19) + '...'
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/content_node.png'
                   mthis.detailData = result
-                  console.log('mthis.detailData')
-                  console.log(mthis.detailData)
+                  // console.log('mthis.detailData')
+                  // console.log(mthis.detailData)
                 })
               } else {
-                // console.log('未找到匹配的类型')
+                // // console.log('未找到匹配的类型')
               }
             }
             // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
           }, 200);
         } else {
-          // console.log('=======mthis.eventdata取值异常')
-          // console.log(mthis.eventdata)
+          // // console.log('=======mthis.eventdata取值异常')
+          // // console.log(mthis.eventdata)
         }
       }
     },
@@ -312,16 +311,14 @@
           this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
         }
       }
-
-
       var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/dictionary.xml");
       var eventType = ob1.getElementsByTagName("event2chinese");
       this.myMapevent = new Map();
       for (let items of eventType) {
-        console.log('-----mymapevent------')
-        console.log(items)
-        console.log(items.getElementsByTagName("eventType")[0].textContent)
-        console.log(items.getElementsByTagName("eventCHType")[0].textContent)
+        // console.log('-----mymapevent------')
+        // console.log(items)
+        // console.log(items.getElementsByTagName("eventType")[0].textContent)
+        // console.log(items.getElementsByTagName("eventCHType")[0].textContent)
         this.myMapevent.set(items.getElementsByTagName("eventType")[0].textContent, {
           name: items.getElementsByTagName("eventCHType")[0].textContent
         });
@@ -419,9 +416,9 @@
     background-color: rgba(51, 255, 255, 0.05);
   }
   /* #NodeTypeInfo >tr>td>span{
-        padding-left:20px;
-        text-align:left;
-    } */
+          padding-left:20px;
+          text-align:left;
+      } */
   #nodeAttr p {
     padding-left: 1em;
     text-align: left;
@@ -442,7 +439,7 @@
     text-overflow: ellipsis;
     width: auto;
     /* max-width: 70%;
-      margin-right: 40px; */
+        margin-right: 40px; */
     padding: 0 10px;
     white-space: nowrap;
   }

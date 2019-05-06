@@ -64,7 +64,7 @@
         //   num: [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,],
         //   date: ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31',
         //          '2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28'],
-        // clickNum:null      
+        // clickNum:[]      
         // },
           
         dataBySeries: {
@@ -92,10 +92,57 @@
           "ids":[]
         },
         // 框选时控制选中分析的显示与否
-        isBrush:[]
+        isBrush:[],
+        // 框选时发送请求需要的时间参数
+        selTimeArr:[],
+        
+        isDataZoom:false
       };
     },
     methods: {
+      query(){
+            this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+                    "selectedIds":this.selectionIdByType.eventIds,
+                    "startTime":this.selTimeArr[0],
+                    "endTime":this.selTimeArr[1]
+                }).then(response =>{
+                    if(response.body.code == 0){
+                      // for(let i=0;i<response.body.data.eventIds.length;i++){
+                      //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                      // }
+                      this.boxSelEventIds.ids = response.body.data.eventIds
+                      this.$store.commit('setNetTimeCondition',response.body.data.eventIds)
+                      this.boxSelEventIds.title = ""
+                      this.$store.commit('setNetOnlyStaticsSelectedIds',this.boxSelEventIds)
+                    }else{
+                      console.log("服务器error")
+                    }
+                    
+                })
+        
+      },
+      throttle(fn,delay,duration){
+        
+        let timer = null;
+        let prev = new Date();
+        return function(){
+          var now = new Date();
+          
+          if(now - prev > duration){
+            
+            fn();
+            prev = now;
+            // clearTimeout(timer);
+          }else{
+            // clearTimeout(timer);
+            timer = setTimeout(function(){
+             
+              fn();
+              // prev = null;
+            },delay)
+          }
+        }
+      },
       hideDiv(){
         
         this.clcikShowDiv = false;
@@ -169,7 +216,7 @@
             brushLink: "all", //不同系列间，选中的项可以联动
             // 选中框外样式
             outOfBrush: {
-              colorAlpha: 0.5
+              colorAlpha: 1
             },
             // 选中框内样式
             inBrush: {
@@ -229,7 +276,7 @@
               end: 100,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
-              show: false,
+              show: true,
               textStyle: {
                 color: "#33ffff",
                 fontFamily: 'Microsoft YaHei'
@@ -261,7 +308,7 @@
               xAxisIndex: [0],
               // startValue: 10,
               // endValue: 20,
-              minValueSpan: 1,
+              minValueSpan: 10,
               handleIcon: "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
               handleSize: "80%",
               handleStyle: {
@@ -281,7 +328,7 @@
               xAxisIndex: [0],
               startValue: 0,
               endValue: 5,
-              minValueSpan: 100
+              minValueSpan: 10
             }
           ],
               
@@ -344,59 +391,39 @@
           width: document.documentElement.clientWidth * mthis.$store.state.split_net - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
-        // mthis.timeTitle = '时间轴'
+        mthis.timeTitle = '请选择节点'
         mthis.option.xAxis.data = mthis.dataBySeries.date;
         mthis.option.series[0].data = mthis.dataBySeries.num;
         mthis.option.series[1].data = mthis.dataBySeries.clickNum;
          
         mthis.charts.setOption(mthis.option)
-        // mthis.charts.on('brushSelected', function(params) {
-        //   console.log("111111111")
-        //   if (params.batch[0].areas[0] !== undefined) {
-        //     var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-        //     console.log("youyouyou")
-        //   }
-        //   mthis.timeTitle = '请选择节点'
-        //   console.log("lalalal")
-        //   if (params.batch[0].areas.length === 0) {
-        //     mthis.timeTitle = '请选择节点'
-        //     console.log("hahahh")
-            
-        //   } else {
-        //     if(startAndEnd[0]<0){
-        //       startAndEnd[0] = 0
-        //     }
-        //     if(startAndEnd[1]<0){
-        //       startAndEnd[1] = mthis.dataBySeries.date.length - 1
-        //     }
-        //     mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
-        //   }
-        // })
-        // mthis.charts.on('click', function(params) {
-        //   mthis.timeTitle = params.name
-          
-        //   mthis.charts.dispatchAction({
-        //     type: 'highlight',
-        //     // 可选，数据的 index
-        //     dataIndex: params.dataIndex
-        //   })
-        // })
+        
+        
         this.charts.on('brushSelected', function(params) {
+          
           var wholeChart = document.getElementById(mthis.timechartdivId);
             wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
              mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
+             mthis.isDataZoom = true
             
           }
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
-            mthis.timeTitle = '请选择节点'
-            mthis.boxSelEventIds.ids = []
-            mthis.$store.commit('setNetTimeCondition',[])
-            mthis.boxSelEventIds.title = "analysis"
-            mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
-            console.log(mthis.boxSelEventIds)
+            if(mthis.isDataZoom){
+              // console.log("lalalla")
+              mthis.timeTitle = '时间轴'
+              mthis.boxSelEventIds.ids = []
+              mthis.$store.commit('setNetTimeCondition',[])
+              mthis.boxSelEventIds.title = ""
+              mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
+              mthis.isBrush = []
+              mthis.boxSelShowDiv = false
+              // console.log(mthis.boxSelEventIds)
+            }
+            mthis.isDataZoom = false
+            
           } else {
             if(startAndEnd[0]<0){
               startAndEnd[0] = 0
@@ -407,30 +434,35 @@
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
             mthis.isBrush = timeArr
-            let selTimeArr = []
-            selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
-            selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
+            mthis.selTimeArr = []
+            mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
+            mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            if(timeArr && selTimeArr[0] && selTimeArr[1]){
-                    mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                    "selectedIds":mthis.selectionIdByType.eventIds,
-                    "startTime":selTimeArr[0],
-                    "endTime":selTimeArr[1]
-                }).then(response =>{
-                    if(response.body.code == 0){
-                      // for(let i=0;i<response.body.data.eventIds.length;i++){
-                      //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
-                      // }
-                      mthis.boxSelEventIds.ids = response.body.data.eventIds
-                      mthis.$store.commit('setNetTimeCondition',response.body.data.eventIds)
-                      mthis.boxSelEventIds.title = "notAnalysis"
-                      mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
-                    }
+            if(timeArr && mthis.selTimeArr[0] && mthis.selTimeArr[1]){
+                    mthis.throttle(mthis.query,1000,1000)()
+                //     mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+                //     "selectedIds":mthis.selectionIdByType.eventIds,
+                //     "startTime":mthis.selTimeArr[0],
+                //     "endTime":mthis.selTimeArr[1]
+                // }).then(response =>{
+                //     if(response.body.code == 0){
+                //       // for(let i=0;i<response.body.data.eventIds.length;i++){
+                //       //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                //       // }
+                //       mthis.boxSelEventIds.ids = response.body.data.eventIds
+                //       mthis.$store.commit('setNetTimeCondition',response.body.data.eventIds)
+                //       mthis.boxSelEventIds.title = ""
+                //       mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
+                //     }else{
+                //       console.log("服务器error")
+                //     }
                     
-                })
+                // })
+
                 mthis.selectTime = true
             }
+            
           }
             
           
@@ -444,7 +476,7 @@
           }
         });
         this.charts.on('click', function(params) {
-          console.log(params)
+        
           mthis.timeTitle = params.name
           
           let timeArr = []
@@ -465,8 +497,10 @@
                       // for(let i=0;i<response.body.data.eventIds.length;i++){
                       //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
                       // }
-                      mthis.clickEventIds.title = "notAnalysis"
+                      mthis.clickEventIds.title = ""
                       mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.clickEventIds)
+                  }else{
+                    console.log("服务器error")
                   }
                 })
           mthis.charts.dispatchAction({
@@ -500,19 +534,22 @@
                   // mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
 
                   mthis.clickEventIds.ids = response.body.data.eventIds
+                }else{
+                  console.log("服务器error")
                 }
                 
             })
             
           })
           wholeChart.oncontextmenu = function(){
-               
-                if(mthis.isBrush.length>0){
-                  //  mthis.boxdivLeft = boxSelectLeftWid +20 + "px"
-                   mthis.boxSelShowDiv = true
+               if(mthis.isBrush.length>0){
+                 mthis.boxSelShowDiv = true
+               }
+               mthis.isBrush = []
                    
-                }
-                mthis.isBrush = []
+                   
+                
+               
             }
         }else if(flag ==2){
           // flag==2---->监听网络关系中的事件，显示数据
@@ -620,6 +657,8 @@
               mthis.dataBySeries.num = response.body.data.count;
               mthis.loadEcharts(2)
               
+            }else{
+              console.log("服务器error")
             }
             
           })
@@ -644,6 +683,8 @@
                       }
                       
                       mthis.loadEcharts(3)
+                  }else{
+                    console.log("服务器error")
                   }
               })
           }
@@ -669,6 +710,8 @@
               mthis.dataBySeries.num = response.body.data.count;
               mthis.loadEcharts(2)
               
+            }else{
+              console.log("服务器error")
             }
             
           })

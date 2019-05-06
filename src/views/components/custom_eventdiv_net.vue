@@ -3,8 +3,8 @@
     <Col>
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
-        <Tabs :value=$store.state.tabSelectNet>
-          <Tab-pane label="选中详情" name='mubiaoxiangqingNet' :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqingNet' @click="changTab('mubiaoxiangqingNet')">
+        <Tabs :value=$store.state.tabSelectNet @on-click="changTab">
+          <Tab-pane label="选中详情" name='mubiaoxiangqingNet' :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqingNet'>
             <eventNet :resArr='resArr' :eventdata='evetdata' v-show='evetdataFlag'></eventNet>
             <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
@@ -13,7 +13,7 @@
               </div>
             </div>
           </Tab-pane>
-          <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi' @click="changTab('toushi')">
+          <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi'>
             <Spin size="large"  v-if="spinShow">
                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
                 <div>Loading</div>
@@ -54,7 +54,7 @@
         selectTime: false,
         timer: null,
         // tabSelect: '数据透视',
-        tabSelectNet: 'mubiaoxiangqingNet',
+        tabSelectNetValue: 'mubiaoxiangqingNet',
         modalNodeId: '',
         contentStatisticsdata: {},
         evetdataFlag:false,
@@ -119,8 +119,8 @@
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
       selectionIdByType: function() {
-        console.log('00000000000----------------------')
-        console.log(this.selectionIdByType)
+        // console.log('00000000000----------------------')
+        // console.log(this.selectionIdByType)
         var mthis = this;
         mthis.evetdataFlag = false
         if (mthis.selectNetNodes[0].ids.length > 0) {
@@ -132,10 +132,10 @@
               nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
                 // mthis.evetdata = response.body.data[0].nodes
-                console.log('\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\')
-                console.log( mthis.evetdata)
+                // console.log('\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\')
+                // console.log( mthis.evetdata)
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                console.log( mthis.evetdata)
+                // console.log( mthis.evetdata)
                 mthis.evetdataFlag = true
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
                 // mthis.$set(mthis.evetdata,0,response.body.data[0].nodes)
@@ -161,7 +161,7 @@
                   response.body.data[i].entity_type = 'event'
                   response.body.data[i].name = response.body.data[i].event_subtype
                 }
-                // // console.log(util.hebing(mthis.evetdata,response.body.data))
+                // // // console.log(util.hebing(mthis.evetdata,response.body.data))
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdataFlag = true
@@ -185,7 +185,7 @@
                   response.body.data[i].name = response.body.data[i].title
                 }
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-                // // console.log(util.hebing(mthis.evetdata,response.body.data))
+                // // // console.log(util.hebing(mthis.evetdata,response.body.data))
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdataFlag = true
               })
@@ -213,7 +213,7 @@
       },
       netTimeCondition: function(va) {
         this.selectTime = true
-        this.tabSelectNet = 'mubiaoxiangqingNet'
+        this.tabSelectNetValue = 'mubiaoxiangqingNet'
       },
       selectNetNodes: function() {
         var mthis = this;
@@ -263,12 +263,12 @@
       },
       clickLeftStatics(staticsClick){
         var mthis = this;
-        // // console.log(staticsClick)
+        // // // console.log(staticsClick)
         mthis.$store.commit('setNetStaticsSelectedIds',staticsClick);
       },
       hightLight(id) {},
       changTab(a) {
-        alert(a)
+        this.tabSelectNetValue = a
         this.$store.commit('setTabSelectNet', a)
       },
       setFlagToFalse(detailModalFlag) {
