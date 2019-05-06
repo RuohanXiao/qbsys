@@ -127,7 +127,7 @@
                         this.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                       }
                       
-                     
+                     debugger
                       this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
                       
                     }else{

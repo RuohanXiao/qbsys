@@ -268,7 +268,10 @@ var store = new Vuex.Store({
     // 监听时间轴是否被选中
     contentTimeCondition: [],
     netTimeCondition: [],
-    geoTimeCondition: {},
+    geoTimeCondition: {
+      'eventIds':[],
+      'type':''
+    },
     refSet:false,
     refAtlast:false,
     viewHeight: 0,
@@ -470,7 +473,8 @@ var store = new Vuex.Store({
       state.contentTimeCondition = val
     },
     setGeoTimeCondition(state,val){
-      state.geoTimeCondition = val
+      let data = Object.assign({},state.setGeoTimeCondition,val);
+      state.geoTimeCondition = data
     },
     setConditionContent(state,val){
       state.conditionContent = val
