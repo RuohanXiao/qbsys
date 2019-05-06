@@ -159,7 +159,7 @@
             "nodeIds": id
           }).then(response => {
             let nodeArr = response.body.data[0].nodes.map(it => {
-              it.img = util.checkImgExists(it.img) ? (it.img) : 'http://10.60.1.140/assets/images/human.png'
+              it.img = util.checkImgExists(it.img) ? (it.img) : 'http://10.60.1.140/assets/images/People.png'
               return it.id
             })
             mthis.$store.commit('setAddNetNodes', {
@@ -171,6 +171,7 @@
           })
         }
         if (type === 'event') {
+          // debugger;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": id
           }).then(response => {

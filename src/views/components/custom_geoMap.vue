@@ -859,6 +859,8 @@ export default {
                 {'Id':2,'parentId':0,'name':'探索组织','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':''},
                 {'Id':3,'parentId':0,'name':'探索地名','hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':''},
                 {'Id':4,'parentId':0,'name':'删除区域','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':''},
+/*                 {'Id':5,'parentId':0,'name':'探索地名11','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':''},
+                {'Id':6,'parentId':0,'name':'删除区域','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':''}, */
                 {'Id':301,'parentId':3,'name':'aa','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
                 {'Id':302,'parentId':3,'name':'bb','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
             ]
@@ -1648,6 +1650,7 @@ export default {
                 url = 'http://10.60.1.141:5100/exploreOrg/'
                 promptType = '组织机构数';
             }
+            debugger
             mthis.waiting();
              mthis.$http.post(url, {
                     'geometry':geometryArr
@@ -3199,6 +3202,8 @@ export default {
             })
             mthis.SelectedIds = mthis.geoStaticsOnlyLookSelectedIds
             var selectedEventsParam = mthis.geoStaticsOnlyLookSelectedIds
+            console.log('============setGeoOnlyselectedParam==================')
+            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
         geoStaticsSelectedIds:function(){
@@ -3237,6 +3242,8 @@ export default {
                 type:'GeoStatics',
                 paramIds:mthis.staticsSelectedEventIds//dealSelectedIds
             };
+            console.log('============setGeoOnlyselectedParam1==================')
+            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
             mthis.SelectedIds = mthis.staticsSelectedEventIds
         },
@@ -3253,6 +3260,8 @@ export default {
             var mthis = this;
             mthis.SelectedIds = mthis.timeSelectedEventIdsOnly
             var selectedEventsParam = mthis.timeSelectedEventIdsOnly
+            console.log('============setGeoOnlyselectedParam2==================')
+            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
         geometrySelectedEventIds:function(){
@@ -3264,6 +3273,8 @@ export default {
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam);  */
             mthis.SelectedIds = mthis.geometrySelectedEventIds
             var selectedEventsParam = mthis.geometrySelectedEventIds
+            console.log('============setGeoOnlyselectedParam3==================')
+            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
             //mthis.SelectedIds = mthis.geometrySelectedEventIds
         },

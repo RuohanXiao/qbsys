@@ -112,6 +112,36 @@
         <chname>游行示威</chname>  
         <img>http://10.60.1.140/assets/images/event/demonstrate.png</img>
       </nameItem> 
+      <nameItem> 
+        <ename>other_crime（type</ename>  
+        <chname>其他</chname>  
+        <img>http://10.60.1.140/assets/images/event/injure.png</img>
+      </nameItem>  
+      <nameItem> 
+        <ename>insurgency_guerilla_action</ename>  
+        <chname>叛乱</chname>  
+        <img>http://10.60.1.140/assets/images/event/demonstrate.png</img>
+      </nameItem>
+      <nameItem> 
+        <ename>intra_inter_group_conflict</ename>  
+        <chname>团体行动</chname>  
+        <img>http://10.60.1.140/assets/images/event/injure.png</img>
+      </nameItem>  
+      <nameItem> 
+        <ename>state_actors</ename>  
+        <chname>国家行动</chname>  
+        <img>http://10.60.1.140/assets/images/event/demonstrate.png</img>
+      </nameItem>
+      <nameItem> 
+        <ename>lack_of_intentionality</ename>  
+        <chname>无意向性</chname>  
+        <img>http://10.60.1.140/assets/images/event/injure.png</img>
+      </nameItem>  
+      <nameItem> 
+        <ename>unknown</ename>  
+        <chname>无</chname>  
+        <img>http://10.60.1.140/assets/images/event/demonstrate.png</img>
+      </nameItem>
     </eventNames> 
   </event2chinese>  
   <event2chinese> 

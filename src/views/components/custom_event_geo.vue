@@ -20,7 +20,7 @@
     <div>
       <div class="e-title">
         <div class="e-title-d"></div>
-        <p class="e-title-p">节点信息</p>
+        <p class="e-title-p">节点信息{{detailData.entity_type}}</p>
       </div>
       <!-- <human-entity-table v-show="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table> -->
       <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
@@ -44,9 +44,9 @@
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
           <div class="e-content-d pointIcon" v-for="(item,index) in eventdata" @click="changeDetailDiv(item.id,item.entity_type,eventdata)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
-            <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.event_subtype.toLowerCase().replace(/-/, "_")).name}}</p>
-            <!-- <p v-if="item.entity_type==='event'" class="e-content-p">{{item.name}}</p> -->
-            <p v-else class="e-content-p">{{item.event_subtype}}</p>
+            <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.name.toLowerCase().replace(/-/, "_")).name}}</p>
+            <!-- <p v-if="item.entity_type==='other'" class="e-content-p">{{item.name}}</p> -->
+            <p v-else class="e-content-p">{{item.name}}</p>
           </div>
         </div>
       </div>
@@ -113,22 +113,22 @@
         // console.log(img)
         if (this.myMap.get(type) === 'entity') {
            if (mthis.eventdata[0].entity_type === 'administrative') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/administrative.png'
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/location.png'
             } else if (mthis.eventdata[0].entity_type === 'human') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/human.png'
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/People.png'
             } else if (mthis.eventdata[0].entity_type === 'organization') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/organization.png'
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/Organization.png'
             } else if (mthis.eventdata[0].entity_type === 'weapon') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/weapon.png'
             } else {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/organization.png'
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/Organization.png'
             }
         } else if (this.myMap.get(type) === 'event') {
           return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
         } else if (this.myMap.get(type) === 'document') {
           return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
         } else {
-          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/organization.png'
+          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/Organization.png'
         }
       },
       changeDetailDiv(id, type, ob) {
@@ -147,6 +147,7 @@
           })
         }
         if (mthis.myMap.get(type) === 'event') {
+          // debugger;
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {
@@ -189,6 +190,8 @@
     },
     watch: {
       eventdata: function() {
+        console.log(this.eventdata)
+        debugger;
         var mthis = this
         if (typeof(mthis.eventdata) === "object" && mthis.eventdata.concat && mthis.eventdata.length > 0) {
           if (mthis.timer) {
@@ -208,11 +211,11 @@
                 let result = new Object();
                 result = response.body.data[0]
                 if (mthis.eventdata[0].entity_type === 'administrative') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/administrative.png'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/location.png'
                 } else if (mthis.eventdata[0].entity_type === 'human') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/human.png'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/People.png'
                 } else if (mthis.eventdata[0].entity_type === 'organization') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/organization.png'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/Organization.png'
                 } else if (mthis.eventdata[0].entity_type === 'weapon') {
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
                 } else {
@@ -230,6 +233,7 @@
               // console.log(mthis.eventdata[0])
               result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
               result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
+              result.entity_type='event'
               mthis.detailData = result
               // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
             } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'document') {
