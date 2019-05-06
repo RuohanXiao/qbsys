@@ -3207,6 +3207,8 @@ export default {
             mthis.HLIds = mthis.geoStaticsOnlyLookSelectedIds;
             mthis.SelectedIds = mthis.geoStaticsOnlyLookSelectedIds;
             var selectedEventsParam = mthis.geoStaticsOnlyLookSelectedIds
+            console.log('============setGeoOnlyselectedParam==================')
+            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
         geoStaticsSelectedIds:function(){
@@ -3245,6 +3247,8 @@ export default {
                 type:'GeoStatics',
                 paramIds:mthis.staticsSelectedEventIds//dealSelectedIds
             };
+            console.log('============setGeoOnlyselectedParam1==================')
+            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
             mthis.HLIds = mthis.staticsSelectedEventIds
         },
@@ -3262,6 +3266,8 @@ export default {
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
             mthis.SelectedIds = mthis.timeSelectedEventIdsOnly;
             var selectedEventsParam = mthis.timeSelectedEventIdsOnly
+            console.log('============setGeoOnlyselectedParam2==================')
+            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
         geometrySelectedEventIds:function(){
@@ -3274,6 +3280,8 @@ export default {
             mthis.HLIds = mthis.geometrySelectedEventIds;
             mthis.SelectedIds = mthis.geometrySelectedEventIds;
             var selectedEventsParam = mthis.geometrySelectedEventIds
+            console.log('============setGeoOnlyselectedParam3==================')
+            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
             //mthis.HLIds = mthis.geometrySelectedEventIds
         },

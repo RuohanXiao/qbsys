@@ -121,17 +121,18 @@
                     "endTime":this.selTimeArr[1]
                 }).then(response =>{
                     if(response.body.code == 0){
-                      
+                      this.boxSelEventIds.eventIds =[]
+                      this.toGeoEventIds.eventIds = []
                       for(let i=0;i<response.body.data.eventIds.length;i++){
                         this.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                         this.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                       }
-                      
-                     debugger
+                      console.log(response.body.data)
+                      console.log(this.toGeoEventIds)
                       this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
                       
                     }else{
-                      console.log("服务器error")
+                      console.log("服务器error")   
                     }
                     
                 })
@@ -501,10 +502,12 @@
                     "endTime":params.name
                 }).then(response =>{
                     if(response.body.code == 0){
-                      
+                      mthis.boxSelEventIds.eventIds= []
+                      mthis.toGeoEventIds.eventIds = []
+
                       for(let i=0;i<response.body.data.eventIds.length;i++){
                         mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
-                        mthis.toGeoEventIds.eventIds[i ] = "event&" + response.body.data.eventIds[i];
+                        mthis.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                       }
                       
                       mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds);
@@ -624,7 +627,10 @@
     computed:mapState ([
       'split','split_geo','splitWidth','tmss','selectNetNodes','geo_selected_param','geo_onlyselected_param']),
     watch: {
+      // setGeoOnlyselectedParam
         geo_onlyselected_param:function(){
+          console.log('=========setGeoOnlyselectedParam  xxxxx==========')
+          console.log(this.geo_onlyselected_param)
           var mthis = this
          
           if(this.geo_onlyselected_param.length>0){

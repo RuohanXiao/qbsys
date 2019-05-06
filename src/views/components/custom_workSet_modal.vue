@@ -680,7 +680,7 @@
     color: #ccffff;
   }
   /* .touxiangImg:hover img{
-                    /* background-image:url('http://10.60.1.140/assets/images/organization.png');
+                    /* background-image:url('http://10.60.1.140/assets/images/Organization.png');
                     background-image:url(../../dist/assets/images/circle.png);
                   }  */
   .top,
