@@ -55,6 +55,9 @@ trClick{
 #EntityAttrColl p{
     padding-left:24px;
     text-align:left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #EntityAttr{
@@ -63,7 +66,7 @@ trClick{
 }
 
 .NameTd{
-    width:35%;
+    width:50%;
     color: #ccffff;
     font-family:"微软雅黑";
     display: table-cell;
