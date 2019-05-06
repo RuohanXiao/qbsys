@@ -1650,7 +1650,7 @@ export default {
                 url = 'http://10.60.1.141:5100/exploreOrg/'
                 promptType = '组织机构数';
             }
-            debugger
+            
             mthis.waiting();
              mthis.$http.post(url, {
                     'geometry':geometryArr

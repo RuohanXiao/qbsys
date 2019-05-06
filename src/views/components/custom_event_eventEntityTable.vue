@@ -171,7 +171,7 @@
           })
         }
         if (type === 'event') {
-          // debugger;
+          // ;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": id
           }).then(response => {

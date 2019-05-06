@@ -149,7 +149,7 @@
           })
         }
         if (mthis.myMap.get(type) === 'event') {
-          // debugger;
+          // ;
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {

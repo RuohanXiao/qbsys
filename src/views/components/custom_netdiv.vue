@@ -18,7 +18,8 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="triggerMethods('selectAll')">
+          <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('selectAll')"> -->
+            <div class="button-div" @click="triggerMethods('selectAll')">
             <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">全选节点</p>
           </div>
@@ -75,9 +76,9 @@
           <!-- <Dropdown trigger="custom"  :visible="expandVisible"> -->
           <Dropdown :visible="expandVisible">
             <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeKnowledge" >
-                                                                                  <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                  <p class="img-content">关系扩展</p>
-                    </div>-->
+                                                                                      <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                                      <p class="img-content">关系扩展</p>
+                        </div>-->
             <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="triggerMethods('expandNodeKnowledge')" v-if="(expandFlag=='knowledge')">
               <Icon class="icon iconfont icon-guanlianshiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
               <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
@@ -125,9 +126,9 @@
           <!-- <Dropdown trigger="custom"  :visible="expandVisible"> -->
           <Dropdown :visible="expandGongzhiVisible">
             <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeKnowledge" >
-                                                                                  <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                  <p class="img-content">关系扩展</p>
-                    </div>-->
+                                                                                      <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                                      <p class="img-content">关系扩展</p>
+                        </div>-->
             <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEnitiy')" v-if="(expandFlag_gongzhi=='knowledge_gongzhi')">
               <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
               <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
@@ -172,29 +173,29 @@
           </Dropdown>
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                                                        <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
-                                                                                          <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                          <p class="img-content">路径</p>
-                                                                                        </div>
-                                                                                      </Tooltip>
-                                                                                      <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                                                          <div class="button-div" @click="showPathEvent">
-                                                                                            <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                            <p class="img-content">事件路径</p>
-                                                                                          </div>
-                                                                                        </Tooltip>
-                -->
+                                                                                            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
+                                                                                              <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                                              <p class="img-content">路径</p>
+                                                                                            </div>
+                                                                                          </Tooltip>
+                                                                                          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+                                                                                              <div class="button-div" @click="showPathEvent">
+                                                                                                <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                                                <p class="img-content">事件路径</p>
+                                                                                              </div>
+                                                                                            </Tooltip>
+                    -->
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                                                        <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
-                                                                                          <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                          <p class="img-content">事件扩展</p>
-                                                                                        </div>
-                </Tooltip>-->
+                                                                                            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
+                                                                                              <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                                              <p class="img-content">事件扩展</p>
+                                                                                            </div>
+                    </Tooltip>-->
         <!-- <Col span="1" align="middle" class="bottom">
-                                                                                                          <Tooltip content="查找关联" placement="bottom">
-                                                                                                            <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                                          </Tooltip>
-                </Col>-->
+                                                                                                              <Tooltip content="查找关联" placement="bottom">
+                                                                                                                <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                                                              </Tooltip>
+                    </Col>-->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="5000">
           <div :class="ifSelectOnlyTwoNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="triggerMethods('showModalStepKnowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
             <Icon class="icon iconfont icon-lujing--tupu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -202,49 +203,49 @@
             <p class="img-content">关系路径</p>
           </div>
           <!-- <Dropdown :visible="stepVisible" trigger="custom">
-                                                                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('knowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
-                                                                  <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                  <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                                                                  <p class="img-content">关系路径</p>
-                                                                </div>
-                                                                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('event')" v-show="stepFlag==='event'" @mouseup="stopStepTimer">
-                                                                  <Icon class="icon iconfont icon-lujing--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                  <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                                                                  <p class="img-content">事件路径</p>
-                                                                </div>
-                                                                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('content')" v-show="stepFlag==='content'" @mouseup="stopStepTimer">
-                                                                  <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                  <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                                                                  <p class="img-content">共现路径</p>
-                                                                </div>
-                                                                <DropdownMenu slot="list" placement="bottom-start">
-                                                                  <div class="button-div">
-                                                                    <DropdownItem class="img-content" @click="showModalStep('knowledge')">
-                                                                      <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                                                                      <span>关系路径</span>
-                                                                    </DropdownItem>
-                                                                  </div>
-                                                                  <div class="button-div">
-                                                                    <DropdownItem class="img-content" @click="showModalStep('event')">
-                                                                      <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                                                                      <span>事件路径</span>
-                                                                    </DropdownItem>
-                                                                  </div>
-                                                                  <div class="button-div">
-                                                                    <DropdownItem class="img-content" @click="showModalStep('content')">
-                                                                      <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                                                                      <span>共现路径</span>
-                                                                    </DropdownItem>
-                                                                  </div>
-                                                                </DropdownMenu>
-                  </Dropdown>-->
+                                                                    <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('knowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
+                                                                      <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                                                                      <p class="img-content">关系路径</p>
+                                                                    </div>
+                                                                    <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('event')" v-show="stepFlag==='event'" @mouseup="stopStepTimer">
+                                                                      <Icon class="icon iconfont icon-lujing--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                                                                      <p class="img-content">事件路径</p>
+                                                                    </div>
+                                                                    <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('content')" v-show="stepFlag==='content'" @mouseup="stopStepTimer">
+                                                                      <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                      <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                                                                      <p class="img-content">共现路径</p>
+                                                                    </div>
+                                                                    <DropdownMenu slot="list" placement="bottom-start">
+                                                                      <div class="button-div">
+                                                                        <DropdownItem class="img-content" @click="showModalStep('knowledge')">
+                                                                          <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                                                                          <span>关系路径</span>
+                                                                        </DropdownItem>
+                                                                      </div>
+                                                                      <div class="button-div">
+                                                                        <DropdownItem class="img-content" @click="showModalStep('event')">
+                                                                          <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                                                                          <span>事件路径</span>
+                                                                        </DropdownItem>
+                                                                      </div>
+                                                                      <div class="button-div">
+                                                                        <DropdownItem class="img-content" @click="showModalStep('content')">
+                                                                          <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                                                                          <span>共现路径</span>
+                                                                        </DropdownItem>
+                                                                      </div>
+                                                                    </DropdownMenu>
+                      </Dropdown>-->
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="spread">
-                                                                <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back deg-90" size="26"></Icon>
-                                                                <p class="img-content">展开</p>
-                                                              </div>
-                </Tooltip>-->
+                                                                  <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="spread">
+                                                                    <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back deg-90" size="26"></Icon>
+                                                                    <p class="img-content">展开</p>
+                                                                  </div>
+                    </Tooltip>-->
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('toGeo')">
@@ -278,11 +279,11 @@
           </div>
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                              <div class="button-div" @click="save">
-                                                                <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                <p class="img-content">保存</p>
-                                                              </div>
-                </Tooltip>-->
+                                                                  <div class="button-div" @click="save">
+                                                                    <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                    <p class="img-content">保存</p>
+                                                                  </div>
+                    </Tooltip>-->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="fit">
             <Icon class="icon iconfont icon-zhengchangshitu--quanping DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -302,21 +303,21 @@
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag="setFlagToFalse"></modal-chart>
     <!-- <Modal v-model="modalStep" ok-text="设置步数"
-                                                                                          cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
-                                                                                        <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
-            </Modal>-->
+                                                                                              cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+                                                                                            <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+                </Modal>-->
     <!-- <Modal v-model="modalStep" width="360">
-        <p slot="header" style="color:#f60;text-align:center">
-          <Icon type="ios-information-circle"></Icon>
-          <span>Delete confirmation</span>
-        </p>
-        <div style="text-align:center">
-          <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change="con"></InputNumber>
-        </div>
-        <div slot="footer">
-          <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
-        </div>
-      </Modal> -->
+            <p slot="header" style="color:#f60;text-align:center">
+              <Icon type="ios-information-circle"></Icon>
+              <span>Delete confirmation</span>
+            </p>
+            <div style="text-align:center">
+              <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change="con"></InputNumber>
+            </div>
+            <div slot="footer">
+              <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
+            </div>
+          </Modal> -->
     <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     <workatlas-modal :workatlastData="workatlastData" :type="workatlasType" :flag="workatlasFlag" />
   </div>
@@ -432,6 +433,43 @@
       Canvas2Image
     },
     methods: {
+      changNetchartMode(n) {
+        //更改样式mode
+        switch (n) {
+          case 'h':
+            this.netchart.updateSettings({
+              layout: {
+                mode: 'hierarchy'
+              }
+            })
+            // this.netchart.layout.mode = 'hierarchy';
+            break;
+          case 's':
+            this.netchart.updateSettings({
+              layout: {
+                mode: 'static'
+              }
+            })
+            // this.netchart.layout.mode = 'static';
+            break;
+          case 'r':
+            this.netchart.updateSettings({
+              layout: {
+                mode: 'radial'
+              }
+            })
+            // this.netchart.layout.mode = 'radial';
+            break;
+          case 'd':
+            this.netchart.updateSettings({
+              layout: {
+                mode: 'dynamic'
+              }
+            })
+            // this.netchart.layout.mode = 'dynamic';
+            break;
+        }
+      },
       linkedKnowlage() {
         this.setMessage('请期待下一版本的链向功能')
       },
@@ -542,10 +580,12 @@
           .then(response => {
             if (response.body.code === 0) {
               if (response.body.data[0].nodes.length > 0) {
+                mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data[0])
                 mthis.netchart.selection(response.body.data[0].nodes.map(item => {
                   return item.id
                 }))
+                changNetchartMode('s')
               } else {
                 mthis.setMessage('未找到最短路径')
               }
@@ -565,10 +605,14 @@
             .then(response => {
               if (response.body.code === 0) {
                 if (response.body.data[0].nodes.length > 0) {
+                  mthis.changNetchartMode('d')
                   mthis.netchart.addData(response.body.data[0])
-                  mthis.netchart.selection(response.body.data[0].nodes.map(item => {
-                    return item.id
-                  }))
+                  setTimeout(function() {
+                    mthis.netchart.selection(response.body.data[0].nodes.map(item => {
+                      return item.id
+                    }))
+                    // mthis.changNetchartMode('s')
+                  }, 200);
                 } else {
                   mthis.setMessage('未找到最短路径')
                 }
@@ -661,13 +705,14 @@
               });
           }
           if (mthis.selectionIdByType.eventIds.length > 0) {
-            // debugger;
+            // ;
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/event-detail/", {
                 EventIds: mthis.selectionIdByType.eventIds
               })
               .then(response => {
                 if (response.body.code === 0) {
+                  ;
                   mthis.worksetData[1].type = "event";
                   response.body.data.map(item => {
                     item.name = item.event_subtype
@@ -684,6 +729,7 @@
                 docIds: mthis.selectionIdByType.contentIds
               })
               .then(response => {
+                ;
                 if (response.body.code === 0) {
                   mthis.worksetData[2].type = "document";
                   response.body.data.map(item => {
@@ -694,9 +740,9 @@
                   mthis.worksetData[2].data = response.body.data;
                 }
               });
-            // console.log('mthis.worksetData----------')
-            // console.log(mthis.worksetData)
           }
+          console.log('mthis.worksetData----------')
+          console.log(mthis.worksetData)
         }
         this.worksetType = "add";
         this.worksetFlag = this.worksetFlag + 1;
@@ -909,13 +955,15 @@
                       }))
                     }
                   }
+                  mthis.changNetchartMode('d')
                   mthis.netchart.addData({
                     'nodes': nodes,
                     'links': links
                   });
                   setTimeout(function() {
                     mthis.netchart.selection(ids);
-                  }, 100);
+                    // mthis.changNetchartMode('s')
+                  }, 200);
                 } else {
                   mthis.setMessage("related-all 接口异常！");
                 }
@@ -978,13 +1026,15 @@
                       }))
                     }
                   }
+                  mthis.changNetchartMode('d')
                   mthis.netchart.addData({
                     'nodes': nodes,
                     'links': links
                   });
                   setTimeout(function() {
                     mthis.netchart.selection(ids);
-                  }, 100);
+                    // mthis.changNetchartMode('s')
+                  }, 200);
                 } else {
                   mthis.setMessage("related-all 接口异常！");
                 }
@@ -1058,13 +1108,15 @@
                   //   ite.type = ite.relation_name
                   //   return ite
                   // })
+                  mthis.changNetchartMode('d')
                   mthis.netchart.addData({
                     'nodes': nodes,
                     'links': links
                   });
                   setTimeout(function() {
                     mthis.netchart.selection(ids);
-                  }, 100);
+                    //mthis.changNetchartMode('s')
+                  }, 200);
                 } else {
                   mthis.setMessage("related-all 接口异常！");
                 }
@@ -1114,6 +1166,7 @@
         let entitRes,
           eventRes,
           docRes = null;
+          ;
         if (mthis.selectionId.length > 0) {
           mthis.spinShow = true;
           mthis.zIndex = 999;
@@ -1143,7 +1196,7 @@
               mthis.selectionId[i]
             );
           }
-          if (mthis.selectionIdByType.nodeIds.length > 0) {
+          if (arrTypeList.length > 0) {
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/related-all/", {
                 NodeIds: arrList,
@@ -1181,13 +1234,15 @@
                       ite.type = ite.relation_name
                       return ite
                     })
+                    mthis.changNetchartMode('d')
                     mthis.netchart.addData({
                       'nodes': nodes,
                       'links': links
                     });
                     setTimeout(function() {
                       mthis.netchart.selection(ids);
-                    }, 100);
+                      // mthis.changNetchartMode('s')
+                    }, 200);
                   } else {
                     mthis.setMessage('未找到关联事件')
                   }
@@ -1240,7 +1295,7 @@
               mthis.selectionId[i]
             );
           }
-          if (mthis.selectionIdByType.nodeIds.length > 0) {
+          if (arrTypeList.length > 0) {
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/related-all/", {
                 NodeIds: arrList,
@@ -1276,13 +1331,15 @@
                       ite.type = (ite.type) ? ite.type : ite.relation_name
                       return ite
                     })
+                    mthis.changNetchartMode('d')
                     mthis.netchart.addData({
                       'nodes': nodes,
                       'links': links
                     });
                     setTimeout(function() {
                       mthis.netchart.selection(ids);
-                    }, 100);
+                      // mthis.changNetchartMode('s')
+                    }, 200);
                   } else {
                     mthis.setMessage('未找到关联文档')
                   }
@@ -1339,6 +1396,7 @@
                 response.body.data[0].links.length >
                 0
               ) {
+                mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data[0]);
                 let idArr = [];
                 let nodeobj = response.body.data[0].nodes;
@@ -1349,7 +1407,10 @@
                 for (let j = 0; j < linkobj.length; j++) {
                   idArr.push(linkobj[j].id);
                 }
-                mthis.netchart.selection(idArr);
+                setTimeout(function() {
+                  mthis.netchart.selection(idArr);
+                  // mthis.changNetchartMode('s')
+                }, 200);
                 mthis.spinShow = false;
                 mthis.zIndex = 0;
               } else {
@@ -1392,10 +1453,15 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
+                
+                mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
-                mthis.netchart.selection(response.body.data.nodes.map(item => {
-                  return item.id
-                }))
+                setTimeout(function() {
+                  mthis.netchart.selection(response.body.data.nodes.map(item => {
+                    return item.id
+                  }))
+                  // mthis.changNetchartMode('s')
+                }, 200);
               } else {
                 mthis.setMessage('未找到共指实体')
               }
@@ -1419,10 +1485,14 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
+                 mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
-                mthis.netchart.selection(response.body.data.nodes.map(item => {
-                  return item.id
-                }))
+                setTimeout(function() {
+                  mthis.netchart.selection(response.body.data.nodes.map(item => {
+                    return item.id
+                  }))
+                  // mthis.changNetchartMode('s')
+                }, 200);
               } else {
                 mthis.setMessage('未找到共指事件')
               }
@@ -1446,10 +1516,14 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
+                mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
-                mthis.netchart.selection(response.body.data.nodes.map(item => {
-                  return item.id
-                }))
+                setTimeout(function() {
+                  mthis.netchart.selection(response.body.data.nodes.map(item => {
+                    return item.id
+                  }))
+                  // mthis.changNetchartMode('s')
+                }, 200);
               } else {
                 mthis.setMessage('未找到共指文档')
               }
@@ -1640,6 +1714,12 @@
       },
       // 层级布局
       hierarchy() {
+        this.changNetchartMode('h');
+        // setTimeout(function() {
+        //   mthis.changNetchartMode('s')
+        // }, 500);
+      },
+      hierarchy1() {
         var mthis = this;
         if (mthis.selectionId.length > 0) {
           var mthis = this;
@@ -1819,28 +1899,29 @@
         // for(let i = 0;i<this.selectionId.length;i++){
         //   this.netchart.hideNode(this.selectionId[i])
         // }
-        let arrayNode = new Array()
-        for (let v of this.selectionIdByType.eventIds) {
-          // console.log(v);  
-          arrayNode.push(this.netchart.getNode(v))
-        };
-        console.log(arrayNode)
-        var obj = {};
-        var i = 0;
-        for (i = 0; i < arrayNode.length; i++) {
-          key = arrayNode[i].id;
-          if (obj[key]) {
-            //对象中有这个字母
-            obj[key]++;
-          } else {
-            //对象中没有这个字母,把字母加到对象中
-            obj[key] = 1;
-          }
-        }
-        for (var key in obj) //遍历这个对象
-        {
-          console.log(key + "这个字母出现了" + obj[key] + "次");
-        }
+        // let arrayNode = new Array()
+        // for (let v of this.selectionIdByType.eventIds) {
+        //   // console.log(v);  
+        //   arrayNode.push(this.netchart.getNode(v))
+        // };
+        // console.log(arrayNode)
+        // var obj = {};
+        // var i = 0;
+        // for (i = 0; i < arrayNode.length; i++) {
+        //   key = arrayNode[i].id;
+        //   if (obj[key]) {
+        //     //对象中有这个字母
+        //     obj[key]++;
+        //   } else {
+        //     //对象中没有这个字母,把字母加到对象中
+        //     obj[key] = 1;
+        //   }
+        // }
+        // for (var key in obj) //遍历这个对象
+        // {
+        //   console.log(key + "这个字母出现了" + obj[key] + "次");
+        // }
+        this.changNetchartMode('h')
       },
       //保存工作集
       save() {
@@ -2187,8 +2268,8 @@
             // mode: "static",
             // mode: "dynamic",
             twoRingRadialLayout: true,
-            nodeSpacing: 100,
-            rowSpacing: 100
+            nodeSpacing: 50,
+            rowSpacing: 50
           },
           // 层级布局
           // layout: \
@@ -2197,21 +2278,21 @@
           //   rowSpacing: 100 // vertical spacing between node rows in the hierarchy layout
           // },
           style: {
-            // nodeLocked: {
-            //   items: [{
-            //     image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
-            //       "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
-            //       "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
-            //       "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
-            //       "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
-            //       "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
-            //     py: -1,
-            //     x: 6,
-            //     backgroundStyle: {
-            //       fillColor: "transparent"
-            //     }
-            //   }],
-            // },
+            nodeLocked: {
+              items: [{
+                image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
+                  "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
+                  "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
+                  "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
+                  "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
+                  "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
+                py: -1,
+                x: 6,
+                backgroundStyle: {
+                  fillColor: "transparent"
+                }
+              }],
+            },
             // NetChart.settings.style.dragSelection 通过该属性可以设置框选颜色和背景等属性
             nodeLabel: {
               maxWidth: 10,
@@ -2293,8 +2374,6 @@
                   node.fillColor = "#003333";
                   node.lineWidth = 2;
                   if (node.hightLight) {
-                    // node.lineColor = "#009999";
-                    // node.shadowColor = "#009999";
                     node.shadowBlur = 20;
                     node.lineColor = mthis.hightlightLineColor;
                     node.shadowColor = mthis.hightlightShadowColor;
@@ -2330,10 +2409,8 @@
                   if (node.hightLight) {
                     node.shadowBlur = 20;
                     node.fillColor = "#003333";
-                    // node.lineColor = "#009999";
                     node.lineColor = mthis.hightlightLineColor
                     node.shadowColor = mthis.hightlightDocShadowColor;
-                    // node.lineDash= [10,5,2,5];
                     node.lineWidth = 5;
                   }
                 } else if (node.hovered) {
@@ -2355,8 +2432,6 @@
                 node.radius = 25;
               } else if (node.data.entity_type === "other") {
                 if (node.selected) {
-                  // node.lineColor = "#ccffff";
-                  // node.shadowColor = "#33ffff";
                   node.fillColor = "#003333";
                   node.lineColor = mthis.hightlightLineColor
                   node.shadowColor = mthis.hightlightShadowColor;
@@ -2365,11 +2440,8 @@
                   if (node.hightLight) {
                     node.shadowBlur = 20;
                     node.fillColor = "#003333";
-                    // node.shadowColor = "#009999";
-                    // node.lineColor = "#009999";
                     node.lineColor = mthis.selectLineColor;
                     node.shadowColor = mthis.selectShadowColor;
-                    // node.lineDash= [10,5,2,5];
                     node.lineWidth = 5;
                   }
                 } else if (node.hovered) {
@@ -2389,21 +2461,16 @@
                 node.image = "http://10.60.1.140/assets/images/image.png";
               } else {
                 if (node.selected) {
-                  // node.lineColor = "#ccffff";
-                  // node.shadowColor = "#33ffff";
                   node.lineColor = mthis.selectLineColor
                   node.shadowColor = mthis.selectShadowColor;
                   node.fillColor = "#003333";
                   node.shadowBlur = 25;
                   node.lineWidth = 5;
                   if (node.hightLight) {
-                    // node.shadowColor = "#009999";
-                    // node.lineColor = "#009999";
                     node.shadowBlur = 20;
                     node.fillColor = "#003333";
                     node.lineColor = mthis.hightlightLineColor;
                     node.shadowColor = mthis.hightlightDocShadowColor;
-                    // node.lineDash= [10,5,2,5];
                     node.lineWidth = 5;
                   }
                 } else if (node.hovered) {
@@ -2491,8 +2558,8 @@
               link.fillColor = "#336666";
               // link.lineColor = "rgba(0,0,0,0)";
               if (link.hovered) {
-                link.shadowColor = "#33ffff";
-                link.shadowBlur = 5;
+                // link.shadowColor = "#33ffff";
+                // link.shadowBlur = 5;
                 link.radius = 2;
                 link.lineWidth = 3;
                 link.fillColor = "#006666";
@@ -2507,8 +2574,8 @@
                 // link.lineWidth = 0;
                 // link.radius = 3
                 if (link.hightLight) {
-                  link.shadowColor = "#006666";
-                  link.shadowBlur = 5;
+                  // link.shadowColor = "#006666";
+                  // link.shadowBlur = 5;
                   link.radius = 3;
                   link.lineWidth = 3;
                 }
@@ -2817,6 +2884,7 @@
               // infoElement.style.display = infoElementVisible ? "block" : "none";
             },
             onSelectionChange(event) {
+              // mthis.changNetchartMode('s')
               if (timer) {
                 clearTimeout(timer);
               }
@@ -3154,7 +3222,7 @@
             })
           }
           if (mthis.selectionIdByType.eventIds.length > 0) {
-            // debugger;
+            // ;
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
               'EventIds': mthis.selectionIdByType.eventIds
             }).then(response => {
@@ -3300,7 +3368,7 @@
         }
         if (mthis.geoToNetData.eventIds.length > 0) {
           dataids.concat(mthis.geoToNetData.eventIds)
-          // debugger;
+          // ;
           mthis.$http
             .post(this.$store.state.ipConfig.api_url + "/event-detail/", {
               EventIds: mthis.geoToNetData.eventIds
