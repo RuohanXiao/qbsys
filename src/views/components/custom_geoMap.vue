@@ -300,7 +300,8 @@ export default {
         staticsSelectedEventIdsOnly:[],
         mouseSelectedEventIds:[],
         onlyLookItIds:[],
-        SelectedIds:[],//被选中的事件或组织机构ids
+        HLIds:[],//被高亮的事件或组织机构ids
+        SelectedIds:[],
         halfSelectedIds:{},
         invertSelectedEventIds:[], //反选存储
         AreaIds:[],  //行政区划ids
@@ -505,9 +506,9 @@ export default {
                 if(mthis.removeEventIdList[paramId]){  //如果removeEventIdList中存在该id及其属性，则删除
                     delete mthis.removeEventIdList[paramId]
                 }
-                var index = util.itemIndexInArr(paramId,mthis.SelectedIds);
+                var index = util.itemIndexInArr(paramId,mthis.HLIds);
                 if(index !== -1){ //如果SelectedIds中存在该id，则删除
-                    mthis.$data.SelectedIds.splice(index,1)
+                    mthis.$data.HLIds.splice(index,1)
                 }
                 var index_geometry = util.itemIndexInArr(paramId,mthis.geometrySelectedEventIds);
                 if(index_geometry !== -1){ //如果geometrySelectedEventIds中存在该id，则删除
@@ -568,7 +569,7 @@ export default {
             var mthis = this;
             var eventIds = [];
             var nodeIds = [];
-            var metalworkIds = mthis.SelectedIds;
+            var metalworkIds = mthis.HLIds;
             if(metalworkIds.length > 0){
                 metalworkIds.forEach(function(id){
                     var type = id.split('&')[0];
@@ -665,7 +666,7 @@ export default {
             mthis.geometrySelectedEventIds = [];
             mthis.timeSelectedEventIds.length = 0;
             mthis.staticsSelectedEventIds.length = 0;
-            //mthis.SelectedIds = [];
+            //mthis.HLIds = [];
             if(mthis.removeFeaturesArr.length > 0){
                 mthis.removeFeaturesArr.forEach(function(feature){
                     var featureId = feature.getId();
@@ -1110,7 +1111,7 @@ export default {
                         })
                     }
                     if(selectFeatures.length > 0){
-                        var SelectedIds = mthis.SelectedIds;
+                        var HLIds = mthis.HLIds;
                         Object.keys(mthis.AllLayerList_conf).forEach(function(key){
                             var layerId = mthis.AllLayerList_conf[key].layerId;
                             var features = mthis.getLayerById(layerId).getSource().getFeatures();
@@ -1174,8 +1175,8 @@ export default {
                 var name = ''
                 var params =feature.get('Params');
                 for(let i = 0; i < params.length; i++){
-                    for(let j = 0; j < mthis.SelectedIds.length; j++){
-                        if(params[i].id === mthis.SelectedIds[j]){
+                    for(let j = 0; j < mthis.HLIds.length; j++){
+                        if(params[i].id === mthis.HLIds[j]){
                             name = params[i].OrgName;
                             break;
                         }
@@ -1218,8 +1219,8 @@ export default {
                 var params =feature.get('Params');
                 for(let i = 0; i < params.length; i++){
                     var isHas = false;
-                    for(let j = 0; j < mthis.SelectedIds.length; j++){
-                        if(params[i].id === mthis.SelectedIds[j]){
+                    for(let j = 0; j < mthis.HLIds.length; j++){
+                        if(params[i].id === mthis.HLIds[j]){
                             eventType = params[i].eventType;
                             isHas = true
                             break;
@@ -2280,8 +2281,8 @@ export default {
             /* var mthis = this
             mthis.maxEventsNum = 0;
             var heatSource = layer.getSource();
-            var selectedIds = mthis.getSelectedEventIds().ids;
-            selectedIds.forEach(function(item){
+            var HLIds = mthis.getSelectedEventIds().ids;
+            HLIds.forEach(function(item){
                 var OId = mthis.getOIdFromId(item);
                 var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
                 var feature = heatSource.getFeatureById(featureId);
@@ -2412,9 +2413,9 @@ export default {
             var mthis = this;
             //var source = mthis.getLayerById('eventsPointsLayer').getSource();
             mthis.deleteSelectClickFeatures();
-            var SelectedIds = mthis.getSelectedEventIds().ids;
-            if(SelectedIds.length > 0){
-                SelectedIds.forEach(function(item){
+            var HLIds = mthis.getSelectedEventIds().ids;
+            if(HLIds.length > 0){
+                HLIds.forEach(function(item){
                     var OId = mthis.getOIdFromId(item);
                     mthis.$set(mthis.removeEventIdList,item,mthis.allEventIdsToFeaturesIdsList[OId]);
                     mthis.deleteEventInFeaturesById(item);
@@ -2464,12 +2465,12 @@ export default {
         invertSelection(){
             var mthis = this
             var keys = Object.keys(mthis.allEventIdsToFeaturesIdsList);
-            var selectedIds = mthis.$store.state.geo_onlyselected_param;
+            var HLIds = mthis.$store.state.geo_onlyselected_param;
             var noSelectedIds = [];
             if(keys.length > 0){
                 keys.forEach(function(key){
                     var id = mthis.allEventIdsToFeaturesIdsList[key].id;
-                    var index = util.itemIndexInArr(id,selectedIds);
+                    var index = util.itemIndexInArr(id,HLIds);
                     if(index === -1){
                         noSelectedIds.push(id)
                     } else {
@@ -2486,10 +2487,10 @@ export default {
             })
             mthis.geometrySelectedEventIds = noSelectedIds;
             /* //mthis.invertSelectedEventIds = [];
-            // var SelectedIds = mthis.getSelectedEventIds();
-            // var ids = SelectedIds.ids;
-            // var type = SelectedIds.type;
-            var ids = mthis.SelectedIds;
+            // var HLIds = mthis.getSelectedEventIds();
+            // var ids = HLIds.ids;
+            // var type = HLIds.type;
+            var ids = mthis.HLIds;
             var type = mthis.$store.state.geo_selected_param.type;
             var invertIds = [];
             var HighUpSelectedParam = mthis.getHighUpSelectedIds();
@@ -2779,6 +2780,9 @@ export default {
                     ++selectedNum[index];
                 }
             })
+            /* for(let i = 0; i < mthis.SelectedIds.length; i++){
+
+            } */
             Object.keys(mthis.AllLayerList_conf).forEach(function(key){
                 var layerId = mthis.AllLayerList_conf[key].layerId;
                 var features = mthis.getLayerById(layerId).getSource().getFeatures();
@@ -3038,7 +3042,7 @@ export default {
                         'isOpen':true
                     }
                 ]
-                if(mthis.SelectedIds.length > 0){
+                if(mthis.HLIds.length > 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HSD',
                         'isOpen':true
@@ -3172,10 +3176,10 @@ export default {
                 })
             }
         },
-        SelectedIds:function(){
+        HLIds:function(){
             var mthis = this;
             if(mthis.routeMap){
-                mthis.setFeatureStatusByIds(mthis.SelectedIds);
+                mthis.setFeatureStatusByIds(mthis.HLIds);
                 mthis.isOperateButtonsHLOrDim();
             }
             
@@ -3200,7 +3204,8 @@ export default {
                     mthis.setFeatureStatus(features[i],'die');
                 }
             })
-            mthis.SelectedIds = mthis.geoStaticsOnlyLookSelectedIds
+            mthis.HLIds = mthis.geoStaticsOnlyLookSelectedIds;
+            mthis.SelectedIds = mthis.geoStaticsOnlyLookSelectedIds;
             var selectedEventsParam = mthis.geoStaticsOnlyLookSelectedIds
             console.log('============setGeoOnlyselectedParam==================')
             console.log(selectedEventsParam)
@@ -3208,8 +3213,8 @@ export default {
         },
         geoStaticsSelectedIds:function(){
             var mthis = this;
-            //if(mthis.staticsSelectedEventIds.length === 0 || mthis.staticsSelectedEventIds.length !== mthis.SelectedIds.length){
-                mthis.halfSelectedIds = mthis.SelectedIds;
+            //if(mthis.staticsSelectedEventIds.length === 0 || mthis.staticsSelectedEventIds.length !== mthis.HLIds.length){
+                mthis.halfSelectedIds = mthis.HLIds;
                 var ids = [];
                 if(mthis.geoStaticsSelectedIds.length > 0){
                     mthis.geoStaticsSelectedIds.forEach(function(item){
@@ -3245,11 +3250,11 @@ export default {
             console.log('============setGeoOnlyselectedParam1==================')
             console.log(selectedEventsParam)
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
-            mthis.SelectedIds = mthis.staticsSelectedEventIds
+            mthis.HLIds = mthis.staticsSelectedEventIds
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            mthis.SelectedIds = mthis.timeSelectedEventIds
+            mthis.HLIds = mthis.timeSelectedEventIds
             var selectedEventsParam = {
                 type:'GeoTime',
                 paramIds:mthis.timeSelectedEventIds
@@ -3258,7 +3263,8 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
-            mthis.SelectedIds = mthis.timeSelectedEventIdsOnly
+            mthis.HLIds = mthis.timeSelectedEventIdsOnly;
+            mthis.SelectedIds = mthis.timeSelectedEventIdsOnly;
             var selectedEventsParam = mthis.timeSelectedEventIdsOnly
             console.log('============setGeoOnlyselectedParam2==================')
             console.log(selectedEventsParam)
@@ -3271,20 +3277,59 @@ export default {
                 paramIds:mthis.geometrySelectedEventIds
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam);  */
-            mthis.SelectedIds = mthis.geometrySelectedEventIds
+            mthis.HLIds = mthis.geometrySelectedEventIds;
+            mthis.SelectedIds = mthis.geometrySelectedEventIds;
             var selectedEventsParam = mthis.geometrySelectedEventIds
             console.log('============setGeoOnlyselectedParam3==================')
             console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
-            //mthis.SelectedIds = mthis.geometrySelectedEventIds
+            //mthis.HLIds = mthis.geometrySelectedEventIds
         },
-        geoTimeCondition:function(){
+        geoTimeCondition:{
+            handler(newValue) {
+                var mthis = this;
+                debugger
+                var type = mthis.geoTimeCondition.type;
+                var timeSelectedIds = mthis.geoTimeCondition.eventIds;
+                if(type === 'notAnalysis'){
+                    mthis.timeSelectedEventIds = timeSelectedIds;
+                    mthis.halfSelectedIds = mthis.HLIds;
+                    var ids = [];
+                    if(mthis.timeSelectedEventIds.length > 0){
+                        mthis.timeSelectedEventIds.forEach(function(item){
+                            if(item.indexOf('&') === -1){
+                                var id = 'org&'+item;
+                                ids.push(id)
+                            } else {
+                                ids.push(item)
+                            }
+                        })
+                    }
+                    mthis.timeSelectedEventIds = ids;
+                    if(mthis.halfSelectedIds.length > 0){
+                        mthis.halfSelectedIds.forEach(function(paramid){
+                            var layerId = mthis.getLayerIdByFeatureIdOrParamId(paramid);
+                            var OId = mthis.getOIdFromId(paramid);
+                            var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
+                            var feature = mthis.getLayerById(layerId).getSource().getFeatureById(featureId);
+                            mthis.setFeatureStatus(feature,'halflife')
+                        })
+                    }
+                } else {
+                    mthis.timeSelectedEventIdsOnly = timeSelectedIds;
+                }
+    　　　　 },
+    　　　　 deep: true,
+            immediate: true
+        },
+        /* geoTimeCondition:function(){
             var mthis = this;
+            debugger
             var type = mthis.geoTimeCondition.type;
             var timeSelectedIds = mthis.geoTimeCondition.eventIds;
             if(type === 'notAnalysis'){
                 mthis.timeSelectedEventIds = timeSelectedIds;
-                mthis.halfSelectedIds = mthis.SelectedIds;
+                mthis.halfSelectedIds = mthis.HLIds;
                 var ids = [];
                 if(mthis.timeSelectedEventIds.length > 0){
                     mthis.timeSelectedEventIds.forEach(function(item){
@@ -3309,11 +3354,12 @@ export default {
             } else {
                 mthis.timeSelectedEventIdsOnly = timeSelectedIds;
             }
-        },
+        }, */
         timeCondition:function(){
             var mthis = this;
+            debugger
             var ids = [];
-            var selectedIds = [];
+            var HLIds = [];
             var idsIsAllIds = false;
             //var allEventIds = [];
             if(mthis.geometrySelectedEventIds.length === 0 && mthis.staticsSelectedEventIds.length === 0){
@@ -3346,12 +3392,12 @@ export default {
                 }
                 if(eventTime !== '' && util.getTimestamp(eventTime) >= mthis.timeCondition[0] && util.getTimestamp(eventTime) <= mthis.timeCondition[1]){
                     //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',true);
-                    selectedIds.push(item);
+                    HLIds.push(item);
                 } else {
                     //mthis.setSelectedEventFeatureParam(feature,'isTimeSelected',false);
                 }
             })
-            mthis.timeSelectedEventIds = selectedIds;
+            mthis.timeSelectedEventIds = HLIds;
                 
         },
         tmss:function(){
