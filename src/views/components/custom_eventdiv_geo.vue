@@ -4,8 +4,7 @@
     <div>
       <div id="tab1" :style="{margin:'0',height:viewHeight_20_geo}">
         <Tabs :value=$store.state.tabSelectGeo>
-          
-          <Tab-pane label="选中详情" name= 'mubiaoxiangqingGeo'  :style="{fontSize: '18px',height:viewHeight_20_geo}" id='mubiaoxiangqingGeo' @click="changTab('mubiaoxiangqingGeo')">
+          <Tab-pane label="选中详情" name='mubiaoxiangqingGeo' :style="{fontSize: '18px',height:viewHeight_20_geo}" id='mubiaoxiangqingGeo' @click="changTab('mubiaoxiangqingGeo')">
             <eventgeo :resArr='resArr' :eventdata='evetdata' v-show='evetdataFlag'></eventgeo>
             <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
@@ -14,10 +13,10 @@
               </div>
             </div>
           </Tab-pane>
-          <Tab-pane label="数据透视" name= 'toushi' :style="{fontSize: '18px',height:viewHeight_20_geo}" id='toushi_geo' @click="changTab('toushi')">
-            <Spin size="large"  v-if="spinShow">
-               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
-                <div>Loading</div>
+          <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_20_geo}" id='toushi_geo' @click="changTab('toushi')">
+            <Spin size="large" v-if="spinShow">
+              <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+              <div>Loading</div>
             </Spin>
             <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
           </Tab-pane>
@@ -31,21 +30,24 @@
 <script>
   import modalChartDetail from './custom_modal_detail'
   import leftStatics from './custom_leftStatics'
-  import { mapState,mapMutations } from 'vuex'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   import eventgeo from './custom_event_geo'
   import util from '../../util/tools.js'
   var timer = null;
   export default {
     data() {
       return {
-        spinShow:false,
-        timer:null,
-        tabSelectGeo:'mubiaoxiangqingGeo',
+        spinShow: false,
+        timer: null,
+        tabSelectGeo: 'mubiaoxiangqingGeo',
         modalNodeId: '',
-        contentStatisticsdata:{},
+        contentStatisticsdata: {},
         evetdata: [],
         detailModalFlag: false,
-        dataStatistics:[],
+        dataStatistics: [],
         value4: '1-1',
         myList: [{
           name: 'aaaaa',
@@ -60,22 +62,29 @@
         detail_data: null,
         show: [],
         value3: '1',
-                value4: '1-1',
+        value4: '1-1',
         eheight: 0,
         eventheightdiv: 0,
         eventheight: 0,
         closable: true,
-        staticsDatas:[],
-        evetdataFlag:false,
-        eventItemHeight:0,
-        saveSelectedIds:[],
+        staticsDatas: [],
+        evetdataFlag: false,
+        eventItemHeight: 0,
+        saveSelectedIds: [],
         nodeTypedata: null,
         staticsIds: [],
         single: false,
         resArr: [],
-        rightClickConf : [
-            {'name':'只选中它','id':'onlylookit','iconClassName':'icon-ren'},
-            {'name':'删除','id':'delete','iconClassName':'icon-ren'}
+        rightClickConf: [{
+            'name': '只选中它',
+            'id': 'onlylookit',
+            'iconClassName': 'icon-ren'
+          },
+          {
+            'name': '删除',
+            'id': 'delete',
+            'iconClassName': 'icon-ren'
+          }
         ]
       };
     },
@@ -85,256 +94,269 @@
       eventgeo
     },
     // computed: {
-      //   menuitemClasses: function() {
-        //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
+    //   menuitemClasses: function() {
+    //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed:mapState (['geo_selected_param', 'geo_onlyselected_param', 'singlePerson', 'viewHeight','contentStatisticsResult','viewHeight_20_geo','clickSelectedGeoIds']),
+    computed: mapState(['geo_selected_param', 'geo_onlyselected_param', 'singlePerson', 'viewHeight', 'contentStatisticsResult', 'viewHeight_20_geo', 'clickSelectedGeoIds']),
     watch: {
-      clickSelectedGeoIds:function(){
+      clickSelectedGeoIds: function() {
         var mthis = this;
-        if(mthis.clickSelectedGeoIds.length > 0){
-            var OrgIds = [];
-            var EventIds = [];
-            mthis.clickSelectedGeoIds.forEach(function(id){
-              var type = id.split('&')[0];
-              var Id = id.split('&')[1];
-              if(type === 'event'){
-                EventIds.push(Id);
-              } else {
-                OrgIds.push(Id);
-              }
-            })
-            if(OrgIds.length > 0){
-              var nodeOb = {};
-              nodeOb.nodeIds = OrgIds;
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
-                    mthis.evetdata = response.body.data[0].nodes;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                    //mthis.saveSelectedIds = mthis.evetdata;
-                    mthis.evetdataFlag = true
-                  })
-            } 
-            if(EventIds.length > 0){
-              var eventeOb = {};
-              eventeOb.EventIds = EventIds;
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
-                    var EventDetail = response.body.data;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                    var eventDs = [];
-                    for(var i = 0; i < EventDetail.length; i++){
-                      var eventD = {};
-                      eventD.entity_type = 'event';
-                      eventD.id = EventDetail[i].id;
-                      eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
-                      eventD.loaded = true;
-                      eventD.name = EventDetail[i].event_content;
-                      eventDs.push(eventD)
-                    }
-                    mthis.evetdata  = eventDs;
-                    //mthis.saveSelectedIds = mthis.evetdata;
-                    mthis.evetdataFlag = true
-                  })
+        if (mthis.clickSelectedGeoIds.length > 0) {
+          var OrgIds = [];
+          var EventIds = [];
+          mthis.clickSelectedGeoIds.forEach(function(id) {
+            var type = id.split('&')[0];
+            var Id = id.split('&')[1];
+            if (type === 'event') {
+              EventIds.push(Id);
+            } else {
+              OrgIds.push(Id);
             }
-          } else {
-            mthis.evetdata = mthis.saveSelectedIds;
+          })
+          if (OrgIds.length > 0) {
+            var nodeOb = {};
+            nodeOb.nodeIds = OrgIds;
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
+              mthis.evetdata = response.body.data[0].nodes; //util.hebing(mthis.evetdata,response.body.data[0].nodes)
+              //mthis.saveSelectedIds = mthis.evetdata;
+              mthis.evetdataFlag = true
+            })
           }
+          if (EventIds.length > 0) {
+            var eventeOb = {};
+            eventeOb.EventIds = EventIds;
+            // debugger;
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
+              var EventDetail = response.body.data; //util.hebing(mthis.evetdata,response.body.data[0].nodes)
+              var eventDs = [];
+              for (var i = 0; i < EventDetail.length; i++) {
+                var eventD = {};
+                eventD.entity_type = 'event';
+                eventD.id = EventDetail[i].id;
+                eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
+                eventD.loaded = true;
+                // eventD.name = EventDetail[i].event_content;
+                // eventD.name = EventDetail[i].event_content?(EventDetail[i].event_content):(EventDetail[i].event_subtype);
+                eventD.name = EventDetail[i].event_subtype
+                eventDs.push(eventD)
+              }
+              mthis.evetdata = eventDs;
+              //mthis.saveSelectedIds = mthis.evetdata;
+              mthis.evetdataFlag = true
+            })
+          }
+        } else {
+          mthis.evetdata = mthis.saveSelectedIds;
+        }
       },
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
-      geo_onlyselected_param:function(){
+      geo_onlyselected_param: function() {
+        // debugger;
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];
-        mthis.geo_onlyselected_param.forEach(function(id){
+        mthis.geo_onlyselected_param.forEach(function(id) {
           var index = id.indexOf('&');
-          if(index === -1){
+          if (index === -1) {
             OrgIds.push(id);
           } else {
+            var type = id.split('&')[0];
             var Id = id.split('&')[1];
-            EventIds.push(Id);
+            if (type === 'org') {
+              OrgIds.push(Id);
+            } else {
+              EventIds.push(Id);
+            }
           }
         })
-        if(mthis.geo_onlyselected_param.length > 0){
-            if(OrgIds.length > 0){
-              var nodeOb = {};
-              nodeOb.nodeIds = OrgIds;
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
-                    mthis.evetdata = response.body.data[0].nodes;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                    mthis.saveSelectedIds = mthis.evetdata;
-                    mthis.evetdataFlag = true
-                  })
-            } 
-            if(EventIds.length > 0){
-              var eventeOb = {};
-              eventeOb.EventIds = EventIds;
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
-                    var EventDetail = response.body.data;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                    var eventDs = [];
-                    for(var i = 0; i < EventDetail.length; i++){
-                      var eventD = {};
-                      eventD.entity_type = 'event';
-                      eventD.id = EventDetail[i].id;
-                      eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
-                      eventD.loaded = true;
-                      eventD.name = EventDetail[i].event_content;
-                      eventDs.push(eventD)
-                    }
-                    mthis.evetdata  = eventDs;
-                    mthis.saveSelectedIds = mthis.evetdata;
-                    mthis.evetdataFlag = true
-                  })
-            }
-            
-          } else {
-            mthis.evetdata = [];
-            mthis.evetdataFlag = false;
+        if (mthis.geo_onlyselected_param.length > 0) {
+          if (OrgIds.length > 0) {
+            var nodeOb = {};
+            nodeOb.nodeIds = OrgIds;
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
+              mthis.evetdata = response.body.data[0].nodes; //util.hebing(mthis.evetdata,response.body.data[0].nodes)
+              mthis.saveSelectedIds = mthis.evetdata;
+              mthis.evetdataFlag = true
+            })
           }
-          if(mthis.geo_onlyselected_param.length > 1){
-            var nodeIds = [];
-            for(let i = 0; i < OrgIds.length; i++){
-              nodeIds.push(OrgIds[i])
-            }
-            for(let i = 0; i < EventIds.length; i++){
-              nodeIds.push(EventIds[i])
-            }
-            //mthis.waiting()
-            mthis.spinShow = true;
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url+'/graph-attr/', {
+          if (EventIds.length > 0) {
+            var eventeOb = {};
+            eventeOb.EventIds = EventIds;
+            // debugger;
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
+              var EventDetail = response.body.data; //util.hebing(mthis.evetdata,response.body.data[0].nodes)
+              var eventDs = [];
+              for (var i = 0; i < EventDetail.length; i++) {
+                var eventD = {};
+                eventD.entity_type = 'event';
+                eventD.id = EventDetail[i].id;
+                eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
+                eventD.loaded = true;
+                // eventD.name = EventDetail[i].event_content;
+                // eventD.name = EventDetail[i].event_content?(EventDetail[i].event_content):(EventDetail[i].event_subtype);
+                eventD.name = EventDetail[i].event_subtype
+                eventDs.push(eventD)
+              }
+              mthis.evetdata = eventDs;
+              mthis.saveSelectedIds = mthis.evetdata;
+              mthis.evetdataFlag = true
+            })
+          }
+        } else {
+          mthis.evetdata = [];
+          mthis.evetdataFlag = false;
+        }
+        if (mthis.geo_onlyselected_param.length > 1) {
+          var nodeIds = [];
+          for (let i = 0; i < OrgIds.length; i++) {
+            nodeIds.push(OrgIds[i])
+          }
+          for (let i = 0; i < EventIds.length; i++) {
+            nodeIds.push(EventIds[i])
+          }
+          //mthis.waiting()
+          mthis.spinShow = true;
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
             'nodeIds': nodeIds,
-            'type':'geo'
-            }).then(response => {
-                mthis.staticsDatas = response.body.data;
-                mthis.spinShow = false;
-              })
-            } else {
-              mthis.staticsDatas = [];
-              mthis.spinShow = false;
-            }
+            'type': 'geo'
+          }).then(response => {
+            mthis.staticsDatas = response.body.data;
+            mthis.spinShow = false;
+          })
+        } else {
+          mthis.staticsDatas = [];
+          mthis.spinShow = false;
+        }
       },
-      geo_selected_param:function(){
+      geo_selected_param: function() {
+        // debugger;
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];
-        mthis.geo_selected_param.paramIds.forEach(function(id){
+        mthis.geo_selected_param.paramIds.forEach(function(id) {
           var type = id.split('&')[0];
           var Id = id.split('&')[1];
-          if(type === 'event'){
+          if (type === 'event') {
             EventIds.push(Id);
           } else {
             OrgIds.push(Id);
           }
         })
-        if(mthis.geo_selected_param.type !== 'GeoStatics'){
-          if(mthis.geo_selected_param.paramIds.length > 0){
-            if(OrgIds.length > 0){
+        if (mthis.geo_selected_param.type !== 'GeoStatics') {
+          if (mthis.geo_selected_param.paramIds.length > 0) {
+            if (OrgIds.length > 0) {
               var nodeOb = {};
               nodeOb.nodeIds = OrgIds;
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
-                    mthis.evetdata = response.body.data[0].nodes;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                    mthis.saveSelectedIds = mthis.evetdata;
-                    mthis.evetdataFlag = true
-                  })
-            } 
-            if(EventIds.length > 0){
+                mthis.evetdata = response.body.data[0].nodes; //util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                mthis.saveSelectedIds = mthis.evetdata;
+                mthis.evetdataFlag = true
+              })
+            }
+            if (EventIds.length > 0) {
               var eventeOb = {};
               eventeOb.EventIds = EventIds;
+              // debugger;
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
-                    var EventDetail = response.body.data;//util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                    var eventDs = [];
-                    for(var i = 0; i < EventDetail.length; i++){
-                      var eventD = {};
-                      eventD.entity_type = 'event';
-                      eventD.id = EventDetail[i].id;
-                      eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
-                      eventD.loaded = true;
-                      eventD.name = EventDetail[i].event_content;
-                      eventDs.push(eventD)
-                    }
-                    mthis.evetdata  = eventDs;
-                    mthis.saveSelectedIds = mthis.evetdata;
-                    mthis.evetdataFlag = true
-                  })
+                var EventDetail = response.body.data; //util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                var eventDs = [];
+                for (var i = 0; i < EventDetail.length; i++) {
+                  var eventD = {};
+                  eventD.entity_type = 'event';
+                  eventD.id = EventDetail[i].id;
+                  eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
+                  eventD.loaded = true;
+                  // eventD.name = EventDetail[i].event_content?(EventDetail[i].event_content):(EventDetail[i].event_subtype);
+                  eventD.name = EventDetail[i].event_subtype
+                  eventDs.push(eventD)
+                }
+                mthis.evetdata = eventDs;
+                mthis.saveSelectedIds = mthis.evetdata;
+                mthis.evetdataFlag = true
+              })
             }
-            
           } else {
             mthis.evetdata = [];
             mthis.evetdataFlag = false;
           }
-          if(mthis.geo_selected_param.paramIds.length > 1){
+          if (mthis.geo_selected_param.paramIds.length > 1) {
             var nodeIds = [];
-            for(let i = 0; i < OrgIds.length; i++){
+            for (let i = 0; i < OrgIds.length; i++) {
               nodeIds.push(OrgIds[i])
             }
-            for(let i = 0; i < EventIds.length; i++){
+            for (let i = 0; i < EventIds.length; i++) {
               nodeIds.push(EventIds[i])
             }
             //mthis.waiting()
             mthis.spinShow = true;
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url+'/graph-attr/', {
-            'nodeIds': nodeIds,
-            'type':'geo'
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
+              'nodeIds': nodeIds,
+              'type': 'geo'
             }).then(response => {
-                mthis.staticsDatas = response.body.data;
-                mthis.spinShow = false;
-                //mthis.hide();
-              })
-            } else {
-              mthis.staticsDatas = [];
+              mthis.staticsDatas = response.body.data;
               mthis.spinShow = false;
-            }
-        }else{
+              //mthis.hide();
+            })
+          } else {
+            mthis.staticsDatas = [];
+            mthis.spinShow = false;
+          }
+        } else {
           return;
         }
       }
     },
     methods: {
-      waiting(){  
-            var mthis = this;
-            mthis.hide();
-            var procbg = document.createElement("div"); //首先创建一个div    
-            procbg.setAttribute("id","WaitCover"); //定义该div的id    
-            procbg.style.background = "#000000";    
-            procbg.style.width = "100%";    
-            procbg.style.height = "100%";    
-            //procbg.style.position = "fixed";    
-            procbg.style.top = "0";    
-            procbg.style.left = "0";    
-            procbg.style.zIndex = "500000";    
-            procbg.style.opacity = "0.6";  
-            procbg.style.cursor='wait';  
-            procbg.style.filter = "Alpha(opacity=70)";    
-            var toushi = document.getElementById('toushi_geo');
-            toushi.appendChild(procbg);    
-        },
-    //取消遮罩    
-        hide() {    
-            var mybg = document.getElementById("WaitCover");
-            if(mybg){
-                var toushi = document.getElementById("toushi");
-                toushi.removeChild(mybg)
-            }   
-        }, 
-      clickRightMenu(rightCilckArgu){
+      waiting() {
+        var mthis = this;
+        mthis.hide();
+        var procbg = document.createElement("div"); //首先创建一个div    
+        procbg.setAttribute("id", "WaitCover"); //定义该div的id    
+        procbg.style.background = "#000000";
+        procbg.style.width = "100%";
+        procbg.style.height = "100%";
+        //procbg.style.position = "fixed";    
+        procbg.style.top = "0";
+        procbg.style.left = "0";
+        procbg.style.zIndex = "500000";
+        procbg.style.opacity = "0.6";
+        procbg.style.cursor = 'wait';
+        procbg.style.filter = "Alpha(opacity=70)";
+        var toushi = document.getElementById('toushi_geo');
+        toushi.appendChild(procbg);
+      },
+      //取消遮罩    
+      hide() {
+        var mybg = document.getElementById("WaitCover");
+        if (mybg) {
+          var toushi = document.getElementById("toushi");
+          toushi.removeChild(mybg)
+        }
+      },
+      clickRightMenu(rightCilckArgu) {
         var mthis = this;
         var buttonId = rightCilckArgu.buttonId;
         var oids = rightCilckArgu.nsIds;
         var ids = []
-        for(let i = 0; i < oids.length; i++){
+        for (let i = 0; i < oids.length; i++) {
           let id = oids[i];
           let index = id.indexOf('&');
-          if(index === -1){
-            ids.push('org&'+id)
+          if (index === -1) {
+            ids.push('org&' + id)
           } else {
             ids.push(id)
           }
         }
-        if(buttonId === 'onlylookit'){
+        if (buttonId === 'onlylookit') {
           mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', ids)
-        } else if(buttonId === 'delete'){
+        } else if (buttonId === 'delete') {
           alert('delete')
         }
       },
-      clickLeftStatics(staticsClick){
+      clickLeftStatics(staticsClick) {
         var mthis = this;
         mthis.$store.commit('setGeoStaticsSelectedIds', staticsClick)
       },
@@ -342,7 +364,7 @@
         alert(a)
         this.$store.commit('setTabSelectGeo', a)
       },
-      setFlagToFalse(detailModalFlag){
+      setFlagToFalse(detailModalFlag) {
         var mthis = this;
         mthis.detailModalFlag = detailModalFlag;
       },
@@ -401,7 +423,6 @@
   };
 </script>
 <style scoped>
-
   .ivu-card {
     background-color: rgba(0, 0, 0, 0) !important;
     background: rgba(0, 0, 0, 0) !important;
@@ -422,18 +443,18 @@
 </style>
 
 <style>
-.entityDetail>.organization_detailTable tr{
-  border-bottom: none !important;
-}
-.entityDetail>.administrative_detailTable tr{
-  border-bottom: none !important;
-}
-.entityDetail>.human_detailTable tr{
-  border-bottom: none !important;
-}
-#toushi>.toushiItems>.ivu-collapse-item>.ivu-collapse-content>.ivu-collapse-content-box>div>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-header>i{
-  margin-left:10px
-}
+  .entityDetail>.organization_detailTable tr {
+    border-bottom: none !important;
+  }
+  .entityDetail>.administrative_detailTable tr {
+    border-bottom: none !important;
+  }
+  .entityDetail>.human_detailTable tr {
+    border-bottom: none !important;
+  }
+  #toushi>.toushiItems>.ivu-collapse-item>.ivu-collapse-content>.ivu-collapse-content-box>div>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-header>i {
+    margin-left: 10px
+  }
   .content_header {
     font-family: MicrosoftYaHei;
     font-size: 14px;
@@ -536,15 +557,15 @@
   .circle-img {
     border-radius: 50% !important;
   }
-  .ivu-collapse{
+  .ivu-collapse {
     background-color: rgba(0, 0, 0, 0) !important;
     border: none !important;
     color: #cff !important;
   }
-  .ivu-collapse-header span{
+  .ivu-collapse-header span {
     font-size: 14px !important;
   }
-  .ivu-collapse-content-box>.ivu-collapse{
+  .ivu-collapse-content-box>.ivu-collapse {
     margin: 5px 0 !important;
   }
   #toushi>.ivu-collapse>.ivu-collapse-item>.ivu-collapse-content,
@@ -586,8 +607,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
- .demo-spin-icon-load{
-        animation: ani-demo-spin 1s linear infinite;
-    }
+  }
+  .demo-spin-icon-load {
+    animation: ani-demo-spin 1s linear infinite;
+  }
 </style>

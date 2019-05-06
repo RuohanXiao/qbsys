@@ -537,7 +537,10 @@
     computed:mapState ([
       'split','split_geo','splitWidth','tmss','selectNetNodes','geo_selected_param','geo_onlyselected_param']),
     watch: {
+      // setGeoOnlyselectedParam
         geo_onlyselected_param:function(){
+          console.log('=========setGeoOnlyselectedParam  xxxxx==========')
+          console.log(this.geo_onlyselected_param)
           var mthis = this
           if(this.geo_onlyselected_param.length>0){
              mthis.geo_only_eventIds = [];

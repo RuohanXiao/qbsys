@@ -152,6 +152,7 @@
               //   // mthis.evetdata = response.body.data[0].nodes
               //   util.hebing(mthis.evetdata,response.body.data[0].nodes)
               // })
+              // debugger;
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventOb).then(response => {
                 // mthis.evetdataFlag = true
                 // mthis.evetdata = response.body.data[0].nodes

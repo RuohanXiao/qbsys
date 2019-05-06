@@ -113,11 +113,11 @@
         // console.log(img)
         if (this.myMap.get(type) === 'entity') {
            if (mthis.eventdata[0].entity_type === 'administrative') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/administrative.png'
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/location.png'
             } else if (mthis.eventdata[0].entity_type === 'human') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/human.png'
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/People.png'
             } else if (mthis.eventdata[0].entity_type === 'organization') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/organization.png'
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/Organization.png'
             } else if (mthis.eventdata[0].entity_type === 'weapon') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/weapon.png'
             } else {
@@ -145,6 +145,7 @@
           })
         }
         if (mthis.myMap.get(type) === 'event') {
+          // debugger;
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {
@@ -206,11 +207,11 @@
                 let result = new Object();
                 result = response.body.data[0]
                 if (mthis.eventdata[0].entity_type === 'administrative') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/administrative.png'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/location.png'
                 } else if (mthis.eventdata[0].entity_type === 'human') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/human.png'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/People.png'
                 } else if (mthis.eventdata[0].entity_type === 'organization') {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/organization.png'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/Organization.png'
                 } else if (mthis.eventdata[0].entity_type === 'weapon') {
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
                 } else {
