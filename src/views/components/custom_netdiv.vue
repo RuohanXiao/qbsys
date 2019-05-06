@@ -18,6 +18,12 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="triggerMethods('selectAll')">
+            <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">全选节点</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('remove')">
             <Icon class="icon iconfont icon-delete-point DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">删除</p>
@@ -287,7 +293,9 @@
     </div>
     <div :style="{height:nh_50,borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <!-- <div id="netchart" aria-autocomplete="true" :style="{height:nh_50}"></div> -->
+      
       <div id="netchart" :style="{height:nh_50}"></div>
+        <!-- <div id="rmenu" :style="{height:200,backgroundColor:'red'}"></div> -->
       <transition name="mybox">
         <div class="xuanfuAlert" v-show="popout">{{message.text}}</div>
       </transition>
@@ -298,7 +306,7 @@
                                                                                         cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
                                                                                       <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
           </Modal>-->
-    <Modal v-model="modalStep" width="360">
+    <!-- <Modal v-model="modalStep" width="360">
       <p slot="header" style="color:#f60;text-align:center">
         <Icon type="ios-information-circle"></Icon>
         <span>Delete confirmation</span>
@@ -309,7 +317,7 @@
       <div slot="footer">
         <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
       </div>
-    </Modal>
+    </Modal> -->
     <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     <workatlas-modal :workatlastData="workatlastData" :type="workatlasType" :flag="workatlasFlag" />
   </div>
@@ -320,7 +328,7 @@
   import modalChart from "./custom_modal_add.vue";
   import worksetModal from "./custom_workSet_modal.vue";
   import workatlasModal from "./custom_workAtlas_modal.vue";
-  // import modalChart from './custom_modal_vue.vue'
+  import {rightMenu} from '../../dist/assets/js/rightMenu.js'
   import {
     mapState,
     mapMutations
@@ -395,6 +403,7 @@
           contentIds: []
         },
         myMap: new Map(),
+        myMapevent: new Map(),
         netchart: null,
         nextId: 4,
         flag: true,
@@ -422,8 +431,32 @@
       Canvas2Image
     },
     methods: {
+      linkedKnowlage(){
+        this.setMessage('请期待下一版本的链向功能')
+      },
+      linkedKnowlageAll(){
+        this.setMessage('请期待下一版本的链向功能')
+      },
+      selectAll(){
+        if(this.netchart.nodes().length>0) {
+          this.netchart.selection(this.netchart.nodes().map(item=>{
+            return item.id
+          }))
+        } else {
+          this.setMessage('画布上还没有节点，无法全选')
+        }
+      },
+      deleteRightMenu(){
+            var mthis = this;
+            $('#ringRightMenu').remove()
+        },
       // 触发按钮事件
       triggerMethods(n) {
+        switch (n) {
+           case 'selectAll':
+              this.selectAll()
+              break;
+        }
         if (this.selectionId.length > 0) {
           switch (n) {
             case 'removeOther':
@@ -462,11 +495,15 @@
             case 'toContent':
               this.toContent()
               break;
-              // case 'openCreatProjectModalImport':
-              //   this.openCreatProjectModal('import')
-              //   break;
             case 'openCreatProjectModalExpend':
               this.openCreatProjectModal('expend')
+              // this.pathKnowledge()
+              break;
+            case linkedKnowlage:
+              this.linkedKnowlage()
+              break;
+            case linkedKnowlageAll:
+              this.linkedKnowlageAll()
               break;
           }
         }
@@ -486,34 +523,59 @@
         if (this.selectionId.length === 2) {
           switch (n) {
             case 'showModalStepKnowledge':
-              // this.showModalStep('knowledge')
               this.shortPath(this.selectionId)
+              break;
+            case 'showModalStepAll':
+              this.shortAllPath(this.selectionId)
               break;
           }
         }
       },
       shortPath(ids) {
         var mthis = this
-        console.log(ids);
-        mthis.$http
-          .post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
-            nodeIds1: new Array(ids[0]),
-            nodeIds2: new Array(ids[1])
-          })
-          .then(response => {
-            if (response.body.code === 0) {
-              if (response.body.data[0].nodes.length > 0) {
-                mthis.netchart.addData(response.body.data[0])
-                mthis.netchart.selection(response.body.data[0].nodes.map(item => {
-                  return item.id
-                }))
-              } else {
-                mthis.setMessage('未找到最短路径')
-              }
+        // console.log(ids);
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
+          subjectId: ids[0],
+          objectId: ids[1]
+        })
+        .then(response => {
+          if (response.body.code === 0) {
+            if (response.body.data[0].nodes.length > 0) {
+              mthis.netchart.addData(response.body.data[0])
+              mthis.netchart.selection(response.body.data[0].nodes.map(item => {
+                return item.id
+              }))
             } else {
-              mthis.setMessage('ShortPath接口异常！')
+              mthis.setMessage('未找到最短路径')
             }
-          })
+          } else {
+            mthis.setMessage('ShortPath接口异常！')
+          }
+        })
+      },
+      shortAllPath(ids) {
+        var mthis = this
+        if(ids.length === 2) {
+          mthis.$http
+            .post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
+              subjectId: ids[0],
+              objectId: ids[1]
+            })
+            .then(response => {
+              if (response.body.code === 0) {
+                if (response.body.data[0].nodes.length > 0) {
+                  mthis.netchart.addData(response.body.data[0])
+                  mthis.netchart.selection(response.body.data[0].nodes.map(item => {
+                    return item.id
+                  }))
+                } else {
+                  mthis.setMessage('未找到最短路径')
+                }
+              } else {
+                mthis.setMessage('ShortPath接口异常！')
+              }
+            })
+        }
       },
       changeMode(type) {
         // this.netchart.replaceSettings({
@@ -533,8 +595,8 @@
           },
           time: ""
         }];
-        // console.log('=====selectionId==========')
-        // console.log(mthis.selectionId)
+        // // console.log('=====selectionId==========')
+        // // console.log(mthis.selectionId)
         setTimeout(() => {
           let ddata = mthis.netchart.exportData();
           mthis.workatlastData = [{
@@ -555,7 +617,7 @@
           this.workatlasType = type;
           this.workatlasFlag = this.workatlasFlag + 1;
         }, 200);
-        // console.log(this.worksetData)
+        // // console.log(this.worksetData)
       },
       openCreateGroupModal() {
         var mthis = this;
@@ -577,8 +639,8 @@
             data: []
           }
         ];
-        // console.log('=====setSelectionIdByType==========')
-        // console.log(mthis.selectionIdByType)
+        // // console.log('=====setSelectionIdByType==========')
+        // // console.log(mthis.selectionIdByType)
         if (!(
             ((mthis.selectionIdByType.nodeIds.length ==
                 mthis.selectionIdByType.eventIds.length) ==
@@ -630,13 +692,13 @@
                   mthis.worksetData[2].data = response.body.data;
                 }
               });
-            console.log('mthis.worksetData----------')
-            console.log(mthis.worksetData)
+            // console.log('mthis.worksetData----------')
+            // console.log(mthis.worksetData)
           }
         }
         this.worksetType = "add";
         this.worksetFlag = this.worksetFlag + 1;
-        // console.log(this.worksetData)
+        // // console.log(this.worksetData)
       },
       startTimer(v) {
         var mthis = this;
@@ -1089,9 +1151,9 @@
               .then(response => {
                 if (response.body.code === 0) {
                   if (JSON.stringify(response.body.data[0].RelatedEvent) !== "{}") {
-                    console.log('if(JSON.stringify(response.body.data[0].RelatedEvent) == "{}")')
-                    console.log(JSON.stringify(response.body.data[0].RelatedEvent) !== "{}")
-                    console.log(response)
+                    // console.log('if(JSON.stringify(response.body.data[0].RelatedEvent) == "{}")')
+                    // console.log(JSON.stringify(response.body.data[0].RelatedEvent) !== "{}")
+                    // console.log(response)
                     eventRes = response.body.data[0].RelatedEvent;
                     let eventList = [];
                     let sList = arrList;
@@ -1316,7 +1378,7 @@
         };
       },
       gongzhiEnitiy() {
-        console.log(this.selectionId)
+        // console.log(this.selectionId)
         var mthis = this
         if (this.selectionId.length > 1) {
           this.expandFlag_gongzhi = 'knowledge_gongzhi'
@@ -1343,7 +1405,7 @@
         }
       },
       gongzhiEvent() {
-        console.log(this.selectionId)
+        // console.log(this.selectionId)
         this.expandFlag_gongzhi = 'event_gongzhi'
         var mthis = this
         mthis.spinShow = true;
@@ -1370,7 +1432,7 @@
         }
       },
       gongzhiDoc() {
-        console.log(this.selectionId)
+        // console.log(this.selectionId)
         var mthis = this
         mthis.expandFlag_gongzhi = 'content_gongzhi'
         mthis.spinShow = true;
@@ -1397,11 +1459,11 @@
         }
       },
       exportImg() {
-        // console.log(this.netchart)
-        // console.log(this.netchart.exportData()) //可以通过这种方法获取到节点的坐标
+        // // console.log(this.netchart)
+        // // console.log(this.netchart.exportData()) //可以通过这种方法获取到节点的坐标
         var mthis = this;
-        // // console.log('=================exportImg==================')
-        // // console.log(this.netchart.getNode("Q22368"))
+        // // // console.log('=================exportImg==================')
+        // // // console.log(this.netchart.getNode("Q22368"))
         // let nodeObj = this.netchart.getNode("Q22368")
         // nodeObj.lineColor = 'rgba(51,255,255,0.5)';
         // nodeObj.backgroundStyle = {
@@ -1610,9 +1672,9 @@
                 }
                 var item;
                 while (stack.length) {
-                  console.log('================++++++++++++++++++')
+                  // console.log('================++++++++++++++++++')
                   item = stack.shift();
-                  console.log(item.order + '    ' + item.depth)
+                  // console.log(item.order + '    ' + item.depth)
                   let nodeObj = mthis.netchart.getNode(item.id)
                   nodeObj['x'] = item.order * 200 + x0
                   nodeObj['y'] = item.depth * 300 + y0
@@ -1620,7 +1682,7 @@
                   mthis.netchart.lockNode(item.id)
                   //如果该节点有子节点，继续添加进入栈底
                   if (item.children && item.children.length) {
-                    console.log(item.children.length)
+                    // console.log(item.children.length)
                     stack = stack.concat(item.children);
                   }
                 }
@@ -1670,7 +1732,7 @@
                   }
                   // nodeObj['x'] = item.order * 200 + x0
                   // nodeObj['y'] = item.depth * 300 + y0
-                  console.log(nodeObj['x'] + ' , ' + nodeObj['y'])
+                  // console.log(nodeObj['x'] + ' , ' + nodeObj['y'])
                   arrids.push(item.id)
                   mthis.netchart.lockNode(item.id)
                   //如果该节点有子节点，继续添加进入栈顶
@@ -1679,14 +1741,14 @@
                     // for (; len; len--) {
                     //     stack.unshift(item.children[len - 1]);
                     // }
-                    // console.log(item.children.length)
+                    // // console.log(item.children.length)
                     stack = item.children.concat(stack);
                   }
                 }
               };
-              // console.log('===============guan du=====================')
+              // // console.log('===============guan du=====================')
               // iterator1(response.body.data[0]);
-              console.log('===============shen du=====================')
+              // console.log('===============shen du=====================')
               iterator2(response.body.data[0]);
             }
           });
@@ -1706,13 +1768,13 @@
       },
       //截屏
       cutScreen() {
-        console.log('================')
-        console.log(this.netchart)
-        console.log(this.netchart.nodes())
-        console.log(this.netchart.links())
+        // console.log('================')
+        // console.log(this.netchart)
+        // console.log(this.netchart.nodes())
+        // console.log(this.netchart.links())
         // html2canvas(document.getElementById('netchart')).then(function(canvas) {
         //   var pageData = canvas.toDataURL('image/jpeg', 1.0);
-        //   // console.log(pageData)
+        //   // // console.log(pageData)
         //   var saveFile = function(data, filename){
         //       var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
         //       save_link.href = data;
@@ -1891,7 +1953,7 @@
           // let netChartLogJson = JSON.parse(netChartLog).data;
           let ids = [];
           for (let num = 0; num < this.selectionId.length; num++) {
-            // console.log(typeof(mthis.selectionId[0]))
+            // // console.log(typeof(mthis.selectionId[0]))
             if (typeof mthis.selectionId[0] === "string") {
               if (mthis.netchart.getNode(mthis.selectionId[num]).isNode) {
                 mthis.netchart.removeData({
@@ -1980,51 +2042,18 @@
       removeOther() {
         var mthis = this;
         // 获取当前选中节点
-        if (this.selectionId.length > 0) {
+        if (mthis.selectionId.length > 0) {
           // 获取全部节点
-          let selectNodes = this.selectionId;
-          let allNodes = this.netchart.nodes();
-          let temp01 = [];
-          let temp02 = [];
-          // let netChartLog = sessionStorage.getItem("netChartLog");
-          // let netChartLogJson = JSON.parse(netChartLog).data;
-          let ids = [];
-          for (var i in selectNodes) {
-            temp01[selectNodes[i].id] = true;
-          }
-          for (var k in allNodes) {
-            if (!temp01[allNodes[k].id]) {
-              if (allNodes[k].isNode) {
-                ids.push(allNodes[k].id);
-                // mthis.netchart.removeData({
-                //   nodes: [{
-                //     id: allNodes[k].id
-                //   }]
-                // });
-              } else if (allNodes[k].isLink) {
-                // ids.push(allNodes[k].id);
-                // event.chart.removeData({
-                //   links: [{
-                //     id: allNodes[k].id
-                //   }]
-                // });
-              }
-            }
-            mthis.netchart.selection(ids);
-          }
-          // netChartLogJson.push({
-          //   id: ids,
-          //   action: "remove",
-          //   other: "反选"
-          // });
-          // sessionStorage.setItem('netChartLog', JSON.stringify({
-          //   data: netChartLogJson
-          // }));
+          let selectNodes = mthis.selectionId;
+          let allNodes = mthis.netchart.nodes().map((item)=>{
+            return item.id
+          });
+          let ids = allNodes.filter(function(item){return selectNodes.indexOf(item)<0})
+          mthis.netchart.selection(ids);
           mthis.getStatistics();
           // 反选结果
         } else {
-          // this.$Message.error('请选中节点！')
-          this.setMessage("请选中节点！");
+          mthis.setMessage("请选中节点！");
         }
       },
       reloadNetData(data) {
@@ -2520,10 +2549,42 @@
             onSettingsChange: function(event) {},
             onRightClick: function(event) {
               event.preventDefault();
+            $('#ringRightMenu').remove()
+            var overlayId = 'rightClickMenu_Area';
+            var ovdiv = document.createElement('div');
+            ovdiv.style = 'width:400px;height:400px;';
+            ovdiv.style.position = 'absolute'; 
+            ovdiv.style.top =event.pageY -120 -200+ "px";
+            ovdiv.style.left = event.pageX-200+ "px";
+            ovdiv.class = 'ringRightMenu';
+            ovdiv.id='ringRightMenu';
+            var config = [
+                {'Id':1,'parentId':0,'name':'关联','hasLeaf':true,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':2,'parentId':0,'name':'共指','hasLeaf':true,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':3,'parentId':0,'name':'路径','hasLeaf':true,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':4,'parentId':0,'name':'链向','hasLeaf':true,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':5,'parentId':0,'name':'聚合','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'','icon':''},
+                {'Id':6,'parentId':0,'name':'删除','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("remove")','icon':''},
+                {'Id':101,'parentId':1,'name':'实体','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("expandNodeKnowledge")','icon':''},
+                {'Id':102,'parentId':1,'name':'事件','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("expandNodeEvent")','icon':''},
+                {'Id':103,'parentId':1,'name':'文档','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("expandNodeContent")','icon':''},
+                {'Id':201,'parentId':2,'name':'实体','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("gongzhiEnitiy")','icon':''},
+                {'Id':202,'parentId':2,'name':'事件','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("gongzhiEvent")','icon':''},
+                {'Id':203,'parentId':2,'name':'文档','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("gongzhiDoc")','icon':''},
+                {'Id':301,'parentId':3,'name':'关系','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("showModalStepKnowledge")','icon':''},
+                {'Id':302,'parentId':3,'name':'所有','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("showModalStepAll")','icon':''},
+                {'Id':401,'parentId':4,'name':'关系','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("linkedKnowlage")','icon':''},
+                {'Id':402,'parentId':4,'name':'所有','hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.triggerMethods("linkedKnowlageAll")','icon':''}
+            ]
+            var routeMap = new rightMenu(mthis,ovdiv,config);
+            document.getElementById('netchart').appendChild(ovdiv)
+            document.getElementById('ringRightMenu').oncontextmenu = function(e){
+              return false;
+            }
             },
             onError: function(event) {
-              // console.log('------error-------------')
-              // console.log(event)
+              // // console.log('------error-------------')
+              // // console.log(event)
             },
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
@@ -2565,7 +2626,7 @@
                 return x.isLink;
               });
               if (event.clickNode || event.clickLink) {
-                mthis.$store.commit("setTabSelect", "mubiaoxiangqing");
+                mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
               } else {
                 // mthis.selectionId = null
               }
@@ -2603,10 +2664,6 @@
                 clearTimeout(timer);
               }
               timer = setTimeout(function() {
-                let netchartnodes = mthis.netchart.nodes()
-                for (let i = 0; i < netchartnodes.length; i++) {
-                  mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
-                }
                 //   selectLineColor:'#ccffff',
                 // selectShadowColor:'#33ffff',
                 // hightlightLineColor:'#009999',
@@ -2616,7 +2673,11 @@
                 mthis.hightlightLineColor = '#009999'
                 mthis.selectShadowColor = "#33ffff"
                 mthis.hightlightShadowColor = '#009999'
-                // mthis.netchart.updateStyle()
+                let netchartnodes = mthis.netchart.nodes()
+                for (let i = 0; i < netchartnodes.length; i++) {
+                  mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
+                  mthis.netchart.updateStyle(netchartnodes[i].id)
+                }
                 if (event.selection.length > 0) {
                   let selectN = {
                     nodes: event.selection.map(item => {
@@ -2628,7 +2689,7 @@
                   }).map(item => {
                     return item.id;
                   });
-                  console.log(mthis.selectionId)
+                  // console.log(mthis.selectionId)
                   let linksArr = [];
                   for (let n = 0; n < mthis.selectionId.length; n++) {
                     if (mthis.netchart.getNode(mthis.selectionId[n])) {
@@ -2668,15 +2729,15 @@
                   // let links = nodeArr.map(item=>{
                   //   return item.links
                   // })
-                  // // console.log('-----// console.log(nodeArr)-----')
-                  // // console.log(nodeArr)
-                  // // console.log(nodesId)
-                  // // console.log(links)
+                  // // // console.log('-----// // console.log(nodeArr)-----')
+                  // // // console.log(nodeArr)
+                  // // // console.log(nodesId)
+                  // // // console.log(links)
                   // let selectLinks =  links.filter(a=>{
                   //   return (util.ifInArr(nodesId,a.from)&& util.ifInArr(nodesId,a.to))
                   // })
-                  // // console.log(selectLinks)
-                  // // console.log('-----// console.log(nodeArr)-----')
+                  // // // console.log(selectLinks)
+                  // // // console.log('-----// // console.log(nodeArr)-----')
                   for (let nu = 0; nu < event.selection.length; nu++) {
                     if (event.selection[nu].isNode) {
                       // mthis.netchart.lockNode(event.selection[nu].data.id)
@@ -2726,8 +2787,8 @@
                     "setSelectionIdByType",
                     mthis.selectionIdByType
                   );
-                  // console.log('==========ssssss======================')
-                  // console.log(mthis.selectionId)
+                  // // console.log('==========ssssss======================')
+                  // // console.log(mthis.selectionId)
                   mthis.netchart.updateStyle(mthis.selectionId);
                   mthis.netchart.updateSettings();
                   mthis.netchart.updateSize();
@@ -2817,15 +2878,15 @@
       },
       atlastData: function() {
         var mthis = this;
-        // console.log('------------dao ru cao zuo------------------')
-        // console.log(this.atlastData)
+        // // console.log('------------dao ru cao zuo------------------')
+        // // console.log(this.atlastData)
         // layout: {
         //     // mode: 'hierarchy',
         //     mode: "radial",
         //     // mode: "static",
         //     // mode: "dynamic",
-        // console.log(mthis.netchart)
-        // console.log(mthis.netchart._impl.settings.layout.mode)
+        // // console.log(mthis.netchart)
+        // // console.log(mthis.netchart._impl.settings.layout.mode)
         // mthis.netchart._impl.settings.layout.mode = 'static'
         mthis.changeMode("static");
         // mthis.netchart.replaceSettings({
@@ -2836,17 +2897,17 @@
         mthis.netchart.addData(mthis.atlastData);
         setTimeout(function() {
           for (let item of mthis.atlastData.nodes) {
-            // console.log('lock--------------')
-            // console.log(item)
-            // console.log(item.id)
-            // console.log(item.x)
-            // console.log(item.y)
+            // // console.log('lock--------------')
+            // // console.log(item)
+            // // console.log(item.id)
+            // // console.log(item.x)
+            // // console.log(item.y)
             mthis.netchart.lockNode(item.id, item.x, item.y);
           }
         }, 200);
         // mthis.netchart.freezeLayout()
         // mthis.netchart.lockNode(mthis.atlastData.nodes.map(item=>{return item.id}))
-        // // console.log(mthis.netchart._impl.settings.layout.mode)
+        // // // console.log(mthis.netchart._impl.settings.layout.mode)
         // setTimeout(function(e) {
         //   mthis.changeMode('radial')
         //   // mthis.netchart.replaceSettings({
@@ -2857,9 +2918,9 @@
         // },200)
       },
       openWorkSetFlag: function() {
-        // // console.log('-----------open modify workset--------------')
-        // // console.log(this.openWorkSetFlag)
-        // // console.log('--------------------------------------------')
+        // // // console.log('-----------open modify workset--------------')
+        // // // console.log(this.openWorkSetFlag)
+        // // // console.log('--------------------------------------------')
         var mthis = this;
         this.worksetInfo = {
           title: "",
@@ -2890,8 +2951,8 @@
               pagesize: 30
             })
             .then(response => {
-              // console.log('=======response============')
-              // console.log(response)
+              // // console.log('=======response============')
+              // // console.log(response)
               if (
                 response.body.code === 0 &&
                 response.body.data[0].nodeIds.length > 0
@@ -2906,8 +2967,8 @@
                     nodeIds: response.body.data[0].nodeIds
                   })
                   .then(res => {
-                    // console.log('=======res============')
-                    // console.log(res)
+                    // // console.log('=======res============')
+                    // // console.log(res)
                     if (res.body.code === 0) {
                       mthis.worksetData[0].data = res.body.data[0].nodes;
                     }
@@ -2958,7 +3019,7 @@
           */
         this.worksetType = "modify";
         this.worksetFlag = this.worksetFlag + 1;
-        // console.log(this.worksetData)
+        // // console.log(this.worksetData)
       },
       startTimer(v) {
         var mthis = this;
@@ -2989,8 +3050,8 @@
         let nodes = [];
         let res = [];
         mthis.spinShow = true;
-        // console.log('ids')
-        // console.log(ids)
+        // // console.log('ids')
+        // // console.log(ids)
         mthis.$http
           .post(mthis.$store.state.ipConfig.api_url + "/entity-info/", {
             nodeIds: ids
@@ -3003,10 +3064,10 @@
                 item.imageCropping = true;
                 return item.id;
               });
-              // console.log('=================')
-              // console.log(nodes)
-              // console.log(arr)
-              // console.log('=================')
+              // // console.log('=================')
+              // // console.log(nodes)
+              // // console.log(arr)
+              // // console.log('=================')
               mthis.spinShow = false;
               mthis.zIndex = 0;
               mthis.netchart.addData({
@@ -3037,21 +3098,15 @@
         let arr = new Array();
         let allNodIds = new Array();
         let netchartnodes = mthis.netchart.nodes()
-        //   selectLineColor:'#ccffff',
-        // selectShadowColor:'#33ffff',
-        // hightlightLineColor:'#009999',
-        // hightlightShadowColor:"#009999",
-        // hightlightDocShadowColor:"#33ffff",
-        mthis.selectLineColor = '#009999'
-        mthis.selectShadowColor = "#009999"
-        mthis.hightlightLineColor = '#ccffff'
-        mthis.hightlightShadowColor = '#33ffff'
         for (let i = 0; i < netchartnodes.length; i++) {
           allNodIds.push(netchartnodes[i].id);
           mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
         }
         if (mthis.netStaticsSelectedIds.length > 0) {
-          
+          mthis.selectLineColor = '#009999'
+          mthis.selectShadowColor = "#009999"
+          mthis.hightlightLineColor = '#ccffff'
+          mthis.hightlightShadowColor = '#33ffff'
           for (let i = 0; i < mthis.netStaticsSelectedIds.length; i++) {
             arr.push(mthis.netStaticsSelectedIds[i]);
             mthis.netchart.getNode(
@@ -3059,26 +3114,6 @@
             ).hightLight = true;
             mthis.netchart.updateStyle(mthis.netStaticsSelectedIds[i])
           }
-          // // mthis.netchart.selection(mthis.$store.state.netStaticsSelectedIds);
-          // var obj = mthis.netchart._impl.data.default.nodes
-          // var arr = [];
-          // for (var key in obj) {
-          //   if (!obj.hasOwnProperty(key)) {
-          //     continue;
-          //   }
-          //   var item = {};
-          //   item[key] = obj[key];
-          //   arr.push(item);
-          // }
-          // // mthis.netchart._impl.settings.style.opacity = 0.5
-          // // mthis.netchart._impl.settings.style.nodeStyleFunction(true)
-          // // mthis.netchart.style.nodeStyleFunction(highLightNodes)
-          // // mthis.netchart
-          // let disarr = arr.map(item => {
-          //   return item.id
-          // })
-          // let ar = util.diff(disarr, mthis.$store.state.netStaticsSelectedIds);
-          // mthis.$store.commit('setNetStaticsSelectedIds', [])
         }
         mthis.netchart.updateStyle(allNodIds);
         mthis.netchart.updateSettings();
@@ -3088,9 +3123,10 @@
         // 调用查询接口，查询id对应数据
         // this.netchart.addData()
         var mthis = this;
-        // mthis.netchart.updateStyle
-        // console.log(mthis.geoToNetData)
+        let dataids = []
+        console.log(mthis.geoToNetData)
         if (mthis.geoToNetData.nodeIds.length > 0) {
+          dataids.concat(mthis.geoToNetData.nodeIds)
           mthis.$http
             .post(mthis.$store.state.ipConfig.api_url + "/entity-info/", {
               nodeIds: mthis.geoToNetData.nodeIds
@@ -3103,6 +3139,7 @@
             });
         }
         if (mthis.geoToNetData.eventIds.length > 0) {
+          dataids.concat(mthis.geoToNetData.eventIds)
           mthis.$http
             .post(this.$store.state.ipConfig.api_url + "/event-detail/", {
               EventIds: mthis.geoToNetData.eventIds
@@ -3130,8 +3167,8 @@
                 mthis.setMessage("/event-detail/接口异常");
               }
             });
-          mthis.netchart.selection(mthis.geoToNetData.nodeIds)
         }
+        mthis.netchart.selection(dataids)
       },
       contentToNetData: function() {
         this.spinShow = true;
@@ -3162,61 +3199,43 @@
         // contentIdsArry = contentIdsArry.concat(mthis.selectionId)
         setTimeout(() => {
           mthis.netchart.selection(contentIdsArry);
-          console.log('==============contentIdsArry================')
-          console.log(contentIdsArry)
+          // console.log('==============contentIdsArry================')
+          // console.log(contentIdsArry)
           mthis.square();
           mthis.spinShow = false;
         }, 300);
       },
       netTimeCondition: function() {
-        // if (this.netTimeCondition) {
-        //   // 选中了时间，令links高亮
-        //   var mthis = this;
-        //   let links = this.netchart._impl.data.default.links;
-        //   if (
-        //     this.netTimeCondition.length > 0 &&
-        //     this.netTimeCondition.length === 2
-        //   ) {
-        //     this.$http
-        //       .post(
-        //         this.$store.state.ipConfig.api_url + "/limit-event-by-time/", {
-        //           nodeIds: links,
-        //           startDate: this.netTimeCondition[0],
-        //           endDate: this.netTimeCondition[1]
-        //         }
-        //       )
-        //       .then(response => {
-        //         if (response.code === 0) {
-        //           mthis.netchart.selection(response.data[0].links);
-        //         }
-        //       });
-        //   } else if (
-        //     this.netTimeCondition.length > 0 &&
-        //     this.netTimeCondition.length === 1
-        //   ) {
-        //     this.$http
-        //       .post(
-        //         this.$store.state.ipConfig.api_url + "/limit-event-by-time/", {
-        //           nodeIds: links,
-        //           startDate: this.netTimeCondition[0],
-        //           endDate: this.netTimeCondition[0]
-        //         }
-        //       )
-        //       .then(response => {
-        //         if (response.code === 0) {
-        //           mthis.netchart.selection(response.data[0].links);
-        //         }
-        //       });
-        //   } else {
-        //     mthis.setMessage(
-        //       "netTimeCondition出错,格式不正确,netTimeCondition长度为" +
-        //       this.netTimeCondition.length
-        //     );
-        //     // this.message={text:'netTimeCondition出错,格式不正确,netTimeCondition长度为' + this.netTimeCondition.length,time:new Date().getTime()}
-        //   }
-        // }
-        console.log('==================================>this.netTimeCondition')
-        console.log(this.netTimeCondition)
+        var mthis = this;
+        let arr = new Array();
+        let allNodIds = new Array();
+        let netchartnodes = mthis.netchart.nodes()
+        for (let i = 0; i < netchartnodes.length; i++) {
+          allNodIds.push(netchartnodes[i].id);
+          mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
+        }
+        if (mthis.netTimeCondition.length > 0) {
+          mthis.selectLineColor = '#009999'
+          mthis.selectShadowColor = "#009999"
+          mthis.hightlightLineColor = '#ccffff'
+          mthis.hightlightShadowColor = '#33ffff'
+          
+          for (let i = 0; i < mthis.netTimeCondition.length; i++) {
+            arr.push(mthis.netTimeCondition[i]);
+            mthis.netchart.getNode(
+              mthis.netTimeCondition[i]
+            ).hightLight = true;
+            mthis.netchart.updateStyle(mthis.netTimeCondition[i])
+          }
+        } else {
+          mthis.selectLineColor = '#ccffff'
+          mthis.hightlightLineColor = '#009999'
+          mthis.selectShadowColor = "#33ffff"
+          mthis.hightlightShadowColor = '#009999'
+        }
+        mthis.netchart.updateStyle(allNodIds);
+        mthis.netchart.updateSettings();
+        mthis.netchart.updateSize();
       },
       searchNetResult: function(va) {
         var mthis = this;
@@ -3248,9 +3267,9 @@
         // }, 200);
       },
       addNetNodes: function(va) {
-        // console.log('=======addNetNodes============================')
-        // console.log(this.addNetNodes)
-        // console.log(va)
+        // // console.log('=======addNetNodes============================')
+        // // console.log(this.addNetNodes)
+        // // console.log(va)
         var mthis = this;
         if (mthis.$store.state.tmss === "net") {
           mthis.netchart.addData(va);
@@ -3395,5 +3414,15 @@
   .mybox-leave,
   .mybox-enter-active {
     opacity: 1;
+  }
+  .ringRightMenu{
+    cursor:pointer;
+    color:#ccffff;
+    background-color: rgba(51,102,102,0.5);
+    border: 1px solid red;
+  }
+  .ringRightMenu:hover{
+    color:red;
+    background-color: rgba(51,255,255,0.3);
   }
 </style>

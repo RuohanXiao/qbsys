@@ -111,7 +111,7 @@
     computed: mapState(['selectContentNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType']),
     watch: {
       // selectionIdByType: function() {
-      //   // // console.log(this.selectionIdByType)
+      //   // // // console.log(this.selectionIdByType)
       //   var mthis = this;
       //   mthis.evetdataFlag = false
       //   if (mthis.selectContentNodes[0].ids.length > 0) {
@@ -149,7 +149,7 @@
       //             response.body.data[i].entity_type = 'event'
       //             response.body.data[i].name = response.body.data[i].event_subtype
       //           }
-      //           // // console.log(util.hebing(mthis.evetdata,response.body.data))
+      //           // // // console.log(util.hebing(mthis.evetdata,response.body.data))
       //           // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
       //           mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
       //           mthis.evetdataFlag = true
@@ -173,7 +173,7 @@
       //             response.body.data[i].name = response.body.data[i].title
       //           }
       //           // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-      //           // // console.log(util.hebing(mthis.evetdata,response.body.data))
+      //           // // // console.log(util.hebing(mthis.evetdata,response.body.data))
       //           mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
       //           mthis.evetdataFlag = true
       //         })
@@ -208,7 +208,7 @@
       // selectContentNodes: function() {
       //   var mthis = this;
       //   if(mthis.selectContentNodes[0].ids.length > 0 ){
-      //     console.log(mthis.selectContentNodes)
+      //     // console.log(mthis.selectContentNodes)
       //     mthis.evetdata = mthis.selectContentNodes[0].ids
       //   }
       //   if(mthis.selectContentNodes[0].ids.length > 1){
@@ -279,7 +279,7 @@
       },
       clickLeftStatics(staticsClick){
         var mthis = this;
-        // // console.log(staticsClick)
+        // // // console.log(staticsClick)
         mthis.$store.commit('setContentStaticsSelectedIds',staticsClick);
       },
       hightLight(id) {},

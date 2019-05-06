@@ -111,7 +111,7 @@
     },
     methods: {
       openModifyGroupModal(setId) {
-        // console.log(setId)
+        // // console.log(setId)
         this.$store.commit('setOpenWorkSetFlag',{
           id:setId,
           type:'modify',
@@ -196,7 +196,7 @@
                 // let optionWordArr = []
                 let optionList = {}
                 let optionListArr = []
-                // console.log(response.body)
+                // // console.log(response.body)
                 // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
                 for (let i = 0; i < response.body.data.nodes.length; i++) {
                   // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
@@ -209,9 +209,9 @@
                     "type": response.body.data.nodes[i].type
                   })
                 }
-                // console.log(optionListArr)
+                // // console.log(optionListArr)
                 mthis.options1 = optionListArr;
-                // console.log(mthis.options1)
+                // // console.log(mthis.options1)
               })
           }, 200);
         } else {
@@ -230,7 +230,7 @@
           "label": "set",
           "type": "set"
         }).then(response => {
-          // console.log(response)
+          // // console.log(response)
           if (response.body.code === 0) {
             alert('删除成功！')
             // mthis.$emit('ref', timestamp)
@@ -241,8 +241,8 @@
         })
       },
       modData(id) {
-        // console.log('modify');
-        // console.log(id);
+        // // console.log('modify');
+        // // console.log(id);
         this.$store.commit('setWorkSpaceModal', {
           "id":id,
           "flag":true
@@ -250,8 +250,8 @@
       },
       importData(id) {
         this.$emit('workSpaceModal', true)
-        // console.log('-------id--------')
-        // console.log(id)
+        // // console.log('-------id--------')
+        // // console.log(id)
         this.$store.commit('setWorkSpaceAddData', id)
       },
       addToChart(id) {

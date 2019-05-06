@@ -23,6 +23,11 @@ var rightMenu = function(t,target,config){
             borderColor: 'rgba(0, 0, 0, 0)',
             borderWidth: 0
         }
+        // normal: {
+        //     color: 'yellow',
+        //     borderColor: 'green',
+        //     borderWidth: 1
+        // }
     };
     for(let i = 0; i < firstMenusNum; i++){
         let dataItem = firstMenu[i]
@@ -57,7 +62,9 @@ var rightMenu = function(t,target,config){
                 position: 'inner',
                 textStyle : {
                     fontSize : 10    //文字的字体大小
-                }
+                },
+                color:'#CCFFFF',
+                fontStyle:'normal'
             },
             emphasis: {
                 show: true,
@@ -93,7 +100,6 @@ var rightMenu = function(t,target,config){
                 func.call(mthis);
             }
         } else {
-            debugger
             var seriesArr = myChart.getOption().series;
             var clickedParamId = params.data.id;
             if(seriesArr.length > 1 && seriesArr[1].name === clickedParamId){
@@ -184,7 +190,9 @@ var rightMenu = function(t,target,config){
                             position: 'inner',
                             textStyle : {
                                 fontSize : 10    //文字的字体大小
-                            }
+                            },
+                            color:'#CCFFFF',
+                            fontStyle:'normal'
                         },
                         emphasis: {
                             show: true,

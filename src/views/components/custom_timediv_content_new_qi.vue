@@ -527,8 +527,8 @@
       }, */
       conditionContent: function(keyword) {
         // 发起http请求,获取时间轴
-        console.log("#########")
-        console.log(this.conditionContent)
+        // console.log("#########")
+        // console.log(this.conditionContent)
         var mthis = this
         this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword='+keyword).then(response => {
           if(response.body.code === 0) {

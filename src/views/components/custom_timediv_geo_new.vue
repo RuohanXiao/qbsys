@@ -408,7 +408,10 @@
        
         mthis.charts.setOption(mthis.option)
         this.charts.on('brushSelected', function(params) {
+<<<<<<< HEAD
           
+=======
+>>>>>>> 9f667ed0149bf66422784790b4cefb4a1ed7ce73
           var wholeChart = document.getElementById(mthis.timechartdivId);
             wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {
@@ -626,10 +629,15 @@
     watch: {
         geo_onlyselected_param:function(){
           var mthis = this
+<<<<<<< HEAD
          
           if(this.geo_onlyselected_param.length>0){
              mthis.geo_only_eventIds = [];
 
+=======
+          if(this.geo_onlyselected_param.length>0){
+             mthis.geo_only_eventIds = [];
+>>>>>>> 9f667ed0149bf66422784790b4cefb4a1ed7ce73
             for(let i = 0;i<this.geo_onlyselected_param.length;i++){
               mthis.geo_only_eventIds[i] = this.geo_onlyselected_param[i].split("&")[1]
             }
@@ -657,7 +665,11 @@
           if(this.geo_onlyselected_param.length ==0){
             
             mthis.loadEcharts(4);
+<<<<<<< HEAD
             }
+=======
+          }
+>>>>>>> 9f667ed0149bf66422784790b4cefb4a1ed7ce73
         },
         geo_selected_param:function(){
            var mthis = this
