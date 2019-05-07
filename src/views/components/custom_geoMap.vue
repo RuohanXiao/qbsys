@@ -3237,10 +3237,6 @@ export default {
                     })
                 }
         },
-        /* halfSelectedIds:function(){
-            var mthis = this;
-            
-        }, */
         staticsSelectedEventIds:function(){
             var mthis = this;
             var selectedEventsParam = {
@@ -3313,8 +3309,10 @@ export default {
                             mthis.setFeatureStatus(feature,'halflife')
                         })
                     }
-                } else {
+                } else if(type === 'analysis'){
                     mthis.timeSelectedEventIdsOnly = timeSelectedIds;
+                } else if(type === 'cancelBox'){
+                    mthis.timeSelectedEventIds = mthis.SelectedIds;
                 }
     　　　　 },
     　　　　 deep: true,

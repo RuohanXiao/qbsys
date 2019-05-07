@@ -129,6 +129,7 @@
                       }
                       console.log(response.body.data)
                       console.log(this.toGeoEventIds)
+                      debugger
                       this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
                       
                     }else{
@@ -409,7 +410,7 @@
        
         mthis.charts.setOption(mthis.option)
         this.charts.on('brushSelected', function(params) {
-          
+          debugger
           var wholeChart = document.getElementById(mthis.timechartdivId);
             wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {

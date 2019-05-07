@@ -164,7 +164,7 @@ export default {
     mounted(){
         this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
     },
-    props:['staticsDatas','rightMenuConf'],
+    props:['staticsDatas','rightMenuConf','HL'],
     components: {
       percentBar,
     },
@@ -240,10 +240,18 @@ export default {
         },
         selectedIds(el,ids){
             var mthis = this;
-            //trClick
             if(el.style.backgroundColor ==='rgba(51,255,255,0.2)'){
                 return;
             }
+            mthis.cancelAllClickEffect();
+            mthis.gainAllClickEffect();
+            mthis.$emit('staticsClick', ids)
+        },
+        gainAllClickEffect(el){
+            el.className='trClick';
+            el.style.backgroundColor='rgba(51,255,255,0.2)';
+        },
+        cancelAllClickEffect(){
             var oldtrClick = document.getElementsByClassName('trClick');
             if(oldtrClick.length !== 0){
                 for(let i = 0; i < oldtrClick.length; i++){
@@ -251,10 +259,6 @@ export default {
                     oldtrClick[i].classList.remove('trClick')
                 }
             }
-            el.className='trClick';
-            el.style.backgroundColor='rgba(51,255,255,0.2)';
-            //mthis.$store.commit('setNetStaticsSelectedIds',ids);
-            mthis.$emit('staticsClick', ids)
         },
         isNodeTypehasInnodeTypedata(id){
             var mthis = this;
