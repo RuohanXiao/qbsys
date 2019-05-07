@@ -80,35 +80,43 @@
           height
         })
       },
-      loadEcharts() {
+      loadEcharts(flag){
+        
         var mthis = this
-        this.option = null
-        this.option = {
-          // tooltip: {
-          //   trigger: "axis",
-          //   formatter: "{b}<br/>{c0}"
-          // },
+        // flag==1--->echarts初始化，mounted时加载
+        if(flag === 1){
+          
+          // var mthis = this
+          // this.option = null
+        this.option = new Object({
+          
           tooltip: {
-            trigger: 'axis'
+            trigger: "axis",
+            padding:10,
+            barBorderRadius:8,
+            
+            // formatter: function(datas){
+            //   var res = datas[0].axisValue + '<br/>',val;
+            //   var m = datas[0].dataIndex;
+            //   val = '事件:' + mthis.dataBySeries.num[m];
+            //   res += val;
+            //   return res
+            // }
           },
-          // legend: {
-          //     data:['China','United States','India','Japan']
-          // },
+         
           grid: {
-            top: "0",
-            right: "20px",
-            left: "50px"
+            top: "10%",
+            right: "4%",
+            left: '50px',
+            bottom:'20%',
+            containLabel: true  
           },
           toolbox: {
             id: "toolbox",
+            left:"30px",
             show: false,
             feature: {
-              /*
-                	dataZoom: {},
-                	dataView: {
-                		readOnly: false
-                	},
-                	*/
+              
               brush: {
                 type: ["polygon", "clear"]
               },
@@ -120,7 +128,8 @@
               restore: {},
               saveAsImage: {
                 pixelRatio: 5
-              }
+              },
+              
             }
           },
           brush: {
@@ -141,19 +150,13 @@
               // borderColor: "#336666"
               borderColor: "rgba(51,255,255,1)"
             },
-            /*
-              	throttleType 取值可以是：
-              	'debounce'：表示只有停止动作了（即一段时间没有操作了），才会触发事件。时间阈值由 brush.throttleDelay 指定。
-              	'fixRate'：表示按照一定的频率触发时间，时间间隔由 brush.throttleDelay 指定。
-              */
+            
             throttleType: "debounce",
             //throttleDelay: 300,
             throttleDelay: 0,
             transformable: true, //已经选好的选框是否可以被调整形状或平移。
             selected: [
-              // 每个系列被选中的项。
-              // 注意，如果某个系列不支持 brush，但是还是会在这里出现对应的项。
-              // 也就是说，selected 可以使用 seriesIndex 来直接找到对应的项。
+              
               {
                 // series 0 被选中的项
                 seriesIndex: 0, //指定了哪些 series 可以被联动  [3, 4, 5] 表示 seriesIndex 为 3, 4, 5 的 series 可以被联动
@@ -162,38 +165,39 @@
             ]
           },
           xAxis: {
-            // 'value' 数值轴，适用于连续数据。
-            // 'category' 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
-            // 'time' 时间轴，适用于连续的时序数据，与数值轴相比时间轴带有时间的格式化，在刻度计算上也有所不同，例如会根据跨度的范围来决定使用月，星期，日还是小时范围的刻度。
-            // 'log' 对数轴。适用于对数数据。
+            
             type: "category",
             // min:-35,
             boundaryGap: true,
             data: [],
-            // data:['Mar-00', 'Jun-00', 'Sep-00', 'Dec-00', 'Mar-01', 'Jun-01', 'Sep-01', 'Dec-01', 'Mar-02', 'Jun-02', 'Sep-02', 'Dec-02', 'Mar-03', 'Jun-03', 'Sep-03', 'Dec-03', 'Mar-04', 'Jun-04', 'Sep-04', 'Dec-04', 'Mar-05', 'Jun-05', 'Sep-05', 'Dec-05', 'Mar-06', 'Jun-06', 'Sep-06', 'Dec-06', 'Mar-07', 'Jun-07', 'Sep-07', 'Dec-07', 'Mar-08', 'Jun-08', 'Sep-08', 'Dec-08', 'Mar-09', 'Jun-09', 'Sep-09', 'Dec-09', 'Mar-10', 'Jun-10', 'Sep-10', 'Dec-10', 'Mar-11', 'Jun-11', 'Sep-11', 'Dec-11', 'Mar-12', 'Jun-12', 'Sep-12', 'Dec-12', 'Mar-13', 'Jun-13', 'Sep-13', 'Dec-13', 'Mar-14', 'Jun-14', 'Sep-14', 'Dec-14', 'Mar-15', 'Jun-15', 'Sep-15', 'Dec-15', 'Mar-16', 'Jun-16', 'Sep-16', 'Dec-16', 'Mar-17', 'Jun-17', 'Sep-17']
-            // data: 年6月', '200/2年9月', '2002年12月', '2003年3月', '2003年6月', '2003年9月', '2003年12月', '2004年3月', '2004年6月', '2004年9月', '2004年12月', '2005年3月', '2005年6月', '2005年9月', '2005年12月', '2006年3月', '2006年6月', '2006年9月', '2006年12月', '2007年3月', '2007年6月', '2007年9月', '2007年12月', '2008年3月', '2008年6月', '2008年9月', '2008年12月', '2009年3月', '2009年6月', '2009年9月', '2009年12月', '2010年3月', '2010年6月', '2010年9月', '2010年12月', '2011年3月', '2011年6月', '2011年9月', '2011年12月', '2012年3月', '2012年6月', '2012年9月', '2012年12月', '2013年3月', '2013年6月', '2013年9月', '2013年12月', '2014年3月', '2014年6月', '2014年9月', '2014年12月', '2015年3月', '2015年6月', '2015年9月', '2015年12月', '2016年3月', '2016年6月', '2016年9月', '2016年12月', '2017年3月', '2017年6月', '2017年9月']
+            splitNumber:10,
             axisLabel: {
+              // rotate:-10,
               color: "rgba(204,255,255,0.5)"
             }
           },
-          yAxis: {
-            type: "value",
-            splitLine: {
-              show: false
+          
+          yAxis:{
+            type:"value",
+            show:true,
+            min:0,
+            max:function(value){
+                return value.max
             },
-            // min:-35,
-            // name: "占世界贸易额比重",
-            axisLabel: {
-              formatter: "{value}",
+            minInterval: 1,
+            axisLabel:{
+              formatter:"{value}",
               color: "rgba(204,255,255,0.5)"
-            }
+            },
+            splitLine:{show:false},
+            
           },
           dataZoom: [{
               type: "slider",
-              startValue: 0,
-              endValue: 100,
-              realtime: false, //是否实时加载
-              // realtime: true, //是否实时加载
+              start: 0,
+              end: 100,
+              // realtime: false, //是否实时加载
+              realtime: true, //是否实时加载
               show: true,
               textStyle: {
                 color: "#33ffff",
@@ -220,16 +224,13 @@
                   }
                 }, //阴影的填充样式
               },
-              // backgroundColor: "rgba(51, 255, 255, 0.2)",
-              // backgroundColor: "rgba(51, 255, 255, 0.2)",
-              // dataBackground: "rgba(51, 255, 255, 0.8)",
-              // borderColor:"rgba(51, 255, 255, 0.2)", //边框颜色
+              
               borderColor: "rgba(0,0,0,0)", //边框颜色
               cursor: "move",
               xAxisIndex: [0],
               // startValue: 10,
               // endValue: 20,
-              minValueSpan: 30,
+              minValueSpan: 10,
               handleIcon: "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
               handleSize: "80%",
               handleStyle: {
@@ -243,23 +244,27 @@
             },
             {
               type: "inside",
-              // start: 0,
-              // end: 10,
+              start: 0,
+              end: 10,
               show: true,
               xAxisIndex: [0],
-              // startValue: 0,
-              // endValue: 5,
-              minValueSpan: 30
+              startValue: 0,
+              endValue: 5,
+              minValueSpan: 10
             }
           ],
+              
+          
+              
           series: [{
-            name: "事件 ",
+            name: "全部",
             type: "bar",
-            // barMaxWidth: '10%',
-            // barMinHeight: '1px',
+            barGap:"-100%",
+            // barWidth:'10px',
             barMaxWidth: '30%',
             barWidth:'10px',
             barMinHeight: '1px',
+            barCategoryGap:'50%',
             itemStyle: {
               // 柱形图默认颜色
               normal: {
@@ -271,121 +276,120 @@
               emphasis: {
                 cursor: "pointer",
                 barBorderRadius: [3, 3, 3, 3],
-                color: "rgba(51,204,153,0.6)"
-                //线性颜色
-                // color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                //     offset: 0,
-                //     color: "#33ffff"
-                //   },
-                //   {
-                //     offset: 1,
-                //     color: "#9999ff"
-                //   }
-                // ])
+                color: "rgba(51,204,153,1)"
+                
               },
-              // label: {
-              //           show: true,
-              //           position: 'top',
-              //           textStyle: {
-              //               color: '#fff',
-              //               fontSize: '14'
-              //           }
-              //       }
+              
+              
             },
             animationDelay: function(idx) {
               return 0;
-              //return idx * 1000;
+             
             },
             animationDurationUpdate: function(idx) {
-              // 越往后的数据延迟越大
+              
               return 1;
             },
+            // data:mthis.dataBySeries.num
             data: []
-          }]
-        };
+          },
+              {
+                        type:'bar',
+                        // barWidth:'10px',
+                        barMaxWidth: '30%',
+                        barWidth:'10px',
+                        barMinHeight: '1px',
+                        barCategoryGap : '60%',
+                        data:mthis.dataBySeries.clickNum,
+                        itemStyle:{
+                            color:'#33ddff',
+                            barBorderRadius:[3,3,3,3]
+                        }
+                    }
+          ],
+        
+        });
         mthis.charts = echarts.init(document.getElementById(mthis.main1Id), "", {
-          width: document.documentElement.clientWidth * mthis.$store.state.split_content - 20 + 'px',
+          width: document.documentElement.clientWidth * mthis.$store.state.split_net - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
-        mthis.timeTitle = ''
+        mthis.timeTitle = '请选择节点'
         mthis.option.xAxis.data = mthis.dataBySeries.date;
         mthis.option.series[0].data = mthis.dataBySeries.num;
+        mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+         
         mthis.charts.setOption(mthis.option)
-        mthis.charts.on('brushSelected', function(params) {
-          if (params.batch[0].areas[0] !== undefined) {
-            var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-          }
-          mthis.timeTitle = ''
-          if (params.batch[0].areas.length === 0) {
-            mthis.timeTitle = ''
-          } else {
-            if (startAndEnd[0] < 0) {
-              startAndEnd[0] = 0
-            }
-            if (startAndEnd[1] < 0) {
-              startAndEnd[1] = mthis.dataBySeries.date.length - 1
-            }
-            mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
-          }
-        })
-        mthis.charts.on('click', function(params) {
-          mthis.timeTitle = params.name
-          // if(params.batch!==undefined &&params.batch[0].areas.length  === 0) {
-          //   mthis.timeTitle = ''
-          // } else if(params.batch!==undefined &&params.batch[0].areas.length  > 0) {
-          //   mthis.timeTitle = mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]] + ' 至 ' + mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex.length-1]
-          // } else {
-          //   mthis.timeTitle = params.name
-          // }
-          // myChart.dispatchAction({
-          //     type: 'dataZoom',
-          //     startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
-          //     endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
-          // });
-          mthis.charts.dispatchAction({
-            type: 'highlight',
-            // 可选，数据的 index
-            dataIndex: params.dataIndex
-          })
-        })
-        mthis.timeTitle = ''
-        this.option.xAxis.data = this.dataBySeries.date;
-        this.option.series[0].data = this.dataBySeries.num;
-        this.charts.setOption(this.option)
+        
+        
         this.charts.on('brushSelected', function(params) {
+          
+          var wholeChart = document.getElementById(mthis.timechartdivId);
+            wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
+             mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
+             mthis.isDataZoom = true
+            
           }
-          mthis.timeTitle = ''
+          // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
-            mthis.timeTitle = ''
+            if(mthis.isDataZoom){
+              // console.log("lalalla")
+              mthis.timeTitle = '时间轴'
+              mthis.boxSelEventIds.ids = []
+              mthis.$store.commit('setNetTimeCondition',[])
+              mthis.boxSelEventIds.title = ""
+              mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
+              mthis.isBrush = []
+              mthis.boxSelShowDiv = false
+              // console.log(mthis.boxSelEventIds)
+            }
+            mthis.isDataZoom = false
+            
           } else {
-            if (startAndEnd[0] < 0) {
+            if(startAndEnd[0]<0){
               startAndEnd[0] = 0
             }
-            if (startAndEnd[1] < 0 || mthis.dataBySeries.date[startAndEnd[1]] === undefined) {
+            if(startAndEnd[1]<0 || mthis.dataBySeries.date[startAndEnd[1]] === undefined){
               startAndEnd[1] = mthis.dataBySeries.date.length - 1
             }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
+            mthis.isBrush = timeArr
+            mthis.selTimeArr = []
+            mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
+            mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            mthis.$store.commit('setContentTimeCondition', timeArr)
-            mthis.selectTime = true
+            if(timeArr && mthis.selTimeArr[0] && mthis.selTimeArr[1]){
+                    mthis.throttle(mthis.query,1000,1000)()
+                //     mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+                //     "selectedIds":mthis.selectionIdByType.eventIds,
+                //     "startTime":mthis.selTimeArr[0],
+                //     "endTime":mthis.selTimeArr[1]
+                // }).then(response =>{
+                //     if(response.body.code == 0){
+                //       // for(let i=0;i<response.body.data.eventIds.length;i++){
+                //       //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                //       // }
+                //       mthis.boxSelEventIds.ids = response.body.data.eventIds
+                //       mthis.$store.commit('setNetTimeCondition',response.body.data.eventIds)
+                //       mthis.boxSelEventIds.title = ""
+                //       mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
+                //     }else{
+                //       console.log("服务器error")
+                //     }
+                    
+                // })
+
+                mthis.selectTime = true
+            }
+            
           }
+            
+          
         })
-        this.charts.on('click', function(params) {
-          mthis.timeTitle = params.name
-          let timeArr = []
-          timeArr.push(params.name)
-          timeArr.push(params.name)
-          mthis.$store.commit('setContentTimeCondition', timeArr)
-          mthis.charts.dispatchAction({
-            type: 'highlight',
-            // 可选，数据的 index
-            dataIndex: params.dataIndex
-          })
-        })
+        
         this.charts.dispatchAction({
           type: "takeGlobalCursor",
           key: "brush",
@@ -393,6 +397,101 @@
             brushType: "lineX"
           }
         });
+        this.charts.on('click', function(params) {
+        
+          mthis.timeTitle = params.name
+          
+          let timeArr = []
+          timeArr.push(params.name)
+          timeArr.push(params.name)
+        //   mthis.$store.commit('setNetTimeCondition', timeArr)
+          mthis.clcikShowDiv = false;
+          mthis.boxSelShowDiv = false;
+          mthis.isBrush = [];
+         
+          mthis.charts.dispatchAction({
+            type: 'highlight',
+            // 可选，数据的 index
+            dataIndex: params.dataIndex
+          })
+         
+        });
+        let myChart = document.getElementById(mthis.main1Id);
+        var wholeChart = document.getElementById(mthis.timechartdivId);
+        myChart.oncontextmenu = () => false;
+        // wholeChart.oncontextmenu = () =>false;
+        mthis.charts.on('contextmenu',function(params){
+            // wholeChart.oncontextmenu = () =>false;
+            let leftWid = params.event.offsetX+20 + "px"
+            var clickTime = params.name
+            
+            mthis.clcikShowDiv = true
+            mthis.clickdivLeft = leftWid
+            mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+                "selectedIds":mthis.selectionIdByType.eventIds,
+                "startTime":clickTime,
+                "endTime":clickTime
+                 
+            }).then(response =>{
+                if(response.body.code == 0){
+                  // for(let i=0;i<response.body.data.eventIds.length;i++){
+                  //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                  // }
+                  // mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
+
+                  mthis.clickEventIds.ids = response.body.data.eventIds
+                }else{
+                  console.log("服务器error")
+                }
+                
+            })
+            
+          })
+          wholeChart.oncontextmenu = function(){
+               if(mthis.isBrush.length>0){
+                 mthis.boxSelShowDiv = true
+               }
+               mthis.isBrush = []
+                   
+                   
+                
+               
+            }
+        }else if(flag ==2){
+          // flag==2---->监听网络关系中的事件，显示数据
+          mthis.timeTitle = '时间轴';
+          mthis.resize();
+          mthis.option.xAxis.data = mthis.dataBySeries.date;
+          mthis.option.xAxis.boundaryGap = true;
+          // mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          mthis.option.series[0].itemStyle.normal.color = "rgba(51,204,153,1)";
+          mthis.charts.setOption(mthis.option)
+          
+        }else if(flag==3){
+          mthis.resize();
+          // flag==3--->数据透视点击事件，层叠显示
+          
+          mthis.option.xAxis.data = mthis.dataBySeries.date;
+          mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          mthis.option.series[0].itemStyle.normal.color = "rgba(51,204,153,0.5)";
+          mthis.charts.setOption(mthis.option)
+        }else{
+          // flag ==4--->网络关系事件节点为空，清空echarts
+          mthis.resize();
+          mthis.dataBySeries.num = []
+          mthis.dataBySeries.date = []
+          mthis.dataBySeries.clickNum= []
+          mthis.option.xAxis.data = []
+          mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          mthis.timeTitle = '请选择节点'
+          mthis.charts.setOption(mthis.option)
+          
+        }
+
       }
     },
     // props: ['splitWidth', 'split'],
@@ -409,7 +508,7 @@
       /* this.iconPosition = useHeight * 0.8 + "px"; */
       this.pwidth = document.documentElement.clientWidth * this.$store.state.split_content - 20 + 'px'
       // this.iconPosition = useHeight - 40 + "px";
-      this.loadEcharts();
+      this.loadEcharts(1);
       let that = this;
       // Enable data zoom when user click bar.
       var zoomSize = 6;
@@ -431,11 +530,9 @@
         this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword=' + keyword).then(response => {
           if (response.body.code === 0) {
             console.log(response.body)
-            mthis.dataBySeries.num = response.body.data.count
-            mthis.dataBySeries.date = response.body.data.time
-            mthis.option.series[0].data = response.body.data.count
-            mthis.option.xAxis.data = response.body.data.time
-            mthis.charts.setOption(mthis.option)
+            mthis.dataBySeries.date = response.body.data.time;
+            mthis.dataBySeries.num = response.body.data.count;
+            mthis.loadEcharts(2)
           }
         })
       },
@@ -450,75 +547,7 @@
       splitWidth: function(va) {
         this.pwidth = document.documentElement.clientWidth * this.$store.state.split_content - 20 + 'px'
       },
-      // geoHeightCount: function() {
-      //   var mthis = this
-      //   var tmss = mthis.$store.state.tmss;
-      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
-      //   if (mthis.geoHeightCount % 2 === 0) {
-      //     /* mthis.iconPosition = useHeight - 40 + "px"; */
-      //     document.getElementById('arrowDown_geo').style.top = useHeight - 40 + "px";
-      //     //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
-      //     //mthis.$store.commit('setGeoHeight',useHeight * 1)
-      //     mthis.$store.commit('setGeoHeight', useHeight * 1)
-      //     document.getElementById('timechartctrl_geo').style.display = "none";
-      //     document.getElementById('main1_geo').style.display = "none";
-      //     document.getElementById('timediv_geo').style.display = "none";
-      //     document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
-      //     /* mthis.$store.commit('setChangenetpx',false); */
-      //   } else {
-      //     /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-      //     document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
-      //     /* mthis.$store.commit('setChangenetpx',true); */
-      //     document.getElementById('timechartctrl_geo').style.display = "block";
-      //     document.getElementById('main1_geo').style.display = "block";
-      //     document.getElementById('timediv_geo').style.display = "block";
-      //     document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
-      //     //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-      //     mthis.$store.commit('setGeoHeight', useHeight * 0.8)
-      //   }
-      //   document.getElementById('arrowDown_geo').style.position = "absolute";
-      //   document.getElementById('arrowDown_geo').style.right = "20px";
-      //   /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-      //   /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
-      //   document.getElementById('arrowDown_geo').style.zIndex = 99;
-      // },
-      // netHeightCount: function() {
-      //   var mthis = this
-      //   var tmss = mthis.$store.state.tmss;
-      //   let useHeight = document.documentElement.clientHeight - 64 - 20;
-      //   if (mthis.netHeightCount % 2 === 0) {
-      //     /* mthis.iconPosition = useHeight - 40 + "px"; */
-      //     document.getElementById('arrowDown_net').style.top = useHeight - 40 + "px";
-      //     mthis.$store.commit('setNetHeight', useHeight * 1)
-      //     document.getElementById('timechartctrl_net').style.display = "none";
-      //     document.getElementById('main1_net').style.display = "none";
-      //     document.getElementById('timediv_net').style.display = "none";
-      //     document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
-      //     mthis.$store.commit('setChangenetpx', false);
-      //   } else {
-      //     /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-      //     document.getElementById('arrowDown_net').style.top = useHeight * 0.8 -3+ "px";
-      //     // this.timepx =
-      //     //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
-      //     //   30 +
-      //     //   "px";
-      //     // this.timepxdiv =
-      //     //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-      //     // mthis.$emit('changenetpx', true);
-      //     mthis.$store.commit('setChangenetpx', true);
-      //     document.getElementById('timechartctrl_net').style.display = "block";
-      //     document.getElementById('main1_net').style.display = "block";
-      //     document.getElementById('timediv_net').style.display = "block";
-      //     document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
-      //     //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-      //     mthis.$store.commit('setNetHeight', useHeight * 0.8)
-      //   }
-      //   document.getElementById('arrowDown_net').style.position = "absolute";
-      //   document.getElementById('arrowDown_net').style.right = "20px";
-      //   /*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-      //   /* document.getElementById('arrowDown_net').style.top = netpxdiv; */
-      //   document.getElementById('arrowDown_net').style.zIndex = 99;
-      // },
+   
       contentHeightCount: function() {
         var mthis = this
         var tmss = mthis.$store.state.tmss;

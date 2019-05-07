@@ -44,9 +44,10 @@
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
           <div class="e-content-d pointIcon" v-for="(item,index) in eventdata" @click="changeDetailDiv(item.id,item.entity_type,eventdata)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
-            <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.name.toLowerCase().replace(/-/, "_")).name}}</p>
-            <!-- <p v-if="item.entity_type==='other'" class="e-content-p">{{item.name}}</p> -->
-            <p v-else class="e-content-p">{{item.name}}</p>
+            <!-- <p v-if="item.entity_type==='event'&&item.name" class="e-content-p">{{myMap1.get(item.name.toLowerCase().replace(/-/, "_")).name}}</p>
+            <p v-else-if="item.entity_type==='event'&&item.name" class="e-content-p">{{myMap1.get(item.event_subtype.toLowerCase().replace(/-/, "_")).name}}</p>
+            <p v-else class="e-content-p">{{item.name}}</p> -->
+            <p class="e-content-p">{{item.name}}</p>
           </div>
         </div>
       </div>
@@ -227,6 +228,7 @@
              } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'event') {
               detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
               mthis.selectTag = detailId
+              // debugger;
               let result = mthis.eventdata[0]
               result.name = result.name.replace(/ /,'_')
               // console.log('**************')
