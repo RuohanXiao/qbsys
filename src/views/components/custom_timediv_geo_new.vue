@@ -27,8 +27,8 @@
       <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
-    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="toGeoAna('one')">选中分析</div>
-    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="toGeoAna('many')">选中分析</div>
+    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="toGeoAna(1)">选中分析</div>
+    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="toGeoAna(2)">选中分析</div>
   </div>
 </template>
  
@@ -104,11 +104,12 @@
     },
     methods: {
       toGeoAna(flag){
-        if(flag="one"){
+        if(flag==1){
           this.clickEventIds.type = "analysis";
           this.$store.commit('setGeoTimeCondition',this.clickEventIds);
         }else{
           this.boxSelEventIds.type = "analysis";
+          console.log(this.boxSelEventIds)
           this.$store.commit('setGeoTimeCondition',this.boxSelEventIds);
         }
         
