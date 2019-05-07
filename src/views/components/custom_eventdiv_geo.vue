@@ -231,8 +231,8 @@
           mthis.spinShow = false;
         }
       },
-      geo_selected_param: function() {
-        // ;
+      /* geo_selected_param: function() {
+        // debugger;
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];
@@ -307,7 +307,7 @@
         } else {
           return;
         }
-      }
+      } */
     },
     methods: {
       waiting() {

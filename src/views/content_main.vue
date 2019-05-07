@@ -19,7 +19,7 @@
 <script>
   import "../dist/assets/styles/net_main.css";
   import contentChartDiv from "./components/custom_contentdiv_new_qi";
-  import timeChartDiv from "./components/custom_timediv_content";
+  import timeChartDiv from "./components/custom_timediv_content_qi";
   import eventChartDivContent from "./components/custom_eventdiv_content";
   import {
     mapState,

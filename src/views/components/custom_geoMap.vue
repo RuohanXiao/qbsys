@@ -3247,13 +3247,12 @@ export default {
                 type:'GeoStatics',
                 paramIds:mthis.staticsSelectedEventIds//dealSelectedIds
             };
-            console.log('============setGeoOnlyselectedParam1==================')
-            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
             mthis.HLIds = mthis.staticsSelectedEventIds
         },
         timeSelectedEventIds:function(){
             var mthis = this;
+            debugger
             mthis.HLIds = mthis.timeSelectedEventIds
             var selectedEventsParam = {
                 type:'GeoTime',
@@ -3263,11 +3262,10 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
+            debugger
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
             mthis.SelectedIds = mthis.timeSelectedEventIdsOnly;
             var selectedEventsParam = mthis.timeSelectedEventIdsOnly
-            console.log('============setGeoOnlyselectedParam2==================')
-            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
         geometrySelectedEventIds:function(){
