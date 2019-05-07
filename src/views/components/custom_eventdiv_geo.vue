@@ -126,7 +126,7 @@
           if (EventIds.length > 0) {
             var eventeOb = {};
             eventeOb.EventIds = EventIds;
-            // debugger;
+            // ;
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
               var EventDetail = response.body.data; //util.hebing(mthis.evetdata,response.body.data[0].nodes)
               var eventDs = [];
@@ -154,7 +154,7 @@
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
       geo_onlyselected_param: function() {
-        // debugger;
+        // ;
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];
@@ -185,7 +185,7 @@
           if (EventIds.length > 0) {
             var eventeOb = {};
             eventeOb.EventIds = EventIds;
-            // debugger;
+            // ;
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
               var EventDetail = response.body.data; //util.hebing(mthis.evetdata,response.body.data[0].nodes)
               var eventDs = [];
@@ -259,7 +259,7 @@
             if (EventIds.length > 0) {
               var eventeOb = {};
               eventeOb.EventIds = EventIds;
-              // debugger;
+              // ;
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventeOb).then(response => {
                 var EventDetail = response.body.data; //util.hebing(mthis.evetdata,response.body.data[0].nodes)
                 var eventDs = [];

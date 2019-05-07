@@ -179,7 +179,7 @@
     },
     methods: {
       deletItem(id,index){
-        alert(id+ '   '+index)
+        // alert(id+ '   '+index)
         this.worksetData[index].data = this.worksetData[index].data.filter(item => {
           return item.id !== id
         })

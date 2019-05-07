@@ -1349,7 +1349,7 @@
                 let a = []
                 a.push(detailId)
                 // mthis.detailData = {}
-                // debugger;
+                // ;
                 mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
                   "EventIds": a
                 }).then(response => {
@@ -1416,7 +1416,7 @@
       },
       addXiangguanEvent(ids) {
         var mthis = this
-        // debugger;
+        // ;
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
           'EventIds': ids
         }).then(response => {
@@ -1608,7 +1608,7 @@
           // })
         }
         if (this.myMap.get(type) === 'event') {
-          // debugger;
+          // ;
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {

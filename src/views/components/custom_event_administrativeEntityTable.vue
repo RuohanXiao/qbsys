@@ -754,7 +754,7 @@ import {
     // },
     methods: {
       addSingleNodeToCanvans(id,type,subType) {
-        // debugger;
+        // ;
         // console.log('this.tableData')
         // console.log(this.tableData)
         var mthis = this
@@ -776,7 +776,7 @@ import {
           })
         }
         if(type === 'event') {
-          // debugger;
+          // ;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds":id
           }).then(response => {

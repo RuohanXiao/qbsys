@@ -147,7 +147,7 @@
           })
         }
         if (mthis.myMap.get(type) === 'event') {
-          // debugger;
+          // ;
           mthis.$http.post(this.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": arr
           }).then(response => {
@@ -191,7 +191,7 @@
     watch: {
       eventdata: function() {
         console.log(this.eventdata)
-        debugger;
+        // ;
         var mthis = this
         if (typeof(mthis.eventdata) === "object" && mthis.eventdata.concat && mthis.eventdata.length > 0) {
           if (mthis.timer) {
