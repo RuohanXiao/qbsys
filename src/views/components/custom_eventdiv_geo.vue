@@ -231,7 +231,7 @@
           mthis.spinShow = false;
         }
       },
-      geo_selected_param: function() {
+      /* geo_selected_param: function() {
         // debugger;
         var mthis = this;
         var OrgIds = [];
@@ -307,7 +307,7 @@
         } else {
           return;
         }
-      }
+      } */
     },
     methods: {
       waiting() {
