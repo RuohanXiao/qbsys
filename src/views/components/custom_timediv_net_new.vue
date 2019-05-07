@@ -35,6 +35,7 @@
  
 <script>
   import echarts from "echarts";
+  var timer = null;
   import {
     mapState,
     mapMutations
@@ -97,6 +98,7 @@
         selTimeArr:[],
         
         isDataZoom:false
+        
       };
     },
     methods: {
@@ -123,7 +125,9 @@
       },
       throttle(fn,delay,duration){
         
-        let timer = null;
+        if(timer){
+          clearTimeout(timer)
+        }
         let prev = new Date();
         return function(){
           var now = new Date();

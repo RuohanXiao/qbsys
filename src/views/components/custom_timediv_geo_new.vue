@@ -36,6 +36,7 @@
   import echarts from "echarts";
   import { mapState,mapMutations } from 'vuex'
   import {timeStaticsData,reSetTimeStaticsData} from '../../dist/assets/js/geo/data.js'
+  var timer = null
   export default {
     name: "",
     data() {
@@ -100,6 +101,7 @@
         geo_only_eventIds:[],
         selTimeArr:[],
         isDataZoom:false
+        
       };
     },
     methods: {
@@ -116,14 +118,18 @@
 
       },
       query(){
+        console.log('query')
+        console.log(this.isDataZoom)
             this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                     "selectedIds":this.geo_only_eventIds,
                     "startTime":this.selTimeArr[0],
                     "endTime":this.selTimeArr[1]
                 }).then(response =>{
                     if(response.body.code == 0){
-                      this.boxSelEventIds.eventIds =[]
-                      this.toGeoEventIds.eventIds = []
+                      this.boxSelEventIds.eventIds =[];
+                      this.toGeoEventIds.eventIds = [];
+                      this.toGeoEventIds.type = "notAnalysis" ; 
+                      this.boxSelEventIds.type = "notAnalysis" ;
                       for(let i=0;i<response.body.data.eventIds.length;i++){
                         this.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                         this.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
@@ -141,7 +147,9 @@
       },
       throttle(fn,delay,duration){
         
-        let timer = null;
+        if(timer){
+          clearTimeout(timer)
+        }
         let prev = new Date();
         return function(){
           var now = new Date();
@@ -410,7 +418,7 @@
        
         mthis.charts.setOption(mthis.option)
         this.charts.on('brushSelected', function(params) {
-          
+          console.log(mthis.isDataZoom)
           var wholeChart = document.getElementById(mthis.timechartdivId);
             wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {
@@ -423,7 +431,7 @@
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
             if(mthis.isDataZoom){
-              // console.log("hahhaah")
+              console.log("hahhaah")
               mthis.timeTitle = '时间轴'
               mthis.boxSelEventIds.eventIds = []
               mthis.toGeoEventIds.eventIds = []
@@ -432,10 +440,12 @@
               // console.log(mthis.toGeoEventIds)
               mthis.isBrush = []
               mthis.boxSelShowDiv = false
+              mthis.boxSelEventIds.type = 'cancelBox'
               mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds)
               // console.log(mthis.boxSelEventIds)
+              mthis.isDataZoom = false
             }
-            mthis.isDataZoom = false
+            
             
           } else {
             if(startAndEnd[0]<0){
@@ -649,6 +659,7 @@
                   "eventids":mthis.geo_only_eventIds
                 }).then(response =>{
                   if(response.body.code === 0){
+                    console.log(response.body)
                        mthis.dataBySeries.date = response.body.data.time;
                        mthis.dataBySeries.num = response.body.data.count;
                        mthis.dataBySeries.clickNum = [];
