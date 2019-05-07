@@ -2277,6 +2277,16 @@
           //   nodeSpacing: 60, // horizontal spacing between nodes
           //   rowSpacing: 100 // vertical spacing between node rows in the hierarchy layout
           // },
+
+
+
+
+//            image: `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA/0lEQVQ4T6WT4U3DMBCFvxcWyAiM
+// ELUDkBE6Qtggo8AGGSEb4AWIPAJskAXaQ1cc5LiBRsJ/LNv3vnvns8U/h/boD2Yd8DRJz2X8XcDR
+// 7GTwIggGVkLuAg5mPdBNUnM0G0rIn4Bkvb9AG6XZ7ZeQG4CLJmnYEi/155AVIB08psA6z+x7jVn9
+// AG+Au/l8l7otQBDMZwiL7Vxs8Oprd+nzTQnJRVgCSnG+vwlIFzUajB682PbMpXgT0Jg1FYypTu//
+// bNBPUrv16FYlLOILnICPCgLfj6g9wxAlX6/GDyAXRykWLVvdSU64ArzOCqJnzsV7/knuoM7btkf8
+// axf2ij3uC/S1jhHc5yKmAAAAAElFTkSuQmCC`,
           style: {
             nodeLocked: {
               items: [{
