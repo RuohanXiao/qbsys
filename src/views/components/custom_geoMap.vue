@@ -3216,8 +3216,10 @@ export default {
             //if(mthis.staticsSelectedEventIds.length === 0 || mthis.staticsSelectedEventIds.length !== mthis.HLIds.length){
                 mthis.halfSelectedIds = mthis.HLIds;
                 var ids = [];
-                if(mthis.geoStaticsSelectedIds.length > 0){
-                    mthis.geoStaticsSelectedIds.forEach(function(item){
+                var keys = Object.keys(mthis.geoStaticsSelectedIds);
+                if(keys.length > 0){
+                    keys.forEach(function(key){
+                        var item = mthis.geoStaticsSelectedIds[key];
                         if(item.indexOf('&') === -1){
                             var id = 'org&'+item;
                             ids.push(id)
@@ -3300,6 +3302,7 @@ export default {
                         })
                     }
                     mthis.timeSelectedEventIds = ids;
+                    mthis.$store.commit('setGeoStaticsHLItemIds',ids);
                     if(mthis.halfSelectedIds.length > 0){
                         mthis.halfSelectedIds.forEach(function(paramid){
                             var layerId = mthis.getLayerIdByFeatureIdOrParamId(paramid);

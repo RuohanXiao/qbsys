@@ -294,7 +294,7 @@ var store = new Vuex.Store({
       ids:[]
     }],
     clickSelectedGeoIds:[],
-    geoStaticsSelectedIds:[],
+    geoStaticsSelectedIds:{},
     geoStaticsOnlyLookSelectedIds:[],
     netModalDetailData: {},
     netModalDetailNodeId: '',
@@ -334,6 +334,7 @@ var store = new Vuex.Store({
     workSpaceModal:{id:'',flag:false},
     contentStatisticsResult:{},
     StaticsIds:[],
+    GeoStaticsHLItemIds:[],
     netStaticsSelectedIds:[],  //net模块中点击右侧统计保存ids
     netOnlyStaticsSelectedIds:{
       'title':'',
@@ -438,6 +439,9 @@ var store = new Vuex.Store({
     setStaticsIds(state,val){
       state.StaticsIds = val
     },
+    setGeoStaticsHLItemIds(state,val){
+      state.GeoStaticsHLItemIds = val
+    },
     // 网络关系与文本传输
     setContentToNetData(state,val){
       state.contentToNetData = val
@@ -456,7 +460,8 @@ var store = new Vuex.Store({
       state.geoStaticsOnlyLookSelectedIds = val
     },
     setGeoStaticsSelectedIds(state,val){
-      state.geoStaticsSelectedIds = val
+      let data = Object.assign({},state.setGeoStaticsSelectedIds,val);
+      state.geoStaticsSelectedIds = data
     },
     // 地图与文本传输
     setContentToGeoData(state,val){
