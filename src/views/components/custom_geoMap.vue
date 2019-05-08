@@ -3250,7 +3250,6 @@ export default {
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            debugger
             mthis.HLIds = mthis.timeSelectedEventIds
             var selectedEventsParam = {
                 type:'GeoTime',
@@ -3260,7 +3259,6 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
-            debugger
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
             mthis.SelectedIds = mthis.timeSelectedEventIdsOnly;
             var selectedEventsParam = mthis.timeSelectedEventIdsOnly
@@ -3284,7 +3282,6 @@ export default {
         geoTimeCondition:{
             handler(newValue) {
                 var mthis = this;
-                debugger
                 var type = mthis.geoTimeCondition.type;
                 var timeSelectedIds = mthis.geoTimeCondition.eventIds;
                 if(type === 'notAnalysis'){
@@ -3323,7 +3320,6 @@ export default {
         },
         /* geoTimeCondition:function(){
             var mthis = this;
-            debugger
             var type = mthis.geoTimeCondition.type;
             var timeSelectedIds = mthis.geoTimeCondition.eventIds;
             if(type === 'notAnalysis'){
@@ -3356,7 +3352,6 @@ export default {
         }, */
         timeCondition:function(){
             var mthis = this;
-            debugger
             var ids = [];
             var HLIds = [];
             var idsIsAllIds = false;

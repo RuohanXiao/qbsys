@@ -243,7 +243,6 @@
         }
       },
       /* geo_selected_param: function() {
-        // debugger;
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];

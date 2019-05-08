@@ -188,7 +188,6 @@ export default {
         },
         HLIds:function(){
             var mthis = this;
-            debugger
             mthis.cancelAllClickEffect();
             var ids = [];
             var barIds = [];
@@ -298,7 +297,6 @@ export default {
         },
         selectedIds(el,ids){
             var mthis = this;
-            debugger
             /* if(el.style.backgroundColor ==='rgba(51, 255, 255, 0.2)'){
                 return;
             } */

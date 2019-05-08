@@ -224,7 +224,6 @@
           'nodeIds': mthis.selectNetNodes[0].ids,
           'type':'net'
           }).then(response => {
-            debugger
               mthis.staticsDatas = response.body.data;
               mthis.spinShow = false;
           //mthis.$data.staticsDatas.splice(0,0,response.body.data);

@@ -136,7 +136,6 @@
                       }
                       console.log(response.body.data)
                       console.log(this.toGeoEventIds)
-                      debugger
                       this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
                       
                     }else{
