@@ -192,6 +192,7 @@ top: 232px;
             </div>
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
         </div>
+        <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     </div>
 </template>
 
@@ -244,6 +245,7 @@ import '../../dist/assets/styles/geo/mapInit.css'
 import imgSlider from "./custom_imgSlider"
 import routeLegend from './custom_routeLegend'
 import imgItemOpera from './custom_mapOperaButtons'
+import worksetModal from "./custom_workSet_modal.vue";
 
 
 
@@ -309,6 +311,26 @@ export default {
         AnimationFun:{},
         heatMapVisible:false,
         oparAreaFeature:null,
+        worksetData:[{
+            type: "entity",
+            data: []
+          },
+          {
+            type: "document",
+            data: []
+          },
+          {
+            type: "event",
+            data: []
+          }
+        ],
+        worksetType: "",
+        worksetFlag:0,
+        worksetInfo: {
+          title: "",
+          des: "",
+          id: ""
+        },
         //selectedOrgIds:[],  //被选中的组织机构ids
         changeButtonParam:[],
         pointMoveListenerKey:null,
@@ -391,7 +413,127 @@ export default {
                 mthis.explore();
             } else if(mapOperationId == 'RectangleExplore_AT' || mapOperationId == 'CircleExplore_AT' || mapOperationId == 'customExplore_AT'){
                 mthis.drawExplore(mapOperation)
+            } else if(mapOperationId == 'createWorkSpace_HSD'){
+                mthis.openWorkset();
             }
+        },
+        /* openWorkset(){
+            var mthis = this;
+            mthis.worksetFlag += 1;
+            var orgIds = [];
+            var eventIds = [];
+            for(let i = 0; i < mthis.SelectedIds.length; i++){
+                var id = mthis.SelectedIds[i];
+                var type = id.split('&')[0];
+                var oid = id.split('&')[1];
+                if(type === 'event'){
+                    eventIds.push(oid);
+                } else {
+                    orgIds.push(oid);
+                }
+            }
+            mthis.worksetData = [{
+                    type: "entity",
+                    data: orgIds
+                },
+                {
+                    type: "document",
+                    data: []
+                },
+                {
+                    type: "event",
+                    data: eventIds
+                }
+            ];
+        }, */
+        openWorkset() {
+            var mthis = this;
+            this.worksetInfo = {
+            title: "",
+            des: "",
+            id: ""
+            };
+            this.worksetData = [{
+                    type: "entity",
+                    data: []
+                },
+                {
+                    type: "event",
+                    data: []
+                },
+                {
+                    type: "document",
+                    data: []
+                }
+            ];
+            var orgIds = [];
+            var eventIds = [];
+            for(let i = 0; i < mthis.SelectedIds.length; i++){
+                var id = mthis.SelectedIds[i];
+                var type = id.split('&')[0];
+                var oid = id.split('&')[1];
+                if(type === 'event'){
+                    eventIds.push(oid);
+                } else {
+                    orgIds.push(oid);
+                }
+            }
+            // // console.log('=====setSelectionIdByType==========')
+            // // console.log(mthis.selectionIdByType)
+            if (orgIds.length + eventIds.length > 0) {
+                if (orgIds.length > 0) {
+                    mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/entity-info/", {
+                        nodeIds: orgIds
+                    }).then(response => {
+                        if (response.body.code === 0) {
+                        mthis.worksetData[0].type = "entity";
+                        mthis.worksetData[0].data = response.body.data[0].nodes;
+                        }
+                    });
+                }
+                if (eventIds.length > 0) {
+                    // ;
+                    mthis.$http
+                    .post(mthis.$store.state.ipConfig.api_url + "/event-detail/", {
+                        EventIds: eventIds
+                    })
+                    .then(response => {
+                        if (response.body.code === 0) {
+                        ;
+                        mthis.worksetData[1].type = "event";
+                        response.body.data.map(item => {
+                            item.name = item.event_subtype
+                            item.img = "http://10.60.1.140/assets/images/event.png"
+                            return item
+                        })
+                        mthis.worksetData[1].data = response.body.data;
+                        }
+                    });
+                }
+                /* if (mthis.selectionIdByType.contentIds.length > 0) {
+                    mthis.$http
+                    .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
+                        docIds: mthis.selectionIdByType.contentIds
+                    })
+                    .then(response => {
+                        ;
+                        if (response.body.code === 0) {
+                        mthis.worksetData[2].type = "document";
+                        response.body.data.map(item => {
+                            item.name = item.title
+                            item.img = "http://10.60.1.140/assets/images/content_node.png"
+                            return item
+                        })
+                        mthis.worksetData[2].data = response.body.data;
+                        }
+                    });
+                } */
+                console.log('mthis.worksetData----------')
+                console.log(mthis.worksetData)
+            }
+            this.worksetType = "add";
+            this.worksetFlag = this.worksetFlag + 1;
+            // // console.log(this.worksetData)
         },
         heatMap_cilck(){
             var mthis = this
@@ -3458,6 +3600,7 @@ export default {
       imgSlider,
       routeLegend,
       imgItemOpera,
+      worksetModal
     }
 }
 </script>

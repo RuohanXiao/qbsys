@@ -166,7 +166,6 @@
       },
       geo_onlyselected_param: function() {
         var mthis = this;
-        debugger
         var OrgIds = [];
         var EventIds = [];
         mthis.geo_onlyselected_param.forEach(function(id) {
