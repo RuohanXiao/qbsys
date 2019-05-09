@@ -1025,7 +1025,7 @@
               } else {
                 console.log('全部加载')
                 mthis.moreLoading = false
-                var promptDiv = '<div style="z-index:999;color:red;font-size:20px;text-align:center;">文档已经全部加载</div>'
+                var promptDiv = '<div style="z-index:999;color:red;font-size:26px;">文档已经全部加载</div>'
                 $('#contentchart').append(promptDiv)
                 mthis.alertNotice('已全部加载', true)
               }

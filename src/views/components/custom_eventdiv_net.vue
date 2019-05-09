@@ -220,7 +220,7 @@
         var mthis = this;
         if(mthis.selectNetNodes[0].ids.length > 1){
           mthis.spinShow = true;
-          mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
           'nodeIds': mthis.selectNetNodes[0].ids,
           'type':'net'
           }).then(response => {

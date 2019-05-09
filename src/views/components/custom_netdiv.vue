@@ -678,11 +678,11 @@
             data: []
           },
           {
-            type: "document",
+            type: "event",
             data: []
           },
           {
-            type: "event",
+            type: "document",
             data: []
           }
         ];

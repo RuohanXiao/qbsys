@@ -18,7 +18,7 @@
                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
                 <div>Loading</div>
             </Spin>
-            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics'  v-if=" $store.state.tmss === 'content' && staticsDatas.length > 0"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' :HLIds='hlids' @rightCilckArgu='clickRightMenu'  v-if=" $store.state.tmss === 'content' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -94,7 +94,19 @@
         nodeTypedata: null,
         staticsIds: [],
         single: false,
-        resArr: []
+        resArr: [],
+        rightClickConf: [{
+            'name': '只选中它',
+            'id': 'onlylookit',
+            'iconClassName': 'icon-ren'
+          },
+          {
+            'name': '删除',
+            'id': 'delete',
+            'iconClassName': 'icon-ren'
+          }
+        ],
+        hlids:[],
       };
     },
     components: {
@@ -252,6 +264,15 @@
           mthis.$set(mthis.evetdata,0,[])
           mthis.evetdata =  []
           mthis.evetdataFlag = false
+        }
+        if(mthis.selectContentNodes[0].ids.length > 1){
+          //调用统计接口
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
+          'nodeIds': mthis.selectContentNodes[0].ids,
+          'type':'content'
+          }).then(response => {
+              mthis.staticsDatas = response.body.data;
+          })
         }
       }
     },
