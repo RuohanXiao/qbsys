@@ -18,28 +18,39 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('selectAll')"> -->
-            <div class="button-div" @click="triggerMethods('selectAll')">
+          <div class="button-div" @click="triggerMethods('selectAll')">
             <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">全选节点</p>
           </div>
         </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('remove')">
-            <Icon class="icon iconfont icon-delete-point DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">删除</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="ifSelectNode?1000:1000000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'">
-            <Icon class="icon iconfont icon-juhe DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">聚合</p>
-          </div>
-        </Tooltip>
+        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('remove')">
+                <Icon class="icon iconfont icon-delete-point DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                <p class="img-content">删除</p>
+              </div>
+            </Tooltip>
+            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="ifSelectNode?1000:1000000">
+              <div :class="ifSelectNode? 'button-div': 'button-div-disable'">
+                <Icon class="icon iconfont icon-juhe DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                <p class="img-content">聚合</p>
+              </div>
+            </Tooltip> -->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="openCreateGroupModal">
             <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">创建集合</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="nailNode">
+            <Icon class="icon iconfont icon-nail DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">锁定节点</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="unnailNode">
+            <Icon class="icon iconfont icon-nail DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">解锁节点</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
@@ -47,205 +58,130 @@
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('square')">
             <Icon class="icon iconfont icon-grid DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">矩形</p>
-            <!-- <p class="img-content">矩形布局</p> -->
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('circleShape')">
+            <Icon class="icon iconfont icon-circle DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
+            <p class="img-content">环形</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('star')">
             <Icon class="icon iconfont icon-star1 DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
             <p class="img-content">星形</p>
-            <!-- <p class="img-content">星形布局</p> -->
           </div>
         </Tooltip>
         <Tooltip placement="top" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('hierarchy')">
             <Icon class="icon iconfont icon-expand DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">层级</p>
-            <!-- <p class="img-content">层级布局</p> -->
           </div>
         </Tooltip>
         <Tooltip placement="top" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'">
             <Icon class="icon iconfont icon-jutuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">聚团</p>
-            <!-- <p class="img-content">层级布局</p> -->
           </div>
         </Tooltip>
-        <div class="divSplitLine"></div>
-        <Tooltip placement="top" content="（Ctrl+A）" :delay="5000">
-          <!-- <Dropdown trigger="custom"  :visible="expandVisible"> -->
-          <Dropdown :visible="expandVisible">
-            <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeKnowledge" >
-                                                                                      <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                      <p class="img-content">关系扩展</p>
-                        </div>-->
-            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="triggerMethods('expandNodeKnowledge')" v-if="(expandFlag=='knowledge')">
-              <Icon class="icon iconfont icon-guanlianshiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-              <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-              <p class="img-content">关联实体</p>
-            </div>
-            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="triggerMethods('expandNodeEvent')" v-if="(expandFlag=='event')">
-              <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-              <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-              <p class="img-content">关联事件</p>
-            </div>
-            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" v-if="(expandFlag=='content')" @click="triggerMethods('expandNodeContent')">
-              <Icon class="icon iconfont icon-kuozhan--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-              <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-              <p class="img-content">关联文档</p>
-            </div>
-            <DropdownMenu slot="list" placement="bottom-start" v-if='ifSelectNode'>
-              <div class="button-div" @click="triggerMethods('expandNodeKnowledge')">
-                <DropdownItem class="img-content">
-                  <Icon class="icon iconfont icon-guanlianshiti DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                  <span>关联实体</span>
-                  <span v-if="(expandFlag=='knowledge')" class="dropDownSelectPoint">●</span>
-                  <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                </DropdownItem>
+        <!--
+            <div class="divSplitLine"></div>
+            <Tooltip placement="top" content="（Ctrl+A）" :delay="5000">
+              <Dropdown :visible="expandVisible">
+                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="triggerMethods('expandNodeKnowledge')" v-if="(expandFlag=='knowledge')">
+                  <Icon class="icon iconfont icon-guanlianshiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                  <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                  <p class="img-content">关联实体</p>
+                </div>
+                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="triggerMethods('expandNodeEvent')" v-if="(expandFlag=='event')">
+                  <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                  <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                  <p class="img-content">关联事件</p>
+                </div>
+                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" v-if="(expandFlag=='content')" @click="triggerMethods('expandNodeContent')">
+                  <Icon class="icon iconfont icon-kuozhan--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                  <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                  <p class="img-content">关联文档</p>
+                </div>
+                <DropdownMenu slot="list" placement="bottom-start" v-if='ifSelectNode'>
+                  <div class="button-div" @click="triggerMethods('expandNodeKnowledge')">
+                    <DropdownItem class="img-content">
+                      <Icon class="icon iconfont icon-guanlianshiti DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                      <span>关联实体</span>
+                      <span v-if="(expandFlag=='knowledge')" class="dropDownSelectPoint">●</span>
+                      <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                    </DropdownItem>
+                  </div>
+                  <div class="button-div" @click="triggerMethods('expandNodeEvent')">
+                    <DropdownItem class="img-content">
+                      <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                      <span>关联事件</span>
+                      <span v-if="(expandFlag=='event')" class="dropDownSelectPoint">●</span>
+                      <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                    </DropdownItem>
+                  </div>
+                  <div class="button-div" @click="triggerMethods('expandNodeContent')">
+                    <DropdownItem class="img-content">
+                      <Icon class="icon iconfont icon-guanlianwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                      <span>关联文档</span>
+                      <span v-if="(expandFlag=='content')" class="dropDownSelectPoint">●</span>
+                      <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                    </DropdownItem>
+                  </div>
+                </DropdownMenu>
+              </Dropdown>
+            </Tooltip>
+             <Tooltip placement="top" content="（Ctrl+A）" :delay="5000">
+              <Dropdown :visible="expandGongzhiVisible">
+                <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEnitiy')" v-if="(expandFlag_gongzhi=='knowledge_gongzhi')">
+                  <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                  <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                  <p class="img-content">共指实体</p>
+                </div>
+                <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEvent')" v-if="(expandFlag_gongzhi=='event_gongzhi')">
+                  <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                  <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                  <p class="img-content">共指事件</p>
+                </div>
+                <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" v-if="(expandFlag_gongzhi=='content_gongzhi')" @click="triggerMethods('gongzhiDoc')">
+                  <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                  <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                  <p class="img-content">共指文档</p>
+                </div>
+                <DropdownMenu slot="list" placement="bottom-start" v-if='ifSelectTwoNode'>
+                  <div class="button-div" @click="triggerMethods('gongzhiEnitiy')">
+                    <DropdownItem class="img-content">
+                      <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                      <span>共指实体</span>
+                      <span v-if="(expandFlag_gongzhi=='knowledge_gongzhi')" class="dropDownSelectPoint">●</span>
+                      <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                    </DropdownItem>
+                  </div>
+                  <div class="button-div" @click="triggerMethods('gongzhiEvent')">
+                    <DropdownItem class="img-content">
+                      <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                      <span>共指事件</span>
+                      <span v-if="(expandFlag_gongzhi=='event_gongzhi')" class="dropDownSelectPoint">●</span>
+                      <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                    </DropdownItem>
+                  </div>
+                  <div class="button-div" @click="triggerMethods('gongzhiDoc')">
+                    <DropdownItem class="img-content">
+                      <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                      <span>共指文档</span>
+                      <span v-if="(expandFlag_gongzhi=='content_gongzhi')" class="dropDownSelectPoint">●</span>
+                      <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                    </DropdownItem>
+                  </div>
+                </DropdownMenu>
+              </Dropdown>
+            </Tooltip>
+            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="5000">
+              <div :class="ifSelectOnlyTwoNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="triggerMethods('showModalStepKnowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
+                <Icon class="icon iconfont icon-lujing--tupu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                <p class="img-content">关系路径</p>
               </div>
-              <div class="button-div" @click="triggerMethods('expandNodeEvent')">
-                <DropdownItem class="img-content">
-                  <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                  <span>关联事件</span>
-                  <span v-if="(expandFlag=='event')" class="dropDownSelectPoint">●</span>
-                  <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                </DropdownItem>
-              </div>
-              <div class="button-div" @click="triggerMethods('expandNodeContent')">
-                <DropdownItem class="img-content">
-                  <Icon class="icon iconfont icon-guanlianwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                  <span>关联文档</span>
-                  <span v-if="(expandFlag=='content')" class="dropDownSelectPoint">●</span>
-                  <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                </DropdownItem>
-              </div>
-            </DropdownMenu>
-          </Dropdown>
-        </Tooltip>
-        <Tooltip placement="top" content="（Ctrl+A）" :delay="5000">
-          <!-- <Dropdown trigger="custom"  :visible="expandVisible"> -->
-          <Dropdown :visible="expandGongzhiVisible">
-            <!-- <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeKnowledge" >
-                                                                                      <Icon class="icon iconfont icon-kuozhan--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                      <p class="img-content">关系扩展</p>
-                        </div>-->
-            <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEnitiy')" v-if="(expandFlag_gongzhi=='knowledge_gongzhi')">
-              <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-              <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-              <p class="img-content">共指实体</p>
-            </div>
-            <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEvent')" v-if="(expandFlag_gongzhi=='event_gongzhi')">
-              <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-              <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-              <p class="img-content">共指事件</p>
-            </div>
-            <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" v-if="(expandFlag_gongzhi=='content_gongzhi')" @click="triggerMethods('gongzhiDoc')">
-              <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-              <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-              <p class="img-content">共指文档</p>
-            </div>
-            <DropdownMenu slot="list" placement="bottom-start" v-if='ifSelectTwoNode'>
-              <div class="button-div" @click="triggerMethods('gongzhiEnitiy')">
-                <DropdownItem class="img-content">
-                  <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                  <span>共指实体</span>
-                  <span v-if="(expandFlag_gongzhi=='knowledge_gongzhi')" class="dropDownSelectPoint">●</span>
-                  <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                </DropdownItem>
-              </div>
-              <div class="button-div" @click="triggerMethods('gongzhiEvent')">
-                <DropdownItem class="img-content">
-                  <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                  <span>共指事件</span>
-                  <span v-if="(expandFlag_gongzhi=='event_gongzhi')" class="dropDownSelectPoint">●</span>
-                  <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                </DropdownItem>
-              </div>
-              <div class="button-div" @click="triggerMethods('gongzhiDoc')">
-                <DropdownItem class="img-content">
-                  <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                  <span>共指文档</span>
-                  <span v-if="(expandFlag_gongzhi=='content_gongzhi')" class="dropDownSelectPoint">●</span>
-                  <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                </DropdownItem>
-              </div>
-            </DropdownMenu>
-          </Dropdown>
-        </Tooltip>
-        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                                                            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="showModalStep">
-                                                                                              <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                              <p class="img-content">路径</p>
-                                                                                            </div>
-                                                                                          </Tooltip>
-                                                                                          <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                                                              <div class="button-div" @click="showPathEvent">
-                                                                                                <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                                <p class="img-content">事件路径</p>
-                                                                                              </div>
-                                                                                            </Tooltip>
-                    -->
-        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                                                            <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="expandNodeEvent">
-                                                                                              <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                              <p class="img-content">事件扩展</p>
-                                                                                            </div>
-                    </Tooltip>-->
-        <!-- <Col span="1" align="middle" class="bottom">
-                                                                                                              <Tooltip content="查找关联" placement="bottom">
-                                                                                                                <Icon class="icon iconfont icon-linkedby  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                                                              </Tooltip>
-                    </Col>-->
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="5000">
-          <div :class="ifSelectOnlyTwoNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="triggerMethods('showModalStepKnowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
-            <Icon class="icon iconfont icon-lujing--tupu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <!--<Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>-->
-            <p class="img-content">关系路径</p>
-          </div>
-          <!-- <Dropdown :visible="stepVisible" trigger="custom">
-                                                                    <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('knowledge')" v-show="stepFlag==='knowledge'" @mouseup="stopStepTimer">
-                                                                      <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                                                                      <p class="img-content">关系路径</p>
-                                                                    </div>
-                                                                    <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('event')" v-show="stepFlag==='event'" @mouseup="stopStepTimer">
-                                                                      <Icon class="icon iconfont icon-lujing--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                                                                      <p class="img-content">事件路径</p>
-                                                                    </div>
-                                                                    <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mousedown="addStepTimer" @click="showModalStep('content')" v-show="stepFlag==='content'" @mouseup="stopStepTimer">
-                                                                      <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                      <Icon class="icon iconfont icon-sanjiao-smaller  DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                                                                      <p class="img-content">共现路径</p>
-                                                                    </div>
-                                                                    <DropdownMenu slot="list" placement="bottom-start">
-                                                                      <div class="button-div">
-                                                                        <DropdownItem class="img-content" @click="showModalStep('knowledge')">
-                                                                          <Icon class="icon iconfont icon-lujing--tupu  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                                                                          <span>关系路径</span>
-                                                                        </DropdownItem>
-                                                                      </div>
-                                                                      <div class="button-div">
-                                                                        <DropdownItem class="img-content" @click="showModalStep('event')">
-                                                                          <Icon class="icon iconfont icon-lujing--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                                                                          <span>事件路径</span>
-                                                                        </DropdownItem>
-                                                                      </div>
-                                                                      <div class="button-div">
-                                                                        <DropdownItem class="img-content" @click="showModalStep('content')">
-                                                                          <Icon class="icon iconfont icon-kuozhan--shijian  DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                                                                          <span>共现路径</span>
-                                                                        </DropdownItem>
-                                                                      </div>
-                                                                    </DropdownMenu>
-                      </Dropdown>-->
-        </Tooltip>
-        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                                  <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="spread">
-                                                                    <Icon class="icon iconfont icon-expand  DVSL-bar-btn-new DVSL-bar-btn-back deg-90" size="26"></Icon>
-                                                                    <p class="img-content">展开</p>
-                                                                  </div>
-                    </Tooltip>-->
+            </Tooltip> -->
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('toGeo')">
@@ -279,11 +215,11 @@
           </div>
         </Tooltip>
         <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                                                                  <div class="button-div" @click="save">
-                                                                    <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                                                                    <p class="img-content">保存</p>
-                                                                  </div>
-                    </Tooltip>-->
+                                                                      <div class="button-div" @click="save">
+                                                                        <Icon class="icon iconfont icon-save1  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                                                                        <p class="img-content">保存</p>
+                                                                      </div>
+                        </Tooltip>-->
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="fit">
             <Icon class="icon iconfont icon-zhengchangshitu--quanping DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
@@ -303,21 +239,21 @@
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag="setFlagToFalse"></modal-chart>
     <!-- <Modal v-model="modalStep" ok-text="设置步数"
-                                                                                              cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
-                                                                                            <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
-                </Modal>-->
+                                                                                                  cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+                                                                                                <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+                    </Modal>-->
     <!-- <Modal v-model="modalStep" width="360">
-            <p slot="header" style="color:#f60;text-align:center">
-              <Icon type="ios-information-circle"></Icon>
-              <span>Delete confirmation</span>
-            </p>
-            <div style="text-align:center">
-              <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change="con"></InputNumber>
-            </div>
-            <div slot="footer">
-              <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
-            </div>
-          </Modal> -->
+                <p slot="header" style="color:#f60;text-align:center">
+                  <Icon type="ios-information-circle"></Icon>
+                  <span>Delete confirmation</span>
+                </p>
+                <div style="text-align:center">
+                  <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change="con"></InputNumber>
+                </div>
+                <div slot="footer">
+                  <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
+                </div>
+              </Modal> -->
     <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     <workatlas-modal :workatlastData="workatlastData" :type="workatlasType" :flag="workatlasFlag" />
   </div>
@@ -423,7 +359,10 @@
         expandTimer_gongzhi: null,
         nh_50: 0,
         buttonTimer: null,
-        hoverdNode: null
+        hoverdNode: null,
+        linkedNodeFlag: false,
+        linkedNodesType: '',
+        linkedNodes: []
       };
     },
     components: {
@@ -471,10 +410,62 @@
         }
       },
       linkedKnowlage() {
-        this.setMessage('请期待下一版本的链向功能')
+        var mthis = this
+        if (mthis.selectionId.length > 0) {
+          mthis.linkedNodeFlag = true
+          mthis.linkedNodesType = 'entity'
+          mthis.linkedNodes = mthis.selectionId
+          mthis.setMessage('已获取到带一组节点，请选择第二组节点')
+        } else {
+          mthis.setMessage('请选择节点后再进行链向操作')
+        }
       },
       linkedKnowlageAll() {
-        this.setMessage('请期待下一版本的链向功能')
+        // this.setMessage('请期待下一版本的链向功能')
+        var mthis = this
+        if (mthis.selectionId.length > 0) {
+          mthis.linkedNodeFlag = true
+          mthis.linkedNodesType = 'all'
+          mthis.linkedNodes = mthis.selectionId
+          mthis.setMessage('已获取到带一组节点，请选择第二组节点')
+        } else {
+          mthis.setMessage('请选择节点后再进行链向操作')
+        }
+      },
+      readyToLink(ids) {
+        var mthis = this
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
+            NodeIds_single: mthis.linkedNodes,
+            NodeIds_double: ids,
+            typeLabel: mthis.linkedNodesType
+          })
+          .then(response => {
+            if (response.body.code == 0) {
+              if (response.body.data.nodes > 0) {
+                mthis.netchart.addData(response.body.data)
+              } else {
+                mthis.setMessage('未找到相关链向，请重新选择节点！')
+              }
+            }
+          }).then(() => {
+            mthis.linkedNodeFlag = false
+            mthis.linkedNodesType = ''
+            mthis.linkedNodes = []
+          })
+      },
+      nailNode() {
+        console.log(this.selectionId)
+        for (let i = 0; i < this.selectionId.length; i++) {
+          this.netchart.lockNode(this.selectionId[i])
+          this.netchart.updateStyle(this.selectionId[i])
+        }
+      },
+      unnailNode() {
+        console.log(this.selectionId)
+        for (let i = 0; i < this.selectionId.length; i++) {
+          this.netchart.unlockNode(this.selectionId[i])
+          this.netchart.updateStyle(this.selectionId[i])
+        }
       },
       selectAll() {
         if (this.netchart.nodes().length > 0) {
@@ -509,6 +500,9 @@
               break;
             case 'square':
               this.square()
+              break;
+            case 'circleShape':
+              this.circleShape()
               break;
             case 'star':
               this.star()
@@ -571,44 +565,50 @@
         }
       },
       shortPath(ids) {
-        var mthis = this
-        // console.log(ids);
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
-            subjectId: ids[0],
-            objectId: ids[1]
-          })
-          .then(response => {
-            if (response.body.code === 0) {
-              if (response.body.data[0].nodes.length > 0) {
-                mthis.changNetchartMode('d')
-                mthis.netchart.addData(response.body.data[0])
-                mthis.netchart.selection(response.body.data[0].nodes.map(item => {
-                  return item.id
-                }))
-                changNetchartMode('s')
-              } else {
-                mthis.setMessage('未找到最短路径')
-              }
-            } else {
-              mthis.setMessage('ShortPath接口异常！')
-            }
-          })
-      },
-      shortAllPath(ids) {
-        var mthis = this
-        if (ids.length === 2) {
-          mthis.$http
-            .post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
-              subjectId: ids[0],
-              objectId: ids[1]
+        if (ids.length > 1) {
+          var mthis = this
+          // console.log(ids);
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
+              NodeIds_single: ids,
+              NodeIds_double: [],
+              typeLabel: "entity"
             })
             .then(response => {
               if (response.body.code === 0) {
-                if (response.body.data[0].nodes.length > 0) {
+                if (response.body.data.nodes.length > 0) {
                   mthis.changNetchartMode('d')
-                  mthis.netchart.addData(response.body.data[0])
+                  mthis.netchart.addData(response.body.data)
+                  mthis.netchart.selection(response.body.data.nodes.map(item => {
+                    return item.id
+                  }))
+                  changNetchartMode('s')
+                } else {
+                  mthis.setMessage('未找到最短路径')
+                }
+              } else {
+                mthis.setMessage('ShortPath接口异常！')
+              }
+            })
+        } else {
+          mthis.setMessage('请选择两个或以上的节点进行路径操作')
+        }
+      },
+      shortAllPath(ids) {
+        var mthis = this
+        if (ids.length > 1) {
+          mthis.$http
+            .post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
+              NodeIds_single: ids,
+              NodeIds_double: [],
+              typeLabel: "all"
+            })
+            .then(response => {
+              if (response.body.code === 0) {
+                if (response.body.data.nodes.length > 0) {
+                  mthis.changNetchartMode('d')
+                  mthis.netchart.addData(response.body.data)
                   setTimeout(function() {
-                    mthis.netchart.selection(response.body.data[0].nodes.map(item => {
+                    mthis.netchart.selection(response.body.data.nodes.map(item => {
                       return item.id
                     }))
                     // mthis.changNetchartMode('s')
@@ -620,6 +620,8 @@
                 mthis.setMessage('ShortPath接口异常！')
               }
             })
+        } else {
+          mthis.setMessage('请选择两个或以上的节点进行路径操作')
         }
       },
       changeMode(type) {
@@ -711,8 +713,7 @@
                 EventIds: mthis.selectionIdByType.eventIds
               })
               .then(response => {
-                if (response.body.code === 0) {
-                  ;
+                if (response.body.code === 0) {;
                   mthis.worksetData[1].type = "event";
                   response.body.data.map(item => {
                     item.name = item.event_subtype
@@ -728,8 +729,7 @@
               .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
                 docIds: mthis.selectionIdByType.contentIds
               })
-              .then(response => {
-                ;
+              .then(response => {;
                 if (response.body.code === 0) {
                   mthis.worksetData[2].type = "document";
                   response.body.data.map(item => {
@@ -1165,8 +1165,7 @@
         let arr = [];
         let entitRes,
           eventRes,
-          docRes = null;
-          ;
+          docRes = null;;
         if (mthis.selectionId.length > 0) {
           mthis.spinShow = true;
           mthis.zIndex = 999;
@@ -1453,7 +1452,6 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
-                
                 mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
                 setTimeout(function() {
@@ -1485,7 +1483,7 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
-                 mthis.changNetchartMode('d')
+                mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
                 setTimeout(function() {
                   mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -1619,6 +1617,31 @@
         // this.netchart.exportData
         // image.src = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3497300994,2503543630&fm=27&gp=0.jpg';
         // this.netchart.dataLinks.selection
+      },
+      //环形布局
+      circleShape() {
+        // this.changNetchartMode('r');
+        var mthis = this
+        // debugger
+        for (let i = 0; i < mthis.selectionId.length; i++) {
+          // 辐射布局
+          let circleNum = Math.floor(Math.log(i) / Math.log(3))
+          let avd = 360 / Math.pow(3, circleNum);
+          let ahd = avd * Math.PI / 360;
+          let radius = 150 * circleNum + 150
+          let nodesInfo = mthis.netchart.getNode(mthis.selectionId[i])
+          let initInfo = mthis.netchart.getNode(mthis.selectionId[0])
+          initInfo['x'] = (initInfo['x'])?(initInfo['x']):(0)
+          initInfo['y'] = (initInfo['y'])?(initInfo['y']):(0)
+          nodesInfo["x"] = mthis.netchart.getNode(mthis.selectionId[0])["x"] +
+            Math.sin(ahd * i) * radius;
+          nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
+            Math.cos(ahd * i) * radius;
+          console.log(nodesInfo)
+          console.log(nodesInfo["x"] + '------' + nodesInfo["y"] )
+          mthis.netchart.updateStyle(mthis.selectionId[i])
+          mthis.netchart.lockNode(mthis.selectionId[i]);
+        }
       },
       //矩形布局
       square() {
@@ -2277,27 +2300,18 @@
           //   nodeSpacing: 60, // horizontal spacing between nodes
           //   rowSpacing: 100 // vertical spacing between node rows in the hierarchy layout
           // },
-
-
-
-
-//            image: `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA/0lEQVQ4T6WT4U3DMBCFvxcWyAiM
-// ELUDkBE6Qtggo8AGGSEb4AWIPAJskAXaQ1cc5LiBRsJ/LNv3vnvns8U/h/boD2Yd8DRJz2X8XcDR
-// 7GTwIggGVkLuAg5mPdBNUnM0G0rIn4Bkvb9AG6XZ7ZeQG4CLJmnYEi/155AVIB08psA6z+x7jVn9
-// AG+Au/l8l7otQBDMZwiL7Vxs8Oprd+nzTQnJRVgCSnG+vwlIFzUajB682PbMpXgT0Jg1FYypTu//
-// bNBPUrv16FYlLOILnICPCgLfj6g9wxAlX6/GDyAXRykWLVvdSU64ArzOCqJnzsV7/knuoM7btkf8
-// axf2ij3uC/S1jhHc5yKmAAAAAElFTkSuQmCC`,
           style: {
             nodeLocked: {
               items: [{
-                image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
-                  "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
-                  "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
-                  "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
-                  "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
-                  "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
-                py: -1,
-                x: 6,
+                image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
+                //    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
+                // "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
+                // "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
+                // "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
+                // "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
+                // "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
+                py: -0.8,
+                px: 0.8,
                 backgroundStyle: {
                   fillColor: "transparent"
                 }
@@ -2899,6 +2913,15 @@
                 clearTimeout(timer);
               }
               timer = setTimeout(function() {
+                let eslect = event.selection.filter(it => {
+                  return it.isNode
+                }).map(item => {
+                  return item.id;
+                });
+                if (mthis.linkedNodeFlag && eslect.length > 0) {
+                  //链向标&&选中节点
+                  mthis.readyToLink(eslect)
+                }
                 //   selectLineColor:'#ccffff',
                 // selectShadowColor:'#33ffff',
                 // hightlightLineColor:'#009999',

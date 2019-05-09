@@ -228,7 +228,6 @@
              } else if (mthis.myMap.get(mthis.eventdata[0].entity_type) === 'event') {
               detailId = (mthis.eventdata instanceof Array) ? (mthis.eventdata[0].id) : (mthis.eventdata.id);
               mthis.selectTag = detailId
-              // debugger;
               let result = mthis.eventdata[0]
               result.name = result.name.replace(/ /,'_')
               // console.log('**************')

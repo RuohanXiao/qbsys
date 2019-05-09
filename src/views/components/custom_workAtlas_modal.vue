@@ -13,9 +13,10 @@
             </div>
             <div class='scrollBarAble1' style='margin-bottom: 20px;height: 60vh;'>
               <div class='resList '>
-                <div class='resli' v-for='op in options1' style="padding:'10px auto';line-height:4vh;">
+                <div class='resli' v-for='op in options1' style="padding:'10px auto';line-height:4vh;" @click="addDataToTemp(op)">
                   <p>{{op.name}}
-                    <Icon class="icon iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" :style="{float: 'right',lineHeight: '4vh',height: '4vh'}" size="20" @click="addDataToTemp(op)" />
+                     <Icon class="icon iconfont icon-delete-name DVSL-bar-btn DVSL-bar-btn-back lineH20" :style="{float: 'right',lineHeight: '4vh',height: '4vh'}" size="20" @click="delDataToTemp(op)" />
+                    <!-- <Icon class="icon iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" :style="{float: 'right',lineHeight: '4vh',height: '4vh'}" size="20" @click="addDataToTemp(op)" /> -->
                   </p>
                 </div>
               </div>
@@ -398,6 +399,24 @@
         // // console.log(item)
         this.workatlastChart.replaceData(item.data)
       },
+      delDataToTemp(item) {
+        var mthis = this
+        console.log(item)
+        let time = new Date().getTime()
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/delete-set-data/', {
+	"timestamp": time,
+	"idlist": new Array(item.id),
+	"label": "project",
+	"type": "project"
+}).then(response => {
+   if (response.body.code === 0) {
+    //  mthis.setMessage
+    alert('删除成功')
+   } else {
+     alert('删除失败')
+   }
+})
+      },
       searchInfo(query) {
         var mthis = this;
         this.loading1 = true;
@@ -410,6 +429,7 @@
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/load-set-data/', {
               "timestamp": time,
               "idlist": '',
+              "query":mthis.searchWorkspaceTitle,
               "label": "project",
               "page": 1,
               "pagesize": 30
