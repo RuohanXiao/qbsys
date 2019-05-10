@@ -678,6 +678,9 @@
     line-height: 30px;
     letter-spacing: 0px;
     color: #ccffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   /* .touxiangImg:hover img{
                     /* background-image:url('http://10.60.1.140/assets/images/Organization.png');

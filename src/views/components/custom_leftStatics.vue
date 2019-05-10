@@ -149,6 +149,7 @@ trClick{
 
 <script>
 import percentBar from './custom_percentBar'
+import util from '../../util/tools.js'
 export default {
     name:'leftStatics',
     data(){
@@ -164,9 +165,9 @@ export default {
     mounted(){
         this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
     },
-    props:['staticsDatas','rightMenuConf'],
+    props:['staticsDatas','rightMenuConf','HLIds'],
     components: {
-      percentBar,
+      percentBar
     },
     watch:{
         staticsdatas:{
@@ -184,6 +185,62 @@ export default {
                 })
             },
             immediate:true
+        },
+        HLIds:function(){
+            var mthis = this;
+            mthis.cancelAllClickEffect();
+            var ids = [];
+            var barIds = [];
+            for(let q = 0; q < mthis.HLIds.length; q++){
+                var id = mthis.HLIds[q];
+                var index = id.indexOf('&');
+                if(index === -1){
+                    ids.push(id);
+                } else {
+                    ids.push(id.split('&')[1])
+                }
+            }
+            var staticsDatas = mthis.staticsDatas;
+            for(let i = 0; i < staticsDatas.length; i++){
+                var firstLevelData = staticsDatas[i];
+                var subStatisticsAttr = firstLevelData.subStatisticsAttr;
+                for(let j = 0; j < subStatisticsAttr.length; j++){
+                    var secondLevelData = subStatisticsAttr[j];
+                    var specificStaticsAttr = secondLevelData.specificStaticsAttr;
+                    for(let v = 0; v < specificStaticsAttr.length; v++){
+                        var thirdLevelData = specificStaticsAttr[v];
+                        var idlist = thirdLevelData.idlist;
+                        var isHas = false;
+                        for(let n = 0; n < ids.length; n++){
+                            var Oid = ids[n];
+                            for(let m = 0; m < idlist.length; m++){
+                                var sid = idlist[m];
+                                var qid = '';
+                                var index = sid.indexOf('&');
+                                if(index === -1){
+                                    qid = sid;
+                                } else {
+                                    qid = sid.split('&')[1];
+                                }
+                                if(Oid === qid){
+                                    isHas = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(isHas){
+                            var barId = thirdLevelData.thirdLevelId;
+                            barIds.push(barId);
+                            //break;
+                        }
+                    }
+                }
+            }
+            for(let x = 0; x < barIds.length; x++){
+                var itemId = barIds[x] + '/id';
+                var bar = document.getElementById(itemId);
+                mthis.gainAllClickEffect(bar);
+            }
         }
     },
     methods:{
@@ -240,21 +297,25 @@ export default {
         },
         selectedIds(el,ids){
             var mthis = this;
-            //trClick
-            if(el.style.backgroundColor ==='rgba(51,255,255,0.2)'){
+            /* if(el.style.backgroundColor ==='rgba(51, 255, 255, 0.2)'){
                 return;
-            }
+            } */
+            mthis.cancelAllClickEffect();
+            mthis.gainAllClickEffect(el);
+            mthis.$emit('staticsClick', ids)
+        },
+        gainAllClickEffect(el){
+            el.className='trClick';
+            el.style.backgroundColor='rgba(51,255,255,0.2)';
+        },
+        cancelAllClickEffect(){
             var oldtrClick = document.getElementsByClassName('trClick');
             if(oldtrClick.length !== 0){
-                for(let i = 0; i < oldtrClick.length; i++){
+                for(let i = oldtrClick.length - 1; i >= 0; i--){
                     oldtrClick[i].removeAttribute('style')
                     oldtrClick[i].classList.remove('trClick')
                 }
             }
-            el.className='trClick';
-            el.style.backgroundColor='rgba(51,255,255,0.2)';
-            //mthis.$store.commit('setNetStaticsSelectedIds',ids);
-            mthis.$emit('staticsClick', ids)
         },
         isNodeTypehasInnodeTypedata(id){
             var mthis = this;

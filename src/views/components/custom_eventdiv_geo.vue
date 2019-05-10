@@ -18,7 +18,13 @@
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>Loading</div>
             </Spin>
-            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' :HLIds='hlids' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
+            <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
+              <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
+                <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
+                <p class="selectP">请选择两个以上节点，查看数据透视</p>
+              </div>
+            </div>
           </Tab-pane>
         </Tabs>
       </div>
@@ -85,7 +91,8 @@
             'id': 'delete',
             'iconClassName': 'icon-ren'
           }
-        ]
+        ],
+        hlids:[],
       };
     },
     components: {
@@ -98,8 +105,12 @@
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['geo_selected_param', 'geo_onlyselected_param', 'singlePerson', 'viewHeight', 'contentStatisticsResult', 'viewHeight_20_geo', 'clickSelectedGeoIds']),
+    computed: mapState(['geo_selected_param', 'geo_onlyselected_param', 'singlePerson', 'viewHeight', 'contentStatisticsResult', 'viewHeight_20_geo', 'clickSelectedGeoIds','GeoStaticsHLItemIds']),
     watch: {
+      GeoStaticsHLItemIds:function(){
+        var mthis = this;
+        mthis.hlids = mthis.GeoStaticsHLItemIds;
+      },
       clickSelectedGeoIds: function() {
         var mthis = this;
         if (mthis.clickSelectedGeoIds.length > 0) {
@@ -154,7 +165,6 @@
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
       geo_onlyselected_param: function() {
-        // ;
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];
@@ -232,7 +242,6 @@
         }
       },
       /* geo_selected_param: function() {
-        // debugger;
         var mthis = this;
         var OrgIds = [];
         var EventIds = [];
