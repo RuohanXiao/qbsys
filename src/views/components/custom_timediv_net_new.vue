@@ -114,7 +114,7 @@
                       // }
                       this.boxSelEventIds.ids = response.body.data.eventIds
                       this.$store.commit('setNetTimeCondition',response.body.data.eventIds)
-                      this.boxSelEventIds.title = ""
+                      this.boxSelEventIds.title = "notAnalysis"
                       this.$store.commit('setNetOnlyStaticsSelectedIds',this.boxSelEventIds)
                     }else{
                       console.log("服务器error")
@@ -420,13 +420,14 @@
               mthis.timeTitle = '时间轴'
               mthis.boxSelEventIds.ids = []
               mthis.$store.commit('setNetTimeCondition',[])
-              mthis.boxSelEventIds.title = ""
+              mthis.boxSelEventIds.title = "cancelBox"
               mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
               mthis.isBrush = []
               mthis.boxSelShowDiv = false
+              mthis.isDataZoom = false
               // console.log(mthis.boxSelEventIds)
             }
-            mthis.isDataZoom = false
+            
             
           } else {
             if(startAndEnd[0]<0){
@@ -501,7 +502,7 @@
                       // for(let i=0;i<response.body.data.eventIds.length;i++){
                       //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
                       // }
-                      mthis.clickEventIds.title = ""
+                      mthis.clickEventIds.title = "notAnalysis"
                       mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.clickEventIds)
                   }else{
                     console.log("服务器error")

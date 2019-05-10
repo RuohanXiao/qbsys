@@ -1,5 +1,5 @@
 <template>
-  <div :id="timechartdivId">
+  <div :id="timechartdivId" @click="hideDiv()">
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
@@ -27,8 +27,8 @@
       <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
-    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="toGeoAna(1)">选中分析</div>
-    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="toGeoAna(2)">选中分析</div>
+    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" @mouseleave="clcikShowDiv=false" @click="toGeoAna(1)">选中分析</div>
+    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft,top:boxdivTop}" @mouseleave="boxSelShowDiv=false" @click="toGeoAna(2)">选中分析</div>
   </div>
 </template>
  
@@ -76,10 +76,12 @@
         clcikShowDiv:false,
         // 右键点击柱子出现选中分析div的left值
         clickdivLeft:'',
+        clickdivTop:'',
         // 框选时间右键点击出现选中分析
         boxSelShowDiv:false,
         // 框选时间右键点击出现选中分析div的left值
         boxdivLeft:'',
+        boxdivTop:'',
         //点击单个柱子的选中分析，要传给数据透视的事件IDS
         clickEventIds:{
           type:"analysis",
@@ -100,8 +102,9 @@
         geoStatics_eventIds:[],
         geo_only_eventIds:[],
         selTimeArr:[],
-        isDataZoom:false
-        
+        // dataZoom不影响框选效果
+        isDataZoom:false,
+        isClick:false,
       };
     },
     methods: {
@@ -186,6 +189,16 @@
       },
       hideDiv(){
         
+        if(this.isClick){
+
+          this.boxSelEventIds.eventIds = []
+          this.toGeoEventIds.eventIds = []
+          this.toGeoEventIds.type = 'cancelBox'
+          this.boxSelEventIds.type = 'cancelBox'
+          this.$store.commit('setGeoTimeCondition',this.boxSelEventIds)
+          this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
+        }
+        this.isClick = false;
         this.clcikShowDiv = false;
         this.boxSelShowDiv = false;
       },
@@ -423,7 +436,7 @@
             wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-             mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
+            //  mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
              mthis.isDataZoom = true
             
             
@@ -433,16 +446,17 @@
             if(mthis.isDataZoom){
               console.log("hahhaah")
               mthis.timeTitle = '时间轴'
+              
+              console.log(mthis.toGeoEventIds)
+              mthis.isBrush = []
+              mthis.boxSelShowDiv = false
               mthis.boxSelEventIds.eventIds = []
               mthis.toGeoEventIds.eventIds = []
               mthis.toGeoEventIds.type = 'cancelBox'
-              mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds)
-              // console.log(mthis.toGeoEventIds)
-              mthis.isBrush = []
-              mthis.boxSelShowDiv = false
               mthis.boxSelEventIds.type = 'cancelBox'
               mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds)
-              // console.log(mthis.boxSelEventIds)
+              mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds)
+              console.log(mthis.boxSelEventIds)
               mthis.isDataZoom = false
             }
             
@@ -498,31 +512,36 @@
           }
         });
         this.charts.on('click', function(params) {
+          console.log(params)
+          params.event.event.stopPropagation();
           mthis.timeTitle = params.name
           let timeArr = []
-          
+          mthis.isClick = true;
+          console.log(mthis.isClick)
           timeArr.push(params.name)
           timeArr.push(params.name)
         //   mthis.$store.commit('setNetTimeCondition', timeArr)
           mthis.clcikShowDiv = false;
           mthis.boxSelShowDiv = false;
           mthis.isBrush = [];
+          
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                    "selectedIds":mthis.geo_eventIds,
+                    "selectedIds":mthis.geo_only_eventIds,
                     "startTime":params.name,
                     "endTime":params.name
                 }).then(response =>{
                     if(response.body.code == 0){
                       mthis.boxSelEventIds.eventIds= []
                       mthis.toGeoEventIds.eventIds = []
-
+                      mthis.toGeoEventIds.type = "notAnalysis" ; 
+                      mthis.boxSelEventIds.type = "notAnalysis" ;
                       for(let i=0;i<response.body.data.eventIds.length;i++){
                         mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                         mthis.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                       }
                       
                       mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds);
-                      
+                      mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds);
                     }else{
                       console.log("服务器error")
                     }
@@ -547,12 +566,13 @@
             mthis.clcikShowDiv = true
             mthis.clickdivLeft = leftWid
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                "selectedIds":mthis.geo_eventIds,
+                "selectedIds":mthis.geo_only_eventIds,
                 "startTime":clickTime,
                 "endTime":clickTime
                  
             }).then(response =>{
                 if(response.body.code == 0){
+                  mthis.clickEventIds.eventIds = []
                   for(let i=0;i<response.body.data.eventIds.length;i++){
                     mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
                   }
@@ -566,6 +586,15 @@
             
           })
           wholeChart.oncontextmenu = function(){
+              mthis.boxdivLeft = event.clientX + 20 + "px"
+              mthis.boxdivTop = event.clientY + "px"
+              console.log(mthis.boxdivTop)
+              console.log(event.pageX)
+              console.log(event.pageY)
+              console.log(event.clientX)
+              console.log(event.clientY)
+              console.log(event.screenX)
+              console.log(event.screenY)
                if(mthis.isBrush.length>0){
                  mthis.boxSelShowDiv = true
                }
@@ -576,11 +605,11 @@
                 
             }
           wholeChart.onclick = function(){
-            mthis.clickEventIds.title = "";
-            mthis.clickEventIds.ids=[];
-            mthis.boxSelEventIds.title = "";
-            mthis.boxSelEventIds.ids = "";
-            // console.log("1111111111111")
+            console.log("djakbdxaushdgbuy")
+            if(mthis.isClick){
+              console.log("echartsg click")
+            }
+            
           }
         }else if(flag ==2){
           
@@ -639,6 +668,10 @@
       'split','split_geo','splitWidth','tmss','selectNetNodes','geo_selected_param','geo_onlyselected_param']),
     watch: {
       // setGeoOnlyselectedParam
+        'dataBySeries.date':function(){
+          var mthis = this;
+          mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
+        },
         geo_onlyselected_param:function(){
           console.log('=========setGeoOnlyselectedParam  xxxxx==========')
           console.log(this.geo_onlyselected_param)
@@ -681,7 +714,7 @@
            var mthis = this
            var type = this.$store.state.geo_selected_param.type;
           //  console.log(this.geo_selected_param)
-           if(type == "GeoStatics"){
+           
               if(this.geo_selected_param.paramIds.length>0){
                 mthis.geoStatics_eventIds = []
                 for(let i = 0;i<this.geo_selected_param.paramIds.length;i++){
@@ -692,7 +725,7 @@
                       "eventids":mthis.geoStatics_eventIds
                     }).then(response =>{
                       if(response.body.code === 0){
-                          mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
+                          // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
                           for(let i=0;i<response.body.data.time.length;i++){
                             let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
                             mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
@@ -711,7 +744,7 @@
                 
               }
               
-            }
+            
             
             
         },
@@ -862,7 +895,7 @@
   }
   .clcikShowDiv{
     position: absolute;
-    top:620px;
+    /* top:620px; */
     width:60px;
     height:20px;
     text-align: center;
@@ -873,7 +906,7 @@
   }
   .boxSelShowDiv{
     position: absolute;
-    top:620px;
+    /* top:620px; */
     width:60px;
     height:20px;
     text-align: center;
