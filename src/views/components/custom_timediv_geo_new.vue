@@ -27,8 +27,32 @@
       <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
-    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" @mouseleave="clcikShowDiv=false" @click="toGeoAna(1)">选中分析</div>
-    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft,top:boxdivTop}" @mouseleave="boxSelShowDiv=false" @click="toGeoAna(2)">选中分析</div>
+    <!-- <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" @click="toGeoAna(1)">选中分析</div>
+    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft,top:boxdivTop}" @click="toGeoAna(2)">选中分析</div> -->
+    <div class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" v-show="clcikShowDiv" @mouseleave="clcikShowDiv=false">
+      <table style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;text-align:center;'>
+        <tr  @click="toGeoAna(1)" class="trClass">
+          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
+          <td style="padding-right:5px;">只选中它</td>
+        </tr>
+        <tr @click="delSel" class="trClass">
+          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
+          <td style="padding-right:30px;">删除</td>
+        </tr>
+      </table>
+    </div>
+    <div class="clcikShowDiv" :style="{left:boxdivLeft,top:boxdivTop}" v-show="boxSelShowDiv" @mouseleave="boxSelShowDiv=false">
+      <table style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;text-align:center;'>
+        <tr  @click="toGeoAna(2)" class="trClass">
+          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
+          <td style="padding-right:5px;">只选中它</td>
+        </tr>
+        <tr @click="delSel" class="trClass">
+          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
+          <td style="padding-right:30px;">删除</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
  
@@ -105,24 +129,33 @@
         // dataZoom不影响框选效果
         isDataZoom:false,
         isClick:false,
+        echartsShowStart:0,
+        echartsShowEnd:100,
+        curInt:null
+       
       };
     },
     methods: {
+      delSel(){
+        alert('删除')
+      },
       toGeoAna(flag){
         if(flag==1){
           this.clickEventIds.type = "analysis";
+          console.log(this.clickEventIds)
           this.$store.commit('setGeoTimeCondition',this.clickEventIds);
+          this.clcikShowDiv = false
         }else{
           this.boxSelEventIds.type = "analysis";
           console.log(this.boxSelEventIds)
           this.$store.commit('setGeoTimeCondition',this.boxSelEventIds);
+          this.boxSelShowDiv = false
         }
         
 
       },
       query(){
-        console.log('query')
-        console.log(this.isDataZoom)
+        
             this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                     "selectedIds":this.geo_only_eventIds,
                     "startTime":this.selTimeArr[0],
@@ -137,8 +170,7 @@
                         this.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                         this.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
                       }
-                      console.log(response.body.data)
-                      console.log(this.toGeoEventIds)
+                      
                       this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
                       
                     }else{
@@ -190,13 +222,15 @@
       hideDiv(){
         
         if(this.isClick){
-
+          console.log("gahsdvshgvuy")
           this.boxSelEventIds.eventIds = []
           this.toGeoEventIds.eventIds = []
           this.toGeoEventIds.type = 'cancelBox'
           this.boxSelEventIds.type = 'cancelBox'
           this.$store.commit('setGeoTimeCondition',this.boxSelEventIds)
           this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
+          this.curInt = null;
+          this.charts.setOption(this.option)
         }
         this.isClick = false;
         this.clcikShowDiv = false;
@@ -252,11 +286,15 @@
             brushLink: "all", //不同系列间，选中的项可以联动
             // 选中框外样式
             outOfBrush: {
-              colorAlpha: 1
+              // colorAlpha: 1
+              barBorderRadius: [3, 3, 3, 3],
+              color: "rgba(51,204,153,1)"
             },
             // 选中框内样式
             inBrush: {
-              colorAlpha: 1
+              // colorAlpha: 1
+              color:'#33ddff',
+              barBorderRadius:[3,3,3,3]
             },
             brushStyle: {
               borderWidth: 1,
@@ -308,8 +346,8 @@
           },
           dataZoom: [{
               type: "slider",
-              start: 0,
-              end: 100,
+              start: mthis.echartsShowStart,
+              end: mthis.echartsShowEnd,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -379,20 +417,28 @@
             barCategoryGap:'50%',
             itemStyle: {
               // 柱形图默认颜色
-              normal: {
-                cursor: "default",
-                barBorderRadius: [3, 3, 3, 3],
-                color: "rgba(51,204,153,1)"
-              },
-              // 柱形图悬浮颜色
-              emphasis: {
-                cursor: "pointer",
-                barBorderRadius: [3, 3, 3, 3],
-                color: "rgba(51,204,153,1)"
+              // normal: {
+              //   cursor: "default",
+              //   barBorderRadius: [3, 3, 3, 3],
+              //   color: "rgba(51,204,153,1)"
+              // },
+              // // 柱形图悬浮颜色
+              // emphasis: {
+              //   cursor: "pointer",
+              //   barBorderRadius: [3, 3, 3, 3],
+              //   color: '#33ddff'
                 
+              // },
+              color:function(param){
+                var key = param.dataIndex;
+                if(key === mthis.curInt){
+                  return '#33ddff'
+                }else{
+                  return "rgba(51,204,153,1)"
+                }
               },
-              
-              
+              cursor: "default",
+              barBorderRadius: [3, 3, 3, 3],
             },
             animationDelay: function(idx) {
               return 0;
@@ -416,7 +462,8 @@
                     itemStyle:{
                         color:'#33ddff',
                         barBorderRadius:[3,3,3,3]
-                    }
+                    },
+                    data:[]
                 }],
         
         });
@@ -430,8 +477,22 @@
         mthis.option.series[1].data = mthis.dataBySeries.clickNum;
        
         mthis.charts.setOption(mthis.option)
+        this.charts.on('datazoom',function(params){
+          console.log(params)
+          console.log( typeof params.start)
+          let haveV = typeof params.start
+          if(haveV == Number){
+            mthis.echartsShowStart = params.start
+            mthis.echartsShowEnd = params.end
+          }else{
+            mthis.echartsShowStart = params.batch[0].start
+            mthis.echartsShowEnd = params.batch[0].end
+          }
+          
+         
+        })
         this.charts.on('brushSelected', function(params) {
-          console.log(mthis.isDataZoom)
+        
           var wholeChart = document.getElementById(mthis.timechartdivId);
             wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {
@@ -470,13 +531,14 @@
             }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
-            mthis.isBrush = timeArr
+            
             mthis.selTimeArr = []
             mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
             mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
             if(timeArr && mthis.selTimeArr[0] && mthis.selTimeArr[1]){
+              mthis.isBrush = timeArr
                 mthis.throttle(mthis.query,1000,1000)()
                 //     mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                 //     "selectedIds":mthis.geo_only_eventIds,
@@ -524,7 +586,11 @@
           mthis.clcikShowDiv = false;
           mthis.boxSelShowDiv = false;
           mthis.isBrush = [];
+          mthis.curInt = params.dataIndex;
+          mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+          mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
           
+          mthis.charts.setOption(mthis.option)
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                     "selectedIds":mthis.geo_only_eventIds,
                     "startTime":params.name,
@@ -560,11 +626,12 @@
         // wholeChart.oncontextmenu = () =>false;
         mthis.charts.on('contextmenu',function(params){
             // wholeChart.oncontextmenu = () =>false;
-            let leftWid = params.event.offsetX+20 + "px"
+            
             var clickTime = params.name
             
             mthis.clcikShowDiv = true
-            mthis.clickdivLeft = leftWid
+            mthis.clickdivLeft = event.clientX + "px"
+            mthis.clickdivTop = event.clientY + 'px'
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                 "selectedIds":mthis.geo_only_eventIds,
                 "startTime":clickTime,
@@ -576,7 +643,7 @@
                   for(let i=0;i<response.body.data.eventIds.length;i++){
                     mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
                   }
-                  
+                  console.log(mthis.clickEventIds)
                   
                 }else{
                   console.log("服务器error")
@@ -588,13 +655,7 @@
           wholeChart.oncontextmenu = function(){
               mthis.boxdivLeft = event.clientX + 20 + "px"
               mthis.boxdivTop = event.clientY + "px"
-              console.log(mthis.boxdivTop)
-              console.log(event.pageX)
-              console.log(event.pageY)
-              console.log(event.clientX)
-              console.log(event.clientY)
-              console.log(event.screenX)
-              console.log(event.screenY)
+              
                if(mthis.isBrush.length>0){
                  mthis.boxSelShowDiv = true
                }
@@ -623,8 +684,8 @@
           
         }else if(flag==3){
           mthis.resize();
-          mthis.option.xAxis.data = mthis.dataBySeries.date;
-          mthis.option.series[0].data = mthis.dataBySeries.num;
+          // mthis.option.xAxis.data = mthis.dataBySeries.date;
+          // mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
           mthis.charts.setOption(mthis.option)
         }else{
@@ -668,10 +729,10 @@
       'split','split_geo','splitWidth','tmss','selectNetNodes','geo_selected_param','geo_onlyselected_param']),
     watch: {
       // setGeoOnlyselectedParam
-        'dataBySeries.date':function(){
-          var mthis = this;
-          mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
-        },
+        // 'dataBySeries.date':function(){
+        //   var mthis = this;
+        //   mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
+        // },
         geo_onlyselected_param:function(){
           console.log('=========setGeoOnlyselectedParam  xxxxx==========')
           console.log(this.geo_onlyselected_param)
@@ -714,37 +775,38 @@
            var mthis = this
            var type = this.$store.state.geo_selected_param.type;
           //  console.log(this.geo_selected_param)
-           
+           if(type == "GeoStatics"){
               if(this.geo_selected_param.paramIds.length>0){
                 mthis.geoStatics_eventIds = []
                 for(let i = 0;i<this.geo_selected_param.paramIds.length;i++){
                   mthis.geoStatics_eventIds[i] = this.geo_selected_param.paramIds[i].split("&")[1]
                 }
                 
-                mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                      "eventids":mthis.geoStatics_eventIds
-                    }).then(response =>{
-                      if(response.body.code === 0){
-                          // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
-                          for(let i=0;i<response.body.data.time.length;i++){
-                            let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
-                            mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
-                           
-                          }
-                          
-                          mthis.loadEcharts(3);
-                          
-                      }else{
-                        console.log("服务器error")
-                      }
-                    })
-              }
-              if(this.geo_selected_param.paramIds.length==0){
-                mthis.dataBySeries.clickNum = [];
+                  mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+                        "eventids":mthis.geoStatics_eventIds
+                      }).then(response =>{
+                        if(response.body.code === 0){
+                            mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
+                            for(let i=0;i<response.body.data.time.length;i++){
+                              let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
+                              mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
+                            
+                            }
+                            
+                            mthis.loadEcharts(3);
+                            
+                        }else{
+                          console.log("服务器error")
+                        }
+                      })
+                
                 
               }
-              
-            
+              if(this.geo_selected_param.paramIds.length==0){
+                  mthis.dataBySeries.clickNum = [];
+                  
+                }
+           }
             
             
         },
@@ -894,32 +956,22 @@
     background-color: rgba(0, 0, 0, 0);
   }
   .clcikShowDiv{
-    position: absolute;
-    /* top:620px; */
+    position: fixed;
+    background-color:rgba(0, 0, 0, 0.8);
+    border: 1px solid #2a6464;
+    cursor:pointer;
+    /* top:620px;
     width:60px;
     height:20px;
     text-align: center;
     line-height: 20px;
     background-color:rgba(51,204,153,0.7);
-    /* z-index:999999; */
-    border-radius: 10px;
+    z-index:999999;
+    border-radius: 10px;  */
   }
-  .boxSelShowDiv{
-    position: absolute;
-    /* top:620px; */
-    width:60px;
-    height:20px;
-    text-align: center;
-    line-height: 20px;
-    background-color:rgba(51,204,153,0.7);
-    /* background-color:red; */
-    /* z-index:999999; */
-    border-radius: 10px;
+  
+  .trClass:hover{
+    color:rgba(93, 240, 240, 1);
   }
-  .clcikShowDiv:hover{
-    cursor: pointer;
-  }
-  .boxSelShowDiv:hover{
-    cursor: pointer;
-  }
+  
 </style>

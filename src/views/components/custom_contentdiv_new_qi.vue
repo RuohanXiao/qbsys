@@ -1017,6 +1017,12 @@
           var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
+          var contentDiv = document.getElementById('contentInfo');
+          contentDiv.style.width = '100%';
+          contentDiv.style.float = 'none';
+          contentDiv.style.display = 'block';
+          contentDiv.style.borderRight = 'none';
+          return
         }
         var contentId = document.getElementById('contentInfo').value;
         
