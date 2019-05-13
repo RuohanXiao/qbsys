@@ -43,13 +43,13 @@
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="nailNode">
-            <Icon class="icon iconfont icon-nail DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <Icon class="icon iconfont icon-nail-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">锁定节点</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="unnailNode">
-            <Icon class="icon iconfont icon-nail DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <Icon class="icon iconfont icon-nail-copy-copy-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">解锁节点</p>
           </div>
         </Tooltip>
