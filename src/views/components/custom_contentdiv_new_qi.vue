@@ -15,9 +15,9 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-delete-name DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">删除</p>
+          <div class="button-custom" @click="deleteNode()"> 
+            <Icon class="icon iconfont icon-delete-name DVSL-bar-btn-new DVSL-bar-btn-back" size="26" :class="(deleteButton)?'lightUp':''"></Icon>
+            <p class="img-content" :class="(deleteButton)?'lightUp':''">删除</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -28,13 +28,13 @@
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
+          <div class="button-div" @click='toContentDiv'>
             <Icon class="icon iconfont icon-zhaiyaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">摘要图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='toContentDiv'>
+          <div class="button-div">
             <Icon class="icon iconfont icon-suolvetu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">缩略图</p>
           </div>
@@ -60,9 +60,9 @@
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='contentTranslate'>
-            <Icon class="icon iconfont icon-selection-box" :class="(translateButton)?'lightUp':''" size="26"></Icon>
-            <p class="img-content">翻译</p>
+          <div class="button-custom" @click='contentTranslate'>
+            <Icon class="icon iconfont icon-selection-box" size="26"  :class="(translateButton)?'lightUp':''" ></Icon>
+            <p class="img-content"  :class="(translateButton)?'lightUp':''">翻译</p>
           </div>
         </Tooltip>
         <!-- <div class="divSplitLine"></div> -->
@@ -92,7 +92,7 @@
               <Row type="flex" justify="start">
                 <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items" :key="index">
                 <div>
-                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id)">
+                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id)" @contextmenu.prevent="rightMenu" @click="togClass">
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
@@ -121,8 +121,8 @@
         </div>
       </div>
       <div>
-        <div v-if="showList" :style="{height:ContentHeightList,overflowY:'scroll'}">
-          <Table width="550" border :columns="columns2" :data="data3"></Table>
+        <div v-if="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
+          <Table border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em"></Table>
         </div>
       </div>
     </div>
@@ -137,6 +137,7 @@
   // import liM from '../../dist/assets/js/jquery.liMarquee.js'
   import modalChart from './custom_modal.vue'
   import InfiniteLoading from 'vue-infinite-loading';
+  
   import $ from "jquery";
   import {
     mapState,
@@ -146,6 +147,7 @@
   mock.test = 1
   var timer = null;
   var tthis = this;
+  var timerClick = null;
   /* eslint-disable */
   export default {
     name: "App",
@@ -158,6 +160,7 @@
         busy: true,
         watchSelectCounter: 0,
         translateButton: false,
+        deleteButton:false,
         spinShow: false,
         markedItem: false,
         ifInfo: false,
@@ -264,6 +267,112 @@
             zip: 100000
           }
         ],
+        columns3: [{
+            title: 'Title',
+            key: 'title',
+            width: 100,
+            fixed: 'left',
+            render:(h,params)=>{
+              let texts = '';
+              texts = params.row.title.substring(0,10) + '....';
+              let strTitle = '';
+              strTitle = params.row.title;
+              return h(
+                "tooltip",
+                {
+                  props:{
+                    placement:"bottom",
+                    transfer:true,
+                    marginLeft:'-30px',
+                    cursor:'pointer'
+                  }
+                },
+                [
+                  texts,
+                  h(
+                    "span",
+                    {
+                      slot:"content",
+                      style:{whiteSpace: "normal", wordBreak: "break-all" }
+                    },
+                    strTitle
+                  )
+                ]
+              )
+            }
+           
+          },
+          {
+            title: 'Time',
+            key: 'time',
+            width: 100,
+            fixed:'left'
+          },
+          {
+            title: 'Text',
+            key: 'text',
+            // render:(h,params)=>{
+            //   let texts = '';
+            //   texts = params.row.text.substring(0,100) + '....';
+            //   let strTitle = '';
+            //   strTitle = params.row.text;
+            //   return h(
+            //     "tooltip",
+            //     {
+            //       props:{
+            //         placement:"bottom",
+            //         transfer:true,
+            //         marginLeft:'-30px',
+                   
+            //       }
+            //     },
+            //     [
+            //       texts,
+            //       h(
+            //         "div",
+            //         {
+            //           slot:"content",
+            //           style:{whiteSpace: "normal", wordBreak: "break-all",width:"900px",}
+            //         },
+            //         strTitle
+            //       )
+            //     ]
+            //   )
+            // }
+          },
+          {
+            title: 'Enty',
+            key: 'enty',
+            width: 100,
+            fixed:'right'
+          },
+          
+        ],
+        data4: [{
+            title: 'John Brown',
+            time: 18,
+            text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
+            enty: 'Trump',
+          },
+          {
+           title: 'John Brown',
+           time: 18,
+            text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
+            enty: 'Trump',
+          },
+          {
+            title: 'John Brown',
+            time: 18,
+            text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
+            enty: 'Trump',
+          },
+          {
+            title: 'John Brown',
+            time: 18,
+            text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
+            enty: 'Trump',
+          }
+        ],
         initSelectBox: function(selector, selectCallback) {
           var mthis = this
           function clearBubble(e) {
@@ -350,12 +459,18 @@
             })
             //  点选切换选中事件
             .on('click', '.select-item', function() {
-              if ($(this).hasClass('item-selected')) {
-                $(this).removeClass('item-selected');
+              console.log("clcik")
+              clearTimeout(timerClick);
+              var selThis = this;
+              timerClick = setTimeout(function(){
+                if ($(selThis).hasClass('item-selected')) {
+                $(selThis).removeClass('item-selected');
               } else {
-                $(this).addClass('item-selected');
+                $(selThis).addClass('item-selected');
               }
               mthis.watchSelectCounter++;
+              },300)
+              
             })
           //  点选全选全不选
           // .on('click', '.toggle-all-btn', function() {
@@ -374,8 +489,16 @@
       'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData'
     ]),
     watch: {
+      
       watchSelectCounter: function() {
+        console.log("watchselectcounter")
+        
         let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        if(selectList.length >0){
+          this.deleteButton = true
+        }else{
+          this.deleteButton = false
+        }
         this.selectArr = []
         for (let m = 0; m < selectList.length; m++) {
           this.selectArr.push(selectList[m].id)
@@ -387,11 +510,13 @@
         }])
       },
       netToContentData: function() {
+        
         var mthis = this
-        // alert('文档接受到了')
-        // // // console.log(this.netToContentData)
+        alert('文档接受到了')
+        console.log(this.netToContentData)
         mthis.items = []
         let contentIds = this.netToContentData.contentIds
+        debugger
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
@@ -422,6 +547,7 @@
                 console.log(response.body)
                 $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
+               
               } else {
                 mthis.items = []
               }
@@ -432,7 +558,7 @@
           } else {
             alert('bbbb')
           }
-        }, 500);
+        }, 1000);
       },
       searchContentResult: function(va) {
         var mthis = this
@@ -444,6 +570,19 @@
           if (response.body.data.length > 0) {
             $('.item-selected').removeClass('item-selected')
             mthis.items = response.body.data
+            console.log("datadatatdattatdtadt")
+            console.log(mthis.items)
+            mthis.data4 = []
+            for(let i=0;i<mthis.items.length;i++){
+              let itemList = {};
+              itemList.title = mthis.items[i].title
+              itemList.time = mthis.items[i].time
+              itemList.text = mthis.items[i].text
+              itemList.id = mthis.items[i].id
+              itemList.enty = mthis.content
+              mthis.data4.push(itemList)
+            }
+            console.log(mthis.data4)
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
           } else {
@@ -479,6 +618,57 @@
     },
     props: ['contentData'],
     methods: {
+      rightMenu(e){
+        var mthis = this
+        console.log("youjianyoujianyoujiainyoujian")
+        // console.dir(e)
+        let that = e.target
+        if(that.tagName == "P"){
+          that = that.parentNode
+        }else{
+          that = that
+        }
+        
+        if($(that).hasClass('item-selected')){
+          return true
+        }else{
+          $(that).addClass('item-selected')
+          mthis.watchSelectCounter++;
+        }
+        console.log(event.pageX)
+        console.log(event.pageY)
+        
+      },
+      togClass(e){
+        clearTimeout(timerClick);
+        var mthis = this;
+        let that = e.target;
+        if(that.tagName == "P"){
+            that = that.parentNode
+          }else{
+              that = that
+          }
+        timerClick = setTimeout(function(){
+        if ($(that).hasClass('item-selected')) {
+          $(that).removeClass('item-selected');
+        } else {
+          $(that).addClass('item-selected');
+        }
+          mthis.watchSelectCounter++;
+        },300)
+      },
+      deleteNode(){
+        if(this.deleteButton){
+          let selectDom = $('.item-selected')
+        
+          selectDom.removeClass('item-selected')
+        
+          this.watchSelectCounter++;
+        }else{
+          alert("qingxuanzejiedian")
+        }
+        
+      },
         // 判断是否是闰年，请求结束时间加一天
       isLeapYear(str){
           var newStr = str.split("-")
@@ -822,10 +1012,17 @@
       },
       contentTranslate() {
         var mthis = this;
-        this.translateButton = true
-        var oldEle = document.getElementById('translatedDiv');
+        console.log(this.translateButton)
+        if(this.translateButton){
+          var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
+          var contentDiv = document.getElementById('contentInfo');
+          contentDiv.style.width = '100%';
+          contentDiv.style.float = 'none';
+          contentDiv.style.display = 'block';
+          contentDiv.style.borderRight = 'none';
+          return
         }
         var contentId = document.getElementById('contentInfo').value;
         
@@ -856,6 +1053,10 @@
               contentDiv.parentElement.appendChild(translatedDiv);
               $('#translatedDiv').addClass('scrollBarAble');
             }) 
+            // this.translateButton = false
+        }
+        // this.translateButton = true
+        
       },
       orderTimeUp() {
         var mthis = this
@@ -1025,7 +1226,7 @@
               } else {
                 console.log('全部加载')
                 mthis.moreLoading = false
-                var promptDiv = '<div style="z-index:999;color:red;font-size:26px;">文档已经全部加载</div>'
+                var promptDiv = '<div style="z-index:999;color:rgba(200,100,80,0.5);font-size:20px;">文档已经全部加载</div>'
                 $('#contentchart').append(promptDiv)
                 mthis.alertNotice('已全部加载', true)
               }
@@ -1041,6 +1242,7 @@
         
       },
       toContentDiv() {
+        this.translateButton = false
         this.showList = false
         this.ifInfo = false
         var oldEle = document.getElementById('translatedDiv');
@@ -1095,8 +1297,10 @@
         }
       },
       showContent(id) {
+        clearTimeout(timerClick);
         var mthis = this
         mthis.ifInfo = true
+        mthis.translateButton = true
         //  mock.get("/getContentInfo",{id:id}).then(function(res) {
         //   // 获取文本数据
         //   document.getElementById('contents').innerHTML = res.data.contents
@@ -1168,6 +1372,15 @@
       
       // // console.log($('#jiazaiDiv').offset())
       // window.addEventListener('scroll', this.handleScroll)
+      document.onkeydown=function(event){ 
+			
+            var e = event || window.event || arguments.callee.caller.arguments[0]; 
+            
+            
+            if(e && e.keyCode == 46){
+              mthis.deleteNode()
+            }
+         };  
     }
   };
 </script>
@@ -1342,8 +1555,43 @@
     background: linear-gradient( 8deg, rgba(0, 0, 0, 0) 0%, rgba(51, 255, 255, 0.2) 40%, rgba(51, 255, 255, 0.3) 50%, rgba(51, 255, 255, 0.2) 60%, rgba(0, 0, 0, 0) 100%);
     /* 标准的语法 */
   }
+  .ivu-table-header th{
+    background-color: #212c31 !important;
+    color:#ccffff;
+    font-weight: bold;
+  }
+  .ivu-table-fixed-header th{
+    background-color: #212c31 !important;
+    color:#ccffff;
+    font-weight: bold;
+    
+   
+  }
+  .ivu-table-tbody .ivu-table-row .ivu-table-cell{
+    white-space: nowrap;
+    overflow-x: scroll;
+  }
+  .ivu-table td{
+    background-color:#010f17 !important;
+    color:#ccffff;
+  }
+  .ivu-table-row-hover td {
+      background-color: rgba(65, 252, 252, 0.4) !important;
+      color:#668c8e;
+      
+    }
+    
 </style>
 <style scoped>
+  
+  .button-custom{
+    cursor: pointer;
+    color: rgba(51, 255, 255, 0.6) !important;
+    align-items: center;
+    text-align: center;
+    min-width: 60px;
+    padding: 4px 0;
+  }
   .zindex99 {
     z-index: 99
   }
@@ -1385,6 +1633,7 @@
     animation: all 1s;
     -webkit-animation: all 1s;
     background-color: rgba(51, 255, 255, 0.4);
+    /* background-color: pink; */
     border: 1px solid rgba(51, 255, 255, 0.5);
   }
   .temp-selected {
@@ -1463,6 +1712,9 @@
     left: -4px;
   }
   .lightUp {
-    color: #ccffff;
+    /* color: #ccffff; */
+    /* color:#cc6666; */
+    cursor: pointer;
+    color: rgba(51, 255, 255, 1) !important;
   }
 </style>

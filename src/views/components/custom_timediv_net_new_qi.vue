@@ -28,32 +28,8 @@
       <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
-    <!-- <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="toGeoAna(1)">选中分析</div>
-    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="toGeoAna(2)">选中分析</div> -->
-    <div class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" v-show="clcikShowDiv" @mouseleave="clcikShowDiv=false">
-      <table style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;text-align:center;'>
-        <tr  @click="toGeoAna(1)" class="trClass">
-          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
-          <td style="padding-right:5px;">只选中它</td>
-        </tr>
-        <tr @click="delSel" class="trClass">
-          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
-          <td style="padding-right:30px;">删除</td>
-        </tr>
-      </table>
-    </div>
-    <div class="clcikShowDiv" :style="{left:boxdivLeft,top:boxdivTop}" v-show="boxSelShowDiv" @mouseleave="boxSelShowDiv=false">
-      <table style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;text-align:center;'>
-        <tr  @click="toGeoAna(2)" class="trClass">
-          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
-          <td style="padding-right:5px;">只选中它</td>
-        </tr>
-        <tr @click="delSel" class="trClass">
-          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
-          <td style="padding-right:30px;">删除</td>
-        </tr>
-      </table>
-    </div>
+    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="toGeoAna(1)">选中分析</div>
+    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false" @click="toGeoAna(2)">选中分析</div>
   </div>
 </template>
  
@@ -100,51 +76,32 @@
         selectTime: false,
         // 右键点击柱子出现选中分析
         clcikShowDiv:false,
-        
-        // 框选时间右键点击出现选中分析
-        boxSelShowDiv:false,
         // 右键点击柱子出现选中分析div的left值
         clickdivLeft:'',
-        clickdivTop:'',
         // 框选时间右键点击出现选中分析
         boxSelShowDiv:false,
         // 框选时间右键点击出现选中分析div的left值
         boxdivLeft:'',
-        boxdivTop:'',
         //点击单个柱子的选中分析，要传给数据透视的事件IDS
         clickEventIds:{
-          "type":"",
+          "title":"",
           "ids":[]
         },
         //点击框选时间的选中分析，要传给数据透视的事件IDS
         boxSelEventIds:{
-          "type":"",
+          "title":"",
           "ids":[]
-        },
-        toNetPersEventIds:{
-          'type':'',
-          'eventIds':[]
-        },
-        toNetEventIds:{
-          'type':'',
-          'eventIds':[]
         },
         // 框选时控制选中分析的显示与否
         isBrush:[],
         // 框选时发送请求需要的时间参数
         selTimeArr:[],
         
-        isDataZoom:false,
-        isClick:false,
-        echartsShowStart:0,
-        echartsShowEnd:100,
-        curInt:null
+        isDataZoom:false
+        
       };
     },
     methods: {
-      delSel(){
-        alert('删除')
-      },
       query(){
             this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                     "selectedIds":this.selectionIdByType.eventIds,
@@ -155,12 +112,10 @@
                       // for(let i=0;i<response.body.data.eventIds.length;i++){
                       //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
                       // }
-                      this.toNetPersEventIds.eventIds = response.body.data.eventIds
-                      this.toNetPersEventIds.type = "notAnalysis"
-                      this.toNetEventIds.eventIds = response.body.data.eventIds
-                      this.toNetEventIds.type = "notAnalysis"
-                      this.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-                      this.$store.commit('setNetTimeCondition', this.toNetEventIds)
+                      this.boxSelEventIds.ids = response.body.data.eventIds
+                      this.$store.commit('setNetTimeCondition',response.body.data.eventIds)
+                      this.boxSelEventIds.title = "notAnalysis"
+                      this.$store.commit('setNetOnlyStaticsSelectedIds',this.boxSelEventIds)
                     }else{
                       console.log("服务器error")
                     }
@@ -193,39 +148,17 @@
         }
       },
       hideDiv(){
-        if(this.isClick){
-          console.log("gahsdvshgvuy")
-          
-          this.toNetPersEventIds.eventIds = []
-          this.toNetEventIds.eventIds = []
-          this.toNetPersEventIds.type = "cancelBox"
-          this.toNetEventIds.type = "cancelBox"
-          this.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-          this.$store.commit('setNetTimeCondition', this.toNetEventIds)
-          this.curInt = null;
-          this.charts.setOption(this.option)
-        }
-        this.isClick = false;
+        
         this.clcikShowDiv = false;
         this.boxSelShowDiv = false;
-        
       },
       toGeoAna(flag){
         if(flag ==1){
-          
-          
-          this.toNetPersEventIds.type = "analysis"
-          this.toNetEventIds.type = "analysis"
-          this.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-          this.$store.commit('setNetTimeCondition', this.toNetEventIds)
-          this.clcikShowDiv = false;
+          this.clickEventIds.title = "analysis"
+          this.$store.commit('setNetOnlyStaticsSelectedIds',this.clickEventIds)
         }else{
-         this.toNetPersEventIds.type = "analysis"
-          this.toNetEventIds.type = "analysis"
-          this.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-          this.$store.commit('setNetTimeCondition', this.toNetEventIds)
-          
-          this.boxSelShowDiv = false;
+          this.boxSelEventIds.title = "analysis"
+          this.$store.commit('setNetOnlyStaticsSelectedIds',this.boxSelEventIds)
         }
         
       },
@@ -258,7 +191,7 @@
             right: "4%",
             left: '50px',
             bottom:'20%',
-            containLabel: true  
+            containLabel: true  
           },
           toolbox: {
             id: "toolbox",
@@ -287,13 +220,11 @@
             brushLink: "all", //不同系列间，选中的项可以联动
             // 选中框外样式
             outOfBrush: {
-              barBorderRadius: [3, 3, 3, 3],
-              color: "rgba(51,204,153,1)"
+              colorAlpha: 1
             },
             // 选中框内样式
             inBrush: {
-              color:'#33ddff',
-              barBorderRadius:[3,3,3,3]
+              colorAlpha: 1
             },
             brushStyle: {
               borderWidth: 1,
@@ -345,8 +276,8 @@
           },
           dataZoom: [{
               type: "slider",
-              start: mthis.echartsShowStart,
-              end: mthis.echartsShowEnd,
+              start: 0,
+              end: 100,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -395,12 +326,12 @@
             },
             {
               type: "inside",
-              // start: 0,
-              // end: 10,
+              start: 0,
+              end: 10,
               show: true,
               xAxisIndex: [0],
-              // startValue: 0,
-              // endValue: 5,
+              startValue: 0,
+              endValue: 5,
               minValueSpan: 10
             }
           ],
@@ -417,17 +348,21 @@
             barMinHeight: '1px',
             barCategoryGap:'50%',
             itemStyle: {
-              color:function(param){
-                var key = param.dataIndex;
-                if(key === mthis.curInt){
-                  return '#33ddff'
-                }else{
-                  return "rgba(51,204,153,1)"
-                }
+              // 柱形图默认颜色
+              normal: {
+                cursor: "default",
+                barBorderRadius: [3, 3, 3, 3],
+                color: "rgba(51,204,153,1)"
               },
-              cursor: "default",
-              barBorderRadius: [3, 3, 3, 3],
-            
+              // 柱形图悬浮颜色
+              emphasis: {
+                cursor: "pointer",
+                barBorderRadius: [3, 3, 3, 3],
+                color: "rgba(51,204,153,1)"
+                
+              },
+              
+              
             },
             animationDelay: function(idx) {
               return 0;
@@ -446,7 +381,7 @@
                         barMaxWidth: '30%',
                         barWidth:'10px',
                         barMinHeight: '1px',
-                        barCategoryGap : '60%',
+                        barCategoryGap : '60%',
                         data:mthis.dataBySeries.clickNum,
                         itemStyle:{
                             color:'#33ddff',
@@ -467,27 +402,14 @@
          
         mthis.charts.setOption(mthis.option)
         
-        this.charts.on('datazoom',function(params){
-          console.log(params)
-          console.log( typeof params.start)
-          let haveV = typeof params.start
-          if(haveV == Number){
-            mthis.echartsShowStart = params.start
-            mthis.echartsShowEnd = params.end
-          }else{
-            mthis.echartsShowStart = params.batch[0].start
-            mthis.echartsShowEnd = params.batch[0].end
-          }
-          
-         
-        })
+        
         this.charts.on('brushSelected', function(params) {
           
           var wholeChart = document.getElementById(mthis.timechartdivId);
             wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-             
+             mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
              mthis.isDataZoom = true
             
           }
@@ -496,17 +418,14 @@
             if(mthis.isDataZoom){
               // console.log("lalalla")
               mthis.timeTitle = '时间轴'
-             
+              mthis.boxSelEventIds.ids = []
+              mthis.$store.commit('setNetTimeCondition',[])
+              mthis.boxSelEventIds.title = "cancelBox"
+              mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
               mthis.isBrush = []
-              mthis.toNetPersEventIds.eventIds = []
-              mthis.toNetEventIds.eventIds = []
-              mthis.toNetPersEventIds.type = "cancelBox"
-              mthis.toNetEventIds.type = "cancelBox"
-              mthis.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-              mthis.$store.commit('setNetTimeCondition', this.toNetEventIds)
               mthis.boxSelShowDiv = false
               mthis.isDataZoom = false
-              
+              // console.log(mthis.boxSelEventIds)
             }
             
             
@@ -545,7 +464,6 @@
                 //     }
                     
                 // })
-
                 mthis.selectTime = true
             }
             
@@ -572,21 +490,19 @@
           mthis.clcikShowDiv = false;
           mthis.boxSelShowDiv = false;
           mthis.isBrush = [];
-          mthis.curInt = params.dataIndex;
-          mthis.option.dataZoom[0].start = mthis.echartsShowStart;
-          mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                     "selectedIds":mthis.selectionIdByType.eventIds,
                     "startTime":params.name,
                     "endTime":params.name
                 }).then(response =>{
                   if(response.body.code ==0){
-                    mthis.toNetPersEventIds.eventIds = response.body.data.eventIds
-                    mthis.toNetEventIds.eventIds = response.body.data.eventIds
-                    mthis.toNetPersEventIds.type = "notAnalysis"
-                    mthis.toNetEventIds.type = "notAnalysis"
-                    mthis.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-                    mthis.$store.commit('setNetTimeCondition', this.toNetEventIds)
+                      mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
+                      mthis.clickEventIds.ids = response.body.data.eventIds
+                      // for(let i=0;i<response.body.data.eventIds.length;i++){
+                      //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                      // }
+                      mthis.clickEventIds.title = "notAnalysis"
+                      mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.clickEventIds)
                   }else{
                     console.log("服务器error")
                   }
@@ -603,12 +519,12 @@
         myChart.oncontextmenu = () => false;
         // wholeChart.oncontextmenu = () =>false;
         mthis.charts.on('contextmenu',function(params){
-            mthis.clcikShowDiv = true
-            mthis.clickdivLeft = event.clientX + "px"
-            mthis.clickdivTop = event.clientY + 'px'
+            // wholeChart.oncontextmenu = () =>false;
+            let leftWid = params.event.offsetX+20 + "px"
             var clickTime = params.name
             
-            
+            mthis.clcikShowDiv = true
+            mthis.clickdivLeft = leftWid
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                 "selectedIds":mthis.selectionIdByType.eventIds,
                 "startTime":clickTime,
@@ -616,10 +532,11 @@
                  
             }).then(response =>{
                 if(response.body.code == 0){
-                  
-                  mthis.toNetPersEventIds.eventIds = response.body.data.eventIds
-                  mthis.toNetEventIds.eventIds = response.body.data.eventIds
-                  
+                  // for(let i=0;i<response.body.data.eventIds.length;i++){
+                  //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                  // }
+                  // mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
+                  mthis.clickEventIds.ids = response.body.data.eventIds
                 }else{
                   console.log("服务器error")
                 }
@@ -628,12 +545,10 @@
             
           })
           wholeChart.oncontextmenu = function(){
-            mthis.boxdivLeft = event.clientX + 20 + "px"
-            mthis.boxdivTop = event.clientY + "px"
-            if(mthis.isBrush.length>0){
-                mthis.boxSelShowDiv = true
-            }
-            mthis.isBrush = []
+               if(mthis.isBrush.length>0){
+                 mthis.boxSelShowDiv = true
+               }
+               mthis.isBrush = []
                    
                    
                 
@@ -673,7 +588,6 @@
           mthis.charts.setOption(mthis.option)
           
         }
-
       },
         
       onchangHeightCount() {
@@ -763,7 +677,7 @@
                   "eventids":mthis.netStaticsSelectedIds
               }).then(response =>{
                   if(response.body.code === 0){
-                      mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
+                      mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
                       for(let i=0;i<response.body.data.time.length;i++){
                         let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
                         mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
@@ -899,13 +813,32 @@
     background-color: rgba(0, 0, 0, 0);
   }
   .clcikShowDiv{
-    position: fixed;
-    background-color:rgba(0, 0, 0, 0.8);
-    border: 1px solid #2a6464;
-    cursor:pointer;
+    position: absolute;
+    top:620px;
+    width:60px;
+    height:20px;
+    text-align: center;
+    line-height: 20px;
+    background-color:rgba(51,204,153,0.7);
+    /* z-index:999999; */
+    border-radius: 10px;
   }
-  .trClass:hover{
-    color:rgba(93, 240, 240, 1);
+  .boxSelShowDiv{
+    position: absolute;
+    top:620px;
+    width:60px;
+    height:20px;
+    text-align: center;
+    line-height: 20px;
+    background-color:rgba(51,204,153,0.7);
+    /* background-color:red; */
+    /* z-index:999999; */
+    border-radius: 10px;
   }
-  
+  .clcikShowDiv:hover{
+    cursor: pointer;
+  }
+  .boxSelShowDiv:hover{
+    cursor: pointer;
+  }
 </style>

@@ -244,13 +244,16 @@
       selectContentNodes: function() {
         var mthis = this;
         mthis.evetdataFlag = false
+        console.log(this.selectContentNodes)
         if (mthis.selectContentNodes[0].ids.length > 0) {
           // 新增防抖功能
           mthis.evetdata = []
           mthis.timer = setTimeout(function() {
               let docOb = {}
               docOb.docIds = mthis.selectContentNodes[0].ids
+              console.log(mthis.selectContentNodes)
                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
+                 console.log(response.body)
                 for(let i = 0; i < response.body.data.length;i++){
                   response.body.data[i].entity_type = 'document'
                   response.body.data[i].name = response.body.data[i].title
