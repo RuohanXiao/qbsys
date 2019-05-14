@@ -668,7 +668,8 @@
         <span>相关事件</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
-            <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p>
+            <!-- <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
+            <p class="econtentp w5em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
@@ -723,13 +724,92 @@ import {
       }
     },
     props: ['tableData', 'entDivH'],
-    created() {
-      var mthis = this
-      mthis.xiangguanEntityItems = new Array()
-      mthis.xiangguanEntitys = new Object()
-      mthis.xiangguanEvent = new Array()
-      mthis.xiangguanDoc = new Array()
+    // created() {
+    //   var mthis = this
+    //   mthis.xiangguanEntityItems = new Array()
+    //   mthis.xiangguanEntitys = new Object()
+    //   mthis.xiangguanEvent = new Array()
+    //   mthis.xiangguanDoc = new Array()
 
+    //   var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
+    //   var eventNames = ob.getElementsByTagName("eventNames");
+    //   mthis.myMap1 = new Map();
+    //   for(let eventNameitem of eventNames) {
+    //     for(let items of eventNameitem.children){
+    //       mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
+    //     }
+    //   }
+    //   var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
+    //   var entityMainType = ob1.getElementsByTagName("entityMainType");
+    //   mthis.myMap = new Map();
+    //   for (var i = 0; i < entityMainType.length; i++) {
+    //     let typeName = entityMainType[i].children[0].textContent;
+    //     let typeChild = []
+    //     for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
+    //       mthis.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
+    //     }
+    //   }
+    // },
+    created(){
+        let mthis = this
+        mthis.xiangguanEntityItems = new Array()
+        mthis.xiangguanEntitys = new Object()
+        mthis.xiangguanEvent = new Array()
+        mthis.xiangguanDoc = new Array()
+        mthis.spinWaiting = true
+        if (this.tableData.isArray) {
+          if (this.tableData.length > 0) {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+              "NodeIds": mthis.tableData.map(item => {
+                return item.id
+              }),
+              "NodeTypes": mthis.tableData.map(item => {
+                return item.entity_type
+              }),
+              "TypeLabel": "all"
+            }).then(response => {
+              mthis.spinWaiting = false
+            })
+          } else {
+            alert('长度为0')
+            mthis.spinWaiting = false
+          }
+        } else {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+            "NodeIds": new Array(mthis.tableData.id),
+            "NodeTypes": new Array('entity'),
+            "TypeLabel": "all"
+          }).then(response => {
+            // mthis.xiangguanEntityItems = new Array()
+            // mthis.xiangguanEntitys = new Object()
+            // mthis.xiangguanEvent = new Array()
+            // mthis.xiangguanDoc = new Array()
+           if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
+             response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
+              item.type = item.undirected_type
+              return item
+            })
+              mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+              mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+              mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+              mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
+              mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+            }
+            if (response.body.data[0].unknown !== new Object()) {
+              // // console.log('------------有未知类型的节点--------------------')
+              // // console.log(response.body.data[0].unknown)
+              // // console.log('-----------------------------------------------')
+            }
+            mthis.spinWaiting = false
+          })
+        }
+    },
+    mounted() {
+      var mthis = this
       var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
       var eventNames = ob.getElementsByTagName("eventNames");
       mthis.myMap1 = new Map();
@@ -888,6 +968,7 @@ import {
               return item
             })
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+              debugger
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }

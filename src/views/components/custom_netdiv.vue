@@ -335,7 +335,7 @@
         pathHoverFlag: false,
         modal_loading: false,
         selectionId: [],
-        selectionIdByType: {
+        selectionIdByTypeData: {
           nodeIds: [],
           eventIds: [],
           contentIds: []
@@ -457,12 +457,18 @@
         console.log(this.selectionId)
         for (let i = 0; i < this.selectionId.length; i++) {
           this.netchart.lockNode(this.selectionId[i])
+          // util.promisify(lockNode,[this.selectionId[i]],this.netchart).then(
+          //   alert('bb')
+          // )
           this.netchart.updateStyle(this.selectionId[i])
         }
       },
       unnailNode() {
         console.log(this.selectionId)
         for (let i = 0; i < this.selectionId.length; i++) {
+          // util.promisify(unlockNode,[this.selectionId[i]],this.netchart).then(
+          //   alert('aa')
+          // )
           this.netchart.unlockNode(this.selectionId[i])
           this.netchart.updateStyle(this.selectionId[i])
         }
@@ -687,17 +693,17 @@
           }
         ];
         // // console.log('=====setSelectionIdByType==========')
-        // // console.log(mthis.selectionIdByType)
+        // // console.log(mthis.selectionIdByTypeData)
         if (!(
-            ((mthis.selectionIdByType.nodeIds.length ==
-                mthis.selectionIdByType.eventIds.length) ==
-              mthis.selectionIdByType.contentIds.length) ==
+            ((mthis.selectionIdByTypeData.nodeIds.length ==
+                mthis.selectionIdByTypeData.eventIds.length) ==
+              mthis.selectionIdByTypeData.contentIds.length) ==
             0
           )) {
-          if (mthis.selectionIdByType.nodeIds.length > 0) {
+          if (mthis.selectionIdByTypeData.nodeIds.length > 0) {
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/entity-info/", {
-                nodeIds: mthis.selectionIdByType.nodeIds
+                nodeIds: mthis.selectionIdByTypeData.nodeIds
               })
               .then(response => {
                 if (response.body.code === 0) {
@@ -706,11 +712,11 @@
                 }
               });
           }
-          if (mthis.selectionIdByType.eventIds.length > 0) {
+          if (mthis.selectionIdByTypeData.eventIds.length > 0) {
             // ;
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/event-detail/", {
-                EventIds: mthis.selectionIdByType.eventIds
+                EventIds: mthis.selectionIdByTypeData.eventIds
               })
               .then(response => {
                 if (response.body.code === 0) {;
@@ -724,10 +730,10 @@
                 }
               });
           }
-          if (mthis.selectionIdByType.contentIds.length > 0) {
+          if (mthis.selectionIdByTypeData.contentIds.length > 0) {
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
-                docIds: mthis.selectionIdByType.contentIds
+                docIds: mthis.selectionIdByTypeData.contentIds
               })
               .then(response => {;
                 if (response.body.code === 0) {
@@ -795,18 +801,18 @@
           'orgIds': [],
           'eventIds': []
         };
-        for (let i = 0; i < this.selectionIdByType.nodeIds.length; i++) {
-          arr.orgIds.push(this.selectionIdByType.nodeIds[i]);
+        for (let i = 0; i < this.selectionIdByTypeData.nodeIds.length; i++) {
+          arr.orgIds.push(this.selectionIdByTypeData.nodeIds[i]);
         }
-        for (let j = 0; j < this.selectionIdByType.eventIds.length; j++) {
-          arr.eventIds.push(this.selectionIdByType.eventIds[j]);
+        for (let j = 0; j < this.selectionIdByTypeData.eventIds.length; j++) {
+          arr.eventIds.push(this.selectionIdByTypeData.eventIds[j]);
         }
         //arr = util.unique(arr);
         this.$store.commit("setNetToGeoData", arr);
       },
       toContent() {
-        if (this.selectionIdByType.contentIds.length > 0) {
-          this.$store.commit("setNetToContentData", this.selectionIdByType);
+        if (this.selectionIdByTypeData.contentIds.length > 0) {
+          this.$store.commit("setNetToContentData", this.selectionIdByTypeData);
           this.$store.commit("changeTMSS", "content");
         } else {
           this.setMessage("非文档节点不能推送至文档!");
@@ -904,16 +910,16 @@
           let arrTypeList_net = new Array();
           let arrTypeList_event = new Array();
           let arrTypeList_doc = new Array();
-          for (let i = 0; i < mthis.selectionIdByType.nodeIds.length; i++) {
-            arrList_net.push(mthis.selectionIdByType.nodeIds[i]);
+          for (let i = 0; i < mthis.selectionIdByTypeData.nodeIds.length; i++) {
+            arrList_net.push(mthis.selectionIdByTypeData.nodeIds[i]);
             arrTypeList_net.push("entity");
           }
-          for (let i = 0; i < mthis.selectionIdByType.eventIds.length; i++) {
-            arrList_event.push(mthis.selectionIdByType.eventIds[i]);
+          for (let i = 0; i < mthis.selectionIdByTypeData.eventIds.length; i++) {
+            arrList_event.push(mthis.selectionIdByTypeData.eventIds[i]);
             arrTypeList_event.push("event");
           }
-          for (let i = 0; i < mthis.selectionIdByType.contentIds.length; i++) {
-            arrList_doc.push(mthis.selectionIdByType.contentIds[i]);
+          for (let i = 0; i < mthis.selectionIdByTypeData.contentIds.length; i++) {
+            arrList_doc.push(mthis.selectionIdByTypeData.contentIds[i]);
             arrTypeList_doc.push("document");
           }
           mthis.saveData(
@@ -928,7 +934,7 @@
               mthis.selectionId[i]
             );
           }
-          if (mthis.selectionIdByType.nodeIds.length > 0) {
+          if (mthis.selectionIdByTypeData.nodeIds.length > 0) {
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/related-all/", {
                 NodeIds: arrList_net,
@@ -969,7 +975,7 @@
                 }
               });
           }
-          if (mthis.selectionIdByType.eventIds.length > 0) {
+          if (mthis.selectionIdByTypeData.eventIds.length > 0) {
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/related-all/", {
                 NodeIds: arrList_event,
@@ -1040,7 +1046,7 @@
                 }
               });
           }
-          if (mthis.selectionIdByType.contentIds.length > 0) {
+          if (mthis.selectionIdByTypeData.contentIds.length > 0) {
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/related-all/", {
                 NodeIds: arrList_doc,
@@ -1148,12 +1154,12 @@
           name: ""
         }]);
         this.selectionId = [];
-        this.selectionIdByType = new Object({
+        this.selectionIdByTypeData = new Object({
           nodeIds: [],
           eventIds: [],
           contentIds: []
         });
-        this.$store.commit("setSelectionIdByType", this.selectionIdByType)
+        this.$store.commit("setSelectionIdByType", this.selectionIdByTypeData)
         this.ifSelectNode = false;
         this.ifSelectTwoNode = false;
         this.ifSelectOnlyTwoNode = false;
@@ -1171,16 +1177,16 @@
           mthis.zIndex = 999;
           let arrList = new Array();
           let arrTypeList = new Array();
-          for (let i = 0; i < mthis.selectionIdByType.nodeIds.length; i++) {
-            arrList.push(mthis.selectionIdByType.nodeIds[i]);
+          for (let i = 0; i < mthis.selectionIdByTypeData.nodeIds.length; i++) {
+            arrList.push(mthis.selectionIdByTypeData.nodeIds[i]);
             arrTypeList.push("entity");
           }
-          for (let i = 0; i < mthis.selectionIdByType.eventIds.length; i++) {
-            arrList.push(mthis.selectionIdByType.eventIds[i]);
+          for (let i = 0; i < mthis.selectionIdByTypeData.eventIds.length; i++) {
+            arrList.push(mthis.selectionIdByTypeData.eventIds[i]);
             arrTypeList.push("event");
           }
-          for (let i = 0; i < mthis.selectionIdByType.contentIds.length; i++) {
-            arrList.push(mthis.selectionIdByType.contentIds[i]);
+          for (let i = 0; i < mthis.selectionIdByTypeData.contentIds.length; i++) {
+            arrList.push(mthis.selectionIdByTypeData.contentIds[i]);
             arrTypeList.push("document");
           }
           mthis.saveData(
@@ -1230,7 +1236,9 @@
                       return ite
                     })
                     links.map(ite => {
-                      ite.type = ite.relation_name
+                      if(ite.relation_name!== undefined){
+                        ite.type = ite.relation_name
+                      }
                       return ite
                     })
                     mthis.changNetchartMode('d')
@@ -1270,16 +1278,16 @@
           mthis.zIndex = 999;
           let arrList = new Array();
           let arrTypeList = new Array();
-          for (let i = 0; i < mthis.selectionIdByType.nodeIds.length; i++) {
-            arrList.push(mthis.selectionIdByType.nodeIds[i]);
+          for (let i = 0; i < mthis.selectionIdByTypeData.nodeIds.length; i++) {
+            arrList.push(mthis.selectionIdByTypeData.nodeIds[i]);
             arrTypeList.push("entity");
           }
-          for (let i = 0; i < mthis.selectionIdByType.eventIds.length; i++) {
-            arrList.push(mthis.selectionIdByType.eventIds[i]);
+          for (let i = 0; i < mthis.selectionIdByTypeData.eventIds.length; i++) {
+            arrList.push(mthis.selectionIdByTypeData.eventIds[i]);
             arrTypeList.push("event");
           }
-          for (let i = 0; i < mthis.selectionIdByType.contentIds.length; i++) {
-            arrList.push(mthis.selectionIdByType.contentIds[i]);
+          for (let i = 0; i < mthis.selectionIdByTypeData.contentIds.length; i++) {
+            arrList.push(mthis.selectionIdByTypeData.contentIds[i]);
             arrTypeList.push("document");
           }
           mthis.saveData(
@@ -1923,7 +1931,7 @@
         //   this.netchart.hideNode(this.selectionId[i])
         // }
         // let arrayNode = new Array()
-        // for (let v of this.selectionIdByType.eventIds) {
+        // for (let v of this.selectionIdByTypeData.eventIds) {
         //   // console.log(v);  
         //   arrayNode.push(this.netchart.getNode(v))
         // };
@@ -2610,7 +2618,7 @@
                 // link.lineColor = "rgb(51,102,102)";
                 // link.lineWidth = 5;
               }
-              // ---------------------------------------
+              // -- -------------------------------------
               if (link.data.type !== undefined && link.data.type !== "") {
                 // link.label = link.data.type;
                 link.items = [{
@@ -2847,7 +2855,7 @@
               } else {
                 mthis.selectionId = [];
                 mthis.selectItem = null;
-                mthis.selectionIdByType = new Object({
+                mthis.selectionIdByTypeData = new Object({
                   nodeIds: [],
                   eventIds: [],
                   contentIds: []
@@ -2857,7 +2865,7 @@
                 }]);
                 mthis.$store.commit(
                   "setSelectionIdByType",
-                  mthis.selectionIdByType
+                  mthis.selectionIdByTypeData
                 );
                 mthis.updateStyleCounter++;
               }
@@ -2973,7 +2981,7 @@
                   mthis.netchart.selection(uniquec.concat(mthis.selectionId));
                   // 有选中节点或者link
                   mthis.selectionId = mthis.selectionId;
-                  mthis.selectionIdByType = {
+                  mthis.selectionIdByTypeData = {
                     nodeIds: [],
                     eventIds: [],
                     contentIds: []
@@ -3001,23 +3009,23 @@
                       // mthis.netchart.lockNode(event.selection[nu].data.id)
                       //有三种情况，实体，事件，文档
                       if (event.selection[nu].data.entity_type === "content" || event.selection[nu].data.entity_type === "document") {
-                        mthis.selectionIdByType.contentIds.push(
+                        mthis.selectionIdByTypeData.contentIds.push(
                           event.selection[nu].data.id
                         );
                       } else if (
                         event.selection[nu].data.entity_type === "event"
                       ) {
-                        mthis.selectionIdByType.eventIds.push(
+                        mthis.selectionIdByTypeData.eventIds.push(
                           event.selection[nu].data.id
                         );
                       } else {
-                        mthis.selectionIdByType.nodeIds.push(
+                        mthis.selectionIdByTypeData.nodeIds.push(
                           event.selection[nu].data.id
                         );
                       }
                       // } else if (event.selection[nu].isLink) {
                       //   if (event.selection[nu].data.class === 'event') {
-                      //     mthis.selectionIdByType.eventIds.push(event.selection[nu].data.id)
+                      //     mthis.selectionIdByTypeData.eventIds.push(event.selection[nu].data.id)
                       //   }
                     }
                   }
@@ -3026,14 +3034,14 @@
                   }]);
                   mthis.$store.commit(
                     "setSelectionIdByType",
-                    mthis.selectionIdByType
+                    mthis.selectionIdByTypeData
                   );
                   mthis.$store.commit(
                     "setSinglePerson", !(mthis.selectionId.length > 1)
                   );
                 } else {
                   mthis.selectionId = [];
-                  mthis.selectionIdByType = {
+                  mthis.selectionIdByTypeData = {
                     nodeIds: [],
                     eventIds: [],
                     contentIds: []
@@ -3043,7 +3051,7 @@
                   }]);
                   mthis.$store.commit(
                     "setSelectionIdByType",
-                    mthis.selectionIdByType
+                    mthis.selectionIdByTypeData
                   );
                   // // console.log('==========ssssss======================')
                   // // console.log(mthis.selectionId)
@@ -3121,11 +3129,17 @@
       "geoToNetData",
       "workSpaceAddData",
       "eventImg",
-      "atlastData"
+      "atlastData",
+      "netOnlyStaticsSelectedIds"
     ]),
     watch: {
-      selectionIdByType: function() {
-        let lengthNum = this.selectionIdByType.nodeIds.length + this.selectionIdByType.eventIds.length + this.selectionIdByType.contentIds.length
+      netOnlyStaticsSelectedIds: function(){
+        this.netchart.selection(this.netOnlyStaticsSelectedIds.ids)
+        this.netchart.updateStyle()
+        this.netchart.updateSettings()
+      },
+      selectionIdByTypeData: function() {
+        let lengthNum = this.selectionIdByTypeData.nodeIds.length + this.selectionIdByTypeData.eventIds.length + this.selectionIdByTypeData.contentIds.length
         this.ifSelectNode = (lengthNum > 0) ? true : false
         this.ifSelectTwoNode = (lengthNum > 1) ? true : false
         this.ifSelectOnlyTwoNode = (lengthNum === 2) ? true : false
@@ -3155,11 +3169,6 @@
         mthis.netchart.addData(mthis.atlastData);
         setTimeout(function() {
           for (let item of mthis.atlastData.nodes) {
-            // // console.log('lock--------------')
-            // // console.log(item)
-            // // console.log(item.id)
-            // // console.log(item.x)
-            // // console.log(item.y)
             mthis.netchart.lockNode(item.id, item.x, item.y);
           }
         }, 200);
@@ -3244,9 +3253,9 @@
             });
         }
         /*
-          if (mthis.selectionIdByType.nodeIds.length > 0) {
+          if (mthis.selectionIdByTypeData.nodeIds.length > 0) {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
-              'nodeIds': mthis.selectionIdByType.nodeIds
+              'nodeIds': mthis.selectionIdByTypeData.nodeIds
             }).then(response => {
               if (response.body.code === 0) {
                 mthis.worksetData[0].type = 'entity';
@@ -3254,10 +3263,10 @@
               }
             })
           }
-          if (mthis.selectionIdByType.eventIds.length > 0) {
+          if (mthis.selectionIdByTypeData.eventIds.length > 0) {
             // ;
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
-              'EventIds': mthis.selectionIdByType.eventIds
+              'EventIds': mthis.selectionIdByTypeData.eventIds
             }).then(response => {
               if (response.body.code === 0) {
                 mthis.worksetData[1].type = 'event';
@@ -3265,9 +3274,9 @@
               }
             })
           }
-          if (mthis.selectionIdByType.contentIds.length > 0) {
+          if (mthis.selectionIdByTypeData.contentIds.length > 0) {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
-              'docIds': mthis.selectionIdByType.contentIds
+              'docIds': mthis.selectionIdByTypeData.contentIds
             }).then(response => {
               if (response.body.code === 0) {
                 mthis.worksetData[2].type = 'document';
@@ -3476,7 +3485,7 @@
           allNodIds.push(netchartnodes[i].id);
           mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
         }
-        if (mthis.netTimeCondition.length > 0) {
+        if (mthis.netTimeCondition!=null && mthis.netTimeCondition.length > 0) {
           mthis.selectLineColor = '#009999'
           mthis.selectShadowColor = "#009999"
           mthis.hightlightLineColor = '#ccffff'
