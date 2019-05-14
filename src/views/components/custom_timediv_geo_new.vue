@@ -150,6 +150,10 @@
           console.log(this.boxSelEventIds)
           this.$store.commit('setGeoTimeCondition',this.boxSelEventIds);
           this.boxSelShowDiv = false
+          this.charts.dispatchAction({
+            type:'brush',
+            areas:[]
+          })
         }
         
 

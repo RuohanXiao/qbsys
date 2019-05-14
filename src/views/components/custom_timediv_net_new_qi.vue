@@ -201,6 +201,10 @@
         }else{
           
           this.$store.commit('setNetOnlyStaticsSelectedIds',this.boxSelEventIds)
+          this.charts.dispatchAction({
+            type:'brush',
+            areas:[]
+          })
         }
         
       },

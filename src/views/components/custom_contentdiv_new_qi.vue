@@ -15,9 +15,15 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-custom" @click="deleteNode()"> 
-            <Icon class="icon iconfont icon-delete-name DVSL-bar-btn-new DVSL-bar-btn-back" size="26" :class="(deleteButton)?'lightUp':''"></Icon>
-            <p class="img-content" :class="(deleteButton)?'lightUp':''">删除</p>
+          <div class="button-div" @click="selectAll">
+            <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">全选</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-div" @click="deleteNode()"> 
+            <Icon class="icon iconfont icon-delete-name DVSL-bar-btn-new DVSL-bar-btn-back" size="26" ></Icon>
+            <p class="img-content">删除</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -100,6 +106,7 @@
                   <div class="contentItem">
                     <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 hoverStyle" :style="{padding:'0 !important'}" size="35" @click="selectThis(item.id)"></Icon>
                     <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
+                  
                   </div>
                 </div>
                 </Col>
@@ -110,6 +117,10 @@
                       <div @click="handleReachBottom" :style="{textAlign:'center',color:'rgba(51,255,255,0.5)'}" class='more'>加载更多</div>
                     </Col> -->
               </Row>
+              
+                <div class="layer">文档已经全部加载</div>
+              
+              
             </div>
           </Scroll>
           <div id="contentInfo" class="scrollBarAble" v-show='ifInfo' :style="{height:ContentHeightList,overflowY:'scroll'}">
@@ -129,6 +140,7 @@
     </Col>
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
+    
   </div>
 </template>
 <script>
@@ -470,7 +482,7 @@
             })
             //  点选切换选中事件
             .on('click', '.select-item', function() {
-              console.log("clcik")
+              // console.log("clcik")
               clearTimeout(timerClick);
               var selThis = this;
               timerClick = setTimeout(function(){
@@ -538,7 +550,7 @@
       },
       
       contentTimeCondition: function(va) {
-        console.log(this.contentTimeCondition)
+        // console.log(this.contentTimeCondition)
         var mthis = this
         if (timer) {
           clearTimeout(timer)
@@ -551,11 +563,11 @@
             let stime = util.getTimestamp(va[0])
             // let etime = util.getTimestamp(va[1])
             let etime = util.getTimestamp(mthis.isLeapYear(va[1]))
-            console.log(stime)
-            console.log(etime)
+            // console.log(stime)
+            // console.log(etime)
             mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
               if (response.body.data.length > 0) {
-                console.log(response.body)
+                // console.log(response.body)
                 $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
                
@@ -581,8 +593,8 @@
           if (response.body.data.length > 0) {
             $('.item-selected').removeClass('item-selected')
             mthis.items = response.body.data
-            console.log("datadatatdattatdtadt")
-            console.log(mthis.items)
+            // console.log("datadatatdattatdtadt")
+            // console.log(mthis.items)
             mthis.data4 = []
             for(let i=0;i<mthis.items.length;i++){
               let itemList = {};
@@ -594,7 +606,7 @@
               itemList.entity = mthis.content
               mthis.data4.push(itemList)
             }
-            console.log(mthis.data4)
+            // console.log(mthis.data4)
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
           } else {
@@ -630,9 +642,15 @@
     },
     props: ['contentData'],
     methods: {
+      selectAll(){
+        let disselectDom = $('.contentDiv:not(.item-selected)')
+        disselectDom.addClass('item-selected')
+        this.watchSelectCounter++;
+        
+      },
       rightMenu(e){
         var mthis = this
-        console.log("youjianyoujianyoujiainyoujian")
+        // console.log("youjianyoujianyoujiainyoujian")
         // console.dir(e)
         let that = e.target
         if(that.tagName == "P"){
@@ -647,8 +665,8 @@
           $(that).addClass('item-selected')
           mthis.watchSelectCounter++;
         }
-        console.log(event.pageX)
-        console.log(event.pageY)
+        // console.log(event.pageX)
+        // console.log(event.pageY)
         
       },
       togClass(e){
@@ -684,7 +702,7 @@
         // 判断是否是闰年，请求结束时间加一天
       isLeapYear(str){
           var newStr = str.split("-")
-          console.log(newStr)
+          // console.log(newStr)
               var year = parseInt(newStr[0])
               var month = parseInt(newStr[1])
               var day = parseInt(newStr[2])
@@ -1024,7 +1042,7 @@
       },
       contentTranslate() {
         var mthis = this;
-        console.log(this.translateButton)
+        // console.log(this.translateButton)
         if(this.translateButton){
           var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
@@ -1236,11 +1254,12 @@
                 $('.item-selected').removeClass('item-selected')
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
-                console.log('全部加载')
+                // console.log('全部加载')
+                $('.layer').show().delay(3000).fadeOut()
                 mthis.moreLoading = false
-                var promptDiv = '<div style="z-index:999;color:rgba(200,100,80,0.5);font-size:20px;">文档已经全部加载</div>'
-                $('#contentchart').append(promptDiv)
-                mthis.alertNotice('已全部加载', true)
+                
+                // mthis.alertNotice('已全部加载', true)
+                
               }
               resolve();
             })
@@ -1391,6 +1410,14 @@
             
             if(e && e.keyCode == 46){
               mthis.deleteNode()
+            }
+            if(e.keyCode == 65 && e.ctrlKey){
+              
+              mthis.selectAll()
+              e.preventDefault();
+              e.stopPropagation();
+              // e.cancelBubble();
+              // e.returnValue = false;
             }
          };  
     }
@@ -1742,4 +1769,28 @@
     cursor: pointer;
     color: rgba(51, 255, 255, 1) !important;
   }
+  .layer{
+    width:200px;
+    height:30px;
+    text-align: center;
+    line-height: 30px;
+    animation: all 1s;
+    -webkit-animation: all 1s;
+    font-family: MicrosoftYaHei;
+    /* font-size:26px; */
+    font-weight: bold;
+    color:#ccffff;
+    background-color: rgba(51, 255, 255, 0.4);
+    /* background-color: pink; */
+    border: 1px solid rgba(51, 255, 255, 0.5);
+    display: none;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    position: absolute;
+    font-size: 18px;
+    right: 20px;
+    bottom:30px;
+  }
+
+
 </style>
