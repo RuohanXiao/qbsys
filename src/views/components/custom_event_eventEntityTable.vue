@@ -411,7 +411,7 @@
     margin: 0px 10px;
   }
   .w5em {
-    width: 5em;
+    width: 10em;
     min-width: 5em;
     margin: 0;
   }

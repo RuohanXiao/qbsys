@@ -35,15 +35,15 @@
         <!-- 实体属性 -->
         <div class="e-title">
           <div class="e-title-d"></div>
-          <p class="e-title-p">当前选择({{eventdata.length}})</p>
+          <p class="e-title-p">当前选择({{nowSelData.length}})</p>
         </div>
-        <div class="e-content" v-if="eventdata.length == undefined" :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" @click="changeDetailDiv(eventdata.id,eventdata.entity_type,eventdata)">
-            <p class="e-content-p">{{eventdata.name}}</p>
+        <div class="e-content" v-if="nowSelData.length == undefined" :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
+          <div class="e-content-d pointIcon" @click="changeDetailDiv(nowSelData.id,nowSelData.entity_type,nowSelData)">
+            <p class="e-content-p">{{nowSelData.name}}</p>
           </div>
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" v-for="(item,index) in eventdata" @click="changeDetailDiv(item.id,item.entity_type,eventdata)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
+          <div class="e-content-d pointIcon" v-for="(item,index) in nowSelData" @click="changeDetailDiv(item.id,item.entity_type,nowSelData)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
             <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.name.toLowerCase().replace(/-/, "_")).name}}</p>
             <!-- <p v-if="item.entity_type==='event'" class="e-content-p">{{item.name}}</p> -->
             <p v-else class="e-content-p">{{item.name}}</p>
@@ -67,6 +67,7 @@
   export default {
     data() {
       return {
+        nowSelData:null,
         ifShown: true,
         value1: ['1', '2', '3', '4'],
         selectTag: '',
@@ -108,6 +109,13 @@
       // checkImg(src) {
       //   util.checkImgExists(src)
       // },
+      arrayUnique:function(arr,name){
+        var hash = {};
+        return arr.reduce(function(item,next){
+          hash[next[name]] ? '':hash[next[name]] = true && item.push(next);
+          return item;
+        },[]);
+      },
       defaultImg(type, img) {
         var mthis = this
         if (mthis.eventdata[0]) {
@@ -267,9 +275,15 @@
           // // console.log('=======mthis.eventdata取值异常')
           // // console.log(mthis.eventdata)
         }
+        
+        mthis.nowSelData =mthis.arrayUnique(mthis.eventdata,'id')
+       
+        
       }
+      
     },
     created() {
+      
       this.dicMap = new Map();
       this.dicMap.set('entity', '实体');
       this.dicMap.set('document', '文档');
@@ -298,6 +312,7 @@
       }
     },
     mounted() {
+      
       this.selectDivHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 8 + 30 + "px";
       this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 12 + "px";
       this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
@@ -324,6 +339,10 @@
           name: items.getElementsByTagName("eventCHType")[0].textContent
         });
       }
+      this.nowSelData = this.eventdata;
+      console.log(this.eventdata)
+      console.log(this.nowSelData)
+      
     }
   }
 </script>
