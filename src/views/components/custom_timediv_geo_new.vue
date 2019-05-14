@@ -230,6 +230,8 @@
           this.$store.commit('setGeoTimeCondition',this.boxSelEventIds)
           this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
           this.curInt = null;
+          
+          this.option.series[1].data = []
           this.charts.setOption(this.option)
         }
         this.isClick = false;
@@ -346,8 +348,8 @@
           },
           dataZoom: [{
               type: "slider",
-              start: mthis.echartsShowStart,
-              end: mthis.echartsShowEnd,
+              start: 0,
+              end: 100,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -479,15 +481,14 @@
         mthis.charts.setOption(mthis.option)
         this.charts.on('datazoom',function(params){
           console.log(params)
-          console.log( typeof params.start)
-          let haveV = typeof params.start
-          if(haveV == Number){
+          if(params.hasOwnProperty('start')){
             mthis.echartsShowStart = params.start
             mthis.echartsShowEnd = params.end
           }else{
             mthis.echartsShowStart = params.batch[0].start
             mthis.echartsShowEnd = params.batch[0].end
           }
+          
           
          
         })
@@ -519,6 +520,11 @@
               mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds)
               console.log(mthis.boxSelEventIds)
               mthis.isDataZoom = false
+              mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+              mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
+              mthis.option.series[1].data = []
+              mthis.charts.setOption(mthis.option)
+              
             }
             
             
@@ -733,6 +739,16 @@
         //   var mthis = this;
         //   mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
         // },
+        'dataBySeries.date':{
+       
+        handler:function(newVal,oldVal){
+          console.log("datedatedate")
+          console.log(newVal)
+          this.dataBySeries.clickNum = new Array(newVal.length).fill(null)
+          console.log(this.dataBySeries)
+        }
+
+      },
         geo_onlyselected_param:function(){
           console.log('=========setGeoOnlyselectedParam  xxxxx==========')
           console.log(this.geo_onlyselected_param)
@@ -786,7 +802,7 @@
                         "eventids":mthis.geoStatics_eventIds
                       }).then(response =>{
                         if(response.body.code === 0){
-                            mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
+                            // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
                             for(let i=0;i<response.body.data.time.length;i++){
                               let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
                               mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
