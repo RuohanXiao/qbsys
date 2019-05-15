@@ -98,7 +98,7 @@
               <Row type="flex" justify="start">
                 <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items" :key="index">
                 <div>
-                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id,$event)" @contextmenu.prevent="rightMenu" @click="togClass">
+                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click="togClass">
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
@@ -1285,6 +1285,12 @@
           contentDiv.style.display = 'none';
           contentDiv.style.borderRight = 'none';
         }
+        this.$store.state.contentSelShowFlag = false
+        let selData = {}
+        selData.id = [];
+        selData.title = ''
+        console.log(selData)
+        this.$store.commit('setcontentSelData',selData)
         // document.getElementById('contents').innerHTML = ''
         // document.getElementById('contentsTitle').innerHTML = ''
         // document.getElementById('contentsTime').innerHTML = ''
@@ -1327,9 +1333,16 @@
           // });
         }
       },
-      showContent(id,e) {
-        clearTimeout(timerClick);
+      showContent(id,title) {
         var mthis = this
+        mthis.$store.state.contentSelShowFlag = true
+        let selData = {}
+        selData.id = [id];
+        selData.title = title
+        console.log(selData)
+        mthis.$store.commit('setcontentSelData',selData)
+        clearTimeout(timerClick);
+        
         mthis.ifInfo = true
         mthis.translateButton = true
         //  mock.get("/getContentInfo",{id:id}).then(function(res) {
@@ -1348,6 +1361,7 @@
           // mthis.dataexpand = response.body.data
           // mthis.singlePerson = (opt[1]>1)?false:true
         })
+        
       },
       /* printer(text,contentid,pointerid){ 
           var l = text.length;

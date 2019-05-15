@@ -1,6 +1,6 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
-  <div :id="timechartdivId">
+  <div :id="timechartdivId" @click="hideDiv()">
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
@@ -27,8 +27,30 @@
       <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
-    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false">选中分析</div>
-    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false">选中分析</div>
+    <div class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" v-show="clcikShowDiv" @mouseleave="clcikShowDiv=false">
+      <table style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;text-align:center;'>
+        <tr  @click="toGeoAna(1)" class="trClass">
+          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
+          <td style="padding-right:5px;">只选中它</td>
+        </tr>
+        <tr @click="delSel" class="trClass">
+          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
+          <td style="padding-right:30px;">删除</td>
+        </tr>
+      </table>
+    </div>
+    <div class="clcikShowDiv" :style="{left:boxdivLeft,top:boxdivTop}" v-show="boxSelShowDiv" @mouseleave="boxSelShowDiv=false">
+      <table style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;text-align:center;'>
+        <tr  @click="toGeoAna(2)" class="trClass">
+          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
+          <td style="padding-right:5px;">只选中它</td>
+        </tr>
+        <tr @click="delSel" class="trClass">
+          <td class="icon iconfont icon-ren" style='padding-left: 3px;'></td>
+          <td style="padding-right:30px;">删除</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
  
@@ -66,10 +88,12 @@
         clcikShowDiv:false,
         // 右键点击柱子出现选中分析div的left值
         clickdivLeft:'',
+        clickdivTop:'',
         // 框选时间右键点击出现选中分析
         boxSelShowDiv:false,
         // 框选时间右键点击出现选中分析div的left值
         boxdivLeft:'',
+        boxdivTop:'',
         //点击单个柱子的选中分析，要传给数据透视的事件IDS
         clickEventIds:{
           type:"analysis",
@@ -82,7 +106,11 @@
         },
         // 框选时控制选中分析的显示与否
         isBrush:[],
-        isDataZoom:false
+        isDataZoom:false,
+        isClick:false,
+        echartsShowStart:0,
+        echartsShowEnd:100,
+        curInt:null
       };
     },
     methods: {
@@ -101,8 +129,32 @@
           height
         })
       },
+      delSel(){
+        alert('删除')
+      },
+      toGeoAna(flag){
+        if(flag==1){
+          this.clcikShowDiv = false
+          console.log("click")
+        }else{
+          this.boxSelShowDiv = false
+          this.charts.dispatchAction({
+            type:'brush',
+            areas:[]
+          })
+          console.log("brush")
+        }
+      },
       hideDiv(){
         
+        if(this.isClick){
+          
+          this.curInt = null;
+          
+          this.option.series[1].data = []
+          this.charts.setOption(this.option)
+        }
+        this.isClick = false;
         this.clcikShowDiv = false;
         this.boxSelShowDiv = false;
       },
@@ -164,11 +216,13 @@
             brushLink: "all", //不同系列间，选中的项可以联动
             // 选中框外样式
             outOfBrush: {
-              colorAlpha: 0.5
+              barBorderRadius: [3, 3, 3, 3],
+              color: "rgba(51,204,153,1)"
             },
             // 选中框内样式
             inBrush: {
-              colorAlpha: 1
+              color:'#33ddff',
+              barBorderRadius:[3,3,3,3]
             },
             brushStyle: {
               borderWidth: 1,
@@ -292,19 +346,16 @@
             barMinHeight: '1px',
             barCategoryGap:'50%',
             itemStyle: {
-              // 柱形图默认颜色
-              normal: {
-                cursor: "default",
-                barBorderRadius: [3, 3, 3, 3],
-                color: "rgba(51,204,153,1)"
+              color:function(param){
+                var key = param.dataIndex;
+                if(key === mthis.curInt){
+                  return '#33ddff'
+                }else{
+                  return "rgba(51,204,153,1)"
+                }
               },
-              // 柱形图悬浮颜色
-              emphasis: {
-                cursor: "pointer",
-                barBorderRadius: [3, 3, 3, 3],
-                color: "rgba(51,204,153,1)"
-                
-              },
+              cursor: "default",
+              barBorderRadius: [3, 3, 3, 3],
               
               
             },
@@ -330,7 +381,8 @@
                         itemStyle:{
                             color:'#33ddff',
                             barBorderRadius:[3,3,3,3]
-                        }
+                        },
+                        data:[]
                     }
           ],
         
@@ -345,6 +397,19 @@
         mthis.option.series[1].data = mthis.dataBySeries.clickNum;
         
         mthis.charts.setOption(mthis.option)
+        this.charts.on('datazoom',function(params){
+          console.log(params)
+          if(params.hasOwnProperty('start')){
+            mthis.echartsShowStart = params.start
+            mthis.echartsShowEnd = params.end
+          }else{
+            mthis.echartsShowStart = params.batch[0].start
+            mthis.echartsShowEnd = params.batch[0].end
+          }
+          
+          
+         
+        })
         this.charts.on('brushSelected', function(params) {
           var wholeChart = document.getElementById(mthis.timechartdivId);
             wholeChart.onclick = () => false;
@@ -368,8 +433,12 @@
              
               mthis.isBrush = []
               mthis.boxSelShowDiv = false
-              
               mthis.isDataZoom = false
+              mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+              mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
+              mthis.option.series[1].data = []
+              mthis.charts.setOption(mthis.option)
+              
             }
           } else {
             if(startAndEnd[0]<0){
@@ -403,12 +472,19 @@
         this.charts.on('click', function(params) {
           mthis.timeTitle = params.name
           let timeArr = []
+          params.event.event.stopPropagation();
           timeArr.push(params.name)
           timeArr.push(params.name)
         //   mthis.$store.commit('setNetTimeCondition', timeArr)
+          mthis.isClick = true;
           mthis.clcikShowDiv = false;
           mthis.boxSelShowDiv = false;
           mthis.isBrush = [];
+          mthis.curInt = params.dataIndex;
+          mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+          mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
+          
+          mthis.charts.setOption(mthis.option)
           mthis.$store.commit('setContentTimeCondition', timeArr)
           mthis.charts.dispatchAction({
             type: 'highlight',
@@ -423,22 +499,21 @@
         // wholeChart.oncontextmenu = () =>false;
         mthis.charts.on('contextmenu',function(params){
             // wholeChart.oncontextmenu = () =>false;
-            let leftWid = params.event.offsetX+20 + "px"
-            var clickTime = params.name
-            
-            mthis.clcikShowDiv = true
-            mthis.clickdivLeft = leftWid
+             mthis.clcikShowDiv = true
+             mthis.clickdivLeft = event.clientX + "px"
+             mthis.clickdivTop = event.clientY + 'px'
             
             
           })
           wholeChart.oncontextmenu = function(){
-               
-                if(mthis.isBrush.length>0){
-                  //  mthis.boxdivLeft = boxSelectLeftWid +20 + "px"
-                   mthis.boxSelShowDiv = true
-                   
-                }
-                mthis.isBrush = []
+               mthis.boxdivLeft = event.clientX + 20 + "px"
+               mthis.boxdivTop = event.clientY + "px"
+              
+               if(mthis.isBrush.length>0){
+                 mthis.boxSelShowDiv = true
+               }
+               mthis.isBrush = [] 
+                
             }
         }else if(flag ==2){
           // flag==2---->监听网络关系中的事件，显示数据
@@ -666,33 +741,22 @@
   #main1 {
     background-color: rgba(0, 0, 0, 0);
   }
-  .clcikShowDiv{
-    position: absolute;
-    top:620px;
+ .clcikShowDiv{
+    position: fixed;
+    background-color:rgba(0, 0, 0, 0.8);
+    border: 1px solid #2a6464;
+    cursor:pointer;
+    /* top:620px;
     width:60px;
     height:20px;
     text-align: center;
     line-height: 20px;
     background-color:rgba(51,204,153,0.7);
-    /* z-index:999999; */
-    border-radius: 10px;
+    z-index:999999;
+    border-radius: 10px;  */
   }
-  .boxSelShowDiv{
-    position: absolute;
-    top:620px;
-    width:60px;
-    height:20px;
-    text-align: center;
-    line-height: 20px;
-    background-color:rgba(51,204,153,0.7);
-    /* background-color:red; */
-    /* z-index:999999; */
-    border-radius: 10px;
-  }
-  .clcikShowDiv:hover{
-    cursor: pointer;
-  }
-  .boxSelShowDiv:hover{
-    cursor: pointer;
+  
+  .trClass:hover{
+    color:rgba(93, 240, 240, 1);
   }
 </style>
