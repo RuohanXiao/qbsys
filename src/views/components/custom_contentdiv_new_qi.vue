@@ -98,7 +98,7 @@
               <Row type="flex" justify="start">
                 <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items" :key="index">
                 <div>
-                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id)" @contextmenu.prevent="rightMenu" @click="togClass">
+                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id,$event)" @contextmenu.prevent="rightMenu" @click="togClass">
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
@@ -1327,7 +1327,7 @@
           // });
         }
       },
-      showContent(id) {
+      showContent(id,e) {
         clearTimeout(timerClick);
         var mthis = this
         mthis.ifInfo = true
