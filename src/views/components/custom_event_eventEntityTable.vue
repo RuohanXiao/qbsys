@@ -6,11 +6,13 @@
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='tableData.event_type'>
             <p class="econtentp w5em">事件类型</p>
-            <p class="econtentp">{{myMapevent.get(tableData.event_type.toLowerCase().replace(/-/, "_")).name}}</p>
+            <!-- <p class="econtentp">{{myMapevent.get(tableData.event_type.toLowerCase().replace(/-/, "_")).name}}</p> -->
+            <p class="econtentp">{{tableData.event_type}}</p>
           </div>
           <div class="econtent" v-if='tableData.event_subtype'>
             <p class="econtentp w5em">子类</p>
-            <p class="econtentp">{{myMap1.get(tableData.event_subtype.toLowerCase().replace(/-/, "_")).name}}</p>
+            <!-- <p class="econtentp">{{myMap1.get(tableData.event_subtype.toLowerCase().replace(/-/, "_")).name}}</p> -->
+            <p class="econtentp">{{tableData.event_subtype}}</p>
           </div>
           <div class="econtent" v-if='tableData.nperps'>
             <p class="econtentp w5em">恐怖分子总数</p>
@@ -56,7 +58,8 @@
         <span>相关事件</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
-            <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p>
+            <!-- <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
+            <p class="econtentp w5em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
@@ -111,16 +114,67 @@
       }
     },
     props: ['tableData', 'entDivH'],
-    created() {
+    created(){
+        let mthis = this
+        mthis.xiangguanEntityItems = new Array()
+        mthis.xiangguanEntitys = new Object()
+        mthis.xiangguanEvent = new Array()
+        mthis.xiangguanDoc = new Array()
+        mthis.spinWaiting = true
+        if (this.tableData.isArray) {
+          if (this.tableData.length > 0) {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+              "NodeIds": mthis.tableData.map(item => {
+                return item.id
+              }),
+              "NodeTypes": mthis.tableData.map(item => {
+                return item.entity_type
+              }),
+              "TypeLabel": "all"
+            }).then(response => {
+              mthis.spinWaiting = false
+            })
+          } else {
+            alert('长度为0')
+            mthis.spinWaiting = false
+          }
+        } else {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+            "NodeIds": new Array(mthis.tableData.id),
+            "NodeTypes": new Array('entity'),
+            "TypeLabel": "all"
+          }).then(response => {
+            // mthis.xiangguanEntityItems = new Array()
+            // mthis.xiangguanEntitys = new Object()
+            // mthis.xiangguanEvent = new Array()
+            // mthis.xiangguanDoc = new Array()
+           if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
+             response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
+              item.type = item.undirected_type
+              return item
+            })
+              mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+              mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+              mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+              mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
+              mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+            }
+            if (response.body.data[0].unknown !== new Object()) {
+            }
+            mthis.spinWaiting = false
+          })
+        }
+    },
+    mounted() {
       var mthis = this
       var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
       var eventType = ob.getElementsByTagName("event2chinese");
       mthis.myMapevent = new Map();
       for (let items of eventType) {
-        // console.log('-----mymapevent------')
-        // console.log(items)
-        // console.log(items.getElementsByTagName("eventType")[0].textContent)
-        // console.log(items.getElementsByTagName("eventCHType")[0].textContent)
         mthis.myMapevent.set(items.getElementsByTagName("eventType")[0].textContent, {
           name: items.getElementsByTagName("eventCHType")[0].textContent
         });
@@ -135,8 +189,6 @@
           })
         }
       }
-      // console.log('==============================mymapevent=============')
-      // console.log(mthis.myMapevent)
       var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
       var entityMainType = ob1.getElementsByTagName("entityMainType");
       mthis.myMap = new Map();
@@ -180,7 +232,9 @@
             let links = new Array();
             if (response.body.code === 0) {
               // let type = response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")
+              debugger
               let img = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).img
+              // let name = subType
               let name = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).name
               for (let i = 0; i < response.body.data.length; i++) {
                 nodes.push({
@@ -241,10 +295,14 @@
             }
           })
         }
+        if (type === 'other') {
+          alert('this is other')
+        }
       }
     },
     watch: {
       tableData: function() {
+        
         // // console.log('===========custom_event_humanEntityTable --------tableData')
         let mthis = this
         mthis.spinWaiting = true
@@ -353,7 +411,7 @@
     margin: 0px 10px;
   }
   .w5em {
-    width: 5em;
+    width: 10em;
     min-width: 5em;
     margin: 0;
   }

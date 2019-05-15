@@ -145,7 +145,8 @@
         <span>相关事件</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
-            <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p>
+            <!-- <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
+            <p class="econtentp w5em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
@@ -200,6 +201,64 @@ import {
       }
     },
     props: ['tableData', 'entDivH'],
+    created(){
+        let mthis = this
+        mthis.xiangguanEntityItems = new Array()
+        mthis.xiangguanEntitys = new Object()
+        mthis.xiangguanEvent = new Array()
+        mthis.xiangguanDoc = new Array()
+        mthis.spinWaiting = true
+        if (this.tableData.isArray) {
+          if (this.tableData.length > 0) {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+              "NodeIds": mthis.tableData.map(item => {
+                return item.id
+              }),
+              "NodeTypes": mthis.tableData.map(item => {
+                return item.entity_type
+              }),
+              "TypeLabel": "all"
+            }).then(response => {
+              mthis.spinWaiting = false
+            })
+          } else {
+            alert('长度为0')
+            mthis.spinWaiting = false
+          }
+        } else {
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+            "NodeIds": new Array(mthis.tableData.id),
+            "NodeTypes": new Array('entity'),
+            "TypeLabel": "all"
+          }).then(response => {
+            // mthis.xiangguanEntityItems = new Array()
+            // mthis.xiangguanEntitys = new Object()
+            // mthis.xiangguanEvent = new Array()
+            // mthis.xiangguanDoc = new Array()
+           if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
+             response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
+              item.type = item.undirected_type
+              return item
+            })
+              mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+              mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+              mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+              mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
+            }
+            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
+              mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+            }
+            if (response.body.data[0].unknown !== new Object()) {
+              // // console.log('------------有未知类型的节点--------------------')
+              // // console.log(response.body.data[0].unknown)
+              // // console.log('-----------------------------------------------')
+            }
+            mthis.spinWaiting = false
+          })
+        }
+    },
     mounted() {
       var mthis = this
       var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
@@ -421,7 +480,7 @@ import {
     margin: 0px 10px;
   }
   .w5em {
-    width: 5em;
+    width: 10em;
     min-width: 5em;
     margin: 0;
   }

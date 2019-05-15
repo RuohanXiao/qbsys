@@ -1,4 +1,27 @@
 export default {
+  //将普通function转为promise方法
+  // .eg1:
+  //   mgr.readFile(filePath,successCallback,errorCallback, isText)
+  // 转换后
+  //   promisify(readFile,[filePath,Promise,isText],mgr)
+  //     .then(....)
+  //     .catch(...)
+  // .eg2:
+  // readFile(successCallback,errorCallback,filePath,isText)
+  // 转换后
+  //     promisify(readFile,[filePath,isText])
+  //     .then(....)
+  //     .catch(...)
+  promisify(method,params,scope){
+    let index = params.indexOf(Promise);
+    if(index<0) {
+        index = 0;
+    }
+    return new Promise((resolve,reject)=>{
+        params.splice(index,1,resolve,reject)
+        method.apply(scope,params)
+    })
+  },
   //判断空对象
   isEmptyObject(obj){
     for(var key in obj){

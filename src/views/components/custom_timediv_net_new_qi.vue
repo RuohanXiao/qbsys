@@ -100,12 +100,9 @@
         selectTime: false,
         // 右键点击柱子出现选中分析
         clcikShowDiv:false,
-        
-        // 框选时间右键点击出现选中分析
-        boxSelShowDiv:false,
+        clickdivTop:'',
         // 右键点击柱子出现选中分析div的left值
         clickdivLeft:'',
-        clickdivTop:'',
         // 框选时间右键点击出现选中分析
         boxSelShowDiv:false,
         // 框选时间右键点击出现选中分析div的left值
@@ -121,30 +118,21 @@
           "type":"",
           "ids":[]
         },
-        toNetPersEventIds:{
-          'type':'',
-          'eventIds':[]
-        },
-        toNetEventIds:{
-          'type':'',
-          'eventIds':[]
-        },
         // 框选时控制选中分析的显示与否
         isBrush:[],
         // 框选时发送请求需要的时间参数
         selTimeArr:[],
         
         isDataZoom:false,
+        isDataZoom:false,
         isClick:false,
         echartsShowStart:0,
         echartsShowEnd:100,
         curInt:null
+        
       };
     },
     methods: {
-      delSel(){
-        alert('删除')
-      },
       query(){
             this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                     "selectedIds":this.selectionIdByType.eventIds,
@@ -155,12 +143,9 @@
                       // for(let i=0;i<response.body.data.eventIds.length;i++){
                       //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
                       // }
-                      this.toNetPersEventIds.eventIds = response.body.data.eventIds
-                      this.toNetPersEventIds.type = "notAnalysis"
-                      this.toNetEventIds.eventIds = response.body.data.eventIds
-                      this.toNetEventIds.type = "notAnalysis"
-                      this.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-                      this.$store.commit('setNetTimeCondition', this.toNetEventIds)
+                      
+                      this.$store.commit('setNetTimeCondition',response.body.data.eventIds)
+                      this.boxSelEventIds.ids = response.body.data.eventIds
                     }else{
                       console.log("服务器error")
                     }
@@ -193,39 +178,33 @@
         }
       },
       hideDiv(){
+        
         if(this.isClick){
           console.log("gahsdvshgvuy")
+          this.$store.commit('setNetTimeCondition',null)
           
-          this.toNetPersEventIds.eventIds = []
-          this.toNetEventIds.eventIds = []
-          this.toNetPersEventIds.type = "cancelBox"
-          this.toNetEventIds.type = "cancelBox"
-          this.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-          this.$store.commit('setNetTimeCondition', this.toNetEventIds)
           this.curInt = null;
+          this.option.series[1].data = []
           this.charts.setOption(this.option)
         }
         this.isClick = false;
         this.clcikShowDiv = false;
         this.boxSelShowDiv = false;
-        
+      },
+      delSel(){
+        alert('删除')
       },
       toGeoAna(flag){
         if(flag ==1){
           
-          
-          this.toNetPersEventIds.type = "analysis"
-          this.toNetEventIds.type = "analysis"
-          this.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-          this.$store.commit('setNetTimeCondition', this.toNetEventIds)
-          this.clcikShowDiv = false;
+          this.$store.commit('setNetOnlyStaticsSelectedIds',this.clickEventIds)
         }else{
-         this.toNetPersEventIds.type = "analysis"
-          this.toNetEventIds.type = "analysis"
-          this.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-          this.$store.commit('setNetTimeCondition', this.toNetEventIds)
           
-          this.boxSelShowDiv = false;
+          this.$store.commit('setNetOnlyStaticsSelectedIds',this.boxSelEventIds)
+          this.charts.dispatchAction({
+            type:'brush',
+            areas:[]
+          })
         }
         
       },
@@ -258,7 +237,7 @@
             right: "4%",
             left: '50px',
             bottom:'20%',
-            containLabel: true  
+            containLabel: true  
           },
           toolbox: {
             id: "toolbox",
@@ -345,8 +324,8 @@
           },
           dataZoom: [{
               type: "slider",
-              start: mthis.echartsShowStart,
-              end: mthis.echartsShowEnd,
+              start: 0,
+              end: 100,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -427,7 +406,6 @@
               },
               cursor: "default",
               barBorderRadius: [3, 3, 3, 3],
-            
             },
             animationDelay: function(idx) {
               return 0;
@@ -446,12 +424,13 @@
                         barMaxWidth: '30%',
                         barWidth:'10px',
                         barMinHeight: '1px',
-                        barCategoryGap : '60%',
+                        barCategoryGap : '60%',
                         data:mthis.dataBySeries.clickNum,
                         itemStyle:{
                             color:'#33ddff',
                             barBorderRadius:[3,3,3,3]
-                        }
+                        },
+                        data:[]
                     }
           ],
         
@@ -466,28 +445,24 @@
         mthis.option.series[1].data = mthis.dataBySeries.clickNum;
          
         mthis.charts.setOption(mthis.option)
-        
         this.charts.on('datazoom',function(params){
-          console.log(params)
-          console.log( typeof params.start)
-          let haveV = typeof params.start
-          if(haveV == Number){
+          if(params.hasOwnProperty('start')){
             mthis.echartsShowStart = params.start
             mthis.echartsShowEnd = params.end
           }else{
             mthis.echartsShowStart = params.batch[0].start
             mthis.echartsShowEnd = params.batch[0].end
           }
-          
          
         })
+        
         this.charts.on('brushSelected', function(params) {
           
           var wholeChart = document.getElementById(mthis.timechartdivId);
             wholeChart.onclick = () => false;
           if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
-             
+             mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
              mthis.isDataZoom = true
             
           }
@@ -496,17 +471,18 @@
             if(mthis.isDataZoom){
               // console.log("lalalla")
               mthis.timeTitle = '时间轴'
-             
+              
+              mthis.$store.commit('setNetTimeCondition',null)
+              console.log("nullnullnullnull")
+              // mthis.boxSelEventIds.ids = []
               mthis.isBrush = []
-              mthis.toNetPersEventIds.eventIds = []
-              mthis.toNetEventIds.eventIds = []
-              mthis.toNetPersEventIds.type = "cancelBox"
-              mthis.toNetEventIds.type = "cancelBox"
-              mthis.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-              mthis.$store.commit('setNetTimeCondition', this.toNetEventIds)
               mthis.boxSelShowDiv = false
               mthis.isDataZoom = false
-              
+              mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+              mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
+              mthis.option.series[1].data = []
+              mthis.charts.setOption(mthis.option)
+              // console.log(mthis.boxSelEventIds)
             }
             
             
@@ -519,13 +495,14 @@
             }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
-            mthis.isBrush = timeArr
+           
             mthis.selTimeArr = []
             mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
             mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
             if(timeArr && mthis.selTimeArr[0] && mthis.selTimeArr[1]){
+              mthis.isBrush = timeArr
                     mthis.throttle(mthis.query,1000,1000)()
                 //     mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                 //     "selectedIds":mthis.selectionIdByType.eventIds,
@@ -545,7 +522,6 @@
                 //     }
                     
                 // })
-
                 mthis.selectTime = true
             }
             
@@ -564,29 +540,32 @@
         this.charts.on('click', function(params) {
         
           mthis.timeTitle = params.name
-          
+          params.event.event.stopPropagation();
           let timeArr = []
           timeArr.push(params.name)
           timeArr.push(params.name)
         //   mthis.$store.commit('setNetTimeCondition', timeArr)
           mthis.clcikShowDiv = false;
           mthis.boxSelShowDiv = false;
+          mthis.isClick = true;
           mthis.isBrush = [];
           mthis.curInt = params.dataIndex;
           mthis.option.dataZoom[0].start = mthis.echartsShowStart;
           mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
+          mthis.charts.setOption(mthis.option)
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                     "selectedIds":mthis.selectionIdByType.eventIds,
                     "startTime":params.name,
                     "endTime":params.name
                 }).then(response =>{
                   if(response.body.code ==0){
-                    mthis.toNetPersEventIds.eventIds = response.body.data.eventIds
-                    mthis.toNetEventIds.eventIds = response.body.data.eventIds
-                    mthis.toNetPersEventIds.type = "notAnalysis"
-                    mthis.toNetEventIds.type = "notAnalysis"
-                    mthis.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
-                    mthis.$store.commit('setNetTimeCondition', this.toNetEventIds)
+                    
+                      mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
+                      mthis.clickEventIds.ids = response.body.data.eventIds
+                      // for(let i=0;i<response.body.data.eventIds.length;i++){
+                      //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                      // }
+                      
                   }else{
                     console.log("服务器error")
                   }
@@ -603,12 +582,15 @@
         myChart.oncontextmenu = () => false;
         // wholeChart.oncontextmenu = () =>false;
         mthis.charts.on('contextmenu',function(params){
-            mthis.clcikShowDiv = true
-            mthis.clickdivLeft = event.clientX + "px"
-            mthis.clickdivTop = event.clientY + 'px'
+            // wholeChart.oncontextmenu = () =>false;
+            
             var clickTime = params.name
             
             
+            
+            mthis.clickdivLeft = event.clientX + 'px'
+            mthis.clickdivTop = event.clientY + 'px'
+            mthis.clcikShowDiv = true
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                 "selectedIds":mthis.selectionIdByType.eventIds,
                 "startTime":clickTime,
@@ -616,10 +598,11 @@
                  
             }).then(response =>{
                 if(response.body.code == 0){
-                  
-                  mthis.toNetPersEventIds.eventIds = response.body.data.eventIds
-                  mthis.toNetEventIds.eventIds = response.body.data.eventIds
-                  
+                  // for(let i=0;i<response.body.data.eventIds.length;i++){
+                  //   mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+                  // }
+                  // mthis.$store.commit('setNetTimeCondition', response.body.data.eventIds)
+                  mthis.clickEventIds.ids = response.body.data.eventIds
                 }else{
                   console.log("服务器error")
                 }
@@ -630,10 +613,10 @@
           wholeChart.oncontextmenu = function(){
             mthis.boxdivLeft = event.clientX + 20 + "px"
             mthis.boxdivTop = event.clientY + "px"
-            if(mthis.isBrush.length>0){
-                mthis.boxSelShowDiv = true
-            }
-            mthis.isBrush = []
+               if(mthis.isBrush.length>0){
+                 mthis.boxSelShowDiv = true
+               }
+               mthis.isBrush = []
                    
                    
                 
@@ -641,24 +624,24 @@
             }
         }else if(flag ==2){
           // flag==2---->监听网络关系中的事件，显示数据
+          
           mthis.timeTitle = '时间轴';
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
-          mthis.option.xAxis.boundaryGap = true;
-          // mthis.option.series[0].data = mthis.dataBySeries.num;
+         
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
-          mthis.option.series[0].itemStyle.normal.color = "rgba(51,204,153,1)";
+          
           mthis.charts.setOption(mthis.option)
           
         }else if(flag==3){
           mthis.resize();
           // flag==3--->数据透视点击事件，层叠显示
           
-          mthis.option.xAxis.data = mthis.dataBySeries.date;
-          mthis.option.series[0].data = mthis.dataBySeries.num;
+          // mthis.option.xAxis.data = mthis.dataBySeries.date;
+          // mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
-          mthis.option.series[0].itemStyle.normal.color = "rgba(51,204,153,0.5)";
+          // mthis.option.series[0].itemStyle.normal.color = "rgba(51,204,153,0.5)";
           mthis.charts.setOption(mthis.option)
         }else{
           // flag ==4--->网络关系事件节点为空，清空echarts
@@ -673,7 +656,6 @@
           mthis.charts.setOption(mthis.option)
           
         }
-
       },
         
       onchangHeightCount() {
@@ -728,10 +710,24 @@
       // selectTime: function() {
       //   netSelectTime
       // },
+      'dataBySeries.date':{
+       
+        handler:function(newVal,oldVal){
+          console.log("datedatedate")
+          console.log(newVal)
+          this.dataBySeries.clickNum = new Array(newVal.length).fill(null)
+          console.log(this.dataBySeries)
+        }
+
+      },
+      
       netOnlyStaticsSelectedIds:function(){
         var mthis = this
+        console.log("zhikantazhikanta")
+        console.log(this.netOnlyStaticsSelectedIds)
+        
         if(this.netOnlyStaticsSelectedIds.ids.length>0){
-          mthis.$store.commit('setNetStaticsSelectedIds',[])
+          // mthis.$store.commit('setNetStaticsSelectedIds',[])
           
           
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
@@ -743,6 +739,7 @@
             if(response.body.code === 0){
               mthis.dataBySeries.date = response.body.data.time;
               mthis.dataBySeries.num = response.body.data.count;
+              mthis.dataBySeries.clickNum = [];
               mthis.loadEcharts(2)
               
             }else{
@@ -763,7 +760,7 @@
                   "eventids":mthis.netStaticsSelectedIds
               }).then(response =>{
                   if(response.body.code === 0){
-                      mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
+                      // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
                       for(let i=0;i<response.body.data.time.length;i++){
                         let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
                         mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
@@ -780,11 +777,15 @@
             mthis.dataBySeries.clickNum = []
           }
       },
+
       selectionIdByType:function(){
         var mthis = this
-        
+        console.log("#$#%$^%&&&&&&&&&&&&&&&&&&&")
+        console.log(this.selectionIdByType)
         if(this.selectionIdByType.eventIds.length>0){
-          mthis.$store.commit('setNetStaticsSelectedIds',[])
+          
+          console.log("lalalall")
+          // mthis.$store.commit('setNetStaticsSelectedIds',[])
           
           
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
@@ -796,6 +797,7 @@
             if(response.body.code === 0){
               mthis.dataBySeries.date = response.body.data.time;
               mthis.dataBySeries.num = response.body.data.count;
+              mthis.dataBySeries.clickNum = [];
               mthis.loadEcharts(2)
               
             }else{
@@ -807,7 +809,8 @@
            
         }
         if(this.selectionIdByType.eventIds.length==0){
-          mthis.$store.commit('setNetStaticsSelectedIds',[])
+          console.log("000000000000000")
+          // mthis.$store.commit('setNetStaticsSelectedIds',[])
           mthis.loadEcharts(4)
         }
         
@@ -907,5 +910,4 @@
   .trClass:hover{
     color:rgba(93, 240, 240, 1);
   }
-  
 </style>

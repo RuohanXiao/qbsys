@@ -268,6 +268,10 @@ var store = new Vuex.Store({
     // 监听时间轴是否被选中
     contentTimeCondition: [],
     netTimeCondition: [],
+    // netTimeCondition:{
+    //   'eventIds':[],
+    //   'type':''
+    // },
     geoTimeCondition: {
       'eventIds':[],
       'type':''
@@ -339,7 +343,7 @@ var store = new Vuex.Store({
     geoWorkSetData_area:[],
     netStaticsSelectedIds:[],  //net模块中点击右侧统计保存ids
     netOnlyStaticsSelectedIds:{
-      'title':'',
+      'type':'',
       'ids':[]
     },
     // 三模块联动监听参数

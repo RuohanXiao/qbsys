@@ -4,8 +4,8 @@
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
-        <Col span="3"/>
-        <Col span="18"  class="bottom"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
+        <!-- <Col span="3"/> -->
+        <Col span="18"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
         <Col span="1"  class="bottom">
         <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
@@ -27,6 +27,8 @@
       <div :id="main1Id" :style="{width:pwidth}"></div>
     </div>
     </Col>
+    <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false">选中分析</div>
+    <div v-show="boxSelShowDiv" class="boxSelShowDiv" :style="{left:boxdivLeft}" @mouseleave="boxSelShowDiv=false">选中分析</div>
   </div>
 </template>
  
@@ -37,7 +39,7 @@
     name: "",
     data() {
       return {
-        timeTitle: '',
+        timeTitle: '请选择节点',
         timechartdivId:'timechartdiv_' + this.activeId,
         arrowDownId:'arrowDown_'+ this.activeId,
         timechartctrlId:'timechartctrl_'+ this.activeId,
@@ -79,7 +81,8 @@
           eventIds:[]
         },
         // 框选时控制选中分析的显示与否
-        isBrush:[]
+        isBrush:[],
+        isDataZoom:false
       };
     },
     methods: {
@@ -340,7 +343,7 @@
         mthis.option.xAxis.data = mthis.dataBySeries.date;
         mthis.option.series[0].data = mthis.dataBySeries.num;
         mthis.option.series[1].data = mthis.dataBySeries.clickNum;
-        let myOption 
+        
         mthis.charts.setOption(mthis.option)
         this.charts.on('brushSelected', function(params) {
           var wholeChart = document.getElementById(mthis.timechartdivId);
@@ -348,11 +351,26 @@
           if (params.batch[0].areas[0] !== undefined) {
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
              mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
-            
+             mthis.isDataZoom = true
           }
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
             // mthis.timeTitle = '请选择节点'
+            if(mthis.isDataZoom){
+              
+              mthis.timeTitle = '时间轴'
+              let cancelTime = []
+              cancelTime.push(mthis.dataBySeries.date[0])
+              cancelTime.push(mthis.dataBySeries.date[mthis.dataBySeries.date.length -1])
+              console.log(mthis.dataBySeries.date)
+              console.log(cancelTime)
+              mthis.$store.commit('setContentTimeCondition',cancelTime)
+             
+              mthis.isBrush = []
+              mthis.boxSelShowDiv = false
+              
+              mthis.isDataZoom = false
+            }
           } else {
             if(startAndEnd[0]<0){
               startAndEnd[0] = 0
@@ -363,28 +381,13 @@
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
             mthis.isBrush = timeArr
-            let selTimeArr = []
-            selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
-            selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
+            
+            // selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
+            // selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            if(timeArr && selTimeArr[0] && selTimeArr[1]){
-                    mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                    "selectedIds":mthis.selectionIdByType.eventIds,
-                    "startTime":selTimeArr[0],
-                    "endTime":selTimeArr[1]
-                }).then(response =>{
-                    if(response.body.code == 0){
-                      for(let i=0;i<response.body.data.eventIds.length;i++){
-                        mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
-                      }
-                      
-                      mthis.$store.commit('setContentTimeCondition',response.body.data.eventIds)
-                    }
-                    
-                })
-                mthis.selectTime = true
-            }
+            mthis.$store.commit('setContentTimeCondition', timeArr)
+            mthis.selectTime = true
           }
             
           
@@ -406,15 +409,7 @@
           mthis.clcikShowDiv = false;
           mthis.boxSelShowDiv = false;
           mthis.isBrush = [];
-          mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                    "selectedIds":mthis.selectionIdByType.eventIds,
-                    "startTime":params.name,
-                    "endTime":params.name
-                }).then(response =>{
-                  if(response.body.code ==0){
-                      mthis.$store.commit('setContentTimeCondition', response.body.data.eventIds)
-                  }
-                })
+          mthis.$store.commit('setContentTimeCondition', timeArr)
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -433,20 +428,7 @@
             
             mthis.clcikShowDiv = true
             mthis.clickdivLeft = leftWid
-            mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                "selectedIds":mthis.selectionIdByType.eventIds,
-                "startTime":clickTime,
-                "endTime":clickTime
-                 
-            }).then(response =>{
-                if(response.body.code == 0){
-                  for(let i=0;i<response.body.data.eventIds.length;i++){
-                    mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
-                  }
-                  
-                }
-                
-            })
+            
             
           })
           wholeChart.oncontextmenu = function(){
@@ -534,9 +516,7 @@
           if(response.body.code === 0) {
             mthis.dataBySeries.num = response.body.data.count
             mthis.dataBySeries.date = response.body.data.time
-            mthis.option.series[0].data = response.body.data.count
-            mthis.option.xAxis.data = response.body.data.time
-            mthis.charts.setOption(mthis.option)
+            mthis.loadEcharts(2)
           }
         })
       },
@@ -685,5 +665,34 @@
   }
   #main1 {
     background-color: rgba(0, 0, 0, 0);
+  }
+  .clcikShowDiv{
+    position: absolute;
+    top:620px;
+    width:60px;
+    height:20px;
+    text-align: center;
+    line-height: 20px;
+    background-color:rgba(51,204,153,0.7);
+    /* z-index:999999; */
+    border-radius: 10px;
+  }
+  .boxSelShowDiv{
+    position: absolute;
+    top:620px;
+    width:60px;
+    height:20px;
+    text-align: center;
+    line-height: 20px;
+    background-color:rgba(51,204,153,0.7);
+    /* background-color:red; */
+    /* z-index:999999; */
+    border-radius: 10px;
+  }
+  .clcikShowDiv:hover{
+    cursor: pointer;
+  }
+  .boxSelShowDiv:hover{
+    cursor: pointer;
   }
 </style>
