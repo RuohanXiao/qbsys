@@ -248,11 +248,65 @@
           "flag":true
         })
       },
-      importData(id) {
+      importData(datas) {
+        var mthis = this;
+        debugger
         this.$emit('workSpaceModal', true)
-        // // console.log('-------id--------')
-        // // console.log(id)
-        this.$store.commit('setWorkSpaceAddData', id)
+        var tmss = mthis.$store.state.tmss;
+        if(tmss === 'net'){
+          /* var noAreaIds = [];
+          for(let i = 0; i < datas.length; i++){
+            var data = datas[i];
+            var type = data.type;
+            if(type === 'entity' || type === 'event' || type === 'document'){
+              let ids = data.ids;
+              for(let j = 0; j < ids.length; j++){
+                let id = ids[j];
+                noAreaIds.push(id);
+              }
+            }
+          } */
+          var dataobj = {};
+          for(let i = 0; i < datas.length; i++){
+            var data = datas[i];
+            var type = data.type;
+            if(type === 'entity' || type === 'event' || type === 'document'){
+              let ids = data.ids;
+              dataobj[type] = ids;
+            }
+            
+          }
+          this.$store.commit('setWorkSpaceAddData', dataobj)
+        } else if(tmss === 'geo'){
+          var noAreaIds = [];
+          var areaIds = [];
+          for(let i = 0; i < datas.length; i++){
+            var data = datas[i];
+            var type = data.type;
+            if(type === 'entity' || type === 'event'){
+              let ids = data.ids;
+              for(let j = 0; j < ids.length; j++){
+                let id = ids[j];
+                noAreaIds.push(id);
+              }
+            }
+            if(type === 'area'){
+              let ids = data.ids;
+              for(let j = 0; j < ids.length; j++){
+                let id = ids[j];
+                areaIds.push(id);
+              }
+            }
+          }
+          if(areaIds.length > 0){
+            mthis.$store.commit('setGeoWorkSetData_area',areaIds);
+          }
+          if(noAreaIds.length > 0){
+            mthis.$store.commit('setGeoWorkSetData_noArea',noAreaIds);
+          }
+          
+        }
+        
       },
       addToChart(id) {
         var mthis = this

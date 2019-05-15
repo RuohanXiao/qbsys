@@ -666,6 +666,7 @@
       },
       openCreateGroupModal() {
         var mthis = this;
+        debugger
         this.worksetInfo = {
           title: "",
           des: "",
@@ -686,12 +687,7 @@
         ];
         // // console.log('=====setSelectionIdByType==========')
         // // console.log(mthis.selectionIdByType)
-        if (!(
-            ((mthis.selectionIdByType.nodeIds.length ==
-                mthis.selectionIdByType.eventIds.length) ==
-              mthis.selectionIdByType.contentIds.length) ==
-            0
-          )) {
+        if (mthis.selectionIdByType.nodeIds.length + mthis.selectionIdByType.eventIds.length + mthis.selectionIdByType.contentIds.length > 0) {
           if (mthis.selectionIdByType.nodeIds.length > 0) {
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/entity-info/", {
@@ -3280,14 +3276,13 @@
       selectionId: function() {
         // this.netchart.unlockNode(this.selectionId);
       },
-      workSpaceAddData: function(ids) {
+      workSpaceAddData: function(obj) {  //留扣，导入集合修改
         var mthis = this;
+        debugger
         let arr = [];
         let nodes = [];
         let res = [];
         mthis.spinShow = true;
-        // // console.log('ids')
-        // // console.log(ids)
         mthis.$http
           .post(mthis.$store.state.ipConfig.api_url + "/entity-info/", {
             nodeIds: ids
@@ -3300,10 +3295,6 @@
                 item.imageCropping = true;
                 return item.id;
               });
-              // // console.log('=================')
-              // // console.log(nodes)
-              // // console.log(arr)
-              // // console.log('=================')
               mthis.spinShow = false;
               mthis.zIndex = 0;
               mthis.netchart.addData({
