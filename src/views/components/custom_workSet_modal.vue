@@ -40,12 +40,11 @@
               <div class="type-content">
                 <Row type="flex" justify="start">
                   <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" v-for='itemObj in item.data'>
-                  <!-- <Avatar class="circle-img touxiangImg" icon="icon-delete-point" :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" /> -->
-                  <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
-                  <p class='nametext'>{{itemObj.name}}</p>
-                  <div class='delItemDiv' @click="deletItem(itemObj.id,index)">
-                    <Icon type="icon iconfont icon-shanchu color515" :style="{padding:'20px 0px'}" size="40"></Icon>
-                  </div>
+                    <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
+                    <p class='nametext'>{{itemObj.name}}</p>
+                    <div class='delItemDiv' @click="deletItem(itemObj.id,index)">
+                      <Icon type="icon iconfont icon-shanchu color515" :style="{padding:'20px 0px'}" size="40"></Icon>
+                    </div>
                   </Col>
                 </Row>
               </div>
@@ -113,6 +112,7 @@
           entity: '实体',
           document: '文本',
           event: '事件',
+          area:'区域'
         },
         // worksetData: [{
         //     type: 'entity',
@@ -127,16 +127,6 @@
         //     data: []
         //   }
         // ],
-        itemsObj: [{
-          name: '实体节点',
-          num: 6
-        }, {
-          name: '事件节点',
-          num: 6
-        }, {
-          name: '文档节点',
-          num: 6
-        }]
       }
     },
     mounted() {
@@ -243,8 +233,53 @@
       },
       createSet() {
         var mthis = this
-        let timestamp = new Date().getTime()
-        let human = mthis.worksetData[0].data.filter(item => {
+        debugger
+        let timestamp = new Date().getTime();
+        var setData = [];
+        var entityIds = [];
+        var eventIds = [];
+        var documentIds = [];
+        var areaIds = [];
+        for(let i = 0; i < mthis.worksetData.length; i++){
+          var datas = mthis.worksetData[i];
+          var type = datas.type;
+          var data = datas.data;
+          var ids = [];
+          if(data.length === 0){
+            continue;
+          }
+          for(let j = 0; j < data.length; j++){
+            var id = data[j].id;
+            ids.push(id);
+          }
+          var param = {
+            "type":type,
+            "ids":ids
+          };
+          setData.push(param);
+          /* if(type === 'entity'){
+            for(let j = 0; j < ids.length; j++){
+              var id = ids[j].id;
+              entityIds.push(id);
+            }
+          } else if(type === 'event'){
+            for(let j = 0; j < ids.length; j++){
+              var id = ids[j].id;
+              eventIds.push(id);
+            }
+          } else if(type === 'document'){
+            for(let j = 0; j < ids.length; j++){
+              var id = ids[j].id;
+              documentIds.push(id);
+            }
+          } else if(type === 'area'){
+            for(let j = 0; j < ids.length; j++){
+              var id = ids[j].id;
+              areaIds.push(id);
+            }
+          } */
+        }
+        /* let human = mthis.worksetData[0].data.filter(item => {
           return item.type === 'human'
         }).map(it => {
           return it.id
@@ -263,8 +298,8 @@
           return item.type === 'weapon'
         }).map(it => {
           return it.id
-        })
-        let events = mthis.worksetData[2].data.map(it => {
+        }) */
+        /* let events = mthis.worksetData[2].data.map(it => {
           return it.id
         })
         let documents = mthis.worksetData[1].data.map(it => {
@@ -273,13 +308,23 @@
         let setIds = mthis.worksetData[0].data.map(item => {
           return item.id
         })
+        /* debugger
+        for(let i = 0; i < mthis.worksetData.length; i++){
+          var datas = mthis.worksetData[i];
+          var ids = datas.data;
+          for(let j = 0; j < ids.length; j++){
+            var id = ids[j].id;
+            setids.push(id);
+          }
+        }
+        debugger */
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/index-set-data/', {
           "timestamp": timestamp,
           "data": {
             "Id": "",
             "name": (mthis.workspaceTitle==='')?('默认标题'+timestamp):mthis.workspaceTitle,
             "des": (mthis.workspaceDes==='')?('暂无描述'):mthis.workspaceDes,
-            "nodeIds": setIds,
+            "nodeIds": setData,//setIds,
             "modify_time": util.getNowFormatDate(),
             "modify_user": "XiaoRuohan",
             "create_time": util.getNowFormatDate(),
@@ -335,8 +380,6 @@
         } else {
           alert('选择节点类型异常，节点ID是' + item.id)
         }
-        // // console.log('addDataToTemp')
-        // // console.log(mthis.worksetData)
       },
       setOption(a) {
         var mthis = this;

@@ -533,6 +533,7 @@
       },
       contentTranslate() {
         var mthis = this;
+        debugger
         this.translateButton = true
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {

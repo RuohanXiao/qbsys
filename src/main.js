@@ -339,6 +339,8 @@ var store = new Vuex.Store({
     contentStatisticsResult:{},
     StaticsIds:[],
     GeoStaticsHLItemIds:[],
+    geoWorkSetData_noArea:[],
+    geoWorkSetData_area:[],
     netStaticsSelectedIds:[],  //net模块中点击右侧统计保存ids
     netOnlyStaticsSelectedIds:{
       'type':'',
@@ -419,11 +421,19 @@ var store = new Vuex.Store({
     },
     //修改工作集调用modal
     setWorkSpaceModal(state,val){
-      state.workSpaceAddData = val
+      let data = Object.assign({},state.setWorkSpaceModal,val);
+      state.workSpaceAddData = data
+    },
+    setGeoWorkSetData_noArea(state,val){
+      state.geoWorkSetData_noArea = val;
+    },
+    setGeoWorkSetData_area(state,val){
+      state.geoWorkSetData_area = val;
     },
     // 从工作及导入到网络关系画布
     setWorkSpaceAddData(state,val){
-      state.workSpaceAddData = val
+      let data = Object.assign({},state.setWorkSpaceAddData,val);
+      state.workSpaceAddData = data
     },
     setClickSelectedGeoIds(state,val){
       state.clickSelectedGeoIds = val

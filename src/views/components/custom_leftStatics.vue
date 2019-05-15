@@ -130,7 +130,7 @@ trClick{
             <panel v-for="(staticsPanel,index) in staticsData.subStatisticsAttr" :name="staticsPanel.secondLevelId">
                 <span :id="staticsPanel.secondLevelId + '/countSpan'">{{staticsPanel.secondLevelName + '（' + staticsPanel.typecount + '）'}}</span>
                 <table slot="content" :id="staticsPanel.secondLevelId + '/entityattr'">
-                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
+                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist,rightMenuConf)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
                         <td class="NameTd">
                             <p>{{specificStatics.thirdLevelName}}</p>
                         </td>
@@ -252,9 +252,10 @@ export default {
             }
             mthis.$emit('rightCilckArgu', data)
         },
-        rightClickShow(eve,ids){
+        rightClickShow(eve,ids,conf){
             var mthis = this;
-            if(mthis.rightMenuConf.length === 0){
+            var config = conf;
+            if(config.length === 0){
                 return;
             }
             var leftStatics = document.getElementById('leftStatics');
@@ -278,7 +279,7 @@ export default {
             table.id = 'rightClickMenuTable';
             table.style = 'font-size: 12px;color: #178d8d;margin: 3px 0px;';
             ovdiv.appendChild(table);
-            mthis.rightMenuConf.forEach(function(item){
+            config.forEach(function(item){
                 var tr = document.createElement('tr');
                 tr.id = item.id;
                 tr.addEventListener('click',function(){

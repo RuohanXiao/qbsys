@@ -253,7 +253,7 @@
           }
         } */
         var params = {
-          'title':'',
+          'type':'',
           'ids':oids
         }
         if(buttonId === 'onlylookit'){
