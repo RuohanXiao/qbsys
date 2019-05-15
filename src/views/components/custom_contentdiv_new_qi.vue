@@ -1404,22 +1404,18 @@
       // // console.log($('#jiazaiDiv').offset())
       // window.addEventListener('scroll', this.handleScroll)
       document.onkeydown=function(event){ 
-			
-            var e = event || window.event || arguments.callee.caller.arguments[0]; 
-            
-            
-            if(e && e.keyCode == 46){
-              mthis.deleteNode()
-            }
-            if(e.keyCode == 65 && e.ctrlKey){
-              
-              mthis.selectAll()
-              e.preventDefault();
-              e.stopPropagation();
-              // e.cancelBubble();
-              // e.returnValue = false;
-            }
-         };  
+        if(mthis.$store.state.tmss === 'content') {
+          var e = event || window.event || arguments.callee.caller.arguments[0]; 
+          if(e && e.keyCode == 46){
+            mthis.deleteNode()
+          }
+          if(e.keyCode == 65 && e.ctrlKey){
+            mthis.selectAll()
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }
+      };  
     }
   };
 </script>

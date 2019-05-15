@@ -358,6 +358,10 @@
           {
             type: 'event',
             data: []
+          },
+          {
+            type: 'area',
+            data: []
           }
         ]
       },
