@@ -51,9 +51,9 @@ export default {
     name:'mapOperaButtons',
     data() {
       return {
-        buttonParamArr:[//AT(AllTime)：永远点亮； HD(HaveData):有数据时点亮； HSD(HavaSelectedData):当有数据被选中时点亮； HDD(HaveDeleteData):当有被删除的数据时被点亮； 
+        buttonParamArr:[//AT(AllTime)：永远点亮； HD(HaveData):有(组织机构和事件)数据时点亮； HSD(HavaSelectedData):当有数据被选中时点亮； HDD(HaveDeleteData):当有被删除的数据时被点亮； 
                         // HL(HaveLocation):当有高亮的行政区时被点亮； NT(NoTime):永远不被点亮  HCD(HaveClearData):当有数据（包括地图上高亮的面数据）时被点亮
-                        //HSE(HaveSelectedEvent):当有事件数据被选择时点亮
+                        //HSE(HaveSelectedEvent):当有事件数据被选择时点亮；HASD(HaveAnySelectedData):当有任何数据时（组织机构、事件以及区域）点亮
           /* {
             'id':'location_AT',
             'name':'定位',
@@ -97,7 +97,7 @@ export default {
             'isOpen':false
           },
           {
-            'id':'createWorkSpace_HSD',
+            'id':'createWorkSpace_HASD',
             'name':'创建集合',
             'imgClass':'icon-add',
             'isOpen':false

@@ -415,7 +415,7 @@ export default {
                 mthis.explore();
             } else if(mapOperationId == 'RectangleExplore_AT' || mapOperationId == 'CircleExplore_AT' || mapOperationId == 'customExplore_AT'){
                 mthis.drawExplore(mapOperation)
-            } else if(mapOperationId == 'createWorkSpace_HSD'){
+            } else if(mapOperationId == 'createWorkSpace_HASD'){
                 mthis.openWorkset();
             }
         },
@@ -956,18 +956,33 @@ export default {
         },
         rightClickEvent(){
             var mthis = this;
-            var feature = mthis.oparAreaFeature;
-            var geometry = feature.getGeometry();
-            var geometryArr = new GeoJSON().writeGeometry(geometry)
-            mthis.orgsSpatialQuery([geometryArr],'Event');
+            debugger
+            var areaIds= mthis.AreaIds;
+            var geometryList = [];
+            for(let i = 0; i < areaIds.length; i++){
+                var id = areaIds[i];
+                var feature = mthis.getLayerById("HLAreaLayer").getSource().getFeatureById(id)
+                var geometry = feature.getGeometry();
+                var geometryStr = new GeoJSON().writeGeometry(geometry)
+                geometryList.push(geometryStr);
+                
+            }
+            mthis.orgsSpatialQuery(geometryList,'Event');
             mthis.deleteRightMenu();
         },
         rightClickOrg(){
             var mthis = this;
-            var feature = mthis.oparAreaFeature;
-            var geometry = feature.getGeometry();
-            var geometryArr = new GeoJSON().writeGeometry(geometry)
-            mthis.orgsSpatialQuery([geometryArr],'Org');
+            var areaIds= mthis.AreaIds;
+            var geometryList = [];
+            for(let i = 0; i < areaIds.length; i++){
+                var id = areaIds[i];
+                var feature = mthis.getLayerById("HLAreaLayer").getSource().getFeatureById(id)
+                var geometry = feature.getGeometry();
+                var geometryStr = new GeoJSON().writeGeometry(geometry)
+                geometryList.push(geometryStr);
+                
+            }
+            mthis.orgsSpatialQuery(geometryList,'Org');
             mthis.deleteRightMenu();
         },
         rightClickLoc(){
@@ -980,7 +995,7 @@ export default {
         },
         rightClickDM(){
             var mthis = this;
-            var feature = mthis.oparAreaFeature;
+            /* var feature = mthis.oparAreaFeature;
             mthis.deleteRightMenu();
             var source = mthis.getLayerById('HLAreaLayer').getSource();
             var fid = feature.getId();
@@ -999,7 +1014,20 @@ export default {
             var overlay = map.getOverlayById(overlayId);
             if(overlay){
                 map.removeOverlay(overlay)
+            } */
+            var areaIds= mthis.AreaIds;
+            var geometryList = [];
+            for(let i = 0; i < areaIds.length; i++){
+                var id = areaIds[i];
+                var source = mthis.getLayerById('HLAreaLayer').getSource();
+                var feature = source.getFeatureById(id)
+                /* var geometry = feature.getGeometry();
+                var geometryStr = new GeoJSON().writeGeometry(geometry)
+                geometryList.push(geometryStr); */
+                source.removeFeature(feature);
             }
+            /* mthis.orgsSpatialQuery(geometryList,'Org'); */
+            mthis.deleteRightMenu();
         },
         deleteRightMenu(){
             var mthis = this;
@@ -1012,7 +1040,7 @@ export default {
                     }
                 },100)
         },
-        setRightClickMenu_Area(feature,coordinate){
+        setRightClickMenu_Area(coordinate){
             var mthis = this;
             var overlayId = 'rightClickMenu_Area';
             var ovdiv = document.createElement('div');
@@ -1029,7 +1057,7 @@ export default {
                 {'Id':301,'parentId':3,'name':'aa','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
                 {'Id':302,'parentId':3,'name':'bb','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
             ]
-            mthis.oparAreaFeature = feature;
+            //mthis.oparAreaFeature = feature;
             var routeMap = new rightMenu(mthis,ovdiv,config);
             //ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer';
             /*ovdiv.class = 'rightMenuDiv';
@@ -1112,23 +1140,32 @@ export default {
         },
         rightClickFilterFun(layer){
             var mthis = this;
-            if(layer.get('id') === "HLAreaLayer"){
+            /* if(layer.get('id') === "HLAreaLayer"){
                 return true;
             }
-            return false;
+            return false; */
+            return true;
         },
         rightClickFun(layer,coordinate){
             var mthis = this;
+            debugger
             var map = mthis.routeMap.map;
             var pixel = map.getPixelFromCoordinate(coordinate);
-            map.forEachFeatureAtPixel(pixel,function(feature,layer){
+            var overlayId = 'rightClickMenu_Area';
+            var overlay = map.getOverlayById(overlayId);
+            if(overlay){
+                map.removeOverlay(overlay)
+            }
+            mthis.setRightClickMenu_Area(coordinate)
+            /* map.forEachLayerAtPixel(pixel,function(feature,layer){
+                debugger
                 var overlayId = 'rightClickMenu_Area';
                 var overlay = map.getOverlayById(overlayId);
                 if(overlay){
                     map.removeOverlay(overlay)
                 }
                 mthis.setRightClickMenu_Area(feature,coordinate)
-            },{'layerFilter':mthis.rightClickFilterFun})
+            },{'layerFilter':mthis.rightClickFilterFun}) */
         },
         addlocationLayer(){
             var mthis = this;
@@ -2547,6 +2584,7 @@ export default {
         },
         getWfsData(featureTypes,filter) {   //mthis.getWfsData(featureTypes,filter);
             var mthis = this;
+            debugger
             /* var featureTypes;
             var filter;
             if(type === 'province'){
@@ -3329,6 +3367,17 @@ export default {
                         'isOpen':true
                     })
                 }
+                if(mthis.AreaIds.length > 0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HASD',
+                        'isOpen':true
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HASD',
+                        'isOpen':false
+                    })
+                }
 
             } else {
                 mthis.changeButtonParam=[
@@ -3371,6 +3420,17 @@ export default {
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HL',
+                        'isOpen':true
+                    })
+                }
+                if(mthis.AreaIds.length == 0 && mthis.SelectedIds.length ==0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HASD',
+                        'isOpen':false
+                    })
+                } else{
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HASD',
                         'isOpen':true
                     })
                 }
@@ -3591,8 +3651,16 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
+            debugger
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
             mthis.SelectedIds = mthis.timeSelectedEventIdsOnly;
+            Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+                var layerId = mthis.AllLayerList_conf[key].layerId;
+                var features = mthis.getLayerById(layerId).getSource().getFeatures();
+                for(let i = 0; i < features.length; i++){
+                    mthis.setFeatureStatus(features[i],'die');
+                }
+            })
             var selectedEventsParam = mthis.timeSelectedEventIdsOnly
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
