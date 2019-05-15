@@ -5,7 +5,8 @@
       <div id="tab1" :style="{margin:'0',height:viewHeight_30}">
         <Tabs :value=$store.state.tabSelectContent>
           <Tab-pane label="选中详情" name='mubiaoxiangqingContent' :style="{fontSize: '18px',height:viewHeight_30,minHeight:viewHeight_30}" id='mubiaoxiangqingContent' @click="changTab('mubiaoxiangqingContent')">
-            <eventContent :resArr='resArr' :eventdata='evetdata' v-show='evetdataFlag'></eventContent>
+            <eventContent :resArr='resArr' :eventdata='evetdata' v-show='evetdataFlag || this.$store.state.contentSelShowFlag'></eventContent>
+            
             <div v-show='!evetdataFlag' :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_select.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -39,6 +40,7 @@
   import percentBar from './custom_percentBar'
   import leftStatics from './custom_leftStatics'
   import eventContent from './custom_event_content'
+  
   import {
     mapState,
     mapMutations
@@ -50,6 +52,7 @@
       return {
         spinShow:false,
         eDiv: '',
+        
         vh20: 0,
         selectTime: false,
         timer: null,
@@ -370,6 +373,7 @@
       this.eventheightdiv = document.documentElement.clientHeight - 64 - 10 + "px";
       this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       this.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
+      
       this.changeLimit()
     }
   };

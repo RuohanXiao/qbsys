@@ -27,10 +27,11 @@
       <organization-entity-table v-show="detailData.entity_type==='organization'" :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
       <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table>
       <event-entity-table v-show="detailData.entity_type==='event'" :tableData="detailData" :entDivH='entDivH'></event-entity-table> -->
-      <doc-entity-table v-show="detailData.entity_type==='document'" :tableData="detailData" :entDivH='entDivH'></doc-entity-table>
+      <doc-entity-table v-show="detailData.entity_type==='document' && !this.$store.state.contentSelShowFlag" :tableData="detailData" :entDivH='entDivH'></doc-entity-table>
+      <contentDetail v-show="this.$store.state.contentSelShowFlag" :entDivH='entDivH+selectDivHeight' ref='conDetail'></contentDetail>
     </div>
     <!-- 选中详情 -->
-    <div class="selectDiv" :style="{height:selectDivHeight}">
+    <div class="selectDiv" :style="{height:selectDivHeight}" v-show="!this.$store.state.contentSelShowFlag">
       <div class="selectEdiv" :style="{height:selectDivHeight,maxHeight:selectDivHeight}">
         <!-- 实体属性 -->
         <div class="e-title">
@@ -63,6 +64,11 @@
   import weaponEntityTable from './custom_event_weaponEntityTable'
   import eventEntityTable from './custom_event_eventEntityTable'
   import docEntityTable from './custom_event_docEntityTable'
+  import contentDetail from './custom_content_detail'
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   mock.test = 1
   export default {
     data() {
@@ -98,7 +104,8 @@
         allRelatedEvent: {
           nodes: [],
           links: []
-        }
+        },
+        docName:''
       }
     },
     props: ['eventdata'],
@@ -184,8 +191,10 @@
       organizationEntityTable,
       weaponEntityTable,
       eventEntityTable,
-      docEntityTable
+      docEntityTable,
+      contentDetail
     },
+    computed: mapState(['contentSelShowFlag','contentSelData']),
     watch: {
       eventdata: function() {
         var mthis = this
@@ -258,6 +267,15 @@
           // // console.log('=======mthis.eventdata取值异常')
           // // console.log(mthis.eventdata)
         }
+      },
+      contentSelData:function(){
+        var mthis = this
+        
+        if(this.contentSelData.title){
+          mthis.detailData.name = this.contentSelData.title
+        }else{
+          mthis.changeDetailDiv(mthis.eventdata[0].id,mthis.eventdata[0].entity_type,mthis.eventdata)
+        }
       }
     },
     created() {
@@ -289,6 +307,7 @@
       }
     },
     mounted() {
+      this.docName = this.detailData.name
       this.selectDivHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 8 + 30 + "px";
       this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 12 + "px";
       this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
@@ -303,6 +322,7 @@
           this.myMap.set(entityMainType[i].children[1].children[n].textContent, typeName)
         }
       }
+      
     }
   }
 </script>

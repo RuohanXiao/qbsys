@@ -389,9 +389,17 @@ var store = new Vuex.Store({
       id:'',
       type:'',
       time:''
+    },
+    contentSelShowFlag:false,
+    contentSelData:{
+      id:[],
+      title:''
     }
   },
   mutations:{
+    setcontentSelData(state,val){
+      state.contentSelData = val
+    },
     // 修改state里的数据时，只能通过mutations的形式来操作
     // 虽然this.$store.state.XXX也可以修改，但是不符合XUEX的理念，万一导致存储数据的混乱，则不能快速溯源，因为每个组件都有可能操作数据
     changeTMSS(state,newStatus){
