@@ -233,7 +233,6 @@
       },
       createSet() {
         var mthis = this
-        debugger
         let timestamp = new Date().getTime();
         var setData = [];
         var entityIds = [];
@@ -473,7 +472,7 @@
                     "name": response.body.data.nodes[i].name,
                     "value": response.body.data.nodes[i].id,
                     "id": response.body.data.nodes[i].id,
-                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image.png'),
+                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image1.png'),
                     "type": response.body.data.nodes[i].type
                   })
                 }

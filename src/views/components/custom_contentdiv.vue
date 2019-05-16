@@ -474,7 +474,6 @@
     methods: {
       //无限滚动加载触发方法
       infiniteHandler($state) {
-        alert()
       setTimeout(() => {
         const temp = [];
         for (let i = this.list.length + 1; i <= this.list.length + 20; i++) {
@@ -533,7 +532,6 @@
       },
       contentTranslate() {
         var mthis = this;
-        debugger
         this.translateButton = true
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {

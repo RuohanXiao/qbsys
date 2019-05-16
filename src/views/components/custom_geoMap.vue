@@ -450,7 +450,6 @@ export default {
         }, */
         openWorkset() {
             var mthis = this;
-            debugger
             this.worksetInfo = {
                 title: "",
                 des: "",
@@ -516,11 +515,9 @@ export default {
                     });
                 }
                 if (areaIds.length > 0){
-                    debugger
                     mthis.$http.post("http://localhost:5000/searchAreaByIds/", {
                         ids: areaIds
                     }).then(response => {
-                        debugger
                         if (response.body.code === 0) {
                             mthis.worksetData[2].type = "area";
                             response.body.data.map(item => {
@@ -1311,7 +1308,6 @@ export default {
                     }
                 });
                 mthis.selectClick.on('select', function(e) {
-                    debugger
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected;
                     var num = 0;
@@ -1360,7 +1356,6 @@ export default {
                     }
                 });
                 mthis.selectClick_area.on('select', function(e) {
-                    debugger
                     var features = e.selected;
                     mthis.deleteSelectClickFeatures();
                     for(let i = 0; i < features.length; i++){
@@ -3276,12 +3271,10 @@ export default {
         }, 
         setFeatureByIds(ids){
             var mthis = this;
-            debugger
             mthis.waiting();
             mthis.$http.post("http://localhost:5000/getParamsByIds/", {
                     "ids": ids
                 }).then(response => {
-                    debugger
                     var orgNum = 0;
                     var eventNum = 0
                     var mes = [];
@@ -3291,7 +3284,6 @@ export default {
                     var addFeatures = (new GeoJSON()).readFeatures(eventGeoJson);
                     for(let i = 0; i < addFeatures.length; i++){
                         var feature= addFeatures[i];
-                        debugger
                         var featureId = feature.getId();
                         var type = featureId.split('&')[0];
                         var num = feature.get("Params").length
@@ -3494,7 +3486,6 @@ export default {
         },
         geoWorkSetData_noArea:function(){
             var mthis = this;
-            debugger
             var data = mthis.geoWorkSetData_noArea;
             mthis.setFeatureByIds(data)
         },
@@ -3534,7 +3525,6 @@ export default {
             /* var Filter_p = new Or(...filters_p);
             mthis.getWfsData(featureTypes_c,Filter_c);
             mthis.getWfsData(featureTypes_p,Filter_p); */
-            debugger
             /* if(type === 'province'){
                 filter = new EqualTo('objectid',id);
             } else {
@@ -3682,7 +3672,6 @@ export default {
         geoTimeCondition:{
             handler(newValue) {
                 var mthis = this;
-                debugger
                 var type = mthis.geoTimeCondition.type;
                 var timeSelectedIds = mthis.geoTimeCondition.eventIds;
                 if(type === 'notAnalysis'){

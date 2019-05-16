@@ -1582,8 +1582,8 @@
             "nodeIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            // res.img = 'http://10.60.1.140/assets/images/image.png'
-            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
+            // res.img = 'http://10.60.1.140/assets/images/image1.png'
+            res.img = (response.body.data[0].img && util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image1.png'
             this.detailData = res
           })
           // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
@@ -1614,7 +1614,7 @@
           }).then(response => {
             // this.detailData = response.body.data[0]
             let res = response.body.data[0]
-            res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
+            res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image1.png'
             this.detailData = res
             this.detailData.entity_type = 'event'
           })
@@ -1631,7 +1631,7 @@
             "docIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image.png'
+            res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/image1.png'
             this.detailData = res
             mthis.detailData.entity_type = 'document'
           })

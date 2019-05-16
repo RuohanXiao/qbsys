@@ -128,14 +128,14 @@
             } else if (mthis.eventdata[0].entity_type === 'weapon') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/weapon.png'
             } else {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image.png'
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image1.png'
             }
         } else if (this.myMap.get(type) === 'event') {
           return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
         } else if (this.myMap.get(type) === 'document') {
           return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
         } else {
-          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image.png'
+          return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image1.png'
         }
       },
       changeDetailDiv(id, type, ob) {
@@ -224,7 +224,7 @@
                 } else if (mthis.eventdata[0].entity_type === 'weapon') {
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
                 } else {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image.png'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
                 }
                 mthis.detailData = result
               })
