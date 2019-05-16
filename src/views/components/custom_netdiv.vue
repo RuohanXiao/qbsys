@@ -2180,6 +2180,16 @@
           // this.$Message.error('请选择节点进行删除操作！')
           this.setMessage("请选择节点进行删除操作！");
         }
+        
+        mthis.selectionIdByTypeData = new Object({
+        nodeIds: [],
+        eventIds: [],
+        contentIds: []
+        });
+        mthis.$store.commit("setSelectionIdByType", mthis.selectionIdByTypeData)
+        mthis.ifSelectNode = false;
+        mthis.ifSelectTwoNode = false;
+        mthis.ifSelectOnlyTwoNode = false;
       },
       queryPerson() {},
       //反选节点
@@ -3149,9 +3159,28 @@
       "workSpaceAddData",
       "eventImg",
       "atlastData",
-      "netOnlyStaticsSelectedIds"
+      "netOnlyStaticsSelectedIds",
+      'netKeyboards'
     ]),
     watch: {
+      netKeyboards:function(){
+        var mthis = this
+        
+        if(this.netKeyboards.indexOf('delete')>-1){
+          let index = mthis.netKeyboards.indexOf('delete')
+          mthis.triggerMethods('remove')
+          mthis.$store.state.netKeyboards.splice(index,1)
+        }else if(this.netKeyboards.indexOf('selall')>-1){
+          let index = mthis.netKeyboards.indexOf('selall')
+          mthis.triggerMethods('selectAll')
+          // debugger
+          mthis.$store.state.netKeyboards.splice(index,1)
+        }else{
+          return
+        }
+        
+        
+      },
       netOnlyStaticsSelectedIds: function() {
         this.netchart.selection(this.netOnlyStaticsSelectedIds.ids)
         this.netchart.updateStyle()
@@ -3714,21 +3743,21 @@
       // }));
       var mthis = this;
       // //快捷键监听
-      document.onkeydown=function(event){ 
-        if(mthis.$store.state.tmss === 'net') {
-          var e = event || window.event || arguments.callee.caller.arguments[0];
-          if (e && e.keyCode == 46) {
-            mthis.triggerMethods('remove')
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          if (e.keyCode == 65 && e.ctrlKey) {
-            mthis.triggerMethods('selectAll')
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }
-      };  
+      // document.onkeydown=function(event){ 
+      //   if(mthis.$store.state.tmss === 'net') {
+      //     var e = event || window.event || arguments.callee.caller.arguments[0];
+      //     if (e && e.keyCode == 46) {
+      //       mthis.triggerMethods('remove')
+      //       e.preventDefault();
+      //       e.stopPropagation();
+      //     }
+      //     if (e.keyCode == 65 && e.ctrlKey) {
+      //       mthis.triggerMethods('selectAll')
+      //       e.preventDefault();
+      //       e.stopPropagation();
+      //     }
+      //   }
+      // };  
       var ob = configer.loadxmlDoc(
         mthis.$store.state.ipConfig.xml_url + "/dictionary.xml"
       );

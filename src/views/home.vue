@@ -124,7 +124,7 @@
       mthis.$store.commit('setContentHeight', mthis.containerHeight)
     },
     computed: mapState([
-      'workSpaceModal'
+      'workSpaceModal','tmss'
     ]),
     watch: {
       workSpaceModal: function() {
@@ -132,6 +132,56 @@
       }
     },
     mounted() {
+      var mthis = this
+      // 快捷键监听
+      let getIn = document.getElementsByClassName('ivu-select-input')
+      document.onkeydown=function(event){ 
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+          if (e.keyCode == 70 && e.ctrlKey) {
+            // ctrl+F
+            if(mthis.tmss == 'net'){
+              getIn[0].value = ''
+              getIn[0].focus()
+            }else if(mthis.tmss== 'geo'){
+              getIn[1].value = ''
+              getIn[1].focus()
+            }else{
+              getIn[2].value = ''
+              getIn[2].focus()
+            }
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          if(e && e.keyCode == 46){
+            // delete
+            if(mthis.tmss == 'net'){
+              mthis.$store.state.netKeyboards.push('delete')
+            }else if(mthis.tmss== 'geo'){
+              mthis.$store.state.geoKeyboards.push('delete')
+            }else{
+              mthis.$store.state.contentKeyboards.push('delete')
+              
+            }
+            e.preventDefault();
+            e.stopPropagation();
+
+          }
+          if(e.keyCode == 65 && e.ctrlKey){
+            // ctrl+A
+            if(mthis.tmss == 'net'){
+              mthis.$store.state.netKeyboards.push('selall')
+            }else if(mthis.tmss== 'geo'){
+              mthis.$store.state.geoKeyboards.push('selall')
+            }else{
+              mthis.$store.state.contentKeyboards.push('selall')
+              
+            }
+            e.preventDefault();
+            e.stopPropagation();
+
+          }
+        
+      };
       var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/configer.xml");
       var imgItem = ob.getElementsByTagName("imgItem");
       let arr = []
@@ -142,6 +192,7 @@
         myMap.set(eventType, imgPosition)
       }
       this.$store.commit('setEventImg', myMap)
+      
     }
   }
 </script>
