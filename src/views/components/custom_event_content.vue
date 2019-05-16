@@ -28,7 +28,7 @@
       <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table>
       <event-entity-table v-show="detailData.entity_type==='event'" :tableData="detailData" :entDivH='entDivH'></event-entity-table> -->
       <doc-entity-table v-show="detailData.entity_type==='document' && !this.$store.state.contentSelShowFlag" :tableData="detailData" :entDivH='entDivH'></doc-entity-table>
-      <contentDetail v-show="this.$store.state.contentSelShowFlag" :entDivH='entDivH+selectDivHeight' ref='conDetail'></contentDetail>
+      <contentDetail v-show="this.$store.state.contentSelShowFlag" :contentDivH='contentDivH' ref='conDetail'></contentDetail>
     </div>
     <!-- 选中详情 -->
     <div class="selectDiv" :style="{height:selectDivHeight}" v-show="!this.$store.state.contentSelShowFlag">
@@ -312,6 +312,7 @@
       this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 12 + "px";
       this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
       this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 60 + "px";
+      this.contentDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 60+140+'px';
       var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
       var entityMainType = ob.getElementsByTagName("entityMainType");
       this.myMap = new Map();

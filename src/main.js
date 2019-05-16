@@ -400,6 +400,7 @@ var store = new Vuex.Store({
     netKeyboards:[],
     geoKeyboards:[],
     contentKeyboards:[],
+    contentPromte
   },
   mutations:{
     

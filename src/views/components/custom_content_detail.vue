@@ -1,7 +1,7 @@
 <template>
   <div>
     
-    <Collapse simple v-model="value1" id='nodeAttr' :style="{height:entDivH}" class='scrollBarAble'>
+    <Collapse simple v-model="value1" :style="{height:contentDivH}" class='scrollBarAble'>
       <panel name="1">
         <span>实体属性</span>
         <div slot="content" class="tableLine">
@@ -122,7 +122,7 @@ import {
         tableData:new Object()
       }
     },
-    props: ['entDivH'],
+    props: ['contentDivH'],
     // created(){
     //     let mthis = this
     //     console.log(this.contentSelData)
@@ -468,6 +468,7 @@ import {
   .eButton {
     opacity: 0;
   }
+  
 </style>
 
 
