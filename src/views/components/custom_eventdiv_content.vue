@@ -298,10 +298,10 @@
           }
         }
         if(buttonId === 'onlylookit'){
-          alert(111)
+          // alert(111)
           //mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', ids)
         } else if(buttonId === 'delete'){
-          alert('delete')
+          // alert('delete')
         }
       },
       clickLeftStatics(staticsClick){

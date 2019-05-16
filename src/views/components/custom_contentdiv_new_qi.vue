@@ -593,9 +593,9 @@
               mthis.spinShow = false
             })
           } else if (va.length === 1) {
-            alert('aaa')
+            // alert('aaa')
           } else {
-            alert('bbbb')
+            // alert('bbbb')
           }
         }, 1000);
       },

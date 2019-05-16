@@ -3231,7 +3231,8 @@ export default {
                             })
                         }
                     } else {
-                        alert('数据没有id');
+                        // alert('数据没有id');
+                         mthis.Message('数据没有id')
                     }
                 })
             }
