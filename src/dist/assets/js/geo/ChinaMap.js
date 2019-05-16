@@ -84,7 +84,8 @@ var map = function(target){
             event.preventDefault();//屏蔽自带的右键事件
             var RClickLayer = layer;
             var coordinate = mthis.map.getEventCoordinate(event);
-            callBack(layer,coordinate);
+            //callBack(layer,coordinate);
+            callBack(wmsTileLayer,coordinate);
             //callBack(rcL,)
 
         })
