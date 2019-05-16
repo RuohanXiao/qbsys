@@ -164,15 +164,19 @@
               "TypeLabel": "document"
             }).then(response => {
               if (response.body.code === 0) {
-                if (response.body.data[0].RelatedDocument[a.id] && response.body.data[0].RelatedDocument[a.id].nodes.length > 0) {
+                if (response.body.data[0].RelatedDocument[a.id]) {
                   let nodes = response.body.data[0].RelatedDocument[a.id].nodes
-                  let ids = nodes.map(item => {
+                  let ids =new Array() 
+                  ids =nodes.map(item => {
                     return item.id
                   })
                   mthis.$store.commit('setNetToContentData', {
                     'contentIds': ids
                   })
                 } else {
+                  mthis.$store.commit('setNetToContentData', {
+                    'contentIds': []
+                  })
                   // alert('未找到对应文档')
                   mthis.$store.commit('setContentPromte', '未找到对应文档')
                 }
