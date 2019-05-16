@@ -4,32 +4,32 @@
       <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}" class="inputDiv">
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
           v-show="type==='net'" placeholder='' :remote='true' loading-text='加载中···' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
-                    <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
-                      <Option v-for="(option, index) in opt1.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
-                        <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
-                        <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                        <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.label}}</Option>
-                    </OptionGroup>
-                  </Select>
+                      <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
+                        <Option v-for="(option, index) in opt1.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
+                          <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
+                          <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+                          <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.label}}</Option>
+                      </OptionGroup>
+                    </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoGeo" :remote='begeoSea'
           clearable filterable class="scrollBarAble" v-show="type==='geo'" placeholder='' :remote-method="searchInfoGeo" :loading="loading2" :label-in-value="false" @on-change="v=>{setOption(v)}" @keyup.enter.native="enterGeoOption(options2[0].data[0])" @on-open-change="lightIcon">
-                    <OptionGroup :label="opt.title" v-for="opt in options2" class="optionTitle">
-                      <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
-                        <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
-                        <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                        <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic_diagra.png" />
-                        <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
-                    </OptionGroup>
-                  </Select>
+                      <OptionGroup :label="opt.title" v-for="opt in options2" class="optionTitle">
+                        <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
+                          <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
+                          <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+                          <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic_diagra.png" />
+                          <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
+                      </OptionGroup>
+                    </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoContent" filterable
           class="scrollBarAble" v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}" @on-open-change="lightIcon" @keyup.enter.native="enterContentOption(options3[0].data[0])">
-                    <OptionGroup :label="opt.title" v-for="opt in options3">
-                      <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}"  @click.native="()=>{setOption(opt.data[index])}">
-                        <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
-                        <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                        <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
-                    </OptionGroup>
-                  </Select>
+                      <OptionGroup :label="opt.title" v-for="opt in options3">
+                        <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}"  @click.native="()=>{setOption(opt.data[index])}">
+                          <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
+                          <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
+                          <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.label}}</Option>
+                      </OptionGroup>
+                    </Select>
       </div>
       <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}" class="imgDiv"><i class="icon iconfont icon-search process-img" :class="(lightIconFlag)?'lightIcon':''" id='searchImg' style="position: absolute;top:1px;left:14px;width:25px;height:25px;"></i></div>
     </div>
@@ -77,8 +77,6 @@
         this.lightIconFlag = !this.lightIconFlag
       },
       setOption(a) {
-        console.log('----setoption-----')
-        console.log(a)
         var mthis = this;
         if (this.$store.state.tmss === 'net') {
           if (a.itemType === 'entity') {
@@ -157,27 +155,73 @@
                 alert('entity-detail接口异常')
               }
             })
-          } else {
-          }
+          } else {}
         }
         if (this.$store.state.tmss === 'content') {
-          mthis.$store.commit('setSearchContentResult', a.value)
-          mthis.$store.commit('setConditionContent', a.value)
-          var query = a.value;
-          mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/doc-statistics/?query=" + a.value, {
-              emulateJSON: true
+          if (a.itemType === 'entity') {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+              "NodeIds": new Array(a.id),
+              "NodeTypes": ["entity"],
+              "TypeLabel": "document"
+            }).then(response => {
+              if (response.body.code === 0) {
+                if (response.body.data[0].RelatedDocument[a.id] && response.body.data[0].RelatedDocument[a.id].nodes.length > 0) {
+                  let nodes = response.body.data[0].RelatedDocument[a.id].nodes
+                  let ids = nodes.map(item => {
+                    return item.id
+                  })
+                  mthis.$store.commit('setNetToContentData', {
+                    'contentIds': ids
+                  })
+                } else {
+                  alert('未找到对应文档')
+                }
+              } else {
+                alert('查询文档数据异常')
+              }
             })
-            .then(response => {
-              mthis.$store.commit('setContentStatisticsResult', response.body)
-            });
-          /* mthis.inputInfoContent = a.value
-          mthis.$store.commit('setSearchContentResult', [{
-            node: {
-              nodes: []
-            },
-            id: '',
-            label: a.value
-          }]) */
+          } else if (a.itemType === 'set') {
+            let timestamp = new Date().getTime()
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/load-set-data/', {
+              "timestamp": timestamp,
+              "idlist": new Array(a.id),
+              "query": "id",
+              "label": "set",
+              "page": 1,
+              "pagesize": 30
+            }).then(response => {
+              if (response.body.code === 0) {
+                var idsList = [];
+                let re = response.body.data[0].nodeIds
+                for (let i = 0; i < re.length; i++) {
+                  var data = re[i];
+                  var type = data.type;
+                  if (type === 'document') {
+                    idsList.concat(data.ids);
+                  }
+                }
+                if (idsList.length > 0) {
+                  mthis.$store.commit('setNetToContentData', {
+                    'contentIds': idsList
+                  })
+                } else {
+                  alert('该集合中无文档，请重新选择')
+                }
+              } else {
+                alert('entity-detail接口异常')
+              }
+            })
+          } else if (a.itemType === 'keywords') {
+            mthis.$store.commit('setSearchContentResult', a.value)
+            mthis.$store.commit('setConditionContent', a.value)
+            var query = a.value;
+            mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/doc-statistics/?query=" + a.value, {
+                emulateJSON: true
+              })
+              .then(response => {
+                mthis.$store.commit('setContentStatisticsResult', response.body)
+              });
+          } else {}
         }
         if (this.$store.state.tmss === 'geo') {
           if (a && a.value) {
@@ -407,32 +451,106 @@
         }
       },
       searchInfoContent(query) {
+        // var mthis = this;
+        // if (query !== "") {
+        //   mthis.loading3 = true;
+        //   let option = []
+        //   let optionWord = {}
+        //   let optionWordArr = []
+        //   optionWordArr.push({
+        //     "label": query,
+        //     "value": query,
+        //     "img": ''
+        //   })
+        //   optionWord.title = '文章检索'
+        //   optionWord.data = optionWordArr
+        //   option.push(optionWord)
+        //   mthis.options3 = option;
+        //   mthis.loading3 = false;
         var mthis = this;
+        let timestamp = new Date().getTime()
+        mthis.loading3 = true;
+        let optionsTemp = []
         if (query !== "") {
-          mthis.loading3 = true;
-          // let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, {
-          //     emulateJSON: true
-          //   })
-          //   .then(response => {
-          let option = []
-          let optionWord = {}
-          let optionWordArr = []
-          // for(let i = 0 ;i<response.body.data.length;i++) {
-          //   optionWordArr.push({"label":'文档搜索实体-\''+response.body.data[i].name+'\'',"value":response.body.data[i].id,"img":response.body.data[i].img})
-          // }
-          optionWordArr.push({
-            "label": query,
-            "value": query,
-            "img": ''
-          })
-          optionWord.title = '文章检索'
-          optionWord.data = optionWordArr
-          option.push(optionWord)
-          mthis.options3 = option;
-          mthis.loading3 = false;
-          // });
+          if (this.timer) {
+            clearTimeout(this.timer)
+          }
+          this.timer = setTimeout(function() {
+            let qtext = decodeURI(query)
+            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/qb-search/?keyword=" + qtext + '&type=net&timestamp=' + timestamp, {
+                emulateJSON: true
+              })
+              .then(response => {
+                if (response.body.timestamp == timestamp && response.body.code == 0) {
+                  mthis.options3 = []
+                  if (response.body.data.SearchEntity.length > 0) {
+                    let optionList = new Object()
+                    let optionListArr = new Array()
+                    response.body.data.SearchEntity.map(item => {
+                      if (item.type === 'administrative') {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
+                      } else if (item.type === 'human') {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
+                      } else if (item.type === 'organization') {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
+                      } else if (item.type === 'weapon') {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                      } else {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
+                      }
+                      optionListArr.push({
+                        "label": item.name + ' (' + mthis.returnCHname(item.type) + ')',
+                        "value": query,
+                        "id": item.id,
+                        "img": item.img,
+                        "type": item.type,
+                        "itemType": 'entity'
+                      })
+                    })
+                    optionList.title = '实体检索';
+                    optionList.data = optionListArr
+                    optionsTemp.push(optionList)
+                  }
+                  if (response.body.data.SearchSet.length > 0) {
+                    let optionList = new Object()
+                    let optionListArr = new Array()
+                    response.body.data.SearchSet.map(item => {
+                      optionListArr.push({
+                        "label": item.name + ' (集合)',
+                        "value": query,
+                        "id": item.id,
+                        // "img": util.checkImgExists(item.img) ? (item.img) : ('http://10.60.1.140/assets/images/default.png'),
+                        "img": 'http://10.60.1.140/assets/images/searchSet.png',
+                        "type": item.type,
+                        "itemType": 'set'
+                      })
+                    })
+                    optionList.title = '集合检索';
+                    optionList.data = optionListArr
+                    optionsTemp.push(optionList)
+                  }
+                  setTimeout(function() {
+                    let optionWord = {}
+                    let optionWordArr = []
+                    optionWordArr.push({
+                      "label": query,
+                      "value": query,
+                      "id": '',
+                      "itemType": 'keywords',
+                      "img": 'http://10.60.1.140/assets/images/image.png'
+                    })
+                    optionWord.title = '关键词检索'
+                    optionWord.data = optionWordArr
+                    optionsTemp.push(optionWord)
+                    mthis.loading3 = false;
+                    mthis.options3 = optionsTemp
+                  }, 200);
+                } else {}
+              })
+          }, 200);
         } else {
           mthis.options3 = [];
+          mthis.loading3 = false;
         }
       }
     },
@@ -518,7 +636,7 @@
     -webkit-animation: all 1s;
   }
   /* #queryInput:focus>.inputDiv+.imgDiv .process-img {
-            color: red;
-          } */
+              color: red;
+            } */
 </style>
 
