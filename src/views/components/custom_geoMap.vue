@@ -3231,7 +3231,8 @@ export default {
                             })
                         }
                     } else {
-                        alert('数据没有id');
+                        // alert('数据没有id');
+                         mthis.Message('数据没有id')
                     }
                 })
             }
@@ -3432,10 +3433,13 @@ export default {
     },
     computed:mapState ([
       'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
-      'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoWorkSetData_noArea','geoWorkSetData_area'
+      'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoWorkSetData_noArea','geoWorkSetData_area','geoPromte'
     ]),
     
     watch:{
+        geoPromte:function(){
+            this.Message(this.geoPromte)
+        },
         AreaIds:function(){
             var mthis = this;
             mthis.isOperateButtonsHLOrDim();

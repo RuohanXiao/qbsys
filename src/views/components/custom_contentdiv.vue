@@ -421,9 +421,9 @@
               mthis.spinShow = false
             })
           } else if (va.length === 1) {
-            alert('aaa')
+            // alert('aaa')
           } else {
-            alert('bbbb')
+            // alert('bbbb')
           }
         }, 500);
       },
@@ -772,7 +772,7 @@
         }, 500);
       },
       scrollBottom() {
-        alert('ssss')
+        // alert('ssss')
         // 滚动到页面底部时，请求前一天的文章内容
         if (((window.screen.height + document.body.scrollTop) > (document.body.clientHeight)) && this.REQUIRE) {
           // 请求的数据未加载完成时，滚动到底部不再请求前一天的数据

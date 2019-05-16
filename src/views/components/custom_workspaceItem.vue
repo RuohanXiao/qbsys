@@ -139,7 +139,15 @@
                 data: response.body.data[0].nodes[0]
               })
             } else {
-              alert('entity-detail接口异常')
+              // alert('entity-detail接口异常')
+               if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', 'entity-detail接口异常')
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', 'entity-detail接口异常')
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', 'entity-detail接口异常')
+          } else {
+          }
             }
           })
           // }, 100);
@@ -232,11 +240,27 @@
         }).then(response => {
           // // console.log(response)
           if (response.body.code === 0) {
-            alert('删除成功！')
+            // alert('删除成功！')
+             if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', '删除成功！')
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', '删除成功！')
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', '删除成功！')
+          } else {
+          }
             // mthis.$emit('ref', timestamp)
             mthis.$store.commit('setRefSet', !mthis.$store.state.refSet)
           } else {
             alert('删除异常，请查询控制台，错误编码' + response.body.code)
+             if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
+          } else {
+          }
           }
         })
       },

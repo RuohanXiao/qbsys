@@ -88,7 +88,8 @@
                   data: response.body.data[0].nodes[0]
                 })
               } else {
-                alert('entity-detail接口异常')
+                // alert('entity-detail接口异常')
+                mthis.$store.commit('setNetPromte', 'entity-detail接口异常')
               }
             })
           } else if (a.itemType === 'set') {
@@ -115,7 +116,7 @@
                 }
                 this.$store.commit('setWorkSpaceAddData', dataobj)
               } else {
-                alert('entity-detail接口异常')
+                // alert('entity-detail接口异常')
               }
             })
             // let timestamp = new Date().getTime()
@@ -152,7 +153,7 @@
                   data: response.body.data[0].nodes[0]
                 })
               } else {
-                alert('entity-detail接口异常')
+                // alert('entity-detail接口异常')
               }
             })
           } else {}
@@ -165,19 +166,25 @@
               "TypeLabel": "document"
             }).then(response => {
               if (response.body.code === 0) {
-                if (response.body.data[0].RelatedDocument[a.id] && response.body.data[0].RelatedDocument[a.id].nodes.length > 0) {
+                if (response.body.data[0].RelatedDocument[a.id]) {
                   let nodes = response.body.data[0].RelatedDocument[a.id].nodes
-                  let ids = nodes.map(item => {
+                  let ids =new Array() 
+                  ids =nodes.map(item => {
                     return item.id
                   })
                   mthis.$store.commit('setNetToContentData', {
                     'contentIds': ids
                   })
                 } else {
-                  alert('未找到对应文档')
+                  mthis.$store.commit('setNetToContentData', {
+                    'contentIds': []
+                  })
+                  // alert('未找到对应文档')
+                  mthis.$store.commit('setContentPromte', '未找到对应文档')
                 }
               } else {
-                alert('查询文档数据异常')
+                mthis.$store.commit('setContentPromte', '查询文档数据异常')
+                // alert('查询文档数据异常')
               }
             })
           } else if (a.itemType === 'set') {
@@ -205,10 +212,13 @@
                     'contentIds': idsList
                   })
                 } else {
-                  alert('该集合中无文档，请重新选择')
+                  
+                  // alert('该集合中无文档，请重新选择')
+                  mthis.$store.commit('setContentPromte', '该集合中无文档，请重新选择')
                 }
               } else {
-                alert('entity-detail接口异常')
+                // alert('entity-detail接口异常')
+                mthis.$store.commit('setContentPromte', 'entity-detail接口异常')
               }
             })
           } else if (a.itemType === 'keywords') {

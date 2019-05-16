@@ -520,9 +520,12 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte'
     ]),
     watch: {
+      contentPromte:function(){
+        this.setMessage(this.contentPromte)
+      },
       message: function() {
         var mthis = this;
         mthis.popout = true; //点击后popout为ture
@@ -552,7 +555,7 @@
         
       },
       watchSelectCounter: function() {
-        console.log("watchselectcounter")
+        // console.log("watchselectcounter")
         
         let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         if(selectList.length >0){
@@ -575,15 +578,21 @@
         var mthis = this
         // alert('文档接受到了')
         console.log(this.netToContentData)
-        mthis.items = []
-        let contentIds = this.netToContentData.contentIds
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+        if(this.netToContentData.contentIds.length ==0){
+          mthis.items = []
+          
+        }else if(this.netToContentData.contentIds.length>0){
+          mthis.items = []
+          let contentIds = this.netToContentData.contentIds
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
           $('.item-selected').removeClass('item-selected')
           mthis.items = response.body.data
         })
         mthis.watchSelectCounter++;
+        }
+        
       },
       
       contentTimeCondition: function(va) {
@@ -629,8 +638,8 @@
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
-            console.log("tianjiawendang")
-            mthis.setMessage('增加文档')
+            
+            
             $('.item-selected').removeClass('item-selected')
             mthis.items = response.body.data
             // console.log("datadatatdattatdtadt")
@@ -652,8 +661,9 @@
             
           } else {
             // mthis.showMore = false
+            mthis.setMessage('未找到匹配的文章')
             mthis.items = []
-            alert('未找到匹配的文章')
+
           }
         })
         // }
@@ -745,7 +755,7 @@
         
           this.watchSelectCounter++;
         }else{
-          alert("qingxuanzejiedian")
+          this.setMessage("请选择至少一篇文章")
         }
         
       },
@@ -1360,7 +1370,7 @@
         }, 500);
       },
       scrollBottom() {
-        alert('ssss')
+        // alert('ssss')
         // 滚动到页面底部时，请求前一天的文章内容
         if (((window.screen.height + document.body.scrollTop) > (document.body.clientHeight)) && this.REQUIRE) {
           // 请求的数据未加载完成时，滚动到底部不再请求前一天的数据
@@ -1385,7 +1395,7 @@
       },
       showContent(id,title) {
         var mthis = this
-        mthis.setMessage('进入文章详情')
+        
         // debugger
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}

@@ -400,11 +400,19 @@ var store = new Vuex.Store({
     netKeyboards:[],
     geoKeyboards:[],
     contentKeyboards:[],
-    contentPromte:''
+    contentPromte: '',
+    netPromte: '',
+    geoPromte: ''
   },
   mutations:{
     setContentPromte(state,val){
       state.contentPromte = val
+    },
+    setNetPromte(state,val){
+      state.netPromte = val
+    },
+    setGeoPromte(state,val){
+      state.geoPromte = val
     },
     setcontentSelData(state,val){
       state.contentSelData = val

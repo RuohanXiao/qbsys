@@ -220,7 +220,6 @@
     },
     methods: {
       changTab(a) {
-        alert(a)
         this.$store.commit('setTabSelectContent', a)
       },
       setFlagToFalse(detailModalFlag){
