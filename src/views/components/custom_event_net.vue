@@ -44,9 +44,9 @@
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
           <div class="e-content-d pointIcon" v-for="(item,index) in nowSelData" @click="changeDetailDiv(item.id,item.entity_type,nowSelData)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
-            <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.name.toLowerCase().replace(/-/, "_")).name}}</p>
-            <!-- <p v-if="item.entity_type==='event'" class="e-content-p">{{item.name}}</p> -->
-            <p v-else class="e-content-p">{{item.name}}</p>
+            <!-- <p v-if="item.entity_type==='event'" class="e-content-p">{{myMap1.get(item.name.toLowerCase().replace(/-/, "_")).name}}</p>
+            <p v-else class="e-content-p">{{item.name}}</p> -->
+            <p class="e-content-p">{{item.name}}</p>
           </div>
         </div>
       </div>
@@ -132,14 +132,14 @@
             } else if (mthis.eventdata[0].entity_type === 'weapon') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/weapon.png'
             } else {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image.png'
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image1.png'
             }
           } else if (this.myMap.get(type) === 'event') {
             return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
           } else if (this.myMap.get(type) === 'document') {
             return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
           } else {
-            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image.png'
+            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image1.png'
           }
         }
       },
@@ -230,7 +230,7 @@
                   } else if (mthis.eventdata[0].entity_type === 'weapon') {
                     result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
                   } else {
-                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image.png'
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
                   }
                   mthis.detailData = result
                 })

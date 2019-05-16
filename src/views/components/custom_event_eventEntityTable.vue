@@ -232,7 +232,6 @@
             let links = new Array();
             if (response.body.code === 0) {
               // let type = response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")
-              debugger
               let img = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).img
               // let name = subType
               let name = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).name

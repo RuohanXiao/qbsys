@@ -220,7 +220,7 @@
                 } else if (mthis.eventdata[0].entity_type === 'weapon') {
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
                 } else {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image.png'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
                 }
                 mthis.detailData = result
               })

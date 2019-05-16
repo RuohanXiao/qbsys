@@ -968,7 +968,6 @@ import {
               return item
             })
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
-              debugger
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }

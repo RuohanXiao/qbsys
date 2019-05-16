@@ -677,7 +677,6 @@
       },
       openCreateGroupModal() {
         var mthis = this;
-        debugger
         this.worksetInfo = {
           title: "",
           des: "",
@@ -1632,7 +1631,6 @@
       circleShape() {
         // this.changNetchartMode('r');
         var mthis = this
-        // debugger
         for (let i = 0; i < mthis.selectionId.length; i++) {
           // 辐射布局
           let circleNum = Math.floor(Math.log(i) / Math.log(3))
@@ -2501,7 +2499,7 @@
                   node.shadowBlur = 20;
                 }
                 node.display = "image";
-                node.image = "http://10.60.1.140/assets/images/image.png";
+                node.image = "http://10.60.1.140/assets/images/image1.png";
               } else {
                 if (node.selected) {
                   node.lineColor = mthis.selectLineColor
@@ -2539,10 +2537,21 @@
                   node.image =
                     "http://10.60.1.143/pic_lib/entity/" + node.id + ".png";
                 } else {
-                  node.image =
-                    "http://10.60.1.140/assets/images/" +
-                    node.data.entity_type +
-                    ".png";
+                  if (node.data.entity_type === 'administrative') {
+                    node.image = 'http://10.60.1.140/assets/images/location.png'
+                  } else if (node.data.entity_type === 'human') {
+                    node.image = 'http://10.60.1.140/assets/images/People.png'
+                  } else if (node.data.entity_type === 'organization') {
+                    node.image = 'http://10.60.1.140/assets/images/Organization.png'
+                  } else if (node.data.entity_type === 'weapon') {
+                    node.image = 'http://10.60.1.140/assets/images/weapon.png'
+                  } else {
+                    node.image = 'http://10.60.1.140/assets/images/image1.png'
+                  }
+                  // node.image =
+                  //   "http://10.60.1.140/assets/images/" +
+                  //   node.data.entity_type +
+                  //   ".png";
                   // node.image = './src/dist/assets/images/' + node.data.entity_type + '.png';
                 }
               }
@@ -3391,7 +3400,6 @@
       workSpaceAddData: function(obj) { //留扣，导入集合修改
         var mthis = this;
         console.log(obj)
-        debugger
         let arr = [];
         // let nodes = [];
         let res = [];

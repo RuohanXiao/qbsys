@@ -539,7 +539,6 @@
         console.log(this.netToContentData)
         mthis.items = []
         let contentIds = this.netToContentData.contentIds
-        debugger
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
@@ -983,7 +982,6 @@
         },
       //无限滚动加载触发方法
       infiniteHandler($state) {
-        alert()
       setTimeout(() => {
         const temp = [];
         for (let i = this.list.length + 1; i <= this.list.length + 20; i++) {
