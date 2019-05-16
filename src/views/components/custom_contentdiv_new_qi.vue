@@ -98,7 +98,7 @@
               <Row type="flex" justify="start">
                 <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items" :key="index">
                 <div>
-                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click="togClass">
+                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu">
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
@@ -118,8 +118,11 @@
                     </Col> -->
               </Row>
               
-                <div class="layer">文档已经全部加载</div>
-              
+                <!-- <div class="layer">文档已经全部加载</div> -->
+                <transition name="mybox">
+                  <div class="xuanfuAlert" v-show="popout">{{message.text}}</div>
+                  <!-- <div class="xuanfuAlert">message.text</div> -->
+                </transition>
               
             </div>
           </Scroll>
@@ -160,11 +163,17 @@
   var timer = null;
   var tthis = this;
   var timerClick = null;
+  var timer2 = null;
   /* eslint-disable */
   export default {
     name: "App",
     data() {
       return {
+        popout:false,
+        message: {
+          text: "",
+          time: ""
+        },
         goodsList: [],
         sortFlag: true, //默认升序
         page: 1,
@@ -483,6 +492,7 @@
             //  点选切换选中事件
             .on('click', '.select-item', function() {
               // console.log("clcik")
+              
               clearTimeout(timerClick);
               var selThis = this;
               timerClick = setTimeout(function(){
@@ -492,6 +502,7 @@
                 $(selThis).addClass('item-selected');
               }
               mthis.watchSelectCounter++;
+              
               },300)
               
             })
@@ -509,12 +520,42 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte'
     ]),
     watch: {
-      
+      contentPromte:function(){
+        this.setMessage(this.contentPromte)
+      },
+      message: function() {
+        var mthis = this;
+        mthis.popout = true; //点击后popout为ture
+        if (timer2) {
+          clearTimeout(timer2);
+        }
+        timer2 = setTimeout(function() {
+          mthis.popout = !mthis.popout; //对popout进行取反
+        }, 1000);
+      },
+      contentKeyboards:function(){
+        var mthis = this
+        
+        if(this.contentKeyboards.indexOf('delete')>-1){
+          let index = mthis.contentKeyboards.indexOf('delete')
+          mthis.deleteNode()
+          mthis.$store.state.contentKeyboards.splice(index,1)
+        }else if(this.contentKeyboards.indexOf('selall')>-1){
+          let index = mthis.contentKeyboards.indexOf('selall')
+          mthis.selectAll()
+          // debugger
+          mthis.$store.state.contentKeyboards.splice(index,1)
+        }else{
+          return
+        }
+        
+        
+      },
       watchSelectCounter: function() {
-        console.log("watchselectcounter")
+        // console.log("watchselectcounter")
         
         let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         if(selectList.length >0){
@@ -537,16 +578,21 @@
         var mthis = this
         // alert('文档接受到了')
         console.log(this.netToContentData)
-        mthis.items = []
-        let contentIds = this.netToContentData.contentIds
-        debugger
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
+        if(this.netToContentData.contentIds.length ==0){
+          mthis.items = []
+          
+        }else if(this.netToContentData.contentIds.length>0){
+          mthis.items = []
+          let contentIds = this.netToContentData.contentIds
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
           $('.item-selected').removeClass('item-selected')
           mthis.items = response.body.data
         })
         mthis.watchSelectCounter++;
+        }
+        
       },
       
       contentTimeCondition: function(va) {
@@ -571,15 +617,16 @@
                 $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
                
+                
               } else {
                 mthis.items = []
               }
               mthis.spinShow = false
             })
           } else if (va.length === 1) {
-            alert('aaa')
+            // alert('aaa')
           } else {
-            alert('bbbb')
+            // alert('bbbb')
           }
         }, 1000);
       },
@@ -591,6 +638,8 @@
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
+            
+            
             $('.item-selected').removeClass('item-selected')
             mthis.items = response.body.data
             // console.log("datadatatdattatdtadt")
@@ -609,10 +658,12 @@
             // console.log(mthis.data4)
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
+            
           } else {
             // mthis.showMore = false
+            mthis.setMessage('未找到匹配的文章')
             mthis.items = []
-            alert('未找到匹配的文章')
+
           }
         })
         // }
@@ -642,6 +693,13 @@
     },
     props: ['contentData'],
     methods: {
+      setMessage(mes) {
+        
+        this.message = {
+          text: mes,
+          time: new Date().getTime()
+        };
+      },
       selectAll(){
         let disselectDom = $('.contentDiv:not(.item-selected)')
         disselectDom.addClass('item-selected')
@@ -670,8 +728,10 @@
         
       },
       togClass(e){
+        
         clearTimeout(timerClick);
         var mthis = this;
+        
         let that = e.target;
         if(that.tagName == "P"){
             that = that.parentNode
@@ -695,7 +755,7 @@
         
           this.watchSelectCounter++;
         }else{
-          alert("qingxuanzejiedian")
+          this.setMessage("请选择至少一篇文章")
         }
         
       },
@@ -983,7 +1043,6 @@
         },
       //无限滚动加载触发方法
       infiniteHandler($state) {
-        alert()
       setTimeout(() => {
         const temp = [];
         for (let i = this.list.length + 1; i <= this.list.length + 20; i++) {
@@ -1255,7 +1314,8 @@
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 // console.log('全部加载')
-                $('.layer').show().delay(3000).fadeOut()
+                // $('.layer').show().delay(3000).fadeOut()
+                mthis.setMessage('文档已经全部加载')
                 mthis.moreLoading = false
                 
                 // mthis.alertNotice('已全部加载', true)
@@ -1310,7 +1370,7 @@
         }, 500);
       },
       scrollBottom() {
-        alert('ssss')
+        // alert('ssss')
         // 滚动到页面底部时，请求前一天的文章内容
         if (((window.screen.height + document.body.scrollTop) > (document.body.clientHeight)) && this.REQUIRE) {
           // 请求的数据未加载完成时，滚动到底部不再请求前一天的数据
@@ -1335,6 +1395,8 @@
       },
       showContent(id,title) {
         var mthis = this
+        
+        // debugger
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}
         selData.id = [id];
@@ -1417,19 +1479,19 @@
       
       // // console.log($('#jiazaiDiv').offset())
       // window.addEventListener('scroll', this.handleScroll)
-      document.onkeydown=function(event){ 
-        if(mthis.$store.state.tmss === 'content') {
-          var e = event || window.event || arguments.callee.caller.arguments[0]; 
-          if(e && e.keyCode == 46){
-            mthis.deleteNode()
-          }
-          if(e.keyCode == 65 && e.ctrlKey){
-            mthis.selectAll()
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }
-      };  
+      // document.onkeydown=function(event){ 
+      //   if(mthis.$store.state.tmss === 'content') {
+      //     var e = event || window.event || arguments.callee.caller.arguments[0]; 
+      //     if(e && e.keyCode == 46){
+      //       mthis.deleteNode()
+      //     }
+      //     if(e.keyCode == 65 && e.ctrlKey){
+      //       mthis.selectAll()
+      //       e.preventDefault();
+      //       e.stopPropagation();
+      //     }
+      //   }
+      // };  
     }
   };
 </script>
@@ -1802,5 +1864,31 @@
     bottom:30px;
   }
 
-
+.xuanfuAlert {
+    /* background-color: rgba(51, 255, 255, 0.3); */
+    position: absolute;
+    color: #ccffff;
+    top: 8px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 4vh;
+    letter-spacing: 0px;
+    font-family: MicrosoftYaHei;
+    height: 4vh;
+    text-align: center;
+  }
+  .mybox-leave-active,
+  .mybox-enter-active {
+    transition: all 2s ease;
+  }
+  .mybox-leave-active,
+  .mybox-enter {
+    opacity: 0;
+  }
+  .mybox-leave,
+  .mybox-enter-active {
+    opacity: 1;
+  }
 </style>

@@ -168,8 +168,18 @@
     },
      methods: {
        delMethod(id){
+         let mthis = this
         //  触发删除工作集方法
-        alert('触发删除工作集方法')
+        // alert('触发删除工作集方法')
+        if(mthis.$store.state.tmss === 'net') {
+              mthis.$store.commit('setNetPromte', '触发删除工作集方法')
+            } else if(mthis.$store.state.tmss === 'geo') {
+              mthis.$store.commit('setGeoPromte', '触发删除工作集方法')
+            } else if(mthis.$store.state.tmss === 'content') {
+              mthis.$store.commit('setContentPromte', '触发删除工作集方法')
+            } else {
+
+            }
        },
        showGongzuoji(){
          this.spinRight = true

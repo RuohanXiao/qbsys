@@ -152,6 +152,10 @@
           this.curInt = null;
           
           this.option.series[1].data = []
+          let cancelTime = []
+          cancelTime.push(this.dataBySeries.date[0])
+          cancelTime.push(this.dataBySeries.date[this.dataBySeries.date.length -1])
+          this.$store.commit('setContentTimeCondition',cancelTime)
           this.charts.setOption(this.option)
         }
         this.isClick = false;

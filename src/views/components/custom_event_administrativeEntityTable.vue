@@ -771,7 +771,16 @@ import {
               mthis.spinWaiting = false
             })
           } else {
-            alert('长度为0')
+            // alert('长度为0')
+            if(mthis.$store.state.tmss === 'net') {
+              mthis.$store.commit('setNetPromte', '长度为0')
+            } else if(mthis.$store.state.tmss === 'geo') {
+              mthis.$store.commit('setGeoPromte', '长度为0')
+            } else if(mthis.$store.state.tmss === 'content') {
+              mthis.$store.commit('setContentPromte', '长度为0')
+            } else {
+
+            }
             mthis.spinWaiting = false
           }
         } else {
@@ -948,7 +957,15 @@ import {
   
             })
           } else {
-            alert('长度为0')
+            if(mthis.$store.state.tmss === 'net') {
+              mthis.$store.commit('setNetPromte', '长度为0')
+            } else if(mthis.$store.state.tmss === 'geo') {
+              mthis.$store.commit('setGeoPromte', '长度为0')
+            } else if(mthis.$store.state.tmss === 'content') {
+              mthis.$store.commit('setContentPromte', '长度为0')
+            } else {
+
+            }
           }
           // mthis.spinWaiting = false
         } else {
@@ -968,7 +985,6 @@ import {
               return item
             })
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
-              debugger
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }

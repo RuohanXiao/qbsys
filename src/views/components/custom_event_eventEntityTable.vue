@@ -135,7 +135,16 @@
               mthis.spinWaiting = false
             })
           } else {
-            alert('长度为0')
+            // alert('长度为0')
+            if(mthis.$store.state.tmss === 'net') {
+              mthis.$store.commit('setNetPromte', '长度为0')
+            } else if(mthis.$store.state.tmss === 'geo') {
+              mthis.$store.commit('setGeoPromte', '长度为0')
+            } else if(mthis.$store.state.tmss === 'content') {
+              mthis.$store.commit('setContentPromte', '长度为0')
+            } else {
+
+            }
             mthis.spinWaiting = false
           }
         } else {
@@ -232,7 +241,6 @@
             let links = new Array();
             if (response.body.code === 0) {
               // let type = response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")
-              debugger
               let img = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).img
               // let name = subType
               let name = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).name
@@ -296,7 +304,16 @@
           })
         }
         if (type === 'other') {
-          alert('this is other')
+          // alert('this is other')
+          if(mthis.$store.state.tmss === 'net') {
+              mthis.$store.commit('setNetPromte', 'this is other')
+            } else if(mthis.$store.state.tmss === 'geo') {
+              mthis.$store.commit('setGeoPromte', 'this is other')
+            } else if(mthis.$store.state.tmss === 'content') {
+              mthis.$store.commit('setContentPromte', 'this is other')
+            } else {
+
+            }
         }
       }
     },
@@ -322,7 +339,16 @@
               "TypeLabel": "all"
             }).then(response => {})
           } else {
-            alert('长度为0')
+            // alert('长度为0')
+            if(mthis.$store.state.tmss === 'net') {
+              mthis.$store.commit('setNetPromte', '长度为0')
+            } else if(mthis.$store.state.tmss === 'geo') {
+              mthis.$store.commit('setGeoPromte', '长度为0')
+            } else if(mthis.$store.state.tmss === 'content') {
+              mthis.$store.commit('setContentPromte', '长度为0')
+            } else {
+
+            }
           }
           // mthis.spinWaiting = false
         } else {

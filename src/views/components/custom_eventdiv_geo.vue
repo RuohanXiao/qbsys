@@ -362,7 +362,7 @@
         if (buttonId === 'onlylookit') {
           mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', ids)
         } else if (buttonId === 'delete') {
-          alert('delete')
+          // alert('delete')
         }
       },
       clickLeftStatics(staticsClick) {
@@ -370,7 +370,7 @@
         mthis.$store.commit('setGeoStaticsSelectedIds', staticsClick)
       },
       changTab(a) {
-        alert(a)
+        // alert(a)
         this.$store.commit('setTabSelectGeo', a)
       },
       setFlagToFalse(detailModalFlag) {

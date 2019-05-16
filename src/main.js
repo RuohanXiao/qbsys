@@ -207,8 +207,8 @@ var store = new Vuex.Store({
       api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
       map_url:'http://10.60.1.142:8082', //地图脚本服务地址
       api_event_test_url:'http://10.60.1.141:5100',//事件时间轴测试接口
-       xml_url:'http://10.60.1.140/assets' // 部署路径
-      //xml_url:'./src/dist/assets' // 本地路径
+      //  xml_url:'http://10.60.1.140/assets' // 部署路径
+      xml_url:'./src/dist/assets' // 本地路径
     },
     // ipConfig: {
     //   // api_url:'http://10.60.1.140:5001', //部署服务器api地址
@@ -391,12 +391,29 @@ var store = new Vuex.Store({
       time:''
     },
     contentSelShowFlag:false,
+    // 双击单个文档监听参数
     contentSelData:{
       id:[],
       title:''
-    }
+    },
+    // 快捷键监听参数
+    netKeyboards:[],
+    geoKeyboards:[],
+    contentKeyboards:[],
+    contentPromte: '',
+    netPromte: '',
+    geoPromte: ''
   },
   mutations:{
+    setContentPromte(state,val){
+      state.contentPromte = val
+    },
+    setNetPromte(state,val){
+      state.netPromte = val
+    },
+    setGeoPromte(state,val){
+      state.geoPromte = val
+    },
     setcontentSelData(state,val){
       state.contentSelData = val
     },

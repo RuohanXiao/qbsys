@@ -421,9 +421,9 @@
               mthis.spinShow = false
             })
           } else if (va.length === 1) {
-            alert('aaa')
+            // alert('aaa')
           } else {
-            alert('bbbb')
+            // alert('bbbb')
           }
         }, 500);
       },
@@ -474,7 +474,6 @@
     methods: {
       //无限滚动加载触发方法
       infiniteHandler($state) {
-        alert()
       setTimeout(() => {
         const temp = [];
         for (let i = this.list.length + 1; i <= this.list.length + 20; i++) {
@@ -533,7 +532,6 @@
       },
       contentTranslate() {
         var mthis = this;
-        debugger
         this.translateButton = true
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
@@ -774,7 +772,7 @@
         }, 500);
       },
       scrollBottom() {
-        alert('ssss')
+        // alert('ssss')
         // 滚动到页面底部时，请求前一天的文章内容
         if (((window.screen.height + document.body.scrollTop) > (document.body.clientHeight)) && this.REQUIRE) {
           // 请求的数据未加载完成时，滚动到底部不再请求前一天的数据

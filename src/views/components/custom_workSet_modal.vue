@@ -223,17 +223,32 @@
         }).then(response => {
           // // console.log(response)
           if (response.body.code === 0) {
-            alert('修改成功！')
+            // alert('修改成功！')
+            if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', '修改成功！')
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', '修改成功！')
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', '修改成功！')
+          } else {
+          }
             mthis.$store.commit('setRefSet', !mthis.$store.state.refSet)
             this.showFlag = false
           } else {
-            alert('修改失败！')
+            // alert('修改失败！')
+              if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', '修改失败！')
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', '修改失败！')
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', '修改失败！')
+          } else {
+          }
           }
         })
       },
       createSet() {
         var mthis = this
-        debugger
         let timestamp = new Date().getTime();
         var setData = [];
         var entityIds = [];
@@ -333,11 +348,27 @@
           }
         }).then(response => {
           if (response.body.code === 0) {
-            alert('新增成功！')
+            // alert('新增成功！')
+              if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', '新增成功！')
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', '新增成功！')
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', '新增成功！')
+          } else {
+          }
             mthis.$store.commit('setRefSet', !mthis.$store.state.refSet)
             this.showFlag = false
           } else {
-            alert('新增失败！')
+            // alert('新增失败！')
+              if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', '新增失败！')
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', '新增失败！')
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', '新增失败！')
+          } else {
+          }
           }
         })
       },
@@ -382,7 +413,15 @@
             mthis.worksetData[2].data.push(item)
           }
         } else {
-          alert('选择节点类型异常，节点ID是' + item.id)
+          // alert('选择节点类型异常，节点ID是' + item.id)
+           if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', '选择节点类型异常，节点ID是' + item.id)
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', '选择节点类型异常，节点ID是' + item.id)
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', '选择节点类型异常，节点ID是' + item.id)
+          } else {
+          }
         }
       },
       setOption(a) {
@@ -406,7 +445,15 @@
                 data: response.body.data[0].nodes[0]
               })
             } else {
-              alert('entity-detail接口异常')
+              // alert('entity-detail接口异常')
+               if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', 'entity-detail接口异常')
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', 'entity-detail接口异常')
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', 'entity-detail接口异常')
+          } else {
+          }
             }
           })
           // }, 100);
@@ -473,7 +520,7 @@
                     "name": response.body.data.nodes[i].name,
                     "value": response.body.data.nodes[i].id,
                     "id": response.body.data.nodes[i].id,
-                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image.png'),
+                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image1.png'),
                     "type": response.body.data.nodes[i].type
                   })
                 }
@@ -496,6 +543,7 @@
         //   "id":id,
         //   "flag":true
         // })
+        let mthis = this
         this.modal1 = !this.modal1;
         this.loading = true;
         let oldimg = ''
@@ -512,14 +560,22 @@
           // item.filter(function (obj) {
           //   return obj.id!==item.target.id
           // })
-          alert('调用删除接口，调用id为' + item.target.parentNode.id)
+          // alert('调用删除接口，调用id为' + item.target.parentNode.id)
           //  item.target.id
+          if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', '调用删除接口，调用id为' + item.target.parentNode.id)
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', '调用删除接口，调用id为' + item.target.parentNode.id)
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', '调用删除接口，调用id为' + item.target.parentNode.id)
+          } else {
+          }
         })
       },
       cantClick() {
-        alert(
-          '不可用工作集，不可导入'
-        )
+        // alert(
+        //   '不可用工作集，不可导入'
+        // )
       }
     },
     props: {
