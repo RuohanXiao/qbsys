@@ -515,12 +515,8 @@ export default {
                     });
                 }
                 if (areaIds.length > 0){
-<<<<<<< HEAD
                     debugger
                     mthis.$http.post("http://10.60.1.141:5100/search-Area/", {
-=======
-                    mthis.$http.post("http://localhost:5000/searchAreaByIds/", {
->>>>>>> 54db5bab81af090081afd87f65eb6272da83a0c7
                         ids: areaIds
                     }).then(response => {
                         if (response.body.code === 0) {
