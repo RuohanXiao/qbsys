@@ -3157,6 +3157,7 @@
     },
     created() {},
     computed: mapState([
+      "netPromte",
       "openWorkSetFlag",
       "searchNetResult",
       "netHeight",
@@ -3172,6 +3173,10 @@
       'netKeyboards'
     ]),
     watch: {
+      //全局监听消息提示
+      netPromte:function(){
+        this.setMessage(this.netPromte)
+      },
       netKeyboards:function(){
         var mthis = this
         
