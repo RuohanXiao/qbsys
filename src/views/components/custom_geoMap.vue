@@ -517,7 +517,7 @@ export default {
                 }
                 if (areaIds.length > 0){
                     debugger
-                    mthis.$http.post("http://localhost:5000/searchAreaByIds/", {
+                    mthis.$http.post("http://10.60.1.141:5100/search-Area/", {
                         ids: areaIds
                     }).then(response => {
                         debugger
@@ -3278,8 +3278,9 @@ export default {
             var mthis = this;
             debugger
             mthis.waiting();
-            mthis.$http.post("http://localhost:5000/getParamsByIds/", {
-                    "ids": ids
+            //mthis.$http.post("http://localhost:5000/getParamsByIds/", {
+            mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
+                    "nodeIds": ids
                 }).then(response => {
                     debugger
                     var orgNum = 0;
