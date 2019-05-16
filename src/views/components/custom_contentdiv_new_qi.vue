@@ -98,7 +98,7 @@
               <Row type="flex" justify="start">
                 <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items" :key="index">
                 <div>
-                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.text" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click="togClass">
+                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu">
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
@@ -118,8 +118,11 @@
                     </Col> -->
               </Row>
               
-                <div class="layer">文档已经全部加载</div>
-              
+                <!-- <div class="layer">文档已经全部加载</div> -->
+                <transition name="mybox">
+                  <div class="xuanfuAlert" v-show="popout">{{message.text}}</div>
+                  <!-- <div class="xuanfuAlert">message.text</div> -->
+                </transition>
               
             </div>
           </Scroll>
@@ -160,11 +163,17 @@
   var timer = null;
   var tthis = this;
   var timerClick = null;
+  var timer2 = null;
   /* eslint-disable */
   export default {
     name: "App",
     data() {
       return {
+        popout:false,
+        message: {
+          text: "",
+          time: ""
+        },
         goodsList: [],
         sortFlag: true, //默认升序
         page: 1,
@@ -483,6 +492,7 @@
             //  点选切换选中事件
             .on('click', '.select-item', function() {
               // console.log("clcik")
+              
               clearTimeout(timerClick);
               var selThis = this;
               timerClick = setTimeout(function(){
@@ -492,6 +502,7 @@
                 $(selThis).addClass('item-selected');
               }
               mthis.watchSelectCounter++;
+              
               },300)
               
             })
@@ -512,6 +523,16 @@
       'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards'
     ]),
     watch: {
+      message: function() {
+        var mthis = this;
+        mthis.popout = true; //点击后popout为ture
+        if (timer2) {
+          clearTimeout(timer2);
+        }
+        timer2 = setTimeout(function() {
+          mthis.popout = !mthis.popout; //对popout进行取反
+        }, 1000);
+      },
       contentKeyboards:function(){
         var mthis = this
         
@@ -587,15 +608,16 @@
                 $('.item-selected').removeClass('item-selected')
                 mthis.items = response.body.data
                
+                
               } else {
                 mthis.items = []
               }
               mthis.spinShow = false
             })
           } else if (va.length === 1) {
-            alert('aaa')
+            // alert('aaa')
           } else {
-            alert('bbbb')
+            // alert('bbbb')
           }
         }, 1000);
       },
@@ -607,6 +629,8 @@
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
+            console.log("tianjiawendang")
+            mthis.setMessage('增加文档')
             $('.item-selected').removeClass('item-selected')
             mthis.items = response.body.data
             // console.log("datadatatdattatdtadt")
@@ -625,6 +649,7 @@
             // console.log(mthis.data4)
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
+            
           } else {
             // mthis.showMore = false
             mthis.items = []
@@ -658,6 +683,13 @@
     },
     props: ['contentData'],
     methods: {
+      setMessage(mes) {
+        
+        this.message = {
+          text: mes,
+          time: new Date().getTime()
+        };
+      },
       selectAll(){
         let disselectDom = $('.contentDiv:not(.item-selected)')
         disselectDom.addClass('item-selected')
@@ -686,8 +718,10 @@
         
       },
       togClass(e){
+        
         clearTimeout(timerClick);
         var mthis = this;
+        
         let that = e.target;
         if(that.tagName == "P"){
             that = that.parentNode
@@ -1270,7 +1304,8 @@
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 // console.log('全部加载')
-                $('.layer').show().delay(3000).fadeOut()
+                // $('.layer').show().delay(3000).fadeOut()
+                mthis.setMessage('文档已经全部加载')
                 mthis.moreLoading = false
                 
                 // mthis.alertNotice('已全部加载', true)
@@ -1350,6 +1385,8 @@
       },
       showContent(id,title) {
         var mthis = this
+        mthis.setMessage('进入文章详情')
+        // debugger
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}
         selData.id = [id];
@@ -1817,5 +1854,31 @@
     bottom:30px;
   }
 
-
+.xuanfuAlert {
+    /* background-color: rgba(51, 255, 255, 0.3); */
+    position: absolute;
+    color: #ccffff;
+    top: 8px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 4vh;
+    letter-spacing: 0px;
+    font-family: MicrosoftYaHei;
+    height: 4vh;
+    text-align: center;
+  }
+  .mybox-leave-active,
+  .mybox-enter-active {
+    transition: all 2s ease;
+  }
+  .mybox-leave-active,
+  .mybox-enter {
+    opacity: 0;
+  }
+  .mybox-leave,
+  .mybox-enter-active {
+    opacity: 1;
+  }
 </style>
