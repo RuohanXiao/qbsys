@@ -57,6 +57,7 @@
 <script>
   import echarts from "echarts";
   import { mapState,mapMutations } from 'vuex'
+  var timer = null
   export default {
     name: "",
     data() {
@@ -110,7 +111,11 @@
         isClick:false,
         echartsShowStart:0,
         echartsShowEnd:100,
-        curInt:null
+        curInt:null,
+        timeParam:{
+          'type':'',
+          'time':[]
+        }
       };
     },
     methods: {
@@ -155,7 +160,8 @@
           let cancelTime = []
           cancelTime.push(this.dataBySeries.date[0])
           cancelTime.push(this.dataBySeries.date[this.dataBySeries.date.length -1])
-          this.$store.commit('setContentTimeCondition',cancelTime)
+          
+          this.$store.commit('setContentTimeCondition',null)
           this.charts.setOption(this.option)
         }
         this.isClick = false;
@@ -433,7 +439,8 @@
               cancelTime.push(mthis.dataBySeries.date[mthis.dataBySeries.date.length -1])
               console.log(mthis.dataBySeries.date)
               console.log(cancelTime)
-              mthis.$store.commit('setContentTimeCondition',cancelTime)
+              
+              mthis.$store.commit('setContentTimeCondition',null)
              
               mthis.isBrush = []
               mthis.boxSelShowDiv = false
@@ -459,8 +466,16 @@
             // selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            mthis.$store.commit('setContentTimeCondition', timeArr)
-            mthis.selectTime = true
+            if(timer){
+              clearTimeout(timer)
+            }
+            timer = setTimeout(function(){
+               
+               mthis.$store.commit('setContentTimeCondition', timeArr)
+               console.log("#$################")
+               mthis.selectTime = true
+            },300)
+           
           }
             
           
@@ -489,7 +504,8 @@
           mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
           
           mthis.charts.setOption(mthis.option)
-          mthis.$store.commit('setContentTimeCondition', timeArr)
+         
+          mthis.$store.commit('setContentTimeCondition',timeArr)
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
