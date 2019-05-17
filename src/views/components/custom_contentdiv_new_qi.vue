@@ -27,14 +27,14 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
+          <div class="button-div" @click="openCreateGroupModal">
             <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">创建集合</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='toContentDiv'>
+          <div class="button-div" @click='hideAlist'>
             <Icon class="icon iconfont icon-zhaiyaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">摘要图</p>
           </div>
@@ -89,16 +89,17 @@
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div :style="{margin:'0,5px'}">
-        <div v-if="!showList">
+        <div v-show="!showList">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow"></Spin>
             </div>
+          
             <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}">
               <Row type="flex" justify="start">
                 <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items" :key="index">
                 <div>
-                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu">
+                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click='togClass'>
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
@@ -125,6 +126,7 @@
                 </transition>
               
             </div>
+            
           </Scroll>
           <div id="contentInfo" class="scrollBarAble" v-show='ifInfo' :style="{height:ContentHeightList,overflowY:'scroll'}">
             <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
@@ -135,7 +137,7 @@
         </div>
       </div>
       <div>
-        <div v-if="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
+        <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
           <Table  :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
@@ -143,6 +145,7 @@
     </Col>
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
+    <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     
   </div>
 </template>
@@ -152,6 +155,7 @@
   // import liM from '../../dist/assets/js/jquery.liMarquee.js'
   import modalChart from './custom_modal.vue'
   import InfiniteLoading from 'vue-infinite-loading';
+  import worksetModal from "./custom_workSet_modal.vue";
   
   import $ from "jquery";
   import {
@@ -164,11 +168,20 @@
   var tthis = this;
   var timerClick = null;
   var timer2 = null;
+
   /* eslint-disable */
   export default {
     name: "App",
     data() {
       return {
+        worksetData: [],
+        worksetType: "",
+        worksetFlag: 0,
+        worksetInfo: {
+          title: "",
+          des: "",
+          id: ""
+        },
         popout:false,
         message: {
           text: "",
@@ -192,6 +205,8 @@
         netheightout: 0,
         flag: true,
         modal01: false,
+        
+        
         eventData: null,
         items: [],
         page: 1,
@@ -199,7 +214,7 @@
         order: '',
         toEdg: -100,
         showList: false,
-        moreLoading: true,
+        moreLoading: false,
         selectArr: [],
         columns2: [{
             title: 'Name',
@@ -493,17 +508,17 @@
             .on('click', '.select-item', function() {
               // console.log("clcik")
               
-              clearTimeout(timerClick);
-              var selThis = this;
-              timerClick = setTimeout(function(){
-                if ($(selThis).hasClass('item-selected')) {
-                $(selThis).removeClass('item-selected');
-              } else {
-                $(selThis).addClass('item-selected');
-              }
-              mthis.watchSelectCounter++;
+              // clearTimeout(timerClick);
+              // var selThis = this;
+              // timerClick = setTimeout(function(){
+              //   if ($(selThis).hasClass('item-selected')) {
+              //   $(selThis).removeClass('item-selected');
+              // } else {
+              //   $(selThis).addClass('item-selected');
+              // }
+              // mthis.watchSelectCounter++;
               
-              },300)
+              // },300)
               
             })
           //  点选全选全不选
@@ -576,18 +591,21 @@
       netToContentData: function() {
         
         var mthis = this
-        // alert('文档接受到了')
-        console.log(this.netToContentData)
+        
         if(this.netToContentData.contentIds.length ==0){
+          
           mthis.items = []
           
         }else if(this.netToContentData.contentIds.length>0){
+          
           mthis.items = []
           let contentIds = this.netToContentData.contentIds
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
+          console.log(0)
           $('.item-selected').removeClass('item-selected')
+          
           mthis.items = response.body.data
         })
         mthis.watchSelectCounter++;
@@ -596,29 +614,45 @@
       },
       
       contentTimeCondition: function(va) {
-        // console.log(this.contentTimeCondition)
+        
         var mthis = this
+        if(va == null){
+          console.log(1)
+         $('.item-selected').removeClass('item-selected')
+         mthis.watchSelectCounter++;
+         
+        }else{
         if (timer) {
           clearTimeout(timer)
         }
         timer = setTimeout(function() {
           mthis.page = 1
           if (va.length === 2) {
-            mthis.spinShow = true
+            // mthis.spinShow = true
             
             let stime = util.getTimestamp(va[0])
             // let etime = util.getTimestamp(va[1])
             let etime = util.getTimestamp(mthis.isLeapYear(va[1]))
             // console.log(stime)
             // console.log(etime)
+            
             mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
               if (response.body.data.length > 0) {
                 // console.log(response.body)
+                console.log(3)
                 $('.item-selected').removeClass('item-selected')
-                mthis.items = response.body.data
-               
                 
+                // mthis.items = response.body.data
+                let checkId = []
+                for(let i=0;i<response.body.data.length;i++){
+                  checkId.push(response.body.data[i].id)
+                }
+                for(let j=0;j<checkId.length;j++){
+                  $('#'+checkId[j]).addClass('item-selected')
+                }
+                mthis.watchSelectCounter++;
               } else {
+                
                 mthis.items = []
               }
               mthis.spinShow = false
@@ -628,7 +662,8 @@
           } else {
             // alert('bbbb')
           }
-        }, 1000);
+        }, 100);
+        }
       },
       searchContentResult: function(va) {
         var mthis = this
@@ -639,22 +674,26 @@
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
             
-            
+            console.log(5)
             $('.item-selected').removeClass('item-selected')
+           
             mthis.items = response.body.data
+            if(response.body.data.length ==30){
+              mthis.moreLoading = true
+            }
             // console.log("datadatatdattatdtadt")
             // console.log(mthis.items)
             mthis.data4 = []
-            for(let i=0;i<mthis.items.length;i++){
-              let itemList = {};
-              itemList.title = mthis.items[i].title
-              itemList.time = mthis.items[i].time.substring(0,10)
-              itemList.text = mthis.items[i].text
-              itemList.id = mthis.items[i].id
-              itemList.i_sn = mthis.items[i].i_sn
-              itemList.entity = mthis.content
-              mthis.data4.push(itemList)
-            }
+            // for(let i=0;i<mthis.items.length;i++){
+            //   let itemList = {};
+            //   itemList.title = mthis.items[i].title
+            //   itemList.time = mthis.items[i].time.substring(0,10)
+            //   itemList.text = mthis.items[i].text
+            //   itemList.id = mthis.items[i].id
+            //   itemList.i_sn = mthis.items[i].i_sn
+            //   itemList.entity = mthis.content
+            //   mthis.data4.push(itemList)
+            // }
             // console.log(mthis.data4)
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
@@ -662,6 +701,7 @@
           } else {
             // mthis.showMore = false
             mthis.setMessage('未找到匹配的文章')
+            
             mthis.items = []
 
           }
@@ -689,10 +729,58 @@
       }
     },
     components: {
-      InfiniteLoading,modalChart
+      InfiniteLoading,modalChart,worksetModal
     },
     props: ['contentData'],
     methods: {
+      openCreateGroupModal(){
+        var mthis = this;
+        this.worksetInfo = {
+          title: "",
+          des: "",
+          id: ""
+        };
+        this.worksetData = [{
+            type: "entity",
+            data: []
+          },
+          {
+            type: "event",
+            data: []
+          },
+          {
+            type: "document",
+            data: []
+          }, {
+            type: "area",
+            data: []
+          },
+        ];
+        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        let contentIds = []
+        for (let m = 0; m < selectList.length; m++) {
+          contentIds.push(selectList[m].id)
+        }
+        if (contentIds.length > 0) {
+            mthis.$http
+              .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
+                docIds: contentIds
+              })
+              .then(response => {;
+                if (response.body.code === 0) {
+                  mthis.worksetData[2].type = "document";
+                  response.body.data.map(item => {
+                    item.name = item.title
+                    item.img = "http://10.60.1.140/assets/images/content_node.png"
+                    return item
+                  })
+                  mthis.worksetData[2].data = response.body.data;
+                }
+              });
+          }
+        this.worksetType = "add";
+        this.worksetFlag = this.worksetFlag + 1;
+      },
       setMessage(mes) {
         
         this.message = {
@@ -740,6 +828,7 @@
           }
         timerClick = setTimeout(function(){
         if ($(that).hasClass('item-selected')) {
+          console.log(6)
           $(that).removeClass('item-selected');
         } else {
           $(that).addClass('item-selected');
@@ -750,7 +839,7 @@
       deleteNode(){
         if(this.deleteButton){
           let selectDom = $('.item-selected')
-        
+          console.log(7)
           selectDom.removeClass('item-selected')
         
           this.watchSelectCounter++;
@@ -1063,11 +1152,13 @@
         // document.getElementsByClassName("box");
         let selectDom = $('.item-selected')
         let disselectDom = $('.contentDiv:not(.item-selected)')
+        console.log(8)
         selectDom.removeClass('item-selected')
         disselectDom.addClass('item-selected')
         this.watchSelectCounter++;
       },
       removeAll() {
+        
         this.items = []
         this.watchSelectCounter++;
         this.page = 1
@@ -1097,7 +1188,24 @@
         this.$store.commit('changeTMSS', 'net')
       },
       showAsList() {
+        
+        
         this.showList = true
+        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        let contentIds = []
+        for (let m = 0; m < selectList.length; m++) {
+          contentIds.push(selectList[m].id)
+        }
+        console.log(contentIds)
+      },
+      hideAlist(){
+        this.showList = false
+        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        let contentIds = []
+        for (let m = 0; m < selectList.length; m++) {
+          contentIds.push(selectList[m].id)
+        }
+        console.log(contentIds)
       },
       contentTranslate() {
         var mthis = this;
@@ -1157,10 +1265,12 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(9)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据1', true)
               }
               resolve();
             })
@@ -1169,20 +1279,24 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(10)
                 $('.item-selected').removeClass('item-selected')
+               
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据2', true)
               }
               resolve();
             })
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(11)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据3', true)
               }
               resolve();
             })
@@ -1199,10 +1313,12 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(12)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据4', true)
               }
               resolve();
             })
@@ -1211,20 +1327,24 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(13)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据5', true)
               }
               resolve();
             })
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(14)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据6', true)
               }
               resolve();
             })
@@ -1246,10 +1366,12 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(15)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据7', true)
               }
               resolve();
             })
@@ -1258,20 +1380,24 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(16)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据8', true)
               }
               resolve();
             })
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(17)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据9', true)
               }
               resolve();
             })
@@ -1288,10 +1414,12 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(18)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据10', true)
               }
               resolve();
             })
@@ -1300,17 +1428,21 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(19)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据11', true)
               }
               resolve();
             })
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                console.log(20)
                 $('.item-selected').removeClass('item-selected')
+                
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 // console.log('全部加载')
@@ -1333,6 +1465,7 @@
         
       },
       toContentDiv() {
+        
         this.translateButton = false
         this.showList = false
         this.ifInfo = false
@@ -1350,7 +1483,7 @@
         selData.id = [];
         selData.title = ''
         console.log(selData)
-        this.$store.commit('setcontentSelData',selData)
+        this.$store.commit('setContentSelData',selData)
         // document.getElementById('contents').innerHTML = ''
         // document.getElementById('contentsTitle').innerHTML = ''
         // document.getElementById('contentsTime').innerHTML = ''
@@ -1402,7 +1535,7 @@
         selData.id = [id];
         selData.title = title
         console.log(selData)
-        mthis.$store.commit('setcontentSelData',selData)
+        mthis.$store.commit('setContentSelData',selData)
         clearTimeout(timerClick);
         
         mthis.ifInfo = true

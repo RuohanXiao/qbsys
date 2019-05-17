@@ -1645,10 +1645,9 @@
             Math.sin(ahd * i) * radius;
           nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
             Math.cos(ahd * i) * radius;
-          console.log(nodesInfo)
-          console.log(nodesInfo["x"] + '------' + nodesInfo["y"])
           mthis.netchart.updateStyle(mthis.selectionId[i])
-          mthis.netchart.lockNode(mthis.selectionId[i]);
+          // mthis.netchart.lockNode(mthis.selectionId[i]);
+          mthis.changNetchartMode('s')
         }
       },
       //矩形布局
@@ -1664,8 +1663,9 @@
             let no = mthis.netchart.getNode(this.selectionId[i]);
             no["x"] = no1["x"] + col * 150;
             no["y"] = no1["y"] + row * 150;
-            mthis.netchart.lockNode(this.selectionId[i]);
+            // mthis.netchart.lockNode(this.selectionId[i]);
           }
+          mthis.changNetchartMode('s')
           mthis.netchart.scrollIntoView(
             this.selectionId.map(item => {
               return item.id;
@@ -3530,7 +3530,7 @@
           mthis.netchart.selection(util.unique(arr));
           setTimeout(function() {
             mthis.square();
-          }, 100);
+          }, 500);
           mthis.netchart.scrollIntoView(arr);
           mthis.netchart.updateSettings()
           mthis.spinShow = false;
@@ -3627,7 +3627,7 @@
           console.log(dataids)
           mthis.square();
           mthis.spinShow = false;
-        }, 300);
+        }, 500);
       },
       contentToNetData: function() {
         this.spinShow = true;
@@ -3662,7 +3662,7 @@
           // console.log(contentIdsArry)
           mthis.square();
           mthis.spinShow = false;
-        }, 300);
+        }, 500);
       },
       netTimeCondition: function() {
         var mthis = this;
@@ -3695,6 +3695,7 @@
         mthis.netchart.updateSettings();
         mthis.netchart.updateSize();
       },
+
       searchNetResult: function(va) {
         var mthis = this;
         va.data.type = va.data.entity_type;

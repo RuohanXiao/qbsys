@@ -414,7 +414,7 @@ var store = new Vuex.Store({
     setGeoPromte(state,val){
       state.geoPromte = val
     },
-    setcontentSelData(state,val){
+    setContentSelData(state,val){
       state.contentSelData = val
     },
     // 修改state里的数据时，只能通过mutations的形式来操作
