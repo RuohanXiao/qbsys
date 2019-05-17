@@ -94,6 +94,11 @@ trClick{
     display: table-cell;
     vertical-align: middle;
 }
+.moreTd{
+    text-align: center;
+    color: #ccffff;
+    vertical-align: middle;
+}
 
 
 #EntityAttrColl > .ivu-collapse-item > .ivu-collapse-header > i{
@@ -126,17 +131,30 @@ trClick{
             <span class="separateLine"></span>
             <span style="margin-left:10px;font-size: 14px;">{{staticsData.firstLevelName}}</span>
         </div>
-        <Collapse simple v-model="openPanelNames" id="EntityAttrColl" v-if='staticsData.subStatisticsAttr.length > 0'>
+        <Collapse simple v-model="openPanelNames" id="EntityAttrColl" v-if='staticsData.subStatisticsAttr.length > 0' @on-change="collchange">
             <panel v-for="(staticsPanel,index) in staticsData.subStatisticsAttr" :name="staticsPanel.secondLevelId">
                 <span :id="staticsPanel.secondLevelId + '/countSpan'">{{staticsPanel.secondLevelName + '（' + staticsPanel.typecount + '）'}}</span>
                 <table slot="content" :id="staticsPanel.secondLevelId + '/entityattr'">
-                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist,rightMenuConf)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
-                        <td class="NameTd">
-                            <p>{{specificStatics.thirdLevelName}}</p>
+                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-if="index<5"  v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist,rightMenuConf)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
+                            <td class="NameTd">
+                                <p>{{specificStatics.thirdLevelName}}</p>
+                            </td>
+                            <td :id="specificStatics.thirdLevelId + '/StaticsPer'" class="StaticsPerTd">
+                                <percentBar  :num="specificStatics.per" :count="specificStatics.count" :index='0'></percentBar>
+                            </td>
+                    </tr> 
+                    <tr :id="staticsPanel.secondLevelId+'/more'" class='trNoClick' v-if="staticsPanel.specificStaticsAttr.length>5&&!displayItem[staticsPanel.secondLevelId]" @click="displaymore(staticsPanel.secondLevelId)">
+                        <td colspan="2" class='moreTd'>
+                        <span :id="staticsPanel.secondLevelId+'/countSpan'">{{"还有"+moreitemCount[staticsPanel.secondLevelId]+"个条目，"+moreparamCount[staticsPanel.secondLevelId]+"个节点"}}</span>
                         </td>
-                        <td :id="specificStatics.thirdLevelId + '/StaticsPer'" class="StaticsPerTd">
-                            <percentBar  :num="specificStatics.per" :count="specificStatics.count" :index='0'></percentBar>
-                        </td>
+                    </tr>
+                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-if="index>=5&&displayItem[staticsPanel.secondLevelId]"  v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist,rightMenuConf)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
+                            <td class="NameTd">
+                                <p>{{specificStatics.thirdLevelName}}</p>
+                            </td>
+                            <td :id="specificStatics.thirdLevelId + '/StaticsPer'" class="StaticsPerTd">
+                                <percentBar  :num="specificStatics.per" :count="specificStatics.count" :index='0'></percentBar>
+                            </td>
                     </tr> 
                 </table>
             </panel>
@@ -156,10 +174,17 @@ export default {
         
         return{
             openPanelNames:[],
+            mactiveNames:[],
             type:'',
             eDivH:'',
             staticsdatas:[],
-            spinShow:true
+            spinShow:true,
+            moredisplay:{
+                "more":true
+            },
+            displayItem:{},
+            moreitemCount:{},
+            moreparamCount:{}
         }
     },
     mounted(){
@@ -170,9 +195,17 @@ export default {
       percentBar
     },
     watch:{
-        staticsdatas:{
+        openPanelNames(){
+            var mthis = this;
+            mthis.mactiveNames = [];
+            for(let i = 0; i < mthis.openPanelNames.length; i++){
+                mthis.mactiveNames.push(mthis.openPanelNames[i])
+            }
+        },
+        staticsDatas:{
             handler:function(val){
                 var mthis = this;
+                debugger
                 mthis.openPanelNames = [];
                 if(!mthis.staticsDatas){
                     return;
@@ -180,11 +213,27 @@ export default {
                 mthis.staticsdatas = mthis.staticsDatas;
                 mthis.staticsDatas.forEach(function(item){
                     item.subStatisticsAttr.forEach(function(Iitem){
+                        var thirdLevel = Iitem.specificStaticsAttr
+                        var itemCount = thirdLevel.length;
+                        var moreItemcount = itemCount>5?itemCount-5:0;
+                        var morethirdIds = 0;
+                        if(itemCount>5){
+                            for(let i = 5; i < itemCount; i++){
+                                var tItem = thirdLevel[i];
+                                var count = tItem.count;
+                                morethirdIds += count;
+                            }
+                        }
                         mthis.openPanelNames.push(Iitem.secondLevelId);
+                        mthis.$set(mthis.displayItem, Iitem.secondLevelId, false)
+                        mthis.$set(mthis.moreitemCount, Iitem.secondLevelId, moreItemcount)
+                        mthis.$set(mthis.moreparamCount, Iitem.secondLevelId, morethirdIds)
                     })
                 })
             },
             immediate:true
+            /* var mthis = this;
+            debugger */
         },
         HLIds:function(){
             var mthis = this;
@@ -244,6 +293,21 @@ export default {
         }
     },
     methods:{
+        collchange(names){
+            var mthis = this;
+            debugger
+            var activeName = "";
+            if(mthis.mactiveNames.length > names.length){
+                for(let i = 0; i < mthis.mactiveNames.length; i++){
+                    var name = mthis.mactiveNames[i];
+                    var index = util.itemIndexInArr(name,names);
+                    if(index === -1){
+                        activeName = name;
+                    }
+                }
+            }
+            mthis.$set(mthis.displayItem, activeName, false);
+        },
         clickRightButton(buttonId,nsIds){
             var mthis = this;
             var data = {
@@ -330,13 +394,21 @@ export default {
                 }
             }
         },
+        displaymore(id){
+            var mthis = this;
+            debugger
+            mthis.$set(mthis.displayItem, id, true)
+           // mthis.$set(mthis.moredisplay, 'more', false)
+            //mthis.moredisplay = false;
+        },
         displayMore(EntityAttrData){
             var mthis = this;
-            var entityattrEle = document.getElementById(EntityAttrData.id+'/entityattr');
-            var moreEle = document.getElementById(EntityAttrData.id+'/more');
-            var countSpan = document.getElementById(EntityAttrData.id+'/countSpan');
-            if(entityattrEle.children.length <= 4){
-                mthis.addMore(EntityAttrData.id);
+            debugger
+            var entityattrEle = document.getElementById(EntityAttrData.secondLevelId+'/entityattr');
+            var moreEle = document.getElementById(EntityAttrData.secondLevelId+'/more');
+            var countSpan = document.getElementById(EntityAttrData.secondLevelId+'/countSpan');
+            if(entityattrEle.children.length <= 6){
+                mthis.addMore(EntityAttrData.secondLevelId);
                 moreEle.firstChild.innerHTML = '收起';
                 var AttrItemSpan = countSpan.innerHTML;
                 var AttrItemSpanName = AttrItemSpan.split('(')[0];
@@ -352,7 +424,7 @@ export default {
         deleteMore(parentNode){
             var mthis = this;
             if(parentNode.children.length > 4){
-                for(let i = 3;i < parentNode.children.length - 1; i++){
+                for(let i = 4;i < parentNode.children.length - 1; i++){
                     parentNode.removeChild(parentNode.children[i]);
                 }
             }
