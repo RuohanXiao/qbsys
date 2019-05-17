@@ -149,9 +149,7 @@
               "pagesize": 30
             }).then(response => {
               if (response.body.code === 0) {
-                mthis.$store.commit('setSearchNetResult', {
-                  data: response.body.data[0].nodes[0]
-                })
+                mthis.$store.commit('setAddNetNodes', response.body.data[0].data)
               } else {
                 // alert('entity-detail接口异常')
               }

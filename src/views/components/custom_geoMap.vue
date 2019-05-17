@@ -515,7 +515,8 @@ export default {
                     });
                 }
                 if (areaIds.length > 0){
-                    mthis.$http.post("http://localhost:5000/searchAreaByIds/", {
+                    debugger
+                    mthis.$http.post("http://10.60.1.141:5100/search-Area/", {
                         ids: areaIds
                     }).then(response => {
                         if (response.body.code === 0) {
@@ -3273,8 +3274,9 @@ export default {
         setFeatureByIds(ids){
             var mthis = this;
             mthis.waiting();
-            mthis.$http.post("http://localhost:5000/getParamsByIds/", {
-                    "ids": ids
+            //mthis.$http.post("http://localhost:5000/getParamsByIds/", {
+            mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
+                    "nodeIds": ids
                 }).then(response => {
                     var orgNum = 0;
                     var eventNum = 0
