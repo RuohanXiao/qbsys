@@ -296,7 +296,7 @@
             outOfBrush: {
               // colorAlpha: 1
               barBorderRadius: [3, 3, 3, 3],
-              color: "rgba(204,255,255,1)"
+              color: "rgba(204,255,255,0.1)"
             },
             // 选中框内样式
             inBrush: {
@@ -450,7 +450,7 @@
                   if(key == mthis.curInt){
                     return '#33cc99'
                   }else{
-                    return "#ccffff"
+                    return "rgba(204,255,255,0.1)"
                   }
                 }
                 

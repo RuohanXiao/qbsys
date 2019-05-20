@@ -140,11 +140,14 @@
           this.clcikShowDiv = false
           console.log("click")
         }else{
+          this.$store.commit('setContentTimeOnlySel',true)
           this.boxSelShowDiv = false
+          this.isDataZoom = false
           this.charts.dispatchAction({
             type:'brush',
             areas:[]
           })
+          
           console.log("brush")
         }
       },
@@ -159,7 +162,7 @@
           cancelTime.push(this.dataBySeries.date[0])
           cancelTime.push(this.dataBySeries.date[this.dataBySeries.date.length -1])
           
-          this.$store.commit('setContentTimeCondition',null)
+          this.$store.commit('setContentTimeCondition',cancelTime)
           this.colorFlag = 0;
           this.charts.setOption(this.option)
         }
@@ -226,11 +229,11 @@
             // 选中框外样式
             outOfBrush: {
               barBorderRadius: [3, 3, 3, 3],
-              color: "rgba(51,204,153,1)"
+              color: "rgba(204,255,255,0.1)"
             },
             // 选中框内样式
             inBrush: {
-              color:'#33ddff',
+              color:'#33cc99',
               barBorderRadius:[3,3,3,3]
             },
             brushStyle: {
@@ -333,13 +336,13 @@
             },
             {
               type: "inside",
-              start: 0,
-              end: 10,
+              // start: 0,
+              // end: 10,
               show: true,
               xAxisIndex: [0],
-              startValue: 0,
-              endValue: 5,
-              minValueSpan: 100
+              // startValue: 0,
+              // endValue: 5,
+              minValueSpan: 10
             }
           ],
               
@@ -368,7 +371,7 @@
                   if(key == mthis.curInt){
                     return '#33cc99'
                   }else{
-                    return "#ccffff"
+                    return "rgba(204,255,255,0.1)"
                   }
                 }
                 
@@ -444,10 +447,11 @@
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
              mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
              mthis.isDataZoom = true
+             mthis.$store.commit('setContentTimeOnlySel',false)
           }
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
-            // mthis.timeTitle = '请选择节点'
+            
             if(mthis.isDataZoom){
               
               mthis.timeTitle = '时间轴'
@@ -457,7 +461,7 @@
               console.log(mthis.dataBySeries.date)
               console.log(cancelTime)
               
-              mthis.$store.commit('setContentTimeCondition',null)
+              mthis.$store.commit('setContentTimeCondition',cancelTime)
              
               mthis.isBrush = []
               mthis.boxSelShowDiv = false

@@ -34,13 +34,13 @@
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='hideAlist'>
+          <div class="button-div" @click='toContentDiv'>
             <Icon class="icon iconfont icon-zhaiyaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">摘要图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
+          <div class="button-div" @click="toThumbnails">
             <Icon class="icon iconfont icon-suolvetu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">缩略图</p>
           </div>
@@ -89,7 +89,7 @@
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div :style="{margin:'0,5px'}">
-        <div v-show="!showList">
+        <div v-show="!showList && !showThumb">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow">
@@ -139,9 +139,15 @@
           </div>
         </div>
       </div>
+    
       <div>
         <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
           <Table  :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
+        </div>
+      </div>
+      <div>
+        <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
+          缩略图
         </div>
       </div>
     </div>
@@ -208,8 +214,8 @@
         netheightout: 0,
         flag: true,
         modal01: false,
-        
-        
+        showThumb:false,
+        checkId:[],
         eventData: null,
         items: [],
         page: 1,
@@ -538,9 +544,17 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel'
     ]),
     watch: {
+      contentTimeOnlySel:function(){
+        if(this.contentTimeOnlySel){
+          this.selectAll()
+        }else{
+          console.log("falsefalsefalsefalse")
+        }
+        
+      },
       contentPromte:function(){
         this.setMessage(this.contentPromte)
       },
@@ -585,8 +599,8 @@
         for (let m = 0; m < selectList.length; m++) {
           this.selectArr.push(selectList[m].id)
         }
-        // // console.log('==============++++++++++==============')
-        // // console.log(this.selectArr)
+        // console.log('==============++++++++++==============')
+        // console.log(this.selectArr)
         this.$store.commit('setSelectContentNodes', [{
           ids: this.selectArr
         }])
@@ -596,19 +610,21 @@
         var mthis = this
         
         if(this.netToContentData.contentIds.length ==0){
-          
+          console.log(0)
           mthis.items = []
           
         }else if(this.netToContentData.contentIds.length>0){
           mthis.spinShow = true
+          console.log(1)
           mthis.items = []
           let contentIds = this.netToContentData.contentIds
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
-          console.log(0)
+          
           $('.item-selected').removeClass('item-selected')
           mthis.spinShow = false
+          console.log(2)
           mthis.items = response.body.data
         })
         mthis.watchSelectCounter++;
@@ -620,7 +636,7 @@
         
         var mthis = this
         if(va == null){
-          console.log(1)
+          
          $('.item-selected').removeClass('item-selected')
          mthis.watchSelectCounter++;
          
@@ -642,20 +658,20 @@
             mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
               if (response.body.data.length > 0) {
                 // console.log(response.body)
-                console.log(3)
+                
                 $('.item-selected').removeClass('item-selected')
-                
-                // mthis.items = response.body.data
-                let checkId = []
+                console.log(3)
+                mthis.items = response.body.data
+                mthis.checkId = []
                 for(let i=0;i<response.body.data.length;i++){
-                  checkId.push(response.body.data[i].id)
+                  mthis.checkId.push(response.body.data[i].id)
                 }
-                for(let j=0;j<checkId.length;j++){
-                  $('#'+checkId[j]).addClass('item-selected')
-                }
-                mthis.watchSelectCounter++;
+                // for(let j=0;j<checkId.length;j++){
+                //   $('#'+checkId[j]).addClass('item-selected')
+                // }
+                // mthis.watchSelectCounter++;
               } else {
-                
+                console.log(4)
                 mthis.items = []
               }
               mthis.spinShow = false
@@ -677,9 +693,9 @@
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
             
-            console.log(5)
+            
             $('.item-selected').removeClass('item-selected')
-           
+            console.log(5)
             mthis.items = response.body.data
             if(response.body.data.length ==30){
               mthis.moreLoading = true
@@ -704,7 +720,7 @@
           } else {
             // mthis.showMore = false
             mthis.setMessage('未找到匹配的文章')
-            
+            console.log(6)
             mthis.items = []
 
           }
@@ -1161,7 +1177,7 @@
         this.watchSelectCounter++;
       },
       removeAll() {
-        
+        console.log(7)
         this.items = []
         this.watchSelectCounter++;
         this.page = 1
@@ -1194,15 +1210,10 @@
         
         
         this.showList = true
-        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-        let contentIds = []
-        for (let m = 0; m < selectList.length; m++) {
-          contentIds.push(selectList[m].id)
-        }
-        console.log(contentIds)
+        
       },
-      hideAlist(){
-        this.showList = false
+      toThumbnails(){
+        this.showThumb = true
         let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         let contentIds = []
         for (let m = 0; m < selectList.length; m++) {
@@ -1268,9 +1279,9 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(9)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(8)
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据1', true)
@@ -1282,9 +1293,9 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(10)
+                
                 $('.item-selected').removeClass('item-selected')
-               
+                console.log(10)
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据2', true)
@@ -1294,9 +1305,9 @@
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(11)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(11)
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据3', true)
@@ -1316,9 +1327,9 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(12)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(12)
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据4', true)
@@ -1330,9 +1341,9 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(13)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(13)
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据5', true)
@@ -1342,9 +1353,9 @@
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(14)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(14)
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据6', true)
@@ -1369,9 +1380,9 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(15)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(15)
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据7', true)
@@ -1383,9 +1394,9 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(16)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(16)
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据8', true)
@@ -1395,9 +1406,9 @@
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(17)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(17)
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据9', true)
@@ -1417,9 +1428,9 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(18)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(18)
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 mthis.alertNotice('无匹配数据10', true)
@@ -1431,9 +1442,9 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(19)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(19)
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 mthis.alertNotice('无匹配数据11', true)
@@ -1443,9 +1454,9 @@
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                console.log(20)
-                $('.item-selected').removeClass('item-selected')
                 
+                $('.item-selected').removeClass('item-selected')
+                console.log(20)
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 // console.log('全部加载')
@@ -1471,6 +1482,7 @@
         
         this.translateButton = false
         this.showList = false
+        this.showThumb = false
         this.ifInfo = false
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
