@@ -112,10 +112,8 @@
         echartsShowStart:0,
         echartsShowEnd:100,
         curInt:null,
-        timeParam:{
-          'type':'',
-          'time':[]
-        }
+        colorFlag:0
+
       };
     },
     methods: {
@@ -162,6 +160,7 @@
           cancelTime.push(this.dataBySeries.date[this.dataBySeries.date.length -1])
           
           this.$store.commit('setContentTimeCondition',null)
+          this.colorFlag = 0;
           this.charts.setOption(this.option)
         }
         this.isClick = false;
@@ -288,7 +287,7 @@
               end: 100,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
-              show: false,
+              show: true,
               textStyle: {
                 color: "#33ffff",
                 fontFamily: 'Microsoft YaHei'
@@ -357,13 +356,27 @@
             barCategoryGap:'50%',
             itemStyle: {
               color:function(param){
+                  
                 var key = param.dataIndex;
-                if(key === mthis.curInt){
-                  return '#33ddff'
-                }else{
-                  return "rgba(51,204,153,1)"
+                if(mthis.colorFlag ==0){
+                  if(key == mthis.curInt){
+                    return '#33cc99'
+                  }else{
+                    return "#33cc99"
+                  }
+                }else if(mthis.colorFlag ==1){
+                  if(key == mthis.curInt){
+                    return '#33cc99'
+                  }else{
+                    return "#ccffff"
+                  }
                 }
+                
               },
+              emphasis: {
+                cursor: "pointer",
+                barBorderRadius: [3, 3, 3, 3],
+                color: '#27866a'},
               cursor: "default",
               barBorderRadius: [3, 3, 3, 3],
               
@@ -389,8 +402,12 @@
                         barCategoryGap : '60%',
                         data:mthis.dataBySeries.clickNum,
                         itemStyle:{
-                            color:'#33ddff',
-                            barBorderRadius:[3,3,3,3]
+                            color:'#33cc99',
+                            barBorderRadius:[3,3,3,3],
+                            emphasis: {
+                              cursor: "pointer",
+                              barBorderRadius: [3, 3, 3, 3],
+                              color: '#27866a'},
                         },
                         data:[]
                     }
@@ -448,6 +465,7 @@
               mthis.option.dataZoom[0].start = mthis.echartsShowStart;
               mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
               mthis.option.series[1].data = []
+              mthis.colorFlag = 0;
               mthis.charts.setOption(mthis.option)
               
             }
@@ -502,7 +520,7 @@
           mthis.curInt = params.dataIndex;
           mthis.option.dataZoom[0].start = mthis.echartsShowStart;
           mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
-          
+          mthis.colorFlag = 1;
           mthis.charts.setOption(mthis.option)
          
           mthis.$store.commit('setContentTimeCondition',timeArr)
@@ -544,6 +562,7 @@
           // mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          mthis.colorFlag = 0;
           mthis.charts.setOption(mthis.option)
           
         }else if(flag==3){
@@ -553,6 +572,7 @@
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          mthis.colorFlag =1;
           mthis.charts.setOption(mthis.option)
         }else{
           // flag ==4--->网络关系事件节点为空，清空echarts

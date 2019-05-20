@@ -92,7 +92,10 @@
         <div v-show="!showList">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
-              <Spin size="large" fix v-if="spinShow"></Spin>
+              <Spin size="large" fix v-if="spinShow">
+                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+              </Spin>
             </div>
           
             <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}">
@@ -597,7 +600,7 @@
           mthis.items = []
           
         }else if(this.netToContentData.contentIds.length>0){
-          
+          mthis.spinShow = true
           mthis.items = []
           let contentIds = this.netToContentData.contentIds
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
@@ -605,7 +608,7 @@
         }).then(response => {
           console.log(0)
           $('.item-selected').removeClass('item-selected')
-          
+          mthis.spinShow = false
           mthis.items = response.body.data
         })
         mthis.watchSelectCounter++;
