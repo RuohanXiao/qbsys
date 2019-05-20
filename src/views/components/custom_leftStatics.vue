@@ -177,7 +177,7 @@ export default {
             mactiveNames:[],
             type:'',
             eDivH:'',
-            staticsdatas:[],
+            /* staticsdatas:[], */
             spinShow:true,
             moredisplay:{
                 "more":true
@@ -210,7 +210,7 @@ export default {
                 if(!mthis.staticsDatas){
                     return;
                 }
-                mthis.staticsdatas = mthis.staticsDatas;
+                //mthis.staticsdatas = mthis.staticsDatas;
                 mthis.staticsDatas.forEach(function(item){
                     item.subStatisticsAttr.forEach(function(Iitem){
                         var thirdLevel = Iitem.specificStaticsAttr
