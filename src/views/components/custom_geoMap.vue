@@ -1029,6 +1029,9 @@ export default {
             /* mthis.orgsSpatialQuery(geometryList,'Org'); */
             mthis.deleteRightMenu();
         },
+        noItemInRightMenu(){
+            alert('请期待!')
+        },
         deleteRightMenu(){
             var mthis = this;
             setTimeout(function(){
@@ -1048,14 +1051,26 @@ export default {
             ovdiv.class = 'ringRightMenu';
             ovdiv.id='ringRightMenu';
             var config = [
-                {'Id':1,'parentId':0,'name':'探索事件','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':''},
-                {'Id':2,'parentId':0,'name':'探索组织','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':''},
-                {'Id':3,'parentId':0,'name':'探索地名','hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':''},
-                {'Id':4,'parentId':0,'name':'删除区域','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':''},
-/*                 {'Id':5,'parentId':0,'name':'探索地名11','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':''},
-                {'Id':6,'parentId':0,'name':'删除区域','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':''}, */
-                {'Id':301,'parentId':3,'name':'aa','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
-                {'Id':302,'parentId':3,'name':'bb','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
+                /* {'Id':1,'parentId':0,'name':'探索事件','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
+                {'Id':2,'parentId':0,'name':'探索组织','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
+                {'Id':3,'parentId':0,'name':'暂无','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':4,'parentId':0,'name':'删除区域','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'deletearea.png'},
+                {'Id':5,'parentId':0,'name':'暂无','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':6,'parentId':0,'name':'暂无','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'}, */
+                /* {'Id':301,'parentId':3,'name':'aa','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
+                {'Id':302,'parentId':3,'name':'bb','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''}, */
+                {'Id':1,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':2,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':3,'parentId':0,'name':'删除','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'deletearea.png'},
+                {'Id':4,'parentId':0,'name':'推送','disable':false,'hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'pushnet.png'},
+                {'Id':5,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':6,'parentId':0,'name':'探索','disable':false,'hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':'explor.png'},
+                {'Id':601,'parentId':6,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
+                {'Id':602,'parentId':6,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
+                {'Id':603,'parentId':6,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
+                {'Id':401,'parentId':4,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
+                {'Id':402,'parentId':4,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
+                {'Id':403,'parentId':4,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'}
             ]
             //mthis.oparAreaFeature = feature;
             var routeMap = new rightMenu(mthis,ovdiv,config);
@@ -1538,6 +1553,7 @@ export default {
         },
         setPointMoveOverlay_Event(feature){
             var mthis = this;
+            debugger
             var overlayId = 'pointMoveOverlay_Event';
             var ovdiv = document.createElement('div');
             ovdiv.style ='background-color: rgba(0,51,51,0.8);border-radius: 5px;';

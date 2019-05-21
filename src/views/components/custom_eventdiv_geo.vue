@@ -18,7 +18,7 @@
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>Loading</div>
             </Spin>
-            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' :HLIds='hlids' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' :openPanelNames='openPanelNames' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' :HLIds='hlids' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -81,6 +81,7 @@
         staticsIds: [],
         single: false,
         resArr: [],
+        openPanelNames:[],
         rightClickConf: [{
             'name': '只选中它',
             'id': 'onlylookit',
@@ -234,7 +235,34 @@
             'type': 'geo'
           }).then(response => {
             mthis.staticsDatas = response.body.data;
+            
+
+
+            mthis.openPanelNames = [];
+            if(!mthis.staticsDatas){
+                return;
+            }
+            //mthis.staticsdatas = mthis.staticsDatas;
+            mthis.staticsDatas.forEach(function(item){
+                item.subStatisticsAttr.forEach(function(Iitem){
+                    var thirdLevel = Iitem.specificStaticsAttr
+                    var itemCount = thirdLevel.length;
+                    var moreItemcount = itemCount>5?itemCount-5:0;
+                    var morethirdIds = 0;
+                    if(itemCount>5){
+                        for(let i = 5; i < itemCount; i++){
+                            var tItem = thirdLevel[i];
+                            var count = tItem.count;
+                            morethirdIds += count;
+                        }
+                    }
+                    mthis.openPanelNames.push(Iitem.secondLevelId);
+                })
+            })
+
             mthis.spinShow = false;
+
+
           })
         } else {
           mthis.staticsDatas = [];

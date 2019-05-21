@@ -173,7 +173,7 @@ export default {
     data(){
         
         return{
-            openPanelNames:[],
+            /* openPanelNames:[], */
             mactiveNames:[],
             type:'',
             eDivH:'',
@@ -190,7 +190,7 @@ export default {
     mounted(){
         this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
     },
-    props:['staticsDatas','rightMenuConf','HLIds'],
+    props:['staticsDatas','rightMenuConf','HLIds','openPanelNames'],
     components: {
       percentBar
     },
@@ -202,7 +202,35 @@ export default {
                 mthis.mactiveNames.push(mthis.openPanelNames[i])
             }
         },
-        staticsDatas:{
+        staticsDatas(){
+            var mthis = this;
+                debugger
+                mthis.openPanelNames = [];
+                if(!mthis.staticsDatas){
+                    return;
+                }
+                //mthis.staticsdatas = mthis.staticsDatas;
+                mthis.staticsDatas.forEach(function(item){
+                    item.subStatisticsAttr.forEach(function(Iitem){
+                        var thirdLevel = Iitem.specificStaticsAttr
+                        var itemCount = thirdLevel.length;
+                        var moreItemcount = itemCount>5?itemCount-5:0;
+                        var morethirdIds = 0;
+                        if(itemCount>5){
+                            for(let i = 5; i < itemCount; i++){
+                                var tItem = thirdLevel[i];
+                                var count = tItem.count;
+                                morethirdIds += count;
+                            }
+                        }
+                        //mthis.openPanelNames.push(Iitem.secondLevelId);
+                        mthis.$set(mthis.displayItem, Iitem.secondLevelId, false)
+                        mthis.$set(mthis.moreitemCount, Iitem.secondLevelId, moreItemcount)
+                        mthis.$set(mthis.moreparamCount, Iitem.secondLevelId, morethirdIds)
+                    })
+                })
+        },
+        /* staticsDatas:{
             handler:function(val){
                 var mthis = this;
                 debugger
@@ -232,9 +260,7 @@ export default {
                 })
             },
             immediate:true
-            /* var mthis = this;
-            debugger */
-        },
+        }, */
         HLIds:function(){
             var mthis = this;
             mthis.cancelAllClickEffect();
