@@ -788,6 +788,11 @@
           }else{
             ids.push(id)
           }
+          if(ids.length>0){
+            mthis.deleteButton = true
+          }else{
+            mthis.deleteButton = false
+          }
           mthis.$store.commit('setSelectContentNodes', [{
             ids: ids
           }])
@@ -861,6 +866,7 @@
             continue
           }
         }
+        mthis.deleteButton = true
         mthis.$store.commit('setSelectContentNodes', [{
           ids: ids
         }])
@@ -915,14 +921,16 @@
         },300)
       },
       deleteNode(){
+        var mthis = this
         if(this.deleteButton){
-          let selectDom = $('.item-selected')
-          console.log(7)
-          selectDom.removeClass('item-selected')
-        
-          this.watchSelectCounter++;
+          mthis.items =  mthis.items.filter(item => item.check == false)
+          debugger
+          mthis.$store.commit('setSelectContentNodes', [{
+          ids: []
+        }])
+          
         }else{
-          this.setMessage("请选择至少一篇文章")
+          mthis.setMessage("请选择至少一篇文章")
         }
         
       },
