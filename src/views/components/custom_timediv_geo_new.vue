@@ -419,10 +419,10 @@
             type: "bar",
             barGap:"-100%",
             // barWidth:'10px',
-            barMaxWidth: '30%',
+            barMaxWidth: "60px",
             barWidth:'10px',
-            barMinHeight: '1px',
-            barCategoryGap:'50%',
+            // barMinHeight: '1px',
+            barCategoryGap:'20px',
             itemStyle: {
               // 柱形图默认颜色
               // normal: {
@@ -481,7 +481,7 @@
           {
                     type:'bar',
                     // barWidth:'10px',
-                    barMaxWidth: '30%',
+                    barMaxWidth: '60px',
                     barWidth:'10px',
                     barMinHeight: '1px',
                     barCategoryGap : '60%',
@@ -514,6 +514,12 @@
           if(params.hasOwnProperty('start')){
             mthis.echartsShowStart = params.start
             mthis.echartsShowEnd = params.end
+            // if(params.end- params.start <3){
+            //   mthis.option.series[0].barWidth = '10px'
+            //   mthis.option.dataZoom[0].start = params.start
+            //   mthis.option.dataZoom[0].end = params.end
+            //   mthis.charts.setOption(mthis.option)
+            // }
           }else{
             mthis.echartsShowStart = params.batch[0].start
             mthis.echartsShowEnd = params.batch[0].end

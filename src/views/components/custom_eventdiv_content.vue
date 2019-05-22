@@ -249,6 +249,7 @@
         var mthis = this;
         mthis.evetdataFlag = false
         console.log(this.selectContentNodes)
+        
         if (mthis.selectContentNodes[0].ids.length > 0) {
           // 新增防抖功能
           mthis.evetdata = []
@@ -277,7 +278,7 @@
           mthis.spinShow = true;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
           'nodeIds': mthis.selectContentNodes[0].ids,
-          'type':'content'
+          'type':'document'
           }).then(response => {
               mthis.staticsDatas = response.body.data;
               mthis.openPanelNames = [];

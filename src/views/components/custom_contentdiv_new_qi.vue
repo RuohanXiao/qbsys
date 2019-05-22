@@ -89,7 +89,7 @@
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div :style="{margin:'0,5px'}">
-        <div v-show="!showList && !showThumb">
+        <div v-show="!showList">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow">
@@ -100,14 +100,23 @@
           
             <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}">
               <Row type="flex" justify="start">
-                <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items" :key="index">
+
+                <Col :sm="colSmnum" :lg="colLgNum" align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
+                <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}"> -->
+                  <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click='item.check = !item.check;toSelIds(item.id)' @dblclick="showContent(item.id,item.title)">
+                   
+                      <img :src='item.img' class="picsize" :class="(item.check)?'markedImg':''" >
+                      <p class='nametext' ref='docP'>{{item.title}}</p>
+                   
+                  </div>
+                <!-- </div> -->
                 <div>
-                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click='togClass'>
+                  <div v-show='!showThumb' class="contentDiv fileDiv select-item" :class="(item.check)?'item-selected':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click='item.check = !item.check;toSelIds(item.id)'>
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
                   </div>
-                  <div class="contentItem">
+                  <div v-show='!showThumb' class="contentItem">
                     <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 hoverStyle" :style="{padding:'0 !important'}" size="35" @click="selectThis(item.id)"></Icon>
                     <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
                   
@@ -132,7 +141,7 @@
             
           </Scroll>
           <div id="contentInfo" class="scrollBarAble" v-show='ifInfo' :style="{height:ContentHeightList,overflowY:'scroll'}">
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='changeDiv'></Icon>
             <h2 class="contentInfoTitle" id='contentsTitle'></h2>
             <p class="contentInfoTime" id='contentsTime'></p>
             <p style='margin:10px'><span id='contents'></span></p>
@@ -146,9 +155,14 @@
         </div>
       </div>
       <div>
-        <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
-          缩略图
-        </div>
+        <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
+          <Row type="flex" justify="space-between" class="code-row-bg">
+              <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" class-name="docThunmsItem" v-for='itemObj in thumbDocIds'>
+                <img :src='itemObj.img' class="picsize">
+                <p class='nametext'>{{itemObj.title}}</p>
+              </Col>
+          </Row>
+        </div> -->
       </div>
     </div>
     </Col>
@@ -183,6 +197,9 @@
     name: "App",
     data() {
       return {
+        divWidth:'100px',
+        colLgNum:4,
+        colSmnum:3,
         worksetData: [],
         worksetType: "",
         worksetFlag: 0,
@@ -215,7 +232,7 @@
         flag: true,
         modal01: false,
         showThumb:false,
-        checkId:[],
+        thumbDocIds:[],
         eventData: null,
         items: [],
         page: 1,
@@ -544,7 +561,7 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes'
     ]),
     watch: {
       contentTimeOnlySel:function(){
@@ -566,7 +583,7 @@
         }
         timer2 = setTimeout(function() {
           mthis.popout = !mthis.popout; //对popout进行取反
-        }, 1000);
+        }, 3000);
       },
       contentKeyboards:function(){
         var mthis = this
@@ -578,7 +595,6 @@
         }else if(this.contentKeyboards.indexOf('selall')>-1){
           let index = mthis.contentKeyboards.indexOf('selall')
           mthis.selectAll()
-          // debugger
           mthis.$store.state.contentKeyboards.splice(index,1)
         }else{
           return
@@ -588,6 +604,8 @@
       },
       watchSelectCounter: function() {
         // console.log("watchselectcounter")
+        
+        // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         
         let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         if(selectList.length >0){
@@ -604,6 +622,7 @@
         this.$store.commit('setSelectContentNodes', [{
           ids: this.selectArr
         }])
+        
       },
       netToContentData: function() {
         
@@ -662,14 +681,7 @@
                 $('.item-selected').removeClass('item-selected')
                 console.log(3)
                 mthis.items = response.body.data
-                mthis.checkId = []
-                for(let i=0;i<response.body.data.length;i++){
-                  mthis.checkId.push(response.body.data[i].id)
-                }
-                // for(let j=0;j<checkId.length;j++){
-                //   $('#'+checkId[j]).addClass('item-selected')
-                // }
-                // mthis.watchSelectCounter++;
+                
               } else {
                 console.log(4)
                 mthis.items = []
@@ -696,7 +708,20 @@
             
             $('.item-selected').removeClass('item-selected')
             console.log(5)
-            mthis.items = response.body.data
+            // mthis.items = response.body.data
+            mthis.items = response.body.data.map(item =>({
+                title: item.title,      
+                i_sn: item.i_sn, 
+                id: item.id,
+                text: item.text,
+                time: item.time,
+                from: item.from,     
+                img: "http://10.60.1.140/assets/images/content_node.png",
+                check:false
+              })
+            );
+            console.log(mthis.items)
+            
             if(response.body.data.length ==30){
               mthis.moreLoading = true
             }
@@ -752,6 +777,24 @@
     },
     props: ['contentData'],
     methods: {
+      toSelIds(id){
+        clearTimeout(timerClick);
+        var mthis = this;
+        timerClick = setTimeout(function(){
+          var ids = mthis.selectContentNodes[0].ids
+          if(ids.indexOf(id)>-1){
+            let index = ids.indexOf(id)
+            ids.splice(index,1)
+          }else{
+            ids.push(id)
+          }
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: ids
+          }])
+        },300)
+        
+        
+      },
       openCreateGroupModal(){
         var mthis = this;
         this.worksetInfo = {
@@ -785,7 +828,7 @@
               .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
                 docIds: contentIds
               })
-              .then(response => {;
+              .then(response => {
                 if (response.body.code === 0) {
                   mthis.worksetData[2].type = "document";
                   response.body.data.map(item => {
@@ -808,9 +851,23 @@
         };
       },
       selectAll(){
-        let disselectDom = $('.contentDiv:not(.item-selected)')
-        disselectDom.addClass('item-selected')
-        this.watchSelectCounter++;
+        var mthis = this
+        let ids = []
+        for(let i=0;i<mthis.items.length;i++){
+          ids.push(mthis.items[i].id)
+          if(!mthis.items[i].check){
+            mthis.items[i].check = true
+          }else{
+            continue
+          }
+        }
+        mthis.$store.commit('setSelectContentNodes', [{
+          ids: ids
+        }])
+
+        // let disselectDom = $('.contentDiv:not(.item-selected)')
+        // disselectDom.addClass('item-selected')
+        // this.watchSelectCounter++;
         
       },
       rightMenu(e){
@@ -836,6 +893,7 @@
       },
       togClass(e){
         
+        
         clearTimeout(timerClick);
         var mthis = this;
         
@@ -846,6 +904,7 @@
               that = that
           }
         timerClick = setTimeout(function(){
+          
         if ($(that).hasClass('item-selected')) {
           console.log(6)
           $(that).removeClass('item-selected');
@@ -1214,12 +1273,18 @@
       },
       toThumbnails(){
         this.showThumb = true
-        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-        let contentIds = []
-        for (let m = 0; m < selectList.length; m++) {
-          contentIds.push(selectList[m].id)
-        }
-        console.log(contentIds)
+        this.colLgNum = 3
+        this.colSmnum = 4
+        
+        // let outCol = $('.outCol').addClass('ivu-col-span-lg-2').removeClass('ivu-col-span-lg-4')
+        
+        
+        // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        // let contentIds = []
+        // for (let m = 0; m < selectList.length; m++) {
+        //   contentIds.push(selectList[m].id)
+        // }
+        // console.log(contentIds)
       },
       contentTranslate() {
         var mthis = this;
@@ -1478,8 +1543,23 @@
         
         
       },
+      changeDiv(){
+        var mthis = this
+        mthis.ifInfo = false
+        this.$store.state.contentSelShowFlag = false
+        let selData = {}
+        selData.id = [];
+        selData.title = ''
+        console.log(selData)
+        this.$store.commit('setContentSelData',selData)
+        if(!this.showThumb){
+          mthis.toContentDiv()
+        }
+      },
       toContentDiv() {
         
+        this.colLgNum = 4
+        this.colSmnum = 3
         this.translateButton = false
         this.showList = false
         this.showThumb = false
@@ -1493,12 +1573,12 @@
           contentDiv.style.display = 'none';
           contentDiv.style.borderRight = 'none';
         }
-        this.$store.state.contentSelShowFlag = false
-        let selData = {}
-        selData.id = [];
-        selData.title = ''
-        console.log(selData)
-        this.$store.commit('setContentSelData',selData)
+        // this.$store.state.contentSelShowFlag = false
+        // let selData = {}
+        // selData.id = [];
+        // selData.title = ''
+        // console.log(selData)
+        // this.$store.commit('setContentSelData',selData)
         // document.getElementById('contents').innerHTML = ''
         // document.getElementById('contentsTitle').innerHTML = ''
         // document.getElementById('contentsTime').innerHTML = ''
@@ -1542,16 +1622,16 @@
         }
       },
       showContent(id,title) {
+        clearTimeout(timerClick);
         var mthis = this
         
-        // debugger
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}
         selData.id = [id];
         selData.title = title
         console.log(selData)
         mthis.$store.commit('setContentSelData',selData)
-        clearTimeout(timerClick);
+        
         
         mthis.ifInfo = true
         mthis.translateButton = true
@@ -1608,6 +1688,7 @@
     },
     mounted() {
       var mthis = this
+      
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
@@ -1931,7 +2012,16 @@
     pointer-events: none;
   }
   .marked {
-    border: 1px solid rgba(51, 255, 255, 0.8);
+    /* border: 1px solid rgba(51, 255, 255, 0.8); */
+    animation: all 1s;
+    -webkit-animation: all 1s;
+    background-color: rgba(51, 255, 255, 0.4);
+    /* background-color: pink; */
+    border: 1px solid rgba(51, 255, 255, 0.5);
+  }
+  .markImg{
+    background-color: #003333;
+	  border: solid 1px #ccffff;
   }
   .contentItem {
     position: absolute;
@@ -1941,7 +2031,7 @@
     width: 15px;
     height: 15px;
   }
-  contentItem:hover {
+  .contentItem:hover {
     opacity: 1;
   }
   .color255-back {
@@ -1989,7 +2079,7 @@
     cursor: pointer;
     color: rgba(51, 255, 255, 1) !important;
   }
-  .layer{
+  /* .layer{
     width:200px;
     height:30px;
     text-align: center;
@@ -1997,11 +2087,11 @@
     animation: all 1s;
     -webkit-animation: all 1s;
     font-family: MicrosoftYaHei;
-    /* font-size:26px; */
+   
     font-weight: bold;
     color:#ccffff;
     background-color: rgba(51, 255, 255, 0.4);
-    /* background-color: pink; */
+    
     border: 1px solid rgba(51, 255, 255, 0.5);
     display: none;
     border-radius: 10px;
@@ -2010,7 +2100,7 @@
     font-size: 18px;
     right: 20px;
     bottom:30px;
-  }
+  } */
 
 .xuanfuAlert {
     /* background-color: rgba(51, 255, 255, 0.3); */
@@ -2039,4 +2129,35 @@
   .mybox-enter-active {
     opacity: 1;
   }
+  .picsize{
+    max-width:100px;
+    max-height:100px;
+    width:100%;
+    
+    
+  }
+  .nametext{
+    white-space: nowrap;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    /* line-height: 30px; */
+    letter-spacing: 0px;
+    color: #ccffff;
+  }
+  .docThunmsItem:hover img{
+    /* background-color:rgba(51, 255, 255, 1); */
+    cursor:pointer;
+    background-color: #003333;
+	  border: solid 1px #336666;
+  }
+  .markedImg{
+    background-color: #003333;
+	  border: solid 2px #ccffff;
+  }
+ 
 </style>

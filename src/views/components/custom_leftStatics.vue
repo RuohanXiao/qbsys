@@ -233,7 +233,6 @@ export default {
         /* staticsDatas:{
             handler:function(val){
                 var mthis = this;
-                debugger
                 mthis.openPanelNames = [];
                 if(!mthis.staticsDatas){
                     return;
@@ -321,7 +320,6 @@ export default {
     methods:{
         collchange(names){
             var mthis = this;
-            debugger
             var activeName = "";
             if(mthis.mactiveNames.length > names.length){
                 for(let i = 0; i < mthis.mactiveNames.length; i++){
@@ -422,14 +420,12 @@ export default {
         },
         displaymore(id){
             var mthis = this;
-            debugger
             mthis.$set(mthis.displayItem, id, true)
            // mthis.$set(mthis.moredisplay, 'more', false)
             //mthis.moredisplay = false;
         },
         displayMore(EntityAttrData){
             var mthis = this;
-            debugger
             var entityattrEle = document.getElementById(EntityAttrData.secondLevelId+'/entityattr');
             var moreEle = document.getElementById(EntityAttrData.secondLevelId+'/more');
             var countSpan = document.getElementById(EntityAttrData.secondLevelId+'/countSpan');
