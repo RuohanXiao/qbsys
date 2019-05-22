@@ -128,7 +128,8 @@
         isClick:false,
         echartsShowStart:0,
         echartsShowEnd:100,
-        curInt:null
+        curInt:null,
+        colorFlag:0
         
       };
     },
@@ -185,6 +186,7 @@
           
           this.curInt = null;
           this.option.series[1].data = []
+          this.colorFlag = 0
           this.charts.setOption(this.option)
         }
         this.isClick = false;
@@ -267,11 +269,11 @@
             // 选中框外样式
             outOfBrush: {
               barBorderRadius: [3, 3, 3, 3],
-              color: "rgba(51,204,153,1)"
+              color: "rgba(204,255,255,0.1)"
             },
             // 选中框内样式
             inBrush: {
-              color:'#33ddff',
+              color:'#33cc99',
               barBorderRadius:[3,3,3,3]
             },
             brushStyle: {
@@ -397,13 +399,27 @@
             barCategoryGap:'50%',
             itemStyle: {
               color:function(param){
+                  
                 var key = param.dataIndex;
-                if(key === mthis.curInt){
-                  return '#33ddff'
-                }else{
-                  return "rgba(51,204,153,1)"
+                if(mthis.colorFlag ==0){
+                  if(key == mthis.curInt){
+                    return '#33cc99'
+                  }else{
+                    return "#33cc99"
+                  }
+                }else if(mthis.colorFlag ==1){
+                  if(key == mthis.curInt){
+                    return '#33cc99'
+                  }else{
+                    return "rgba(204,255,255,0.1)"
+                  }
                 }
+                
               },
+              emphasis: {
+                cursor: "pointer",
+                barBorderRadius: [3, 3, 3, 3],
+                color: '#27866a'},
               cursor: "default",
               barBorderRadius: [3, 3, 3, 3],
             },
@@ -427,9 +443,13 @@
                         barCategoryGap : '60%',
                         data:mthis.dataBySeries.clickNum,
                         itemStyle:{
-                            color:'#33ddff',
-                            barBorderRadius:[3,3,3,3]
-                        },
+                            color:'#33cc99',
+                            barBorderRadius:[3,3,3,3],
+                            emphasis: {
+                              cursor: "pointer",
+                              barBorderRadius: [3, 3, 3, 3],
+                              color: '#27866a'},
+                            },
                         data:[]
                     }
           ],
@@ -481,6 +501,7 @@
               mthis.option.dataZoom[0].start = mthis.echartsShowStart;
               mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
               mthis.option.series[1].data = []
+              mthis.colorFlag = 0;
               mthis.charts.setOption(mthis.option)
               // console.log(mthis.boxSelEventIds)
             }
@@ -552,6 +573,7 @@
           mthis.curInt = params.dataIndex;
           mthis.option.dataZoom[0].start = mthis.echartsShowStart;
           mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
+          mthis.colorFlag = 1;
           mthis.charts.setOption(mthis.option)
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                     "selectedIds":mthis.selectionIdByType.eventIds,
@@ -631,7 +653,7 @@
          
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
-          
+          mthis.colorFlag =0;
           mthis.charts.setOption(mthis.option)
           
         }else if(flag==3){
@@ -641,6 +663,7 @@
           // mthis.option.xAxis.data = mthis.dataBySeries.date;
           // mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          mthis.colorFlag = 1;
           // mthis.option.series[0].itemStyle.normal.color = "rgba(51,204,153,0.5)";
           mthis.charts.setOption(mthis.option)
         }else{

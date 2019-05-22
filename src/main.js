@@ -396,6 +396,8 @@ var store = new Vuex.Store({
       id:[],
       title:''
     },
+    // 文档时间轴只看它时显示标志
+    contentTimeOnlySel:false,
     // 快捷键监听参数
     netKeyboards:[],
     geoKeyboards:[],
@@ -405,6 +407,9 @@ var store = new Vuex.Store({
     geoPromte: ''
   },
   mutations:{
+    setContentTimeOnlySel(state,val){
+      state.contentTimeOnlySel = val
+    },
     setContentPromte(state,val){
       state.contentPromte = val
     },
@@ -414,7 +419,7 @@ var store = new Vuex.Store({
     setGeoPromte(state,val){
       state.geoPromte = val
     },
-    setcontentSelData(state,val){
+    setContentSelData(state,val){
       state.contentSelData = val
     },
     // 修改state里的数据时，只能通过mutations的形式来操作

@@ -4,11 +4,6 @@
       <panel name="1">
         <span>实体属性</span>
         <div slot="content" class="tableLine">
-
-
-
-
-
           <div class="econtent" v-if='tableData.native_label'>
             <p class="econtentp w5em">母语名</p>
             <p class="econtentp">{{tableData.native_label}}</p>
@@ -200,13 +195,14 @@ import {
         
       }
     },
-    props: ['tableData', 'entDivH'],
+    props: ['tableData', 'entDivH','tableType'],
     created(){
         let mthis = this
         mthis.xiangguanEntityItems = new Array()
         mthis.xiangguanEntitys = new Object()
         mthis.xiangguanEvent = new Array()
         mthis.xiangguanDoc = new Array()
+        if(this.tableType === 'organization'){
         mthis.spinWaiting = true
         if (this.tableData.isArray) {
           if (this.tableData.length > 0) {
@@ -214,9 +210,9 @@ import {
               "NodeIds": mthis.tableData.map(item => {
                 return item.id
               }),
-              "NodeTypes": mthis.tableData.map(item => {
-                return item.entity_type
-              }),
+              // "NodeTypes": mthis.tableData.map(item => {
+              //   return item.entity_type
+              // }),
               "TypeLabel": "all"
             }).then(response => {
               mthis.spinWaiting = false
@@ -237,7 +233,7 @@ import {
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
-            "NodeTypes": new Array('entity'),
+            // "NodeTypes": new Array('entity'),
             "TypeLabel": "all"
           }).then(response => {
             // mthis.xiangguanEntityItems = new Array()
@@ -266,7 +262,7 @@ import {
             }
             mthis.spinWaiting = false
           })
-        }
+        }}
     },
     mounted() {
       var mthis = this
@@ -392,12 +388,13 @@ import {
         mthis.xiangguanEntitys = new Object()
         mthis.xiangguanEvent = new Array()
         mthis.xiangguanDoc = new Array()
+        if(this.tableType === 'organization'){
         mthis.spinWaiting = true
         if(this.tableData.isArray){
           if(this.tableData.length>0){
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
               "NodeIds":  mthis.tableData.map(item=>{return item.id}),
-              "NodeTypes":mthis.tableData.map(item=>{return item.entity_type}),
+              // "NodeTypes":mthis.tableData.map(item=>{return item.entity_type}),
               "TypeLabel": "all"
             }).then(response => {
   
@@ -418,7 +415,7 @@ import {
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds":  new Array(mthis.tableData.id),
-            "NodeTypes":new Array('entity'),
+            // "NodeTypes":new Array('entity'),
             "TypeLabel": "all"
           }).then(response => {
             
@@ -445,7 +442,7 @@ import {
           })
         }
         mthis.spinWaiting = false
-      }
+      }}
     }
   }
 </script>

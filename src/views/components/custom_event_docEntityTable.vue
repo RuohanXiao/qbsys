@@ -65,7 +65,7 @@
       <panel name="3">
         <span>相关事件</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
+          <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0 && items.num>0' v-for='items in xiangguanEvent.statistics'>
             <!-- <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
             <p class="econtentp w5em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
@@ -83,7 +83,7 @@
       <panel name="4">
         <span>相关文档</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0' v-for='items in xiangguanDoc.statistics'>
+          <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0 && items.num>0' v-for='items in xiangguanDoc.statistics'>
             <p class="econtentp w5em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
@@ -120,7 +120,7 @@ import {
         myMap1: new Map()
       }
     },
-    props: ['tableData', 'entDivH'],
+    props: ['tableData', 'entDivH','tableType'],
     created(){
         let mthis = this
         mthis.xiangguanEntityItems = new Array()
@@ -128,15 +128,16 @@ import {
         mthis.xiangguanEvent = new Array()
         mthis.xiangguanDoc = new Array()
         mthis.spinWaiting = true
+        if(this.tableType === 'document'||this.tableType === 'content'){
         if (this.tableData.isArray) {
           if (this.tableData.length > 0) {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
               "NodeIds": mthis.tableData.map(item => {
                 return item.id
               }),
-              "NodeTypes": mthis.tableData.map(item => {
-                return item.entity_type
-              }),
+              // "NodeTypes": mthis.tableData.map(item => {
+              //   return item.entity_type
+              // }),
               "TypeLabel": "all"
             }).then(response => {
               mthis.spinWaiting = false
@@ -156,7 +157,7 @@ import {
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
-            "NodeTypes": new Array('entity'),
+            // "NodeTypes": new Array('entity'),
             "TypeLabel": "all"
           }).then(response => {
             // mthis.xiangguanEntityItems = new Array()
@@ -182,7 +183,7 @@ import {
             }
             mthis.spinWaiting = false
           })
-        }
+        }}
     },
     mounted() {
       var mthis = this
@@ -318,6 +319,7 @@ import {
         mthis.xiangguanEntitys = new Object()
         mthis.xiangguanEvent = new Array()
         mthis.xiangguanDoc = new Array()
+        if(this.tableType === 'document'||this.tableType === 'content'){
         if (this.tableData.isArray) {
           if (this.tableData.length > 0) {
             // let node
@@ -325,10 +327,10 @@ import {
               "NodeIds": mthis.tableData.map(item => {
                 return item.id
               }),
-              "NodeTypes": mthis.tableData.map(item => {
-                // return item.entity_type
-                return 'document'
-              }),
+              // "NodeTypes": mthis.tableData.map(item => {
+              //   // return item.entity_type
+              //   return 'document'
+              // }),
               "TypeLabel": "all"
             }).then(response => {
             })
@@ -347,7 +349,7 @@ import {
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
-            "NodeTypes": new Array('document'),
+            // "NodeTypes": new Array('document'),
             "TypeLabel": "all"
           }).then(response => {
             
@@ -378,6 +380,7 @@ import {
           })
         }
         mthis.spinWaiting = false
+      }
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
     
-    <Collapse simple v-model="value1" :style="{height:contentDivH}" class='scrollBarAble'>
+    <Collapse simple v-model="value1" :style="{height:contentDivH}" class='scrollBarAble' id='nodeAttr'>
       <panel name="1">
         <span>实体属性</span>
         <div slot="content" class="tableLine">
@@ -387,7 +387,7 @@ import {
           })
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds":this.contentSelData.id,
-            "NodeTypes":["document"],
+            // "NodeTypes":["document"],
             "TypeLabel": "all"
           }).then(response =>{
            console.log(response)

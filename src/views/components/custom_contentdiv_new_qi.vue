@@ -27,7 +27,7 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
+          <div class="button-div" @click="openCreateGroupModal">
             <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">创建集合</p>
           </div>
@@ -40,7 +40,7 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
+          <div class="button-div" @click="toThumbnails">
             <Icon class="icon iconfont icon-suolvetu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">缩略图</p>
           </div>
@@ -89,21 +89,34 @@
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div :style="{margin:'0,5px'}">
-        <div v-if="!showList">
+        <div v-show="!showList">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
-              <Spin size="large" fix v-if="spinShow"></Spin>
+              <Spin size="large" fix v-if="spinShow">
+                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+              </Spin>
             </div>
+          
             <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}">
               <Row type="flex" justify="start">
-                <Col :sm="8" :lg="4" align="middle" v-for="(item,index) in items" :key="index">
+
+                <Col :sm="colSmnum" :lg="colLgNum" align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
+                <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}"> -->
+                  <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click='item.check = !item.check;toSelIds(item.id)' @dblclick="showContent(item.id,item.title)">
+                   
+                      <img :src='item.img' class="picsize" :class="(item.check)?'markedImg':''" >
+                      <p class='nametext' ref='docP'>{{item.title}}</p>
+                   
+                  </div>
+                <!-- </div> -->
                 <div>
-                  <div class="contentDiv fileDiv select-item" :class="(item.check)?'marked':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu">
+                  <div v-show='!showThumb' class="contentDiv fileDiv select-item" :class="(item.check)?'item-selected':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click='item.check = !item.check;toSelIds(item.id)'>
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
                   </div>
-                  <div class="contentItem">
+                  <div v-show='!showThumb' class="contentItem">
                     <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 hoverStyle" :style="{padding:'0 !important'}" size="35" @click="selectThis(item.id)"></Icon>
                     <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
                   
@@ -125,24 +138,37 @@
                 </transition>
               
             </div>
+            
           </Scroll>
           <div id="contentInfo" class="scrollBarAble" v-show='ifInfo' :style="{height:ContentHeightList,overflowY:'scroll'}">
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='toContentDiv'></Icon>
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='changeDiv'></Icon>
             <h2 class="contentInfoTitle" id='contentsTitle'></h2>
             <p class="contentInfoTime" id='contentsTime'></p>
             <p style='margin:10px'><span id='contents'></span></p>
           </div>
         </div>
       </div>
+    
       <div>
-        <div v-if="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
+        <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
           <Table  :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
+      </div>
+      <div>
+        <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
+          <Row type="flex" justify="space-between" class="code-row-bg">
+              <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" class-name="docThunmsItem" v-for='itemObj in thumbDocIds'>
+                <img :src='itemObj.img' class="picsize">
+                <p class='nametext'>{{itemObj.title}}</p>
+              </Col>
+          </Row>
+        </div> -->
       </div>
     </div>
     </Col>
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
+    <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     
   </div>
 </template>
@@ -152,6 +178,7 @@
   // import liM from '../../dist/assets/js/jquery.liMarquee.js'
   import modalChart from './custom_modal.vue'
   import InfiniteLoading from 'vue-infinite-loading';
+  import worksetModal from "./custom_workSet_modal.vue";
   
   import $ from "jquery";
   import {
@@ -164,11 +191,23 @@
   var tthis = this;
   var timerClick = null;
   var timer2 = null;
+
   /* eslint-disable */
   export default {
     name: "App",
     data() {
       return {
+        divWidth:'100px',
+        colLgNum:4,
+        colSmnum:3,
+        worksetData: [],
+        worksetType: "",
+        worksetFlag: 0,
+        worksetInfo: {
+          title: "",
+          des: "",
+          id: ""
+        },
         popout:false,
         message: {
           text: "",
@@ -192,6 +231,8 @@
         netheightout: 0,
         flag: true,
         modal01: false,
+        showThumb:false,
+        thumbDocIds:[],
         eventData: null,
         items: [],
         page: 1,
@@ -199,7 +240,7 @@
         order: '',
         toEdg: -100,
         showList: false,
-        moreLoading: true,
+        moreLoading: false,
         selectArr: [],
         columns2: [{
             title: 'Name',
@@ -493,17 +534,17 @@
             .on('click', '.select-item', function() {
               // console.log("clcik")
               
-              clearTimeout(timerClick);
-              var selThis = this;
-              timerClick = setTimeout(function(){
-                if ($(selThis).hasClass('item-selected')) {
-                $(selThis).removeClass('item-selected');
-              } else {
-                $(selThis).addClass('item-selected');
-              }
-              mthis.watchSelectCounter++;
+              // clearTimeout(timerClick);
+              // var selThis = this;
+              // timerClick = setTimeout(function(){
+              //   if ($(selThis).hasClass('item-selected')) {
+              //   $(selThis).removeClass('item-selected');
+              // } else {
+              //   $(selThis).addClass('item-selected');
+              // }
+              // mthis.watchSelectCounter++;
               
-              },300)
+              // },300)
               
             })
           //  点选全选全不选
@@ -520,9 +561,17 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes'
     ]),
     watch: {
+      contentTimeOnlySel:function(){
+        if(this.contentTimeOnlySel){
+          this.selectAll()
+        }else{
+          console.log("falsefalsefalsefalse")
+        }
+        
+      },
       contentPromte:function(){
         this.setMessage(this.contentPromte)
       },
@@ -534,7 +583,7 @@
         }
         timer2 = setTimeout(function() {
           mthis.popout = !mthis.popout; //对popout进行取反
-        }, 1000);
+        }, 3000);
       },
       contentKeyboards:function(){
         var mthis = this
@@ -546,7 +595,6 @@
         }else if(this.contentKeyboards.indexOf('selall')>-1){
           let index = mthis.contentKeyboards.indexOf('selall')
           mthis.selectAll()
-          // debugger
           mthis.$store.state.contentKeyboards.splice(index,1)
         }else{
           return
@@ -556,6 +604,8 @@
       },
       watchSelectCounter: function() {
         // console.log("watchselectcounter")
+        
+        // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         
         let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         if(selectList.length >0){
@@ -567,27 +617,33 @@
         for (let m = 0; m < selectList.length; m++) {
           this.selectArr.push(selectList[m].id)
         }
-        // // console.log('==============++++++++++==============')
-        // // console.log(this.selectArr)
+        // console.log('==============++++++++++==============')
+        // console.log(this.selectArr)
         this.$store.commit('setSelectContentNodes', [{
           ids: this.selectArr
         }])
+        
       },
       netToContentData: function() {
         
         var mthis = this
-        // alert('文档接受到了')
-        console.log(this.netToContentData)
+        
         if(this.netToContentData.contentIds.length ==0){
+          console.log(0)
           mthis.items = []
           
         }else if(this.netToContentData.contentIds.length>0){
+          mthis.spinShow = true
+          console.log(1)
           mthis.items = []
           let contentIds = this.netToContentData.contentIds
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
+          
           $('.item-selected').removeClass('item-selected')
+          mthis.spinShow = false
+          console.log(2)
           mthis.items = response.body.data
         })
         mthis.watchSelectCounter++;
@@ -596,29 +652,38 @@
       },
       
       contentTimeCondition: function(va) {
-        // console.log(this.contentTimeCondition)
+        
         var mthis = this
+        if(va == null){
+          
+         $('.item-selected').removeClass('item-selected')
+         mthis.watchSelectCounter++;
+         
+        }else{
         if (timer) {
           clearTimeout(timer)
         }
         timer = setTimeout(function() {
           mthis.page = 1
           if (va.length === 2) {
-            mthis.spinShow = true
+            // mthis.spinShow = true
             
             let stime = util.getTimestamp(va[0])
             // let etime = util.getTimestamp(va[1])
             let etime = util.getTimestamp(mthis.isLeapYear(va[1]))
             // console.log(stime)
             // console.log(etime)
+            
             mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
               if (response.body.data.length > 0) {
                 // console.log(response.body)
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(3)
                 mthis.items = response.body.data
-               
                 
               } else {
+                console.log(4)
                 mthis.items = []
               }
               mthis.spinShow = false
@@ -628,7 +693,8 @@
           } else {
             // alert('bbbb')
           }
-        }, 1000);
+        }, 100);
+        }
       },
       searchContentResult: function(va) {
         var mthis = this
@@ -641,20 +707,37 @@
             
             
             $('.item-selected').removeClass('item-selected')
-            mthis.items = response.body.data
+            console.log(5)
+            // mthis.items = response.body.data
+            mthis.items = response.body.data.map(item =>({
+                title: item.title,      
+                i_sn: item.i_sn, 
+                id: item.id,
+                text: item.text,
+                time: item.time,
+                from: item.from,     
+                img: "http://10.60.1.140/assets/images/content_node.png",
+                check:false
+              })
+            );
+            console.log(mthis.items)
+            
+            if(response.body.data.length ==30){
+              mthis.moreLoading = true
+            }
             // console.log("datadatatdattatdtadt")
             // console.log(mthis.items)
             mthis.data4 = []
-            for(let i=0;i<mthis.items.length;i++){
-              let itemList = {};
-              itemList.title = mthis.items[i].title
-              itemList.time = mthis.items[i].time.substring(0,10)
-              itemList.text = mthis.items[i].text
-              itemList.id = mthis.items[i].id
-              itemList.i_sn = mthis.items[i].i_sn
-              itemList.entity = mthis.content
-              mthis.data4.push(itemList)
-            }
+            // for(let i=0;i<mthis.items.length;i++){
+            //   let itemList = {};
+            //   itemList.title = mthis.items[i].title
+            //   itemList.time = mthis.items[i].time.substring(0,10)
+            //   itemList.text = mthis.items[i].text
+            //   itemList.id = mthis.items[i].id
+            //   itemList.i_sn = mthis.items[i].i_sn
+            //   itemList.entity = mthis.content
+            //   mthis.data4.push(itemList)
+            // }
             // console.log(mthis.data4)
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
@@ -662,6 +745,7 @@
           } else {
             // mthis.showMore = false
             mthis.setMessage('未找到匹配的文章')
+            console.log(6)
             mthis.items = []
 
           }
@@ -689,10 +773,76 @@
       }
     },
     components: {
-      InfiniteLoading,modalChart
+      InfiniteLoading,modalChart,worksetModal
     },
     props: ['contentData'],
     methods: {
+      toSelIds(id){
+        clearTimeout(timerClick);
+        var mthis = this;
+        timerClick = setTimeout(function(){
+          var ids = mthis.selectContentNodes[0].ids
+          if(ids.indexOf(id)>-1){
+            let index = ids.indexOf(id)
+            ids.splice(index,1)
+          }else{
+            ids.push(id)
+          }
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: ids
+          }])
+        },300)
+        
+        
+      },
+      openCreateGroupModal(){
+        var mthis = this;
+        this.worksetInfo = {
+          title: "",
+          des: "",
+          id: ""
+        };
+        this.worksetData = [{
+            type: "entity",
+            data: []
+          },
+          {
+            type: "event",
+            data: []
+          },
+          {
+            type: "document",
+            data: []
+          }, {
+            type: "area",
+            data: []
+          },
+        ];
+        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        let contentIds = []
+        for (let m = 0; m < selectList.length; m++) {
+          contentIds.push(selectList[m].id)
+        }
+        if (contentIds.length > 0) {
+            mthis.$http
+              .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
+                docIds: contentIds
+              })
+              .then(response => {
+                if (response.body.code === 0) {
+                  mthis.worksetData[2].type = "document";
+                  response.body.data.map(item => {
+                    item.name = item.title
+                    item.img = "http://10.60.1.140/assets/images/content_node.png"
+                    return item
+                  })
+                  mthis.worksetData[2].data = response.body.data;
+                }
+              });
+          }
+        this.worksetType = "add";
+        this.worksetFlag = this.worksetFlag + 1;
+      },
       setMessage(mes) {
         
         this.message = {
@@ -701,9 +851,23 @@
         };
       },
       selectAll(){
-        let disselectDom = $('.contentDiv:not(.item-selected)')
-        disselectDom.addClass('item-selected')
-        this.watchSelectCounter++;
+        var mthis = this
+        let ids = []
+        for(let i=0;i<mthis.items.length;i++){
+          ids.push(mthis.items[i].id)
+          if(!mthis.items[i].check){
+            mthis.items[i].check = true
+          }else{
+            continue
+          }
+        }
+        mthis.$store.commit('setSelectContentNodes', [{
+          ids: ids
+        }])
+
+        // let disselectDom = $('.contentDiv:not(.item-selected)')
+        // disselectDom.addClass('item-selected')
+        // this.watchSelectCounter++;
         
       },
       rightMenu(e){
@@ -729,6 +893,7 @@
       },
       togClass(e){
         
+        
         clearTimeout(timerClick);
         var mthis = this;
         
@@ -739,7 +904,9 @@
               that = that
           }
         timerClick = setTimeout(function(){
+          
         if ($(that).hasClass('item-selected')) {
+          console.log(6)
           $(that).removeClass('item-selected');
         } else {
           $(that).addClass('item-selected');
@@ -750,7 +917,7 @@
       deleteNode(){
         if(this.deleteButton){
           let selectDom = $('.item-selected')
-        
+          console.log(7)
           selectDom.removeClass('item-selected')
         
           this.watchSelectCounter++;
@@ -1063,11 +1230,13 @@
         // document.getElementsByClassName("box");
         let selectDom = $('.item-selected')
         let disselectDom = $('.contentDiv:not(.item-selected)')
+        console.log(8)
         selectDom.removeClass('item-selected')
         disselectDom.addClass('item-selected')
         this.watchSelectCounter++;
       },
       removeAll() {
+        console.log(7)
         this.items = []
         this.watchSelectCounter++;
         this.page = 1
@@ -1097,7 +1266,25 @@
         this.$store.commit('changeTMSS', 'net')
       },
       showAsList() {
+        
+        
         this.showList = true
+        
+      },
+      toThumbnails(){
+        this.showThumb = true
+        this.colLgNum = 3
+        this.colSmnum = 4
+        
+        // let outCol = $('.outCol').addClass('ivu-col-span-lg-2').removeClass('ivu-col-span-lg-4')
+        
+        
+        // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        // let contentIds = []
+        // for (let m = 0; m < selectList.length; m++) {
+        //   contentIds.push(selectList[m].id)
+        // }
+        // console.log(contentIds)
       },
       contentTranslate() {
         var mthis = this;
@@ -1157,10 +1344,12 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(8)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据1', true)
               }
               resolve();
             })
@@ -1169,20 +1358,24 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(10)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据2', true)
               }
               resolve();
             })
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(11)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据3', true)
               }
               resolve();
             })
@@ -1199,10 +1392,12 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(12)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据4', true)
               }
               resolve();
             })
@@ -1211,20 +1406,24 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(13)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据5', true)
               }
               resolve();
             })
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(14)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据6', true)
               }
               resolve();
             })
@@ -1246,10 +1445,12 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(15)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据7', true)
               }
               resolve();
             })
@@ -1258,20 +1459,24 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(16)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据8', true)
               }
               resolve();
             })
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(17)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据9', true)
               }
               resolve();
             })
@@ -1288,10 +1493,12 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(18)
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据10', true)
               }
               resolve();
             })
@@ -1300,17 +1507,21 @@
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(19)
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
-                mthis.alertNotice('无匹配数据', true)
+                mthis.alertNotice('无匹配数据11', true)
               }
               resolve();
             })
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
+                
                 $('.item-selected').removeClass('item-selected')
+                console.log(20)
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 // console.log('全部加载')
@@ -1332,9 +1543,26 @@
         
         
       },
+      changeDiv(){
+        var mthis = this
+        mthis.ifInfo = false
+        this.$store.state.contentSelShowFlag = false
+        let selData = {}
+        selData.id = [];
+        selData.title = ''
+        console.log(selData)
+        this.$store.commit('setContentSelData',selData)
+        if(!this.showThumb){
+          mthis.toContentDiv()
+        }
+      },
       toContentDiv() {
+        
+        this.colLgNum = 4
+        this.colSmnum = 3
         this.translateButton = false
         this.showList = false
+        this.showThumb = false
         this.ifInfo = false
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
@@ -1345,12 +1573,12 @@
           contentDiv.style.display = 'none';
           contentDiv.style.borderRight = 'none';
         }
-        this.$store.state.contentSelShowFlag = false
-        let selData = {}
-        selData.id = [];
-        selData.title = ''
-        console.log(selData)
-        this.$store.commit('setcontentSelData',selData)
+        // this.$store.state.contentSelShowFlag = false
+        // let selData = {}
+        // selData.id = [];
+        // selData.title = ''
+        // console.log(selData)
+        // this.$store.commit('setContentSelData',selData)
         // document.getElementById('contents').innerHTML = ''
         // document.getElementById('contentsTitle').innerHTML = ''
         // document.getElementById('contentsTime').innerHTML = ''
@@ -1394,16 +1622,16 @@
         }
       },
       showContent(id,title) {
+        clearTimeout(timerClick);
         var mthis = this
         
-        // debugger
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}
         selData.id = [id];
         selData.title = title
         console.log(selData)
-        mthis.$store.commit('setcontentSelData',selData)
-        clearTimeout(timerClick);
+        mthis.$store.commit('setContentSelData',selData)
+        
         
         mthis.ifInfo = true
         mthis.translateButton = true
@@ -1460,6 +1688,7 @@
     },
     mounted() {
       var mthis = this
+      
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
@@ -1783,7 +2012,16 @@
     pointer-events: none;
   }
   .marked {
-    border: 1px solid rgba(51, 255, 255, 0.8);
+    /* border: 1px solid rgba(51, 255, 255, 0.8); */
+    animation: all 1s;
+    -webkit-animation: all 1s;
+    background-color: rgba(51, 255, 255, 0.4);
+    /* background-color: pink; */
+    border: 1px solid rgba(51, 255, 255, 0.5);
+  }
+  .markImg{
+    background-color: #003333;
+	  border: solid 1px #ccffff;
   }
   .contentItem {
     position: absolute;
@@ -1793,7 +2031,7 @@
     width: 15px;
     height: 15px;
   }
-  contentItem:hover {
+  .contentItem:hover {
     opacity: 1;
   }
   .color255-back {
@@ -1841,7 +2079,7 @@
     cursor: pointer;
     color: rgba(51, 255, 255, 1) !important;
   }
-  .layer{
+  /* .layer{
     width:200px;
     height:30px;
     text-align: center;
@@ -1849,11 +2087,11 @@
     animation: all 1s;
     -webkit-animation: all 1s;
     font-family: MicrosoftYaHei;
-    /* font-size:26px; */
+   
     font-weight: bold;
     color:#ccffff;
     background-color: rgba(51, 255, 255, 0.4);
-    /* background-color: pink; */
+    
     border: 1px solid rgba(51, 255, 255, 0.5);
     display: none;
     border-radius: 10px;
@@ -1862,7 +2100,7 @@
     font-size: 18px;
     right: 20px;
     bottom:30px;
-  }
+  } */
 
 .xuanfuAlert {
     /* background-color: rgba(51, 255, 255, 0.3); */
@@ -1891,4 +2129,35 @@
   .mybox-enter-active {
     opacity: 1;
   }
+  .picsize{
+    max-width:100px;
+    max-height:100px;
+    width:100%;
+    
+    
+  }
+  .nametext{
+    white-space: nowrap;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    /* line-height: 30px; */
+    letter-spacing: 0px;
+    color: #ccffff;
+  }
+  .docThunmsItem:hover img{
+    /* background-color:rgba(51, 255, 255, 1); */
+    cursor:pointer;
+    background-color: #003333;
+	  border: solid 1px #336666;
+  }
+  .markedImg{
+    background-color: #003333;
+	  border: solid 2px #ccffff;
+  }
+ 
 </style>

@@ -131,8 +131,8 @@
         isClick:false,
         echartsShowStart:0,
         echartsShowEnd:100,
-        curInt:null
-       
+        curInt:null,
+        colorFlag:0
       };
     },
     methods: {
@@ -234,8 +234,10 @@
           this.$store.commit('setGeoTimeCondition',this.boxSelEventIds)
           this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
           this.curInt = null;
-          
+          this.colorFlag = 0;
+          // this.option.series[0].itemStyle.normal.color = '#33cc99'
           this.option.series[1].data = []
+          
           this.charts.setOption(this.option)
         }
         this.isClick = false;
@@ -294,12 +296,12 @@
             outOfBrush: {
               // colorAlpha: 1
               barBorderRadius: [3, 3, 3, 3],
-              color: "rgba(51,204,153,1)"
+              color: "rgba(204,255,255,0.1)"
             },
             // 选中框内样式
             inBrush: {
               // colorAlpha: 1
-              color:'#33ddff',
+              color:'#33cc99',
               barBorderRadius:[3,3,3,3]
             },
             brushStyle: {
@@ -417,10 +419,10 @@
             type: "bar",
             barGap:"-100%",
             // barWidth:'10px',
-            barMaxWidth: '30%',
+            barMaxWidth: "60px",
             barWidth:'10px',
-            barMinHeight: '1px',
-            barCategoryGap:'50%',
+            // barMinHeight: '1px',
+            barCategoryGap:'20px',
             itemStyle: {
               // 柱形图默认颜色
               // normal: {
@@ -436,13 +438,32 @@
                 
               // },
               color:function(param){
+                  
                 var key = param.dataIndex;
-                if(key === mthis.curInt){
-                  return '#33ddff'
-                }else{
-                  return "rgba(51,204,153,1)"
+                if(mthis.colorFlag ==0){
+                  if(key == mthis.curInt){
+                    return '#33cc99'
+                  }else{
+                    return "#33cc99"
+                  }
+                }else if(mthis.colorFlag ==1){
+                  if(key == mthis.curInt){
+                    return '#33cc99'
+                  }else{
+                    return "rgba(204,255,255,0.1)"
+                  }
                 }
+                
               },
+              
+              emphasis: {
+                cursor: "pointer",
+                barBorderRadius: [3, 3, 3, 3],
+                color: '#27866a'},
+              // normal: {
+                
+              //   color: "#33cc99"
+              // },
               cursor: "default",
               barBorderRadius: [3, 3, 3, 3],
             },
@@ -460,14 +481,19 @@
           {
                     type:'bar',
                     // barWidth:'10px',
-                    barMaxWidth: '30%',
+                    barMaxWidth: '60px',
                     barWidth:'10px',
                     barMinHeight: '1px',
                     barCategoryGap : '60%',
                     data:mthis.dataBySeries.clickNum,
                     itemStyle:{
-                        color:'#33ddff',
-                        barBorderRadius:[3,3,3,3]
+                        // color:'#33ddff',
+                        color:'#33cc99',
+                        barBorderRadius:[3,3,3,3],
+                        emphasis: {
+                          cursor: "pointer",
+                          barBorderRadius: [3, 3, 3, 3],
+                          color: '#27866a'},
                     },
                     data:[]
                 }],
@@ -488,6 +514,12 @@
           if(params.hasOwnProperty('start')){
             mthis.echartsShowStart = params.start
             mthis.echartsShowEnd = params.end
+            // if(params.end- params.start <3){
+            //   mthis.option.series[0].barWidth = '10px'
+            //   mthis.option.dataZoom[0].start = params.start
+            //   mthis.option.dataZoom[0].end = params.end
+            //   mthis.charts.setOption(mthis.option)
+            // }
           }else{
             mthis.echartsShowStart = params.batch[0].start
             mthis.echartsShowEnd = params.batch[0].end
@@ -527,6 +559,7 @@
               mthis.option.dataZoom[0].start = mthis.echartsShowStart;
               mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
               mthis.option.series[1].data = []
+              mthis.colorFlag = 0;
               mthis.charts.setOption(mthis.option)
               
             }
@@ -589,6 +622,7 @@
           mthis.timeTitle = params.name
           let timeArr = []
           mthis.isClick = true;
+          mthis.colorFlag = 1;
           console.log(mthis.isClick)
           timeArr.push(params.name)
           timeArr.push(params.name)
@@ -599,7 +633,8 @@
           mthis.curInt = params.dataIndex;
           mthis.option.dataZoom[0].start = mthis.echartsShowStart;
           mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
-          
+          // mthis.option.series[0].itemStyle.normal.color = '#ccffff'
+          console.log(mthis.option.series[0].itemStyle)
           mthis.charts.setOption(mthis.option)
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                     "selectedIds":mthis.geo_only_eventIds,
@@ -689,14 +724,18 @@
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           
           mthis.option.series[0].data = mthis.dataBySeries.num;
+          // mthis.option.series[0].itemStyle.normal.color = '#33cc99'
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          mthis.colorFlag = 0;
           mthis.charts.setOption(mthis.option)
           
         }else if(flag==3){
           mthis.resize();
           // mthis.option.xAxis.data = mthis.dataBySeries.date;
           // mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.colorFlag = 1;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          // mthis.option.series[0].itemStyle.normal.color = 'rgba(204,255,255,0.1)'
           mthis.charts.setOption(mthis.option)
         }else{
           // console.log("noshuju")

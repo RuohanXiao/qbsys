@@ -57,6 +57,7 @@
 <script>
   import echarts from "echarts";
   import { mapState,mapMutations } from 'vuex'
+  var timer = null
   export default {
     name: "",
     data() {
@@ -110,7 +111,9 @@
         isClick:false,
         echartsShowStart:0,
         echartsShowEnd:100,
-        curInt:null
+        curInt:null,
+        colorFlag:0
+
       };
     },
     methods: {
@@ -137,11 +140,14 @@
           this.clcikShowDiv = false
           console.log("click")
         }else{
+          this.$store.commit('setContentTimeOnlySel',true)
           this.boxSelShowDiv = false
+          this.isDataZoom = false
           this.charts.dispatchAction({
             type:'brush',
             areas:[]
           })
+          
           console.log("brush")
         }
       },
@@ -155,7 +161,9 @@
           let cancelTime = []
           cancelTime.push(this.dataBySeries.date[0])
           cancelTime.push(this.dataBySeries.date[this.dataBySeries.date.length -1])
+          
           this.$store.commit('setContentTimeCondition',cancelTime)
+          this.colorFlag = 0;
           this.charts.setOption(this.option)
         }
         this.isClick = false;
@@ -221,11 +229,11 @@
             // 选中框外样式
             outOfBrush: {
               barBorderRadius: [3, 3, 3, 3],
-              color: "rgba(51,204,153,1)"
+              color: "rgba(204,255,255,0.1)"
             },
             // 选中框内样式
             inBrush: {
-              color:'#33ddff',
+              color:'#33cc99',
               barBorderRadius:[3,3,3,3]
             },
             brushStyle: {
@@ -282,7 +290,7 @@
               end: 100,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
-              show: false,
+              show: true,
               textStyle: {
                 color: "#33ffff",
                 fontFamily: 'Microsoft YaHei'
@@ -328,13 +336,13 @@
             },
             {
               type: "inside",
-              start: 0,
-              end: 10,
+              // start: 0,
+              // end: 10,
               show: true,
               xAxisIndex: [0],
-              startValue: 0,
-              endValue: 5,
-              minValueSpan: 100
+              // startValue: 0,
+              // endValue: 5,
+              minValueSpan: 10
             }
           ],
               
@@ -351,13 +359,27 @@
             barCategoryGap:'50%',
             itemStyle: {
               color:function(param){
+                  
                 var key = param.dataIndex;
-                if(key === mthis.curInt){
-                  return '#33ddff'
-                }else{
-                  return "rgba(51,204,153,1)"
+                if(mthis.colorFlag ==0){
+                  if(key == mthis.curInt){
+                    return '#33cc99'
+                  }else{
+                    return "#33cc99"
+                  }
+                }else if(mthis.colorFlag ==1){
+                  if(key == mthis.curInt){
+                    return '#33cc99'
+                  }else{
+                    return "rgba(204,255,255,0.1)"
+                  }
                 }
+                
               },
+              emphasis: {
+                cursor: "pointer",
+                barBorderRadius: [3, 3, 3, 3],
+                color: '#27866a'},
               cursor: "default",
               barBorderRadius: [3, 3, 3, 3],
               
@@ -383,8 +405,12 @@
                         barCategoryGap : '60%',
                         data:mthis.dataBySeries.clickNum,
                         itemStyle:{
-                            color:'#33ddff',
-                            barBorderRadius:[3,3,3,3]
+                            color:'#33cc99',
+                            barBorderRadius:[3,3,3,3],
+                            emphasis: {
+                              cursor: "pointer",
+                              barBorderRadius: [3, 3, 3, 3],
+                              color: '#27866a'},
                         },
                         data:[]
                     }
@@ -421,10 +447,11 @@
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
              mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
              mthis.isDataZoom = true
+             mthis.$store.commit('setContentTimeOnlySel',false)
           }
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
-            // mthis.timeTitle = '请选择节点'
+            
             if(mthis.isDataZoom){
               
               mthis.timeTitle = '时间轴'
@@ -433,6 +460,7 @@
               cancelTime.push(mthis.dataBySeries.date[mthis.dataBySeries.date.length -1])
               console.log(mthis.dataBySeries.date)
               console.log(cancelTime)
+              
               mthis.$store.commit('setContentTimeCondition',cancelTime)
              
               mthis.isBrush = []
@@ -441,6 +469,7 @@
               mthis.option.dataZoom[0].start = mthis.echartsShowStart;
               mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
               mthis.option.series[1].data = []
+              mthis.colorFlag = 0;
               mthis.charts.setOption(mthis.option)
               
             }
@@ -459,8 +488,16 @@
             // selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            mthis.$store.commit('setContentTimeCondition', timeArr)
-            mthis.selectTime = true
+            if(timer){
+              clearTimeout(timer)
+            }
+            timer = setTimeout(function(){
+               
+               mthis.$store.commit('setContentTimeCondition', timeArr)
+               console.log("#$################")
+               mthis.selectTime = true
+            },300)
+           
           }
             
           
@@ -487,9 +524,10 @@
           mthis.curInt = params.dataIndex;
           mthis.option.dataZoom[0].start = mthis.echartsShowStart;
           mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
-          
+          mthis.colorFlag = 1;
           mthis.charts.setOption(mthis.option)
-          mthis.$store.commit('setContentTimeCondition', timeArr)
+         
+          mthis.$store.commit('setContentTimeCondition',timeArr)
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -520,7 +558,7 @@
                 
             }
         }else if(flag ==2){
-          // flag==2---->监听网络关系中的事件，显示数据
+          // flag==2---->监听画布中的文档，显示数据
           mthis.timeTitle = '时间轴';
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
@@ -528,6 +566,7 @@
           // mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          mthis.colorFlag = 0;
           mthis.charts.setOption(mthis.option)
           
         }else if(flag==3){
@@ -537,6 +576,7 @@
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
+          mthis.colorFlag =1;
           mthis.charts.setOption(mthis.option)
         }else{
           // flag ==4--->网络关系事件节点为空，清空echarts

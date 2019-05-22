@@ -54,7 +54,8 @@
       return {
         containerDivHeight: 0,
         containerHeight: 0,
-        workSpaceModalFlag: false
+        workSpaceModalFlag: false,
+        keyCount:0
       }
     },
     components: {
@@ -136,8 +137,12 @@
       // 快捷键监听
       let getIn = document.getElementsByClassName('ivu-select-input')
       document.onkeydown=function(event){ 
+        mthis.keyCount ++;
+        console.log("keydownkeydownkeydown")
+        console.log(mthis.keyCount)
+        console.log(event)
         var e = event || window.event || arguments.callee.caller.arguments[0];
-          if (e.keyCode == 70 && e.ctrlKey) {
+          if (mthis.keyCount ==2 && e.keyCode == 70 && (e.ctrlKey || e.metaKey)) {
             // ctrl+F
             if(mthis.tmss == 'net'){
               getIn[0].value = ''
@@ -152,7 +157,7 @@
             e.preventDefault();
             e.stopPropagation();
           }
-          if(e && e.keyCode == 46){
+          if(mthis.keyCount ==1 && e && e.keyCode == 46){
             // delete
             if(mthis.tmss == 'net'){
               mthis.$store.state.netKeyboards.push('delete')
@@ -166,7 +171,7 @@
             e.stopPropagation();
 
           }
-          if(e.keyCode == 65 && e.ctrlKey){
+          if(mthis.keyCount ==2 && e.keyCode == 65 && (e.ctrlKey || e.metaKey)){
             // ctrl+A
             if(mthis.tmss == 'net'){
               mthis.$store.state.netKeyboards.push('selall')
@@ -182,6 +187,11 @@
           }
         
       };
+      document.onkeyup = function(){
+        mthis.keyCount = mthis.keyCount - 1;
+        console.log("keyupkeyupkeyup")
+        console.log(mthis.keyCount)
+      }
       var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/configer.xml");
       var imgItem = ob.getElementsByTagName("imgItem");
       let arr = []
