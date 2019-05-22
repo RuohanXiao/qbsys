@@ -22,12 +22,12 @@
         <div class="e-title-d"></div>
         <p class="e-title-p">节点信息</p>
       </div>
-      <human-entity-table v-if="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table>
-      <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
-      <organization-entity-table v-show="detailData.entity_type==='organization'" :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
-      <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table>
-      <event-entity-table v-show="detailData.entity_type==='event'" :tableData="detailData" :entDivH='entDivH'></event-entity-table>
-      <doc-entity-table v-show="detailData.entity_type==='document'" :tableData="detailData" :entDivH='entDivH'></doc-entity-table>
+      <human-entity-table v-if="detailData.entity_type==='human'" :tableData="detailData" :tableType='detailData.entity_type' :entDivH='entDivH'></human-entity-table>
+      <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
+      <organization-entity-table v-show="detailData.entity_type==='organization'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
+      <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></weapon-entity-table>
+      <event-entity-table v-show="detailData.entity_type==='event'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></event-entity-table>
+      <doc-entity-table v-show="detailData.entity_type==='document'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></doc-entity-table>
     </div>
     <!-- 选中详情 -->
     <div class="selectDiv" :style="{height:selectDivHeight}">

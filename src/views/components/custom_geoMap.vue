@@ -517,7 +517,6 @@ export default {
                     });
                 }
                 if (areaIds.length > 0){
-                    debugger
                     mthis.$http.post("http://10.60.1.141:5100/search-Area/", {
                         ids: areaIds
                     }).then(response => {
@@ -956,7 +955,6 @@ export default {
         },
         rightClickEvent(){
             var mthis = this;
-            debugger
             var areaIds= mthis.AreaIds;
             var geometryList = [];
             for(let i = 0; i < areaIds.length; i++){
@@ -1148,7 +1146,6 @@ export default {
         },
         rightClickFun(layer,coordinate){
             var mthis = this;
-            debugger
             var map = mthis.routeMap.map;
             var pixel = map.getPixelFromCoordinate(coordinate);
             var overlayId = 'rightClickMenu_Area';
@@ -1158,7 +1155,6 @@ export default {
             }
             mthis.setRightClickMenu_Area(coordinate)
             /* map.forEachLayerAtPixel(pixel,function(feature,layer){
-                debugger
                 var overlayId = 'rightClickMenu_Area';
                 var overlay = map.getOverlayById(overlayId);
                 if(overlay){
@@ -1279,7 +1275,6 @@ export default {
 
                 }); */
                 /* mthis.mapSingleClick = mthis.routeMap.map.on('singleclick',function(e){
-                    debugger
                     for(let i = 0; i < mthis.SelectedIds.length; i++){
                         let id = mthis.SelectedIds[i];
                         let oId = id.split("&")[1];
@@ -1328,7 +1323,6 @@ export default {
                     }
                 });
                 mthis.selectClick.on('select', function(e) {
-                    debugger
                     mthis.deleteSelectClickFeatures();
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected;
@@ -1355,7 +1349,6 @@ export default {
                     if(selectFeatures.length > 0){
                         //mthis.deleteSelectClickFeatures();
                         var HLIds = mthis.HLIds;
-                        debugger
                         var paramIds = [];
                         for(let i = 0; i < selectFeatures.length; i++){
                             var id = selectFeatures[i].getId();
@@ -1426,7 +1419,6 @@ export default {
                 });
                 /* mthis.selectClick_area.on('select', function(e) {
                     var features = e.selected;
-                    debugger
                     mthis.deleteSelectClickFeatures();
                     for(let i = 0; i < features.length; i++){
                         var feature = features[i];
@@ -2652,7 +2644,6 @@ export default {
         },
         getWfsData(featureTypes,filter) {   //mthis.getWfsData(featureTypes,filter);
             var mthis = this;
-            debugger
             /* var featureTypes;
             var filter;
             if(type === 'province'){
@@ -3316,7 +3307,7 @@ export default {
             mthis.promptflag = true;
             setTimeout(function(){
                 mthis.promptflag = false;
-            },2000);
+            },3000);
         },
         waiting(){  
             var mthis = this;
@@ -3719,7 +3710,6 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
-            debugger
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
             mthis.SelectedIds = mthis.timeSelectedEventIdsOnly;
             Object.keys(mthis.AllLayerList_conf).forEach(function(key){

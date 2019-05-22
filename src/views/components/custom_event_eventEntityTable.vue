@@ -113,13 +113,14 @@
         myMapevent: new Map()
       }
     },
-    props: ['tableData', 'entDivH'],
+    props: ['tableData', 'entDivH','tableType'],
     created(){
         let mthis = this
         mthis.xiangguanEntityItems = new Array()
         mthis.xiangguanEntitys = new Object()
         mthis.xiangguanEvent = new Array()
         mthis.xiangguanDoc = new Array()
+        if(this.tableType==='event'){
         mthis.spinWaiting = true
         if (this.tableData.isArray) {
           if (this.tableData.length > 0) {
@@ -127,9 +128,9 @@
               "NodeIds": mthis.tableData.map(item => {
                 return item.id
               }),
-              "NodeTypes": mthis.tableData.map(item => {
-                return item.entity_type
-              }),
+              // "NodeTypes": mthis.tableData.map(item => {
+              //   return item.entity_type
+              // }),
               "TypeLabel": "all"
             }).then(response => {
               mthis.spinWaiting = false
@@ -150,7 +151,7 @@
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
-            "NodeTypes": new Array('entity'),
+            // "NodeTypes": new Array('entity'),
             "TypeLabel": "all"
           }).then(response => {
             // mthis.xiangguanEntityItems = new Array()
@@ -176,7 +177,7 @@
             }
             mthis.spinWaiting = false
           })
-        }
+        }}
     },
     mounted() {
       var mthis = this
@@ -327,15 +328,16 @@
         mthis.xiangguanEntitys = new Object()
         mthis.xiangguanEvent = new Array()
         mthis.xiangguanDoc = new Array()
+        if(this.tableType==='event'){
         if (this.tableData.isArray) {
           if (this.tableData.length > 0) {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
               "NodeIds": mthis.tableData.map(item => {
                 return item.id
               }),
-              "NodeTypes": mthis.tableData.map(item => {
-                return item.entity_type
-              }),
+              // "NodeTypes": mthis.tableData.map(item => {
+              //   return item.entity_type
+              // }),
               "TypeLabel": "all"
             }).then(response => {})
           } else {
@@ -354,7 +356,7 @@
         } else {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
-            "NodeTypes": new Array('entity'),
+            // "NodeTypes": new Array('entity'),
             "TypeLabel": "all"
           }).then(response => {
             // mthis.xiangguanEntityItems = new Array()
@@ -384,7 +386,7 @@
           })
         }
         mthis.spinWaiting = false
-      }
+      }}
     }
   }
 </script>

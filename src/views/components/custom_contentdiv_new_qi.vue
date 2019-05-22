@@ -566,7 +566,7 @@
         }
         timer2 = setTimeout(function() {
           mthis.popout = !mthis.popout; //对popout进行取反
-        }, 1000);
+        }, 3000);
       },
       contentKeyboards:function(){
         var mthis = this
@@ -578,7 +578,6 @@
         }else if(this.contentKeyboards.indexOf('selall')>-1){
           let index = mthis.contentKeyboards.indexOf('selall')
           mthis.selectAll()
-          // debugger
           mthis.$store.state.contentKeyboards.splice(index,1)
         }else{
           return
@@ -1544,7 +1543,6 @@
       showContent(id,title) {
         var mthis = this
         
-        // debugger
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}
         selData.id = [id];
