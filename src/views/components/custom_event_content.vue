@@ -199,6 +199,7 @@
     watch: {
       eventdata: function() {
         var mthis = this
+        debugger
         if (typeof(mthis.eventdata) === "object" && mthis.eventdata.concat && mthis.eventdata.length > 0) {
           if (mthis.timer) {
             clearTimeout(mthis.timer)
@@ -275,6 +276,8 @@
         if(this.contentSelData.title){
           mthis.detailData.name = this.contentSelData.title
         }else{
+          console.log(mthis.eventdata)
+          debugger
           mthis.changeDetailDiv(mthis.eventdata[0].id,mthis.eventdata[0].entity_type,mthis.eventdata)
         }
       }

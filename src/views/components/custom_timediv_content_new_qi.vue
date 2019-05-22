@@ -558,7 +558,7 @@
                 
             }
         }else if(flag ==2){
-          // flag==2---->监听网络关系中的事件，显示数据
+          // flag==2---->监听画布中的文档，显示数据
           mthis.timeTitle = '时间轴';
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
