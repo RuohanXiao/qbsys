@@ -184,7 +184,7 @@ top: 232px;
                     <div class='heatSettingName'>热力设置</div>
                     <form class='heatMapForm'>
                         <label>半径大小</label><br/>
-                        <input id="radius" type="range" min="1" max="50" step="1" value="5" @input='setRadius()'/><br/>
+                        <input id="radius" type="range" min="1" max="50" step="1" value="15" @input='setRadius()'/><br/>
                         <label>模糊度大小</label><br/>
                         <input id="blur" type="range" min="1" max="50" step="1" value="15" @input='setBlur()'/>
                     </form>
@@ -571,7 +571,8 @@ export default {
                     radius: 15,
                     weight:mthis.weightFunction,
                     renderModed:'image',
-                    id:'heatmapLayer'
+                    id:'heatmapLayer',
+                    gradient:[]
                 })
                 mthis.heatMap.addlayer(heatMapLayer);
             } else {
@@ -1051,62 +1052,19 @@ export default {
             ovdiv.class = 'ringRightMenu';
             ovdiv.id='ringRightMenu';
             var config = [
-                /* {'Id':1,'parentId':0,'name':'探索事件','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
-                {'Id':2,'parentId':0,'name':'探索组织','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
-                {'Id':3,'parentId':0,'name':'暂无','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
-                {'Id':4,'parentId':0,'name':'删除区域','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'deletearea.png'},
-                {'Id':5,'parentId':0,'name':'暂无','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
-                {'Id':6,'parentId':0,'name':'暂无','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'}, */
-                /* {'Id':301,'parentId':3,'name':'aa','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
-                {'Id':302,'parentId':3,'name':'bb','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''}, */
                 {'Id':1,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
                 {'Id':2,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
                 {'Id':3,'parentId':0,'name':'删除','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'deletearea.png'},
-                {'Id':4,'parentId':0,'name':'推送','disable':false,'hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'pushnet.png'},
+                {'Id':4,'parentId':0,'name':'推送','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'pushnet.png'},
                 {'Id':5,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
                 {'Id':6,'parentId':0,'name':'探索','disable':false,'hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':'explor.png'},
                 {'Id':601,'parentId':6,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
                 {'Id':602,'parentId':6,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
                 {'Id':603,'parentId':6,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
-                {'Id':401,'parentId':4,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
-                {'Id':402,'parentId':4,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
-                {'Id':403,'parentId':4,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'}
             ]
             //mthis.oparAreaFeature = feature;
             var routeMap = new rightMenu(mthis,ovdiv,config);
-            //ovdiv.style ='background-color:rgba(0, 0, 0, 0.8);border: 1px solid #2a6464;cursor:pointer';
-            /*ovdiv.class = 'rightMenuDiv';
-            ovdiv.id='rightClickMenu';
-            ovdiv.addEventListener("mouseleave", function(){
-                mthis.deleteRightMenu();
-            });
-            var table = document.createElement('table');
-            table.id = 'rightClickMenuTable';
-            table.style = 'font-size: 12px;color: rgba(51,255,255,0.4);margin: 3px 0px;';
-            ovdiv.appendChild(table);
-            var rightClickConf = [
-                {'name':'探索事件','id':'eventExplore','iconClassName':'icon-ren','funName':'mthis.rightClickEvent'},
-                {'name':'探索组织','id':'orgExplore','iconClassName':'icon-ren','funName':'mthis.rightClickOrg'},
-                {'name':'探索地点','id':'locExplore','iconClassName':'icon-ren','funName':'mthis.rightClickLoc'},
-                {'name':'删除边框','id':'menuDelete','iconClassName':'icon-ren','funName':'mthis.rightClickDM'}
-            ];
-            rightClickConf.forEach(function(item){
-                var tr = document.createElement('tr');
-                tr.id = item.id;
-                tr.addEventListener('click',function(){
-                    var func=eval(item.funName);
-                    func.call(mthis,feature);
-                })
-                var iconTd = document.createElement('td');
-                iconTd.style='padding-left: 5px;';
-                iconTd.classList.add('icon','iconfont',item.iconClassName);
-                tr.appendChild(iconTd);
-                var nameTd = document.createElement('td');
-                nameTd.style = 'padding-right: 10px;';
-                nameTd.innerHTML=item.name;
-                tr.appendChild(nameTd);
-                table.appendChild(tr);
-            }) */
+
             
             var overlayId = mthis.setOverlay(coordinate,ovdiv,overlayId,'top-left',-200,-200);
             mthis.routeMap.map.addOverlay(overlayId);
@@ -1240,10 +1198,11 @@ export default {
                     visible:false
                 })
                 
-                mthis.routeMap.addlayer(heatMapLayer);
+                
                 mthis.routeMap.addlayer(HLArealayer);
                 mthis.routeMap.addlayer(Eventslayer);
                 mthis.routeMap.addlayer(Orglayer);
+                mthis.routeMap.addlayer(heatMapLayer);
                 mthis.selectPointerMove = new Select({
                     condition: pointerMove,
                     layers:[Eventslayer,Orglayer],
@@ -2663,7 +2622,8 @@ export default {
         },
         weightFunction(feature){
             var mthis = this;
-            var weight = feature.get('selectedNum') / mthis.maxEventsNum;
+            var we = feature.get('selectedNum') / mthis.maxEventsNum;
+            var weight = we>0.5?we:0.5;
             return weight
         },
         getWfsData(featureTypes,filter) {   //mthis.getWfsData(featureTypes,filter);
@@ -3153,9 +3113,6 @@ export default {
                     ++selectedNum[index];
                 }
             })
-            /* for(let i = 0; i < mthis.SelectedIds.length; i++){
-
-            } */
             Object.keys(mthis.AllLayerList_conf).forEach(function(key){
                 var layerId = mthis.AllLayerList_conf[key].layerId;
                 var features = mthis.getLayerById(layerId).getSource().getFeatures();
@@ -3221,7 +3178,6 @@ export default {
                         mthis.setFeatureStatus(feature,'life');
                     } else {
                         feature.set('selectedNum',0,false);
-                        //mthis.setFeatureStatus(feature,'die');
                     }
                 }
             })
@@ -3683,8 +3639,6 @@ export default {
             mthis.HLIds = mthis.geoStaticsOnlyLookSelectedIds;
             mthis.SelectedIds = mthis.geoStaticsOnlyLookSelectedIds;
             var selectedEventsParam = mthis.geoStaticsOnlyLookSelectedIds
-            console.log('============setGeoOnlyselectedParam==================')
-            console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
         geoStaticsSelectedIds:function(){
