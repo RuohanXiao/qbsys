@@ -578,6 +578,7 @@ export default {
                                     let optionWordArr = []
                                     optionWordArr.push({
                                         "label": query,
+                                        "labelShort": query,
                                         "value": query,
                                         "id": '',
                                         "itemType": 'keywords',

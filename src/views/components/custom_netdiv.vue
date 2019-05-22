@@ -445,7 +445,7 @@ export default {
                 })
                 .then(response => {
                     if (response.body.code == 0) {
-                        if (response.body.data.nodes > 0) {
+                        if (response.body.data.nodes.length > 0) {
                             mthis.netchart.addData(response.body.data)
                         } else {
                             mthis.setMessage('未找到相关链向，请重新选择节点！')
@@ -1675,12 +1675,9 @@ export default {
             // this.changNetchartMode('r');
             var mthis = this
 
+            if (mthis.selectionId.length > 0) {
 
-
-
-            if( mthis.selectionId.length>0){
-              
-            //半径
+                //半径
                 let radius = mthis.selectionId.length > 7 ? 200 : 100;
                 // let radius = mthis.selectionId.length*2;
                 //每一个BOX对应的角度;
@@ -1704,8 +1701,8 @@ export default {
                     // mthis.netchart.lockNode(mthis.selectionId[index].id);
                 }
                 mthis.netchart.addFocusNode(no1.id);
-                
-          }else {
+
+            } else {
                 // mthis.$Message.error('请选择节点进行矩形排列操作！')
                 this.setMessage("请选择节点进行环型排列操作！");
             }
@@ -1802,26 +1799,26 @@ export default {
             //     // mthis.$Message.error('请选择节点进行矩形排列操作！')
             //     this.setMessage("请选择节点进行矩形排列操作！");
             // }
-            if(mthis.selectionId.length>0){
-             for (let i = 0; i < mthis.selectionId.length; i++) {
-                // 辐射布局
-                let circleNum = Math.floor(Math.log(i) / Math.log(3))
-                let avd = 360 / Math.pow(3, circleNum);
-                let ahd = avd * Math.PI / 360;
-                let radius = 150 * circleNum + 150
-                let nodesInfo = mthis.netchart.getNode(mthis.selectionId[i])
-                let initInfo = mthis.netchart.getNode(mthis.selectionId[0])
-                initInfo['x'] = (initInfo['x']) ? (initInfo['x']) : (0)
-                initInfo['y'] = (initInfo['y']) ? (initInfo['y']) : (0)
-                nodesInfo["x"] = mthis.netchart.getNode(mthis.selectionId[0])["x"] +
-                    Math.sin(ahd * i) * radius;
-                nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
-                    Math.cos(ahd * i) * radius;
-                mthis.netchart.updateStyle(mthis.selectionId[i])
-                // mthis.netchart.lockNode(mthis.selectionId[i]);
-                mthis.changNetchartMode('s')
-            }
-            }else {
+            if (mthis.selectionId.length > 0) {
+                for (let i = 0; i < mthis.selectionId.length; i++) {
+                    // 辐射布局
+                    let circleNum = Math.floor(Math.log(i) / Math.log(3))
+                    let avd = 360 / Math.pow(3, circleNum);
+                    let ahd = avd * Math.PI / 360;
+                    let radius = 150 * circleNum + 150
+                    let nodesInfo = mthis.netchart.getNode(mthis.selectionId[i])
+                    let initInfo = mthis.netchart.getNode(mthis.selectionId[0])
+                    initInfo['x'] = (initInfo['x']) ? (initInfo['x']) : (0)
+                    initInfo['y'] = (initInfo['y']) ? (initInfo['y']) : (0)
+                    nodesInfo["x"] = mthis.netchart.getNode(mthis.selectionId[0])["x"] +
+                        Math.sin(ahd * i) * radius;
+                    nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
+                        Math.cos(ahd * i) * radius;
+                    mthis.netchart.updateStyle(mthis.selectionId[i])
+                    // mthis.netchart.lockNode(mthis.selectionId[i]);
+                    mthis.changNetchartMode('s')
+                }
+            } else {
                 // mthis.$Message.error('请选择节点进行矩形排列操作！')
                 this.setMessage("请选择节点进行星型排列操作！");
             }
@@ -2790,189 +2787,197 @@ export default {
                         event.preventDefault();
                         // if (mthis.selectionId > 0) {
 
-                            $('#ringRightMenu').remove()
-                            var overlayId = 'rightClickMenu_Area';
-                            var ovdiv = document.createElement('div');
-                            ovdiv.style = 'width:400px;height:400px;';
-                            ovdiv.style.position = 'absolute';
-                            ovdiv.style.top = event.pageY - 120 - 200 + "px";
-                            ovdiv.style.left = event.pageX - 200 + "px";
-                            ovdiv.class = 'ringRightMenu';
-                            ovdiv.id = 'ringRightMenu';
-                            var config = [
-                                {
-                                    'Id': 1,
-                                    'parentId': 0,
-                                    'name': '链向',
-                                    'hasLeaf': true,
-                                    'disable':false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': '',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 2,
-                                    'parentId': 0,
-                                    'name': '聚合',
-                                    'hasLeaf': false,
-                                    'disable':false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': '',
-                                    'icon': 'noclick.png'
-                                },{'Id':3,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(51,102,102,0.5)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
-                                {
-                                    'Id': 4,
-                                    'parentId': 0,
-                                    'name': '删除',
-                                    'hasLeaf': false,
-                                    'disable':false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("remove")',
-                                    'icon': 'noclick.png'
-                                },{
-                                    'Id': 5,
-                                    'parentId': 0,
-                                    'disable':false,
-                                    'name': '推送',
-                                    'hasLeaf': false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': '',
-                                    'icon': 'noclick.png'
-                                },{
-                                    'Id': 6,
-                                    'parentId': 0,
-                                    'name': '路径',
-                                    'disable':false,
-                                    'hasLeaf': true,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': '',
-                                    'icon': 'noclick.png'
-                                },{
-                                    'Id': 7,
-                                    'parentId': 0,
-                                    'name': '共指',
-                                    'disable':false,
-                                    'hasLeaf': true,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': '',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 8,
-                                    'parentId': 0,
-                                    'disable':false,
-                                    'name': '关联',
-                                    'hasLeaf': true,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': '',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 801,
-                                    'parentId': 8,
-                                    'name': '实体',
-                                    'hasLeaf': false,
-                                    'disable':false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("expandNodeKnowledge")',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 802,
-                                    'parentId': 8,
-                                    'name': '事件',
-                                    'hasLeaf': false,
-                                    'disable':false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("expandNodeEvent")',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 803,
-                                    'parentId': 8,
-                                    'name': '文档',
-                                    'hasLeaf': false,
-                                    'disable':false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("expandNodeContent")',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 701,
-                                    'parentId': 7,
-                                    'name': '实体',
-                                    'hasLeaf': false,
-                                    'disable':false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("gongzhiEnitiy")',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 702,
-                                    'parentId': 7,
-                                    'name': '事件',
-                                    'hasLeaf': false,
-                                    'disable':false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("gongzhiEvent")',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 703,
-                                    'parentId': 7,
-                                    'name': '文档',
-                                    'disable':false,
-                                    'hasLeaf': false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("gongzhiDoc")',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 601,
-                                    'parentId': 6,
-                                    'name': '关系',
-                                    'disable':false,
-                                    'hasLeaf': false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("showModalStepKnowledge")',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 602,
-                                    'parentId': 6,
-                                    'name': '所有',
-                                    'disable':false,
-                                    'hasLeaf': false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("showModalStepAll")',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 101,
-                                    'parentId': 1,
-                                    'name': '关系',
-                                    'disable':false,
-                                    'hasLeaf': false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("linkedKnowlage")',
-                                    'icon': 'noclick.png'
-                                },
-                                {
-                                    'Id': 102,
-                                    'parentId': 1,
-                                    'name': '所有',
-                                    'disable':false,
-                                    'hasLeaf': false,
-                                    'color': "rgba(51,102,102,0.5)",
-                                    'backcall': 'mthis.triggerMethods("linkedKnowlageAll")',
-                                    'icon': 'noclick.png'
-                                }
-                            ]
-                            var routeMap = new rightMenu(mthis, ovdiv, config);
-                            document.getElementById('netchart').appendChild(ovdiv)
-                            document.getElementById('ringRightMenu').oncontextmenu = function (e) {
-                                return false;
+                        $('#ringRightMenu').remove()
+                        var overlayId = 'rightClickMenu_Area';
+                        var ovdiv = document.createElement('div');
+                        ovdiv.style = 'width:400px;height:400px;';
+                        ovdiv.style.position = 'absolute';
+                        ovdiv.style.top = event.pageY - 120 - 200 + "px";
+                        ovdiv.style.left = event.pageX - 200 + "px";
+                        ovdiv.class = 'ringRightMenu';
+                        ovdiv.id = 'ringRightMenu';
+                        var config = [{
+                                'Id': 1,
+                                'parentId': 0,
+                                'name': '链向',
+                                'hasLeaf': true,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'lianxiang.png'
+                            },
+                            {
+                                'Id': 2,
+                                'parentId': 0,
+                                'name': '聚合',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'juhe.png'
+                            }, {
+                                'Id': 3,
+                                'parentId': 0,
+                                'name': '暂无',
+                                'disable': true,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.noItemInRightMenu',
+                                'icon': 'noclick.png'
+                            },
+                            {
+                                'Id': 4,
+                                'parentId': 0,
+                                'name': '删除',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("remove")',
+                                'icon': 'shanchu.png'
+                            }, {
+                                'Id': 5,
+                                'parentId': 0,
+                                'disable': false,
+                                'name': '推送',
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'tuisong.png'
+                            }, {
+                                'Id': 6,
+                                'parentId': 0,
+                                'name': '路径',
+                                'disable': false,
+                                'hasLeaf': true,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'lujing.png'
+                            }, {
+                                'Id': 7,
+                                'parentId': 0,
+                                'name': '共指',
+                                'disable': false,
+                                'hasLeaf': true,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'gongzhi.png'
+                            },
+                            {
+                                'Id': 8,
+                                'parentId': 0,
+                                'disable': false,
+                                'name': '关联',
+                                'hasLeaf': true,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'guanlian.png'
+                            },
+                            {
+                                'Id': 801,
+                                'parentId': 8,
+                                'name': '实体',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("expandNodeKnowledge")',
+                                'icon': 'guanlianshiti.png'
+                            },
+                            {
+                                'Id': 802,
+                                'parentId': 8,
+                                'name': '事件',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("expandNodeEvent")',
+                                'icon': 'guanlianshijian.png'
+                            },
+                            {
+                                'Id': 803,
+                                'parentId': 8,
+                                'name': '文档',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("expandNodeContent")',
+                                'icon': 'guanlianwendang.png'
+                            },
+                            {
+                                'Id': 701,
+                                'parentId': 7,
+                                'name': '实体',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("gongzhiEnitiy")',
+                                'icon': 'gongzhishiti.png'
+                            },
+                            {
+                                'Id': 702,
+                                'parentId': 7,
+                                'name': '事件',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("gongzhiEvent")',
+                                'icon': 'gongzhishijian.png'
+                            },
+                            {
+                                'Id': 703,
+                                'parentId': 7,
+                                'name': '文档',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("gongzhiDoc")',
+                                'icon': 'gongzhiwendang.png'
+                            },
+                            {
+                                'Id': 601,
+                                'parentId': 6,
+                                'name': '关系',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("showModalStepKnowledge")',
+                                'icon': 'zhishilujing.png'
+                            },
+                            {
+                                'Id': 602,
+                                'parentId': 6,
+                                'name': '所有',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("showModalStepAll")',
+                                'icon': 'quanbu.png'
+                            },
+                            {
+                                'Id': 101,
+                                'parentId': 1,
+                                'name': '关系',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("linkedKnowlage")',
+                                'icon': 'zhishilianxiang.png'
+                            },
+                            {
+                                'Id': 102,
+                                'parentId': 1,
+                                'name': '所有',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("linkedKnowlageAll")',
+                                'icon': 'quanbu.png'
                             }
+                        ]
+                        var routeMap = new rightMenu(mthis, ovdiv, config);
+                        document.getElementById('netchart').appendChild(ovdiv)
+                        document.getElementById('ringRightMenu').oncontextmenu = function (e) {
+                            return false;
+                        }
                         // }
                     },
                     onError: function (event) {
