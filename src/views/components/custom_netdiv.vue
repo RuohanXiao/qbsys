@@ -445,7 +445,7 @@ export default {
                 })
                 .then(response => {
                     if (response.body.code == 0) {
-                        if (response.body.data.nodes > 0) {
+                        if (response.body.data.nodes.length > 0) {
                             mthis.netchart.addData(response.body.data)
                         } else {
                             mthis.setMessage('未找到相关链向，请重新选择节点！')
@@ -2950,7 +2950,7 @@ export default {
                                 'hasLeaf': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("showModalStepAll")',
-                                'icon': 'suoyoulujing.png'
+                                'icon': 'quanbu.png'
                             },
                             {
                                 'Id': 101,
@@ -2970,7 +2970,7 @@ export default {
                                 'hasLeaf': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("linkedKnowlageAll")',
-                                'icon': 'suoyoulianxiang.png'
+                                'icon': 'quanbu.png'
                             }
                         ]
                         var routeMap = new rightMenu(mthis, ovdiv, config);
