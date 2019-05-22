@@ -191,7 +191,7 @@
   var tthis = this;
   var timerClick = null;
   var timer2 = null;
-
+  
   /* eslint-disable */
   export default {
     name: "App",
@@ -1708,19 +1708,18 @@
       
       // // console.log($('#jiazaiDiv').offset())
       // window.addEventListener('scroll', this.handleScroll)
-      // document.onkeydown=function(event){ 
-      //   if(mthis.$store.state.tmss === 'content') {
-      //     var e = event || window.event || arguments.callee.caller.arguments[0]; 
-      //     if(e && e.keyCode == 46){
-      //       mthis.deleteNode()
-      //     }
-      //     if(e.keyCode == 65 && e.ctrlKey){
-      //       mthis.selectAll()
-      //       e.preventDefault();
-      //       e.stopPropagation();
-      //     }
-      //   }
-      // };  
+      // let contentChart = document.getElementById('contentchart');
+      // console.log(contentChart)
+      // var contentTimer = null;
+      // $('#contentchart').click(function(){
+      //   contentTimer = setTimeout(function(){
+      //      $('#contentchart').css("cursor","crosshair");
+      //      alert(1111)
+      //   },1000);
+      // },function(){
+      //   clearTimeout(contentTimer);
+      // });
+      
     }
   };
 </script>
