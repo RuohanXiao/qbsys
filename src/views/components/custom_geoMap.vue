@@ -517,7 +517,6 @@ export default {
                     });
                 }
                 if (areaIds.length > 0){
-                    debugger
                     mthis.$http.post("http://10.60.1.141:5100/search-Area/", {
                         ids: areaIds
                     }).then(response => {
@@ -956,7 +955,6 @@ export default {
         },
         rightClickEvent(){
             var mthis = this;
-            debugger
             var areaIds= mthis.AreaIds;
             var geometryList = [];
             for(let i = 0; i < areaIds.length; i++){
@@ -1029,6 +1027,9 @@ export default {
             /* mthis.orgsSpatialQuery(geometryList,'Org'); */
             mthis.deleteRightMenu();
         },
+        noItemInRightMenu(){
+            alert('请期待!')
+        },
         deleteRightMenu(){
             var mthis = this;
             setTimeout(function(){
@@ -1048,14 +1049,26 @@ export default {
             ovdiv.class = 'ringRightMenu';
             ovdiv.id='ringRightMenu';
             var config = [
-                {'Id':1,'parentId':0,'name':'探索事件','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':''},
-                {'Id':2,'parentId':0,'name':'探索组织','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':''},
-                {'Id':3,'parentId':0,'name':'探索地名','hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':''},
-                {'Id':4,'parentId':0,'name':'删除区域','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':''},
-/*                 {'Id':5,'parentId':0,'name':'探索地名11','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':''},
-                {'Id':6,'parentId':0,'name':'删除区域','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':''}, */
-                {'Id':301,'parentId':3,'name':'aa','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
-                {'Id':302,'parentId':3,'name':'bb','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
+                /* {'Id':1,'parentId':0,'name':'探索事件','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
+                {'Id':2,'parentId':0,'name':'探索组织','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
+                {'Id':3,'parentId':0,'name':'暂无','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':4,'parentId':0,'name':'删除区域','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'deletearea.png'},
+                {'Id':5,'parentId':0,'name':'暂无','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':6,'parentId':0,'name':'暂无','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'}, */
+                /* {'Id':301,'parentId':3,'name':'aa','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''},
+                {'Id':302,'parentId':3,'name':'bb','hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickLoc','icon':''}, */
+                {'Id':1,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':2,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':3,'parentId':0,'name':'删除','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'deletearea.png'},
+                {'Id':4,'parentId':0,'name':'推送','disable':false,'hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickDM','icon':'pushnet.png'},
+                {'Id':5,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png'},
+                {'Id':6,'parentId':0,'name':'探索','disable':false,'hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':'explor.png'},
+                {'Id':601,'parentId':6,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
+                {'Id':602,'parentId':6,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
+                {'Id':603,'parentId':6,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
+                {'Id':401,'parentId':4,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
+                {'Id':402,'parentId':4,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
+                {'Id':403,'parentId':4,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'}
             ]
             //mthis.oparAreaFeature = feature;
             var routeMap = new rightMenu(mthis,ovdiv,config);
@@ -1148,7 +1161,6 @@ export default {
         },
         rightClickFun(layer,coordinate){
             var mthis = this;
-            debugger
             var map = mthis.routeMap.map;
             var pixel = map.getPixelFromCoordinate(coordinate);
             var overlayId = 'rightClickMenu_Area';
@@ -1158,7 +1170,6 @@ export default {
             }
             mthis.setRightClickMenu_Area(coordinate)
             /* map.forEachLayerAtPixel(pixel,function(feature,layer){
-                debugger
                 var overlayId = 'rightClickMenu_Area';
                 var overlay = map.getOverlayById(overlayId);
                 if(overlay){
@@ -1279,7 +1290,6 @@ export default {
 
                 }); */
                 /* mthis.mapSingleClick = mthis.routeMap.map.on('singleclick',function(e){
-                    debugger
                     for(let i = 0; i < mthis.SelectedIds.length; i++){
                         let id = mthis.SelectedIds[i];
                         let oId = id.split("&")[1];
@@ -1328,7 +1338,6 @@ export default {
                     }
                 });
                 mthis.selectClick.on('select', function(e) {
-                    debugger
                     mthis.deleteSelectClickFeatures();
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected;
@@ -1355,7 +1364,6 @@ export default {
                     if(selectFeatures.length > 0){
                         //mthis.deleteSelectClickFeatures();
                         var HLIds = mthis.HLIds;
-                        debugger
                         var paramIds = [];
                         for(let i = 0; i < selectFeatures.length; i++){
                             var id = selectFeatures[i].getId();
@@ -1426,7 +1434,6 @@ export default {
                 });
                 /* mthis.selectClick_area.on('select', function(e) {
                     var features = e.selected;
-                    debugger
                     mthis.deleteSelectClickFeatures();
                     for(let i = 0; i < features.length; i++){
                         var feature = features[i];
@@ -1538,6 +1545,7 @@ export default {
         },
         setPointMoveOverlay_Event(feature){
             var mthis = this;
+            debugger
             var overlayId = 'pointMoveOverlay_Event';
             var ovdiv = document.createElement('div');
             ovdiv.style ='background-color: rgba(0,51,51,0.8);border-radius: 5px;';
@@ -2652,7 +2660,6 @@ export default {
         },
         getWfsData(featureTypes,filter) {   //mthis.getWfsData(featureTypes,filter);
             var mthis = this;
-            debugger
             /* var featureTypes;
             var filter;
             if(type === 'province'){
@@ -3316,7 +3323,7 @@ export default {
             mthis.promptflag = true;
             setTimeout(function(){
                 mthis.promptflag = false;
-            },2000);
+            },3000);
         },
         waiting(){  
             var mthis = this;
@@ -3719,7 +3726,6 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
-            debugger
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
             mthis.SelectedIds = mthis.timeSelectedEventIdsOnly;
             Object.keys(mthis.AllLayerList_conf).forEach(function(key){

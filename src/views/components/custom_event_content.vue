@@ -27,7 +27,7 @@
       <organization-entity-table v-show="detailData.entity_type==='organization'" :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
       <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table>
       <event-entity-table v-show="detailData.entity_type==='event'" :tableData="detailData" :entDivH='entDivH'></event-entity-table> -->
-      <doc-entity-table v-show="detailData.entity_type==='document' && !this.$store.state.contentSelShowFlag" :tableData="detailData" :entDivH='entDivH'></doc-entity-table>
+      <doc-entity-table v-show="detailData.entity_type==='document' && !this.$store.state.contentSelShowFlag" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></doc-entity-table>
       <contentDetail v-show="this.$store.state.contentSelShowFlag" :contentDivH='contentDivH' ref='conDetail'></contentDetail>
     </div>
     <!-- 选中详情 -->

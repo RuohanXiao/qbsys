@@ -248,8 +248,8 @@
                 node.backgroundStyle = {}
               } else {
                 node.display = 'image'
-                if (util.checkImgExists("http://10.60.1.143/pic_lib/entity/" + node.id + ".png")) {
-                  node.image = "http://10.60.1.143/pic_lib/entity/" + node.id + ".png"
+                if (util.checkImgExists("http://10.60.1.143/pic_lib/padded/" + node.id + ".png")) {
+                  node.image = "http://10.60.1.143/pic_lib/padded/" + node.id + ".png"
                 } else {
                   node.image = 'http://10.60.1.140/assets/images/' + node.data.entity_type + '.png';
                 }
