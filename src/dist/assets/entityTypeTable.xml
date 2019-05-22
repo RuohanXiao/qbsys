@@ -7,6 +7,7 @@
       <tyeName>human</tyeName>  
       <tyeName>organization</tyeName>  
       <tyeName>weapon</tyeName> 
+      <tyeName>other</tyeName> 
     </includeType> 
   </entityMainType>  
   <entityMainType> 
