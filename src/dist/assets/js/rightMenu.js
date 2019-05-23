@@ -85,6 +85,7 @@ var rightMenu = function(t,target,config){
     var firstSeries = {
         name:'右键菜单',
         type:'pie',
+        animationType:"scale ",
         radius: ['20%', '50%'],
         startAngle: 0,
         avoidLabelOverlap: false,
@@ -242,6 +243,7 @@ var rightMenu = function(t,target,config){
         var secondMenuSeries = {
             name:parentId,
             type:'pie',
+            animationType:"scale ",
             radius: ['60%', '90%'],
             startAngle: shiftRotate,
             hoverAnimation:false,
@@ -271,6 +273,7 @@ var rightMenu = function(t,target,config){
             /* startAngle: shiftRotate,
             color:secondColor, */
             avoidLabelOverlap: false,
+            animationType:"scale ",
             label: {
                 normal: {
                     position: 'inner',
