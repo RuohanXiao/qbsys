@@ -3,7 +3,7 @@
     <!-- topdiv 头像, 名字, 简介 -->
     <div :style="{display:'flex'}">
       <div class='avatarStyle'>
-        <Avatar class="circle-img" :src="defaultImg(detailData.entity_type,detailData.img)" :style="{width:'50px',height:'50px'}" />
+        <Avatar class="circle-img" :src="detailData.img" :onerror="defaultImg(detailData.entity_type,detailData.img)" :style="{width:'50px',height:'50px'}" />
       </div>
       <div class="contentStyle">
         <div>

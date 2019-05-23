@@ -4,32 +4,32 @@
       <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}" class="inputDiv">
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
           v-show="type==='net'" placeholder='' :remote='true' loading-text='加载中···' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
-                                                  <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
-                                                    <Option v-for="(option, index) in opt1.data" :title="option.label" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
-                                                      <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
-                                                      <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                                                      <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;">{{option.labelvalue}}</span></Option>
-                                                  </OptionGroup>
-                                                </Select>
+          <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
+            <Option v-for="(option, index) in opt1.data" :title="option.label" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
+              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
+              <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)" />
+              <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
+          </OptionGroup>
+        </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoGeo" :remote='begeoSea'
           clearable filterable class="scrollBarAble" v-show="type==='geo'" placeholder='' :remote-method="searchInfoGeo" :loading="loading2" :label-in-value="false" @on-change="v=>{setOption(v)}" @keyup.enter.native="enterGeoOption(options2[0].data[0])" @on-open-change="lightIcon">
-                                                  <OptionGroup :label="opt.title" v-for="opt in options2" class="optionTitle">
-                                                    <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
-                                                      <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
-                                                      <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                                                      <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic_diagra.png" />
-                                                      <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;">{{option.labelvalue}}</span></Option>
-                                                  </OptionGroup>
-                                                </Select>
+          <OptionGroup :label="opt.title" v-for="opt in options2" class="optionTitle">
+            <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
+              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
+              <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
+              <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic_diagra.png" :onerror="errorImg(option)"/>
+              <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;">{{option.labelvalue}}</span></Option>
+          </OptionGroup>
+        </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoContent" filterable
           class="scrollBarAble" v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}" @on-open-change="lightIcon" @keyup.enter.native="enterContentOption(options3[0].data[0])">
-                                                  <OptionGroup :label="opt.title" v-for="opt in options3"  class="optionTitle">
-                                                    <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}"  @click.native="()=>{setOption(opt.data[index])}">
-                                                      <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" />
-                                                      <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" />
-                                                      <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;opacit:0.5">{{option.labelvalue}}</span></Option>
-                                                  </OptionGroup>
-                                                </Select>
+          <OptionGroup :label="opt.title" v-for="opt in options3"  class="optionTitle">
+            <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}"  @click.native="()=>{setOption(opt.data[index])}">
+              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
+              <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
+              <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;opacit:0.5" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
+          </OptionGroup>
+        </Select>
       </div>
       <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}" class="imgDiv"><i class="icon iconfont icon-search process-img" :class="(lightIconFlag)?'lightIcon':''" id='searchImg' style="position: absolute;top:1px;left:14px;width:25px;height:25px;"></i></div>
     </div>
@@ -53,6 +53,7 @@
         inputInfoNet: "",
         inputInfoGeo: "",
         inputInfoContent: "",
+        timestamp: '',
         options1: [],
         options2: [],
         options3: [],
@@ -95,9 +96,9 @@
               }
             })
           } else if (a.itemType === 'set') {
-            let timestamp = new Date().getTime()
+            mthis.timestamp = new Date().getTime()
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/load-set-data/', {
-              "timestamp": timestamp,
+              "timestamp": mthis.timestamp,
               "idlist": new Array(a.id),
               "query": "id",
               "label": "set",
@@ -140,9 +141,9 @@
             //   }
             // })
           } else if (a.itemType === 'pro') {
-            let timestamp = new Date().getTime()
+            mthis.timestamp = new Date().getTime()
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/load-set-data/', {
-              "timestamp": timestamp,
+              "timestamp": mthis.timestamp,
               "idlist": new Array(a.id),
               "query": "id",
               "label": "project",
@@ -187,9 +188,9 @@
               }
             })
           } else if (a.itemType === 'set') {
-            let timestamp = new Date().getTime()
+            mthis.timestamp = new Date().getTime()
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/load-set-data/', {
-              "timestamp": timestamp,
+              "timestamp": mthis.timestamp,
               "idlist": new Array(a.id),
               "query": "id",
               "label": "set",
@@ -265,17 +266,43 @@
           case 'other':
             return '其他'
             break;
-           case 'country':
+          case 'country':
             return '国家'
             break;
-           case 'province':
+          case 'province':
             return '省份'
             break;
         }
       },
+      errorImg(item) {
+        if (item.type === 'administrative') {
+          this.src = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
+        } else if (item.type === 'human') {
+          this.src = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
+        } else if (item.type === 'organization') {
+          this.src = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
+        } else if (item.type === 'weapon') {
+          this.src = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
+        } else {
+          this.src = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
+        }
+      },
+       errorImg1(item) {
+        if (item.type === 'administrative') {
+          return  util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
+        } else if (item.type === 'human') {
+          return  util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
+        } else if (item.type === 'organization') {
+          return  util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
+        } else if (item.type === 'weapon') {
+          return  util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
+        } else {
+          return util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
+        }
+      },
       searchInfoNet(query) {
         var mthis = this;
-        let timestamp = new Date().getTime()
+        mthis.timestamp = new Date().getTime()
         mthis.loading1 = true;
         let optionsTemp = []
         if (query !== "") {
@@ -284,11 +311,11 @@
           }
           this.timer = setTimeout(function() {
             let qtext = decodeURI(query)
-            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/qb-search/?keyword=" + qtext + '&type=net&timestamp=' + timestamp, {
+            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/qb-search/?keyword=" + qtext + '&type=net&timestamp=' + mthis.timestamp, {
                 emulateJSON: true
               })
               .then(response => {
-                if (response.body.timestamp == timestamp && response.body.code == 0) {
+                if (response.body.timestamp == mthis.timestamp && response.body.code == 0) {
                   mthis.options1 = []
                   // let optionList = {}
                   // let optionListArr = []
@@ -309,17 +336,6 @@
                     let optionList = new Object()
                     let optionListArr = new Array()
                     response.body.data.SearchEntity.map(item => {
-                      if (item.type === 'administrative') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
-                      } else if (item.type === 'human') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
-                      } else if (item.type === 'organization') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
-                      } else if (item.type === 'weapon') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
-                      } else {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
-                      }
                       if (item.name.length > 14) {
                         item.shortname = item.name.substring(0, 13) + '...'
                       } else {
@@ -331,6 +347,7 @@
                         "labelvalue": "(" + mthis.returnCHname(item.type) + ')',
                         "value": item.name,
                         "id": item.id,
+                        // "img": mthis.errorImg1(item),
                         "img": item.img,
                         "type": item.type,
                         "itemType": 'entity'
@@ -407,7 +424,7 @@
         if (query !== "") {
           mthis.loading2 = true;
           let optionsTemp = []
-          let timestamp = new Date().getTime()
+          mthis.timestamp = new Date().getTime()
           let qtext = decodeURI(query)
           let option = []
           let optionOrg = {}
@@ -421,26 +438,26 @@
           let res3 = new Array()
           mthis.options2 = [];
           /* let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, { */
-          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/qb-search/?keyword=" + qtext + '&type=geo&timestamp=' + timestamp, {
+          let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/qb-search/?keyword=" + qtext + '&type=geo&timestamp=' + mthis.timestamp, {
               emulateJSON: true
             })
             .then(response => {
-              if (response.body.timestamp == timestamp && response.body.code == 0) {
+              if (response.body.timestamp == mthis.timestamp && response.body.code == 0) {
                 if (response.body.data.SearchEntity.length > 0) {
                   let optionList = new Object()
                   let optionListArr = new Array()
                   response.body.data.SearchEntity.map(item => {
-                    if (item.type === 'administrative') {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
-                    } else if (item.type === 'human') {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
-                    } else if (item.type === 'organization') {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
-                    } else if (item.type === 'weapon') {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
-                    } else {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
-                    }
+                    // if (item.type === 'administrative') {
+                    //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
+                    // } else if (item.type === 'human') {
+                    //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
+                    // } else if (item.type === 'organization') {
+                    //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
+                    // } else if (item.type === 'weapon') {
+                    //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                    // } else {
+                    //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
+                    // }
                     if (item.name.length > 14) {
                       item.shortname = item.name.substring(0, 13) + '...'
                     } else {
@@ -452,7 +469,8 @@
                       "labelvalue": "(" + mthis.returnCHname(item.type) + ')',
                       "value": item.name,
                       "id": item.id,
-                      "img": item.img,
+                      // "img": mthis.errorImg1(item),
+                        "img": item.img,
                       "type": item.type,
                       "itemType": 'entity'
                     })
@@ -503,7 +521,6 @@
                       } else {
                         item.shortname = item.name
                       }
-                      console.log()
                       var queryObj = {
                         "label": item.name,
                         "labelShort": item.shortname,
@@ -577,7 +594,7 @@
               setTimeout(function() {
                 mthis.loading2 = false;
                 debugger;
-                mthis.options2 = res1.concat(res2,res3)
+                mthis.options2 = res1.concat(res2, res3)
               }, 200);
             });
         } else {
@@ -602,7 +619,7 @@
         //   mthis.options3 = option;
         //   mthis.loading3 = false;
         var mthis = this;
-        let timestamp = new Date().getTime()
+        mthis.timestamp = new Date().getTime()
         mthis.loading3 = true;
         let optionsTemp = []
         if (query !== "") {
@@ -611,31 +628,31 @@
           }
           this.timer = setTimeout(function() {
             let qtext = decodeURI(query)
-            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/qb-search/?keyword=" + qtext + '&type=net&timestamp=' + timestamp, {
+            let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/qb-search/?keyword=" + qtext + '&type=net&timestamp=' + mthis.timestamp, {
                 emulateJSON: true
               })
               .then(response => {
-                if (response.body.timestamp == timestamp && response.body.code == 0) {
+                if (response.body.timestamp == mthis.timestamp && response.body.code == 0) {
                   mthis.options3 = []
                   if (response.body.data.SearchEntity.length > 0) {
                     let optionList = new Object()
                     let optionListArr = new Array()
                     response.body.data.SearchEntity.map(item => {
-                      if (item.type === 'administrative') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
-                      } else if (item.type === 'human') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
-                      } else if (item.type === 'organization') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
-                      } else if (item.type === 'weapon') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
-                      } else if (item.type === 'province') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
-                      } else if (item.type === 'country') {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
-                      } else {
-                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
-                      }
+                      // if (item.type === 'administrative') {
+                      //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
+                      // } else if (item.type === 'human') {
+                      //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
+                      // } else if (item.type === 'organization') {
+                      //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
+                      // } else if (item.type === 'weapon') {
+                      //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                      // } else if (item.type === 'province') {
+                      //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
+                      // } else if (item.type === 'country') {
+                      //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
+                      // } else {
+                      //   item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
+                      // }
                       if (item.name.length > 14) {
                         item.shortname = item.name.substring(0, 13) + '...'
                       } else {
@@ -647,6 +664,7 @@
                         "labelvalue": "(" + mthis.returnCHname(item.type) + ')',
                         "value": item.name,
                         "id": item.id,
+                        // "img": mthis.errorImg1(item),
                         "img": item.img,
                         "type": item.type,
                         "itemType": 'entity'
@@ -798,6 +816,6 @@
     overflow: hidden;
   }
   /* #queryInput:focus>.inputDiv+.imgDiv .process-img {
-                                          color: red;
-                                        } */
+                                            color: red;
+                                          } */
 </style>

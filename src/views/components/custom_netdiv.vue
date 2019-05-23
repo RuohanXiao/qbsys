@@ -4041,6 +4041,6 @@ export default {
 
 .ringRightMenu:hover {
     color: red;
-    background-color: rgba(51, 255, 255, 0.3);s
+    background-color: rgba(51, 255, 255, 0.3);
 }
 </style>
