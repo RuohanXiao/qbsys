@@ -95,7 +95,8 @@ trClick{
     vertical-align: middle;
 }
 .moreTd{
-    text-align: center;
+    text-align: left;
+    padding-left: 24px;
     color: #ccffff;
     vertical-align: middle;
 }

@@ -323,7 +323,7 @@
         let setIds = mthis.worksetData[0].data.map(item => {
           return item.id
         })
-        /* debugger
+        /* 
         for(let i = 0; i < mthis.worksetData.length; i++){
           var datas = mthis.worksetData[i];
           var ids = datas.data;
@@ -332,7 +332,7 @@
             setids.push(id);
           }
         }
-        debugger */
+         */
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/index-set-data/', {
           "timestamp": timestamp,
           "data": {

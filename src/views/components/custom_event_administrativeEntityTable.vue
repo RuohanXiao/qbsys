@@ -1490,7 +1490,6 @@
             tableData: function() {
                 // // console.log('===========custom_event_humanEntityTable --------tableData')
                 // // console.log(this.tableData)
-                debugger
                 let mthis = this
                 mthis.spinWaiting = true
                 mthis.xiangguanEntityItems = new Array()
