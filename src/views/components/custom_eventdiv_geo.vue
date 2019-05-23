@@ -228,7 +228,6 @@
           for (let i = 0; i < EventIds.length; i++) {
             nodeIds.push(EventIds[i])
           }
-          debugger
           mthis.spinShow = true;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
             'nodeIds': nodeIds,

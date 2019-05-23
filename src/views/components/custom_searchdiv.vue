@@ -80,7 +80,6 @@
       },
       setOption(a) {
         var mthis = this;
-        debugger
         if (this.$store.state.tmss === 'net') {
           if (a.itemType === 'entity') {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
@@ -475,7 +474,6 @@
               emulateJSON: true
             })
             .then(response => {
-              debugger
               if (response.body.timestamp == timestamp && response.body.code == 0) {
                 if (response.body.data.SearchEntity.length > 0) {
                   let optionList = new Object()
@@ -556,7 +554,6 @@
               }
               setTimeout(function() {
                 mthis.loading2 = false;
-                debugger;
                 if(optionLocationNameArr.length > 0){
                   mthis.options2.push({
                       title: '地名检索',

@@ -109,7 +109,6 @@
       // },
       defaultImg(type, img) {
         var mthis  = this
-        debugger
         if (this.myMap.get(type) === 'entity') {
            if (mthis.eventdata[0].entity_type === 'administrative') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/location.png'

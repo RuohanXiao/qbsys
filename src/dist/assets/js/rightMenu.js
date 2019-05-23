@@ -4,7 +4,6 @@ import echarts from 'echarts'
 
 var rightMenu = function(t,target,config){
     var mthis = t;
-    debugger
     var nowOpr = {
         'inOrOut':'',
         'parentId':'',
@@ -106,7 +105,6 @@ var rightMenu = function(t,target,config){
     myChart.setOption(option);
     //this.deleteRightMenu = function(){},
     let overOption = function(params){
-        debugger
         var disable = params.data.disable;
         var name = params.data.name;
         var seriesName = params.seriesName;

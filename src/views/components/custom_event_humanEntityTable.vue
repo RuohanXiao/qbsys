@@ -905,7 +905,6 @@
       },
       addSingleNodeToCanvans(id, type, subType) {
         var mthis = this
-        debugger
         if (type === 'entity') {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
             "nodeIds": id
@@ -999,7 +998,6 @@
     watch: {
       tableData: function() {
         let mthis = this
-        debugger
         mthis.xiangguanEntityItems = new Array()
         mthis.xiangguanEntitys = new Object()
         mthis.xiangguanEvent = new Array()

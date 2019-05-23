@@ -1307,7 +1307,6 @@ export default {
                     }
                 });
                 mthis.selectClick.on('select', function(e) {
-                    debugger
                     mthis.deleteSelectClickFeatures();
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected;
@@ -1515,7 +1514,6 @@ export default {
         },
         setPointMoveOverlay_Event(feature){
             var mthis = this;
-            debugger
             var overlayId = 'pointMoveOverlay_Event';
             var ovdiv = document.createElement('div');
             ovdiv.style ='background-color: rgba(0,51,51,0.8);border-radius: 5px;';
@@ -1975,8 +1973,8 @@ export default {
                 url = 'http://localhost:5000/exploreOrg/'
                 promptType = '组织机构数';
             } else if(type === 'GeoTar'){
-                //url = 'http://10.60.1.141:5100/exploreOrg/'
-                url = 'http://localhost:5000/exploreGeoTar/'
+                url = 'http://10.60.1.141:5100/exploreGeoTar/'
+                //url = 'http://localhost:5000/exploreGeoTar/'
                 promptType = '地理目标数';
             }
             
