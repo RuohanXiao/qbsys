@@ -1191,7 +1191,8 @@ export default {
                     weight:mthis.weightFunction,
                     renderModed:'image',
                     id:'heatmapLayer',
-                    visible:false
+                    visible:false,
+                    gradient:['#00f', '#0ff', '#0f0', '#ff0', '#f00']
                 })
                 
                 
@@ -1297,11 +1298,12 @@ export default {
                     }
                 });
                 mthis.selectClick.on('select', function(e) {
+                    debugger
                     mthis.deleteSelectClickFeatures();
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected;
                     var num = 0;
-                    mthis.geometrySelectedEventIds = [];
+                    
                     if(deselectFeatures.length > 0){
                         var paramFeatures = [];
                         for(let i = 0; i < selectFeatures.length; i++){
@@ -1309,7 +1311,6 @@ export default {
                             var id = feature.getId();
                             let index = id.indexOf('&');
                             if(index != -1){
-                                //let oId = id.split('&')[1];
                                 paramFeatures.push(feature);
                             }
                         }
@@ -1333,6 +1334,7 @@ export default {
                             }
                         }
                         if(paramIds.length > 0){
+                            mthis.geometrySelectedEventIds = [];
                             Object.keys(mthis.AllLayerList_conf).forEach(function(key){
                                 var layerId = mthis.AllLayerList_conf[key].layerId;
                                 var features = mthis.getLayerById(layerId).getSource().getFeatures();
@@ -2724,14 +2726,6 @@ export default {
                 }
                 mthis.selectClick.getFeatures().clear();
             }
-            /* if(mthis.selectClick_area.getFeatures().getArray().length > 0){
-                let features = mthis.selectClick_area.getFeatures().getArray();
-                for(let i = 0; i < features.length; i++){
-                    let feature = features[i]
-                    mthis.stopAnimation(feature);
-                }
-                mthis.selectClick_area.getFeatures().clear();
-            } */
         },
         deletePoints(){
             var mthis = this;
