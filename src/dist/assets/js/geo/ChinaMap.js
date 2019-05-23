@@ -5,6 +5,7 @@ import View from 'ol/View'
 import Map from 'ol/Map'
 import {defaults as defaultControls, ScaleLine, FullScreen,ZoomSlider} from 'ol/control.js'
 
+
 var map = function(target){
 	var bounds = [75, 6,140, 55];//范围
 	//世界地图
@@ -84,11 +85,19 @@ var map = function(target){
             event.preventDefault();//屏蔽自带的右键事件
             var RClickLayer = layer;
             var coordinate = mthis.map.getEventCoordinate(event);
-            //callBack(layer,coordinate);
-            callBack(wmsTileLayer,coordinate);
+            callBack(layer,coordinate);
             //callBack(rcL,)
 
         })
+        /* $(this.map.getViewport()).on("contextmenu", function(event){
+            debugger
+            event.preventDefault();//屏蔽自带的右键事件
+            var rcL = RClickLayer;
+            var coordinate = mthis.map.getEventCoordinate(event);
+            debugger
+            //callBack(rcL,)
+
+        }); */
     };
     //地图显示
     this.map.getView().fit(bounds, this.map.getSize());

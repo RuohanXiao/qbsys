@@ -284,19 +284,19 @@ if (isMock) {
             "nodes": [{
               'entity_type': "human",
               'id': "Q22368",
-              'img': "http://10.60.1.143/pic_lib/entity/Q22368.png",
+              'img': "http://10.60.1.143/pic_lib/padded/Q22368.png",
               'loaded': true,
               'name': "陈水扁"
             }, {
               'entity_type': "human",
               'id': "Q315528",
-              'img': "http://10.60.1.143/pic_lib/entity/Q315528.png",
+              'img': "http://10.60.1.143/pic_lib/padded/Q315528.png",
               'loaded': true,
               'name': "李登辉"
             }, {
               'entity_type': "human",
               'id': "Q233984",
-              'img': "http://10.60.1.143/pic_lib/entity/Q233984.png",
+              'img': "http://10.60.1.143/pic_lib/padded/Q233984.png",
               'loaded': true,
               'name': "蔡英文"
             }]
