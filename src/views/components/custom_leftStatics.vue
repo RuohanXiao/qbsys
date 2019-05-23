@@ -95,7 +95,8 @@ trClick{
     vertical-align: middle;
 }
 .moreTd{
-    text-align: center;
+    text-align: left;
+    padding-left: 24px;
     color: #ccffff;
     vertical-align: middle;
 }
@@ -145,7 +146,7 @@ trClick{
                     </tr> 
                     <tr :id="staticsPanel.secondLevelId+'/more'" class='trNoClick' v-if="staticsPanel.specificStaticsAttr.length>5&&!displayItem[staticsPanel.secondLevelId]" @click="displaymore(staticsPanel.secondLevelId)">
                         <td colspan="2" class='moreTd'>
-                        <span :id="staticsPanel.secondLevelId+'/countSpan'">{{"还有"+moreitemCount[staticsPanel.secondLevelId]+"个条目，"+moreparamCount[staticsPanel.secondLevelId]+"个节点"}}</span>
+                        <span :id="staticsPanel.secondLevelId+'/countSpan'">{{"还有"+moreitemCount[staticsPanel.secondLevelId]+"个条目"}}</span>  <!-- +moreparamCount[staticsPanel.secondLevelId]+"个节点" -->
                         </td>
                     </tr>
                     <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-if="index>=5&&displayItem[staticsPanel.secondLevelId]"  v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist,rightMenuConf)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
@@ -183,8 +184,7 @@ export default {
                 "more":true
             },
             displayItem:{},
-            moreitemCount:{},
-            moreparamCount:{}
+            moreitemCount:{}
         }
     },
     mounted(){
@@ -202,64 +202,22 @@ export default {
                 mthis.mactiveNames.push(mthis.openPanelNames[i])
             }
         },
-        staticsDatas(){
-            var mthis = this;
-                debugger
-                mthis.openPanelNames = [];
-                if(!mthis.staticsDatas){
-                    return;
-                }
-                //mthis.staticsdatas = mthis.staticsDatas;
-                mthis.staticsDatas.forEach(function(item){
-                    item.subStatisticsAttr.forEach(function(Iitem){
-                        var thirdLevel = Iitem.specificStaticsAttr
-                        var itemCount = thirdLevel.length;
-                        var moreItemcount = itemCount>5?itemCount-5:0;
-                        var morethirdIds = 0;
-                        if(itemCount>5){
-                            for(let i = 5; i < itemCount; i++){
-                                var tItem = thirdLevel[i];
-                                var count = tItem.count;
-                                morethirdIds += count;
-                            }
-                        }
-                        //mthis.openPanelNames.push(Iitem.secondLevelId);
-                        mthis.$set(mthis.displayItem, Iitem.secondLevelId, false)
-                        mthis.$set(mthis.moreitemCount, Iitem.secondLevelId, moreItemcount)
-                        mthis.$set(mthis.moreparamCount, Iitem.secondLevelId, morethirdIds)
-                    })
-                })
-        },
-        /* staticsDatas:{
+        staticsDatas:{
             handler:function(val){
                 var mthis = this;
-                mthis.openPanelNames = [];
-                if(!mthis.staticsDatas){
-                    return;
-                }
-                //mthis.staticsdatas = mthis.staticsDatas;
                 mthis.staticsDatas.forEach(function(item){
                     item.subStatisticsAttr.forEach(function(Iitem){
                         var thirdLevel = Iitem.specificStaticsAttr
                         var itemCount = thirdLevel.length;
                         var moreItemcount = itemCount>5?itemCount-5:0;
                         var morethirdIds = 0;
-                        if(itemCount>5){
-                            for(let i = 5; i < itemCount; i++){
-                                var tItem = thirdLevel[i];
-                                var count = tItem.count;
-                                morethirdIds += count;
-                            }
-                        }
-                        mthis.openPanelNames.push(Iitem.secondLevelId);
                         mthis.$set(mthis.displayItem, Iitem.secondLevelId, false)
                         mthis.$set(mthis.moreitemCount, Iitem.secondLevelId, moreItemcount)
-                        mthis.$set(mthis.moreparamCount, Iitem.secondLevelId, morethirdIds)
                     })
                 })
             },
             immediate:true
-        }, */
+        },
         HLIds:function(){
             var mthis = this;
             mthis.cancelAllClickEffect();

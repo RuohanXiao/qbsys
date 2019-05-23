@@ -984,12 +984,20 @@ export default {
             mthis.orgsSpatialQuery(geometryList,'Org');
             mthis.deleteRightMenu();
         },
-        rightClickLoc(){
+
+        rightClickGeoTar(){
             var mthis = this;
-            var feature = mthis.oparAreaFeature;
-            var geometry = feature.getGeometry();
-            var geometryArr = new GeoJSON().writeGeometry(geometry)
-            mthis.orgsSpatialQuery([geometryArr],'Org');
+            var areaIds= mthis.AreaIds;
+            var geometryList = [];
+            for(let i = 0; i < areaIds.length; i++){
+                var id = areaIds[i];
+                var feature = mthis.getLayerById("HLAreaLayer").getSource().getFeatureById(id)
+                var geometry = feature.getGeometry();
+                var geometryStr = new GeoJSON().writeGeometry(geometry)
+                geometryList.push(geometryStr);
+                
+            }
+            mthis.orgsSpatialQuery(geometryList,'GeoTar');
             mthis.deleteRightMenu();
         },
         rightClickDM(){
@@ -1058,7 +1066,8 @@ export default {
                 {'Id':6,'parentId':0,'name':'探索','disable':false,'hasLeaf':true,'color':"rgba(0, 0, 0, 0.7)",'backcall':'','icon':'explor.png'},
                 {'Id':601,'parentId':6,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png'},
                 {'Id':602,'parentId':6,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
-                {'Id':603,'parentId':6,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
+                {'Id':603,'parentId':6,'name':'地理目标','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickGeoTar','icon':'exploreorg.png'},
+                {'Id':604,'parentId':6,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0, 0, 0, 0.7)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png'},
             ]
             //mthis.oparAreaFeature = feature;
             var routeMap = new rightMenu(mthis,ovdiv,config);
@@ -1191,7 +1200,8 @@ export default {
                     weight:mthis.weightFunction,
                     renderModed:'image',
                     id:'heatmapLayer',
-                    visible:false
+                    visible:false,
+                    gradient:['#00f', '#0ff', '#0f0', '#ff0', '#f00']
                 })
                 
                 
@@ -1301,7 +1311,7 @@ export default {
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected;
                     var num = 0;
-                    mthis.geometrySelectedEventIds = [];
+                    
                     if(deselectFeatures.length > 0){
                         var paramFeatures = [];
                         for(let i = 0; i < selectFeatures.length; i++){
@@ -1309,7 +1319,6 @@ export default {
                             var id = feature.getId();
                             let index = id.indexOf('&');
                             if(index != -1){
-                                //let oId = id.split('&')[1];
                                 paramFeatures.push(feature);
                             }
                         }
@@ -1333,6 +1342,7 @@ export default {
                             }
                         }
                         if(paramIds.length > 0){
+                            mthis.geometrySelectedEventIds = [];
                             Object.keys(mthis.AllLayerList_conf).forEach(function(key){
                                 var layerId = mthis.AllLayerList_conf[key].layerId;
                                 var features = mthis.getLayerById(layerId).getSource().getFeatures();
@@ -1504,7 +1514,6 @@ export default {
         },
         setPointMoveOverlay_Event(feature){
             var mthis = this;
-            debugger
             var overlayId = 'pointMoveOverlay_Event';
             var ovdiv = document.createElement('div');
             ovdiv.style ='background-color: rgba(0,51,51,0.8);border-radius: 5px;';
@@ -1960,8 +1969,13 @@ export default {
                 //url = 'http://localhost:5000/exploreEvent/'
                 promptType = '事件数';
             } else if(type === 'Org'){
-                url = 'http://10.60.1.141:5100/exploreOrg/'
+                //url = 'http://10.60.1.141:5100/exploreOrg/'
+                url = 'http://localhost:5000/exploreOrg/'
                 promptType = '组织机构数';
+            } else if(type === 'GeoTar'){
+                url = 'http://10.60.1.141:5100/exploreGeoTar/'
+                //url = 'http://localhost:5000/exploreGeoTar/'
+                promptType = '地理目标数';
             }
             
             mthis.waiting();
@@ -1996,6 +2010,9 @@ export default {
                     mthis.Message(promptMess);
                     mthis.hide();
                     
+                },function(error){
+                    alert("探索失败!");
+                    mthis.hide();
                 })
         },
         startAnimation(feature) { 
@@ -2673,6 +2690,9 @@ export default {
                     duration: 1000
                 });
                 //mthis.routeMap.map.render();
+            })
+            .catch(function(error) {
+                alert('request failed')
             });
         },
 
@@ -2724,14 +2744,6 @@ export default {
                 }
                 mthis.selectClick.getFeatures().clear();
             }
-            /* if(mthis.selectClick_area.getFeatures().getArray().length > 0){
-                let features = mthis.selectClick_area.getFeatures().getArray();
-                for(let i = 0; i < features.length; i++){
-                    let feature = features[i]
-                    mthis.stopAnimation(feature);
-                }
-                mthis.selectClick_area.getFeatures().clear();
-            } */
         },
         deletePoints(){
             var mthis = this;
@@ -3335,22 +3347,21 @@ export default {
                     }
                     mthis.addFeaturesToLayer(addFeatures_Org,'org');
                     mthis.addFeaturesToLayer(addFeatures_Event,'event')
-                    if(orgNum > 0){
+                    //if(orgNum > 0){
                         mes.push('组织机构：' + orgNum + ' 处');
-                        /* if(data.eventIds.length === 0){
-                            var promess_ = '增加' + mes.join(',');
-                            mthis.Message(promess_);
-                        } */
-                    }
-                    if(eventNum > 0){
+                    //}
+                    //if(eventNum > 0){
                         mes.push('事件：' + eventNum + ' 件');
-                    }
-                    if((eventNum + orgNum) > 0){
+                    //}
+                    //if((eventNum + orgNum) > 0){
                         var promess = '增加' + mes.join(' , ');
                         mthis.Message(promess);
-                    }
+                    //}
                     mthis.hide()
-                })
+                },function(res){
+                    alert(res.status)
+                    mthis.hide();
+                });
         },
         isOperateButtonsHLOrDim(){
             var mthis = this;
@@ -3365,6 +3376,7 @@ export default {
                             'isOpen':false
                         }
                     ]
+                mthis.heatMapVisible = false;  //关闭热力设置按钮
                 if($.isEmptyObject(mthis.removeEventIdList)){
                     mthis.changeButtonParam.push({
 
@@ -3430,6 +3442,7 @@ export default {
                         'id_suf':'HSD',
                         'isOpen':false
                     })
+                    mthis.heatMapVisible = false;  //关闭热力设置按钮
                 }
                 if($.isEmptyObject(mthis.removeEventIdList)){
                     mthis.changeButtonParam.push({
@@ -3465,12 +3478,13 @@ export default {
                     })
                 }
             }
+            
         }
 
     },
     computed:mapState ([
       'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
-      'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoWorkSetData_noArea','geoWorkSetData_area','geoPromte'
+      'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte'
     ]),
     
     watch:{
@@ -3525,9 +3539,9 @@ export default {
                 mthis.addFeaturesToLayer(addFeatures,'event');
             })
         },
-        geoWorkSetData_noArea:function(){
+        geoNoAreaDataGoInMap:function(){
             var mthis = this;
-            var data = mthis.geoWorkSetData_noArea;
+            var data = mthis.geoNoAreaDataGoInMap;
             mthis.setFeatureByIds(data)
         },
         geoWorkSetData_area:function(){

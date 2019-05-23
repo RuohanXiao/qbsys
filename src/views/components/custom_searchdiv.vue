@@ -234,17 +234,64 @@
         if (this.$store.state.tmss === 'geo') {
           mthis.inputInfoGeo = a.label
           if (a && a.value) {
-            if (a.type === 'human') {
+            if(a.itemType === 'set'){
+              var setId = a.id
+              var param = {
+                "timestamp": "loooooooooooooooooong_timestamp",
+                "idlist": [setId],
+                "query":"id",
+                "label": "set",
+                "page": 1,
+                "pagesize": 30
+              }
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/load-set-data/",param)
+                .then(response => {
+                  var datas = response.body.data[0].nodeIds
+                  var noAreaIds = [];
+                  var areaIds = [];
+                  for(let i = 0; i < datas.length; i++){
+                    var data = datas[i];
+                    var type = data.type;
+                    if(type === 'entity' || type === 'event'){
+                      let ids = data.ids;
+                      for(let j = 0; j < ids.length; j++){
+                        let id = ids[j];
+                        noAreaIds.push(id);
+                      }
+                    }
+                    if(type === 'area'){
+                      let ids = data.ids;
+                      for(let j = 0; j < ids.length; j++){
+                        let id = ids[j];
+                        areaIds.push(id);
+                      }
+                    }
+                  }
+                  if(areaIds.length > 0){
+                    mthis.$store.commit('setGeoWorkSetData_area',areaIds);
+                  }
+                  if(noAreaIds.length > 0){
+                    mthis.$store.commit('setGeoNoAreaDataGoInMap',noAreaIds);
+                  }
+                },function(error){
+                  console.log('请求/load-set-data/失败！')
+                })
+            } else if(a.itemType === 'location'){
+              mthis.$store.commit('setHLlocationIds', [a.value])
+            } else {
+              mthis.$store.commit('setGeoNoAreaDataGoInMap',[a.id]);
+            }
+            /* if (a.type === 'human') {
               mthis.$store.commit('setSearchGeoEventResult', {
                 ids: [a.value]
               })
             } else if (a.type === 'location') {
               mthis.$store.commit('setHLlocationIds', [a.value])
-            } else {
+            } else if (a.type === 'administrative') {
               mthis.$store.commit('setSearchGeoEntityResult', {
                 ids: [a.value]
               })
-            }
+            } */
           }
         }
       },
@@ -414,11 +461,13 @@
           let optionOrgArr = []
           let optionEvent = {}
           let optionEventArr = []
-          let optionLocationName = {}
+          let optionLocationNames = []
           let optionLocationNameArr = []
           let res1 = new Array()
           let res2 = new Array()
           let res3 = new Array()
+          let optionListArr = new Array()
+          let optionListArr1 = new Array()
           mthis.options2 = [];
           /* let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/fuzzy-match/?pattern=" + query, { */
           let response = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/qb-search/?keyword=" + qtext + '&type=geo&timestamp=' + timestamp, {
@@ -428,43 +477,60 @@
               if (response.body.timestamp == timestamp && response.body.code == 0) {
                 if (response.body.data.SearchEntity.length > 0) {
                   let optionList = new Object()
-                  let optionListArr = new Array()
+                  
                   response.body.data.SearchEntity.map(item => {
-                    if (item.type === 'administrative') {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
-                    } else if (item.type === 'human') {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
-                    } else if (item.type === 'organization') {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
-                    } else if (item.type === 'weapon') {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                    if(item.type === "locationName"){
+                      /* optionLocationNames.push(item); */
+                      var shortname = '';
+                      if (item.name.length > 14) {
+                        shortname = item.name.substring(0, 13) + '...'
+                      } else {
+                        shortname = item.name
+                      }
+                      var queryObj = {
+                        "label": item.name,
+                        "labelShort": shortname,
+                        "labelvalue": "(地区)",
+                        "value": item.id,
+                        "id": item.id,
+                        "img": '',
+                        "type": 'location',
+                        "itemType":'location'
+                      }
+                      optionLocationNameArr.push(queryObj);
                     } else {
-                      item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
+                      if (item.type === 'administrative') {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
+                      } else if (item.type === 'human') {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
+                      } else if (item.type === 'organization') {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
+                      } else if (item.type === 'weapon') {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                      } else {
+                        item.img = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
+                      }
+                      if (item.name.length > 14) {
+                        item.shortname = item.name.substring(0, 13) + '...'
+                      } else {
+                        item.shortname = item.name
+                      }
+                      optionListArr.push({
+                        "label": item.name,
+                        "labelShort": item.shortname,
+                        "labelvalue": "(" + mthis.returnCHname(item.type) + ')',
+                        "value": item.name,
+                        "id": item.id,
+                        "img": item.img,
+                        "type": item.type,
+                        "itemType": 'entity'
+                      })
                     }
-                    if (item.name.length > 14) {
-                      item.shortname = item.name.substring(0, 13) + '...'
-                    } else {
-                      item.shortname = item.name
-                    }
-                    optionListArr.push({
-                      "label": item.name,
-                      "labelShort": item.shortname,
-                      "labelvalue": "(" + mthis.returnCHname(item.type) + ')',
-                      "value": item.name,
-                      "id": item.id,
-                      "img": item.img,
-                      "type": item.type,
-                      "itemType": 'entity'
-                    })
-                  })
-                  res1 = new Array({
-                    title: '实体检索',
-                    data: optionListArr
                   })
                 }
                 if (response.body.data.SearchSet.length > 0) {
                   let optionList1 = new Object()
-                  let optionListArr1 = new Array()
+                  
                   response.body.data.SearchSet.map(item => {
                     if (item.name.length > 14) {
                       item.shortname = item.name.substring(0, 13) + '...'
@@ -483,101 +549,29 @@
                       "itemType": 'set'
                     })
                   })
-                  // optionsTemp.push(optionList)
-                  res2 = new Array({
-                    title: '集合检索',
-                    data: optionListArr1
-                  })
                 }
+                
               }
-              let response_geo = mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/search-location-name/?localName=" + query, {
-                  //let response_geo = mthis.$http.get("http://127.0.0.1:5000/searchLocationName/" + query, {
-                  emulateJSON: true
-                })
-                .then(response_geo => {
-                  if (response_geo.data !== 'false') {
-                    var LCdata = response_geo.body.data;
-                    LCdata.forEach(function(item) {
-                      if (item.name.length > 14) {
-                        item.shortname = item.name.substring(0, 13) + '...'
-                      } else {
-                        item.shortname = item.name
-                      }
-                      console.log()
-                      var queryObj = {
-                        "label": item.name,
-                        "labelShort": item.shortname,
-                        "labelvalue": "(地区)",
-                        "value": item.id + '_' + item.type,
-                        "id": item.id + '_' + item.type,
-                        "img": '',
-                        "type": 'location'
-                      }
-                      optionLocationNameArr.push(queryObj)
-                    })
-                    //     optionLocationName.title = "地名搜索";
-                    //     optionLocationName.data = optionLocationNameArr
-                    //     for (let i = 0; i < response.body.data.nodes.length; i++) {
-                    //         if( response.body.data.nodes[i].name.length>11){
-                    //             response.body.data.nodes[i].shortname = response.body.data.nodes[i].name.substring(0, 10)+'...'
-                    //         }else{
-                    //             response.body.data.nodes[i].shortname = response.body.data.nodes[i].name
-                    //         }
-                    //         if (response.body.data.nodes[i].type === 'human') {
-                    //             optionEventArr.push({
-                    //                 "label": response.body.data.nodes[i].name + ' 的事件',
-                    //                 "labelShort": response.body.data.nodes[i].shortname + ' 的事件',
-                    //                 "labelvalue": "(事件)",
-                    //                 "id": response.body.data.nodes[i].id,
-                    //                 "value": response.body.data.nodes[i].id,
-                    //                 "img": response.body.data.nodes[i].img,
-                    //                 "type": 'human'
-                    //             })
-                    //         } else if (response.body.data.nodes[i].type === 'organization') {
-                    //             optionOrgArr.push({
-                    //                 "label": response.body.data.nodes[i].name,
-                    //                 "labelShort": response.body.data.nodes[i].shortname,
-                    //                 "labelvalue": "(机构)",
-                    //                 "id": response.body.data.nodes[i].id,
-                    //                 "value": response.body.data.nodes[i].id,
-                    //                 "img": response.body.data.nodes[i].img,
-                    //                 "type": 'organization'
-                    //             })
-                    //         } else {}
-                    //     }
-                    // }
-                    res3 = new Array({
-                      title: '地名搜索',
-                      data: optionLocationNameArr
-                    })
-                    // mthis.options2 = optionsTemp
-                    // optionOrg.title = '实体搜索'
-                    // optionOrg.data = optionOrgArr
-                    // optionEvent.title = '事件搜索'
-                    // optionEvent.data = optionEventArr
-                    // mthis.options2 = []
-                    // if (optionOrg.data.length > 0) {
-                    //     mthis.options2.push(optionOrg)
-                    // }
-                    // if (optionEvent.data.length > 0) {
-                    //     mthis.options2.push(optionEvent)
-                    // }
-                    // if (optionLocationName.data.length > 0) {
-                    //     mthis.options2.push(optionLocationName)
-                    // }
-                    // option.push(optionEvent)
-                    // option.push(optionOrg)
-                    // option.push(optionLocationName)
-                    //// // console.log('-------option------')
-                    // // // console.log(option)
-                    // mthis.options2 = option;
-                    //// // console.log(mthis.options2)
-                  }
-                })
               setTimeout(function() {
                 mthis.loading2 = false;
-                debugger;
-                mthis.options2 = res1.concat(res2,res3)
+                if(optionLocationNameArr.length > 0){
+                  mthis.options2.push({
+                      title: '地名检索',
+                      data: optionLocationNameArr
+                    })
+                }
+                if(optionListArr.length > 0){
+                  mthis.options2.push({
+                      title: '实体检索',
+                      data: optionListArr
+                    })
+                }
+                if(optionListArr1.length > 0){
+                  mthis.options2.push({
+                      title: '集合检索',
+                      data: optionListArr1
+                    })
+                }
               }, 200);
             });
         } else {

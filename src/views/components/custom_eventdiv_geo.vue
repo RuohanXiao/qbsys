@@ -228,16 +228,12 @@
           for (let i = 0; i < EventIds.length; i++) {
             nodeIds.push(EventIds[i])
           }
-          //mthis.waiting()
           mthis.spinShow = true;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
             'nodeIds': nodeIds,
             'type': 'geo'
           }).then(response => {
             mthis.staticsDatas = response.body.data;
-            
-
-
             mthis.openPanelNames = [];
             if(!mthis.staticsDatas){
                 return;

@@ -207,7 +207,7 @@ var store = new Vuex.Store({
       api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
       map_url:'http://10.60.1.142:8082', //地图脚本服务地址
       api_event_test_url:'http://10.60.1.141:5100',//事件时间轴测试接口
-      //  xml_url:'http://10.60.1.140/assets' // 部署路径
+      // xml_url:'http://10.60.1.140/assets' // 部署路径
       xml_url:'./src/dist/assets' // 本地路径
     },
     // ipConfig: {
@@ -254,6 +254,7 @@ var store = new Vuex.Store({
     searchGeoEntityResult: {
       ids:[]
     },
+    searchGeoOrgIds:[],
     searchContentResult: {
       id:'',
       label:'',
@@ -339,7 +340,7 @@ var store = new Vuex.Store({
     contentStatisticsResult:{},
     StaticsIds:[],
     GeoStaticsHLItemIds:[],
-    geoWorkSetData_noArea:[],
+    geoNoAreaDataGoInMap:[],
     geoWorkSetData_area:[],
     netStaticsSelectedIds:[],  //net模块中点击右侧统计保存ids
     netOnlyStaticsSelectedIds:{
@@ -446,8 +447,8 @@ var store = new Vuex.Store({
       let data = Object.assign({},state.setWorkSpaceModal,val);
       state.workSpaceAddData = data
     },
-    setGeoWorkSetData_noArea(state,val){
-      state.geoWorkSetData_noArea = val;
+    setGeoNoAreaDataGoInMap(state,val){
+      state.geoNoAreaDataGoInMap = val;
     },
     setGeoWorkSetData_area(state,val){
       state.geoWorkSetData_area = val;
@@ -585,6 +586,9 @@ var store = new Vuex.Store({
     },
     setSearchGeoEntityResult(state,val){
       state.searchGeoEntityResult = val
+    },
+    setSearchGeoOrgIds(state,val){
+      state.searchGeoOrgIds = val
     },
     setSearchContentResult(state,val){
       state.searchContentResult = val

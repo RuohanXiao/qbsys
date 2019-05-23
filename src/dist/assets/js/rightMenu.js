@@ -4,7 +4,6 @@ import echarts from 'echarts'
 
 var rightMenu = function(t,target,config){
     var mthis = t;
-    debugger
     var nowOpr = {
         'inOrOut':'',
         'parentId':'',
@@ -85,6 +84,7 @@ var rightMenu = function(t,target,config){
     var firstSeries = {
         name:'右键菜单',
         type:'pie',
+        animationType:"scale ",
         radius: ['20%', '50%'],
         startAngle: 0,
         avoidLabelOverlap: false,
@@ -105,7 +105,6 @@ var rightMenu = function(t,target,config){
     myChart.setOption(option);
     //this.deleteRightMenu = function(){},
     let overOption = function(params){
-        debugger
         var disable = params.data.disable;
         var name = params.data.name;
         var seriesName = params.seriesName;
@@ -242,6 +241,7 @@ var rightMenu = function(t,target,config){
         var secondMenuSeries = {
             name:parentId,
             type:'pie',
+            animationType:"scale ",
             radius: ['60%', '90%'],
             startAngle: shiftRotate,
             hoverAnimation:false,
@@ -271,6 +271,7 @@ var rightMenu = function(t,target,config){
             /* startAngle: shiftRotate,
             color:secondColor, */
             avoidLabelOverlap: false,
+            animationType:"scale ",
             label: {
                 normal: {
                     position: 'inner',
