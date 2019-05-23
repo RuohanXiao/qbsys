@@ -6,7 +6,7 @@
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',border:'solid 1px #336666'}" id="net">
         <div class="divStyle">
             <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="newCanvans">
+                <div :class="ifhasNode? 'button-div':'button-div-disable'"  @click="newCanvans">
                     <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
                     <p class="img-content">清空画布</p>
                 </div>
@@ -18,7 +18,7 @@
                 </div>
             </Tooltip>
             <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="triggerMethods('selectAll')">
+                <div :class="ifhasNode? 'button-div': 'button-div-disable'" @click="triggerMethods('selectAll')">
                     <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
                     <p class="img-content">全选节点</p>
                 </div>
@@ -203,7 +203,7 @@
                 </div>
             </Tooltip>
             <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="cutScreen">
+                <div :class="ifhasNode? 'button-div':'button-div-disable'" @click="cutScreen">
                     <Icon class="icon iconfont icon-cut DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
                     <p class="img-content">截屏</p>
                 </div>
@@ -215,7 +215,7 @@
                                                                           </div>
                             </Tooltip>-->
             <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="fit">
+                <div :class="ifhasNode? 'button-div':'button-div-disable'" @click="fit">
                     <Icon class="icon iconfont icon-zhengchangshitu--quanping DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
                     <p class="img-content">适配</p>
                 </div>
@@ -345,6 +345,7 @@ export default {
             modal01: false,
             eventData: null,
             ids: [],
+            ifhasNode: false,
             ifSelectNode: false,
             ifSelectTwoNode: false,
             ifSelectOnlyTwoNode: false,
@@ -580,7 +581,7 @@ export default {
                     .then(response => {
                         if (response.body.code === 0) {
                             if (response.body.data.nodes.length > 0) {
-                                mthis.changNetchartMode('d')
+                                mthis.changNetchartMode('r')//  mthis.changNetchartMode('d')
                                 mthis.netchart.addData(response.body.data)
                                 mthis.netchart.selection(response.body.data.nodes.map(item => {
                                     return item.id
@@ -609,7 +610,7 @@ export default {
                     .then(response => {
                         if (response.body.code === 0) {
                             if (response.body.data.nodes.length > 0) {
-                                mthis.changNetchartMode('d')
+                                 mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                                 mthis.netchart.addData(response.body.data)
                                 setTimeout(function () {
                                     mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -958,7 +959,7 @@ export default {
                                         }))
                                     }
                                 }
-                                mthis.changNetchartMode('r')
+                                 mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                                 mthis.netchart.addData({
                                     'nodes': nodes,
                                     'links': links
@@ -1000,7 +1001,7 @@ export default {
                 //             }))
                 //           }
                 //         }
-                //         mthis.changNetchartMode('d')
+                //          mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                 //         mthis.netchart.addData({
                 //           'nodes': nodes,
                 //           'links': links
@@ -1071,7 +1072,7 @@ export default {
                 //             }))
                 //           }
                 //         }
-                //         mthis.changNetchartMode('d')
+                //          mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                 //         mthis.netchart.addData({
                 //           'nodes': nodes,
                 //           'links': links
@@ -1153,7 +1154,7 @@ export default {
                 //         //   ite.type = ite.relation_name
                 //         //   return ite
                 //         // })
-                //         mthis.changNetchartMode('d')
+                //          mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                 //         mthis.netchart.addData({
                 //           'nodes': nodes,
                 //           'links': links
@@ -1202,6 +1203,7 @@ export default {
             this.ifSelectNode = false;
             this.ifSelectTwoNode = false;
             this.ifSelectOnlyTwoNode = false;
+            this.ifhasNode = false
             this.getStatistics();
         },
         // 事件拓展
@@ -1279,7 +1281,7 @@ export default {
                                         }
                                         return ite
                                     })
-                                    mthis.changNetchartMode('d')
+                                     mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                                     mthis.netchart.addData({
                                         'nodes': nodes,
                                         'links': links
@@ -1376,7 +1378,7 @@ export default {
                                         ite.type = (ite.type) ? ite.type : ite.relation_name
                                         return ite
                                     })
-                                    mthis.changNetchartMode('d')
+                                     mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                                     mthis.netchart.addData({
                                         'nodes': nodes,
                                         'links': links
@@ -1441,7 +1443,7 @@ export default {
                             response.body.data[0].links.length >
                             0
                         ) {
-                            mthis.changNetchartMode('d')
+                             mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                             mthis.netchart.addData(response.body.data[0]);
                             let idArr = [];
                             let nodeobj = response.body.data[0].nodes;
@@ -1498,7 +1500,7 @@ export default {
                 }).then(response => {
                     if (response.body.code === 0) {
                         if (response.body.data.nodes.length > 0) {
-                            mthis.changNetchartMode('d')
+                             mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                             mthis.netchart.addData(response.body.data)
                             setTimeout(function () {
                                 mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -1529,7 +1531,7 @@ export default {
                 }).then(response => {
                     if (response.body.code === 0) {
                         if (response.body.data.nodes.length > 0) {
-                            mthis.changNetchartMode('d')
+                             mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                             mthis.netchart.addData(response.body.data)
                             setTimeout(function () {
                                 mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -1560,7 +1562,7 @@ export default {
                 }).then(response => {
                     if (response.body.code === 0) {
                         if (response.body.data.nodes.length > 0) {
-                            mthis.changNetchartMode('d')
+                             mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                             mthis.netchart.addData(response.body.data)
                             setTimeout(function () {
                                 mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -2252,7 +2254,7 @@ export default {
                 // this.$Message.error('请选择节点进行删除操作！')
                 this.setMessage("请选择节点进行删除操作！");
             }
-
+           
             mthis.selectionIdByTypeData = new Object({
                 nodeIds: [],
                 eventIds: [],
@@ -2262,6 +2264,13 @@ export default {
             mthis.ifSelectNode = false;
             mthis.ifSelectTwoNode = false;
             mthis.ifSelectOnlyTwoNode = false;
+            setTimeout(function () {
+            if(mthis.netchart.nodes().length>0){
+                mthis.ifhasNode = true
+            }else {
+                mthis.ifhasNode = false
+            }
+            }, 200);
         },
         queryPerson() {},
         //反选节点
@@ -2352,9 +2361,7 @@ export default {
                 navigation: {
                     // 初始化展示层级
                     focusNodeExpansionRadius: 1,
-                    // initialNodes: null,
                     mode: "showall",
-                    // mode: "focusnodes" ,
                     expandOnClick: false
                 },
                 // legend: { enabled: true },
@@ -2384,14 +2391,21 @@ export default {
                     mode: "radial",
                     // mode: "static",
                     // mode: "dynamic",
+                    // z重力模块配置
+                    // gravity:{
+                    //     from:"graph",
+                    //     to: "graphLockedNodes",
+                    //     fromCenter:"geometric", // "geometric"
+                    //     toCenter:"geometric "
+                    // },
                     twoRingRadialLayout: true,
                     // layoutFreezeMinTimeout:300,
                     // layoutFreezeTimeout: 300,
                     // incrementalLayoutMaxTime:100,
                     // initialLayoutMaxTime:500,
-                    globalLayoutOnChanges: false,
-                    nodeSpacing: 50,
-                    rowSpacing: 50
+                    globalLayoutOnChanges: true,
+                    nodeSpacing: 16,
+                    rowSpacing: 30
                 },
                 // 层级布局
                 // layout: \
@@ -2516,6 +2530,7 @@ export default {
                             node.display = "text";
                             node.radius = 15;
                             node.borderRadius = 5;
+                            // node.image = util.checkImg(node.data.img).then(function(data){ return data? (node.data.img) : 'http://10.60.1.140/assets/images/event.png'})
                             node.image = util.checkImgExists(node.data.img) ?
                                 node.data.img :
                                 "http://10.60.1.140/assets/images/event.png";
@@ -2610,6 +2625,7 @@ export default {
                                 util.checkImgExists(
                                     "http://10.60.1.143/pic_lib/padded/" + node.id + ".png"
                                 )
+                            
                             ) {
                                 node.image =
                                     "http://10.60.1.143/pic_lib/padded/" + node.id + ".png";
@@ -2775,7 +2791,9 @@ export default {
                         console.log(event)
                         mthis.changNetchartMode('s')
                     },
-                    onChartUpdate: function (event) {},
+                    // onChartUpdate: function (event) {
+                    //     console.log('-------------------------------------------------->>>onChartUpdate')
+                    // },
                     onSettingsChange: function (event) {},
                     onRightClick: function (event) {
                         event.preventDefault();
@@ -3078,7 +3096,13 @@ export default {
                                 mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
                                 mthis.netchart.updateStyle(netchartnodes[i].id)
                             }
+                            if(mthis.netchart.nodes().length>0){
+                                mthis.ifhasNode = true
+                            }else {
+                                mthis.ifhasNode = false
+                            }
                             if (event.selection.length > 0) {
+                                mthis.ifhasNode = true
                                 let selectN = {
                                     nodes: event.selection.map(item => {
                                         return item.data;

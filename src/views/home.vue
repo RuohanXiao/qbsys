@@ -136,14 +136,21 @@
       var mthis = this
       // 快捷键监听
       let getIn = document.getElementsByClassName('ivu-select-input')
+      let prevKdown = null;
+      let prevKup = null;
       document.onkeydown=function(event){ 
-        mthis.keyCount ++;
-        console.log("keydownkeydownkeydown")
-        console.log(mthis.keyCount)
-        console.log(event)
+        // mthis.keyCount ++;
+        
+       
         var e = event || window.event || arguments.callee.caller.arguments[0];
-          if (mthis.keyCount ==2 && e.keyCode == 70 && (e.ctrlKey || e.metaKey)) {
+          if(e.code != prevKdown){
+            mthis.keyCount = mthis.keyCount + 1;
+            prevKdown = e.code
+          }
+         
+          if (mthis.keyCount==2 && e.keyCode == 70 && (e.ctrlKey || e.metaKey)) {
             // ctrl+F
+            
             if(mthis.tmss == 'net'){
               getIn[0].value = ''
               getIn[0].focus()
@@ -157,7 +164,7 @@
             e.preventDefault();
             e.stopPropagation();
           }
-          if(mthis.keyCount ==1 && e && e.keyCode == 46){
+          if(mthis.keyCount==1 && e && e.keyCode == 46){
             // delete
             if(mthis.tmss == 'net'){
               mthis.$store.state.netKeyboards.push('delete')
@@ -171,7 +178,7 @@
             e.stopPropagation();
 
           }
-          if(mthis.keyCount ==2 && e.keyCode == 65 && (e.ctrlKey || e.metaKey)){
+          if(mthis.keyCount==2 && e.keyCode == 65 && (e.ctrlKey || e.metaKey)){
             // ctrl+A
             if(mthis.tmss == 'net'){
               mthis.$store.state.netKeyboards.push('selall')
@@ -187,10 +194,14 @@
           }
         
       };
-      document.onkeyup = function(){
-        mthis.keyCount = mthis.keyCount - 1;
-        console.log("keyupkeyupkeyup")
-        console.log(mthis.keyCount)
+      document.onkeyup = function(event){
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        
+        if(e.code != prevKup){
+            mthis.keyCount = mthis.keyCount - 1;
+            prevKup = e.code
+          }
+        
       }
       var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/configer.xml");
       var imgItem = ob.getElementsByTagName("imgItem");

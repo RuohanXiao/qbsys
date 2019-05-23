@@ -144,7 +144,6 @@
         }
       },
       changeDetailDiv(id, type, ob) {
-        var mthis = this
         let arr = []
         arr.push(id)
         if (mthis.myMap.get(type) === 'entity') {
