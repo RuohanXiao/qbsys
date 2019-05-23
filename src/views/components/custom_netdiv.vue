@@ -964,7 +964,7 @@ export default {
                                         }))
                                     }
                                 }
-                                mthis.changNetchartMode('r')
+                                mthis.changNetchartMode('d')
                                 mthis.netchart.addData({
                                     'nodes': nodes,
                                     'links': links
@@ -2358,9 +2358,7 @@ export default {
                 navigation: {
                     // 初始化展示层级
                     focusNodeExpansionRadius: 1,
-                    // initialNodes: null,
                     mode: "showall",
-                    // mode: "focusnodes" ,
                     expandOnClick: false
                 },
                 // legend: { enabled: true },
@@ -2387,17 +2385,24 @@ export default {
                 // 星形布局
                 layout: {
                     // mode: 'hierarchy',
-                    mode: "radial",
+                    // mode: "radial",
                     // mode: "static",
-                    // mode: "dynamic",
+                    mode: "dynamic",
+                    // z重力模块配置
+                    // gravity:{
+                    //     from:"graph",
+                    //     to: "graphLockedNodes",
+                    //     fromCenter:"geometric", // "geometric"
+                    //     toCenter:"geometric "
+                    // },
                     twoRingRadialLayout: true,
                     // layoutFreezeMinTimeout:300,
                     // layoutFreezeTimeout: 300,
                     // incrementalLayoutMaxTime:100,
                     // initialLayoutMaxTime:500,
-                    globalLayoutOnChanges: false,
-                    nodeSpacing: 50,
-                    rowSpacing: 50
+                    globalLayoutOnChanges: true,
+                    nodeSpacing: 16,
+                    rowSpacing: 30
                 },
                 // 层级布局
                 // layout: \
