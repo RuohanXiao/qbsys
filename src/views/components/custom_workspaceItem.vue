@@ -325,7 +325,7 @@
             mthis.$store.commit('setGeoWorkSetData_area',areaIds);
           }
           if(noAreaIds.length > 0){
-            mthis.$store.commit('setGeoWorkSetData_noArea',noAreaIds);
+            mthis.$store.commit('setGeoNoAreaDataGoInMap',noAreaIds);
           }
           
         }
