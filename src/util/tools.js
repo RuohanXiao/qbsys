@@ -29,8 +29,23 @@ export default {
     };
     return true
   },
+  checkImg(imgurl){
+    var p = new Promise(function(resolve, reject){
+      var ImgObj = new Image(); //判断图片是否存在  
+      ImgObj.src = imgurl;
+      //没有图片，则返回-1  
+      if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
+        resolve(true);
+      } else{
+        reject(false);
+      }
+    });
+    return p;   
+  },
   //验证图片资源是否存在（404）
   checkImgExists(imgurl) {
+    console.log('+++++++++++++>imgurl')
+    console.log(imgurl)
     var ImgObj = new Image(); //判断图片是否存在  
     ImgObj.src = imgurl;
     //没有图片，则返回-1  
