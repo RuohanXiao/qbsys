@@ -98,20 +98,21 @@
               </Spin>
             </div>
           
-            <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}">
+            <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}" 
+            @mouseenter="changeCursor" @mousedown.stop="kuangxuan">
               <Row type="flex" justify="start">
 
                 <Col :sm="colSmnum" :lg="colLgNum" align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
                 <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}"> -->
-                  <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click='item.check = !item.check;toSelIds(item.id)' @dblclick="showContent(item.id,item.title)">
+                  <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click.stop='item.check = !item.check;toSelIds(item.id)' @dblclick="showContent(item.id,item.title)">
                    
-                      <img :src='item.img' class="picsize" :class="(item.check)?'markedImg':''" >
+                      <img :src='item.img' class="picsize" :class="(item.check)?'item-selected':''" >
                       <p class='nametext' ref='docP'>{{item.title}}</p>
                    
                   </div>
                 <!-- </div> -->
                 <div>
-                  <div v-show='!showThumb' class="contentDiv fileDiv select-item" :class="(item.check)?'item-selected':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click='item.check = !item.check;toSelIds(item.id)'>
+                  <div v-show='!showThumb' class="contentDiv fileDiv select-item" :class="(item.check)?'item-selected':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click.stop='item.check = !item.check;toSelIds(item.id)'>
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
@@ -464,17 +465,19 @@
           //  框选事件
           $container
             .on('mousedown', function(eventDown) {
+              console.log(111)
               //  设置选择的标识
               var isSelect = true;
               //  创建选框节点
               var $selectBoxDashed = $('<div class="select-box-dashed"></div>');
-              $('body').append($selectBoxDashed);
+              $container.append($selectBoxDashed);
               //  设置选框的初始位置
               var startX = eventDown.x || eventDown.clientX;
               var startY = eventDown.y || eventDown.clientY;
               $selectBoxDashed.css({
                 left: startX,
-                top: startY
+                top: startY,
+                
               });
               //  根据鼠标移动，设置选框宽高
               var _x = null;
@@ -484,6 +487,7 @@
               //  监听鼠标移动事件
               $(selector).on('mousemove', function(eventMove) {
                 //  设置选框可见
+                console.log(2222)
                 $selectBoxDashed.css('display', 'block');
                 //  根据鼠标移动，设置选框的位置、宽高
                 _x = eventMove.x || eventMove.clientX;
@@ -640,13 +644,28 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
-          
-          $('.item-selected').removeClass('item-selected')
+          let selectIds = []
+          mthis.items = response.body.data.map(item =>({
+                title: item.title,      
+                i_sn: item.i_sn, 
+                id: item.id,
+                text: item.text,
+                time: item.time,
+                from: item.from,     
+                img: "http://10.60.1.140/assets/images/content_node.png",
+                check:true
+              })
+            );
           mthis.spinShow = false
           console.log(2)
-          mthis.items = response.body.data
+          for(let i=0;i<mthis.items.length;i++){
+            selectIds.push(mthis.items[i].id)
+          }
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: selectIds
+          }])
         })
-        mthis.watchSelectCounter++;
+        
         }
         
       },
@@ -741,7 +760,9 @@
             // console.log(mthis.data4)
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
-            
+            mthis.$store.commit('setSelectContentNodes', [{
+              ids: []
+            }])
           } else {
             // mthis.showMore = false
             mthis.setMessage('未找到匹配的文章')
@@ -777,6 +798,12 @@
     },
     props: ['contentData'],
     methods: {
+      kuangxuan(){
+
+      },
+      changeCursor(e){
+        e.target.style.cursor = 'move'
+      },
       toSelIds(id){
         clearTimeout(timerClick);
         var mthis = this;
@@ -823,11 +850,17 @@
             data: []
           },
         ];
-        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-        let contentIds = []
-        for (let m = 0; m < selectList.length; m++) {
-          contentIds.push(selectList[m].id)
+        let contentIds = [];
+        let checkItems = [];
+        checkItems = mthis.items.filter(item => item.check)
+        if(checkItems.length ==0){
+          mthis.setMessage('请至少选择一篇文章')
+          return
         }
+        for (let m = 0; m < checkItems.length; m++) {
+          contentIds.push(checkItems[m].id)
+        }
+        
         if (contentIds.length > 0) {
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
@@ -924,7 +957,7 @@
         var mthis = this
         if(this.deleteButton){
           mthis.items =  mthis.items.filter(item => item.check == false)
-          debugger
+          
           mthis.$store.commit('setSelectContentNodes', [{
           ids: []
         }])
@@ -1229,25 +1262,48 @@
     },
 
       selectThis(id) {
-        // 添加：document.getElementById("id").classList.add("类名")；
-        // 删除：document.getElementById("id").classList.remove("类名")；
-        (document.getElementById(id).getAttribute("class").indexOf('item-selected') > 0) ? (document.getElementById(id).classList.remove("item-selected")) : (document.getElementById(id).classList.add("item-selected"))
-        this.watchSelectCounter++;
+        var mthis = this
+        let index = 0;
+        let selIds = mthis.selectContentNodes[0].ids;
+        for(let i=0;i<mthis.items.length;i++){
+          if(mthis.items[i].id == id){
+            index = i;
+            if(mthis.items[i].check == false){
+              selIds.push(id)
+              mthis.items[i].check = true
+              mthis.$store.commit('setSelectContentNodes', [{
+                ids: selIds
+              }])
+              
+            }else{
+              return
+            }
+          }
+        }
       },
       fanxuan() {
         // document.getElementsByClassName("box");
-        let selectDom = $('.item-selected')
-        let disselectDom = $('.contentDiv:not(.item-selected)')
-        console.log(8)
-        selectDom.removeClass('item-selected')
-        disselectDom.addClass('item-selected')
-        this.watchSelectCounter++;
+        var mthis = this
+        for(let i=0;i<this.items.length;i++){
+          mthis.items[i].check = !mthis.items[i].check
+        }
+        let selectList = []
+        let selectContent = this.items.filter(item => item.check)
+        for(let i=0;i<selectContent.length;i++){
+          selectList.push(selectContent[i].id)
+        }
+        mthis.$store.commit('setSelectContentNodes', [{
+          ids: selectList
+        }])
       },
       removeAll() {
         console.log(7)
         this.items = []
-        this.watchSelectCounter++;
-        this.page = 1
+        // this.watchSelectCounter++;
+        this.page = 1;
+        this.$store.commit('setSelectContentNodes', [{
+          ids: []
+        }])
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
@@ -1256,7 +1312,9 @@
         });
       },
       toNet() {
-        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        
+        let selectList = this.items.filter(item => item.check)
+        
         let infos = []
         for (let m = 0; m < selectList.length; m++) {
           infos.push({
@@ -1712,7 +1770,7 @@
       window.px = "";
       window.py = "";
       window.divLength = 0;
-      this.initSelectBox('#contentchart')
+      // this.initSelectBox('#contentchart')
       
       // // console.log($('#jiazaiDiv').offset())
       // window.addEventListener('scroll', this.handleScroll)
@@ -2006,16 +2064,17 @@
   .select-box-dashed {
     position: absolute;
     display: none;
-    width: 0px;
-    height: 0px;
+    width: 100px;
+    height: 100px;
     padding: 0px;
     margin: 0px;
-    border: 1px dashed #0099ff;
-    background-color: rgb(51, 255, 255);
+    border: 1px solid #0099ff;
+    /* background-color: rgb(51, 255, 255); */
+    background-color: pink;
     opacity: 0.5;
     filter: alpha(opacity=50);
     font-size: 0px;
-    z-index: 999;
+    z-index: 9999;
     pointer-events: none;
   }
   .marked {
@@ -2040,6 +2099,7 @@
   }
   .contentItem:hover {
     opacity: 1;
+    cursor: pointer;
   }
   .color255-back {
     color: rgba(51, 255, 255, 0.1);
