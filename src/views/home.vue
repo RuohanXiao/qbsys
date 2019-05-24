@@ -753,6 +753,28 @@
     background: rgba(51, 255, 255, 0.2);
     margin: 10px 5px 10px 5px;
   }
+  body{
+    /* GPU加速渲染 */
+  -webkit-transform: translateZ(0);
+   -moz-transform: translateZ(0);
+   -ms-transform: translateZ(0);
+   -o-transform: translateZ(0);
+   transform: translateZ(0);
+   /* webkit内核 GPU加速渲染 */
+   -webkit-transform: translate3d(0, 0, 0);
+   -moz-transform: translate3d(0, 0, 0);
+   -ms-transform: translate3d(0, 0, 0);
+   transform: translate3d(0, 0, 0);
+    /* Chrome或Safari 闪烁解决 */
+   -webkit-backface-visibility: hidden;
+   -moz-backface-visibility: hidden;
+   -ms-backface-visibility: hidden;
+   backface-visibility: hidden;
+   -webkit-perspective: 1000;
+   -moz-perspective: 1000;
+   -ms-perspective: 1000;
+   perspective: 1000;
+  }
 </style>
 
 <style scoped>

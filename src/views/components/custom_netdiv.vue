@@ -112,66 +112,60 @@
                           <span v-else class="dropDownSelectPoint">&nbsp;</span>
                         </DropdownItem>
                       </div>
-                      <div class="button-div" @click="triggerMethods('expandNodeEvent')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>关联事件</span>
-                          <span v-if="(expandFlag=='event')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="triggerMethods('expandNodeEvent')" v-if="(expandFlag=='event')">
+                        <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">关联事件</p>
                       </div>
-                      <div class="button-div" @click="triggerMethods('expandNodeContent')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-guanlianwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>关联文档</span>
-                          <span v-if="(expandFlag=='content')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" v-if="(expandFlag=='content')" @click="triggerMethods('expandNodeContent')">
+                        <Icon class="icon iconfont icon-kuozhan--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">关联文档</p>
                       </div>
-                    </DropdownMenu>
-                  </Dropdown>
-                </Tooltip>
-                 <Tooltip placement="top" content="（Ctrl+A）" :delay="5000">
-                  <Dropdown :visible="expandGongzhiVisible">
-                    <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEnitiy')" v-if="(expandFlag_gongzhi=='knowledge_gongzhi')">
-                      <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                      <p class="img-content">共指实体</p>
-                    </div>
-                    <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEvent')" v-if="(expandFlag_gongzhi=='event_gongzhi')">
-                      <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                      <p class="img-content">共指事件</p>
-                    </div>
-                    <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" v-if="(expandFlag_gongzhi=='content_gongzhi')" @click="triggerMethods('gongzhiDoc')">
-                      <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                      <p class="img-content">共指文档</p>
-                    </div>
-                    <DropdownMenu slot="list" placement="bottom-start" v-if='ifSelectTwoNode'>
-                      <div class="button-div" @click="triggerMethods('gongzhiEnitiy')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>共指实体</span>
-                          <span v-if="(expandFlag_gongzhi=='knowledge_gongzhi')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <DropdownMenu slot="list" placement="bottom-start" v-if='ifSelectNode'>
+                        <div class="button-div" @click="triggerMethods('expandNodeKnowledge')">
+                          <DropdownItem class="img-content">
+                            <Icon class="icon iconfont icon-guanlianshiti DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                            <span>关联实体</span>
+                            <span v-if="(expandFlag=='knowledge')" class="dropDownSelectPoint">●</span>
+                            <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                          </DropdownItem>
+                        </div>
+                        <div class="button-div" @click="triggerMethods('expandNodeEvent')">
+                          <DropdownItem class="img-content">
+                            <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                            <span>关联事件</span>
+                            <span v-if="(expandFlag=='event')" class="dropDownSelectPoint">●</span>
+                            <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                          </DropdownItem>
+                        </div>
+                        <div class="button-div" @click="triggerMethods('expandNodeContent')">
+                          <DropdownItem class="img-content">
+                            <Icon class="icon iconfont icon-guanlianwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                            <span>关联文档</span>
+                            <span v-if="(expandFlag=='content')" class="dropDownSelectPoint">●</span>
+                            <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                          </DropdownItem>
+                        </div>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </Tooltip>
+                   <Tooltip placement="top" content="（Ctrl+A）" :delay="5000">
+                    <Dropdown :visible="expandGongzhiVisible">
+                      <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEnitiy')" v-if="(expandFlag_gongzhi=='knowledge_gongzhi')">
+                        <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">共指实体</p>
                       </div>
-                      <div class="button-div" @click="triggerMethods('gongzhiEvent')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>共指事件</span>
-                          <span v-if="(expandFlag_gongzhi=='event_gongzhi')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEvent')" v-if="(expandFlag_gongzhi=='event_gongzhi')">
+                        <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">共指事件</p>
                       </div>
-                      <div class="button-div" @click="triggerMethods('gongzhiDoc')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>共指文档</span>
-                          <span v-if="(expandFlag_gongzhi=='content_gongzhi')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" v-if="(expandFlag_gongzhi=='content_gongzhi')" @click="triggerMethods('gongzhiDoc')">
+                        <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">共指文档</p>
                       </div>
                     </DropdownMenu>
                   </Dropdown>
@@ -239,21 +233,21 @@
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag="setFlagToFalse"></modal-chart>
     <!-- <Modal v-model="modalStep" ok-text="设置步数"
-                                                                                                      cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
-                                                                                                    <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
-                        </Modal>-->
+                                                                                                        cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+                                                                                                      <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+                          </Modal>-->
     <!-- <Modal v-model="modalStep" width="360">
-                    <p slot="header" style="color:#f60;text-align:center">
-                      <Icon type="ios-information-circle"></Icon>
-                      <span>Delete confirmation</span>
-                    </p>
-                    <div style="text-align:center">
-                      <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change="con"></InputNumber>
-                    </div>
-                    <div slot="footer">
-                      <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
-                    </div>
-                  </Modal> -->
+                      <p slot="header" style="color:#f60;text-align:center">
+                        <Icon type="ios-information-circle"></Icon>
+                        <span>Delete confirmation</span>
+                      </p>
+                      <div style="text-align:center">
+                        <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change="con"></InputNumber>
+                      </div>
+                      <div slot="footer">
+                        <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
+                      </div>
+                    </Modal> -->
     <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     <workatlas-modal :workatlastData="workatlastData" :type="workatlasType" :flag="workatlasFlag" />
 </div>
