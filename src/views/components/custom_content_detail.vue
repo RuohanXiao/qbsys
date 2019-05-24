@@ -63,7 +63,7 @@
         </div>
       </panel>
       <!-- ============================================相关事件================================================== -->
-      <!-- <panel name="3">
+      <panel name="3">
         <span>相关事件</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
@@ -79,7 +79,7 @@
             <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
           </div>
         </div>
-      </panel> -->
+      </panel>
       <!-- ============================================相关文档================================================== -->
       <!-- <panel name="4">
         <span>相关文档</span>
@@ -392,7 +392,13 @@ import {
           }).then(response =>{
            console.log(response)
             if(response.body.code ==0){
-              mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.contentSelData.id].nodes
+              if(response.body.data[0].RelatedEntity[mthis.contentSelData.id]){
+                  mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.contentSelData.id].nodes;
+              }
+              if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+                mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.contentSelData.id];
+              }
+              
             }
           })
       }

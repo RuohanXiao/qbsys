@@ -87,7 +87,7 @@
         </Tooltip> -->
       </div>
     </div>
-    <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
+    <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
         <div v-show="!showList">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
@@ -98,13 +98,15 @@
               </Spin>
             </div>
           
-            <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}" 
-            @mouseenter="changeCursor" @mousedown.stop="kuangxuan">
+            <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}"
+             @mousedown='kuangxuan'>
               <Row type="flex" justify="start">
 
                 <Col :sm="colSmnum" :lg="colLgNum" align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
                 <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}"> -->
-                  <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click.stop='item.check = !item.check;toSelIds(item.id)' @dblclick="showContent(item.id,item.title)">
+                  <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click='toSelIds(index,item.check,item.id,$event)' 
+                  @dblclick="showContent(item.id,item.title)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
+                  @mouseenter="addHover" @mouseleave="removeHover">
                    
                       <img :src='item.img' class="picsize" :class="(item.check)?'item-selected':''" >
                       <p class='nametext' ref='docP'>{{item.title}}</p>
@@ -112,7 +114,9 @@
                   </div>
                 <!-- </div> -->
                 <div>
-                  <div v-show='!showThumb' class="contentDiv fileDiv select-item" :class="(item.check)?'item-selected':''" :id="item.id" :title="item.title" @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click.stop='item.check = !item.check;toSelIds(item.id)'>
+                  <div v-show='!showThumb' class="contentDiv fileDiv select-item" :class="(item.check)?'item-selected':''" :id="item.id" :title="item.title" 
+                  @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click='toSelIds(index,item.check,item.id,$event)' 
+                  @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'>
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
@@ -192,13 +196,15 @@
   var tthis = this;
   var timerClick = null;
   var timer2 = null;
-  
+  var timerMouse = null;
   /* eslint-disable */
   export default {
     name: "App",
     data() {
       return {
-        divWidth:'100px',
+        mouseStartX:0,
+        mouseStartY:0,
+        mouseOn:false,
         colLgNum:4,
         colSmnum:3,
         worksetData: [],
@@ -611,21 +617,21 @@
         
         // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         
-        let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-        if(selectList.length >0){
-          this.deleteButton = true
-        }else{
-          this.deleteButton = false
-        }
-        this.selectArr = []
-        for (let m = 0; m < selectList.length; m++) {
-          this.selectArr.push(selectList[m].id)
-        }
-        // console.log('==============++++++++++==============')
-        // console.log(this.selectArr)
-        this.$store.commit('setSelectContentNodes', [{
-          ids: this.selectArr
-        }])
+        // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
+        // if(selectList.length >0){
+        //   this.deleteButton = true
+        // }else{
+        //   this.deleteButton = false
+        // }
+        // this.selectArr = []
+        // for (let m = 0; m < selectList.length; m++) {
+        //   this.selectArr.push(selectList[m].id)
+        // }
+        // // console.log('==============++++++++++==============')
+        // // console.log(this.selectArr)
+        // this.$store.commit('setSelectContentNodes', [{
+        //   ids: this.selectArr
+        // }])
         
       },
       netToContentData: function() {
@@ -697,10 +703,22 @@
               if (response.body.data.length > 0) {
                 // console.log(response.body)
                 
-                $('.item-selected').removeClass('item-selected')
+                // $('.item-selected').removeClass('item-selected')
                 console.log(3)
-                mthis.items = response.body.data
-                
+                mthis.items = response.body.data.map(item =>({
+                  title: item.title,      
+                  i_sn: item.i_sn, 
+                  id: item.id,
+                  text: item.text,
+                  time: item.time,
+                  from: item.from,     
+                  img: "http://10.60.1.140/assets/images/content_node.png",
+                  check:false
+                })
+              );
+                mthis.$store.commit('setSelectContentNodes', [{
+                  ids: []
+                }])
               } else {
                 console.log(4)
                 mthis.items = []
@@ -798,15 +816,172 @@
     },
     props: ['contentData'],
     methods: {
-      kuangxuan(){
-
+      clearBubble(e) {
+        if (e.stopPropagation) {
+          e.stopPropagation();
+          } else {
+            e.cancelBubble = true;
+          }
+          if (e.preventDefault) {
+              e.preventDefault();
+            } else {
+              e.returnValue = false;
+            }
+          },
+      getOffset(obj){
+        var arr=[]
+        var offsetL=0
+        var offsetT=0
+        while(obj!=window.document.body&&obj!=null)
+        {
+          offsetL+=obj.offsetLeft
+          offsetT+=obj.offsetTop
+          obj=obj.offsetParent
+        }
+        arr.push(offsetL,offsetT)
+        return arr
       },
-      changeCursor(e){
-        e.target.style.cursor = 'move'
+      addHover(e){
+        this.clearBubble(e)
+        $(e.target).find('img').addClass('imgHover')
       },
-      toSelIds(id){
+      removeHover(e){
+        this.clearBubble(e)
+        $(e.target).find('img').removeClass('imgHover')
+      },
+      kuangxuan(e){
+        this.clearBubble(e)
+        console.log('downdown')
+        var mthis = this;
+        for(let m=0;m<mthis.items.length;m++){
+          mthis.items[m].check = false
+        }
+        if (e.buttons !== 1 || e.which !== 1) return;
+        var selDivList = document.getElementsByClassName('docThunmsItem');
+        for(let k =0;k<selDivList.length;k++){
+                  $(selDivList[k]).off('mouseenter');
+                  $(selDivList[k]).off('mouseleave');
+                  
+                }
+        var selOutDiv = document.createElement("div");
+        selOutDiv.id = 'selOutDiv';
+        selOutDiv.style.cssText = "position:absolute;margin:0px;padding:0px;z-index:100;display:none;width:100%;height:100%;top:0;left:0;";
+        var selDiv = document.createElement("div");
+        selDiv.style.cssText = "position:absolute;width:0px;height:0px;font-size:0px;margin:0px;padding:0px;border:1px dashed #0099FF;background-color:rgb(51, 255, 255);z-index:999;filter:alpha(opacity:60);opacity:0.6;display:block;cursor:move;"; 
+        selDiv.id = "selectDiv";
+        var $selectBoxDashed = $('#selectDiv')
+        // var $selectBoxDashed = $('<div class="select-box-dashed"></div>');
+        $('#contentchart').append(selOutDiv);
+        $('#selOutDiv').append(selDiv);
+        //  设置选框的初始位置
+        var startX = (e.x || e.clientX) ;
+        var startY = (e.y || e.clientY) -120 ;
+        // var startX = e.offsetX;
+        // var startY = e.offsetY;
+        
+        
+        selDiv.style.left = startX + "px"; 
+        selDiv.style.top = startY + "px"; 
+        
+        // $selectBoxDashed.css({
+        //   left: startX + 'px',
+        //   top: startY + 'px',
+        // });
+        // console.log($selectBoxDashed.css('left'))
+              //  根据鼠标移动，设置选框宽高
+        var _x = null;
+        var _y = null;
+        var ids = [];
+        $('#contentchart').on('mousemove', function(eventMove) {
+                //  设置选框可见
+                
+                console.log('movemove')
+                
+                // $selectBoxDashed.css('display', 'block');
+                selOutDiv.style.display = 'block'
+                selDiv.style.display = 'block'
+                // selOutDiv.style.top = 0 
+                // selOutDiv.style.left = 0 
+                //  根据鼠标移动，设置选框的位置、宽高
+                _x = (eventMove.x || eventMove.clientX);
+                _y = (eventMove.y || eventMove.clientY) -120;
+                //  暂存选框的位置及宽高，用于将 select-item 选中
+                var _left = Math.min(_x, startX);
+                var _top = Math.min(_y, startY);
+                var _width = Math.abs(_x - startX);
+                var _height = Math.abs(_y - startY);
+                
+                selDiv.style.left = _left + "px"; 
+                selDiv.style.top =  _top + "px"; 
+                selDiv.style.width = _width + "px"; 
+                selDiv.style.height =  _height + "px";
+                console.log(_width)
+                console.log(selDiv)
+                var _w = selDiv.offsetWidth, _h = selDiv.offsetHeight;
+                var _l = mthis.getOffset(selDiv)[0];
+                var _t = mthis.getOffset(selDiv)[1];
+                
+                for ( var i = 0; i < selDivList.length; i++) {
+                  var sw =  mthis.getOffset(selDivList[i])[0];
+                  var sh = mthis.getOffset(selDivList[i])[1];
+                  var sl = selDivList[i].offsetWidth + sw ; 
+                  var st = selDivList[i].offsetHeight + sh ; 
+                  if (sl > _l && st > _t && sw < _l + _w && sh < _t + _h) {
+                    
+                    if($(selDivList[i]).find('img').hasClass("item-selected")){
+                      continue
+                    }else{
+                      mthis.items[i].check = true
+                      ids.push(mthis.items[i].id)
+                      
+                    }
+                    
+                  
+                  }else{
+                    
+                    if($(selDivList[i]).find('img').hasClass("item-selected")){
+                      mthis.items[i].check = false
+                      let idx = ids.indexOf(mthis.items[i].id)
+                      ids.splice(idx,1)
+                    }
+                  }
+                }
+                
+                
+                
+                
+                
+                //  清除事件冒泡、捕获
+                mthis.clearBubble(eventMove);
+              });
+            $(document).on('mouseup', function() {
+                $('#contentchart').off('mousemove');
+                
+                selOutDiv.style.display = 'none'
+                selDiv.style.display = 'none'
+                ids = util.unique(ids)
+                console.log(ids)
+                mthis.$store.commit('setSelectContentNodes', [{
+                  ids: ids
+                }])
+                console.log('upupupupup')
+                // $(selector).find('.temp-selected').find('.contentDiv').addClass('item-selected')
+                
+                $('#selectDiv').remove();
+                $('#selOutDiv').remove();
+                
+              });
+          
+        
+      },
+   
+      toSelIds(index,check,id,evt){
+        this.clearBubble(evt)
+        
         clearTimeout(timerClick);
         var mthis = this;
+        check = !check;
+        mthis.items[index].check = check;
         timerClick = setTimeout(function(){
           var ids = mthis.selectContentNodes[0].ids
           if(ids.indexOf(id)>-1){
@@ -959,8 +1134,8 @@
           mthis.items =  mthis.items.filter(item => item.check == false)
           
           mthis.$store.commit('setSelectContentNodes', [{
-          ids: []
-        }])
+            ids: []
+          }])
           
         }else{
           mthis.setMessage("请选择至少一篇文章")
@@ -1342,15 +1517,7 @@
         this.colLgNum = 3
         this.colSmnum = 4
         
-        // let outCol = $('.outCol').addClass('ivu-col-span-lg-2').removeClass('ivu-col-span-lg-4')
-        
-        
-        // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-        // let contentIds = []
-        // for (let m = 0; m < selectList.length; m++) {
-        //   contentIds.push(selectList[m].id)
-        // }
-        // console.log(contentIds)
+       
       },
       contentTranslate() {
         var mthis = this;
@@ -1427,7 +1594,20 @@
                 
                 $('.item-selected').removeClass('item-selected')
                 console.log(10)
-                mthis.items = response.body.data
+                mthis.items = response.body.data.map(item =>({
+                  title: item.title,      
+                  i_sn: item.i_sn, 
+                  id: item.id,
+                  text: item.text,
+                  time: item.time,
+                  from: item.from,     
+                  img: "http://10.60.1.140/assets/images/content_node.png",
+                  check:false
+                })
+              );
+              mthis.$store.commit('setSelectContentNodes', [{
+                ids: []
+              }])
               } else {
                 mthis.alertNotice('无匹配数据2', true)
               }
@@ -1437,11 +1617,11 @@
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
                 
-                $('.item-selected').removeClass('item-selected')
+                // $('.item-selected').removeClass('item-selected')
                 console.log(11)
                 mthis.items = response.body.data
               } else {
-                mthis.alertNotice('无匹配数据3', true)
+                mthis.setMessage('无匹配数据3')
               }
               resolve();
             })
@@ -1483,13 +1663,26 @@
             })
           } else {
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+              
               if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
+                mthis.items = response.body.data.map(item =>({
+                  title: item.title,      
+                  i_sn: item.i_sn, 
+                  id: item.id,
+                  text: item.text,
+                  time: item.time,
+                  from: item.from,     
+                  img: "http://10.60.1.140/assets/images/content_node.png",
+                  check:false
+                })
+              );
+                // $('.item-selected').removeClass('item-selected')
                 console.log(14)
-                mthis.items = response.body.data
+                mthis.$store.commit('setSelectContentNodes', [{
+                  ids: []
+                }])
               } else {
-                mthis.alertNotice('无匹配数据6', true)
+                mthis.setMessage('无匹配数据6')
               }
               resolve();
             })
@@ -1583,12 +1776,24 @@
               resolve();
             })
           } else {
+            let nowItems = []
             mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
               if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
+                nowItems = response.body.data.map(item =>({
+                  title: item.title,      
+                  i_sn: item.i_sn, 
+                  id: item.id,
+                  text: item.text,
+                  time: item.time,
+                  from: item.from,     
+                  img: "http://10.60.1.140/assets/images/content_node.png",
+                  check:false
+                })
+              );
+              
+                // $('.item-selected').removeClass('item-selected')
                 console.log(20)
-                mthis.items = mthis.items.concat(response.body.data)
+                mthis.items = mthis.items.concat(nowItems)
               } else {
                 // console.log('全部加载')
                 // $('.layer').show().delay(3000).fadeOut()
@@ -2061,18 +2266,18 @@
             .select-item.temp-selected {
               background-color: rgba(51, 255, 255, 0.2);
             } */
-  .select-box-dashed {
+  #select-box-dashed {
     position: absolute;
     display: none;
-    width: 100px;
-    height: 100px;
+    width: 0px;
+    height: 0px;
     padding: 0px;
     margin: 0px;
     border: 1px solid #0099ff;
     /* background-color: rgb(51, 255, 255); */
-    background-color: pink;
-    opacity: 0.5;
-    filter: alpha(opacity=50);
+    background-color: pink !important;
+    opacity: 0.6;
+    filter: alpha(opacity=60);
     font-size: 0px;
     z-index: 9999;
     pointer-events: none;
@@ -2216,11 +2421,13 @@
     letter-spacing: 0px;
     color: #ccffff;
   }
-  .docThunmsItem:hover img{
+  
+  .imgHover{
     /* background-color:rgba(51, 255, 255, 1); */
     cursor:pointer;
     background-color: #003333;
 	  border: solid 1px #336666;
+    
   }
   .markedImg{
     background-color: #003333;

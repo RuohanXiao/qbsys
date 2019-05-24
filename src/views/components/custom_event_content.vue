@@ -273,12 +273,14 @@
       contentSelData:function(){
         var mthis = this
         
-        if(this.contentSelData.title){
+        if(this.contentSelData.id.length>0){
           mthis.detailData.name = this.contentSelData.title
         }else{
-          console.log(mthis.eventdata)
           
-          mthis.changeDetailDiv(mthis.eventdata[0].id,mthis.eventdata[0].entity_type,mthis.eventdata)
+          if(mthis.eventdata.length>0){
+            mthis.changeDetailDiv(mthis.eventdata[0].id,mthis.eventdata[0].entity_type,mthis.eventdata)
+          }
+          
         }
       }
     },

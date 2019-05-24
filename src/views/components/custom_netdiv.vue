@@ -112,66 +112,60 @@
                           <span v-else class="dropDownSelectPoint">&nbsp;</span>
                         </DropdownItem>
                       </div>
-                      <div class="button-div" @click="triggerMethods('expandNodeEvent')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>关联事件</span>
-                          <span v-if="(expandFlag=='event')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="triggerMethods('expandNodeEvent')" v-if="(expandFlag=='event')">
+                        <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">关联事件</p>
                       </div>
-                      <div class="button-div" @click="triggerMethods('expandNodeContent')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-guanlianwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>关联文档</span>
-                          <span v-if="(expandFlag=='content')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" v-if="(expandFlag=='content')" @click="triggerMethods('expandNodeContent')">
+                        <Icon class="icon iconfont icon-kuozhan--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">关联文档</p>
                       </div>
-                    </DropdownMenu>
-                  </Dropdown>
-                </Tooltip>
-                 <Tooltip placement="top" content="（Ctrl+A）" :delay="5000">
-                  <Dropdown :visible="expandGongzhiVisible">
-                    <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEnitiy')" v-if="(expandFlag_gongzhi=='knowledge_gongzhi')">
-                      <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                      <p class="img-content">共指实体</p>
-                    </div>
-                    <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEvent')" v-if="(expandFlag_gongzhi=='event_gongzhi')">
-                      <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                      <p class="img-content">共指事件</p>
-                    </div>
-                    <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" v-if="(expandFlag_gongzhi=='content_gongzhi')" @click="triggerMethods('gongzhiDoc')">
-                      <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                      <p class="img-content">共指文档</p>
-                    </div>
-                    <DropdownMenu slot="list" placement="bottom-start" v-if='ifSelectTwoNode'>
-                      <div class="button-div" @click="triggerMethods('gongzhiEnitiy')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>共指实体</span>
-                          <span v-if="(expandFlag_gongzhi=='knowledge_gongzhi')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <DropdownMenu slot="list" placement="bottom-start" v-if='ifSelectNode'>
+                        <div class="button-div" @click="triggerMethods('expandNodeKnowledge')">
+                          <DropdownItem class="img-content">
+                            <Icon class="icon iconfont icon-guanlianshiti DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                            <span>关联实体</span>
+                            <span v-if="(expandFlag=='knowledge')" class="dropDownSelectPoint">●</span>
+                            <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                          </DropdownItem>
+                        </div>
+                        <div class="button-div" @click="triggerMethods('expandNodeEvent')">
+                          <DropdownItem class="img-content">
+                            <Icon class="icon iconfont icon-guanlianshijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                            <span>关联事件</span>
+                            <span v-if="(expandFlag=='event')" class="dropDownSelectPoint">●</span>
+                            <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                          </DropdownItem>
+                        </div>
+                        <div class="button-div" @click="triggerMethods('expandNodeContent')">
+                          <DropdownItem class="img-content">
+                            <Icon class="icon iconfont icon-guanlianwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
+                            <span>关联文档</span>
+                            <span v-if="(expandFlag=='content')" class="dropDownSelectPoint">●</span>
+                            <span v-else class="dropDownSelectPoint">&nbsp;</span>
+                          </DropdownItem>
+                        </div>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </Tooltip>
+                   <Tooltip placement="top" content="（Ctrl+A）" :delay="5000">
+                    <Dropdown :visible="expandGongzhiVisible">
+                      <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEnitiy')" v-if="(expandFlag_gongzhi=='knowledge_gongzhi')">
+                        <Icon class="icon iconfont icon-gongzhishiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">共指实体</p>
                       </div>
-                      <div class="button-div" @click="triggerMethods('gongzhiEvent')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>共指事件</span>
-                          <span v-if="(expandFlag_gongzhi=='event_gongzhi')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" @click="triggerMethods('gongzhiEvent')" v-if="(expandFlag_gongzhi=='event_gongzhi')">
+                        <Icon class="icon iconfont icon-gongzhishijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">共指事件</p>
                       </div>
-                      <div class="button-div" @click="triggerMethods('gongzhiDoc')">
-                        <DropdownItem class="img-content">
-                          <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back padding6" size="18"></Icon>
-                          <span>共指文档</span>
-                          <span v-if="(expandFlag_gongzhi=='content_gongzhi')" class="dropDownSelectPoint">●</span>
-                          <span v-else class="dropDownSelectPoint">&nbsp;</span>
-                        </DropdownItem>
+                      <div :class="ifSelectTwoNode? 'button-div': 'button-div-disable'" @mouseover="addGongzhi()" @mouseout="stopGongzhi()" v-if="(expandFlag_gongzhi=='content_gongzhi')" @click="triggerMethods('gongzhiDoc')">
+                        <Icon class="icon iconfont icon-gongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
+                        <p class="img-content">共指文档</p>
                       </div>
                     </DropdownMenu>
                   </Dropdown>
@@ -239,21 +233,21 @@
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData" @detailModalFlag="setFlagToFalse"></modal-chart>
     <!-- <Modal v-model="modalStep" ok-text="设置步数"
-                                                                                                      cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
-                                                                                                    <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
-                        </Modal>-->
+                                                                                                        cancel-text="放弃查询" @on-ok="showPathKnowledge" @on-cancel="cancel">
+                                                                                                      <InputNumber :max="10" :min="1" v-model="value1"></InputNumber>
+                          </Modal>-->
     <!-- <Modal v-model="modalStep" width="360">
-                    <p slot="header" style="color:#f60;text-align:center">
-                      <Icon type="ios-information-circle"></Icon>
-                      <span>Delete confirmation</span>
-                    </p>
-                    <div style="text-align:center">
-                      <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change="con"></InputNumber>
-                    </div>
-                    <div slot="footer">
-                      <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
-                    </div>
-                  </Modal> -->
+                      <p slot="header" style="color:#f60;text-align:center">
+                        <Icon type="ios-information-circle"></Icon>
+                        <span>Delete confirmation</span>
+                      </p>
+                      <div style="text-align:center">
+                        <InputNumber :max="10" :min="1" v-model="InputNumber" :on-change="con"></InputNumber>
+                      </div>
+                      <div slot="footer">
+                        <Button type="error" size="large" long @click="pathKnowledge">Delete</Button>
+                      </div>
+                    </Modal> -->
     <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     <workatlas-modal :workatlastData="workatlastData" :type="workatlasType" :flag="workatlasFlag" />
 </div>
@@ -446,6 +440,16 @@ export default {
                 })
                 .then(response => {
                     if (response.body.code == 0) {
+                        console.log('=======>>>>>>>>>>>')
+                        console.log(response.body.data)
+                         response.body.data.nodes.map(item=>{
+                            if(item.entity_type==='document') {
+                                item.name= item.title.substring(0,19)+'...'
+                            }
+                            if(item.entity_type==='event') {
+                                sitem.name= item.event_subtype
+                            }
+                         })
                         if (response.body.data.nodes.length > 0) {
                             mthis.netchart.addData(response.body.data)
                         } else {
@@ -564,7 +568,7 @@ export default {
                         break;
                 }
             }
-            if (this.selectionId.length === 2) {
+            if (this.selectionId.length > 2) {
                 switch (n) {
                     case 'showModalStepKnowledge':
                         this.shortPath(this.selectionId)
@@ -605,6 +609,7 @@ export default {
             }
         },
         shortAllPath(ids) {
+            debugger;
             var mthis = this
             if (ids.length > 1) {
                 mthis.$http
@@ -616,7 +621,15 @@ export default {
                     .then(response => {
                         if (response.body.code === 0) {
                             if (response.body.data.nodes.length > 0) {
-                                 mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                                mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                                console.log('=======>>>>>>>>>>>')
+                                console.log(response.body.data)
+                                if(item.entity_type==='document') {
+                                    item.name= item.title.substring(0,19)+'...'
+                                }
+                                if(item.entity_type==='event') {
+                                    item.name= item.event_subtype
+                                }
                                 mthis.netchart.addData(response.body.data)
                                 setTimeout(function () {
                                     mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -910,6 +923,8 @@ export default {
                 let arrList_net = new Array();
                 let arrList_event = new Array();
                 let arrList_doc = new Array();
+                console.log('===============selectionIdByTypeData==============================')
+                console.log(mthis.selectionIdByTypeData)
                 let arrList = new Array().concat(mthis.selectionIdByTypeData.nodeIds).concat(mthis.selectionIdByTypeData.eventIds).concat(mthis.selectionIdByTypeData.contentIds)
                 // // let arrTypeList_net = new Array();
                 // // let arrTypeList_event = new Array();
@@ -939,7 +954,7 @@ export default {
                     );
                 }
 
-                if (mthis.selectionIdByTypeData.nodeIds.length > 0) {
+                if (arrList.length > 0) {
                     mthis.$http
                         .post(mthis.$store.state.ipConfig.api_url + "/related-all/", {
                             NodeIds: arrList,
@@ -1501,7 +1516,7 @@ export default {
                 mthis.spinShow = true;
                 this.$http.post(mthis.$store.state.ipConfig.api_url + "/commonAll/", {
                     "NodeIds": mthis.selectionId,
-                    "TypeLabel": "all",
+                    // "TypeLabel": "all",
                     "ComLabel": "entity"
                 }).then(response => {
                     if (response.body.code === 0) {
@@ -1532,7 +1547,7 @@ export default {
             if (this.selectionId.length > 1) {
                 this.$http.post(mthis.$store.state.ipConfig.api_url + "/commonAll/", {
                     "NodeIds": mthis.selectionId,
-                    "TypeLabel": "all",
+                    // "TypeLabel": "all",
                     "ComLabel": "event"
                 }).then(response => {
                     if (response.body.code === 0) {
@@ -1563,7 +1578,7 @@ export default {
             if (this.selectionId.length > 1) {
                 this.$http.post(mthis.$store.state.ipConfig.api_url + "/commonAll/", {
                     "NodeIds": mthis.selectionId,
-                    "TypeLabel": "all",
+                    // "TypeLabel": "all",
                     "ComLabel": "document"
                 }).then(response => {
                     if (response.body.code === 0) {
@@ -2328,6 +2343,218 @@ export default {
             });
             mthis.getStatistics();
         },
+        rightMenuShow(){
+            
+                        $('#ringRightMenu').remove()
+                        var overlayId = 'rightClickMenu_Area';
+                        var ovdiv = document.createElement('div');
+                        ovdiv.style = 'width:400px;height:400px;';
+                        ovdiv.style.position = 'absolute';
+                        ovdiv.style.top = event.pageY - 120 - 200 + "px";
+                        ovdiv.style.left = event.pageX - 200 + "px";
+                        ovdiv.class = 'ringRightMenu';
+                        ovdiv.id = 'ringRightMenu';
+                        var config = [{
+                                'Id': 1,
+                                'parentId': 0,
+                                'name': '链向',
+                                'hasLeaf': true,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'lianxiang.png',
+                                'disicon':'lianxiang_disable.png'
+                            },
+                            {
+                                'Id': 2,
+                                'parentId': 0,
+                                'name': '聚合',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'juhe.png',
+                                'disicon':'juhe_disable.png'
+                            }, {
+                                'Id': 3,
+                                'parentId': 0,
+                                'name': '暂无',
+                                'disable': true,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.noItemInRightMenu',
+                                'icon': 'noclick.png',
+                                'disicon':'noclick_disable.png'
+                            },
+                            {
+                                'Id': 4,
+                                'parentId': 0,
+                                'name': '删除',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("remove")',
+                                'icon': 'shanchu.png',
+                                'disicon':'shanchu_disable.png'
+                            }, {
+                                'Id': 5,
+                                'parentId': 0,
+                                'disable': false,
+                                'name': '推送',
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'tuisong.png',
+                                'disicon':'tuisong_disable.png'
+                            }, {
+                                'Id': 6,
+                                'parentId': 0,
+                                'name': '路径',
+                                'disable': false,
+                                'hasLeaf': true,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'lujing.png',
+                                'disicon':'lujing_disable.png'
+                            }, {
+                                'Id': 7,
+                                'parentId': 0,
+                                'name': '共指',
+                                'disable': false,
+                                'hasLeaf': true,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'gongzhi.png',
+                                'disicon':'gongzhi_disable.png'
+                            },
+                            {
+                                'Id': 8,
+                                'parentId': 0,
+                                'disable': false,
+                                'name': '关联',
+                                'hasLeaf': true,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': '',
+                                'icon': 'guanlian.png',
+                                'disicon':'guanlian_disable.png'
+                            },
+                            {
+                                'Id': 801,
+                                'parentId': 8,
+                                'name': '实体',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("expandNodeKnowledge")',
+                                'icon': 'guanlianshiti.png',
+                                'disicon':'guanlianshiti_disable.png'
+                            },
+                            {
+                                'Id': 802,
+                                'parentId': 8,
+                                'name': '事件',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("expandNodeEvent")',
+                                'icon': 'guanlianshijian.png',
+                                'disicon':'guanlianshijian_disable.png'
+                            },
+                            {
+                                'Id': 803,
+                                'parentId': 8,
+                                'name': '文档',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("expandNodeContent")',
+                                'icon': 'guanlianwendang.png',
+                                'disicon':'guanlianwendang_disable.png'
+                            },
+                            {
+                                'Id': 701,
+                                'parentId': 7,
+                                'name': '实体',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("gongzhiEnitiy")',
+                                'icon': 'gongzhishiti.png',
+                                'disicon':'gongzhishiti_disable.png'
+                            },
+                            {
+                                'Id': 702,
+                                'parentId': 7,
+                                'name': '事件',
+                                'hasLeaf': false,
+                                'disable': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("gongzhiEvent")',
+                                'icon': 'gongzhishijian.png',
+                                'disicon':'gongzhishijian_disable.png'
+                            },
+                            {
+                                'Id': 703,
+                                'parentId': 7,
+                                'name': '文档',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("gongzhiDoc")',
+                                'icon': 'gongzhiwendang.png',
+                                'disicon':'gongzhiwendang_disable.png'
+                            },
+                            {
+                                'Id': 601,
+                                'parentId': 6,
+                                'name': '关系',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("showModalStepKnowledge")',
+                                'icon': 'zhishilujing.png',
+                                'disicon':'zhishilujing_disable.png'
+                            },
+                            {
+                                'Id': 602,
+                                'parentId': 6,
+                                'name': '所有',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("showModalStepAll")',
+                                'icon': 'quanbu.png',
+                                'disicon':'quanbu_disable.png'
+                            },
+                            {
+                                'Id': 101,
+                                'parentId': 1,
+                                'name': '关系',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("linkedKnowlage")',
+                                'icon': 'zhishilianxiang.png',
+                                'disicon':'zhishilianxiang_disable.png'
+                            },
+                            {
+                                'Id': 102,
+                                'parentId': 1,
+                                'name': '所有',
+                                'disable': false,
+                                'hasLeaf': false,
+                                'color': "rgba(51,102,102,0.5)",
+                                'backcall': 'mthis.triggerMethods("linkedKnowlageAll")',
+                                'icon': 'quanbu.png',
+                                'disicon':'quanbu_disable.png'
+                            }
+                        ]
+                        var routeMap = new rightMenu(this, ovdiv, config);
+                        document.getElementById('netchart').appendChild(ovdiv)
+                        document.getElementById('ringRightMenu').oncontextmenu = function (e) {
+                            return false;
+                        }
+        },
         back() {
             let netChartLog = sessionStorage.getItem("netChartLog");
             let netChartLogJson = JSON.parse(netChartLog).data;
@@ -2410,7 +2637,7 @@ export default {
                     // incrementalLayoutMaxTime:100,
                     // initialLayoutMaxTime:500,
                     globalLayoutOnChanges: true,
-                    nodeSpacing: 16,
+                    nodeSpacing: 25,
                     rowSpacing: 30
                 },
                 // 层级布局
@@ -2472,7 +2699,8 @@ export default {
                     // { className: "事件", style: { fillColor: "rgba(51, 255, 255, 0.4)"} }
                     // ],
                     node: {
-                        display: "image",
+                        // display: "image",
+                        display: "text",
                         //节点外环大小
                         lineWidth: 2,
                         // lineColor: "rgba(204,255,255,0.5)",
@@ -2804,216 +3032,7 @@ export default {
                     onRightClick: function (event) {
                         event.preventDefault();
                         // if (mthis.selectionId > 0) {
-
-                        $('#ringRightMenu').remove()
-                        var overlayId = 'rightClickMenu_Area';
-                        var ovdiv = document.createElement('div');
-                        ovdiv.style = 'width:400px;height:400px;';
-                        ovdiv.style.position = 'absolute';
-                        ovdiv.style.top = event.pageY - 120 - 200 + "px";
-                        ovdiv.style.left = event.pageX - 200 + "px";
-                        ovdiv.class = 'ringRightMenu';
-                        ovdiv.id = 'ringRightMenu';
-                        var config = [{
-                                'Id': 1,
-                                'parentId': 0,
-                                'name': '链向',
-                                'hasLeaf': true,
-                                'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': '',
-                                'icon': 'lianxiang.png',
-                                'disicon':'lianxiang_disable.png'
-                            },
-                            {
-                                'Id': 2,
-                                'parentId': 0,
-                                'name': '聚合',
-                                'hasLeaf': false,
-                                'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': '',
-                                'icon': 'juhe.png',
-                                'disicon':'juhe_disable.png'
-                            }, {
-                                'Id': 3,
-                                'parentId': 0,
-                                'name': '暂无',
-                                'disable': true,
-                                'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.noItemInRightMenu',
-                                'icon': 'noclick.png',
-                                'disicon':'noclick_disable.png'
-                            },
-                            {
-                                'Id': 4,
-                                'parentId': 0,
-                                'name': '删除',
-                                'hasLeaf': false,
-                                'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("remove")',
-                                'icon': 'shanchu.png',
-                                'disicon':'shanchu_disable.png'
-                            }, {
-                                'Id': 5,
-                                'parentId': 0,
-                                'disable': false,
-                                'name': '推送',
-                                'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': '',
-                                'icon': 'tuisong.png',
-                                'disicon':'tuisong_disable.png'
-                            }, {
-                                'Id': 6,
-                                'parentId': 0,
-                                'name': '路径',
-                                'disable': false,
-                                'hasLeaf': true,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': '',
-                                'icon': 'lujing.png',
-                                'disicon':'lujing_disable.png'
-                            }, {
-                                'Id': 7,
-                                'parentId': 0,
-                                'name': '共指',
-                                'disable': false,
-                                'hasLeaf': true,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': '',
-                                'icon': 'gongzhi.png',
-                                'disicon':'gongzhi_disable.png'
-                            },
-                            {
-                                'Id': 8,
-                                'parentId': 0,
-                                'disable': false,
-                                'name': '关联',
-                                'hasLeaf': true,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': '',
-                                'icon': 'guanlian.png',
-                                'disicon':'guanlian_disable.png'
-                            },
-                            {
-                                'Id': 801,
-                                'parentId': 8,
-                                'name': '实体',
-                                'hasLeaf': false,
-                                'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("expandNodeKnowledge")',
-                                'icon': 'guanlianshiti.png',
-                                'disicon':'guanlianshiti_disable.png'
-                            },
-                            {
-                                'Id': 802,
-                                'parentId': 8,
-                                'name': '事件',
-                                'hasLeaf': false,
-                                'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("expandNodeEvent")',
-                                'icon': 'guanlianshijian.png',
-                                'disicon':'guanlianshijian_disable.png'
-                            },
-                            {
-                                'Id': 803,
-                                'parentId': 8,
-                                'name': '文档',
-                                'hasLeaf': false,
-                                'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("expandNodeContent")',
-                                'icon': 'guanlianwendang.png',
-                                'disicon':'guanlianwendang_disable.png'
-                            },
-                            {
-                                'Id': 701,
-                                'parentId': 7,
-                                'name': '实体',
-                                'hasLeaf': false,
-                                'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("gongzhiEnitiy")',
-                                'icon': 'gongzhishiti.png',
-                                'disicon':'gongzhishiti_disable.png'
-                            },
-                            {
-                                'Id': 702,
-                                'parentId': 7,
-                                'name': '事件',
-                                'hasLeaf': false,
-                                'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("gongzhiEvent")',
-                                'icon': 'gongzhishijian.png',
-                                'disicon':'gongzhishijian_disable.png'
-                            },
-                            {
-                                'Id': 703,
-                                'parentId': 7,
-                                'name': '文档',
-                                'disable': false,
-                                'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("gongzhiDoc")',
-                                'icon': 'gongzhiwendang.png',
-                                'disicon':'gongzhiwendang_disable.png'
-                            },
-                            {
-                                'Id': 601,
-                                'parentId': 6,
-                                'name': '关系',
-                                'disable': false,
-                                'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("showModalStepKnowledge")',
-                                'icon': 'zhishilujing.png',
-                                'disicon':'zhishilujing_disable.png'
-                            },
-                            {
-                                'Id': 602,
-                                'parentId': 6,
-                                'name': '所有',
-                                'disable': false,
-                                'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("showModalStepAll")',
-                                'icon': 'quanbu.png',
-                                'disicon':'quanbu_disable.png'
-                            },
-                            {
-                                'Id': 101,
-                                'parentId': 1,
-                                'name': '关系',
-                                'disable': false,
-                                'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("linkedKnowlage")',
-                                'icon': 'zhishilianxiang.png',
-                                'disicon':'zhishilianxiang_disable.png'
-                            },
-                            {
-                                'Id': 102,
-                                'parentId': 1,
-                                'name': '所有',
-                                'disable': false,
-                                'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
-                                'backcall': 'mthis.triggerMethods("linkedKnowlageAll")',
-                                'icon': 'quanbu.png',
-                                'disicon':'quanbu_disable.png'
-                            }
-                        ]
-                        var routeMap = new rightMenu(mthis, ovdiv, config);
-                        document.getElementById('netchart').appendChild(ovdiv)
-                        document.getElementById('ringRightMenu').oncontextmenu = function (e) {
-                            return false;
-                        }
+                           mthis.rightMenuShow()
                         // }
                     },
                     onError: function (event) {
