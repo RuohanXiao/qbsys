@@ -2822,7 +2822,8 @@ export default {
                                 'disable': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': '',
-                                'icon': 'lianxiang.png'
+                                'icon': 'lianxiang.png',
+                                'disicon':'lianxiang_disable.png'
                             },
                             {
                                 'Id': 2,
@@ -2832,7 +2833,8 @@ export default {
                                 'disable': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': '',
-                                'icon': 'juhe.png'
+                                'icon': 'juhe.png',
+                                'disicon':'juhe_disable.png'
                             }, {
                                 'Id': 3,
                                 'parentId': 0,
@@ -2841,7 +2843,8 @@ export default {
                                 'hasLeaf': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.noItemInRightMenu',
-                                'icon': 'noclick.png'
+                                'icon': 'noclick.png',
+                                'disicon':'noclick_disable.png'
                             },
                             {
                                 'Id': 4,
@@ -2851,7 +2854,8 @@ export default {
                                 'disable': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("remove")',
-                                'icon': 'shanchu.png'
+                                'icon': 'shanchu.png',
+                                'disicon':'shanchu_disable.png'
                             }, {
                                 'Id': 5,
                                 'parentId': 0,
@@ -2860,7 +2864,8 @@ export default {
                                 'hasLeaf': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': '',
-                                'icon': 'tuisong.png'
+                                'icon': 'tuisong.png',
+                                'disicon':'tuisong_disable.png'
                             }, {
                                 'Id': 6,
                                 'parentId': 0,
@@ -2869,7 +2874,8 @@ export default {
                                 'hasLeaf': true,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': '',
-                                'icon': 'lujing.png'
+                                'icon': 'lujing.png',
+                                'disicon':'lujing_disable.png'
                             }, {
                                 'Id': 7,
                                 'parentId': 0,
@@ -2878,7 +2884,8 @@ export default {
                                 'hasLeaf': true,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': '',
-                                'icon': 'gongzhi.png'
+                                'icon': 'gongzhi.png',
+                                'disicon':'gongzhi_disable.png'
                             },
                             {
                                 'Id': 8,
@@ -2888,7 +2895,8 @@ export default {
                                 'hasLeaf': true,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': '',
-                                'icon': 'guanlian.png'
+                                'icon': 'guanlian.png',
+                                'disicon':'guanlian_disable.png'
                             },
                             {
                                 'Id': 801,
@@ -2898,7 +2906,8 @@ export default {
                                 'disable': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("expandNodeKnowledge")',
-                                'icon': 'guanlianshiti.png'
+                                'icon': 'guanlianshiti.png',
+                                'disicon':'guanlianshiti_disable.png'
                             },
                             {
                                 'Id': 802,
@@ -2908,7 +2917,8 @@ export default {
                                 'disable': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("expandNodeEvent")',
-                                'icon': 'guanlianshijian.png'
+                                'icon': 'guanlianshijian.png',
+                                'disicon':'guanlianshijian_disable.png'
                             },
                             {
                                 'Id': 803,
@@ -2918,7 +2928,8 @@ export default {
                                 'disable': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("expandNodeContent")',
-                                'icon': 'guanlianwendang.png'
+                                'icon': 'guanlianwendang.png',
+                                'disicon':'guanlianwendang_disable.png'
                             },
                             {
                                 'Id': 701,
@@ -2928,7 +2939,8 @@ export default {
                                 'disable': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("gongzhiEnitiy")',
-                                'icon': 'gongzhishiti.png'
+                                'icon': 'gongzhishiti.png',
+                                'disicon':'gongzhishiti_disable.png'
                             },
                             {
                                 'Id': 702,
@@ -2938,7 +2950,8 @@ export default {
                                 'disable': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("gongzhiEvent")',
-                                'icon': 'gongzhishijian.png'
+                                'icon': 'gongzhishijian.png',
+                                'disicon':'gongzhishijian_disable.png'
                             },
                             {
                                 'Id': 703,
@@ -2948,7 +2961,8 @@ export default {
                                 'hasLeaf': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("gongzhiDoc")',
-                                'icon': 'gongzhiwendang.png'
+                                'icon': 'gongzhiwendang.png',
+                                'disicon':'gongzhiwendang_disable.png'
                             },
                             {
                                 'Id': 601,
@@ -2958,7 +2972,8 @@ export default {
                                 'hasLeaf': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("showModalStepKnowledge")',
-                                'icon': 'zhishilujing.png'
+                                'icon': 'zhishilujing.png',
+                                'disicon':'zhishilujing_disable.png'
                             },
                             {
                                 'Id': 602,
@@ -2968,7 +2983,8 @@ export default {
                                 'hasLeaf': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("showModalStepAll")',
-                                'icon': 'quanbu.png'
+                                'icon': 'quanbu.png',
+                                'disicon':'quanbu_disable.png'
                             },
                             {
                                 'Id': 101,
@@ -2978,7 +2994,8 @@ export default {
                                 'hasLeaf': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("linkedKnowlage")',
-                                'icon': 'zhishilianxiang.png'
+                                'icon': 'zhishilianxiang.png',
+                                'disicon':'zhishilianxiang_disable.png'
                             },
                             {
                                 'Id': 102,
@@ -2988,7 +3005,8 @@ export default {
                                 'hasLeaf': false,
                                 'color': "rgba(51,102,102,0.5)",
                                 'backcall': 'mthis.triggerMethods("linkedKnowlageAll")',
-                                'icon': 'quanbu.png'
+                                'icon': 'quanbu.png',
+                                'disicon':'quanbu_disable.png'
                             }
                         ]
                         var routeMap = new rightMenu(mthis, ovdiv, config);
