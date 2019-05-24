@@ -867,7 +867,7 @@
         selOutDiv.id = 'selOutDiv';
         selOutDiv.style.cssText = "position:absolute;margin:0px;padding:0px;z-index:100;display:none;width:100%;height:100%;top:0;left:0;";
         var selDiv = document.createElement("div");
-        selDiv.style.cssText = "position:absolute;width:0px;height:0px;font-size:0px;margin:0px;padding:0px;border:1px dashed #0099FF;background-color:red;z-index:999;filter:alpha(opacity:60);opacity:0.6;display:block;cursor:move;"; 
+        selDiv.style.cssText = "position:absolute;width:0px;height:0px;font-size:0px;margin:0px;padding:0px;border:1px dashed #0099FF;background-color:rgb(51, 255, 255);z-index:999;filter:alpha(opacity:60);opacity:0.6;display:block;cursor:move;"; 
         selDiv.id = "selectDiv";
         var $selectBoxDashed = $('#selectDiv')
         // var $selectBoxDashed = $('<div class="select-box-dashed"></div>');
