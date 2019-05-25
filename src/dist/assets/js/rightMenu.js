@@ -4,6 +4,10 @@ import echarts from 'echarts'
 
 var rightMenu = function(t,target,config){
     var mthis = t;
+    var firstMenuRadius = ['20%','55%'];
+    var secoundMenuRadius = ['60%','95%'];
+    var disableColor = "rgba(204,255,255,0.4)";
+    var ableColor = "rgba(204,255,255,1)";
     var nowOpr = {
         'inOrOut':'',
         'parentId':'',
@@ -32,6 +36,8 @@ var rightMenu = function(t,target,config){
     };
     for(let i = 0; i < firstMenusNum; i++){
         let dataItem = firstMenu[i]
+        let color = dataItem.disable?disableColor:ableColor;
+        let icon = dataItem.disable?dataItem.disicon:dataItem.icon;
         data.push({
             'value':(360 - firstMenusNum) / firstMenusNum,
             'name':dataItem.Id.toString(),
@@ -49,18 +55,19 @@ var rightMenu = function(t,target,config){
                         '{icon|}',
                         '{title|' + dataItem.name +'}{abg|}'    // {a}指series.name  {b}指series.data的name// {c}指series.data的value  {d}%指这一部分占总数的百分比
                     ].join('\n'),
-                    backgroundColor: 'transparent',
+                    backgroundColor:'transparent',
                     borderColor: '#777',
+                    
                     rich: {
                         icon:{
                             height: 30,
                             align: 'center',
                             backgroundColor: {
-                                image: require("../images/rightMenuImage/" + dataItem.icon)
-                            }
+                                image: require("../images/rightMenuImage/" + icon)
+                            },
                         },
                         title: {
-                            color: '#eee',
+                            color: color,
                             align: 'center'
                         },
                         abg: {
@@ -84,19 +91,27 @@ var rightMenu = function(t,target,config){
     var firstSeries = {
         name:'右键菜单',
         type:'pie',
-        animationType:"scale ",
-        radius: ['20%', '50%'],
+        /* animationType:"scale ", */
+        radius: firstMenuRadius,
         startAngle: 0,
         avoidLabelOverlap: false,
         color:firstColors,
-        selectedMode: 'single',
+        selectedMode: false,//'single',
         hoverAnimation:false,
+        animation:false,
         labelLine: {
             normal: {
                 show: false
             }
         },
         data:data,
+        emphasis: {
+            show: false,
+            /* textStyle: {
+                fontSize: '12',
+                fontWeight: 'bold'
+            } */
+        }
         //itemStyle: itemStyle
     };
     var option = {
@@ -147,9 +162,11 @@ var rightMenu = function(t,target,config){
         var secondRotate = 40;  //二级菜单块的角度
         var eValue = 360 - secondRotate * nextMenu.length;
         for(let i = 0; i < nextMenu.length; i++){
-            let dataItem = nextMenu[i]
+            let dataItem = nextMenu[i];
+            let color = dataItem.disable?disableColor:ableColor;
+            let icon = dataItem.disable?dataItem.disicon:dataItem.icon;
             secondData.push({
-                'value':secondRotate,
+                'value':secondRotate - 1,
                 'name':dataItem.Id.toString(),
                 'id':dataItem.Id,
                 'parentId':dataItem.parentId,
@@ -171,11 +188,11 @@ var rightMenu = function(t,target,config){
                                 height: 30,
                                 align: 'center',
                                 backgroundColor: {
-                                    image: require("../images/rightMenuImage/" + dataItem.icon)
+                                    image: require("../images/rightMenuImage/" + icon)
                                 }
                             },
                             title: {
-                                color: '#eee',
+                                color: color,
                                 align: 'center'
                             },
                             abg: {
@@ -193,6 +210,10 @@ var rightMenu = function(t,target,config){
                         color: dataItem.color
                     }
                 }
+            },{
+                value: 1,
+                name: '',
+                itemStyle: placeHolderStyle
             })
         };
         secondData.push({
@@ -241,10 +262,11 @@ var rightMenu = function(t,target,config){
         var secondMenuSeries = {
             name:parentId,
             type:'pie',
-            animationType:"scale ",
-            radius: ['60%', '90%'],
+            /* animationType:"scale ", */
+            radius: secoundMenuRadius,
             startAngle: shiftRotate,
             hoverAnimation:false,
+            animation:false,
             /* color:['white','white','white','white'],//secondColor, */
             avoidLabelOverlap: false,
             selectedMode: 'single',
@@ -280,11 +302,11 @@ var rightMenu = function(t,target,config){
                     }
                 },
                 emphasis: {
-                    show: true,
-                    textStyle: {
+                    show: false,
+                    /* textStyle: {
                         fontSize: '12',
                         fontWeight: 'bold'
-                    }
+                    } */
                 }
             },
             labelLine: {
