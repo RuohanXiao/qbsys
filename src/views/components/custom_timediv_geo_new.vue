@@ -60,6 +60,7 @@
   import echarts from "echarts";
   import { mapState,mapMutations } from 'vuex'
   import {timeStaticsData,reSetTimeStaticsData} from '../../dist/assets/js/geo/data.js'
+  import util from '../../util/tools'
   var timer = null
   export default {
     name: "",
@@ -92,6 +93,7 @@
         dataBySeries: {
           num: [],
           date: [],
+          ids:[],
           clickNum:[]
         },
         geo_eventIds:[],
@@ -132,7 +134,8 @@
         echartsShowStart:0,
         echartsShowEnd:100,
         curInt:null,
-        colorFlag:0
+        colorFlag:0,
+        selIdsArr:[]
       };
     },
     methods: {
@@ -142,12 +145,12 @@
       toGeoAna(flag){
         if(flag==1){
           this.clickEventIds.type = "analysis";
-          console.log(this.clickEventIds)
+         
           this.$store.commit('setGeoTimeCondition',this.clickEventIds);
           this.clcikShowDiv = false
         }else{
           this.boxSelEventIds.type = "analysis";
-          console.log(this.boxSelEventIds)
+         
           this.$store.commit('setGeoTimeCondition',this.boxSelEventIds);
           this.boxSelShowDiv = false
           this.charts.dispatchAction({
@@ -159,29 +162,42 @@
 
       },
       query(){
-        
-            this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                    "selectedIds":this.geo_only_eventIds,
-                    "startTime":this.selTimeArr[0],
-                    "endTime":this.selTimeArr[1]
-                }).then(response =>{
-                    if(response.body.code == 0){
-                      this.boxSelEventIds.eventIds =[];
-                      this.toGeoEventIds.eventIds = [];
-                      this.toGeoEventIds.type = "notAnalysis" ; 
-                      this.boxSelEventIds.type = "notAnalysis" ;
-                      for(let i=0;i<response.body.data.eventIds.length;i++){
-                        this.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
-                        this.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
-                      }
+            var mthis = this
+            this.boxSelEventIds.eventIds =[];
+            this.toGeoEventIds.eventIds = [];
+            this.toGeoEventIds.type = "notAnalysis" ; 
+            this.boxSelEventIds.type = "notAnalysis" ;
+            
+            let eventIds = util.getStorage("eventIds",mthis.selIdsArr)
+            for(var i in eventIds){
+              for(var j of eventIds[i]){
+                mthis.toGeoEventIds.eventIds.push("event&" + j)
+                mthis.boxSelEventIds.eventIds.push("event&" + j)
+              }
+            }
+            mthis.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
+            // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+            //         "selectedIds":this.geo_only_eventIds,
+            //         "startTime":this.selTimeArr[0],
+            //         "endTime":this.selTimeArr[1]
+            //     }).then(response =>{
+            //         if(response.body.code == 0){
+            //           this.boxSelEventIds.eventIds =[];
+            //           this.toGeoEventIds.eventIds = [];
+            //           this.toGeoEventIds.type = "notAnalysis" ; 
+            //           this.boxSelEventIds.type = "notAnalysis" ;
+            //           for(let i=0;i<response.body.data.eventIds.length;i++){
+            //             this.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+            //             this.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+            //           }
                       
-                      this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
+            //           this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
                       
-                    }else{
-                      console.log("服务器error")   
-                    }
+            //         }else{
+            //             
+            //         }
                     
-                })
+            //     })
         
       },
       throttle(fn,delay,duration){
@@ -226,7 +242,7 @@
       hideDiv(){
         
         if(this.isClick){
-          console.log("gahsdvshgvuy")
+          
           this.boxSelEventIds.eventIds = []
           this.toGeoEventIds.eventIds = []
           this.toGeoEventIds.type = 'cancelBox'
@@ -510,7 +526,7 @@
        
         mthis.charts.setOption(mthis.option)
         this.charts.on('datazoom',function(params){
-          console.log(params)
+          
           if(params.hasOwnProperty('start')){
             mthis.echartsShowStart = params.start
             mthis.echartsShowEnd = params.end
@@ -542,10 +558,9 @@
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
             if(mthis.isDataZoom){
-              console.log("hahhaah")
+              
               mthis.timeTitle = '时间轴'
               
-              console.log(mthis.toGeoEventIds)
               mthis.isBrush = []
               mthis.boxSelShowDiv = false
               mthis.boxSelEventIds.eventIds = []
@@ -554,7 +569,7 @@
               mthis.boxSelEventIds.type = 'cancelBox'
               mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds)
               mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds)
-              console.log(mthis.boxSelEventIds)
+              
               mthis.isDataZoom = false
               mthis.option.dataZoom[0].start = mthis.echartsShowStart;
               mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
@@ -574,15 +589,19 @@
             }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
-            
+            mthis.selIdsArr= []
             mthis.selTimeArr = []
             mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
             mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
+            mthis.selIdsArr.push(startAndEnd[0])
+            mthis.selIdsArr.push(startAndEnd[1])
+            
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
             if(timeArr && mthis.selTimeArr[0] && mthis.selTimeArr[1]){
               mthis.isBrush = timeArr
-                mthis.throttle(mthis.query,1000,1000)()
+              
+              mthis.throttle(mthis.query,1000,1000)()
                 //     mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
                 //     "selectedIds":mthis.geo_only_eventIds,
                 //     "startTime":selTimeArr[0],
@@ -598,7 +617,7 @@
                 //       mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds)
                       
                 //     }else{
-                //       console.log("服务器error")
+                //       
                 //     }
                     
                 // })
@@ -617,13 +636,15 @@
           }
         });
         this.charts.on('click', function(params) {
-          console.log(params)
+          mthis.boxSelEventIds.eventIds= []
+          mthis.toGeoEventIds.eventIds = []
+          
           params.event.event.stopPropagation();
           mthis.timeTitle = params.name
           let timeArr = []
           mthis.isClick = true;
           mthis.colorFlag = 1;
-          console.log(mthis.isClick)
+          
           timeArr.push(params.name)
           timeArr.push(params.name)
         //   mthis.$store.commit('setNetTimeCondition', timeArr)
@@ -634,30 +655,42 @@
           mthis.option.dataZoom[0].start = mthis.echartsShowStart;
           mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
           // mthis.option.series[0].itemStyle.normal.color = '#ccffff'
-          console.log(mthis.option.series[0].itemStyle)
+          
           mthis.charts.setOption(mthis.option)
-          mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                    "selectedIds":mthis.geo_only_eventIds,
-                    "startTime":params.name,
-                    "endTime":params.name
-                }).then(response =>{
-                    if(response.body.code == 0){
-                      mthis.boxSelEventIds.eventIds= []
-                      mthis.toGeoEventIds.eventIds = []
-                      mthis.toGeoEventIds.type = "notAnalysis" ; 
-                      mthis.boxSelEventIds.type = "notAnalysis" ;
-                      for(let i=0;i<response.body.data.eventIds.length;i++){
-                        mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
-                        mthis.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
-                      }
+          let eventIds = util.getStorage("eventIds",params.dataIndex);
+          
+          
+          for(let m=0;m<eventIds.length;m++){
+            mthis.toGeoEventIds.eventIds[m] = "event&" + eventIds[m]
+            mthis.boxSelEventIds.eventIds[m] = "event&" + eventIds[m]
+          }
+          
+          mthis.toGeoEventIds.type = "notAnalysis" ;
+          mthis.boxSelEventIds.type = "notAnalysis" ;
+          mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds);
+          mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds);
+          // mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+          //           "selectedIds":mthis.geo_only_eventIds,
+          //           "startTime":params.name,
+          //           "endTime":params.name
+          //       }).then(response =>{
+          //           if(response.body.code == 0){
+          //             mthis.boxSelEventIds.eventIds= []
+          //             mthis.toGeoEventIds.eventIds = []
+          //             mthis.toGeoEventIds.type = "notAnalysis" ; 
+          //             mthis.boxSelEventIds.type = "notAnalysis" ;
+          //             for(let i=0;i<response.body.data.eventIds.length;i++){
+          //               mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+          //               mthis.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+          //             }
                       
-                      mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds);
-                      mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds);
-                    }else{
-                      console.log("服务器error")
-                    }
+          //             mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds);
+          //             mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds);
+          //           }else{
+          //             
+          //           }
                     
-                })
+          //       })
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -671,30 +704,33 @@
         // wholeChart.oncontextmenu = () =>false;
         mthis.charts.on('contextmenu',function(params){
             // wholeChart.oncontextmenu = () =>false;
-            
-            var clickTime = params.name
-            
             mthis.clcikShowDiv = true
+            mthis.clickEventIds.eventIds = []
             mthis.clickdivLeft = event.clientX + "px"
             mthis.clickdivTop = event.clientY + 'px'
-            mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                "selectedIds":mthis.geo_only_eventIds,
-                "startTime":clickTime,
-                "endTime":clickTime
+            let eventIds = util.getStorage("eventIds",params.dataIndex);
+            for(let m=0;m<eventIds.length;m++){
+               mthis.clickEventIds.eventIds[m] = "event&" + eventIds[m]
+              
+            }
+            // mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+            //     "selectedIds":mthis.geo_only_eventIds,
+            //     "startTime":clickTime,
+            //     "endTime":clickTime
                  
-            }).then(response =>{
-                if(response.body.code == 0){
-                  mthis.clickEventIds.eventIds = []
-                  for(let i=0;i<response.body.data.eventIds.length;i++){
-                    mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
-                  }
-                  console.log(mthis.clickEventIds)
+            // }).then(response =>{
+            //     if(response.body.code == 0){
+            //       mthis.clickEventIds.eventIds = []
+            //       for(let i=0;i<response.body.data.eventIds.length;i++){
+            //         mthis.clickEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+            //       }
+            //       
                   
-                }else{
-                  console.log("服务器error")
-                }
+            //     }else{
+            //       
+            //     }
                 
-            })
+            // })
             
           })
           wholeChart.oncontextmenu = function(){
@@ -711,9 +747,9 @@
                 
             }
           wholeChart.onclick = function(){
-            console.log("djakbdxaushdgbuy")
+            
             if(mthis.isClick){
-              console.log("echartsg click")
+              
             }
             
           }
@@ -738,8 +774,8 @@
           // mthis.option.series[0].itemStyle.normal.color = 'rgba(204,255,255,0.1)'
           mthis.charts.setOption(mthis.option)
         }else{
-          // console.log("noshuju")
-          // console.log(mthis.geo_onlyselected_param)
+          
+          
           mthis.dataBySeries.num = [];
           mthis.dataBySeries.date = [];
           mthis.dataBySeries.clickNum = [];
@@ -772,6 +808,7 @@
       let that = this;
       // Enable data zoom when user click bar.
       var zoomSize = 6;
+      util.removeStorage("eventIds")
       // this.changHeightCount++
     },
     computed:mapState ([
@@ -785,16 +822,15 @@
         'dataBySeries.date':{
        
         handler:function(newVal,oldVal){
-          console.log("datedatedate")
-          console.log(newVal)
+        
+          
           this.dataBySeries.clickNum = new Array(newVal.length).fill(null)
-          console.log(this.dataBySeries)
+          
         }
 
       },
         geo_onlyselected_param:function(){
-          console.log('=========setGeoOnlyselectedParam  xxxxx==========')
-          console.log(this.geo_onlyselected_param)
+          
           var mthis = this
          
           if(this.geo_onlyselected_param.length>0){
@@ -809,16 +845,18 @@
             //   }
             // }
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                  "eventids":mthis.geo_only_eventIds
+                  "eventids":mthis.geo_only_eventIds,
+                  "typeLabel":"event"
                 }).then(response =>{
                   if(response.body.code === 0){
-                    console.log(response.body)
+                    
                        mthis.dataBySeries.date = response.body.data.time;
                        mthis.dataBySeries.num = response.body.data.count;
-                       mthis.dataBySeries.clickNum = [];
-                      
-                       mthis.loadEcharts(2);
                        
+                       mthis.dataBySeries.clickNum = [];
+                       
+                       mthis.loadEcharts(2);
+                       util.writeStorage("eventIds",response.body.data.ids)
                   }else{
                     console.log("服务器error")
                   }
@@ -833,7 +871,7 @@
         geo_selected_param:function(){
            var mthis = this
            var type = this.$store.state.geo_selected_param.type;
-          //  console.log(this.geo_selected_param)
+          
            if(type == "GeoStatics"){
               if(this.geo_selected_param.paramIds.length>0){
                 mthis.geoStatics_eventIds = []
@@ -842,7 +880,8 @@
                 }
                 
                   mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                        "eventids":mthis.geoStatics_eventIds
+                        "eventids":mthis.geoStatics_eventIds,
+                        "typeLabel":"event"
                       }).then(response =>{
                         if(response.body.code === 0){
                             // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)

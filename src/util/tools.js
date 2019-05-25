@@ -225,7 +225,24 @@ getNowFormatDate() {
       }
     }
   },
-
+  // 写入本地存储
+  writeStorage(name,ids){
+    localStorage.setItem(name,JSON.stringify(ids))
+  },
+  getStorage(name,index){
+    var idArr = JSON.parse(localStorage.getItem(name))
+    if(Array.isArray(index)){
+      let useIds  = idArr.slice(index[0],index[1])
+      useIds = useIds.filter(item => item.length>0)
+      return useIds
+    }else{
+      return idArr[index]
+    }
+    
+  },
+  removeStorage(name){
+    localStorage.removeItem(name)
+  },
   // //xml转json
   // Xml2Json(xml) {
   //   let jsonobj;

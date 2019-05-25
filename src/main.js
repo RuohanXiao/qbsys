@@ -171,13 +171,14 @@ import element from 'element-ui';
   Vue.use(InfiniteLoading);
   Vue.use(VueResource);
 //   Vue.component(Select.name, Select)
-  
+// echarts词云图
+import echartWordcloud from 'echarts-wordcloud'
   Vue.use(VueRouter);
   Vue.use(iView);
   Vue.use(echarts);
   Vue.use(Vuex);
   Vue.use(element);
-  
+  Vue.use(echartWordcloud);
 //   Vue.use(Antd);
 // 路由配置
 const RouterConfig = {

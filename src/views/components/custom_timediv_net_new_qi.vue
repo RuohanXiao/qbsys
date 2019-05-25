@@ -59,6 +59,7 @@
  
 <script>
   import echarts from "echarts";
+  import util from '../../util/tools'
   var timer = null;
   import {
     mapState,
@@ -129,29 +130,41 @@
         echartsShowStart:0,
         echartsShowEnd:100,
         curInt:null,
-        colorFlag:0
+        colorFlag:0,
+        selIdsArr:[]
         
       };
     },
     methods: {
       query(){
-            this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-                    "selectedIds":this.selectionIdByType.eventIds,
-                    "startTime":this.selTimeArr[0],
-                    "endTime":this.selTimeArr[1]
-                }).then(response =>{
-                    if(response.body.code == 0){
-                      // for(let i=0;i<response.body.data.eventIds.length;i++){
-                      //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
-                      // }
+        var mthis = this;
+        let eventIds = util.getStorage("eventIds",mthis.selIdsArr);
+        let selEventIds = []
+            for(var i in eventIds){
+              for(var j of eventIds[i]){
+                selEventIds.push(j)
+                
+              }
+            }
+        this.$store.commit('setNetTimeCondition',selEventIds)
+        this.boxSelEventIds.ids = selEventIds
+            // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+            //         "selectedIds":this.selectionIdByType.eventIds,
+            //         "startTime":this.selTimeArr[0],
+            //         "endTime":this.selTimeArr[1]
+            //     }).then(response =>{
+            //         if(response.body.code == 0){
+            //           // for(let i=0;i<response.body.data.eventIds.length;i++){
+            //           //   mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i]
+            //           // }
                       
-                      this.$store.commit('setNetTimeCondition',response.body.data.eventIds)
-                      this.boxSelEventIds.ids = response.body.data.eventIds
-                    }else{
-                      console.log("服务器error")
-                    }
+            //           this.$store.commit('setNetTimeCondition',response.body.data.eventIds)
+            //           this.boxSelEventIds.ids = response.body.data.eventIds
+            //         }else{
+            //           console.log("服务器error")
+            //         }
                     
-                })
+            //     })
         
       },
       throttle(fn,delay,duration){
@@ -516,10 +529,12 @@
             }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
-           
+            mthis.selIdsArr= []
             mthis.selTimeArr = []
             mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
             mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
+            mthis.selIdsArr.push(startAndEnd[0])
+            mthis.selIdsArr.push(startAndEnd[1])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
             if(timeArr && mthis.selTimeArr[0] && mthis.selTimeArr[1]){
@@ -764,7 +779,7 @@
               mthis.dataBySeries.num = response.body.data.count;
               mthis.dataBySeries.clickNum = [];
               mthis.loadEcharts(2)
-              
+              util.writeStorage("eventIds",response.body.data.ids)
             }else{
               console.log("服务器error")
             }
@@ -822,7 +837,7 @@
               mthis.dataBySeries.num = response.body.data.count;
               mthis.dataBySeries.clickNum = [];
               mthis.loadEcharts(2)
-              
+              util.writeStorage("eventIds",response.body.data.ids)
             }else{
               console.log("服务器error")
             }

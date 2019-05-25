@@ -71,6 +71,12 @@
             <p class="img-content"  :class="(translateButton)?'lightUp':''">翻译</p>
           </div>
         </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-custom" @click="showWordCloud">
+            <Icon class="icon iconfont icon-selection-box" size="26"></Icon>
+            <p class="img-content">分析</p>
+          </div>
+        </Tooltip>
         <!-- <div class="divSplitLine"></div> -->
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -90,7 +96,7 @@
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
         <div v-show="!showList">
-          <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
+          <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !ifWordCloud' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -146,10 +152,17 @@
             
           </Scroll>
           <div id="contentInfo" class="scrollBarAble" v-show='ifInfo' :style="{height:ContentHeightList,overflowY:'scroll'}">
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='changeDiv'></Icon>
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(1)'></Icon>
             <h2 class="contentInfoTitle" id='contentsTitle'></h2>
             <p class="contentInfoTime" id='contentsTime'></p>
             <p style='margin:10px'><span id='contents'></span></p>
+          </div>
+          <!-- 文档内容分析词云图 -->
+          <div id = "contentWordCloud" v-show='ifWordCloud' style="width: 1000px;height: 800px;margin-left: 100px;">
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)'></Icon>
+            <!-- <div class="panel-body" style="width: 80%;height: 50%;margin-left: 50px;position:absolute;right:50px;top:70px;"> -->
+              <div id="worldCloud" style="width: 800px;height: 450px;position:absolute;left: 50px;right:50px;top:70px;"></div>
+          <!-- </div> -->
           </div>
         </div>
       </div>
@@ -184,7 +197,7 @@
   import modalChart from './custom_modal.vue'
   import InfiniteLoading from 'vue-infinite-loading';
   import worksetModal from "./custom_workSet_modal.vue";
-  
+  import echarts from 'echarts';
   import $ from "jquery";
   import {
     mapState,
@@ -231,6 +244,7 @@
         spinShow: false,
         markedItem: false,
         ifInfo: false,
+        ifWordCloud:false,
         ContentHeight: 0,
         ContentHeightList: 0,
         netheight: 0,
@@ -1546,7 +1560,7 @@
               contentDiv.style.display = 'inline';
               contentDiv.style.borderRight = '2px #366674 solid';
               var data = response.body.data;
-              var translatedTitle = data.title;
+              var translatedTitle = data.human_title_translate;
               var translatedTime = util.transformPHPTimeMS(data.time);
               var translatedText = data.text.ch;
               var translatedHtml = /* "<div  id='translateContentInfo' class='scrollBarAble' style='height: 607px; overflow-y: scroll; width: 50%; border-right: 2px solid rgb(54, 102, 116);'>" */
@@ -1814,18 +1828,24 @@
         
         
       },
-      changeDiv(){
+      hideContentDiv(flag){
         var mthis = this
-        mthis.ifInfo = false
-        this.$store.state.contentSelShowFlag = false
-        let selData = {}
-        selData.id = [];
-        selData.title = ''
-        console.log(selData)
-        this.$store.commit('setContentSelData',selData)
-        if(!this.showThumb){
-          mthis.toContentDiv()
+        if(flag ==1){
+          mthis.ifInfo = false
+          mthis.$store.state.contentSelShowFlag = false
+          let selData = {}
+          selData.id = [];
+          selData.title = ''
+          console.log(selData)
+          mthis.$store.commit('setContentSelData',selData)
+          if(!mthis.showThumb){
+            mthis.toContentDiv()
+          }
+        }else{
+          mthis.ifWordCloud = false
         }
+        
+        
       },
       toContentDiv() {
         
@@ -1835,6 +1855,7 @@
         this.showList = false
         this.showThumb = false
         this.ifInfo = false
+        this.ifWordCloud = false
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
@@ -1891,6 +1912,91 @@
           //   this.REQUIRE = true;
           // });
         }
+      },
+      showWordCloud(){
+        var mthis = this
+        mthis.ifWordCloud = true;
+        var worldCloudcharts=echarts.init(document.getElementById('worldCloud'));
+        var option = new Object({
+          title: {
+ 			        text: '关键词分析',
+ 			        x: 'left',
+ 			        textStyle: {
+ 			            fontSize: 12,
+ 			            color:'#FFFFFF'
+ 			        }
+ 
+           },
+           tooltip: {
+ 			        show: true
+           },
+           series: [{
+ 			        name: '关键词分析',
+ 			        type: 'wordCloud',
+ 			        sizeRange: [10, 18],
+ 			        rotationRange: [0, 0],
+ 			        textPadding: 0,
+ 			        autoSize: {
+ 			            enable: true,
+ 			            minSize: 10
+ 			        },
+ 			        textStyle: {
+ 			            normal: {
+ 			                color: function() {
+ 			                    return 'rgb(' + [
+ 			                        Math.round(Math.random() * 160),
+ 			                        Math.round(Math.random() * 160),
+ 			                        Math.round(Math.random() * 160)
+ 			                    ].join(',') + ')';
+ 			                }
+ 			            },
+ 			            emphasis: {
+ 			                shadowBlur: 10,
+ 			                shadowColor: '#333'
+ 			            }
+ 			        },
+ 			 	}]
+           
+        })
+        var JosnList = [];
+ 
+        JosnList.push({
+            name: "Jayfee",
+            value: 520
+        }, {
+            name: "Nancy",
+            value: 520
+        }, {
+            name: "生活资源",
+            value: 520
+        }, {
+            name: "供热管理",
+            value: 520
+        }, {
+            name: "供气质量",
+            value: 520
+        }, {
+            name: "生活用水管理",
+            value: 520
+        }, {
+            name: "一次供水问题",
+            value: 520
+        }, {
+            name: "交通运输",
+            value: 520
+        }, {
+            name: "城市交通",
+            value: 520
+        }, {
+            name: "环境保护",
+            value: 520
+        }, {
+            name: "房地产管理",
+            value: 520
+        },  );
+      option.series[0].data = JosnList;
+ 
+ 		  worldCloudcharts.setOption(option);
       },
       showContent(id,title) {
         clearTimeout(timerClick);
@@ -2433,5 +2539,8 @@
     background-color: #003333;
 	  border: solid 2px #ccffff;
   }
- 
+ #contentWordCloud{
+   /* width: 100%; */
+   
+ }
 </style>
