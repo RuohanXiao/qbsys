@@ -93,7 +93,6 @@
         dataBySeries: {
           num: [],
           date: [],
-          ids:[],
           clickNum:[]
         },
         geo_eventIds:[],
@@ -436,7 +435,7 @@
             barGap:"-100%",
             // barWidth:'10px',
             barMaxWidth: "60px",
-            barWidth:'10px',
+            barWidth:'2px',
             // barMinHeight: '1px',
             barCategoryGap:'20px',
             itemStyle: {
@@ -757,8 +756,13 @@
           
           mthis.timeTitle = '时间轴';
           mthis.resize();
+          console.log(mthis.dataBySeries.date.length)
           mthis.option.xAxis.data = mthis.dataBySeries.date;
-          
+          if(mthis.dataBySeries.date.length>10000){
+            mthis.option.series[0].barWidth = '2px';
+            mthis.option.dataZoom[0].start = 0
+            mthis.option.dataZoom[0].end = 30
+          }
           mthis.option.series[0].data = mthis.dataBySeries.num;
           // mthis.option.series[0].itemStyle.normal.color = '#33cc99'
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;

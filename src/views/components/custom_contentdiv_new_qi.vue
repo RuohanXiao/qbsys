@@ -72,7 +72,7 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-custom" @click="showWordCloud">
+          <div class="button-custom" @click="showContentAna">
             <Icon class="icon iconfont icon-selection-box" size="26"></Icon>
             <p class="img-content">分析</p>
           </div>
@@ -96,7 +96,7 @@
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
         <div v-show="!showList">
-          <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !ifWordCloud' :height=ContentHeight>
+          <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !contentAna' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -158,11 +158,17 @@
             <p style='margin:10px'><span id='contents'></span></p>
           </div>
           <!-- 文档内容分析词云图 -->
-          <div id = "contentWordCloud" v-show='ifWordCloud' style="width: 1000px;height: 800px;margin-left: 100px;">
+          <div id = "contentWordCloud" class="scrollBarAble" v-show='contentAna' :style="{height:ContentHeightList,overflowY:'scroll',width:'100%',}">
+            <i-button type='info' size="large" :style="{position:'absolute',left:'50px',top:'70px'}" @click='changeChart(1)'>词云图</i-button>
+            <i-button type='info' size="large" :style="{position:'absolute',left:'150px',top:'70px'}" @click='changeChart(2)'>柱状图</i-button>
             <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)'></Icon>
-            <!-- <div class="panel-body" style="width: 80%;height: 50%;margin-left: 50px;position:absolute;right:50px;top:70px;"> -->
-              <div id="worldCloud" style="width: 800px;height: 450px;position:absolute;left: 50px;right:50px;top:70px;"></div>
-          <!-- </div> -->
+            <div v-show='ifWord' >
+              <div id="worldCloud" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
+            </div>
+            <div v-show='ifBar' >
+              <div id="myChart" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
+            </div>
+            
           </div>
         </div>
       </div>
@@ -215,6 +221,12 @@
     name: "App",
     data() {
       return {
+        ifWord:false,
+        ifBar:false,
+        WCheight:0,
+        WCWidth:0,
+        contentAnaWidth:0,
+        prevItems:[],
         mouseStartX:0,
         mouseStartY:0,
         mouseOn:false,
@@ -244,7 +256,7 @@
         spinShow: false,
         markedItem: false,
         ifInfo: false,
-        ifWordCloud:false,
+        contentAna:false,
         ContentHeight: 0,
         ContentHeightList: 0,
         netheight: 0,
@@ -684,68 +696,63 @@
           mthis.$store.commit('setSelectContentNodes', [{
             ids: selectIds
           }])
+          mthis.$store.commit('setContent2time',[{
+            ids:selectIds
+          }])
         })
         
         }
         
       },
       
-      contentTimeCondition: function(va) {
-        
+      'contentTimeCondition.type': function() {
         var mthis = this
-        if(va == null){
-          
-         $('.item-selected').removeClass('item-selected')
-         mthis.watchSelectCounter++;
-         
-        }else{
-        if (timer) {
-          clearTimeout(timer)
-        }
-        timer = setTimeout(function() {
-          mthis.page = 1
-          if (va.length === 2) {
-            // mthis.spinShow = true
-            
-            let stime = util.getTimestamp(va[0])
-            // let etime = util.getTimestamp(va[1])
-            let etime = util.getTimestamp(mthis.isLeapYear(va[1]))
-            // console.log(stime)
-            // console.log(etime)
-            
-            mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
-              if (response.body.data.length > 0) {
-                // console.log(response.body)
-                
-                // $('.item-selected').removeClass('item-selected')
-                console.log(3)
-                mthis.items = response.body.data.map(item =>({
-                  title: item.title,      
-                  i_sn: item.i_sn, 
-                  id: item.id,
-                  text: item.text,
-                  time: item.time,
-                  from: item.from,     
-                  img: "http://10.60.1.140/assets/images/content_node.png",
-                  check:false
-                })
-              );
-                mthis.$store.commit('setSelectContentNodes', [{
-                  ids: []
-                }])
-              } else {
-                console.log(4)
-                mthis.items = []
-              }
-              mthis.spinShow = false
-            })
-          } else if (va.length === 1) {
-            // alert('aaa')
-          } else {
-            // alert('bbbb')
+        console.log(this.contentTimeCondition.type)
+        if(mthis.contentTimeCondition.type == 'cancel'){
+          mthis.items = mthis.prevItems;
+          let selIds = []
+          for(let i=0;i<mthis.items.length;i++){
+            selIds.push(mthis.items[i].id)
+            mthis.items[i].check = true
           }
-        }, 100);
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: selIds
+          }])
         }
+        if(mthis.contentTimeCondition.type == 'sel'){
+          if(mthis.contentTimeCondition.ids.length ==0){
+            mthis.items = mthis.prevItems;
+            let selIds = []
+            for(let i=0;i<mthis.items.length;i++){
+              selIds.push(mthis.items[i].id)
+              mthis.items[i].check = true
+            }
+            mthis.$store.commit('setSelectContentNodes', [{
+              ids: selIds
+            }])
+         }
+          if(mthis.contentTimeCondition.ids.length>0){
+            let items = []
+            for(var i of mthis.contentTimeCondition.ids){
+              for(var j in mthis.items){
+                if(i == mthis.items[j].id){
+                  items.push(mthis.items[j])
+                  }
+                }
+              }
+            for(var m=0;m<items.length;m++){
+              items[m].check = false
+            }
+            mthis.items = items
+            mthis.$store.commit('setSelectContentNodes', [{
+              ids: []
+            }])
+            }
+          
+        }
+        
+        
+          
       },
       searchContentResult: function(va) {
         var mthis = this
@@ -772,7 +779,7 @@
               })
             );
             console.log(mthis.items)
-            
+            mthis.prevItems = mthis.items
             if(response.body.data.length ==30){
               mthis.moreLoading = true
             }
@@ -794,6 +801,9 @@
             // mthis.showMore = true
             mthis.$store.commit('setSelectContentNodes', [{
               ids: []
+            }])
+            mthis.$store.commit('setContent2time',[{
+              ids:[]
             }])
           } else {
             // mthis.showMore = false
@@ -820,6 +830,9 @@
         var mthis = this;
         var Ele = document.getElementById('translatedDiv');
         var contentDiv = document.getElementById('contentInfo');
+        
+        mthis.WCheight = (parseInt(mthis.ContentHeightList.split('px')[0]) - 45) + 'px'
+        
         if (Ele !== null) {
           Ele.style.height = mthis.ContentHeightList;
         }
@@ -978,6 +991,9 @@
                 mthis.$store.commit('setSelectContentNodes', [{
                   ids: ids
                 }])
+                mthis.$store.commit('setContent2time',[{
+                  ids:ids
+                }])
                 console.log('upupupupup')
                 // $(selector).find('.temp-selected').find('.contentDiv').addClass('item-selected')
                 
@@ -1011,6 +1027,9 @@
           }
           mthis.$store.commit('setSelectContentNodes', [{
             ids: ids
+          }])
+          mthis.$store.commit('setContent2time',[{
+            ids:ids
           }])
         },300)
         
@@ -1092,6 +1111,9 @@
         mthis.$store.commit('setSelectContentNodes', [{
           ids: ids
         }])
+        mthis.$store.commit('setContent2time',[{
+            ids:ids
+          }])
 
         // let disselectDom = $('.contentDiv:not(.item-selected)')
         // disselectDom.addClass('item-selected')
@@ -1150,7 +1172,9 @@
           mthis.$store.commit('setSelectContentNodes', [{
             ids: []
           }])
-          
+          mthis.$store.commit('setContent2time',[{
+            ids:[]
+          }])
         }else{
           mthis.setMessage("请选择至少一篇文章")
         }
@@ -1463,7 +1487,9 @@
               mthis.$store.commit('setSelectContentNodes', [{
                 ids: selIds
               }])
-              
+              mthis.$store.commit('setContent2time',[{
+                ids:[]
+              }])
             }else{
               return
             }
@@ -1484,6 +1510,9 @@
         mthis.$store.commit('setSelectContentNodes', [{
           ids: selectList
         }])
+        mthis.$store.commit('setContent2time',[{
+            ids:selectList
+          }])
       },
       removeAll() {
         console.log(7)
@@ -1493,6 +1522,9 @@
         this.$store.commit('setSelectContentNodes', [{
           ids: []
         }])
+        this.$store.commit('setContent2time',[{
+            ids:[]
+          }])
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
@@ -1622,6 +1654,9 @@
               mthis.$store.commit('setSelectContentNodes', [{
                 ids: []
               }])
+              mthis.$store.commit('setContent2time',[{
+                ids:[]
+              }])
               } else {
                 mthis.alertNotice('无匹配数据2', true)
               }
@@ -1694,6 +1729,9 @@
                 console.log(14)
                 mthis.$store.commit('setSelectContentNodes', [{
                   ids: []
+                }])
+                mthis.$store.commit('setContent2time',[{
+                  ids:[]
                 }])
               } else {
                 mthis.setMessage('无匹配数据6')
@@ -1808,6 +1846,7 @@
                 // $('.item-selected').removeClass('item-selected')
                 console.log(20)
                 mthis.items = mthis.items.concat(nowItems)
+                mthis.prevItems = mthis.items
               } else {
                 // console.log('全部加载')
                 // $('.layer').show().delay(3000).fadeOut()
@@ -1842,7 +1881,7 @@
             mthis.toContentDiv()
           }
         }else{
-          mthis.ifWordCloud = false
+          mthis.contentAna = false
         }
         
         
@@ -1855,7 +1894,7 @@
         this.showList = false
         this.showThumb = false
         this.ifInfo = false
-        this.ifWordCloud = false
+        this.contentAna = false
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
@@ -1913,14 +1952,26 @@
           // });
         }
       },
-      showWordCloud(){
+      changeChart(flag){
         var mthis = this
-        mthis.ifWordCloud = true;
+        if(flag ==1){
+          mthis.ifWord = true;
+          mthis.ifBar = false
+        }else{
+          mthis.ifWord = false;
+          mthis.ifBar = true
+        }
+      },
+      showContentAna(){
+        var mthis = this
+        mthis.contentAna = true;
+        mthis.ifWord = true;
         var worldCloudcharts=echarts.init(document.getElementById('worldCloud'));
-        var option = new Object({
+        var charts = echarts.init(document.getElementById('myChart'));
+        var worldCloudoption = new Object({
           title: {
  			        text: '关键词分析',
- 			        x: 'left',
+ 			        x: 'center',
  			        textStyle: {
  			            fontSize: 12,
  			            color:'#FFFFFF'
@@ -1994,9 +2045,133 @@
             name: "房地产管理",
             value: 520
         },  );
-      option.series[0].data = JosnList;
+        var colors = ['#66CDAA',  '#B8860B','#FF9080'];
+
+        var xData = function() {
+            var data = [];
+            for (var i = 1; i < 13; i++) {
+                data.push("地区"+i);
+            }
+            return data;
+        }();
+        var chartOption = new Object({
+          title: {
+            "text": "生产总值累计值\n",
+            subtext:"",
+            top:'12%',
+            "left": "10%",
+            "subtextStyle": {
+              "color": "#fff",
+              fontWeight:800,
+              fontSize:16
+            },
+            textStyle:{
+                "color": "#fff",
+              fontSize:28
+            }
+          },
+
+          backgroundColor: '#020306',
+          color: ['#4162ff', '#c78b42', '#CD3F2A', '#ff6e72', '#9692ff'],
+          tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'shadow'
+              }
+          },
+          legend: {
+              top:'14%',
+              right:'30%',
+              textStyle:{
+                  color:'#FFFFFF'
+              },
+              orient: 'vertical',
+              data: ['第一产业', '第二产业', '第三产业', '']
+          },
+          grid: {
+              left: '10%',
+              right: '30%',
+              bottom: '20%',
+              top: '27%',
+              containLabel: true,
+              z: 22
+          },
+          yAxis: [{
+              type: 'value',
+              splitLine: {
+                  show: true,
+                  lineStyle: {
+                      color: ['#f2f2f2']
+                  }
+              },
+              axisLine: {
+                      lineStyle: {
+                          color: '#0c3b71'
+                      }
+                  },
+                  axisLabel: {
+                      color: 'rgb(170,170,170)',
+                      formatter: '{value} '
+                  }
+          }],
+          xAxis: [{
+              type: 'category',
+              axisLine: {
+                  lineStyle: {
+                      color: '#0c3b71'
+                  }
+              },
+              axisLabel: {
+                  show: true,
+                  color: 'rgb(170,170,170)',
+                  fontSize:14
+              },
+              data:xData
+          }],
+          series: [{
+                  name: '第一产业',
+                  type: 'bar',
+                  stack: '总量',
+                  barWidth: '16px',
+                  data: [80, 212, 101, 110, 80, 212, 101, 120, 113, 101, 120, 113],
+                  // markArea: areaStyle
+              },
+              {
+                  name: '第二产业',
+                  type: 'bar',
+                  stack: '总量',
+                  data: [90, 232, 251, 212, 101, 110,212, 101, 110, 10,  120, 113],
+                  // markArea: areaStyle
+              },
+              {
+                  name: '第三产业',
+                  type: 'bar',
+                  stack: '总量',
+                  data: [90, 232, 231, 134, 190, 90, 232, 251, 212, 101, 110, 10],
+                  // markArea: areaStyle
+              },
+              {
+                  name: '',
+                  type: 'bar',
+                  xAxisIndex: 0,
+                  barWidth: '16px',
+                  barGap: '-95%',
+                  itemStyle: {
+                      normal: {
+                          color: 'rgba(255,255,255,0.1)'
+                      }
+                  },
+                  zlevel: 9,
+                  data: [700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700],
+                  // markArea: areaStyle
+              },
+            
+          ]
+        })
+        charts.setOption(chartOption)
+      worldCloudoption.series[0].data = JosnList;
  
- 		  worldCloudcharts.setOption(option);
+ 		  worldCloudcharts.setOption(worldCloudoption);
       },
       showContent(id,title) {
         clearTimeout(timerClick);
@@ -2065,7 +2240,9 @@
     },
     mounted() {
       var mthis = this
-      
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+      let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
+      mthis.WCWidth = (wwWidth - 200) + 'px'
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
@@ -2540,7 +2717,8 @@
 	  border: solid 2px #ccffff;
   }
  #contentWordCloud{
-   /* width: 100%; */
+   border-right:1px solid #336666;
+   border-left:1px solid #336666;
    
  }
 </style>

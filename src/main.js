@@ -268,7 +268,10 @@ var store = new Vuex.Store({
     },
     conditionContent: '',
     // 监听时间轴是否被选中
-    contentTimeCondition: [],
+    contentTimeCondition: {
+      "type":'',
+      "ids":[]
+    },
     netTimeCondition: [],
     // netTimeCondition:{
     //   'eventIds':[],
@@ -297,6 +300,10 @@ var store = new Vuex.Store({
     }],   //点击net节点，将节点id返回到event
     selectGeoNodes:[],
     selectContentNodes:[{
+      ids:[]
+    }],
+    // content2time
+    content2time:[{
       ids:[]
     }],
     clickSelectedGeoIds:[],
@@ -553,6 +560,9 @@ var store = new Vuex.Store({
     },
     setSelectContentNodes(state,val){
       state.selectContentNodes = val
+    },
+    setContent2time(state,val){
+      state.content2time = val
     },
     setSplit(state,val){
       state.split = val

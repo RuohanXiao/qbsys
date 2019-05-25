@@ -232,9 +232,18 @@ getNowFormatDate() {
   getStorage(name,index){
     var idArr = JSON.parse(localStorage.getItem(name))
     if(Array.isArray(index)){
-      let useIds  = idArr.slice(index[0],index[1])
-      useIds = useIds.filter(item => item.length>0)
-      return useIds
+      if(index[0] == index[1]){
+        let useIds = idArr[index[0]]
+        useIds = useIds.filter(item => item.length>0)
+        return useIds
+      }else{
+        let useIds  = idArr.slice(index[0],index[1])
+        useIds = useIds.filter(item => item.length>0)
+        return useIds
+      }
+      
+      
+     
     }else{
       return idArr[index]
     }
