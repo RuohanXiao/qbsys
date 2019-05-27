@@ -416,9 +416,13 @@ var store = new Vuex.Store({
     contentKeyboards:[],
     contentPromte: '',
     netPromte: '',
-    geoPromte: ''
+    geoPromte: '',
+    showDocTime:true
   },
   mutations:{
+    setShowDocTime(state,val){
+      state.showDocTime = val
+    },
     setContentTimeOnlySel(state,val){
       state.contentTimeOnlySel = val
     },

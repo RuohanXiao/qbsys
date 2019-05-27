@@ -1,7 +1,8 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId" @click="hideDiv()">
-    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
+    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" 
+    @click="onchangHeightCount" v-show="showDocTime"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <!-- <Col span="3"/> -->
@@ -666,7 +667,7 @@
       // this.changHeightCount++
     },
     computed:mapState ([
-      'split','splitWidth','tmss','conditionContent','content2time'
+      'split','splitWidth','tmss','conditionContent','content2time','showDocTime'
     ]),
     watch: {
       /* tmss: function(){

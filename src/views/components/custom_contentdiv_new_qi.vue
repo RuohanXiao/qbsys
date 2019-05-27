@@ -158,16 +158,48 @@
             <p style='margin:10px'><span id='contents'></span></p>
           </div>
           <!-- 文档内容分析词云图 -->
-          <div id = "contentWordCloud" class="scrollBarAble" v-show='contentAna' :style="{height:ContentHeightList,overflowY:'scroll',width:'100%',}">
-            <i-button type='info' size="large" :style="{position:'absolute',left:'50px',top:'70px'}" @click='changeChart(1)'>词云图</i-button>
-            <i-button type='info' size="large" :style="{position:'absolute',left:'150px',top:'70px'}" @click='changeChart(2)'>柱状图</i-button>
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)'></Icon>
-            <div v-show='ifWord' >
+          <div id = "contentWordCloud" class="scrollBarAble" v-show='contentAna' :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}" style='z-index:100'>
+            <!-- <i-button type='info' size="large" :style="{position:'absolute',left:'50px',top:'70px'}" @click='changeChart(1)'>词云图</i-button>
+            <i-button type='info' size="large" :style="{position:'absolute',left:'150px',top:'70px'}" @click='changeChart(2)'>柱状图</i-button> -->
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)' style='z-index:101'></Icon>
+            <div  :style="{width:WCWidth,position:'absolute',display:'flex'}">
+              <div :style="{width:docWidth,height:ContentHeightList}" style="border-right:1px solid #336666">
+                <div class="e-title">
+                  <div class="e-title-d"></div>
+                  <p class="e-title-p">{{selDocItems.firstLevelName}}</p>
+                </div>
+                <Collapse simple id='nodeAttr' class='scrollBarAble'>
+                  <panel v-for="(list,index) in selDocItems.subStatisticsAttr" :key="index">
+                    <span>{{list.secondLevelName}}</span>
+                    <div slot="content" class="tableLine">
+                      <div class="econtent" v-for="(specifics,ind) in list.specificStaticsAttr" :key="ind">
+                        <p class="econtentp w5em">{{specifics.thirdLevelName}}</p>
+                        <p class="econtentp">{{specifics.count}}</p>
+                      </div>
+                    </div>
+                  </panel>
+                </Collapse>
+                
+                
+              </div>
+              <div :style="{width:barWidth,height:ContentHeightList}">
+                <div style='border-bottom:1px solid #336666'>
+                    <div id="worldCloud" :style="{width:barWidth,height:barHeight}"></div>
+                </div>
+                  <div style='border-bottom:1px solid #336666'>
+                    <div id="myChart" :style="{width:barWidth,height:barHeight}"></div>
+                  </div>
+                  
+              </div>
+            </div>
+            
+            
+            <!-- <div v-show='ifWord' >
               <div id="worldCloud" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
             </div>
             <div v-show='ifBar' >
               <div id="myChart" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
-            </div>
+            </div> -->
             
           </div>
         </div>
@@ -225,6 +257,9 @@
         ifBar:false,
         WCheight:0,
         WCWidth:0,
+        docWidth:0,
+        barWidth:0,
+        barHeight:0,
         contentAnaWidth:0,
         prevItems:[],
         mouseStartX:0,
@@ -232,6 +267,7 @@
         mouseOn:false,
         colLgNum:4,
         colSmnum:3,
+        selDocItems:{},
         worksetData: [],
         worksetType: "",
         worksetFlag: 0,
@@ -849,7 +885,7 @@
         var contentDiv = document.getElementById('contentInfo');
         
         mthis.WCheight = (parseInt(mthis.ContentHeightList.split('px')[0]) - 45) + 'px'
-        
+        mthis.barHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) /2 -0.8) + 'px'
         if (Ele !== null) {
           Ele.style.height = mthis.ContentHeightList;
         }
@@ -1900,7 +1936,7 @@
         }else{
           mthis.contentAna = false
         }
-        
+        mthis.$store.commit('setShowDocTime',true)
         
       },
       toContentDiv() {
@@ -1982,7 +2018,23 @@
       showContentAna(){
         var mthis = this
         mthis.contentAna = true;
-        mthis.ifWord = true;
+        mthis.$store.commit('setShowDocTime',false)
+        let selDocs = mthis.items.filter(item => item.check);
+        let contentIds = []
+        mthis.selDocItems = new Object();
+        for(let i=0;i<selDocs.length;i++){
+          contentIds.push(selDocs[i].id)
+        }
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
+          "nodeIds": contentIds,
+          "type":"document"
+        }).then(response =>{
+          if(response.body.code ==0){
+            console.log(response.body.data)
+            mthis.selDocItems = response.body.data[1]
+          }
+        })
+        // mthis.ifWord = true;
         var worldCloudcharts=echarts.init(document.getElementById('worldCloud'));
         var charts = echarts.init(document.getElementById('myChart'));
         var worldCloudoption = new Object({
@@ -2024,7 +2076,7 @@
  			            }
  			        },
  			 	}]
-           
+          
         })
         var JosnList = [];
  
@@ -2259,7 +2311,9 @@
       var mthis = this
       mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
-      mthis.WCWidth = (wwWidth - 200) + 'px'
+      mthis.WCWidth = wwWidth   + 'px'
+      mthis.docWidth = (wwWidth * 0.5) + 'px'
+      mthis.barWidth = (wwWidth - (parseInt(mthis.docWidth.split('px')[0]))) + 'px'
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
@@ -2738,4 +2792,52 @@
    border-left:1px solid #336666;
    
  }
+.e-title {
+    height: 30px;
+    background-color: rgba(51, 255, 255, 0.2);
+    border-top: solid 1px #366674;
+    border-bottom: solid 1px #366674;
+    display: flex;
+  }
+  .e-title-p {
+    height: 18px;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #ccffff;
+  }
+  .e-title-d {
+    width: 4px;
+    height: 16px;
+    background-color: #009999;
+    margin: 6px 6px;
+  }
+  .econtent {
+    display: flex;
+    height: auto;
+    min-height: 30px;
+  }
+  
+  .w5em {
+    width: 10em;
+    min-width: 5em;
+    margin: 0;
+  }
+  .tableLine>.econtent:nth-child(odd) {
+    background-color: rgba(51, 255, 255, 0.05);
+  }
+  .tableLine>.econtent:nth-child(odd):hover {
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+  .tableLine>.econtent:nth-child(even):hover {
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+  .process-img:hover{
+    animation: all 1s;
+    -webkit-animation: all 1s;
+    background-color: rgba(51, 255, 255, 0.4);
+  }
 </style>
