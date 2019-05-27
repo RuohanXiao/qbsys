@@ -661,23 +661,24 @@
         
       },
       netToContentData: function() {
-        
+        console.log(this.netToContentData)
         var mthis = this
         
-        if(this.netToContentData.contentIds.length ==0){
+        if(this.netToContentData.contentIds.ids.length ==0){
           console.log(0)
           mthis.items = []
           
-        }else if(this.netToContentData.contentIds.length>0){
+        }else if(this.netToContentData.contentIds.ids.length>0){
           mthis.spinShow = true
           console.log(1)
           mthis.items = []
-          let contentIds = this.netToContentData.contentIds
+          let contentIds = this.netToContentData.contentIds.ids
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
           let selectIds = []
-          mthis.items = response.body.data.map(item =>({
+          if(mthis.netToContentData.contentIds.type == 'push'){
+            mthis.items = response.body.data.map(item =>({
                 title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
@@ -688,17 +689,33 @@
                 check:true
               })
             );
+            for(let i=0;i<mthis.items.length;i++){
+              selectIds.push(mthis.items[i].id)
+            }
+            mthis.$store.commit('setSelectContentNodes', [{
+              ids: selectIds
+            }])
+            mthis.$store.commit('setContent2time',[{
+              ids:selectIds
+            }])
+          }else if(mthis.netToContentData.contentIds.type == 'search'){
+            mthis.items = response.body.data.map(item =>({
+                title: item.title,      
+                i_sn: item.i_sn, 
+                id: item.id,
+                text: item.text,
+                time: item.time,
+                from: item.from,     
+                img: "http://10.60.1.140/assets/images/content_node.png",
+                check:false
+              })
+            );
+          }
+          
           mthis.spinShow = false
           console.log(2)
-          for(let i=0;i<mthis.items.length;i++){
-            selectIds.push(mthis.items[i].id)
-          }
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: selectIds
-          }])
-          mthis.$store.commit('setContent2time',[{
-            ids:selectIds
-          }])
+          
+         
         })
         
         }
@@ -878,7 +895,7 @@
       },
       kuangxuan(e){
         this.clearBubble(e)
-        console.log('downdown')
+        if(!this.showThumb) return;
         var mthis = this;
         for(let m=0;m<mthis.items.length;m++){
           mthis.items[m].check = false
