@@ -759,7 +759,7 @@
           console.log(mthis.dataBySeries.date.length)
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           if(mthis.dataBySeries.date.length>10000){
-            mthis.option.series[0].barWidth = '2px';
+            mthis.option.series[0].barWidth = '5px';
             mthis.option.dataZoom[0].start = 0
             mthis.option.dataZoom[0].end = 30
           }

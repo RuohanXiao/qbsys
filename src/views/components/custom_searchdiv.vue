@@ -116,6 +116,7 @@
                     dataobj[type] = ids;
                   }
                 }
+                
                 this.$store.commit('setWorkSpaceAddData', dataobj)
               } else {
                 // alert('entity-detail接口异常')
@@ -211,7 +212,7 @@
                   var data = re[i];
                   var type = data.type;
                   if (type === 'document') {
-                    idsList.concat(data.ids);
+                    idsList=idsList.concat(data.ids);
                   }
                 }
                 if (idsList.length > 0) {
@@ -219,7 +220,7 @@
                     
                     'contentIds': {
                       'type':'search',
-                      'ids':idlist
+                      'ids':idsList
                     }
                   })
                 } else {

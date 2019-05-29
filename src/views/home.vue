@@ -55,7 +55,8 @@
         containerDivHeight: 0,
         containerHeight: 0,
         workSpaceModalFlag: false,
-        keyCount:0
+        keyCount:0,
+        widKeyCount:0
       }
     },
     components: {
@@ -138,17 +139,25 @@
       let getIn = document.getElementsByClassName('ivu-select-input')
       let prevKdown = null;
       let prevKup = null;
-      document.onkeydown=function(event){ 
-        // mthis.keyCount ++;
+      
+      let widPrevD = null;
+      let widPrevU = null;
+      
         
-       
+      
+      document.onkeydown = function(e){
+        
         var e = event || window.event || arguments.callee.caller.arguments[0];
-          if(e.code != prevKdown){
-            mthis.keyCount = mthis.keyCount + 1;
-            prevKdown = e.code
+        if(mthis.widKeyCount<0){
+          mthis.widKeyCount = 0
+        }
+          if(e.code != widPrevD){
+            mthis.widKeyCount = mthis.widKeyCount + 1;
+            widPrevD = e.code
           }
+          console.log('widKyDown',mthis.widKeyCount)
          
-          if (mthis.keyCount==2 && e.keyCode == 70 && (e.ctrlKey || e.metaKey)) {
+          if (e.keyCode == 70 && (e.ctrlKey || e.metaKey) && (!e.shiftKey) && (!e.altKey)) {
             // ctrl+F
             
             if(mthis.tmss == 'net'){
@@ -164,45 +173,20 @@
             e.preventDefault();
             e.stopPropagation();
           }
-          if(mthis.keyCount==1 && e && e.keyCode == 46){
-            // delete
-            if(mthis.tmss == 'net'){
-              mthis.$store.state.netKeyboards.push('delete')
-            }else if(mthis.tmss== 'geo'){
-              mthis.$store.state.geoKeyboards.push('delete')
-            }else{
-              mthis.$store.state.contentKeyboards.push('delete')
-              
-            }
-            e.preventDefault();
-            e.stopPropagation();
-
-          }
-          if(mthis.keyCount==2 && e.keyCode == 65 && (e.ctrlKey || e.metaKey)){
-            // ctrl+A
-            if(mthis.tmss == 'net'){
-              mthis.$store.state.netKeyboards.push('selall')
-            }else if(mthis.tmss== 'geo'){
-              mthis.$store.state.geoKeyboards.push('selall')
-            }else{
-              mthis.$store.state.contentKeyboards.push('selall')
-              
-            }
-            e.preventDefault();
-            e.stopPropagation();
-
-          }
-        
+         
       };
-      document.onkeyup = function(event){
-        var e = event || window.event || arguments.callee.caller.arguments[0];
+      // document.onkeyup = function(e){
+      //   var e = event || window.event || arguments.callee.caller.arguments[0];
         
-        if(e.code != prevKup){
-            mthis.keyCount = mthis.keyCount - 1;
-            prevKup = e.code
-          }
+      //   if(e.code != widPrevU){
+      //       mthis.widKeyCount = mthis.widKeyCount - 1;
+      //       widPrevU = e.code
+      //     }
+      //   console.log('widkeyup',mthis.widKeyCount)
         
-      }
+      // };
+      
+      
       var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/configer.xml");
       var imgItem = ob.getElementsByTagName("imgItem");
       let arr = []

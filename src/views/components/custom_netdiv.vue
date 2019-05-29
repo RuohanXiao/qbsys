@@ -1,5 +1,5 @@
 <template>
-<div :style="{height:nh}">
+<div :style="{height:nh}" tabindex="1" @keydown="keyD">
     <div :style="{height:nh,backgroundColor:'rgba(0,0,0,0)',position:'absolute',zIndex: zIndex,top:0,width:'99%',margin:'0 10px'}">
         <Spin size="large" fix v-if="spinShow"></Spin>
     </div>
@@ -279,6 +279,9 @@ export default {
     name: "App",
     data() {
         return {
+            prevKdown:null,
+            prevKup:null,
+            keyCount:0,
             updateStyleCounter: 0,
             worksetInfo: {
                 title: "",
@@ -371,6 +374,66 @@ export default {
         Canvas2Image
     },
     methods: {
+        keyD(e){
+        
+        var mthis = this;
+        if(mthis.keyCount<0){
+              mthis.keyCount = 0
+            }
+        if(e.code != mthis.prevKdown){
+            mthis.keyCount = mthis.keyCount + 1;
+            mthis.prevKdown = e.code
+          }
+        
+        if(mthis.$store.state.tmss === 'net') {
+          var e = event || window.event || arguments.callee.caller.arguments[0];
+          
+          if(e && e.keyCode == 46 && (!e.shiftKey) && (!e.altKey) && (!e.ctrlKey)){
+            // delete
+            mthis.triggerMethods('remove')
+            mthis.clearBubble(e)
+          }
+          if(e.keyCode == 65 && (e.ctrlKey || e.metaKey) && (!e.shiftKey) && (!e.altKey)){
+            mthis.triggerMethods('selectAll')
+            mthis.clearBubble(e)
+          }
+          
+        }
+        
+        
+      },
+      keyU(e){
+        
+        var mthis = this;
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(mthis.keyCount==1 && e && e.keyCode == 46){
+            // delete
+            
+            mthis.clearBubble(e)
+          }
+          if(mthis.keyCount==2 && e.keyCode == 65 && (e.ctrlKey || e.metaKey)){
+           
+            mthis.clearBubble(e)
+          }
+        if(e.code != mthis.prevKup){
+            mthis.keyCount = mthis.keyCount - 1;
+            mthis.prevKup = e.code
+          }
+        console.log('keyup')
+        console.log(mthis.keyCount)
+      },
+      clearBubble(e) {
+        if (e.stopPropagation) {
+          e.stopPropagation();
+          } else {
+            e.cancelBubble = true;
+          }
+          if (e.preventDefault) {
+              e.preventDefault();
+            } else {
+              e.returnValue = false;
+            }
+          },
         jutuan() {
             this.changNetchartMode('d')
         },
@@ -3049,6 +3112,7 @@ export default {
                         // // console.log(event)
                     },
                     onClick: function (event) {
+                        
                         if (event.clickNode || event.clickLink) {
                             // if (event.clickNode) {}
                             // mthis.selectItem = event;
@@ -3942,7 +4006,9 @@ export default {
         //   data: []
         // }));
         var mthis = this;
+        
         // //快捷键监听
+        
         // document.onkeydown=function(event){ 
         //   if(mthis.$store.state.tmss === 'net') {
         //     var e = event || window.event || arguments.callee.caller.arguments[0];
