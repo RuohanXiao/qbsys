@@ -127,16 +127,16 @@ trClick{
 
 <template>
 <div id='leftStatics' :style="{height:eDivH}">
-    <div :id='staticsData.firstLevelId' v-for='(staticsData,index) in staticsDatas'>
+    <div :id='staticsData.firstLevelId' v-for='(staticsData,Index) in staticsDatas'>
         <div :id="staticsData.firstLevelId + 'Name'">
             <span class="separateLine"></span>
             <span style="margin-left:10px;font-size: 14px;">{{staticsData.firstLevelName}}</span>
         </div>
         <Collapse simple v-model="openPanelNames" id="EntityAttrColl" v-if='staticsData.subStatisticsAttr.length > 0' @on-change="collchange">
-            <panel v-for="(staticsPanel,index) in staticsData.subStatisticsAttr" :name="staticsPanel.secondLevelId">
+            <panel v-for="(staticsPanel,index) in staticsData.subStatisticsAttr" :value="staticsPanel.secondLevelId" :name="Index+'_'+index">   <!-- :name="staticsPanel.secondLevelId" -->
                 <span :id="staticsPanel.secondLevelId + '/countSpan'">{{staticsPanel.secondLevelName + '（' + staticsPanel.typecount + '）'}}</span>
                 <table slot="content" :id="staticsPanel.secondLevelId + '/entityattr'">
-                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-if="index<5"  v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist,rightMenuConf)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
+                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-if="ndex<5"  v-for="(specificStatics,ndex ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist,rightMenuConf)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
                             <td class="NameTd">
                                 <p>{{specificStatics.thirdLevelName}}</p>
                             </td>
@@ -144,12 +144,12 @@ trClick{
                                 <percentBar  :num="specificStatics.per" :count="specificStatics.count" :index='0'></percentBar>
                             </td>
                     </tr> 
-                    <tr :id="staticsPanel.secondLevelId+'/more'" class='trNoClick' v-if="staticsPanel.specificStaticsAttr.length>5&&!displayItem[staticsPanel.secondLevelId]" @click="displaymore(staticsPanel.secondLevelId)">
+                    <tr :id="staticsPanel.secondLevelId+'/more'" class='trNoClick' v-if="staticsPanel.specificStaticsAttr.length>5&&!displayItem[Index+'_'+index]" @click="displaymore(Index+'_'+index)">
                         <td colspan="2" class='moreTd'>
-                        <span :id="staticsPanel.secondLevelId+'/countSpan'">{{"还有"+moreitemCount[staticsPanel.secondLevelId]+"个条目"}}</span>  <!-- +moreparamCount[staticsPanel.secondLevelId]+"个节点" -->
+                        <span :id="staticsPanel.secondLevelId+'/countSpan'">{{"还有"+moreitemCount[Index+'_'+index]+"个条目"}}</span>  <!-- +moreparamCount[staticsPanel.secondLevelId]+"个节点" -->
                         </td>
                     </tr>
-                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-if="index>=5&&displayItem[staticsPanel.secondLevelId]"  v-for="(specificStatics,index ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist,rightMenuConf)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
+                    <tr :id="specificStatics.thirdLevelId + '/id'" class='trNoClick' v-if="ndex>=5&&displayItem[Index+'_'+index]"  v-for="(specificStatics,ndex ) in staticsPanel.specificStaticsAttr" @contextmenu.prevent="rightClickShow($event,specificStatics.idlist,rightMenuConf)" @click="selectedIds($event.currentTarget,specificStatics.idlist)">  
                             <td class="NameTd">
                                 <p>{{specificStatics.thirdLevelName}}</p>
                             </td>
@@ -174,8 +174,8 @@ export default {
     data(){
         
         return{
-            /* openPanelNames:[], */
-            mactiveNames:[],
+            /* openPanelNames:["be9f33b2-81bd-11e9-b567-b8ca3a670664", "be9f3ca4-81bd-11e9-b567-b8ca3a670664", "be9f403c-81bd-11e9-b567-b8ca3a670664", "bea2e980-81bd-11e9-b567-b8ca3a670664", "bea2ffb0-81bd-11e9-b567-b8ca3a670664", "bea31e6e-81bd-11e9-b567-b8ca3a670664"], */
+            mactiveNames:[],/* 79568354-81be-11e9-ac0c-b8ca3a670664 */
             type:'',
             eDivH:'',
             /* staticsdatas:[], */
@@ -190,9 +190,26 @@ export default {
     mounted(){
         this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
     },
-    props:['staticsDatas','rightMenuConf','HLIds','openPanelNames'],
+    props:['staticsDatas','rightMenuConf','HLIds'],  /* ,'openPanelNames' */
     components: {
       percentBar
+    },
+    computed:{
+        openPanelNames:{
+            get:function(){
+                var mthis = this;
+                debugger
+                var openPanelNames = [];
+                mthis.staticsDatas.forEach(function(item,Index){
+                    item.subStatisticsAttr.forEach(function(Iitem,index){
+                        //openPanelNames.push(Iitem.secondLevelId);
+                        openPanelNames.push(Index+'_'+index);
+                    })
+                })
+                return openPanelNames
+            },
+            set:function(){}
+        }
     },
     watch:{
         openPanelNames(){
@@ -205,14 +222,15 @@ export default {
         staticsDatas:{
             handler:function(val){
                 var mthis = this;
-                mthis.staticsDatas.forEach(function(item){
-                    item.subStatisticsAttr.forEach(function(Iitem){
+                mthis.staticsDatas.forEach(function(item,Index){
+                    item.subStatisticsAttr.forEach(function(Iitem,index){
                         var thirdLevel = Iitem.specificStaticsAttr
                         var itemCount = thirdLevel.length;
                         var moreItemcount = itemCount>5?itemCount-5:0;
                         var morethirdIds = 0;
-                        mthis.$set(mthis.displayItem, Iitem.secondLevelId, false)
-                        mthis.$set(mthis.moreitemCount, Iitem.secondLevelId, moreItemcount)
+                        var name = Index + '_' + index;
+                        mthis.$set(mthis.displayItem, name, false)
+                        mthis.$set(mthis.moreitemCount, name, moreItemcount)
                     })
                 })
             },
@@ -278,6 +296,7 @@ export default {
     methods:{
         collchange(names){
             var mthis = this;
+            debugger
             var activeName = "";
             if(mthis.mactiveNames.length > names.length){
                 for(let i = 0; i < mthis.mactiveNames.length; i++){
@@ -344,6 +363,7 @@ export default {
         },
         selectedIds(el,ids){
             var mthis = this;
+            debugger
             /* if(el.style.backgroundColor ==='rgba(51, 255, 255, 0.2)'){
                 return;
             } */
