@@ -1,5 +1,5 @@
 <template>
-  <div id='demo' :style="{height:netheightdiv}" tabindex="1" @keydown="keyD">
+  <div id='demo' :style="{height:netheightdiv}" tabindex="1" @keydown="keyD" style="outline:none;">
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px',border:'solid 1px #336666'}">
       <div class='divStyle'>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -73,8 +73,8 @@
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-custom" @click="showContentAna">
-            <Icon class="icon iconfont icon-selection-box" size="26"></Icon>
-            <p class="img-content">分析</p>
+            <Icon class="icon iconfont icon-selection-box" size="26" :class="(analysisButton)?'lightUp':''"></Icon>
+            <p class="img-content" :class="(analysisButton)?'lightUp':''">分析</p>
           </div>
         </Tooltip>
         <!-- <div class="divSplitLine"></div> -->
@@ -204,10 +204,10 @@
           </div>
         </div>
       </div>
-    
+      <!-- 列表图 -->
       <div>
         <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
-          <Table  :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
+          <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
       <div>
@@ -297,6 +297,7 @@
         watchSelectCounter: 0,
         translateButton: false,
         deleteButton:false,
+        analysisButton:false,
         spinShow: false,
         markedItem: false,
         ifInfo: false,
@@ -846,7 +847,7 @@
             }
             // console.log("datadatatdattatdtadt")
             // console.log(mthis.items)
-            mthis.data4 = []
+            // mthis.data4 = []
             // for(let i=0;i<mthis.items.length;i++){
             //   let itemList = {};
             //   itemList.title = mthis.items[i].title
@@ -1082,7 +1083,7 @@
         this.clearBubble(eventMove)
       },
       kuangup(e){
-        
+        if(!this.showThumb) return;
         this.isSel = false;
         var mthis = this;
         
@@ -1125,8 +1126,10 @@
           }
           if(ids.length>0){
             mthis.deleteButton = true
+            mthis.analysisButton = true
           }else{
             mthis.deleteButton = false
+            mthis.analysisButton = false
           }
           mthis.$store.commit('setSelectContentNodes', [{
             ids: ids
@@ -1211,6 +1214,7 @@
           }
         }
         mthis.deleteButton = true
+        mthis.analysisButton = true
         mthis.$store.commit('setSelectContentNodes', [{
           ids: ids
         }])
@@ -1662,6 +1666,7 @@
         
       },
       toThumbnails(){
+        this.showList = false
         this.showThumb = true
         this.colLgNum = 3
         this.colSmnum = 4
@@ -1984,7 +1989,8 @@
             mthis.toContentDiv()
           }
         }else{
-          mthis.contentAna = false
+          mthis.contentAna = false;
+          mthis.analysisButton = true
         }
         mthis.$store.commit('setShowDocTime',true)
         
@@ -2067,7 +2073,9 @@
       },
       showContentAna(){
         var mthis = this
-        mthis.contentAna = true;
+        if(mthis.analysisButton){
+            mthis.contentAna = true;
+        // 控制时间轴不显示
         mthis.$store.commit('setShowDocTime',false)
         let selDocs = mthis.items.filter(item => item.check);
         let contentIds = []
@@ -2274,9 +2282,14 @@
           ]
         })
         charts.setOption(chartOption)
-      worldCloudoption.series[0].data = JosnList;
- 
- 		  worldCloudcharts.setOption(worldCloudoption);
+        worldCloudoption.series[0].data = JosnList;
+  
+        worldCloudcharts.setOption(worldCloudoption);
+        mthis.analysisButton = false
+        }else{
+          mthis.setMessage("请选择至少一篇文章")
+        }
+        
       },
       showContent(id,title) {
         clearTimeout(timerClick);
@@ -2605,11 +2618,11 @@
       color:#668c8e;
       
     }
-  .ivu-table-wrapper {
+  /* .ivu-table-wrapper {
       border: none !important;
     }
     .ivu-table:before{background-color:none;}
-    .ivu-table:after{background-color:none;}
+    .ivu-table:after{background-color:none;} */
 
 </style>
 <style scoped>

@@ -155,7 +155,7 @@
             mthis.widKeyCount = mthis.widKeyCount + 1;
             widPrevD = e.code
           }
-          console.log('widKyDown',mthis.widKeyCount)
+          
          
           if (e.keyCode == 70 && (e.ctrlKey || e.metaKey) && (!e.shiftKey) && (!e.altKey)) {
             // ctrl+F

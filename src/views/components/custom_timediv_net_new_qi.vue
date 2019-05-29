@@ -194,7 +194,7 @@
       hideDiv(){
         
         if(this.isClick){
-          console.log("gahsdvshgvuy")
+          
           this.$store.commit('setNetTimeCondition',null)
           
           this.curInt = null;
@@ -506,7 +506,7 @@
               mthis.timeTitle = '时间轴'
               
               mthis.$store.commit('setNetTimeCondition',null)
-              console.log("nullnullnullnull")
+              
               // mthis.boxSelEventIds.ids = []
               mthis.isBrush = []
               mthis.boxSelShowDiv = false
@@ -757,8 +757,6 @@
       
       netOnlyStaticsSelectedIds:function(){
         var mthis = this
-        console.log("zhikantazhikanta")
-        console.log(this.netOnlyStaticsSelectedIds)
         
         if(this.netOnlyStaticsSelectedIds.ids.length>0){
           // mthis.$store.commit('setNetStaticsSelectedIds',[])
@@ -844,8 +842,8 @@
           
            
         }
-        if(this.selectionIdByType.eventIds.length==0){
-          console.log("000000000000000")
+        if(this.selectionIdByType.eventIds.length==0 && this.dataBySeries.date.length>0){
+          
           // mthis.$store.commit('setNetStaticsSelectedIds',[])
           mthis.loadEcharts(4)
         }
