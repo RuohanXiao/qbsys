@@ -116,6 +116,7 @@
                     dataobj[type] = ids;
                   }
                 }
+                
                 this.$store.commit('setWorkSpaceAddData', dataobj)
               } else {
                 // alert('entity-detail接口异常')
@@ -173,11 +174,18 @@
                     return item.id
                   })
                   mthis.$store.commit('setNetToContentData', {
-                    'contentIds': ids
+                    'contentIds':{
+                      'type':'search',
+                      'ids': ids
+                    }
+                    
                   })
                 } else {
                   mthis.$store.commit('setNetToContentData', {
-                    'contentIds': []
+                    'contentIds':{
+                      'type':'search',
+                      'ids': []
+                    }
                   })
                   // alert('未找到对应文档')
                   mthis.$store.commit('setContentPromte', '未找到对应文档')
@@ -204,12 +212,16 @@
                   var data = re[i];
                   var type = data.type;
                   if (type === 'document') {
-                    idsList.concat(data.ids);
+                    idsList=idsList.concat(data.ids);
                   }
                 }
                 if (idsList.length > 0) {
                   mthis.$store.commit('setNetToContentData', {
-                    'contentIds': idsList
+                    
+                    'contentIds': {
+                      'type':'search',
+                      'ids':idsList
+                    }
                   })
                 } else {
                   // alert('该集合中无文档，请重新选择')

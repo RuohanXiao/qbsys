@@ -1,5 +1,5 @@
 <template>
-<div :style="{height:nh}">
+<div :style="{height:nh}" tabindex="1" @keydown="keyD">
     <div :style="{height:nh,backgroundColor:'rgba(0,0,0,0)',position:'absolute',zIndex: zIndex,top:0,width:'99%',margin:'0 10px'}">
         <Spin size="large" fix v-if="spinShow"></Spin>
     </div>
@@ -279,6 +279,9 @@ export default {
     name: "App",
     data() {
         return {
+            prevKdown:null,
+            prevKup:null,
+            keyCount:0,
             updateStyleCounter: 0,
             worksetInfo: {
                 title: "",
@@ -333,7 +336,10 @@ export default {
             selectionIdByTypeData: {
                 nodeIds: [],
                 eventIds: [],
-                contentIds: []
+                contentIds: {
+                    'type':'push',
+                    'ids':[]
+                }
             },
             myMap: new Map(),
             myMapevent: new Map(),
@@ -368,6 +374,66 @@ export default {
         Canvas2Image
     },
     methods: {
+        keyD(e){
+        
+        var mthis = this;
+        if(mthis.keyCount<0){
+              mthis.keyCount = 0
+            }
+        if(e.code != mthis.prevKdown){
+            mthis.keyCount = mthis.keyCount + 1;
+            mthis.prevKdown = e.code
+          }
+        
+        if(mthis.$store.state.tmss === 'net') {
+          var e = event || window.event || arguments.callee.caller.arguments[0];
+          
+          if(e && e.keyCode == 46 && (!e.shiftKey) && (!e.altKey) && (!e.ctrlKey)){
+            // delete
+            mthis.triggerMethods('remove')
+            mthis.clearBubble(e)
+          }
+          if(e.keyCode == 65 && (e.ctrlKey || e.metaKey) && (!e.shiftKey) && (!e.altKey)){
+            mthis.triggerMethods('selectAll')
+            mthis.clearBubble(e)
+          }
+          
+        }
+        
+        
+      },
+      keyU(e){
+        
+        var mthis = this;
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(mthis.keyCount==1 && e && e.keyCode == 46){
+            // delete
+            
+            mthis.clearBubble(e)
+          }
+          if(mthis.keyCount==2 && e.keyCode == 65 && (e.ctrlKey || e.metaKey)){
+           
+            mthis.clearBubble(e)
+          }
+        if(e.code != mthis.prevKup){
+            mthis.keyCount = mthis.keyCount - 1;
+            mthis.prevKup = e.code
+          }
+        console.log('keyup')
+        console.log(mthis.keyCount)
+      },
+      clearBubble(e) {
+        if (e.stopPropagation) {
+          e.stopPropagation();
+          } else {
+            e.cancelBubble = true;
+          }
+          if (e.preventDefault) {
+              e.preventDefault();
+            } else {
+              e.returnValue = false;
+            }
+          },
         jutuan() {
             this.changNetchartMode('d')
         },
@@ -715,7 +781,7 @@ export default {
             ];
             // // console.log('=====setSelectionIdByType==========')
             // // console.log(mthis.selectionIdByTypeData)
-            if (mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.length > 0) {
+            if (mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.ids.length > 0) {
                 if (mthis.selectionIdByTypeData.nodeIds.length > 0) {
                     mthis.$http
                         .post(mthis.$store.state.ipConfig.api_url + "/entity-info/", {
@@ -746,10 +812,10 @@ export default {
                             }
                         });
                 }
-                if (mthis.selectionIdByTypeData.contentIds.length > 0) {
+                if (mthis.selectionIdByTypeData.contentIds.ids.length > 0) {
                     mthis.$http
                         .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
-                            docIds: mthis.selectionIdByTypeData.contentIds
+                            docIds: mthis.selectionIdByTypeData.contentIds.ids
                         })
                         .then(response => {;
                             if (response.body.code === 0) {
@@ -827,7 +893,7 @@ export default {
             this.$store.commit("setNetToGeoData", arr);
         },
         toContent() {
-            if (this.selectionIdByTypeData.contentIds.length > 0) {
+            if (this.selectionIdByTypeData.contentIds.ids.length > 0) {
                 this.$store.commit("setNetToContentData", this.selectionIdByTypeData);
                 this.$store.commit("changeTMSS", "content");
             } else {
@@ -925,7 +991,7 @@ export default {
                 let arrList_doc = new Array();
                 console.log('===============selectionIdByTypeData==============================')
                 console.log(mthis.selectionIdByTypeData)
-                let arrList = new Array().concat(mthis.selectionIdByTypeData.nodeIds).concat(mthis.selectionIdByTypeData.eventIds).concat(mthis.selectionIdByTypeData.contentIds)
+                let arrList = new Array().concat(mthis.selectionIdByTypeData.nodeIds).concat(mthis.selectionIdByTypeData.eventIds).concat(mthis.selectionIdByTypeData.contentIds.ids)
                 // // let arrTypeList_net = new Array();
                 // // let arrTypeList_event = new Array();
                 // // let arrTypeList_doc = new Array();
@@ -1218,7 +1284,10 @@ export default {
             this.selectionIdByTypeData = new Object({
                 nodeIds: [],
                 eventIds: [],
-                contentIds: []
+                contentIds: {
+                    'type':'net',
+                    'ids':[]
+                }
             });
             this.$store.commit("setSelectionIdByType", this.selectionIdByTypeData)
             this.ifSelectNode = false;
@@ -1247,8 +1316,8 @@ export default {
                     arrList.push(mthis.selectionIdByTypeData.eventIds[i]);
                     arrTypeList.push("event");
                 }
-                for (let i = 0; i < mthis.selectionIdByTypeData.contentIds.length; i++) {
-                    arrList.push(mthis.selectionIdByTypeData.contentIds[i]);
+                for (let i = 0; i < mthis.selectionIdByTypeData.contentIds.ids.length; i++) {
+                    arrList.push(mthis.selectionIdByTypeData.contentIds.ids[i]);
                     arrTypeList.push("document");
                 }
                 mthis.saveData(
@@ -2279,7 +2348,10 @@ export default {
             mthis.selectionIdByTypeData = new Object({
                 nodeIds: [],
                 eventIds: [],
-                contentIds: []
+                contentIds: {
+                    'type':'push',
+                    'ids':[]
+                }
             });
             mthis.$store.commit("setSelectionIdByType", mthis.selectionIdByTypeData)
             mthis.ifSelectNode = false;
@@ -3040,6 +3112,7 @@ export default {
                         // // console.log(event)
                     },
                     onClick: function (event) {
+                        
                         if (event.clickNode || event.clickLink) {
                             // if (event.clickNode) {}
                             // mthis.selectItem = event;
@@ -3055,7 +3128,10 @@ export default {
                             mthis.selectionIdByTypeData = new Object({
                                 nodeIds: [],
                                 eventIds: [],
-                                contentIds: []
+                                contentIds: {
+                                    'type':"push",
+                                    'ids':[]
+                                }
                             });
                             mthis.$store.commit("setSelectNetNodes", [{
                                 ids: mthis.selectionId
@@ -3185,7 +3261,10 @@ export default {
                                 mthis.selectionIdByTypeData = {
                                     nodeIds: [],
                                     eventIds: [],
-                                    contentIds: []
+                                    contentIds: {
+                                        'type':'push',
+                                        'ids':[]
+                                    }
                                 };
                                 // let nodeArr = event.selection.filter(item=>{
                                 //   return item.isNode
@@ -3210,7 +3289,7 @@ export default {
                                         // mthis.netchart.lockNode(event.selection[nu].data.id)
                                         //有三种情况，实体，事件，文档
                                         if (event.selection[nu].data.entity_type === "content" || event.selection[nu].data.entity_type === "document") {
-                                            mthis.selectionIdByTypeData.contentIds.push(
+                                            mthis.selectionIdByTypeData.contentIds.ids.push(
                                                 event.selection[nu].data.id
                                             );
                                         } else if (
@@ -3245,7 +3324,10 @@ export default {
                                 mthis.selectionIdByTypeData = {
                                     nodeIds: [],
                                     eventIds: [],
-                                    contentIds: []
+                                    contentIds: {
+                                        'type':'push',
+                                        'ids':[]
+                                    }
                                 };
                                 mthis.$store.commit("setSelectNetNodes", [{
                                     ids: mthis.selectionId
@@ -3369,7 +3451,7 @@ export default {
             this.netchart.updateSettings()
         },
         selectionIdByTypeData: function () {
-            let lengthNum = this.selectionIdByTypeData.nodeIds.length + this.selectionIdByTypeData.eventIds.length + this.selectionIdByTypeData.contentIds.length
+            let lengthNum = this.selectionIdByTypeData.nodeIds.length + this.selectionIdByTypeData.eventIds.length + this.selectionIdByTypeData.contentIds.ids.length
             this.ifSelectNode = (lengthNum > 0) ? true : false
             this.ifSelectTwoNode = (lengthNum > 1) ? true : false
             this.ifSelectOnlyTwoNode = (lengthNum === 2) ? true : false
@@ -3924,7 +4006,9 @@ export default {
         //   data: []
         // }));
         var mthis = this;
+        
         // //快捷键监听
+        
         // document.onkeydown=function(event){ 
         //   if(mthis.$store.state.tmss === 'net') {
         //     var e = event || window.event || arguments.callee.caller.arguments[0];

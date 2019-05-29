@@ -175,7 +175,7 @@ top: 232px;
 </style>
 
 <template>
-    <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv'>
+    <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv' tabindex="1" @keydown="keyD" style="outline:none;">
         <imgItemOpera :changeButton='changeButtonParam' @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
@@ -378,6 +378,34 @@ export default {
         mthis.geoWidth=document.documentElement.clientWidth * this.$store.state.split_geo - 20 + 'px';
     },
     methods:{
+         keyD(e){
+            var mthis = this;
+            if(mthis.$store.state.tmss === 'geo') {
+                var e = event || window.event || arguments.callee.caller.arguments[0];
+                if(e && e.keyCode == 46 && (!e.shiftKey) && (!e.altKey) && (!e.ctrlKey)){
+                    // delete
+                    mthis.deletePoints()
+                    mthis.clearBubble(e)
+                }
+                if(e.keyCode == 65 && (e.ctrlKey || e.metaKey) && (!e.shiftKey) && (!e.altKey)){
+                    //   ctrl+A
+                    mthis.selectAll()
+                    mthis.clearBubble(e)
+                }
+            }
+        },
+        clearBubble(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            } else {
+                e.cancelBubble = true;
+            }
+            if (e.preventDefault) {
+                e.preventDefault();
+            } else {
+                e.returnValue = false;
+            }
+        },
         setBlur(){
             var mthis = this;
             var radius = document.getElementById('blur').value;

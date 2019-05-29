@@ -171,13 +171,14 @@ import element from 'element-ui';
   Vue.use(InfiniteLoading);
   Vue.use(VueResource);
 //   Vue.component(Select.name, Select)
-  
+// echarts词云图
+import echartWordcloud from 'echarts-wordcloud'
   Vue.use(VueRouter);
   Vue.use(iView);
   Vue.use(echarts);
   Vue.use(Vuex);
   Vue.use(element);
-  
+  Vue.use(echartWordcloud);
 //   Vue.use(Antd);
 // 路由配置
 const RouterConfig = {
@@ -267,7 +268,10 @@ var store = new Vuex.Store({
     },
     conditionContent: '',
     // 监听时间轴是否被选中
-    contentTimeCondition: [],
+    contentTimeCondition: {
+      "type":'',
+      "ids":[]
+    },
     netTimeCondition: [],
     // netTimeCondition:{
     //   'eventIds':[],
@@ -296,6 +300,10 @@ var store = new Vuex.Store({
     }],   //点击net节点，将节点id返回到event
     selectGeoNodes:[],
     selectContentNodes:[{
+      ids:[]
+    }],
+    // content2time
+    content2time:[{
       ids:[]
     }],
     clickSelectedGeoIds:[],
@@ -368,7 +376,10 @@ var store = new Vuex.Store({
     netToContentData:{
       nodeIds:[],
       eventIds:[],
-      contentIds:[]
+      contentIds:{
+        type:'',
+        ids:[]
+      }
     },
     netToGeoData:{},
     geoToNetData:{
@@ -405,9 +416,13 @@ var store = new Vuex.Store({
     contentKeyboards:[],
     contentPromte: '',
     netPromte: '',
-    geoPromte: ''
+    geoPromte: '',
+    showDocTime:true
   },
   mutations:{
+    setShowDocTime(state,val){
+      state.showDocTime = val
+    },
     setContentTimeOnlySel(state,val){
       state.contentTimeOnlySel = val
     },
@@ -552,6 +567,9 @@ var store = new Vuex.Store({
     },
     setSelectContentNodes(state,val){
       state.selectContentNodes = val
+    },
+    setContent2time(state,val){
+      state.content2time = val
     },
     setSplit(state,val){
       state.split = val

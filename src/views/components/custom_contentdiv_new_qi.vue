@@ -1,5 +1,5 @@
 <template>
-  <div :style="{height:netheightdiv}">
+  <div id='demo' :style="{height:netheightdiv}" tabindex="1" @keydown="keyD" style="outline:none;">
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px',border:'solid 1px #336666'}">
       <div class='divStyle'>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -71,6 +71,12 @@
             <p class="img-content"  :class="(translateButton)?'lightUp':''">翻译</p>
           </div>
         </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div class="button-custom" @click="showContentAna">
+            <Icon class="icon iconfont icon-selection-box" size="26" :class="(analysisButton)?'lightUp':''"></Icon>
+            <p class="img-content" :class="(analysisButton)?'lightUp':''">分析</p>
+          </div>
+        </Tooltip>
         <!-- <div class="divSplitLine"></div> -->
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -90,7 +96,7 @@
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
         <div v-show="!showList">
-          <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo' :height=ContentHeight>
+          <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !contentAna' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -99,7 +105,7 @@
             </div>
           
             <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}"
-             @mousedown='kuangxuan'>
+             @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup">
               <Row type="flex" justify="start">
 
                 <Col :sm="colSmnum" :lg="colLgNum" align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
@@ -146,17 +152,62 @@
             
           </Scroll>
           <div id="contentInfo" class="scrollBarAble" v-show='ifInfo' :style="{height:ContentHeightList,overflowY:'scroll'}">
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='changeDiv'></Icon>
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(1)'></Icon>
             <h2 class="contentInfoTitle" id='contentsTitle'></h2>
             <p class="contentInfoTime" id='contentsTime'></p>
             <p style='margin:10px'><span id='contents'></span></p>
           </div>
+          <!-- 文档内容分析词云图 -->
+          <div id = "contentWordCloud" class="scrollBarAble" v-show='contentAna' :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}" style='z-index:100'>
+            <!-- <i-button type='info' size="large" :style="{position:'absolute',left:'50px',top:'70px'}" @click='changeChart(1)'>词云图</i-button>
+            <i-button type='info' size="large" :style="{position:'absolute',left:'150px',top:'70px'}" @click='changeChart(2)'>柱状图</i-button> -->
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)' style='z-index:101'></Icon>
+            <div  :style="{width:WCWidth,position:'absolute',display:'flex'}">
+              <div :style="{width:docWidth,height:ContentHeightList}" style="border-right:1px solid #336666">
+                <div class="e-title">
+                  <div class="e-title-d"></div>
+                  <p class="e-title-p">{{selDocItems.firstLevelName}}</p>
+                </div>
+                <Collapse simple id='nodeAttr' class='scrollBarAble'>
+                  <panel v-for="(list,index) in selDocItems.subStatisticsAttr" :key="index">
+                    <span>{{list.secondLevelName}}</span>
+                    <div slot="content" class="tableLine">
+                      <div class="econtent" v-for="(specifics,ind) in list.specificStaticsAttr" :key="ind">
+                        <p class="econtentp w5em">{{specifics.thirdLevelName}}</p>
+                        <p class="econtentp">{{specifics.count}}</p>
+                      </div>
+                    </div>
+                  </panel>
+                </Collapse>
+                
+                
+              </div>
+              <div :style="{width:barWidth,height:ContentHeightList}">
+                <div style='border-bottom:1px solid #336666'>
+                    <div id="worldCloud" :style="{width:barWidth,height:barHeight}"></div>
+                </div>
+                  <div style='border-bottom:1px solid #336666'>
+                    <div id="myChart" :style="{width:barWidth,height:barHeight}"></div>
+                  </div>
+                  
+              </div>
+            </div>
+            
+            
+            <!-- <div v-show='ifWord' >
+              <div id="worldCloud" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
+            </div>
+            <div v-show='ifBar' >
+              <div id="myChart" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
+            </div> -->
+            
+          </div>
         </div>
       </div>
-    
+      <!-- 列表图 -->
       <div>
         <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
-          <Table  :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
+          <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
       <div>
@@ -184,7 +235,7 @@
   import modalChart from './custom_modal.vue'
   import InfiniteLoading from 'vue-infinite-loading';
   import worksetModal from "./custom_workSet_modal.vue";
-  
+  import echarts from 'echarts';
   import $ from "jquery";
   import {
     mapState,
@@ -202,11 +253,29 @@
     name: "App",
     data() {
       return {
+        isBru:false,
+        bruIds:[],
+        bruStartX:0,
+        bruStartY:0,
+        prevKdown:null,
+        prevKup:null,
+        keyCount:0,
+        isSel:null,
+        ifWord:false,
+        ifBar:false,
+        WCheight:0,
+        WCWidth:0,
+        docWidth:0,
+        barWidth:0,
+        barHeight:0,
+        contentAnaWidth:0,
+        prevItems:[],
         mouseStartX:0,
         mouseStartY:0,
         mouseOn:false,
         colLgNum:4,
         colSmnum:3,
+        selDocItems:{},
         worksetData: [],
         worksetType: "",
         worksetFlag: 0,
@@ -228,9 +297,11 @@
         watchSelectCounter: 0,
         translateButton: false,
         deleteButton:false,
+        analysisButton:false,
         spinShow: false,
         markedItem: false,
         ifInfo: false,
+        contentAna:false,
         ContentHeight: 0,
         ContentHeightList: 0,
         netheight: 0,
@@ -635,23 +706,24 @@
         
       },
       netToContentData: function() {
-        
+        console.log(this.netToContentData)
         var mthis = this
         
-        if(this.netToContentData.contentIds.length ==0){
+        if(this.netToContentData.contentIds.ids.length ==0){
           console.log(0)
           mthis.items = []
           
-        }else if(this.netToContentData.contentIds.length>0){
+        }else if(this.netToContentData.contentIds.ids.length>0){
           mthis.spinShow = true
           console.log(1)
           mthis.items = []
-          let contentIds = this.netToContentData.contentIds
+          let contentIds = this.netToContentData.contentIds.ids
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
           'docIds': contentIds
         }).then(response => {
           let selectIds = []
-          mthis.items = response.body.data.map(item =>({
+          if(mthis.netToContentData.contentIds.type == 'push'){
+            mthis.items = response.body.data.map(item =>({
                 title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
@@ -662,76 +734,87 @@
                 check:true
               })
             );
+            for(let i=0;i<mthis.items.length;i++){
+              selectIds.push(mthis.items[i].id)
+            }
+            mthis.$store.commit('setSelectContentNodes', [{
+              ids: selectIds
+            }])
+            mthis.$store.commit('setContent2time',[{
+              ids:selectIds
+            }])
+          }else if(mthis.netToContentData.contentIds.type == 'search'){
+            mthis.items = response.body.data.map(item =>({
+                title: item.title,      
+                i_sn: item.i_sn, 
+                id: item.id,
+                text: item.text,
+                time: item.time,
+                from: item.from,     
+                img: "http://10.60.1.140/assets/images/content_node.png",
+                check:false
+              })
+            );
+          }
+          
           mthis.spinShow = false
           console.log(2)
-          for(let i=0;i<mthis.items.length;i++){
-            selectIds.push(mthis.items[i].id)
-          }
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: selectIds
-          }])
+          
+         
         })
         
         }
         
       },
       
-      contentTimeCondition: function(va) {
-        
+      'contentTimeCondition.type': function() {
         var mthis = this
-        if(va == null){
-          
-         $('.item-selected').removeClass('item-selected')
-         mthis.watchSelectCounter++;
-         
-        }else{
-        if (timer) {
-          clearTimeout(timer)
-        }
-        timer = setTimeout(function() {
-          mthis.page = 1
-          if (va.length === 2) {
-            // mthis.spinShow = true
-            
-            let stime = util.getTimestamp(va[0])
-            // let etime = util.getTimestamp(va[1])
-            let etime = util.getTimestamp(mthis.isLeapYear(va[1]))
-            // console.log(stime)
-            // console.log(etime)
-            
-            mthis.$http.get(mthis.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime).then(response => {
-              if (response.body.data.length > 0) {
-                // console.log(response.body)
-                
-                // $('.item-selected').removeClass('item-selected')
-                console.log(3)
-                mthis.items = response.body.data.map(item =>({
-                  title: item.title,      
-                  i_sn: item.i_sn, 
-                  id: item.id,
-                  text: item.text,
-                  time: item.time,
-                  from: item.from,     
-                  img: "http://10.60.1.140/assets/images/content_node.png",
-                  check:false
-                })
-              );
-                mthis.$store.commit('setSelectContentNodes', [{
-                  ids: []
-                }])
-              } else {
-                console.log(4)
-                mthis.items = []
-              }
-              mthis.spinShow = false
-            })
-          } else if (va.length === 1) {
-            // alert('aaa')
-          } else {
-            // alert('bbbb')
+        console.log(this.contentTimeCondition.type)
+        if(mthis.contentTimeCondition.type == 'cancel'){
+          mthis.items = mthis.prevItems;
+          let selIds = []
+          for(let i=0;i<mthis.items.length;i++){
+            selIds.push(mthis.items[i].id)
+            mthis.items[i].check = true
           }
-        }, 100);
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: selIds
+          }])
         }
+        if(mthis.contentTimeCondition.type == 'sel'){
+          if(mthis.contentTimeCondition.ids.length ==0){
+            mthis.items = mthis.prevItems;
+            let selIds = []
+            for(let i=0;i<mthis.items.length;i++){
+              selIds.push(mthis.items[i].id)
+              mthis.items[i].check = true
+            }
+            mthis.$store.commit('setSelectContentNodes', [{
+              ids: selIds
+            }])
+         }
+          if(mthis.contentTimeCondition.ids.length>0){
+            let items = []
+            for(var i of mthis.contentTimeCondition.ids){
+              for(var j in mthis.items){
+                if(i == mthis.items[j].id){
+                  items.push(mthis.items[j])
+                  }
+                }
+              }
+            for(var m=0;m<items.length;m++){
+              items[m].check = false
+            }
+            mthis.items = items
+            mthis.$store.commit('setSelectContentNodes', [{
+              ids: []
+            }])
+            }
+          
+        }
+        
+        
+          
       },
       searchContentResult: function(va) {
         var mthis = this
@@ -758,13 +841,13 @@
               })
             );
             console.log(mthis.items)
-            
+            mthis.prevItems = mthis.items
             if(response.body.data.length ==30){
               mthis.moreLoading = true
             }
             // console.log("datadatatdattatdtadt")
             // console.log(mthis.items)
-            mthis.data4 = []
+            // mthis.data4 = []
             // for(let i=0;i<mthis.items.length;i++){
             //   let itemList = {};
             //   itemList.title = mthis.items[i].title
@@ -780,6 +863,9 @@
             // mthis.showMore = true
             mthis.$store.commit('setSelectContentNodes', [{
               ids: []
+            }])
+            mthis.$store.commit('setContent2time',[{
+              ids:[]
             }])
           } else {
             // mthis.showMore = false
@@ -806,6 +892,9 @@
         var mthis = this;
         var Ele = document.getElementById('translatedDiv');
         var contentDiv = document.getElementById('contentInfo');
+        
+        mthis.WCheight = (parseInt(mthis.ContentHeightList.split('px')[0]) - 45) + 'px'
+        mthis.barHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) /2 -0.8) + 'px'
         if (Ele !== null) {
           Ele.style.height = mthis.ContentHeightList;
         }
@@ -816,6 +905,53 @@
     },
     props: ['contentData'],
     methods: {
+      keyD(e){
+        
+        var mthis = this;
+        if(mthis.keyCount<0){
+              mthis.keyCount = 0
+            }
+        if(e.code != mthis.prevKdown){
+            mthis.keyCount = mthis.keyCount + 1;
+            mthis.prevKdown = e.code
+          }
+       
+        if(mthis.$store.state.tmss === 'content') {
+          var e = event || window.event || arguments.callee.caller.arguments[0];
+          if(e && e.keyCode == 46 && (!e.shiftKey) && (!e.altKey) && (!e.ctrlKey)){
+            // delete
+            mthis.deleteNode()
+            mthis.clearBubble(e)
+          }
+          if(e.keyCode == 65 && (e.ctrlKey || e.metaKey) && (!e.shiftKey) && (!e.altKey)){
+            mthis.selectAll()
+            mthis.clearBubble(e)
+          }
+          
+        }
+        
+        
+      },
+      keyU(e){
+        
+        var mthis = this;
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(mthis.keyCount==1 && e && e.keyCode == 46){
+            // delete
+            
+            mthis.clearBubble(e)
+          }
+          if(mthis.keyCount==2 && e.keyCode == 65 && (e.ctrlKey || e.metaKey)){
+           
+            mthis.clearBubble(e)
+          }
+        if(e.code != mthis.prevKup){
+            mthis.keyCount = mthis.keyCount - 1;
+            mthis.prevKup = e.code
+          }
+        console.log('keyup')
+        console.log(mthis.keyCount)
+      },
       clearBubble(e) {
         if (e.stopPropagation) {
           e.stopPropagation();
@@ -849,14 +985,16 @@
         this.clearBubble(e)
         $(e.target).find('img').removeClass('imgHover')
       },
+      
       kuangxuan(e){
-        this.clearBubble(e)
-        console.log('downdown')
-        var mthis = this;
-        for(let m=0;m<mthis.items.length;m++){
-          mthis.items[m].check = false
-        }
+        
+        if(!this.showThumb) return;
         if (e.buttons !== 1 || e.which !== 1) return;
+        
+        this.isSel = true;
+        this.clearBubble(e);
+        this.bruIds= [];
+        var mthis = this;
         var selDivList = document.getElementsByClassName('docThunmsItem');
         for(let k =0;k<selDivList.length;k++){
                   $(selDivList[k]).off('mouseenter');
@@ -874,54 +1012,49 @@
         $('#contentchart').append(selOutDiv);
         $('#selOutDiv').append(selDiv);
         //  设置选框的初始位置
-        var startX = (e.x || e.clientX) ;
-        var startY = (e.y || e.clientY) -120 ;
+        mthis.bruStartX= (e.x || e.clientX) ;
+        mthis.bruStartY = (e.y || e.clientY) -120 ;
         // var startX = e.offsetX;
         // var startY = e.offsetY;
         
         
-        selDiv.style.left = startX + "px"; 
-        selDiv.style.top = startY + "px"; 
-        
-        // $selectBoxDashed.css({
-        //   left: startX + 'px',
-        //   top: startY + 'px',
-        // });
-        // console.log($selectBoxDashed.css('left'))
-              //  根据鼠标移动，设置选框宽高
+        selDiv.style.left = mthis.bruStartX + "px"; 
+        selDiv.style.top = mthis.bruStartY  + "px"; 
+      },
+      kuangmove(eventMove){
+        if(!this.isSel) return;
+        this.isBru = true;
+       
+        var mthis = this;
+        var selDiv = document.getElementById('selectDiv');
+        var selOutDiv = document.getElementById('selOutDiv');
+        var selDivList = document.getElementsByClassName('docThunmsItem');
         var _x = null;
         var _y = null;
-        var ids = [];
-        $('#contentchart').on('mousemove', function(eventMove) {
-                //  设置选框可见
+        
+        selOutDiv.style.display = 'block'
+        selDiv.style.display = 'block'
+        // selOutDiv.style.top = 0 
+        // selOutDiv.style.left = 0 
+        //  根据鼠标移动，设置选框的位置、宽高
+        _x = (eventMove.x || eventMove.clientX);
+        _y = (eventMove.y || eventMove.clientY) -120;
+        //  暂存选框的位置及宽高，用于将 select-item 选中
+        var _left = Math.min(_x, mthis.bruStartX);
+        var _top = Math.min(_y, mthis.bruStartY);
+        var _width = Math.abs(_x - mthis.bruStartX);
+        var _height = Math.abs(_y - mthis.bruStartY);
                 
-                console.log('movemove')
+        selDiv.style.left = _left + "px"; 
+        selDiv.style.top =  _top + "px"; 
+        selDiv.style.width = _width + "px"; 
+        selDiv.style.height =  _height + "px";
                 
-                // $selectBoxDashed.css('display', 'block');
-                selOutDiv.style.display = 'block'
-                selDiv.style.display = 'block'
-                // selOutDiv.style.top = 0 
-                // selOutDiv.style.left = 0 
-                //  根据鼠标移动，设置选框的位置、宽高
-                _x = (eventMove.x || eventMove.clientX);
-                _y = (eventMove.y || eventMove.clientY) -120;
-                //  暂存选框的位置及宽高，用于将 select-item 选中
-                var _left = Math.min(_x, startX);
-                var _top = Math.min(_y, startY);
-                var _width = Math.abs(_x - startX);
-                var _height = Math.abs(_y - startY);
-                
-                selDiv.style.left = _left + "px"; 
-                selDiv.style.top =  _top + "px"; 
-                selDiv.style.width = _width + "px"; 
-                selDiv.style.height =  _height + "px";
-                console.log(_width)
-                console.log(selDiv)
-                var _w = selDiv.offsetWidth, _h = selDiv.offsetHeight;
-                var _l = mthis.getOffset(selDiv)[0];
-                var _t = mthis.getOffset(selDiv)[1];
-                
-                for ( var i = 0; i < selDivList.length; i++) {
+        var _w = selDiv.offsetWidth, _h = selDiv.offsetHeight;
+        var _l = mthis.getOffset(selDiv)[0];
+        var _t = mthis.getOffset(selDiv)[1];
+        
+        for ( var i = 0; i < selDivList.length; i++) {
                   var sw =  mthis.getOffset(selDivList[i])[0];
                   var sh = mthis.getOffset(selDivList[i])[1];
                   var sl = selDivList[i].offsetWidth + sw ; 
@@ -932,7 +1065,7 @@
                       continue
                     }else{
                       mthis.items[i].check = true
-                      ids.push(mthis.items[i].id)
+                      mthis.bruIds.push(mthis.items[i].id)
                       
                     }
                     
@@ -941,41 +1074,42 @@
                     
                     if($(selDivList[i]).find('img').hasClass("item-selected")){
                       mthis.items[i].check = false
-                      let idx = ids.indexOf(mthis.items[i].id)
-                      ids.splice(idx,1)
+                      let idx = mthis.bruIds.indexOf(mthis.items[i].id)
+                      mthis.bruIds.splice(idx,1)
                     }
                   }
                 }
-                
-                
-                
-                
-                
-                //  清除事件冒泡、捕获
-                mthis.clearBubble(eventMove);
-              });
-            $(document).on('mouseup', function() {
-                $('#contentchart').off('mousemove');
-                
-                selOutDiv.style.display = 'none'
-                selDiv.style.display = 'none'
-                ids = util.unique(ids)
-                console.log(ids)
-                mthis.$store.commit('setSelectContentNodes', [{
-                  ids: ids
-                }])
-                console.log('upupupupup')
-                // $(selector).find('.temp-selected').find('.contentDiv').addClass('item-selected')
-                
-                $('#selectDiv').remove();
-                $('#selOutDiv').remove();
-                
-              });
-          
         
+        this.clearBubble(eventMove)
       },
-   
-      toSelIds(index,check,id,evt){
+      kuangup(e){
+        if(!this.showThumb) return;
+        this.isSel = false;
+        var mthis = this;
+        
+        var selDiv = document.getElementById('selectDiv');
+        var selOutDiv = document.getElementById('selOutDiv');
+        selOutDiv.style.display = 'none';
+        selDiv.style.display = 'none';
+        
+        if(this.isBru){
+          mthis.bruIds= util.unique(mthis.bruIds);
+          
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: mthis.bruIds
+          }])
+          mthis.$store.commit('setContent2time',[{
+            ids:mthis.bruIds
+          }])
+          mthis.isBru = false;
+        }
+        
+        $('#selectDiv').remove();
+        $('#selOutDiv').remove();
+        this.clearBubble(e)
+        $('#contentchart').off('mousemove');
+      },
+    toSelIds(index,check,id,evt){
         this.clearBubble(evt)
         
         clearTimeout(timerClick);
@@ -992,11 +1126,16 @@
           }
           if(ids.length>0){
             mthis.deleteButton = true
+            mthis.analysisButton = true
           }else{
             mthis.deleteButton = false
+            mthis.analysisButton = false
           }
           mthis.$store.commit('setSelectContentNodes', [{
             ids: ids
+          }])
+          mthis.$store.commit('setContent2time',[{
+            ids:ids
           }])
         },300)
         
@@ -1075,9 +1214,13 @@
           }
         }
         mthis.deleteButton = true
+        mthis.analysisButton = true
         mthis.$store.commit('setSelectContentNodes', [{
           ids: ids
         }])
+        mthis.$store.commit('setContent2time',[{
+            ids:ids
+          }])
 
         // let disselectDom = $('.contentDiv:not(.item-selected)')
         // disselectDom.addClass('item-selected')
@@ -1136,7 +1279,9 @@
           mthis.$store.commit('setSelectContentNodes', [{
             ids: []
           }])
-          
+          mthis.$store.commit('setContent2time',[{
+            ids:[]
+          }])
         }else{
           mthis.setMessage("请选择至少一篇文章")
         }
@@ -1449,7 +1594,9 @@
               mthis.$store.commit('setSelectContentNodes', [{
                 ids: selIds
               }])
-              
+              mthis.$store.commit('setContent2time',[{
+                ids:[]
+              }])
             }else{
               return
             }
@@ -1470,6 +1617,9 @@
         mthis.$store.commit('setSelectContentNodes', [{
           ids: selectList
         }])
+        mthis.$store.commit('setContent2time',[{
+            ids:selectList
+          }])
       },
       removeAll() {
         console.log(7)
@@ -1479,6 +1629,9 @@
         this.$store.commit('setSelectContentNodes', [{
           ids: []
         }])
+        this.$store.commit('setContent2time',[{
+            ids:[]
+          }])
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
@@ -1513,6 +1666,7 @@
         
       },
       toThumbnails(){
+        this.showList = false
         this.showThumb = true
         this.colLgNum = 3
         this.colSmnum = 4
@@ -1546,7 +1700,7 @@
               contentDiv.style.display = 'inline';
               contentDiv.style.borderRight = '2px #366674 solid';
               var data = response.body.data;
-              var translatedTitle = data.title;
+              var translatedTitle = data.human_title_translate;
               var translatedTime = util.transformPHPTimeMS(data.time);
               var translatedText = data.text.ch;
               var translatedHtml = /* "<div  id='translateContentInfo' class='scrollBarAble' style='height: 607px; overflow-y: scroll; width: 50%; border-right: 2px solid rgb(54, 102, 116);'>" */
@@ -1607,6 +1761,9 @@
               );
               mthis.$store.commit('setSelectContentNodes', [{
                 ids: []
+              }])
+              mthis.$store.commit('setContent2time',[{
+                ids:[]
               }])
               } else {
                 mthis.alertNotice('无匹配数据2', true)
@@ -1680,6 +1837,9 @@
                 console.log(14)
                 mthis.$store.commit('setSelectContentNodes', [{
                   ids: []
+                }])
+                mthis.$store.commit('setContent2time',[{
+                  ids:[]
                 }])
               } else {
                 mthis.setMessage('无匹配数据6')
@@ -1794,6 +1954,7 @@
                 // $('.item-selected').removeClass('item-selected')
                 console.log(20)
                 mthis.items = mthis.items.concat(nowItems)
+                mthis.prevItems = mthis.items
               } else {
                 // console.log('全部加载')
                 // $('.layer').show().delay(3000).fadeOut()
@@ -1814,18 +1975,25 @@
         
         
       },
-      changeDiv(){
+      hideContentDiv(flag){
         var mthis = this
-        mthis.ifInfo = false
-        this.$store.state.contentSelShowFlag = false
-        let selData = {}
-        selData.id = [];
-        selData.title = ''
-        console.log(selData)
-        this.$store.commit('setContentSelData',selData)
-        if(!this.showThumb){
-          mthis.toContentDiv()
+        if(flag ==1){
+          mthis.ifInfo = false
+          mthis.$store.state.contentSelShowFlag = false
+          let selData = {}
+          selData.id = [];
+          selData.title = ''
+          console.log(selData)
+          mthis.$store.commit('setContentSelData',selData)
+          if(!mthis.showThumb){
+            mthis.toContentDiv()
+          }
+        }else{
+          mthis.contentAna = false;
+          mthis.analysisButton = true
         }
+        mthis.$store.commit('setShowDocTime',true)
+        
       },
       toContentDiv() {
         
@@ -1835,6 +2003,7 @@
         this.showList = false
         this.showThumb = false
         this.ifInfo = false
+        this.contentAna = false
         var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
@@ -1891,6 +2060,236 @@
           //   this.REQUIRE = true;
           // });
         }
+      },
+      changeChart(flag){
+        var mthis = this
+        if(flag ==1){
+          mthis.ifWord = true;
+          mthis.ifBar = false
+        }else{
+          mthis.ifWord = false;
+          mthis.ifBar = true
+        }
+      },
+      showContentAna(){
+        var mthis = this
+        if(mthis.analysisButton){
+            mthis.contentAna = true;
+        // 控制时间轴不显示
+        mthis.$store.commit('setShowDocTime',false)
+        let selDocs = mthis.items.filter(item => item.check);
+        let contentIds = []
+        mthis.selDocItems = new Object();
+        for(let i=0;i<selDocs.length;i++){
+          contentIds.push(selDocs[i].id)
+        }
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
+          "nodeIds": contentIds,
+          "type":"document"
+        }).then(response =>{
+          if(response.body.code ==0){
+            console.log(response.body.data)
+            mthis.selDocItems = response.body.data[1]
+          }
+        })
+        // mthis.ifWord = true;
+        var worldCloudcharts=echarts.init(document.getElementById('worldCloud'));
+        var charts = echarts.init(document.getElementById('myChart'));
+        var worldCloudoption = new Object({
+          title: {
+ 			        text: '关键词分析',
+ 			        x: 'center',
+ 			        textStyle: {
+ 			            fontSize: 12,
+ 			            color:'#FFFFFF'
+ 			        }
+ 
+           },
+           tooltip: {
+ 			        show: true
+           },
+           series: [{
+ 			        name: '关键词分析',
+ 			        type: 'wordCloud',
+ 			        sizeRange: [10, 18],
+ 			        rotationRange: [0, 0],
+ 			        textPadding: 0,
+ 			        autoSize: {
+ 			            enable: true,
+ 			            minSize: 10
+ 			        },
+ 			        textStyle: {
+ 			            normal: {
+ 			                color: function() {
+ 			                    return 'rgb(' + [
+ 			                        Math.round(Math.random() * 160),
+ 			                        Math.round(Math.random() * 160),
+ 			                        Math.round(Math.random() * 160)
+ 			                    ].join(',') + ')';
+ 			                }
+ 			            },
+ 			            emphasis: {
+ 			                shadowBlur: 10,
+ 			                shadowColor: '#333'
+ 			            }
+ 			        },
+ 			 	}]
+          
+        })
+        var JosnList = [];
+ 
+        JosnList.push({
+            name: "Jayfee",
+            value: 520
+        }, {
+            name: "Nancy",
+            value: 520
+        }, {
+            name: "生活资源",
+            value: 520
+        }, {
+            name: "供热管理",
+            value: 520
+        }, {
+            name: "供气质量",
+            value: 520
+        }, {
+            name: "生活用水管理",
+            value: 520
+        }, {
+            name: "一次供水问题",
+            value: 520
+        }, {
+            name: "交通运输",
+            value: 520
+        }, {
+            name: "城市交通",
+            value: 520
+        }, {
+            name: "环境保护",
+            value: 520
+        }, {
+            name: "房地产管理",
+            value: 520
+        },  );
+        var colors = ['#66CDAA',  '#B8860B','#FF9080'];
+
+        var xData = function() {
+            var data = [];
+            for (var i = 1; i < 13; i++) {
+                data.push("地区"+i);
+            }
+            return data;
+        }();
+        var chartOption = new Object({
+          title: {
+            "text": "生产总值累计值\n",
+            subtext:"",
+            top:'12%',
+            "left": "10%",
+            "subtextStyle": {
+              "color": "#fff",
+              fontWeight:800,
+              fontSize:16
+            },
+            textStyle:{
+                "color": "#fff",
+              fontSize:28
+            }
+          },
+
+          backgroundColor: '#020306',
+          color: ['#4162ff', '#c78b42', '#CD3F2A', '#ff6e72', '#9692ff'],
+          tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'shadow'
+              }
+          },
+          legend: {
+              top:'14%',
+              right:'30%',
+              textStyle:{
+                  color:'#FFFFFF'
+              },
+              orient: 'vertical',
+              data: ['第一产业', '第二产业', '第三产业', '']
+          },
+          grid: {
+              left: '10%',
+              right: '30%',
+              bottom: '20%',
+              top: '27%',
+              containLabel: true,
+              z: 22
+          },
+          yAxis: [{
+              type: 'value',
+              splitLine: {
+                  show: false,
+                  lineStyle: {
+                      color: ['#f2f2f2']
+                  }
+              },
+              axisLine: {
+                      lineStyle: {
+                          color: '#0c3b71'
+                      }
+                  },
+                  axisLabel: {
+                      color: 'rgb(170,170,170)',
+                      formatter: '{value} '
+                  }
+          }],
+          xAxis: [{
+              type: 'category',
+              axisLine: {
+                  lineStyle: {
+                      color: '#0c3b71'
+                  }
+              },
+              axisLabel: {
+                  show: true,
+                  color: 'rgb(170,170,170)',
+                  fontSize:14
+              },
+              data:xData
+          }],
+          series: [{
+                  name: '第一产业',
+                  type: 'bar',
+                  stack: '总量',
+                  barWidth: '16px',
+                  data: [80, 212, 101, 110, 80, 212, 101, 120, 113, 101, 120, 113],
+                  // markArea: areaStyle
+              },
+              {
+                  name: '第二产业',
+                  type: 'bar',
+                  stack: '总量',
+                  data: [90, 232, 251, 212, 101, 110,212, 101, 110, 10,  120, 113],
+                  // markArea: areaStyle
+              },
+              {
+                  name: '第三产业',
+                  type: 'bar',
+                  stack: '总量',
+                  data: [90, 232, 231, 134, 190, 90, 232, 251, 212, 101, 110, 10],
+                  // markArea: areaStyle
+              },
+              
+            
+          ]
+        })
+        charts.setOption(chartOption)
+        worldCloudoption.series[0].data = JosnList;
+  
+        worldCloudcharts.setOption(worldCloudoption);
+        mthis.analysisButton = false
+        }else{
+          mthis.setMessage("请选择至少一篇文章")
+        }
+        
       },
       showContent(id,title) {
         clearTimeout(timerClick);
@@ -1959,7 +2358,11 @@
     },
     mounted() {
       var mthis = this
-      
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+      let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
+      mthis.WCWidth = wwWidth   + 'px'
+      mthis.docWidth = (wwWidth * 0.5) + 'px'
+      mthis.barWidth = (wwWidth - (parseInt(mthis.docWidth.split('px')[0]))) + 'px'
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
@@ -1975,6 +2378,8 @@
       window.px = "";
       window.py = "";
       window.divLength = 0;
+      
+    
       // this.initSelectBox('#contentchart')
       
       // // console.log($('#jiazaiDiv').offset())
@@ -1990,7 +2395,22 @@
       // },function(){
       //   clearTimeout(contentTimer);
       // });
-      
+      // $('#contentchart').on('keydown',function(e){
+      //   console.log('keydown')
+      //   if(mthis.$store.state.tmss === 'content') {
+      //       var e = event || window.event || arguments.callee.caller.arguments[0];
+      //       if (e && e.keyCode == 46) {
+      //         mthis.deleteNode()
+      //         e.preventDefault();
+      //         e.stopPropagation();
+      //       }
+      //       if (e.keyCode == 65 && e.ctrlKey) {
+      //         mthis.selectAll()
+      //         e.preventDefault();
+      //         e.stopPropagation();
+      //       }
+      //     }
+      // })
     }
   };
 </script>
@@ -2198,11 +2618,11 @@
       color:#668c8e;
       
     }
-  .ivu-table-wrapper {
+  /* .ivu-table-wrapper {
       border: none !important;
     }
     .ivu-table:before{background-color:none;}
-    .ivu-table:after{background-color:none;}
+    .ivu-table:after{background-color:none;} */
 
 </style>
 <style scoped>
@@ -2433,5 +2853,56 @@
     background-color: #003333;
 	  border: solid 2px #ccffff;
   }
- 
+ #contentWordCloud{
+   border-right:1px solid #336666;
+   border-left:1px solid #336666;
+   
+ }
+.e-title {
+    height: 30px;
+    background-color: rgba(51, 255, 255, 0.2);
+    border-top: solid 1px #366674;
+    border-bottom: solid 1px #366674;
+    display: flex;
+  }
+  .e-title-p {
+    height: 18px;
+    font-family: MicrosoftYaHei;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #ccffff;
+  }
+  .e-title-d {
+    width: 4px;
+    height: 16px;
+    background-color: #009999;
+    margin: 6px 6px;
+  }
+  .econtent {
+    display: flex;
+    height: auto;
+    min-height: 30px;
+  }
+  
+  .w5em {
+    width: 10em;
+    min-width: 5em;
+    margin: 0;
+  }
+  .tableLine>.econtent:nth-child(odd) {
+    background-color: rgba(51, 255, 255, 0.05);
+  }
+  .tableLine>.econtent:nth-child(odd):hover {
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+  .tableLine>.econtent:nth-child(even):hover {
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+  .rightIcon:hover{
+    opacity: 1;
+    cursor: pointer;
+  }
 </style>

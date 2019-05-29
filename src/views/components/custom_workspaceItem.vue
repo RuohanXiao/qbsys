@@ -328,6 +328,28 @@
             mthis.$store.commit('setGeoNoAreaDataGoInMap',noAreaIds);
           }
           
+        }else if(tmss == 'content'){
+          console.log(datas)
+          let contentObj = {
+            'type':'push',
+            'ids':[]
+          }
+          for(let i=0;i<datas.length;i++){
+            var data = datas[i];
+            var type = data.type;
+            if(type == 'document' || type == 'content'){
+              let ids = data.ids;
+              for(let j = 0; j < ids.length; j++){
+                let id = ids[j];
+                contentObj.ids.push(id);
+              }
+            }
+            if(contentObj.ids.length>0){
+              mthis.$store.commit('setNetToContentData',{
+                'contentIds':contentObj
+              });
+            }
+          }
         }
         
       },

@@ -1,7 +1,8 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId" @click="hideDiv()">
-    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
+    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" 
+    @click="onchangHeightCount" v-show="showDocTime"></Icon>
     <div :style="{height:'30px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <!-- <Col span="3"/> -->
@@ -57,6 +58,7 @@
 <script>
   import echarts from "echarts";
   import { mapState,mapMutations } from 'vuex'
+  import util from '../../util/tools'
   var timer = null
   export default {
     name: "",
@@ -112,7 +114,12 @@
         echartsShowStart:0,
         echartsShowEnd:100,
         curInt:null,
-        colorFlag:0
+        colorFlag:0,
+        selIdsArr:[],
+        sendDocIds:{
+          type:'',
+          ids:[]
+        }
 
       };
     },
@@ -135,9 +142,43 @@
       delSel(){
         alert('删除')
       },
+      query(){
+        var mthis = this
+        let docIds = util.getStorage("docIds",mthis.selIdsArr);
+        console.log(mthis.selIdsArr)
+        console.log(docIds)
+        
+        mthis.sendDocIds.type = 'sel'
+        mthis.sendDocIds.ids = docIds
+        mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
+      },
+      throttle(fn,delay,duration){
+        if(timer){
+          clearTimeout(timer)
+        }
+        let prev = new Date();
+        return function(){
+          var now = new Date();
+          
+          if(now - prev > duration){
+            
+            fn();
+            prev = now;
+            // clearTimeout(timer);
+          }else{
+            // clearTimeout(timer);
+            timer = setTimeout(function(){
+              
+              fn();
+              // prev = null;
+            },delay)
+          }
+        }
+      },
       toGeoAna(flag){
         if(flag==1){
           this.clcikShowDiv = false
+          this.$store.commit('setContentTimeOnlySel',true)
           console.log("click")
         }else{
           this.$store.commit('setContentTimeOnlySel',true)
@@ -161,8 +202,9 @@
           let cancelTime = []
           cancelTime.push(this.dataBySeries.date[0])
           cancelTime.push(this.dataBySeries.date[this.dataBySeries.date.length -1])
-          
-          this.$store.commit('setContentTimeCondition',cancelTime)
+          mthis.sendDocIds.type = 'cancel';
+          mthis.sendDocIds.ids = []
+          this.$store.commit('setContentTimeCondition',mthis.sendDocIds)
           this.colorFlag = 0;
           this.charts.setOption(this.option)
         }
@@ -349,7 +391,7 @@
           
               
           series: [{
-            name: "事件",
+            name: "文档",
             type: "bar",
             barGap:"-100%",
             // barWidth:'10px',
@@ -456,13 +498,12 @@
               
               mthis.timeTitle = '时间轴'
               let cancelTime = []
-              cancelTime.push(mthis.dataBySeries.date[0])
-              cancelTime.push(mthis.dataBySeries.date[mthis.dataBySeries.date.length -1])
-              console.log(mthis.dataBySeries.date)
-              console.log(cancelTime)
               
-              mthis.$store.commit('setContentTimeCondition',cancelTime)
-             
+              mthis.sendDocIds.type = 'cancel'
+              mthis.sendDocIds.ids = []
+              console.log(mthis.sendDocIds)
+              mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
+              
               mthis.isBrush = []
               mthis.boxSelShowDiv = false
               mthis.isDataZoom = false
@@ -482,21 +523,22 @@
             }
             mthis.timeTitle = mthis.dataBySeries.date[startAndEnd[0]] + ' 至 ' + mthis.dataBySeries.date[startAndEnd[1]]
             let timeArr = []
-            mthis.isBrush = timeArr
+            mthis.selIdsArr= []
+            mthis.selTimeArr = []
             
+            mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
+            mthis.selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
+            mthis.selIdsArr.push(startAndEnd[0])
+            mthis.selIdsArr.push(startAndEnd[1])
             // selTimeArr.push(mthis.dataBySeries.date[startAndEnd[0]])
             // selTimeArr.push(mthis.dataBySeries.date[startAndEnd[1]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[0]])
             timeArr.push(mthis.dataBySeries.date[params.batch[0].selected[0].dataIndex[(params.batch[0].selected[0].dataIndex.length) - 1]])
-            if(timer){
-              clearTimeout(timer)
+            
+            if(timeArr && mthis.selTimeArr[0] && mthis.selTimeArr[1]){
+              mthis.isBrush = timeArr
+              mthis.throttle(mthis.query,300,500)()
             }
-            timer = setTimeout(function(){
-               
-               mthis.$store.commit('setContentTimeCondition', timeArr)
-               console.log("#$################")
-               mthis.selectTime = true
-            },300)
            
           }
             
@@ -526,8 +568,12 @@
           mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
           mthis.colorFlag = 1;
           mthis.charts.setOption(mthis.option)
-         
-          mthis.$store.commit('setContentTimeCondition',timeArr)
+          let docIds = util.getStorage("docIds",params.dataIndex);
+          mthis.clickEventIds.ids = docIds
+          mthis.sendDocIds.type = 'sel'
+          mthis.sendDocIds.ids = docIds
+          mthis.$store.commit('setContentTimeCondition',mthis.sendDocIds)
+          console.log(docIds)
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -544,7 +590,11 @@
              mthis.clcikShowDiv = true
              mthis.clickdivLeft = event.clientX + "px"
              mthis.clickdivTop = event.clientY + 'px'
-            
+             let docIds = util.getStorage("docIds",params.dataIndex);
+             mthis.clickEventIds.ids = docIds
+             mthis.sendDocIds.type = 'sel'
+             mthis.sendDocIds.ids = docIds
+             mthis.$store.commit('setContentTimeCondition',mthis.sendDocIds)
             
           })
           wholeChart.oncontextmenu = function(){
@@ -617,7 +667,7 @@
       // this.changHeightCount++
     },
     computed:mapState ([
-      'split','splitWidth','tmss','conditionContent'
+      'split','splitWidth','tmss','conditionContent','content2time','showDocTime'
     ]),
     watch: {
       /* tmss: function(){
@@ -626,19 +676,49 @@
           mthis.changHeightCount++;
         }
       }, */
-      conditionContent: function(keyword) {
-        // 发起http请求,获取时间轴
-        // console.log("#########")
-        // console.log(this.conditionContent)
-        var mthis = this
-        this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword='+keyword).then(response => {
-          if(response.body.code === 0) {
-            mthis.dataBySeries.num = response.body.data.count
-            mthis.dataBySeries.date = response.body.data.time
-            mthis.loadEcharts(2)
-          }
-        })
+      'dataBySeries.date':{
+       
+        handler:function(newVal,oldVal){
+        
+          
+          this.dataBySeries.clickNum = new Array(newVal.length).fill(null)
+          
+        }
+
       },
+      content2time:function(){
+        var mthis = this;
+        if(this.content2time[0].ids.length>0){
+          mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+            "eventids":mthis.content2time[0].ids,
+            "typeLabel":"document"
+            }).then(response =>{
+              if(response.body.code ==0){
+                mthis.dataBySeries.date = response.body.data.time;
+                mthis.dataBySeries.num = response.body.data.count;
+                mthis.dataBySeries.clickNum = [];
+                mthis.loadEcharts(2);
+                util.writeStorage("docIds",response.body.data.ids)
+              }else{
+                console.log('服务器error')
+              }
+            })
+        }
+        if(this.content2time[0].ids.length ==0){
+          mthis.loadEcharts(4);
+        }
+      },
+      // conditionContent: function(keyword) {
+        
+      //   var mthis = this
+      //   this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword='+keyword).then(response => {
+      //     if(response.body.code === 0) {
+      //       mthis.dataBySeries.num = response.body.data.count
+      //       mthis.dataBySeries.date = response.body.data.time
+      //       mthis.loadEcharts(2)
+      //     }
+      //   })
+      // },
       split: function(va) {
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
