@@ -2075,6 +2075,7 @@ export default {
                     mthis.hide();
                 })
         },
+        //mapAddFeature
         startAnimation(feature) { 
             var mthis = this;
             if(feature.getGeometry().getType() !== 'MultiLineString'){
@@ -3321,7 +3322,10 @@ export default {
                         } else {  //若地图原有数据中没有该地点数据
                             var addevents = additem.get('Params');
                             addevents.forEach(function(event){
-                                mthis.geometrySelectedEventIds.push(event.id);
+                                var index = util.itemIndexInArr(event.id,mthis.geometrySelectedEventIds)
+                                if(index === -1){
+                                    mthis.geometrySelectedEventIds.push(event.id);
+                                }
                                 var mapEvents = mapFeature.get('Params');
                                 for(let i = 0; i < mapEvents.length; i++){
                                     if(event.id === mapEvents[i].id){
@@ -3391,9 +3395,39 @@ export default {
                     var addFeatures_Org = [];
                     var addFeatures_Event = [];
                     var eventGeoJson = response.body.data.Features;
-                    var addFeatures = (new GeoJSON()).readFeatures(eventGeoJson);
-                    for(let i = 0; i < addFeatures.length; i++){
-                        var feature= addFeatures[i];
+                    var addfeatures = (new GeoJSON()).readFeatures(eventGeoJson);
+
+
+
+
+                    /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+                        var layerId = mthis.AllLayerList_conf[key].layerId;
+                        var existFeatures = mthis.getLayerById(layerId).getSource().getFeatures();
+                        for(let j = 0; j < existFeatures.length; j++){
+                            mthis.setFeatureStatus(existFeatures[j],'die');
+                        }
+                    })
+                    mthis.AnimationFun = {};
+                    for(let i = 0; i < addfeatures.length; i++){
+                        var feature = addfeatures[i];
+                        var params = feature.get('Params');
+                        //num += params.length;
+                        if(feature.getGeometry().getType() === 'MultiLineString'){
+                            
+                            mthis.startAnimation(feature)
+                        }
+                        
+                        mthis.mapAddFeature(feature);
+                    }
+                    // var promptMess = '增加' + promptType + ': ' + num;
+                    // mthis.Message(promptMess);
+                    mthis.hide(); */
+
+
+
+
+                    for(let i = 0; i < addfeatures.length; i++){
+                        var feature= addfeatures[i];
                         var featureId = feature.getId();
                         var type = featureId.split('&')[0];
                         var num = feature.get("Params").length
@@ -3656,6 +3690,7 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
+            debugger
             var data = mthis.$store.state.netToGeoData;
             var ids = [];
             var keys = Object.keys(data);
