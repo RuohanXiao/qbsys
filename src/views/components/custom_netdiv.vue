@@ -2420,7 +2420,7 @@ export default {
                         $('#ringRightMenu').remove()
                         var overlayId = 'rightClickMenu_Area';
                         var ovdiv = document.createElement('div');
-                        ovdiv.style = 'width:400px;height:400px;';
+                        ovdiv.style = 'width:440px;height:440px;';
                         ovdiv.style.position = 'absolute';
                         ovdiv.style.top = event.pageY - 120 - 200 + "px";
                         ovdiv.style.left = event.pageX - 200 + "px";
@@ -2432,7 +2432,7 @@ export default {
                                 'name': '链向',
                                 'hasLeaf': true,
                                 'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': '',
                                 'icon': 'lianxiang.png',
                                 'disicon':'lianxiang_disable.png'
@@ -2443,7 +2443,7 @@ export default {
                                 'name': '聚合',
                                 'hasLeaf': false,
                                 'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': '',
                                 'icon': 'juhe.png',
                                 'disicon':'juhe_disable.png'
@@ -2453,7 +2453,7 @@ export default {
                                 'name': '暂无',
                                 'disable': true,
                                 'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.noItemInRightMenu',
                                 'icon': 'noclick.png',
                                 'disicon':'noclick_disable.png'
@@ -2464,7 +2464,7 @@ export default {
                                 'name': '删除',
                                 'hasLeaf': false,
                                 'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("remove")',
                                 'icon': 'shanchu.png',
                                 'disicon':'shanchu_disable.png'
@@ -2474,7 +2474,7 @@ export default {
                                 'disable': false,
                                 'name': '推送',
                                 'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': '',
                                 'icon': 'tuisong.png',
                                 'disicon':'tuisong_disable.png'
@@ -2484,7 +2484,7 @@ export default {
                                 'name': '路径',
                                 'disable': false,
                                 'hasLeaf': true,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': '',
                                 'icon': 'lujing.png',
                                 'disicon':'lujing_disable.png'
@@ -2494,7 +2494,7 @@ export default {
                                 'name': '共指',
                                 'disable': false,
                                 'hasLeaf': true,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': '',
                                 'icon': 'gongzhi.png',
                                 'disicon':'gongzhi_disable.png'
@@ -2505,7 +2505,7 @@ export default {
                                 'disable': false,
                                 'name': '关联',
                                 'hasLeaf': true,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': '',
                                 'icon': 'guanlian.png',
                                 'disicon':'guanlian_disable.png'
@@ -2516,7 +2516,7 @@ export default {
                                 'name': '实体',
                                 'hasLeaf': false,
                                 'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("expandNodeKnowledge")',
                                 'icon': 'guanlianshiti.png',
                                 'disicon':'guanlianshiti_disable.png'
@@ -2527,7 +2527,7 @@ export default {
                                 'name': '事件',
                                 'hasLeaf': false,
                                 'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("expandNodeEvent")',
                                 'icon': 'guanlianshijian.png',
                                 'disicon':'guanlianshijian_disable.png'
@@ -2538,7 +2538,7 @@ export default {
                                 'name': '文档',
                                 'hasLeaf': false,
                                 'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("expandNodeContent")',
                                 'icon': 'guanlianwendang.png',
                                 'disicon':'guanlianwendang_disable.png'
@@ -2549,7 +2549,7 @@ export default {
                                 'name': '实体',
                                 'hasLeaf': false,
                                 'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("gongzhiEnitiy")',
                                 'icon': 'gongzhishiti.png',
                                 'disicon':'gongzhishiti_disable.png'
@@ -2560,7 +2560,7 @@ export default {
                                 'name': '事件',
                                 'hasLeaf': false,
                                 'disable': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("gongzhiEvent")',
                                 'icon': 'gongzhishijian.png',
                                 'disicon':'gongzhishijian_disable.png'
@@ -2571,7 +2571,7 @@ export default {
                                 'name': '文档',
                                 'disable': false,
                                 'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("gongzhiDoc")',
                                 'icon': 'gongzhiwendang.png',
                                 'disicon':'gongzhiwendang_disable.png'
@@ -2582,7 +2582,7 @@ export default {
                                 'name': '关系',
                                 'disable': false,
                                 'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("showModalStepKnowledge")',
                                 'icon': 'zhishilujing.png',
                                 'disicon':'zhishilujing_disable.png'
@@ -2593,7 +2593,7 @@ export default {
                                 'name': '所有',
                                 'disable': false,
                                 'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("showModalStepAll")',
                                 'icon': 'quanbu.png',
                                 'disicon':'quanbu_disable.png'
@@ -2604,7 +2604,7 @@ export default {
                                 'name': '关系',
                                 'disable': false,
                                 'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("linkedKnowlage")',
                                 'icon': 'zhishilianxiang.png',
                                 'disicon':'zhishilianxiang_disable.png'
@@ -2615,7 +2615,7 @@ export default {
                                 'name': '所有',
                                 'disable': false,
                                 'hasLeaf': false,
-                                'color': "rgba(51,102,102,0.5)",
+                                'color': "rgba(0,51,51,0.98)",
                                 'backcall': 'mthis.triggerMethods("linkedKnowlageAll")',
                                 'icon': 'quanbu.png',
                                 'disicon':'quanbu_disable.png'

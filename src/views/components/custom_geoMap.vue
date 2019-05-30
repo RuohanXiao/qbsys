@@ -991,10 +991,10 @@ export default {
                 var feature = mthis.getLayerById("HLAreaLayer").getSource().getFeatureById(id)
                 var geometry = feature.getGeometry();
                 var geometryStr = new GeoJSON().writeGeometry(geometry)
-                geometryList.push(geometryStr);
-                
+                //geometryList.push(geometryStr);
+                mthis.orgsSpatialQuery([geometryStr],'Event');
             }
-            mthis.orgsSpatialQuery(geometryList,'Event');
+            //mthis.orgsSpatialQuery(geometryList,'Event');
             mthis.deleteRightMenu();
         },
         rightClickOrg(){
@@ -1106,18 +1106,18 @@ export default {
             ovdiv.id='ringRightMenu';
             var disableIds = mthis.judgeRightMenuaDisable();
             var config = [
-                {'Id':1,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
-                {'Id':2,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
-                {'Id':3,'parentId':0,'name':'删除','disable':false,'hasLeaf':true,'color':"rgba(0,51,51,0.9)",'backcall':'','icon':'delete.png','disicon':'delete_disable.png'},
-                {'Id':4,'parentId':0,'name':'推送','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.pushToNet','icon':'pushnet.png','disicon':'pushnet_disable.png'},
-                {'Id':5,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
-                {'Id':6,'parentId':0,'name':'探索','disable':false,'hasLeaf':true,'color':"rgba(0,51,51,0.9)",'backcall':'','icon':'explor.png','disicon':'explor_disable.png'},
-                {'Id':601,'parentId':6,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png','disicon':'explorevent_disable.png'},
-                {'Id':602,'parentId':6,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png','disicon':'exploreorg_disable.png'},
-                {'Id':603,'parentId':6,'name':'地理目标','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickGeoTar','icon':'exploregoal.png','disicon':'exploregoal_disable.png'},
-                {'Id':604,'parentId':6,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickOrg','icon':'quanbu.png','disicon':'quanbu_disable.png'},
-                {'Id':301,'parentId':3,'name':'所选节点','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.deletePoints','icon':'deletenodes.png','disicon':'deletenodes_disable.png'},
-                {'Id':302,'parentId':3,'name':'所选区域','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickDM','icon':'deletearea.png','disicon':'deletearea_disable.png'},
+                {'Id':1,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
+                {'Id':2,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
+                {'Id':3,'parentId':0,'name':'删除','disable':false,'hasLeaf':true,'color':"rgba(0,51,51,0.98)",'backcall':'','icon':'delete.png','disicon':'delete_disable.png'},
+                {'Id':4,'parentId':0,'name':'推送','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.pushToNet','icon':'pushnet.png','disicon':'pushnet_disable.png'},
+                {'Id':5,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
+                {'Id':6,'parentId':0,'name':'探索','disable':false,'hasLeaf':true,'color':"rgba(0,51,51,0.98)",'backcall':'','icon':'explor.png','disicon':'explor_disable.png'},
+                {'Id':601,'parentId':6,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png','disicon':'explorevent_disable.png'},
+                {'Id':602,'parentId':6,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png','disicon':'exploreorg_disable.png'},
+                {'Id':603,'parentId':6,'name':'地理目标','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickGeoTar','icon':'exploregoal.png','disicon':'exploregoal_disable.png'},
+                {'Id':604,'parentId':6,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickOrg','icon':'quanbu.png','disicon':'quanbu_disable.png'},
+                {'Id':301,'parentId':3,'name':'所选节点','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.deletePoints','icon':'deletenodes.png','disicon':'deletenodes_disable.png'},
+                {'Id':302,'parentId':3,'name':'所选区域','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickDM','icon':'deletearea.png','disicon':'deletearea_disable.png'},
             ]
             for(let i = 0; i < disableIds.length; i++){
                 var id = disableIds[i];
@@ -2075,6 +2075,7 @@ export default {
                     mthis.hide();
                 })
         },
+        //mapAddFeature
         startAnimation(feature) { 
             var mthis = this;
             if(feature.getGeometry().getType() !== 'MultiLineString'){
@@ -3321,7 +3322,10 @@ export default {
                         } else {  //若地图原有数据中没有该地点数据
                             var addevents = additem.get('Params');
                             addevents.forEach(function(event){
-                                mthis.geometrySelectedEventIds.push(event.id);
+                                var index = util.itemIndexInArr(event.id,mthis.geometrySelectedEventIds)
+                                if(index === -1){
+                                    mthis.geometrySelectedEventIds.push(event.id);
+                                }
                                 var mapEvents = mapFeature.get('Params');
                                 for(let i = 0; i < mapEvents.length; i++){
                                     if(event.id === mapEvents[i].id){
@@ -3391,9 +3395,39 @@ export default {
                     var addFeatures_Org = [];
                     var addFeatures_Event = [];
                     var eventGeoJson = response.body.data.Features;
-                    var addFeatures = (new GeoJSON()).readFeatures(eventGeoJson);
-                    for(let i = 0; i < addFeatures.length; i++){
-                        var feature= addFeatures[i];
+                    var addfeatures = (new GeoJSON()).readFeatures(eventGeoJson);
+
+
+
+
+                    /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+                        var layerId = mthis.AllLayerList_conf[key].layerId;
+                        var existFeatures = mthis.getLayerById(layerId).getSource().getFeatures();
+                        for(let j = 0; j < existFeatures.length; j++){
+                            mthis.setFeatureStatus(existFeatures[j],'die');
+                        }
+                    })
+                    mthis.AnimationFun = {};
+                    for(let i = 0; i < addfeatures.length; i++){
+                        var feature = addfeatures[i];
+                        var params = feature.get('Params');
+                        //num += params.length;
+                        if(feature.getGeometry().getType() === 'MultiLineString'){
+                            
+                            mthis.startAnimation(feature)
+                        }
+                        
+                        mthis.mapAddFeature(feature);
+                    }
+                    // var promptMess = '增加' + promptType + ': ' + num;
+                    // mthis.Message(promptMess);
+                    mthis.hide(); */
+
+
+
+
+                    for(let i = 0; i < addfeatures.length; i++){
+                        var feature= addfeatures[i];
                         var featureId = feature.getId();
                         var type = featureId.split('&')[0];
                         var num = feature.get("Params").length
@@ -3656,6 +3690,7 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
+            debugger
             var data = mthis.$store.state.netToGeoData;
             var ids = [];
             var keys = Object.keys(data);
