@@ -1,97 +1,14 @@
 <template>
-<div :style="{height:nh}" tabindex="1" @keydown="keyD" style="outline:none;">
-    <div :style="{height:nh,backgroundColor:'rgba(0,0,0,0)',position:'absolute',zIndex: zIndex,top:0,width:'99%',margin:'0 10px'}">
-        <Spin size="large" fix v-if="spinShow"></Spin>
-    </div>
-    <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',border:'solid 1px #336666'}" id="net">
-        <div class="divStyle">
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div :class="ifhasNode? 'button-div':'button-div-disable'"  @click="newCanvans">
-                    <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">清空画布</p>
-                </div>
-            </Tooltip>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('removeOther')">
-                    <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">反选节点</p>
-                </div>
-            </Tooltip>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div :class="ifhasNode? 'button-div': 'button-div-disable'" @click="triggerMethods('selectAll')">
-                    <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">全选节点</p>
-                </div>
-            </Tooltip>
-            <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                  <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('remove')">
-                    <Icon class="icon iconfont icon-delete-point DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">删除</p>
-                  </div>
-                </Tooltip>
-                <Tooltip placement="bottom" content="（Ctrl+A）" :delay="ifSelectNode?1000:1000000">
-                  <div :class="ifSelectNode? 'button-div': 'button-div-disable'">
-                    <Icon class="icon iconfont icon-juhe DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">聚合</p>
-                  </div>
-                </Tooltip> -->
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="openCreateGroupModal">
-                    <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">创建集合</p>
-                </div>
-            </Tooltip>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="nailNode">
-                    <Icon class="icon iconfont icon-nail-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">锁定节点</p>
-                </div>
-            </Tooltip>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div class="button-div" @click="unnailNode">
-                    <Icon class="icon iconfont icon-nail-copy-copy-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">解锁节点</p>
-                </div>
-            </Tooltip>
-            <div class="divSplitLine"></div>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('square')">
-                    <Icon class="icon iconfont icon-grid DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">矩形</p>
-                </div>
-            </Tooltip>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('circleShape')">
-                    <Icon class="icon iconfont icon-circle DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
-                    <p class="img-content">环形</p>
-                </div>
-            </Tooltip>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('star')">
-                    <Icon class="icon iconfont icon-star1 DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
-                    <p class="img-content">星形</p>
-                </div>
-            </Tooltip>
-            <Tooltip placement="top" content="（Ctrl+A）" :delay="1000">
-                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('hierarchy')">
-                    <Icon class="icon iconfont icon-expand DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">层级</p>
-                </div>
-            </Tooltip>
-            <Tooltip placement="top" content="（Ctrl+A）" :delay="1000">
-                <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('jutuan')">
-                    <Icon class="icon iconfont icon-jutuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                    <p class="img-content">聚团</p>
-                </div>
-            </Tooltip>
-            <!--
-                <div class="divSplitLine"></div>
-                <Tooltip placement="top" content="（Ctrl+A）" :delay="5000">
-                  <Dropdown :visible="expandVisible">
-                    <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @mouseover="addExpandTimer()" @mouseout="stopExpandTimer()" @click="triggerMethods('expandNodeKnowledge')" v-if="(expandFlag=='knowledge')">
-                      <Icon class="icon iconfont icon-guanlianshiti DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                      <Icon class="icon iconfont icon-sanjiao-smaller DVSL-bar-btn-new DVSL-bar-btn-back downIcon" size="5"></Icon>
-                      <p class="img-content">关联实体</p>
+    <div :style="{height:nh}">
+        <div :style="{height:nh,backgroundColor:'rgba(0,0,0,0)',position:'absolute',zIndex: zIndex,top:0,width:'99%',margin:'0 10px'}">
+            <Spin size="large" fix v-if="spinShow"></Spin>
+        </div>
+        <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',border:'solid 1px #336666'}" id="net">
+            <div class="divStyle">
+                <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+                    <div :class="ifhasNode? 'button-div':'button-div-disable'" @click="newCanvans">
+                        <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                        <p class="img-content">清空画布</p>
                     </div>
                 </Tooltip>
                 <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
