@@ -219,7 +219,6 @@
           'nodeIds': mthis.selectNetNodes[0].ids,
           'type':'net'
           }).then(response => {
-            debugger
               mthis.staticsDatas = response.body.data;
               mthis.openPanelNames = [];
               if(!mthis.staticsDatas){

@@ -675,7 +675,6 @@ export default {
             }
         },
         shortAllPath(ids) {
-            debugger;
             var mthis = this
             if (ids.length > 1) {
                 mthis.$http
