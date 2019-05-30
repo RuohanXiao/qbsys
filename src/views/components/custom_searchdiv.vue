@@ -6,8 +6,7 @@
           v-show="type==='net'" placeholder='' :remote='true' loading-text='加载中···' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
           <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
             <Option v-for="(option, index) in opt1.data" :title="option.label" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
-              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
-              <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)" />
+              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src='option.img' />
               <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
           </OptionGroup>
         </Select>
@@ -46,6 +45,7 @@
   export default {
     data() {
       return {
+        autoImg: '',
         begeoSea: true,
         loading1: false,
         loading2: false,
@@ -332,6 +332,36 @@
             break;
         }
       },
+      defaultImg(type, img) {
+        if(img){
+        var mthis = this
+          if(!util.checkImgExists(img)){
+            if (this.myMap1.get(type) === 'entity') {
+               if (type === 'administrative') {
+                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/searchAdmin.png'
+              } else if (type === 'human') {
+                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/searchHuman.png'
+              } else if (type === 'organization') {
+                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/searchOrg.png'
+              } else if (type === 'weapon') {
+                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/weapon.png'
+              } else {
+                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image.png'
+              }
+            } else if (this.myMap1.get(type) === 'event') {
+              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
+            } else if (this.myMap1.get(type) === 'document') {
+              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
+            } else {
+              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image1.png'
+            }
+          } else{
+            return img
+          }
+        }else{
+          return ''
+        }
+      },
       errorImg(item) {
         if (item.type === 'administrative') {
           this.src = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
@@ -399,14 +429,14 @@
                       } else {
                         item.shortname = item.name
                       }
+                      let idString = item.id
                       optionListArr.push({
                         "label": item.name,
                         "labelShort": item.shortname,
                         "labelvalue": "(" + mthis.returnCHname(item.type) + ')',
                         "value": item.name,
                         "id": item.id,
-                        // "img": mthis.errorImg1(item),
-                        "img": item.img,
+                        "img": mthis.defaultImg(item.type,'http://10.60.1.143/pic_lib/padded/'+idString+'.png'),
                         "type": item.type,
                         "itemType": 'entity'
                       })
@@ -430,7 +460,6 @@
                         "labelvalue": '(集合)',
                         "value": item.name,
                         "id": item.id,
-                        // "img": util.checkImgExists(item.img) ? (item.img) : ('http://10.60.1.140/assets/images/default.png'),
                         "img": 'http://10.60.1.140/assets/images/searchSet.png',
                         "type": item.type,
                         "itemType": 'set'
@@ -468,6 +497,7 @@
                   setTimeout(function() {
                     mthis.loading1 = false;
                     mthis.options1 = optionsTemp
+                    console.log(mthis.options1)
                   }, 200);
                 } else {}
               })
@@ -744,6 +774,16 @@
             name: items.getElementsByTagName("chname")[0].textContent,
             img: items.getElementsByTagName("img")[0].textContent
           });
+        }
+      }
+       var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
+      var entityMainType = ob1.getElementsByTagName("entityMainType");
+      mthis.myMap1 = new Map();
+      for (var i = 0; i < entityMainType.length; i++) {
+        let typeName = entityMainType[i].children[0].textContent;
+        let typeChild = []
+        for (var n = 0; n < entityMainType[i].children[1].children.length; n++) {
+          mthis.myMap1.set(entityMainType[i].children[1].children[n].textContent, typeName)
         }
       }
     }

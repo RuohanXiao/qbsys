@@ -3,7 +3,7 @@
     <!-- topdiv 头像, 名字, 简介 -->
     <div :style="{display:'flex'}">
       <div class='avatarStyle'>
-        <Avatar class="circle-img" :src="detailData.img" :onerror="defaultImg(detailData.entity_type,detailData.img)" :style="{width:'50px',height:'50px'}" />
+        <Avatar class="circle-img" :src='autoImg' :onerror="defaultImg(detailData.entity_type,detailData.img)" :style="{width:'50px',height:'50px'}" />
       </div>
       <div class="contentStyle">
         <div>
@@ -67,6 +67,7 @@
   export default {
     data() {
       return {
+        autoImg:'',
         nowSelData:null,
         ifShown: true,
         value1: ['1', '2', '3', '4'],
@@ -117,30 +118,37 @@
         },[]);
       },
       defaultImg(type, img) {
+        // console.log('==================')
+        // console.log(util.checkImgExists(img))
+        if(img){
         var mthis = this
         if (mthis.eventdata[0]) {
-          // console.log('==============defaultImg=====================')
-          // console.log(type)
-          // console.log(img)
-          if (this.myMap.get(type) === 'entity') {
-            if (mthis.eventdata[0].entity_type === 'administrative') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/location.png'
-            } else if (mthis.eventdata[0].entity_type === 'human') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/People.png'
-            } else if (mthis.eventdata[0].entity_type === 'organization') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/Organization.png'
-            } else if (mthis.eventdata[0].entity_type === 'weapon') {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/weapon.png'
+          if(!util.checkImgExists(img)){
+            if (this.myMap.get(type) === 'entity') {
+              if (mthis.eventdata[0].entity_type === 'administrative') {
+                return 'http://10.60.1.140/assets/images/location.png'
+              } else if (mthis.eventdata[0].entity_type === 'human') {
+                return 'http://10.60.1.140/assets/images/People.png'
+              } else if (mthis.eventdata[0].entity_type === 'organization') {
+                return 'http://10.60.1.140/assets/images/Organization.png'
+              } else if (mthis.eventdata[0].entity_type === 'weapon') {
+                return 'http://10.60.1.140/assets/images/weapon.png'
+              } else {
+                return 'http://10.60.1.140/assets/images/image1.png'
+              }
+            } else if (this.myMap.get(type) === 'event') {
+              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
+            } else if (this.myMap.get(type) === 'document') {
+              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
             } else {
-              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image1.png'
+              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image1.png'
             }
-          } else if (this.myMap.get(type) === 'event') {
-            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
-          } else if (this.myMap.get(type) === 'document') {
-            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
-          } else {
-            return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image1.png'
+          } else{
+            return img
           }
+        }
+        }else{
+          return ''
         }
       },
       changeDetailDiv(id, type, ob) {
@@ -200,6 +208,7 @@
     },
     watch: {
       detailData: function() {
+        this.autoImg=this.defaultImg(this.detailData.entity_type,'http://10.60.1.143/pic_lib/padded/'+this.detailData.id+'.png')
       },
       eventdata: function() {
         var mthis = this
@@ -340,8 +349,8 @@
         });
       }
       this.nowSelData = this.eventdata;
-      console.log(this.eventdata)
-      console.log(this.nowSelData)
+      // console.log(this.eventdata)
+      // console.log(this.nowSelData)
       
     }
   }

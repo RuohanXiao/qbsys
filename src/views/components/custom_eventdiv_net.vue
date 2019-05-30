@@ -120,8 +120,6 @@
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
       selectionIdByType: function() {
-        // console.log('00000000000----------------------')
-        // console.log(this.selectionIdByType)
         var mthis = this;
         mthis.evetdataFlag = false
         if (mthis.selectNetNodes[0].ids.length > 0) {
@@ -132,14 +130,8 @@
               let nodeOb = {}
               nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
-                // mthis.evetdata = response.body.data[0].nodes
-                // console.log('\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\')
-                // console.log( mthis.evetdata)
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                // console.log( mthis.evetdata)
                 mthis.evetdataFlag = true
-                // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
-                // mthis.$set(mthis.evetdata,0,response.body.data[0].nodes)
               })
             }
             if (mthis.selectionIdByType.eventIds.length > 0) {
@@ -169,12 +161,12 @@
                 mthis.evetdataFlag = true
               })
             }
-            if (mthis.selectionIdByType.contentIds.length > 0) {
+            if (mthis.selectionIdByType.contentIds.ids.length > 0) {
               // let nodeIdsArry = mthis.selectNetNodes[0].ids.map(item => {
               //   return item.id;
               // });
               let docOb = {}
-              docOb.docIds = mthis.selectionIdByType.contentIds
+              docOb.docIds = mthis.selectionIdByType.contentIds.ids
               // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
               //   // mthis.evetdataFlag = true
               //   // mthis.evetdata = response.body.data[0].nodes
@@ -199,6 +191,8 @@
           mthis.evetdata =  []
           mthis.evetdataFlag = false
         }
+        console.log('-------------------evetdata-----------------')
+        console.log(mthis.evetdata)
       },
       singlePerson: function() {
         this.single = this.singlePerson

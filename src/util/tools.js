@@ -47,6 +47,8 @@ export default {
     var ImgObj = new Image(); //判断图片是否存在  
     ImgObj.src = imgurl;
     //没有图片，则返回-1  
+    console.log(imgurl)
+    console.log(ImgObj)
     if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
       return true;
     } else {
