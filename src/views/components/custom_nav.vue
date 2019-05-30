@@ -1,6 +1,6 @@
 <template>
   <div class='rightNav'  :style="{height:contentHeight,display:'flex'}">
-    <div class="navStyleTitle right" :style="{position: 'initial',zIndex: '98',width:'2vw',bottom:'1px',display:'flex'}">
+    <div class="navStyleTitle right" :style="{position: 'initial',zIndex: '98',width:'40px',bottom:'1px',display:'flex'}">
       <div class="floater">
         <div :style="{height:'5vh',margin:'0 0 3vh 0'}" class="right1" @click="showGongzuoji">
           <Icon class="icon iconfont icon-file DVSL-bar-btn DVSL-bar-btn-back" size="26" />

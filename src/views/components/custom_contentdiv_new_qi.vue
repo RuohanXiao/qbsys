@@ -108,7 +108,7 @@
              @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup">
               <Row type="flex" justify="start">
 
-                <Col :sm="colSmnum" :lg="colLgNum" align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
+                <Col :sm="colSmnum" :lg="colLgNum" :md='colMdNum' align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
                 <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}"> -->
                   <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click='toSelIds(index,item.check,item.id,$event)' 
                   @dblclick="showContent(item.id,item.title)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
@@ -274,7 +274,8 @@
         mouseStartY:0,
         mouseOn:false,
         colLgNum:4,
-        colSmnum:3,
+        colMdNum:6,
+        colSmnum:8,
         selDocItems:{},
         worksetData: [],
         worksetType: "",
@@ -1204,6 +1205,10 @@
       },
       selectAll(){
         var mthis = this
+        if(mthis.items.length==0){
+          mthis.setMessage('该页面没有文档')
+          return
+        }
         let ids = []
         for(let i=0;i<mthis.items.length;i++){
           ids.push(mthis.items[i].id)
@@ -1669,8 +1674,8 @@
         this.showList = false
         this.showThumb = true
         this.colLgNum = 3
-        this.colSmnum = 4
-        
+        this.colSmnum = 6
+        this.colMdNum= 4 
        
       },
       contentTranslate() {
@@ -1700,9 +1705,9 @@
               contentDiv.style.display = 'inline';
               contentDiv.style.borderRight = '2px #366674 solid';
               var data = response.body.data;
-              var translatedTitle = data.human_title_translate;
+              var translatedTitle = data.title_translate;
               var translatedTime = util.transformPHPTimeMS(data.time);
-              var translatedText = data.text.ch;
+              var translatedText = data.text;
               var translatedHtml = /* "<div  id='translateContentInfo' class='scrollBarAble' style='height: 607px; overflow-y: scroll; width: 50%; border-right: 2px solid rgb(54, 102, 116);'>" */
                 "<h2 id='translateContentsTitle'class='contentInfoTitle'>" + translatedTitle +
                 "</h2> <p id='translateContentsTime' class='contentInfoTime'>" + translatedTime +
@@ -1998,7 +2003,8 @@
       toContentDiv() {
         
         this.colLgNum = 4
-        this.colSmnum = 3
+        this.colSmnum = 8
+        this.colMdNum = 6
         this.translateButton = false
         this.showList = false
         this.showThumb = false
@@ -2313,6 +2319,7 @@
         // });
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-id/?idValue=' + id).then(response => {
           // mthis.printer(response.body.data[0].text, 'contents', 'pointer')
+         
           document.getElementById('contentInfo').value = response.body.data[0].id;
           var text = response.body.data[0].text.replace(/(\r\n)|(\n)/g, '<br>');
           document.getElementById('contents').innerHTML = text
