@@ -175,7 +175,7 @@ top: 232px;
 </style>
 
 <template>
-    <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv'>
+    <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv' tabindex="1" @keydown="keyD" style="outline:none;">
         <imgItemOpera :changeButton='changeButtonParam' @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
@@ -378,6 +378,34 @@ export default {
         mthis.geoWidth=document.documentElement.clientWidth * this.$store.state.split_geo - 20 + 'px';
     },
     methods:{
+         keyD(e){
+            var mthis = this;
+            if(mthis.$store.state.tmss === 'geo') {
+                var e = event || window.event || arguments.callee.caller.arguments[0];
+                if(e && e.keyCode == 46 && (!e.shiftKey) && (!e.altKey) && (!e.ctrlKey)){
+                    // delete
+                    mthis.deletePoints()
+                    mthis.clearBubble(e)
+                }
+                if(e.keyCode == 65 && (e.ctrlKey || e.metaKey) && (!e.shiftKey) && (!e.altKey)){
+                    //   ctrl+A
+                    mthis.selectAll()
+                    mthis.clearBubble(e)
+                }
+            }
+        },
+        clearBubble(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            } else {
+                e.cancelBubble = true;
+            }
+            if (e.preventDefault) {
+                e.preventDefault();
+            } else {
+                e.returnValue = false;
+            }
+        },
         setBlur(){
             var mthis = this;
             var radius = document.getElementById('blur').value;
@@ -963,10 +991,10 @@ export default {
                 var feature = mthis.getLayerById("HLAreaLayer").getSource().getFeatureById(id)
                 var geometry = feature.getGeometry();
                 var geometryStr = new GeoJSON().writeGeometry(geometry)
-                geometryList.push(geometryStr);
-                
+                //geometryList.push(geometryStr);
+                mthis.orgsSpatialQuery([geometryStr],'Event');
             }
-            mthis.orgsSpatialQuery(geometryList,'Event');
+            //mthis.orgsSpatialQuery(geometryList,'Event');
             mthis.deleteRightMenu();
         },
         rightClickOrg(){
@@ -1078,18 +1106,18 @@ export default {
             ovdiv.id='ringRightMenu';
             var disableIds = mthis.judgeRightMenuaDisable();
             var config = [
-                {'Id':1,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
-                {'Id':2,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
-                {'Id':3,'parentId':0,'name':'删除','disable':false,'hasLeaf':true,'color':"rgba(0,51,51,0.9)",'backcall':'','icon':'delete.png','disicon':'delete_disable.png'},
-                {'Id':4,'parentId':0,'name':'推送','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.pushToNet','icon':'pushnet.png','disicon':'pushnet_disable.png'},
-                {'Id':5,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
-                {'Id':6,'parentId':0,'name':'探索','disable':false,'hasLeaf':true,'color':"rgba(0,51,51,0.9)",'backcall':'','icon':'explor.png','disicon':'explor_disable.png'},
-                {'Id':601,'parentId':6,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png','disicon':'explorevent_disable.png'},
-                {'Id':602,'parentId':6,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png','disicon':'exploreorg_disable.png'},
-                {'Id':603,'parentId':6,'name':'地理目标','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickGeoTar','icon':'exploregoal.png','disicon':'exploregoal_disable.png'},
-                {'Id':604,'parentId':6,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickOrg','icon':'quanbu.png','disicon':'quanbu_disable.png'},
-                {'Id':301,'parentId':3,'name':'所选节点','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.deletePoints','icon':'deletenodes.png','disicon':'deletenodes_disable.png'},
-                {'Id':302,'parentId':3,'name':'所选区域','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.9)",'backcall':'mthis.rightClickDM','icon':'deletearea.png','disicon':'deletearea_disable.png'},
+                {'Id':1,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
+                {'Id':2,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
+                {'Id':3,'parentId':0,'name':'删除','disable':false,'hasLeaf':true,'color':"rgba(0,51,51,0.98)",'backcall':'','icon':'delete.png','disicon':'delete_disable.png'},
+                {'Id':4,'parentId':0,'name':'推送','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.pushToNet','icon':'pushnet.png','disicon':'pushnet_disable.png'},
+                {'Id':5,'parentId':0,'name':'暂无','disable':true,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.noItemInRightMenu','icon':'noclick.png','disicon':'noclick_disable.png'},
+                {'Id':6,'parentId':0,'name':'探索','disable':false,'hasLeaf':true,'color':"rgba(0,51,51,0.98)",'backcall':'','icon':'explor.png','disicon':'explor_disable.png'},
+                {'Id':601,'parentId':6,'name':'事件','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickEvent','icon':'explorevent.png','disicon':'explorevent_disable.png'},
+                {'Id':602,'parentId':6,'name':'组织','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickOrg','icon':'exploreorg.png','disicon':'exploreorg_disable.png'},
+                {'Id':603,'parentId':6,'name':'地理目标','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickGeoTar','icon':'exploregoal.png','disicon':'exploregoal_disable.png'},
+                {'Id':604,'parentId':6,'name':'全部','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickOrg','icon':'quanbu.png','disicon':'quanbu_disable.png'},
+                {'Id':301,'parentId':3,'name':'所选节点','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.deletePoints','icon':'deletenodes.png','disicon':'deletenodes_disable.png'},
+                {'Id':302,'parentId':3,'name':'所选区域','disable':false,'hasLeaf':false,'color':"rgba(0,51,51,0.98)",'backcall':'mthis.rightClickDM','icon':'deletearea.png','disicon':'deletearea_disable.png'},
             ]
             for(let i = 0; i < disableIds.length; i++){
                 var id = disableIds[i];

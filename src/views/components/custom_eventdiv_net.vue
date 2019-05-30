@@ -219,6 +219,7 @@
           'nodeIds': mthis.selectNetNodes[0].ids,
           'type':'net'
           }).then(response => {
+            debugger
               mthis.staticsDatas = response.body.data;
               mthis.openPanelNames = [];
               if(!mthis.staticsDatas){
@@ -227,7 +228,7 @@
               //mthis.staticsdatas = mthis.staticsDatas;
               mthis.staticsDatas.forEach(function(item){
                   item.subStatisticsAttr.forEach(function(Iitem){
-                      var thirdLevel = Iitem.specificStaticsAttr
+                      /* var thirdLevel = Iitem.specificStaticsAttr
                       var itemCount = thirdLevel.length;
                       var moreItemcount = itemCount>5?itemCount-5:0;
                       var morethirdIds = 0;
@@ -237,7 +238,7 @@
                               var count = tItem.count;
                               morethirdIds += count;
                           }
-                      }
+                      } */
                       mthis.openPanelNames.push(Iitem.secondLevelId);
                   })
               })

@@ -124,12 +124,12 @@ var rightMenu = function(t,target,config){
         var name = params.data.name;
         var seriesName = params.seriesName;
         var hasLeaf = params.data.hasLeaf;
+        var parentId = params.data.parentId;
         if(!disable){
             
             if(hasLeaf){
                 develpSecoundMenu(params);
             } else{
-                var parentId = params.data.parentId;
                 if(parentId === 0){
                     cancalSecoundMenu();
                 }
@@ -137,7 +137,7 @@ var rightMenu = function(t,target,config){
             }
             myChart.dispatchAction({
                 type: 'pieSelect',
-                seriesName:seriesName ,
+                seriesName:seriesName,
                 name: name
             })
         } else {
@@ -146,7 +146,10 @@ var rightMenu = function(t,target,config){
                 seriesName:seriesName ,
                 name: -1
             });
-            cancalSecoundMenu();
+            if(parentId ===0){
+                cancalSecoundMenu();
+            }
+            //cancalSecoundMenu();
         }
     }
     let develpSecoundMenu = function(params){
@@ -339,7 +342,8 @@ var rightMenu = function(t,target,config){
     this.deleteRightMenu = _deleteRightMenu;
     myChart.on('click', function (params) {
         var hasLeaf = params.data.hasLeaf; 
-        if(!hasLeaf){
+        var disable = params.data.disable;
+        if(!hasLeaf && !disable){
             var id = params.data.id;
             if(id === 'transparent'){
                 timeout = setTimeout(function(){
@@ -356,7 +360,6 @@ var rightMenu = function(t,target,config){
         var id = params.data.id;
         if(id === 'transparent'){
             timeout = setTimeout(function(){
-                /* mthis.deleteRightMenu(); */
                 myChart.dispose();
             },500)
         } else {
@@ -367,7 +370,6 @@ var rightMenu = function(t,target,config){
         var lastId = nowOpr.id;
         if(id === lastId || id === lastparentId){
             overOption(params)
-            //return;
         } else {
             overOption(params);
             nowOpr.inOrOut = 'in';
@@ -377,25 +379,7 @@ var rightMenu = function(t,target,config){
         
     })
     myChart.on('mouseout',function eConsole(params){
-        /* var disable = params.data.disable;
-        var name = params.data.name;
-        var seriesName = params.seriesName;
-        var hasLeaf = params.data.hasLeaf; */
-       /*  if(!disable){
-            myChart.dispatchAction({
-                type: 'pieUnSelect',
-                // 可选，系列 index，可以是一个数组指定多个系列
-                //seriesIndex: 1,
-                // 可选，系列名称，可以是一个数组指定多个系列
-                seriesName:seriesName ,
-                // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
-                //dataIndex: 1,
-                // 可选，数据名称，在有 dataIndex 的时候忽略
-                name: name
-            })
-        } */
         timeout = setTimeout(function(){
-            /* mthis.deleteRightMenu(); */
             _deleteRightMenu();
         },500)
     })

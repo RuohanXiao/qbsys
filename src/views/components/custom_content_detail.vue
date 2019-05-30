@@ -7,7 +7,7 @@
         <div slot="content" class="tableLine">
           <div class="econtent">
             <p class="econtentp w5em">标题</p>
-            <p class="econtentp">{{tableData.title}}</p>
+            <p class="econtentp" style="margin-right:3em;">{{tableData.title}}</p>
           </div>
           <div class="econtent" v-if='tableData.i_sn'>
             <p class="econtentp w5em">来源</p>

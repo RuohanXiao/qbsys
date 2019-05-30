@@ -1,5 +1,5 @@
 <template>
-  <div :style="{height:netheightdiv}">
+  <div id='demo' :style="{height:netheightdiv}" tabindex="1" @keydown="keyD" style="outline:none;">
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px',border:'solid 1px #336666'}">
       <div class='divStyle'>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -73,8 +73,8 @@
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-custom" @click="showContentAna">
-            <Icon class="icon iconfont icon-selection-box" size="26"></Icon>
-            <p class="img-content">分析</p>
+            <Icon class="icon iconfont icon-selection-box" size="26" :class="(analysisButton)?'lightUp':''"></Icon>
+            <p class="img-content" :class="(analysisButton)?'lightUp':''">分析</p>
           </div>
         </Tooltip>
         <!-- <div class="divSplitLine"></div> -->
@@ -105,7 +105,7 @@
             </div>
           
             <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}"
-             @mousedown='kuangxuan'>
+             @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup">
               <Row type="flex" justify="start">
 
                 <Col :sm="colSmnum" :lg="colLgNum" align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
@@ -152,7 +152,7 @@
             
           </Scroll>
           <div id="contentInfo" class="scrollBarAble" v-show='ifInfo' :style="{height:ContentHeightList,overflowY:'scroll'}">
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(1)'></Icon>
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(1)'></Icon>
             <h2 class="contentInfoTitle" id='contentsTitle'></h2>
             <p class="contentInfoTime" id='contentsTime'></p>
             <p style='margin:10px'><span id='contents'></span></p>
@@ -161,7 +161,7 @@
           <div id = "contentWordCloud" class="scrollBarAble" v-show='contentAna' :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}" style='z-index:100'>
             <!-- <i-button type='info' size="large" :style="{position:'absolute',left:'50px',top:'70px'}" @click='changeChart(1)'>词云图</i-button>
             <i-button type='info' size="large" :style="{position:'absolute',left:'150px',top:'70px'}" @click='changeChart(2)'>柱状图</i-button> -->
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn-new DVSL-bar-btn-back" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)' style='z-index:101'></Icon>
+            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)' style='z-index:101'></Icon>
             <div  :style="{width:WCWidth,position:'absolute',display:'flex'}">
               <div :style="{width:docWidth,height:ContentHeightList}" style="border-right:1px solid #336666">
                 <div class="e-title">
@@ -204,10 +204,10 @@
           </div>
         </div>
       </div>
-    
+      <!-- 列表图 -->
       <div>
         <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
-          <Table  :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
+          <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
       <div>
@@ -253,6 +253,14 @@
     name: "App",
     data() {
       return {
+        isBru:false,
+        bruIds:[],
+        bruStartX:0,
+        bruStartY:0,
+        prevKdown:null,
+        prevKup:null,
+        keyCount:0,
+        isSel:null,
         ifWord:false,
         ifBar:false,
         WCheight:0,
@@ -289,6 +297,7 @@
         watchSelectCounter: 0,
         translateButton: false,
         deleteButton:false,
+        analysisButton:false,
         spinShow: false,
         markedItem: false,
         ifInfo: false,
@@ -838,7 +847,7 @@
             }
             // console.log("datadatatdattatdtadt")
             // console.log(mthis.items)
-            mthis.data4 = []
+            // mthis.data4 = []
             // for(let i=0;i<mthis.items.length;i++){
             //   let itemList = {};
             //   itemList.title = mthis.items[i].title
@@ -896,6 +905,53 @@
     },
     props: ['contentData'],
     methods: {
+      keyD(e){
+        
+        var mthis = this;
+        if(mthis.keyCount<0){
+              mthis.keyCount = 0
+            }
+        if(e.code != mthis.prevKdown){
+            mthis.keyCount = mthis.keyCount + 1;
+            mthis.prevKdown = e.code
+          }
+       
+        if(mthis.$store.state.tmss === 'content') {
+          var e = event || window.event || arguments.callee.caller.arguments[0];
+          if(e && e.keyCode == 46 && (!e.shiftKey) && (!e.altKey) && (!e.ctrlKey)){
+            // delete
+            mthis.deleteNode()
+            mthis.clearBubble(e)
+          }
+          if(e.keyCode == 65 && (e.ctrlKey || e.metaKey) && (!e.shiftKey) && (!e.altKey)){
+            mthis.selectAll()
+            mthis.clearBubble(e)
+          }
+          
+        }
+        
+        
+      },
+      keyU(e){
+        
+        var mthis = this;
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(mthis.keyCount==1 && e && e.keyCode == 46){
+            // delete
+            
+            mthis.clearBubble(e)
+          }
+          if(mthis.keyCount==2 && e.keyCode == 65 && (e.ctrlKey || e.metaKey)){
+           
+            mthis.clearBubble(e)
+          }
+        if(e.code != mthis.prevKup){
+            mthis.keyCount = mthis.keyCount - 1;
+            mthis.prevKup = e.code
+          }
+        console.log('keyup')
+        console.log(mthis.keyCount)
+      },
       clearBubble(e) {
         if (e.stopPropagation) {
           e.stopPropagation();
@@ -929,14 +985,16 @@
         this.clearBubble(e)
         $(e.target).find('img').removeClass('imgHover')
       },
+      
       kuangxuan(e){
-        this.clearBubble(e)
+        
         if(!this.showThumb) return;
-        var mthis = this;
-        for(let m=0;m<mthis.items.length;m++){
-          mthis.items[m].check = false
-        }
         if (e.buttons !== 1 || e.which !== 1) return;
+        
+        this.isSel = true;
+        this.clearBubble(e);
+        this.bruIds= [];
+        var mthis = this;
         var selDivList = document.getElementsByClassName('docThunmsItem');
         for(let k =0;k<selDivList.length;k++){
                   $(selDivList[k]).off('mouseenter');
@@ -954,54 +1012,49 @@
         $('#contentchart').append(selOutDiv);
         $('#selOutDiv').append(selDiv);
         //  设置选框的初始位置
-        var startX = (e.x || e.clientX) ;
-        var startY = (e.y || e.clientY) -120 ;
+        mthis.bruStartX= (e.x || e.clientX) ;
+        mthis.bruStartY = (e.y || e.clientY) -120 ;
         // var startX = e.offsetX;
         // var startY = e.offsetY;
         
         
-        selDiv.style.left = startX + "px"; 
-        selDiv.style.top = startY + "px"; 
-        
-        // $selectBoxDashed.css({
-        //   left: startX + 'px',
-        //   top: startY + 'px',
-        // });
-        // console.log($selectBoxDashed.css('left'))
-              //  根据鼠标移动，设置选框宽高
+        selDiv.style.left = mthis.bruStartX + "px"; 
+        selDiv.style.top = mthis.bruStartY  + "px"; 
+      },
+      kuangmove(eventMove){
+        if(!this.isSel) return;
+        this.isBru = true;
+       
+        var mthis = this;
+        var selDiv = document.getElementById('selectDiv');
+        var selOutDiv = document.getElementById('selOutDiv');
+        var selDivList = document.getElementsByClassName('docThunmsItem');
         var _x = null;
         var _y = null;
-        var ids = [];
-        $('#contentchart').on('mousemove', function(eventMove) {
-                //  设置选框可见
+        
+        selOutDiv.style.display = 'block'
+        selDiv.style.display = 'block'
+        // selOutDiv.style.top = 0 
+        // selOutDiv.style.left = 0 
+        //  根据鼠标移动，设置选框的位置、宽高
+        _x = (eventMove.x || eventMove.clientX);
+        _y = (eventMove.y || eventMove.clientY) -120;
+        //  暂存选框的位置及宽高，用于将 select-item 选中
+        var _left = Math.min(_x, mthis.bruStartX);
+        var _top = Math.min(_y, mthis.bruStartY);
+        var _width = Math.abs(_x - mthis.bruStartX);
+        var _height = Math.abs(_y - mthis.bruStartY);
                 
-                console.log('movemove')
+        selDiv.style.left = _left + "px"; 
+        selDiv.style.top =  _top + "px"; 
+        selDiv.style.width = _width + "px"; 
+        selDiv.style.height =  _height + "px";
                 
-                // $selectBoxDashed.css('display', 'block');
-                selOutDiv.style.display = 'block'
-                selDiv.style.display = 'block'
-                // selOutDiv.style.top = 0 
-                // selOutDiv.style.left = 0 
-                //  根据鼠标移动，设置选框的位置、宽高
-                _x = (eventMove.x || eventMove.clientX);
-                _y = (eventMove.y || eventMove.clientY) -120;
-                //  暂存选框的位置及宽高，用于将 select-item 选中
-                var _left = Math.min(_x, startX);
-                var _top = Math.min(_y, startY);
-                var _width = Math.abs(_x - startX);
-                var _height = Math.abs(_y - startY);
-                
-                selDiv.style.left = _left + "px"; 
-                selDiv.style.top =  _top + "px"; 
-                selDiv.style.width = _width + "px"; 
-                selDiv.style.height =  _height + "px";
-                console.log(_width)
-                console.log(selDiv)
-                var _w = selDiv.offsetWidth, _h = selDiv.offsetHeight;
-                var _l = mthis.getOffset(selDiv)[0];
-                var _t = mthis.getOffset(selDiv)[1];
-                
-                for ( var i = 0; i < selDivList.length; i++) {
+        var _w = selDiv.offsetWidth, _h = selDiv.offsetHeight;
+        var _l = mthis.getOffset(selDiv)[0];
+        var _t = mthis.getOffset(selDiv)[1];
+        
+        for ( var i = 0; i < selDivList.length; i++) {
                   var sw =  mthis.getOffset(selDivList[i])[0];
                   var sh = mthis.getOffset(selDivList[i])[1];
                   var sl = selDivList[i].offsetWidth + sw ; 
@@ -1012,7 +1065,7 @@
                       continue
                     }else{
                       mthis.items[i].check = true
-                      ids.push(mthis.items[i].id)
+                      mthis.bruIds.push(mthis.items[i].id)
                       
                     }
                     
@@ -1021,44 +1074,42 @@
                     
                     if($(selDivList[i]).find('img').hasClass("item-selected")){
                       mthis.items[i].check = false
-                      let idx = ids.indexOf(mthis.items[i].id)
-                      ids.splice(idx,1)
+                      let idx = mthis.bruIds.indexOf(mthis.items[i].id)
+                      mthis.bruIds.splice(idx,1)
                     }
                   }
                 }
-                
-                
-                
-                
-                
-                //  清除事件冒泡、捕获
-                mthis.clearBubble(eventMove);
-              });
-            $(document).on('mouseup', function() {
-                $('#contentchart').off('mousemove');
-                
-                selOutDiv.style.display = 'none'
-                selDiv.style.display = 'none'
-                ids = util.unique(ids)
-                console.log(ids)
-                mthis.$store.commit('setSelectContentNodes', [{
-                  ids: ids
-                }])
-                mthis.$store.commit('setContent2time',[{
-                  ids:ids
-                }])
-                console.log('upupupupup')
-                // $(selector).find('.temp-selected').find('.contentDiv').addClass('item-selected')
-                
-                $('#selectDiv').remove();
-                $('#selOutDiv').remove();
-                
-              });
-          
         
+        this.clearBubble(eventMove)
       },
-   
-      toSelIds(index,check,id,evt){
+      kuangup(e){
+        if(!this.showThumb) return;
+        this.isSel = false;
+        var mthis = this;
+        
+        var selDiv = document.getElementById('selectDiv');
+        var selOutDiv = document.getElementById('selOutDiv');
+        selOutDiv.style.display = 'none';
+        selDiv.style.display = 'none';
+        
+        if(this.isBru){
+          mthis.bruIds= util.unique(mthis.bruIds);
+          
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: mthis.bruIds
+          }])
+          mthis.$store.commit('setContent2time',[{
+            ids:mthis.bruIds
+          }])
+          mthis.isBru = false;
+        }
+        
+        $('#selectDiv').remove();
+        $('#selOutDiv').remove();
+        this.clearBubble(e)
+        $('#contentchart').off('mousemove');
+      },
+    toSelIds(index,check,id,evt){
         this.clearBubble(evt)
         
         clearTimeout(timerClick);
@@ -1075,8 +1126,10 @@
           }
           if(ids.length>0){
             mthis.deleteButton = true
+            mthis.analysisButton = true
           }else{
             mthis.deleteButton = false
+            mthis.analysisButton = false
           }
           mthis.$store.commit('setSelectContentNodes', [{
             ids: ids
@@ -1161,6 +1214,7 @@
           }
         }
         mthis.deleteButton = true
+        mthis.analysisButton = true
         mthis.$store.commit('setSelectContentNodes', [{
           ids: ids
         }])
@@ -1612,6 +1666,7 @@
         
       },
       toThumbnails(){
+        this.showList = false
         this.showThumb = true
         this.colLgNum = 3
         this.colSmnum = 4
@@ -1934,7 +1989,8 @@
             mthis.toContentDiv()
           }
         }else{
-          mthis.contentAna = false
+          mthis.contentAna = false;
+          mthis.analysisButton = true
         }
         mthis.$store.commit('setShowDocTime',true)
         
@@ -2017,7 +2073,9 @@
       },
       showContentAna(){
         var mthis = this
-        mthis.contentAna = true;
+        if(mthis.analysisButton){
+            mthis.contentAna = true;
+        // 控制时间轴不显示
         mthis.$store.commit('setShowDocTime',false)
         let selDocs = mthis.items.filter(item => item.check);
         let contentIds = []
@@ -2168,7 +2226,7 @@
           yAxis: [{
               type: 'value',
               splitLine: {
-                  show: true,
+                  show: false,
                   lineStyle: {
                       color: ['#f2f2f2']
                   }
@@ -2219,28 +2277,19 @@
                   data: [90, 232, 231, 134, 190, 90, 232, 251, 212, 101, 110, 10],
                   // markArea: areaStyle
               },
-              {
-                  name: '',
-                  type: 'bar',
-                  xAxisIndex: 0,
-                  barWidth: '16px',
-                  barGap: '-95%',
-                  itemStyle: {
-                      normal: {
-                          color: 'rgba(255,255,255,0.1)'
-                      }
-                  },
-                  zlevel: 9,
-                  data: [700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700, 700],
-                  // markArea: areaStyle
-              },
+              
             
           ]
         })
         charts.setOption(chartOption)
-      worldCloudoption.series[0].data = JosnList;
- 
- 		  worldCloudcharts.setOption(worldCloudoption);
+        worldCloudoption.series[0].data = JosnList;
+  
+        worldCloudcharts.setOption(worldCloudoption);
+        mthis.analysisButton = false
+        }else{
+          mthis.setMessage("请选择至少一篇文章")
+        }
+        
       },
       showContent(id,title) {
         clearTimeout(timerClick);
@@ -2329,6 +2378,8 @@
       window.px = "";
       window.py = "";
       window.divLength = 0;
+      
+    
       // this.initSelectBox('#contentchart')
       
       // // console.log($('#jiazaiDiv').offset())
@@ -2344,7 +2395,22 @@
       // },function(){
       //   clearTimeout(contentTimer);
       // });
-      
+      // $('#contentchart').on('keydown',function(e){
+      //   console.log('keydown')
+      //   if(mthis.$store.state.tmss === 'content') {
+      //       var e = event || window.event || arguments.callee.caller.arguments[0];
+      //       if (e && e.keyCode == 46) {
+      //         mthis.deleteNode()
+      //         e.preventDefault();
+      //         e.stopPropagation();
+      //       }
+      //       if (e.keyCode == 65 && e.ctrlKey) {
+      //         mthis.selectAll()
+      //         e.preventDefault();
+      //         e.stopPropagation();
+      //       }
+      //     }
+      // })
     }
   };
 </script>
@@ -2552,11 +2618,11 @@
       color:#668c8e;
       
     }
-  .ivu-table-wrapper {
+  /* .ivu-table-wrapper {
       border: none !important;
     }
     .ivu-table:before{background-color:none;}
-    .ivu-table:after{background-color:none;}
+    .ivu-table:after{background-color:none;} */
 
 </style>
 <style scoped>
@@ -2835,9 +2901,8 @@
   .tableLine>.econtent:nth-child(even):hover {
     background-color: rgba(51, 255, 255, 0.2);
   }
-  .process-img:hover{
-    animation: all 1s;
-    -webkit-animation: all 1s;
-    background-color: rgba(51, 255, 255, 0.4);
+  .rightIcon:hover{
+    opacity: 1;
+    cursor: pointer;
   }
 </style>
