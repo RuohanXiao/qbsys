@@ -991,10 +991,10 @@ export default {
                 var feature = mthis.getLayerById("HLAreaLayer").getSource().getFeatureById(id)
                 var geometry = feature.getGeometry();
                 var geometryStr = new GeoJSON().writeGeometry(geometry)
-                //geometryList.push(geometryStr);
-                mthis.orgsSpatialQuery([geometryStr],'Event');
+                geometryList.push(geometryStr);
+                //mthis.orgsSpatialQuery([geometryStr],'Event');
             }
-            //mthis.orgsSpatialQuery(geometryList,'Event');
+            mthis.orgsSpatialQuery(geometryList,'Event');
             mthis.deleteRightMenu();
         },
         rightClickOrg(){
