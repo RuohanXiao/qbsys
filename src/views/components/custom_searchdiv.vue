@@ -3,10 +3,10 @@
     <div>
       <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}" class="inputDiv">
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
-          v-show="type==='net'" placeholder='' :remote='true' loading-text='加载中···' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
+          v-show="type==='net'" placeholder='' :remote='true' :loading-text='loadingT' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
           <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
             <Option v-for="(option, index) in opt1.data" :title="option.label" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
-              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src='option.img' />
+              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)" />
               <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
           </OptionGroup>
         </Select>
@@ -60,6 +60,7 @@
         lightIconFlag: false,
         timer: null,
         optionNet: [],
+        loadingT:'加载中',
         myMap: new Map()
       }
     },
@@ -762,8 +763,14 @@
       }
     },
     props: ['type'],
+    mounted() {
+      // setTimeout(function(){
+      //   this.loadingT = (this.loadingT == '加载中...') ? '加载中': (this.loadingT + '.');
+      // }, 100);
+    },
     created() {
       var mthis = this
+      mthis.loadingText = mthis.loadingT+mthis.loadingS
       var ob = configer.loadxmlDoc(
         mthis.$store.state.ipConfig.xml_url + "/dictionary.xml"
       );
@@ -860,6 +867,15 @@
     width: 70%;
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+
+
+
+
+  .ivu-select-loading,.ivu-select-not-found li{
+    color:rgba(204,255,255,0.5) !important;
+    font-family: "微软雅黑" !important;
+    font-size: 14px !important;
   }
   /* #queryInput:focus>.inputDiv+.imgDiv .process-img {
                                             color: red;
