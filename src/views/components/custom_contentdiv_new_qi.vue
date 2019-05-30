@@ -173,7 +173,7 @@
                     <span>{{list.secondLevelName}}</span>
                     <div slot="content" class="tableLine">
                       <div class="econtent" v-for="(specifics,ind) in list.specificStaticsAttr" :key="ind">
-                        <p class="econtentp w5em">{{specifics.thirdLevelName}}</p>
+                        <p class="econtentp w8em">{{specifics.thirdLevelName}}</p>
                         <p class="econtentp">{{specifics.count}}</p>
                       </div>
                     </div>
@@ -2894,9 +2894,10 @@
     min-height: 30px;
   }
   
-  .w5em {
-    width: 10em;
-    min-width: 5em;
+  .w8em {
+    width: 8em;
+    min-width: 8em;
+    max-width: 8em;
     margin: 0;
   }
   .tableLine>.econtent:nth-child(odd) {

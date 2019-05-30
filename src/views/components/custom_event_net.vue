@@ -501,5 +501,13 @@
   .bstyle:hover {
     color: rgba(51, 255, 255, 0.8) !important;
   }
+  .allowWrap {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .blockStyle{
+    display: block;
+    width: 100%;
+  }
 </style>
 
