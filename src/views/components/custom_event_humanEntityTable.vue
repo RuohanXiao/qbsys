@@ -705,11 +705,21 @@
       <panel name="2">
         <span>相关实体</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
+          <!-- <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
             <p class="econtentp w5em" :title="items.relation">{{items.relation}}</p>
             <p class="econtentp">{{items.name}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+            </div>
+          </div> -->
+          <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
+            <div class="econtent blockStyle" v-for="(item,index) in items.data">
+              <p class="econtentp w5em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
+              <p class="econtentp w5em" v-else :title="items.relation"></p>
+              <p class="econtentp">{{item.name}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+              </div>
             </div>
           </div>
           <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
@@ -819,6 +829,7 @@
               // "NodeTypes": mthis.tableData.map(item => {
               //   return item.entity_type
               // }),
+              
               "TypeLabel": "all"
             }).then(response => {
               mthis.spinWaiting = false
@@ -839,6 +850,7 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
             // "NodeTypes": new Array('entity'),
+            "Group": "True",
             "TypeLabel": "all"
           }).then(response => {
             // mthis.xiangguanEntityItems = new Array()
@@ -852,6 +864,7 @@
               })
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+              console.log(mthis.xiangguanEntityItems)
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }
             if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
@@ -1025,6 +1038,7 @@
           } else {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
               "NodeIds": new Array(mthis.tableData.id),
+              "Group": "True",
               "TypeLabel": "all"
             }).then(response => {
               if (response.body.data[0].RelatedEntity[mthis.tableData.id]) {
@@ -1034,6 +1048,7 @@
                 })
                 mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
                 mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+                
                 mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
               }
               if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
@@ -1104,7 +1119,8 @@
   }
   .w5em {
     width: 10em;
-    min-width: 5em;
+    min-width: 10em;
+    max-width: 10em;
     margin: 0;
   }
   .tableLine>.econtent:nth-child(odd) {

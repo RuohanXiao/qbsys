@@ -558,10 +558,10 @@ export default {
                         }
                     });
                 }
-                /* if (mthis.selectionIdByType.contentIds.length > 0) {
+                /* if (mthis.selectionIdByType.contentIds.ids.length > 0) {
                     mthis.$http
                     .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
-                        docIds: mthis.selectionIdByType.contentIds
+                        docIds: mthis.selectionIdByType.contentIds.ids
                     })
                     .then(response => {
                         ;

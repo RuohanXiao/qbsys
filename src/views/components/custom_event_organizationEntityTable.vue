@@ -18,20 +18,81 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.headquarters_location'>
-            <p class="econtentp w5em">组织总部</p>
+          <!-- <div class="econtent" v-if='tableData.headquarters_location'>
+            <p class="econtentp w5em">组织类型</p>
             <p class="econtentp">{{tableData.headquarters_location}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+          <div class="econtent allowWrap" v-if='tableData.headquarters_location'>
+            <div v-if="typeof(tableData.headquarters_location) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">组织总部</p>
+              <p class="econtentp">{{tableData.headquarters_location}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.headquarters_location) === 'object'&&index<5" v-for="(it,index) in tableData.headquarters_location">
+              <p class="econtentp w5em" v-if="index==0">组织总部</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.headquarters_location.length>5&&displayMore['headquarters_location']" @click="clickMore('headquarters_location')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.headquarters_location) === 'object'&&index>=5&&!displayMore['headquarters_location']" v-for="(occ,index) in tableData.headquarters_location">
+              <p class="econtentp w5em" v-if="index==0">组织总部</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.headquarters_location.length>5&&!displayMore['headquarters_location']" @click="clickCutOut('headquarters_location')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
-          <div class="econtent" v-if='tableData.type'>
+
+          <!-- <div class="econtent" v-if='tableData.type'>
             <p class="econtentp w5em">组织类型</p>
             <p class="econtentp">{{tableData.type}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+          <div class="econtent allowWrap" v-if='tableData.type'>
+            <div v-if="typeof(tableData.type) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">组织类型</p>
+              <p class="econtentp">{{tableData.type}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.type) === 'object'&&index<5" v-for="(it,index) in tableData.type">
+              <p class="econtentp w5em" v-if="index==0">组织类型</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.type.length>5&&displayMore['type']" @click="clickMore('type')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.type) === 'object'&&index>=5&&!displayMore['type']" v-for="(occ,index) in tableData.type">
+              <p class="econtentp w5em" v-if="index==0">组织类型</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.type.length>5&&!displayMore['type']" @click="clickCutOut('type')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
+
+
           <div class="econtent" v-if='tableData.inception'>
             <p class="econtentp w5em">成立时间</p>
             <p class="econtentp">{{tableData.inception}}</p>
@@ -39,27 +100,120 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.founded_by'>
+          <!-- <div class="econtent" v-if='tableData.founded_by'>
             <p class="econtentp w5em">创办者</p>
             <p class="econtentp">{{tableData.founded_by}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+          <div class="econtent allowWrap" v-if='tableData.founded_by'>
+            <div v-if="typeof(tableData.founded_by) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">创办者</p>
+              <p class="econtentp">{{tableData.founded_by}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.founded_by) === 'object'&&index<5" v-for="(it,index) in tableData.founded_by">
+              <p class="econtentp w5em" v-if="index==0">创办者</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.founded_by.length>5&&displayMore['founded_by']" @click="clickMore('founded_by')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.founded_by) === 'object'&&index>=5&&!displayMore['founded_by']" v-for="(occ,index) in tableData.founded_by">
+              <p class="econtentp w5em" v-if="index==0">创办者</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.founded_by.length>5&&!displayMore['founded_by']" @click="clickCutOut('founded_by')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
-          <div class="econtent" v-if='tableData.chairperson'>
+
+
+          <!-- <div class="econtent" v-if='tableData.chairperson'>
             <p class="econtentp w5em">领袖</p>
             <p class="econtentp">{{tableData.chairperson}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+          <div class="econtent allowWrap" v-if='tableData.chairperson'>
+            <div v-if="typeof(tableData.chairperson) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">领袖</p>
+              <p class="econtentp">{{tableData.chairperson}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chairperson) === 'object'&&index<5" v-for="(it,index) in tableData.chairperson">
+              <p class="econtentp w5em" v-if="index==0">领袖</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.chairperson.length>5&&displayMore['chairperson']" @click="clickMore('chairperson')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chairperson) === 'object'&&index>=5&&!displayMore['chairperson']" v-for="(occ,index) in tableData.chairperson">
+              <p class="econtentp w5em" v-if="index==0">领袖</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.chairperson.length>5&&!displayMore['chairperson']" @click="clickCutOut('chairperson')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
-          <div class="econtent" v-if='tableData.chief_executive_officer'>
+
+
+          <!-- <div class="econtent" v-if='tableData.chief_executive_officer'>
             <p class="econtentp w5em">首席执行官</p>
             <p class="econtentp">{{tableData.chief_executive_officer}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+          <div class="econtent allowWrap" v-if='tableData.chief_executive_officer'>
+            <div v-if="typeof(tableData.chief_executive_officer) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">首席执行官</p>
+              <p class="econtentp">{{tableData.chief_executive_officer}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chief_executive_officer) === 'object'&&index<5" v-for="(it,index) in tableData.chief_executive_officer">
+              <p class="econtentp w5em" v-if="index==0">首席执行官</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.chief_executive_officer.length>5&&displayMore['chief_executive_officer']" @click="clickMore('chief_executive_officer')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chief_executive_officer) === 'object'&&index>=5&&!displayMore['chief_executive_officer']" v-for="(occ,index) in tableData.chief_executive_officer">
+              <p class="econtentp w5em" v-if="index==0">首席执行官</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.chief_executive_officer.length>5&&!displayMore['chief_executive_officer']" @click="clickCutOut('chief_executive_officer')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
+
+
           <div class="econtent" v-if='tableData.member_count'>
             <p class="econtentp w5em">组织成员数</p>
             <p class="econtentp">{{tableData.member_count}}</p>
@@ -74,46 +228,236 @@
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.political_ideology'>
+
+
+          <!-- <div class="econtent" v-if='tableData.political_ideology'>
             <p class="econtentp w5em">意识形态</p>
             <p class="econtentp">{{tableData.political_ideology}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+
+
+
+          <div class="econtent allowWrap" v-if='tableData.political_ideology'>
+            <div v-if="typeof(tableData.political_ideology) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">意识形态</p>
+              <p class="econtentp">{{tableData.political_ideology}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.political_ideology) === 'object'&&index<5" v-for="(it,index) in tableData.political_ideology">
+              <p class="econtentp w5em" v-if="index==0">意识形态</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.political_ideology.length>5&&displayMore['political_ideology']" @click="clickMore('political_ideology')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.political_ideology) === 'object'&&index>=5&&!displayMore['political_ideology']" v-for="(occ,index) in tableData.political_ideology">
+              <p class="econtentp w5em" v-if="index==0">意识形态</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.political_ideology.length>5&&!displayMore['political_ideology']" @click="clickCutOut('political_ideology')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
-          <div class="econtent" v-if='tableData.business_division'>
+
+
+          <!-- <div class="econtent" v-if='tableData.business_division'>
             <p class="econtentp w5em">业务部门</p>
             <p class="econtentp">{{tableData.business_division}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+          <div class="econtent allowWrap" v-if='tableData.business_division'>
+            <div v-if="typeof(tableData.business_division) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">业务部门</p>
+              <p class="econtentp">{{tableData.business_division}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.business_division) === 'object'&&index<5" v-for="(it,index) in tableData.business_division">
+              <p class="econtentp w5em" v-if="index==0">业务部门</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.business_division.length>5&&displayMore['business_division']" @click="clickMore('business_division')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.business_division) === 'object'&&index>=5&&!displayMore['business_division']" v-for="(occ,index) in tableData.business_division">
+              <p class="econtentp w5em" v-if="index==0">业务部门</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.business_division.length>5&&!displayMore['business_division']" @click="clickCutOut('business_division')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
-          <div class="econtent" v-if='tableData.parent_organization'>
+
+
+          <!-- <div class="econtent" v-if='tableData.parent_organization'>
             <p class="econtentp w5em">上级部门</p>
             <p class="econtentp">{{tableData.parent_organization}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+           <div class="econtent allowWrap" v-if='tableData.parent_organization'>
+            <div v-if="typeof(tableData.parent_organization) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">上级部门</p>
+              <p class="econtentp">{{tableData.parent_organization}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.parent_organization) === 'object'&&index<5" v-for="(it,index) in tableData.parent_organization">
+              <p class="econtentp w5em" v-if="index==0">上级部门</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.parent_organization.length>5&&displayMore['parent_organization']" @click="clickMore('parent_organization')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.parent_organization) === 'object'&&index>=5&&!displayMore['parent_organization']" v-for="(occ,index) in tableData.parent_organization">
+              <p class="econtentp w5em" v-if="index==0">上级部门</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.parent_organization.length>5&&!displayMore['parent_organization']" @click="clickCutOut('parent_organization')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
-          <div class="econtent" v-if='tableData.subsidiary'>
+
+
+          <!-- <div class="econtent" v-if='tableData.subsidiary'>
             <p class="econtentp w5em">下级部门</p>
             <p class="econtentp">{{tableData.subsidiary}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+          <div class="econtent allowWrap" v-if='tableData.subsidiary'>
+            <div v-if="typeof(tableData.subsidiary) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">下级部门</p>
+              <p class="econtentp">{{tableData.subsidiary}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.subsidiary) === 'object'&&index<5" v-for="(it,index) in tableData.subsidiary">
+              <p class="econtentp w5em" v-if="index==0">下级部门</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.subsidiary.length>5&&displayMore['subsidiary']" @click="clickMore('subsidiary')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.subsidiary) === 'object'&&index>=5&&!displayMore['subsidiary']" v-for="(occ,index) in tableData.subsidiary">
+              <p class="econtentp w5em" v-if="index==0">下级部门</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.subsidiary.length>5&&!displayMore['subsidiary']" @click="clickCutOut('subsidiary')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
-          <div class="econtent" v-if='tableData.official_website'>
+
+
+          <!-- <div class="econtent" v-if='tableData.official_website'>
             <p class="econtentp w5em">官网</p>
             <p class="econtentp">{{tableData.official_website}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
+          </div> -->
+
+          <div class="econtent allowWrap" v-if='tableData.official_website'>
+            <div v-if="typeof(tableData.official_website) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">官网</p>
+              <p class="econtentp">{{tableData.official_website}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.official_website) === 'object'&&index<5" v-for="(it,index) in tableData.official_website">
+              <p class="econtentp w5em" v-if="index==0">官网</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.official_website.length>5&&displayMore['official_website']" @click="clickMore('official_website')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.official_website) === 'object'&&index>=5&&!displayMore['official_website']" v-for="(occ,index) in tableData.official_website">
+              <p class="econtentp w5em" v-if="index==0">官网</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.official_website.length>5&&!displayMore['official_website']" @click="clickCutOut('official_website')">
+              <p class="econtentp w5em moreP">收起</p>
+            </div>
           </div>
-          <div class="econtent" v-if='tableData.telephone_number'>
+
+
+          <!-- <div class="econtent" v-if='tableData.telephone_number'>
             <p class="econtentp w5em">电话</p>
             <p class="econtentp">{{tableData.telephone_number}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+            </div>
+          </div> -->
+
+
+          <div class="econtent allowWrap" v-if='tableData.telephone_number'>
+            <div v-if="typeof(tableData.telephone_number) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">电话</p>
+              <p class="econtentp">{{tableData.telephone_number}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.telephone_number) === 'object'&&index<5" v-for="(it,index) in tableData.telephone_number">
+              <p class="econtentp w5em" v-if="index==0">电话</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.telephone_number.length>5&&displayMore['telephone_number']" @click="clickMore('telephone_number')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.telephone_number) === 'object'&&index>=5&&!displayMore['telephone_number']" v-for="(occ,index) in tableData.telephone_number">
+              <p class="econtentp w5em" v-if="index==0">电话</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.telephone_number.length>5&&!displayMore['telephone_number']" @click="clickCutOut('telephone_number')">
+              <p class="econtentp w5em moreP">收起</p>
             </div>
           </div>
         </div>
@@ -122,11 +466,21 @@
       <panel name="2">
         <span>相关实体</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEntityItems.length>0'  v-for="items in xiangguanEntityItems">
+          <!-- <div class="econtent" v-if='xiangguanEntityItems.length>0'  v-for="items in xiangguanEntityItems">
             <p class="econtentp w5em">{{items.relation}}</p>
             <p class="econtentp">{{items.name}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+            </div>
+          </div> -->
+          <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
+            <div class="econtent blockStyle" v-for="(item,index) in items.data">
+              <p class="econtentp w5em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
+              <p class="econtentp w5em" v-else :title="items.relation"></p>
+              <p class="econtentp">{{item.name}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+              </div>
             </div>
           </div>
           <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
@@ -234,6 +588,7 @@ import {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
             // "NodeTypes": new Array('entity'),
+            "Group": "True",
             "TypeLabel": "all"
           }).then(response => {
             // mthis.xiangguanEntityItems = new Array()
@@ -416,6 +771,7 @@ import {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds":  new Array(mthis.tableData.id),
             // "NodeTypes":new Array('entity'),
+            "Group": "True",
             "TypeLabel": "all"
           }).then(response => {
             

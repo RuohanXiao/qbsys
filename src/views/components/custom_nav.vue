@@ -58,6 +58,7 @@
       </div>
     </div>
       </div>
+      <modal-del-set></modal-del-set>
   </div>
 </template>
 <script>
@@ -65,6 +66,7 @@
   import nav from "../../dist/assets/js/nav.js";
   import mock from "../../mock/index.js";
   import Bg2 from "../../dist/assets/images/bg.jpg";
+  import modalDelSet from './custom_delWorkSet_Modal';
   import workspaceItem from "./custom_workspaceItem";
   // import workspaceItem from "./custom_workspaceItem_pic";
   import workspaceItemPic from "./custom_workspaceItem_pic";
@@ -164,7 +166,7 @@
       this.contentHeight = this.$store.getters.getViewHeight
     },
      components: {
-       workspaceItem,workspaceItemPic
+       workspaceItem,workspaceItemPic,modalDelSet
     },
      methods: {
        delMethod(id){

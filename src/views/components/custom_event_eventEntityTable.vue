@@ -40,11 +40,21 @@
       <panel name="2">
         <span>相关实体</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
+          <!-- <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
             <p class="econtentp w5em">{{items.relation}}</p>
             <p class="econtentp">{{items.name}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+            </div>
+          </div> -->
+          <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
+            <div class="econtent blockStyle" v-for="(item,index) in items.data">
+              <p class="econtentp w5em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
+              <p class="econtentp w5em" v-else :title="items.relation"></p>
+              <p class="econtentp">{{item.name}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+              </div>
             </div>
           </div>
           <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
@@ -152,6 +162,7 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
             // "NodeTypes": new Array('entity'),
+            "Group": "True",
             "TypeLabel": "all"
           }).then(response => {
             // mthis.xiangguanEntityItems = new Array()
@@ -357,6 +368,7 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
             // "NodeTypes": new Array('entity'),
+            "Group": "True",
             "TypeLabel": "all"
           }).then(response => {
             // mthis.xiangguanEntityItems = new Array()

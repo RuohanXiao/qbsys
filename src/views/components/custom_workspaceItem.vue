@@ -34,7 +34,7 @@
         <div class="cd">
           <Icon class="icon iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="importData(item.nodeIds)" />
           <Icon class="icon iconfont icon-edit DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="openModifyGroupModal(item.id)" />
-          <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="del(item.id)" />
+          <Icon class="icon iconfont icon-shanchu DVSL-bar-btn DVSL-bar-btn-back lineH20" size="16" @click="del(item.id,$event)" />
         </div>
       </div>
       </Col>
@@ -73,11 +73,13 @@
         </Col>
       </Row>
       -->
+      
   </div>
 </template>
 <script>
   import mock from '../../mock/index.js'
   import util from '../../util/tools.js'
+  
   import {
     mapState,
     mapMutations
@@ -86,6 +88,7 @@
   export default {
     data() {
       return {
+        
         loading: false,
         modal1: false,
         searchWorkspaceTitle: '',
@@ -106,9 +109,11 @@
         }]
       }
     },
+    
     mounted() {
       // $('.touxiangImg')
     },
+    
     methods: {
       openModifyGroupModal(setId) {
         // // console.log(setId)
@@ -227,42 +232,55 @@
         }
         mthis.loading1 = false;
       },
-      del(id) {
+      del(id,e) {
         var mthis = this
+        let workDatas = {
+          flag:false,
+          datas:{
+            id:'',
+            setLeft:0,
+            setTop:0
+          }
+        };
+        workDatas.flag = true;
+        workDatas.datas.id = id;
+        workDatas.datas.setLeft = e.clientX;
+        workDatas.datas.setTop = e.clientY;
+        this.$store.commit('setDelSetData',workDatas)
         // this.$emit('delId', id)
         // alert(id)
-        let timestamp = new Date().getTime()
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/delete-set-data/', {
-          "timestamp": timestamp,
-          "idlist": new Array(id),
-          "label": "set",
-          "type": "set"
-        }).then(response => {
-          // // console.log(response)
-          if (response.body.code === 0) {
-            // alert('删除成功！')
-             if (mthis.$store.state.tmss === 'net') {
-            mthis.$store.commit('setNetPromte', '删除成功！')
-          } else if (mthis.$store.state.tmss === 'geo') {
-            mthis.$store.commit('setGeoPromte', '删除成功！')
-          } else if (mthis.$store.state.tmss === 'content') {
-            mthis.$store.commit('setContentPromte', '删除成功！')
-          } else {
-          }
-            // mthis.$emit('ref', timestamp)
-            mthis.$store.commit('setRefSet', !mthis.$store.state.refSet)
-          } else {
-            alert('删除异常，请查询控制台，错误编码' + response.body.code)
-             if (mthis.$store.state.tmss === 'net') {
-            mthis.$store.commit('setNetPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
-          } else if (mthis.$store.state.tmss === 'geo') {
-            mthis.$store.commit('setGeoPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
-          } else if (mthis.$store.state.tmss === 'content') {
-            mthis.$store.commit('setContentPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
-          } else {
-          }
-          }
-        })
+        // let timestamp = new Date().getTime()
+        // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/delete-set-data/', {
+        //   "timestamp": timestamp,
+        //   "idlist": new Array(id),
+        //   "label": "set",
+        //   "type": "set"
+        // }).then(response => {
+        //   // // console.log(response)
+        //   if (response.body.code === 0) {
+        //     // alert('删除成功！')
+        //      if (mthis.$store.state.tmss === 'net') {
+        //     mthis.$store.commit('setNetPromte', '删除成功！')
+        //   } else if (mthis.$store.state.tmss === 'geo') {
+        //     mthis.$store.commit('setGeoPromte', '删除成功！')
+        //   } else if (mthis.$store.state.tmss === 'content') {
+        //     mthis.$store.commit('setContentPromte', '删除成功！')
+        //   } else {
+        //   }
+        //     // mthis.$emit('ref', timestamp)
+        //     mthis.$store.commit('setRefSet', !mthis.$store.state.refSet)
+        //   } else {
+        //     alert('删除异常，请查询控制台，错误编码' + response.body.code)
+        //      if (mthis.$store.state.tmss === 'net') {
+        //     mthis.$store.commit('setNetPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
+        //   } else if (mthis.$store.state.tmss === 'geo') {
+        //     mthis.$store.commit('setGeoPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
+        //   } else if (mthis.$store.state.tmss === 'content') {
+        //     mthis.$store.commit('setContentPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
+        //   } else {
+        //   }
+        //   }
+        // })
       },
       modData(id) {
         // // console.log('modify');

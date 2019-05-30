@@ -8,20 +8,76 @@
             <p class="econtentp w5em">标题</p>
             <p class="econtentp" style="margin-right:3em;">{{tableData.title}}</p>
           </div>
-          <div class="econtent" v-if='tableData.i_sn'>
-            <p class="econtentp w5em">来源</p>
-            <p class="econtentp">{{tableData.i_sn}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <!-- <div class="econtent" v-if='tableData.i_sn'>
+              <p class="econtentp w5em">来源</p>
+              <p class="econtentp">{{tableData.i_sn}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+              </div>
+            </div> -->
+          <div class="econtent allowWrap" v-if='tableData.i_sn'>
+            <div v-if="typeof(tableData.i_sn) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">来源</p>
+              <p class="econtentp">{{tableData.i_sn}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.i_sn) === 'object'&&index<5" v-for="(it,index) in tableData.i_sn">
+              <p class="econtentp w5em" v-if="index==0">来源</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.i_sn.length>5&&displayMore['i_sn']" @click="clickMore('i_sn')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.i_sn) === 'object'&&index>=5&&!displayMore['i_sn']" v-for="(occ,index) in tableData.i_sn">
+              <p class="econtentp w5em" v-if="index==0">来源</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.i_sn.length>5&&!displayMore['i_sn']" @click="clickCutOut('i_sn')">
+              <p class="econtentp w5em moreP">收起</p>
             </div>
           </div>
-          <div class="econtent" v-if='tableData.from'>
-            <p class="econtentp w5em">作者</p>
-            <p class="econtentp">{{tableData.from}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+          <div class="econtent allowWrap" v-if='tableData.from'>
+            <div v-if="typeof(tableData.from) !== 'object'" :style="{display:'flex'}">
+              <p class="econtentp w5em">作者</p>
+              <p class="econtentp">{{tableData.from}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.from) === 'object'&&index<5" v-for="(it,index) in tableData.from">
+              <p class="econtentp w5em" v-if="index==0">作者</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{it}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.from.length>5&&displayMore['from']" @click="clickMore('from')">
+              <p class="econtentp w5em moreP">更多</p>
+            </div>
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.from) === 'object'&&index>=5&&!displayMore['from']" v-for="(occ,index) in tableData.from">
+              <p class="econtentp w5em" v-if="index==0">作者</p>
+              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp">{{occ}}</p>
+              <div class="eButton">
+              </div>
+            </div>
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.from.length>5&&!displayMore['from']" @click="clickCutOut('from')">
+              <p class="econtentp w5em moreP">收起</p>
             </div>
           </div>
+          <!-- <div class="econtent" v-if='tableData.from'>
+              <p class="econtentp w5em">作者</p>
+              <p class="econtentp">{{tableData.from}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+              </div>
+            </div> -->
           <div class="econtent" v-if='tableData.time'>
             <p class="econtentp w5em">时间</p>
             <p class="econtentp">{{tableData.time}}</p>
@@ -49,15 +105,26 @@
       <panel name="2">
         <span>相关实体</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
-            <p class="econtentp w5em">{{items.relation}}</p>
-            <p class="econtentp">{{items.name}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+          <!-- <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
+              <p class="econtentp w5em">{{items.relation}}</p>
+              <p class="econtentp">{{items.name}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+              </div>
+            </div> -->
+          <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
+            <div class="econtent blockStyle" v-for="(item,index) in items.data">
+              <p class="econtentp w5em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
+              <p class="econtentp w5em" v-else :title="items.relation"></p>
+              <p class="econtentp">{{item.name}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+              </div>
             </div>
           </div>
-          <div class="econtent" v-if='!xiangguanEntityItems.length>0'>
-            <p class="econtentp">暂无相关实体</p>
+          <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
+            <p class="econtentp" v-show="spinWaiting">相关实体加载中···</p>
+            <p class="econtentp" v-show="!spinWaiting">暂无相关实体</p>
           </div>
         </div>
       </panel>
@@ -100,7 +167,7 @@
   </div>
 </template>
 <script>
-import {
+  import {
     mapState,
     mapMutations
   } from 'vuex'
@@ -109,7 +176,7 @@ import {
   export default {
     data() {
       return {
-        spinWaiting:false,
+        spinWaiting: false,
         value1: ['1', '2', '3', '4'],
         xiangguanEntityItems: new Array(),
         xiangguanEntitys: new Object(),
@@ -120,15 +187,15 @@ import {
         myMap1: new Map()
       }
     },
-    props: ['tableData', 'entDivH','tableType'],
-    created(){
-        let mthis = this
-        mthis.xiangguanEntityItems = new Array()
-        mthis.xiangguanEntitys = new Object()
-        mthis.xiangguanEvent = new Array()
-        mthis.xiangguanDoc = new Array()
-        mthis.spinWaiting = true
-        if(this.tableType === 'document'||this.tableType === 'content'){
+    props: ['tableData', 'entDivH', 'tableType'],
+    created() {
+      let mthis = this
+      mthis.xiangguanEntityItems = new Array()
+      mthis.xiangguanEntitys = new Object()
+      mthis.xiangguanEvent = new Array()
+      mthis.xiangguanDoc = new Array()
+      mthis.spinWaiting = true
+      if (this.tableType === 'document' || this.tableType === 'content') {
         if (this.tableData.isArray) {
           if (this.tableData.length > 0) {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
@@ -143,14 +210,13 @@ import {
               mthis.spinWaiting = false
             })
           } else {
-            if(mthis.$store.state.tmss === 'net') {
+            if (mthis.$store.state.tmss === 'net') {
               mthis.$store.commit('setNetPromte', '长度为0')
-            } else if(mthis.$store.state.tmss === 'geo') {
+            } else if (mthis.$store.state.tmss === 'geo') {
               mthis.$store.commit('setGeoPromte', '长度为0')
-            } else if(mthis.$store.state.tmss === 'content') {
+            } else if (mthis.$store.state.tmss === 'content') {
               mthis.$store.commit('setContentPromte', '长度为0')
             } else {
-
             }
             mthis.spinWaiting = false
           }
@@ -158,44 +224,48 @@ import {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
             "NodeIds": new Array(mthis.tableData.id),
             // "NodeTypes": new Array('entity'),
+            "Group": "True",
             "TypeLabel": "all"
           }).then(response => {
             // mthis.xiangguanEntityItems = new Array()
             // mthis.xiangguanEntitys = new Object()
             // mthis.xiangguanEvent = new Array()
             // mthis.xiangguanDoc = new Array()
-           if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
-             response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
-              item.type = item.undirected_type
-              return item
-            })
+            if (response.body.data[0].RelatedEntity[mthis.tableData.id]) {
+              response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item => {
+                item.type = item.undirected_type
+                return item
+              })
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }
-            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+            if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
               mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
             }
-            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
+            if (response.body.data[0].RelatedDocument[mthis.tableData.id]) {
               mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
             }
-            if (response.body.data[0].unknown !== new Object()) {
-            }
+            if (response.body.data[0].unknown !== new Object()) {}
             mthis.spinWaiting = false
           })
-        }}
+        }
+      }
     },
     mounted() {
       var mthis = this
       var ob = configer.loadxmlDoc(mthis.$store.state.ipConfig.xml_url + "/dictionary.xml");
       var eventNames = ob.getElementsByTagName("eventNames");
       mthis.myMap1 = new Map();
-      for(let eventNameitem of eventNames) {
-        for(let items of eventNameitem.children){
-          mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {name:items.getElementsByTagName('chname')[0].textContent,img:items.getElementsByTagName('img')[0].textContent})
+      for (let eventNameitem of eventNames) {
+        for (let items of eventNameitem.children) {
+          mthis.myMap1.set(items.getElementsByTagName('ename')[0].textContent, {
+            name: items.getElementsByTagName('chname')[0].textContent,
+            img: items.getElementsByTagName('img')[0].textContent
+          })
         }
       }
-       var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
+      var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
       var entityMainType = ob1.getElementsByTagName("entityMainType");
       mthis.myMap = new Map();
       for (var i = 0; i < entityMainType.length; i++) {
@@ -210,43 +280,42 @@ import {
       this.tableData = new Object()
     },
     methods: {
-      addmultNodeToCanvans(obj,type,subType) {
+      addmultNodeToCanvans(obj, type, subType) {
         mthis.$store.commit('setAddNetNodes', {
-          nodes:obj.nodes,
-          links:obj.links
+          nodes: obj.nodes,
+          links: obj.links
         })
       },
-      addSingleNodeToCanvans(id,type,subType) {
+      addSingleNodeToCanvans(id, type, subType) {
         var mthis = this
-        if(type === 'entity') {
+        if (type === 'entity') {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
-            "nodeIds":id
+            "nodeIds": id
           }).then(response => {
-            let nodeArr = response.body.data[0].nodes.map(it=>{
+            let nodeArr = response.body.data[0].nodes.map(it => {
               it.img = util.checkImgExists(it.img) ? (it.img) : 'http://10.60.1.140/assets/images/People.png'
               return it.id
             })
             mthis.$store.commit('setAddNetNodes', {
-              nodes:response.body.data[0].nodes,
-              links:mthis.linkObj.filter(item=>{
+              nodes: response.body.data[0].nodes,
+              links: mthis.linkObj.filter(item => {
                 return item.from == id || item.to == id
               })
             })
           })
-        }
-        else if(type === 'event') {
+        } else if (type === 'event') {
           // ;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
-            "EventIds":id
+            "EventIds": id
           }).then(response => {
             // console.log('response.body.data')
             let nodes = new Array();
             let links = new Array();
-            if(response.body.code === 0) {
+            if (response.body.code === 0) {
               // let type = response.body.data[0].event_subtype.toLowerCase().replace(/-/, "_")
               let img = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).img
               let name = mthis.myMap1.get(subType.toLowerCase().replace(/-/, "_")).name
-              for(let i = 0;i<response.body.data.length;i++) {
+              for (let i = 0; i < response.body.data.length; i++) {
                 nodes.push({
                   id: response.body.data[i].id,
                   img: img,
@@ -254,10 +323,10 @@ import {
                   name: name,
                   loaded: true
                 })
-                response.body.data[i].entity_list.map(oitem=>{
-                  if(oitem.id === this.tableData.id) {
+                response.body.data[i].entity_list.map(oitem => {
+                  if (oitem.id === this.tableData.id) {
                     links.push({
-                      id: (this.tableData.id>response.body.data[i].id)?(this.tableData.id+'-'+response.body.data[i].id):(response.body.data[i].id+'-'+this.tableData.id),
+                      id: (this.tableData.id > response.body.data[i].id) ? (this.tableData.id + '-' + response.body.data[i].id) : (response.body.data[i].id + '-' + this.tableData.id),
                       type: oitem.role,
                       from: this.tableData.id,
                       to: response.body.data[i].id,
@@ -267,29 +336,28 @@ import {
                 })
               }
               mthis.$store.commit('setAddNetNodes', {
-                nodes:nodes,
-                links:links
+                nodes: nodes,
+                links: links
               })
             }
           })
-        }
-        else if(type === 'document') {
+        } else if (type === 'document') {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
-            "docIds":id
+            "docIds": id
           }).then(response => {
             let nodes = new Array();
             let links = new Array();
-            if(response.body.code === 0) {
-              for(let i = 0;i<response.body.data.length;i++) {
+            if (response.body.code === 0) {
+              for (let i = 0; i < response.body.data.length; i++) {
                 nodes.push({
                   id: response.body.data[i].id,
                   img: 'http://10.60.1.140/assets/images/content_node.png',
                   entity_type: 'content',
-                  name:response.body.data[i].title,
-                  label: response.body.data[i].title.substring(0, 19)+'...',
+                  name: response.body.data[i].title,
+                  label: response.body.data[i].title.substring(0, 19) + '...',
                   loaded: true
                 })
-                let idstr = (this.tableData.id>response.body.data[i].id)?('content_'+this.tableData.id+'-'+response.body.data[i].id):('content_'+response.body.data[i].id+'-'+this.tableData.id)
+                let idstr = (this.tableData.id > response.body.data[i].id) ? ('content_' + this.tableData.id + '-' + response.body.data[i].id) : ('content_' + response.body.data[i].id + '-' + this.tableData.id)
                 links.push({
                   id: idstr,
                   type: '包含',
@@ -299,14 +367,12 @@ import {
                 })
               }
               mthis.$store.commit('setAddNetNodes', {
-                nodes:nodes,
-                links:links
+                nodes: nodes,
+                links: links
               })
             }
           })
-        }
-        else {
-
+        } else {
         }
       }
     },
@@ -319,68 +385,66 @@ import {
         mthis.xiangguanEntitys = new Object()
         mthis.xiangguanEvent = new Array()
         mthis.xiangguanDoc = new Array()
-        if(this.tableType === 'document'||this.tableType === 'content'){
-        if (this.tableData.isArray) {
-          if (this.tableData.length > 0) {
-            // let node
+        if (this.tableType === 'document' || this.tableType === 'content') {
+          if (this.tableData.isArray) {
+            if (this.tableData.length > 0) {
+              // let node
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+                "NodeIds": mthis.tableData.map(item => {
+                  return item.id
+                }),
+                // "NodeTypes": mthis.tableData.map(item => {
+                //   // return item.entity_type
+                //   return 'document'
+                // }),
+                "TypeLabel": "all"
+              }).then(response => {})
+            } else {
+              if (mthis.$store.state.tmss === 'net') {
+                mthis.$store.commit('setNetPromte', '长度为0')
+              } else if (mthis.$store.state.tmss === 'geo') {
+                mthis.$store.commit('setGeoPromte', '长度为0')
+              } else if (mthis.$store.state.tmss === 'content') {
+                mthis.$store.commit('setContentPromte', '长度为0')
+              } else {
+              }
+            }
+            // mthis.spinWaiting = false
+          } else {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
-              "NodeIds": mthis.tableData.map(item => {
-                return item.id
-              }),
-              // "NodeTypes": mthis.tableData.map(item => {
-              //   // return item.entity_type
-              //   return 'document'
-              // }),
+              "NodeIds": new Array(mthis.tableData.id),
+              // "NodeTypes": new Array('document'),
+              "Group": "True",
               "TypeLabel": "all"
             }).then(response => {
+              // mthis.xiangguanEntityItems = new Array()
+              // mthis.xiangguanEntitys = new Object()
+              // mthis.xiangguanEvent = new Array()
+              // mthis.xiangguanDoc = new Array()
+              if (response.body.data[0].RelatedEntity[mthis.tableData.id]) {
+                response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item => {
+                  item.type = item.undirected_type
+                  return item
+                })
+                mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+                mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+                mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
+              }
+              if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
+                mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
+              }
+              if (response.body.data[0].RelatedDocument[mthis.tableData.id]) {
+                mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+              }
+              if (response.body.data[0].unknown !== new Object()) {
+                // // console.log('------------有未知类型的节点--------------------')
+                // // console.log(response.body.data[0].unknown)
+                // // console.log('-----------------------------------------------')
+              }
             })
-          } else {
-            if(mthis.$store.state.tmss === 'net') {
-              mthis.$store.commit('setNetPromte', '长度为0')
-            } else if(mthis.$store.state.tmss === 'geo') {
-              mthis.$store.commit('setGeoPromte', '长度为0')
-            } else if(mthis.$store.state.tmss === 'content') {
-              mthis.$store.commit('setContentPromte', '长度为0')
-            } else {
-
-            }
           }
-          // mthis.spinWaiting = false
-        } else {
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
-            "NodeIds": new Array(mthis.tableData.id),
-            // "NodeTypes": new Array('document'),
-            "TypeLabel": "all"
-          }).then(response => {
-            
-            // mthis.xiangguanEntityItems = new Array()
-            // mthis.xiangguanEntitys = new Object()
-            // mthis.xiangguanEvent = new Array()
-            // mthis.xiangguanDoc = new Array()
-            if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
-              response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
-              item.type = item.undirected_type
-              return item
-            })
-              mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
-              mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
-              mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
-            }
-            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
-              mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
-            }
-            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
-              mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
-            }
-            if (response.body.data[0].unknown !== new Object()) {
-              // // console.log('------------有未知类型的节点--------------------')
-              // // console.log(response.body.data[0].unknown)
-              // // console.log('-----------------------------------------------')
-            }
-          })
+          mthis.spinWaiting = false
         }
-        mthis.spinWaiting = false
-      }
       }
     }
   }
