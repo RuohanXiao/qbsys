@@ -1098,7 +1098,6 @@ export default {
         },
         setRightClickMenu_Area(coordinate){
             var mthis = this;
-            debugger
             var overlayId = 'rightClickMenu_Area';
             var ovdiv = document.createElement('div');
             ovdiv.style = 'width:440px;height:440px';
@@ -3690,7 +3689,6 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
-            debugger
             var data = mthis.$store.state.netToGeoData;
             var ids = [];
             var keys = Object.keys(data);
