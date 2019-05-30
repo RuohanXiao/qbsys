@@ -1,5 +1,5 @@
 <template>
-<div :style="{height:nh}" tabindex="1" @keydown="keyD">
+<div :style="{height:nh}" tabindex="1" @keydown="keyD" style="outline:none;">
     <div :style="{height:nh,backgroundColor:'rgba(0,0,0,0)',position:'absolute',zIndex: zIndex,top:0,width:'99%',margin:'0 10px'}">
         <Spin size="large" fix v-if="spinShow"></Spin>
     </div>
