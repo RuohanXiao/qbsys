@@ -558,10 +558,10 @@ export default {
                         }
                     });
                 }
-                /* if (mthis.selectionIdByType.contentIds.length > 0) {
+                /* if (mthis.selectionIdByType.contentIds.ids.length > 0) {
                     mthis.$http
                     .post(mthis.$store.state.ipConfig.api_url + "/doc-detail/", {
-                        docIds: mthis.selectionIdByType.contentIds
+                        docIds: mthis.selectionIdByType.contentIds.ids
                     })
                     .then(response => {
                         ;
@@ -1580,16 +1580,16 @@ export default {
             var conLabel = document.createElement('div');
             conLabel.style = 'padding: 5px 10px;';
             ovdiv.appendChild(conLabel);
-            var Lp = document.createElement('p');
+            /* var Lp = document.createElement('p');
             conLabel.appendChild(Lp);
             Lp.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
-            Lp.innerHTML = feature.get('locationName');
+            Lp.innerHTML = feature.get('locationName'); */
             var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
 
             var orgNum = feature.get('selectedNum');
-            /* if(orgNum === 1){
+            if(orgNum === 1){
                 var name = ''
                 var Entitites = '';
                 var eventType = '';
@@ -1605,13 +1605,13 @@ export default {
                         }
                     }
                     if(isHas){
-                        Ap.innerHTML = "事件：" + params[i].completeEvent;
+                        Ap.innerHTML = "事件：" + params[i].eventType;
                         break;
                     }
                 }
-            } else { */
-                Ap.innerHTML = "事件数：" + feature.get('selectedNum');
-            //}
+            } else {
+                Ap.innerHTML = "事件数：" + orgNum;
+            }
             //Ap.innerHTML = "事件：" + feature.get('selectedNum');
             var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,ovdiv,overlayId,'top-left');
             mthis.routeMap.map.addOverlay(overlayId);
@@ -3387,7 +3387,7 @@ export default {
             mthis.waiting();
             //mthis.$http.post("http://localhost:5000/getParamsByIds/", {
             mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
-                    "nodeIds": ids
+                     "nodeIds": ids
                 }).then(response => {
                     var orgNum = 0;
                     var eventNum = 0
