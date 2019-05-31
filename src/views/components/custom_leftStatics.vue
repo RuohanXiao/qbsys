@@ -198,7 +198,6 @@ export default {
         openPanelNames:{
             get:function(){
                 var mthis = this;
-                debugger
                 var openPanelNames = [];
                 mthis.staticsDatas.forEach(function(item,Index){
                     item.subStatisticsAttr.forEach(function(Iitem,index){
@@ -296,7 +295,6 @@ export default {
     methods:{
         collchange(names){
             var mthis = this;
-            debugger
             var activeName = "";
             if(mthis.mactiveNames.length > names.length){
                 for(let i = 0; i < mthis.mactiveNames.length; i++){
@@ -363,7 +361,6 @@ export default {
         },
         selectedIds(el,ids){
             var mthis = this;
-            debugger
             /* if(el.style.backgroundColor ==='rgba(51, 255, 255, 0.2)'){
                 return;
             } */

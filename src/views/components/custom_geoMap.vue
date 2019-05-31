@@ -991,10 +991,10 @@ export default {
                 var feature = mthis.getLayerById("HLAreaLayer").getSource().getFeatureById(id)
                 var geometry = feature.getGeometry();
                 var geometryStr = new GeoJSON().writeGeometry(geometry)
-                //geometryList.push(geometryStr);
-                mthis.orgsSpatialQuery([geometryStr],'Event');
+                geometryList.push(geometryStr);
+                //mthis.orgsSpatialQuery([geometryStr],'Event');
             }
-            //mthis.orgsSpatialQuery(geometryList,'Event');
+            mthis.orgsSpatialQuery(geometryList,'Event');
             mthis.deleteRightMenu();
         },
         rightClickOrg(){
@@ -1098,7 +1098,6 @@ export default {
         },
         setRightClickMenu_Area(coordinate){
             var mthis = this;
-            debugger
             var overlayId = 'rightClickMenu_Area';
             var ovdiv = document.createElement('div');
             ovdiv.style = 'width:440px;height:440px';
@@ -3690,7 +3689,6 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
-            debugger
             var data = mthis.$store.state.netToGeoData;
             var ids = [];
             var keys = Object.keys(data);

@@ -417,9 +417,25 @@ var store = new Vuex.Store({
     contentPromte: '',
     netPromte: '',
     geoPromte: '',
-    showDocTime:true
+    // 词云图开时间轴按钮消失
+    showDocTime:true,
+    // 删除集合
+    delSetData:{
+      flag:false,
+      datas:{
+        id:'',
+        setLeft:0,
+        setTop:0,
+        title:'',
+        canText:'',
+        delText:''
+      }
+    }
   },
   mutations:{
+    setDelSetData(state,val){
+      state.delSetData = val
+    },
     setShowDocTime(state,val){
       state.showDocTime = val
     },

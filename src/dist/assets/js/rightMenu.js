@@ -351,7 +351,10 @@ var rightMenu = function(t,target,config){
                 },1000)
             } else {
                 var func=eval(params.data.callback);
-                func.call(mthis);
+                if(func !== undefined){
+                    func.call(mthis);
+                }
+                
             }
         }
             
