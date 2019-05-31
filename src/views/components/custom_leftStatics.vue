@@ -127,7 +127,7 @@ trClick{
 
 <template>
 <div id='leftStatics' :style="{height:eDivH}">
-    <div :id='staticsData.firstLevelId' v-for='(staticsData,Index) in staticsDatas'>
+    <div :id='staticsData.firstLevelId' v-if='staticsData.subStatisticsAttr.length > 0' v-for='(staticsData,Index) in staticsDatas'>
         <div :id="staticsData.firstLevelId + 'Name'">
             <span class="separateLine"></span>
             <span style="margin-left:10px;font-size: 14px;">{{staticsData.firstLevelName}}</span>
