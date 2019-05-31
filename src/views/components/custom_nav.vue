@@ -155,12 +155,14 @@
       }
     },
     computed: mapState([
-      'refSet'
+      'refSet','delSetFlag'
     ]),
     watch: {
       refSet:function(){
         this.showGongzuoji()
-      }
+        
+      },
+      
     },
     mounted() {
       this.contentHeight = this.$store.getters.getViewHeight
@@ -170,9 +172,11 @@
     },
      methods: {
        delMethod(id){
+         alert(111)
          let mthis = this
+
         //  触发删除工作集方法
-        // alert('触发删除工作集方法')
+        alert('触发删除工作集方法')
         if(mthis.$store.state.tmss === 'net') {
               mthis.$store.commit('setNetPromte', '触发删除工作集方法')
             } else if(mthis.$store.state.tmss === 'geo') {
@@ -197,6 +201,7 @@
             "pagesize": 30
           }).then(response => {
             mthis.items_gongzuoji = response.body.data
+            console.log(response.body.data)
             this.spinRight = false
           })
        },

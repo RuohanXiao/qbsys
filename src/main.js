@@ -430,7 +430,7 @@ var store = new Vuex.Store({
         canText:'',
         delText:''
       }
-    }
+    },
   },
   mutations:{
     setDelSetData(state,val){
