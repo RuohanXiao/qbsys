@@ -5,11 +5,12 @@
         :mask="false"
         footer-hide
         v-model="modal1"
+        
         >
         <div class="setTitle">{{setTitle}}</div>
         <div class="setButton">
-            <div class="cancelB" style="color:rgba(204,255,255,0.5);">{{canText}}</div>
-            <div class="delB" style="color:#ccffff;">{{delText}}</div>
+            <div class="cancelB" style="color:rgba(204,255,255,0.5);" @click="modal1 = false">{{canText}}</div>
+            <div class="delB" style="color:#ccffff;" @click="del(setId)">{{delText}}</div>
         </div>
         
     </Modal>
@@ -30,15 +31,52 @@ export default {
             setTitle:'',
             canText:'',
             delText:'',
-            
+            setId:''
         }
     },
     
     computed:mapState([
       'delSetData'
     ]),
-    mounted(){
-        
+    methods:{
+        del(id){
+            console.log(id)
+           
+            var mthis = this
+            let timestamp = new Date().getTime()
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/delete-set-data/', {
+                "timestamp": timestamp,
+                "idlist": new Array(id),
+                "label": "set",
+                "type": "set"
+            }).then(response => {
+                // // console.log(response)
+                if (response.body.code === 0) {
+                    // alert('删除成功！')
+                    if (mthis.$store.state.tmss === 'net') {
+                        mthis.$store.commit('setNetPromte', '删除成功！')
+                    } else if (mthis.$store.state.tmss === 'geo') {
+                        mthis.$store.commit('setGeoPromte', '删除成功！')
+                    } else if (mthis.$store.state.tmss === 'content') {
+                        mthis.$store.commit('setContentPromte', '删除成功！')
+                    } else {
+                }
+                // mthis.$emit('ref', timestamp)
+                    mthis.$store.commit('setRefSet', !mthis.$store.state.refSet)
+                } else {
+                    alert('删除异常，请查询控制台，错误编码' + response.body.code)
+                    if (mthis.$store.state.tmss === 'net') {
+                        mthis.$store.commit('setNetPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
+                    } else if (mthis.$store.state.tmss === 'geo') {
+                        mthis.$store.commit('setGeoPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
+                    } else if (mthis.$store.state.tmss === 'content') {
+                        mthis.$store.commit('setContentPromte', '删除异常，请查询控制台，错误编码' + response.body.code)
+                    } else {
+                    }
+                }
+            })
+            this.modal1 = false
+        }
     },
     watch:{
         delSetData: function() {
@@ -49,11 +87,18 @@ export default {
             var setContent = document.getElementsByClassName('ivu-modal-content')[0]
             
             setContent.style.position = 'fixed';
-            setContent.style.top = (this.delSetData.datas.setTop +18) + 'px';
-            setContent.style.left =(this.delSetData.datas.setLeft - 200) + 'px';
+            if(this.delSetData.datas.setTop>670){
+                setContent.style.top = (mthis.delSetData.datas.setTop -40-55) +'px';
+                setContent.style.left =(mthis.delSetData.datas.setLeft - 200-110) + 'px';
+            }else{
+                setContent.style.top = (mthis.delSetData.datas.setTop +18) + 'px';
+                setContent.style.left =(mthis.delSetData.datas.setLeft - 200) + 'px';
+            }
+            
             mthis.setTitle = this.delSetData.datas.title;
             mthis.canText = this.delSetData.datas.canText;
             mthis.delText = this.delSetData.datas.delText;
+            mthis.setId = this.delSetData.datas.id;
             this.modal1 = true;
             
       },
@@ -65,6 +110,7 @@ export default {
         width:220px  !important;
         
     }
+    
 </style>
 <style scoped>
     .setTitle{
