@@ -3,17 +3,17 @@
     <!-- topdiv 头像, 名字, 简介 -->
     <div :style="{display:'flex'}">
       <div class='avatarStyle'>
-        <Avatar class="circle-img" :src='autoImg' :onerror="defaultImg(detailData.entity_type,detailData.img)" :style="{width:'50px',height:'50px'}" />
+        <Avatar class="circle-img" :src='autoImg' :onerror="defaultImg(detailData.entity_type,detailData.img,detailData.event_subtype)" :style="{width:'50px',height:'50px'}" />
       </div>
       <div class="contentStyle">
         <div>
           <p :style="{lineHeight:'28px',fontSize:'16px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" class="titleStyle">{{detailData.name}}</p>
           <!-- <p :style="{lineHeight:'28px',fontSize:'16px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" class="titleStyle">{{detailData.title}}</p> -->
         </div>
-        <div v-if="myMap.get(detailData.entity_type) === 'entity'">
-          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-if="detailData.description">{{detailData.event_content}}</p>
-          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-else class="desStyle">暂无简介</p>
-        </div>
+        <!-- <div v-if="myMap.get(detailData.entity_type) === 'entity'"> -->
+          <p class='desClass' :title='detailData.description' v-if="detailData.description">{{detailData.description}}</p>
+          <p class='desClass desStyle' v-else >暂无简介</p>
+        <!-- </div> -->
       </div>
     </div>
     <!-- 节点信息 -->
@@ -117,7 +117,7 @@
           return item;
         },[]);
       },
-      defaultImg(type, img) {
+      defaultImg(type, img, subtype) {
         // console.log('==================')
         // console.log(util.checkImgExists(img))
         if(img){
@@ -137,7 +137,8 @@
                 return 'http://10.60.1.140/assets/images/image1.png'
               }
             } else if (this.myMap.get(type) === 'event') {
-              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
+              return mthis.myMap1.get(subtype).img
+              // return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
             } else if (this.myMap.get(type) === 'document') {
               return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
             } else {
@@ -208,7 +209,15 @@
     },
     watch: {
       detailData: function() {
-        this.autoImg=this.defaultImg(this.detailData.entity_type,'http://10.60.1.143/pic_lib/padded/'+this.detailData.id+'.png')
+        if (this.detailData.entity_type === 'event' && this.detailData.event_subtype) {
+          this.autoImg = this.myMap1.get(this.detailData.event_subtype).img
+        } else if(this.detailData.entity_type === 'document'){
+          this.autoImg = 'http://10.60.1.140/assets/images/content_node.png'
+        } else if(this.detailData.entity_type === 'other'){
+          this.autoImg = 'http://10.60.1.140/assets/images/image1.png'
+        }else {
+          this.autoImg=this.defaultImg(this.detailData.entity_type,'http://10.60.1.143/pic_lib/padded/'+this.detailData.id+'.png','')
+        }
       },
       eventdata: function() {
         var mthis = this
@@ -509,5 +518,18 @@
     display: block;
     width: 100%;
   }
+  .desClass{
+    line-height: 22px;
+    overflow: hidden;
+    white-space: wrap;
+    text-overflow: -o-ellipsis-lastline;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    height: 44px;
+    word-break: break-all;
+    }
 </style>
 
