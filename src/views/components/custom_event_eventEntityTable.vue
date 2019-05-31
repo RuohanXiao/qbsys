@@ -5,33 +5,33 @@
         <span>事件属性</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='tableData.event_type'>
-            <p class="econtentp w5em">事件类型</p>
+            <p class="econtentp w8em">事件类型</p>
             <!-- <p class="econtentp">{{myMapevent.get(tableData.event_type.toLowerCase().replace(/-/, "_")).name}}</p> -->
             <p class="econtentp">{{tableData.event_type}}</p>
           </div>
           <div class="econtent" v-if='tableData.event_subtype'>
-            <p class="econtentp w5em">子类</p>
+            <p class="econtentp w8em">子类</p>
             <!-- <p class="econtentp">{{myMap1.get(tableData.event_subtype.toLowerCase().replace(/-/, "_")).name}}</p> -->
             <p class="econtentp">{{tableData.event_subtype}}</p>
           </div>
           <div class="econtent" v-if='tableData.nperps'>
-            <p class="econtentp w5em">恐怖分子总数</p>
+            <p class="econtentp w8em">恐怖分子总数</p>
             <p class="econtentp">{{tableData.nperps}}</p>
           </div>
           <div class="econtent" v-if='tableData.nkill'>
-            <p class="econtentp w5em">死亡总人数</p>
+            <p class="econtentp w8em">死亡总人数</p>
             <p class="econtentp">{{tableData.nkill}}</p>
           </div>
           <div class="econtent" v-if='tableData.motivate'>
-            <p class="econtentp w5em">动机 </p>
+            <p class="econtentp w8em">动机 </p>
             <p class="econtentp">{{tableData.motivate}}</p>
           </div>
           <div class="econtent" v-if='tableData.natlty1_txt'>
-            <p class="econtentp w5em">被攻击目标的国籍</p>
+            <p class="econtentp w8em">被攻击目标的国籍</p>
             <p class="econtentp">{{tableData.natlty1_txt}}</p>
           </div>
           <div class="econtent" v-if='tableData.attacktype1_txt'>
-            <p class="econtentp w5em">攻击方法</p>
+            <p class="econtentp w8em">攻击方法</p>
             <p class="econtentp">{{tableData.attacktype1_txt}}</p>
           </div>
         </div>
@@ -41,20 +41,36 @@
         <span>相关实体</span>
         <div slot="content" class="tableLine">
           <!-- <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
-            <p class="econtentp w5em">{{items.relation}}</p>
-            <p class="econtentp">{{items.name}}</p>
-            <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
-            </div>
-          </div> -->
-          <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
-            <div class="econtent blockStyle" v-for="(item,index) in items.data">
-              <p class="econtentp w5em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
-              <p class="econtentp w5em" v-else :title="items.relation"></p>
+                <p class="econtentp w8em">{{items.relation}}</p>
+                <p class="econtentp">{{items.name}}</p>
+                <div class="eButton">
+                  <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
+                </div>
+              </div> -->
+          <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="(items,ind) in xiangguanEntityItems">
+            <div v-show='ctrls[ind]||items.data.length<5' class="econtent blockStyle" v-for="(item,index) in items.data">
+              <p class="econtentp w8em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
+              <p class="econtentp w8em" v-else :title="items.relation"></p>
               <p class="econtentp">{{item.name}}</p>
               <div class="eButton">
-                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
               </div>
+            </div>
+            <div v-show="!ctrls[ind]&&items.data.length>5&&index<5" class="econtent blockStyle" v-for="(item,index) in items.data">
+              <p class="econtentp w8em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
+              <p class="econtentp w8em" v-else :title="items.relation"></p>
+              <p class="econtentp">{{item.name}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
+              </div>
+            </div>
+            <div v-show="!ctrls[ind]&&items.data.length>5" class="econtent blockStyle">
+              <p class="econtentp w8em"><a @click='more(ind)'>更多</a></p>
+              <p class="econtentp"></p>
+            </div>
+            <div v-show="ctrls[ind]&&items.data.length>5" class="econtent blockStyle">
+              <p class="econtentp w8em"><a @click='more(ind)'>收起</a></p>
+              <p class="econtentp"></p>
             </div>
           </div>
           <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
@@ -68,8 +84,8 @@
         <span>相关事件</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
-            <!-- <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
-            <p class="econtentp w5em">{{items.type}}</p>
+            <!-- <p class="econtentp w8em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
+            <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
@@ -86,7 +102,7 @@
         <span>相关文档</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0' v-for='items in xiangguanDoc.statistics'>
-            <p class="econtentp w5em">{{items.type}}</p>
+            <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
@@ -120,17 +136,18 @@
         linkObj: new Object(),
         myMap: new Map(),
         myMap1: new Map(),
-        myMapevent: new Map()
+        myMapevent: new Map(),
+        ctrls: new Array()
       }
     },
-    props: ['tableData', 'entDivH','tableType'],
-    created(){
-        let mthis = this
-        mthis.xiangguanEntityItems = new Array()
-        mthis.xiangguanEntitys = new Object()
-        mthis.xiangguanEvent = new Array()
-        mthis.xiangguanDoc = new Array()
-        if(this.tableType==='event'){
+    props: ['tableData', 'entDivH', 'tableType'],
+    created() {
+      let mthis = this
+      mthis.xiangguanEntityItems = new Array()
+      mthis.xiangguanEntitys = new Object()
+      mthis.xiangguanEvent = new Array()
+      mthis.xiangguanDoc = new Array()
+      if (this.tableType === 'event') {
         mthis.spinWaiting = true
         if (this.tableData.isArray) {
           if (this.tableData.length > 0) {
@@ -147,15 +164,13 @@
             })
           } else {
             // alert('长度为0')
-            if(mthis.$store.state.tmss === 'net') {
+            if (mthis.$store.state.tmss === 'net') {
               mthis.$store.commit('setNetPromte', '长度为0')
-            } else if(mthis.$store.state.tmss === 'geo') {
+            } else if (mthis.$store.state.tmss === 'geo') {
               mthis.$store.commit('setGeoPromte', '长度为0')
-            } else if(mthis.$store.state.tmss === 'content') {
+            } else if (mthis.$store.state.tmss === 'content') {
               mthis.$store.commit('setContentPromte', '长度为0')
-            } else {
-
-            }
+            } else {}
             mthis.spinWaiting = false
           }
         } else {
@@ -169,26 +184,30 @@
             // mthis.xiangguanEntitys = new Object()
             // mthis.xiangguanEvent = new Array()
             // mthis.xiangguanDoc = new Array()
-           if(response.body.data[0].RelatedEntity[mthis.tableData.id]){
-             response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item=>{
-              item.type = item.undirected_type
-              return item
-            })
+            if (response.body.data[0].RelatedEntity[mthis.tableData.id]) {
+              response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item => {
+                item.type = item.undirected_type
+                return item
+              })
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+              mthis.ctrls = new Array()
+              mthis.xiangguanEntityItems.map(item => {
+                mthis.ctrls.push(!item.data.length > 5)
+              })
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }
-            if(response.body.data[0].RelatedEvent[mthis.tableData.id]){
+            if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
               mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
             }
-            if(response.body.data[0].RelatedDocument[mthis.tableData.id]){
+            if (response.body.data[0].RelatedDocument[mthis.tableData.id]) {
               mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
             }
-            if (response.body.data[0].unknown !== new Object()) {
-            }
+            if (response.body.data[0].unknown !== new Object()) {}
             mthis.spinWaiting = false
           })
-        }}
+        }
+      }
     },
     mounted() {
       var mthis = this
@@ -225,6 +244,11 @@
       this.tableData = new Object()
     },
     methods: {
+      more(index) {
+                // this.ctrls[index].splice(index,1,!this.ctrls[index]) 
+                this.ctrls[index]=!this.ctrls[index]
+                this.$forceUpdate()
+            },
       addSingleNodeToCanvans(id, type, subType) {
         var mthis = this
         if (type === 'entity') {
@@ -317,21 +341,18 @@
         }
         if (type === 'other') {
           // alert('this is other')
-          if(mthis.$store.state.tmss === 'net') {
-              mthis.$store.commit('setNetPromte', 'this is other')
-            } else if(mthis.$store.state.tmss === 'geo') {
-              mthis.$store.commit('setGeoPromte', 'this is other')
-            } else if(mthis.$store.state.tmss === 'content') {
-              mthis.$store.commit('setContentPromte', 'this is other')
-            } else {
-
-            }
+          if (mthis.$store.state.tmss === 'net') {
+            mthis.$store.commit('setNetPromte', 'this is other')
+          } else if (mthis.$store.state.tmss === 'geo') {
+            mthis.$store.commit('setGeoPromte', 'this is other')
+          } else if (mthis.$store.state.tmss === 'content') {
+            mthis.$store.commit('setContentPromte', 'this is other')
+          } else {}
         }
       }
     },
     watch: {
       tableData: function() {
-        
         // // console.log('===========custom_event_humanEntityTable --------tableData')
         let mthis = this
         mthis.spinWaiting = true
@@ -339,66 +360,69 @@
         mthis.xiangguanEntitys = new Object()
         mthis.xiangguanEvent = new Array()
         mthis.xiangguanDoc = new Array()
-        if(this.tableType==='event'){
-        if (this.tableData.isArray) {
-          if (this.tableData.length > 0) {
-            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
-              "NodeIds": mthis.tableData.map(item => {
-                return item.id
-              }),
-              // "NodeTypes": mthis.tableData.map(item => {
-              //   return item.entity_type
-              // }),
-              "TypeLabel": "all"
-            }).then(response => {})
-          } else {
-            // alert('长度为0')
-            if(mthis.$store.state.tmss === 'net') {
-              mthis.$store.commit('setNetPromte', '长度为0')
-            } else if(mthis.$store.state.tmss === 'geo') {
-              mthis.$store.commit('setGeoPromte', '长度为0')
-            } else if(mthis.$store.state.tmss === 'content') {
-              mthis.$store.commit('setContentPromte', '长度为0')
+        if (this.tableType === 'event') {
+          if (this.tableData.isArray) {
+            if (this.tableData.length > 0) {
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+                "NodeIds": mthis.tableData.map(item => {
+                  return item.id
+                }),
+                // "NodeTypes": mthis.tableData.map(item => {
+                //   return item.entity_type
+                // }),
+                "TypeLabel": "all"
+              }).then(response => {})
             } else {
-
+              // alert('长度为0')
+              if (mthis.$store.state.tmss === 'net') {
+                mthis.$store.commit('setNetPromte', '长度为0')
+              } else if (mthis.$store.state.tmss === 'geo') {
+                mthis.$store.commit('setGeoPromte', '长度为0')
+              } else if (mthis.$store.state.tmss === 'content') {
+                mthis.$store.commit('setContentPromte', '长度为0')
+              } else {}
             }
+            // mthis.spinWaiting = false
+          } else {
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
+              "NodeIds": new Array(mthis.tableData.id),
+              // "NodeTypes": new Array('entity'),
+              "Group": "True",
+              "TypeLabel": "all"
+            }).then(response => {
+              // mthis.xiangguanEntityItems = new Array()
+              // mthis.xiangguanEntitys = new Object()
+              // mthis.xiangguanEvent = new Array()
+              // mthis.xiangguanDoc = new Array()
+              if (response.body.data[0].RelatedEntity[mthis.tableData.id]) {
+                response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item => {
+                  item.type = item.undirected_type
+                  return item
+                })
+                mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
+                mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+                mthis.ctrls = new Array()
+                mthis.xiangguanEntityItems.map(item => {
+                  mthis.ctrls.push(!item.data.length > 5)
+                })
+                mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
+              }
+              if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
+                mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
+              }
+              if (response.body.data[0].RelatedDocument[mthis.tableData.id]) {
+                mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
+              }
+              if (response.body.data[0].unknown !== new Object()) {
+                // // console.log('------------有未知类型的节点--------------------')
+                // // console.log(response.body.data[0].unknown)
+                // // console.log('-----------------------------------------------')
+              }
+            })
           }
-          // mthis.spinWaiting = false
-        } else {
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
-            "NodeIds": new Array(mthis.tableData.id),
-            // "NodeTypes": new Array('entity'),
-            "Group": "True",
-            "TypeLabel": "all"
-          }).then(response => {
-            // mthis.xiangguanEntityItems = new Array()
-            // mthis.xiangguanEntitys = new Object()
-            // mthis.xiangguanEvent = new Array()
-            // mthis.xiangguanDoc = new Array()
-            if (response.body.data[0].RelatedEntity[mthis.tableData.id]) {
-              response.body.data[0].RelatedEntity[mthis.tableData.id].links.map(item => {
-                item.type = item.undirected_type
-                return item
-              })
-              mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
-              mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
-              mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
-            }
-            if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
-              mthis.xiangguanEvent = response.body.data[0].RelatedEvent[mthis.tableData.id]
-            }
-            if (response.body.data[0].RelatedDocument[mthis.tableData.id]) {
-              mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
-            }
-            if (response.body.data[0].unknown !== new Object()) {
-              // // console.log('------------有未知类型的节点--------------------')
-              // // console.log(response.body.data[0].unknown)
-              // // console.log('-----------------------------------------------')
-            }
-          })
+          mthis.spinWaiting = false
         }
-        mthis.spinWaiting = false
-      }}
+      }
     }
   }
 </script>
@@ -450,9 +474,10 @@
     min-width: 20px;
     margin: 0px 10px;
   }
-  .w5em {
-    width: 10em;
-    min-width: 5em;
+  .w8em {
+    width: 8em;
+    min-width: 8em;
+    max-width: 8em;
     margin: 0;
   }
   .tableLine>.econtent:nth-child(odd) {
@@ -465,6 +490,9 @@
     background-color: rgba(51, 255, 255, 0.2);
   }
   .tableLine>.econtent:hover>.eButton {
+    opacity: 1;
+  }
+  .blockStyle:hover .eButton{
     opacity: 1;
   }
   .eButton {

@@ -5,95 +5,95 @@
         <span>实体属性</span>
         <div slot="content" class="tableLine">
           <div class="econtent">
-            <p class="econtentp w5em">标题</p>
+            <p class="econtentp w8em">标题</p>
             <p class="econtentp" style="margin-right:3em;">{{tableData.title}}</p>
           </div>
           <!-- <div class="econtent" v-if='tableData.i_sn'>
-              <p class="econtentp w5em">来源</p>
-              <p class="econtentp">{{tableData.i_sn}}</p>
-              <div class="eButton">
-                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
-              </div>
-            </div> -->
+                  <p class="econtentp w8em">来源</p>
+                  <p class="econtentp">{{tableData.i_sn}}</p>
+                  <div class="eButton">
+                    <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+                  </div>
+                </div> -->
           <div class="econtent allowWrap" v-if='tableData.i_sn'>
             <div v-if="typeof(tableData.i_sn) !== 'object'" :style="{display:'flex'}">
-              <p class="econtentp w5em">来源</p>
+              <p class="econtentp w8em">来源</p>
               <p class="econtentp">{{tableData.i_sn}}</p>
               <div class="eButton">
               </div>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.i_sn) === 'object'&&index<5" v-for="(it,index) in tableData.i_sn">
-              <p class="econtentp w5em" v-if="index==0">来源</p>
-              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp w8em" v-if="index==0">来源</p>
+              <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{it}}</p>
               <div class="eButton">
               </div>
             </div>
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.i_sn.length>5&&displayMore['i_sn']" @click="clickMore('i_sn')">
-              <p class="econtentp w5em moreP">更多</p>
+              <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.i_sn) === 'object'&&index>=5&&!displayMore['i_sn']" v-for="(occ,index) in tableData.i_sn">
-              <p class="econtentp w5em" v-if="index==0">来源</p>
-              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp w8em" v-if="index==0">来源</p>
+              <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
               <div class="eButton">
               </div>
             </div>
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.i_sn.length>5&&!displayMore['i_sn']" @click="clickCutOut('i_sn')">
-              <p class="econtentp w5em moreP">收起</p>
+              <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
           <div class="econtent allowWrap" v-if='tableData.from'>
             <div v-if="typeof(tableData.from) !== 'object'" :style="{display:'flex'}">
-              <p class="econtentp w5em">作者</p>
+              <p class="econtentp w8em">作者</p>
               <p class="econtentp">{{tableData.from}}</p>
               <div class="eButton">
               </div>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.from) === 'object'&&index<5" v-for="(it,index) in tableData.from">
-              <p class="econtentp w5em" v-if="index==0">作者</p>
-              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp w8em" v-if="index==0">作者</p>
+              <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{it}}</p>
               <div class="eButton">
               </div>
             </div>
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.from.length>5&&displayMore['from']" @click="clickMore('from')">
-              <p class="econtentp w5em moreP">更多</p>
+              <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.from) === 'object'&&index>=5&&!displayMore['from']" v-for="(occ,index) in tableData.from">
-              <p class="econtentp w5em" v-if="index==0">作者</p>
-              <p class="econtentp w5em" v-else>&nbsp;</p>
+              <p class="econtentp w8em" v-if="index==0">作者</p>
+              <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
               <div class="eButton">
               </div>
             </div>
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.from.length>5&&!displayMore['from']" @click="clickCutOut('from')">
-              <p class="econtentp w5em moreP">收起</p>
+              <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
           <!-- <div class="econtent" v-if='tableData.from'>
-              <p class="econtentp w5em">作者</p>
-              <p class="econtentp">{{tableData.from}}</p>
-              <div class="eButton">
-                <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
-              </div>
-            </div> -->
+                  <p class="econtentp w8em">作者</p>
+                  <p class="econtentp">{{tableData.from}}</p>
+                  <div class="eButton">
+                    <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
+                  </div>
+                </div> -->
           <div class="econtent" v-if='tableData.time'>
-            <p class="econtentp w5em">时间</p>
+            <p class="econtentp w8em">时间</p>
             <p class="econtentp">{{tableData.time}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="econtent" v-if='tableData.channel'>
-            <p class="econtentp w5em">通道</p>
+            <p class="econtentp w8em">通道</p>
             <p class="econtentp">{{tableData.channel}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="econtent" v-if='tableData.type'>
-            <p class="econtentp w5em">类型</p>
+            <p class="econtentp w8em">类型</p>
             <p class="econtentp">{{tableData.type}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
@@ -106,20 +106,36 @@
         <span>相关实体</span>
         <div slot="content" class="tableLine">
           <!-- <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
-              <p class="econtentp w5em">{{items.relation}}</p>
-              <p class="econtentp">{{items.name}}</p>
-              <div class="eButton">
-                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
-              </div>
-            </div> -->
-          <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
-            <div class="econtent blockStyle" v-for="(item,index) in items.data">
-              <p class="econtentp w5em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
-              <p class="econtentp w5em" v-else :title="items.relation"></p>
+                  <p class="econtentp w8em">{{items.relation}}</p>
+                  <p class="econtentp">{{items.name}}</p>
+                  <div class="eButton">
+                    <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
+                  </div>
+                </div> -->
+          <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="(items,ind) in xiangguanEntityItems">
+            <div v-show='ctrls[ind]||items.data.length<5' class="econtent blockStyle" v-for="(item,index) in items.data">
+              <p class="econtentp w8em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
+              <p class="econtentp w8em" v-else :title="items.relation"></p>
               <p class="econtentp">{{item.name}}</p>
               <div class="eButton">
-                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
               </div>
+            </div>
+            <div v-show="!ctrls[ind]&&items.data.length>5&&index<5" class="econtent blockStyle" v-for="(item,index) in items.data">
+              <p class="econtentp w8em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
+              <p class="econtentp w8em" v-else :title="items.relation"></p>
+              <p class="econtentp">{{item.name}}</p>
+              <div class="eButton">
+                <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
+              </div>
+            </div>
+            <div v-show="!ctrls[ind]&&items.data.length>5" class="econtent blockStyle">
+              <p class="econtentp w8em"><a @click='more(ind)'>更多</a></p>
+              <p class="econtentp"></p>
+            </div>
+            <div v-show="ctrls[ind]&&items.data.length>5" class="econtent blockStyle">
+              <p class="econtentp w8em"><a @click='more(ind)'>收起</a></p>
+              <p class="econtentp"></p>
             </div>
           </div>
           <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
@@ -133,8 +149,8 @@
         <span>相关事件</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0 && items.num>0' v-for='items in xiangguanEvent.statistics'>
-            <!-- <p class="econtentp w5em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
-            <p class="econtentp w5em">{{items.type}}</p>
+            <!-- <p class="econtentp w8em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
+            <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
@@ -151,7 +167,7 @@
         <span>相关文档</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0 && items.num>0' v-for='items in xiangguanDoc.statistics'>
-            <p class="econtentp w5em">{{items.type}}</p>
+            <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
@@ -184,7 +200,8 @@
         xiangguanDoc: new Array(),
         linkObj: new Object(),
         myMap: new Map(),
-        myMap1: new Map()
+        myMap1: new Map(),
+        ctrls: new Array()
       }
     },
     props: ['tableData', 'entDivH', 'tableType'],
@@ -216,8 +233,7 @@
               mthis.$store.commit('setGeoPromte', '长度为0')
             } else if (mthis.$store.state.tmss === 'content') {
               mthis.$store.commit('setContentPromte', '长度为0')
-            } else {
-            }
+            } else {}
             mthis.spinWaiting = false
           }
         } else {
@@ -238,6 +254,10 @@
               })
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+              mthis.ctrls = new Array()
+              mthis.xiangguanEntityItems.map(item => {
+                mthis.ctrls.push(!item.data.length > 5)
+              })
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }
             if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
@@ -280,6 +300,11 @@
       this.tableData = new Object()
     },
     methods: {
+     more(index) {
+                // this.ctrls[index].splice(index,1,!this.ctrls[index]) 
+                this.ctrls[index]=!this.ctrls[index]
+                this.$forceUpdate()
+            },
       addmultNodeToCanvans(obj, type, subType) {
         mthis.$store.commit('setAddNetNodes', {
           nodes: obj.nodes,
@@ -372,8 +397,7 @@
               })
             }
           })
-        } else {
-        }
+        } else {}
       }
     },
     watch: {
@@ -406,8 +430,7 @@
                 mthis.$store.commit('setGeoPromte', '长度为0')
               } else if (mthis.$store.state.tmss === 'content') {
                 mthis.$store.commit('setContentPromte', '长度为0')
-              } else {
-              }
+              } else {}
             }
             // mthis.spinWaiting = false
           } else {
@@ -428,6 +451,10 @@
                 })
                 mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
                 mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
+                mthis.ctrls = new Array()
+                mthis.xiangguanEntityItems.map(item => {
+                  mthis.ctrls.push(!item.data.length > 5)
+                })
                 mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
               }
               if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
@@ -497,9 +524,10 @@
     min-width: 20px;
     margin: 0px 10px;
   }
-  .w5em {
-    width: 10em;
-    min-width: 5em;
+  .w8em {
+    width: 8em;
+    min-width: 8em;
+    max-width: 8em;
     margin: 0;
   }
   .tableLine>.econtent:nth-child(odd) {
@@ -512,6 +540,9 @@
     background-color: rgba(51, 255, 255, 0.2);
   }
   .tableLine>.econtent:hover>.eButton {
+    opacity: 1;
+  }
+  .blockStyle:hover .eButton{
     opacity: 1;
   }
   .eButton {

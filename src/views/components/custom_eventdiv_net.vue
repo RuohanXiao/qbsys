@@ -567,8 +567,5 @@
     color: #ccffff;
     opacity: 0.5;
   }
-  .blockStyle{
-    display: block;
-    width: 100%;
-  }
+  
 </style>
