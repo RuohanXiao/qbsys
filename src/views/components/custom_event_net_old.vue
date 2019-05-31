@@ -71,133 +71,133 @@
         </div>
         <div class="e-content shuxingDiv" v-if="detailData.entity_type === 'human'">
           <div class="e-content-d">
-            <p class="e-content-p w5em">全名</p>
+            <p class="e-content-p w8em">全名</p>
             <p class="e-content-p">{{detailData.chinese_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.entity_name'>
-            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p w8em">母语名</p>
             <p class="e-content-p">{{detailData.entity_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.nickname'>
-            <p class="e-content-p w5em">昵称</p>
+            <p class="e-content-p w8em">昵称</p>
             <p class="e-content-p">{{detailData.nickname}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.date_of_birth'>
-            <p class="e-content-p w5em">出生日期</p>
+            <p class="e-content-p w8em">出生日期</p>
             <p class="e-content-p">{{detailData.date_of_birth}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.date_of_death'>
-            <p class="e-content-p w5em">死亡日期</p>
+            <p class="e-content-p w8em">死亡日期</p>
             <p class="e-content-p">{{detailData.date_of_death}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.date_of_disappearance'>
-            <p class="e-content-p w5em">失踪日期</p>
+            <p class="e-content-p w8em">失踪日期</p>
             <p class="e-content-p">{{detailData.date_of_disappearance}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.place_of_birth'>
-            <p class="e-content-p w5em">出生地</p>
+            <p class="e-content-p w8em">出生地</p>
             <p class="e-content-p">{{detailData.place_of_birth}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.country_of_citizenship'>
-            <p class="e-content-p w5em">国籍</p>
+            <p class="e-content-p w8em">国籍</p>
             <p class="e-content-p">{{detailData.country_of_citizenship}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.ethic_group'>
-            <p class="e-content-p w5em">所属民族</p>
+            <p class="e-content-p w8em">所属民族</p>
             <p class="e-content-p">{{detailData.ethic_group}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.religion'>
-            <p class="e-content-p w5em">宗教信仰</p>
+            <p class="e-content-p w8em">宗教信仰</p>
             <p class="e-content-p">{{detailData.religion}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.occupation'>
-            <p class="e-content-p w5em">从事职业</p>
+            <p class="e-content-p w8em">从事职业</p>
             <p class="e-content-p">{{detailData.occupation}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.military_rank'>
-            <p class="e-content-p w5em">军衔</p>
+            <p class="e-content-p w8em">军衔</p>
             <p class="e-content-p">{{detailData.military_rank}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.military_branch'>
-            <p class="e-content-p w5em">所属军种</p>
+            <p class="e-content-p w8em">所属军种</p>
             <p class="e-content-p">{{detailData.military_branch}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.member_of_political_party'>
-            <p class="e-content-p w5em">所属政党</p>
+            <p class="e-content-p w8em">所属政党</p>
             <p class="e-content-p">{{detailData.member_of_political_party}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.award_received'>
-            <p class="e-content-p w5em">荣誉</p>
+            <p class="e-content-p w8em">荣誉</p>
             <p class="e-content-p">{{detailData.award_received}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.e_mail'>
-            <p class="e-content-p w5em">邮箱</p>
+            <p class="e-content-p w8em">邮箱</p>
             <p class="e-content-p">{{detailData.e_mail}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.official_blog'>
-            <p class="e-content-p w5em">博客</p>
+            <p class="e-content-p w8em">博客</p>
             <p class="e-content-p">{{detailData.official_blog}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.official_website'>
-            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p w8em">官网</p>
             <p class="e-content-p">{{detailData.official_website}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.summary'>
-            <p class="e-content-p w5em">简介</p>
+            <p class="e-content-p w8em">简介</p>
             <p class="e-content-p">{{detailData.summary}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
@@ -206,77 +206,77 @@
         </div>
         <div class="e-content shuxingDiv" v-if="detailData.entity_type === 'organization'">
           <div class="e-content-d" v-if='detailData.description'>
-            <p class="e-content-p w5em">描述</p>
+            <p class="e-content-p w8em">描述</p>
             <p class="e-content-p">{{detailData.description}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.native_label'>
-            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p w8em">母语名</p>
             <p class="e-content-p">{{detailData.native_label}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.short_name'>
-            <p class="e-content-p w5em">简称</p>
+            <p class="e-content-p w8em">简称</p>
             <p class="e-content-p">{{detailData.short_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.headquarters_location'>
-            <p class="e-content-p w5em">组织总部</p>
+            <p class="e-content-p w8em">组织总部</p>
             <p class="e-content-p">{{detailData.headquarters_location}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.type'>
-            <p class="e-content-p w5em">组织类型</p>
+            <p class="e-content-p w8em">组织类型</p>
             <p class="e-content-p">{{detailData.type}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.inception'>
-            <p class="e-content-p w5em">成立</p>
+            <p class="e-content-p w8em">成立</p>
             <p class="e-content-p">{{detailData.inception}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.member_count'>
-            <p class="e-content-p w5em">成员数</p>
+            <p class="e-content-p w8em">成员数</p>
             <p class="e-content-p">{{detailData.member_count}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.employees'>
-            <p class="e-content-p w5em">员工数</p>
+            <p class="e-content-p w8em">员工数</p>
             <p class="e-content-p">{{detailData.employees}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.political_ideology'>
-            <p class="e-content-p w5em">意识形态</p>
+            <p class="e-content-p w8em">意识形态</p>
             <p class="e-content-p">{{detailData.political_ideology}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.official_website'>
-            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p w8em">官网</p>
             <p class="e-content-p">{{detailData.official_website}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.telephone_number'>
-            <p class="e-content-p w5em">电话</p>
+            <p class="e-content-p w8em">电话</p>
             <p class="e-content-p">{{detailData.telephone_number}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
@@ -285,182 +285,182 @@
         </div>
         <div class="e-content shuxingDiv" v-if="detailData.entity_type === 'administrative'">
           <div class="e-content-d" v-if='detailData.location_map'>
-            <p class="e-content-p w5em">地图</p>
+            <p class="e-content-p w8em">地图</p>
             <p class="e-content-p">{{detailData.location_map}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.image'>
-            <p class="e-content-p w5em">地标</p>
+            <p class="e-content-p w8em">地标</p>
             <p class="e-content-p">{{detailData.image}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.description'>
-            <p class="e-content-p w5em">描述</p>
+            <p class="e-content-p w8em">描述</p>
             <p class="e-content-p">{{detailData.description}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.official_name'>
-            <p class="e-content-p w5em">全名</p>
+            <p class="e-content-p w8em">全名</p>
             <p class="e-content-p">{{detailData.official_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.name_in_native_language'>
-            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p w8em">母语名</p>
             <p class="e-content-p">{{detailData.name_in_native_language}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.replaces'>
-            <p class="e-content-p w5em">曾用名</p>
+            <p class="e-content-p w8em">曾用名</p>
             <p class="e-content-p">{{detailData.replaces}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.replaces_by'>
-            <p class="e-content-p w5em">现用名</p>
+            <p class="e-content-p w8em">现用名</p>
             <p class="e-content-p">{{detailData.replaces_by}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.nickname'>
-            <p class="e-content-p w5em">昵称</p>
+            <p class="e-content-p w8em">昵称</p>
             <p class="e-content-p">{{detailData.nickname}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.short_name'>
-            <p class="e-content-p w5em">简称</p>
+            <p class="e-content-p w8em">简称</p>
             <p class="e-content-p">{{detailData.short_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.inception'>
-            <p class="e-content-p w5em">建立时间</p>
+            <p class="e-content-p w8em">建立时间</p>
             <p class="e-content-p">{{detailData.inception}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.capital'>
-            <p class="e-content-p w5em">首府</p>
+            <p class="e-content-p w8em">首府</p>
             <p class="e-content-p">{{detailData.capital}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.continent'>
-            <p class="e-content-p w5em">所属大陆</p>
+            <p class="e-content-p w8em">所属大陆</p>
             <p class="e-content-p">{{detailData.continent}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.country'>
-            <p class="e-content-p w5em">所属国家</p>
+            <p class="e-content-p w8em">所属国家</p>
             <p class="e-content-p">{{detailData.country}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.area'>
-            <p class="e-content-p w5em">面积</p>
+            <p class="e-content-p w8em">面积</p>
             <p class="e-content-p">{{detailData.area}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.located_in_or_next_to_body_of_water'>
-            <p class="e-content-p w5em">水域</p>
+            <p class="e-content-p w8em">水域</p>
             <p class="e-content-p">{{detailData.located_in_or_next_to_body_of_water}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.population'>
-            <p class="e-content-p w5em">人口</p>
+            <p class="e-content-p w8em">人口</p>
             <p class="e-content-p">{{detailData.population}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.GDP'>
-            <p class="e-content-p w5em">GDP</p>
+            <p class="e-content-p w8em">GDP</p>
             <p class="e-content-p">{{detailData.GDP}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.gini_coefficient'>
-            <p class="e-content-p w5em">基尼系数</p>
+            <p class="e-content-p w8em">基尼系数</p>
             <p class="e-content-p">{{detailData.gini_coefficient}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.Human_Development_Index'>
-            <p class="e-content-p w5em">人类发展指数</p>
+            <p class="e-content-p w8em">人类发展指数</p>
             <p class="e-content-p">{{detailData.Human_Development_Index}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.located_in_time_zone'>
-            <p class="e-content-p w5em">时区</p>
+            <p class="e-content-p w8em">时区</p>
             <p class="e-content-p">{{detailData.located_in_time_zone}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.coordinate_location'>
-            <p class="e-content-p w5em">坐标</p>
+            <p class="e-content-p w8em">坐标</p>
             <p class="e-content-p">{{detailData.coordinate_location}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.local_dialing_code'>
-            <p class="e-content-p w5em">电话区号</p>
+            <p class="e-content-p w8em">电话区号</p>
             <p class="e-content-p">{{detailData.local_dialing_code}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.postal_code'>
-            <p class="e-content-p w5em">邮编</p>
+            <p class="e-content-p w8em">邮编</p>
             <p class="e-content-p">{{detailData.postal_code}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.top_level_Internet_domain'>
-            <p class="e-content-p w5em">顶级域名</p>
+            <p class="e-content-p w8em">顶级域名</p>
             <p class="e-content-p">{{detailData.top_level_Internet_domain}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.official_website'>
-            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p w8em">官网</p>
             <p class="e-content-p">{{detailData.official_website}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.office_blog'>
-            <p class="e-content-p w5em">博客</p>
+            <p class="e-content-p w8em">博客</p>
             <p class="e-content-p">{{detailData.office_blog}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
@@ -469,77 +469,77 @@
         </div>
         <div class="e-content shuxingDiv" v-if="detailData.entity_type === 'weapon'">
           <div class="e-content-d" v-if='detailData.description'>
-            <p class="e-content-p w5em">描述</p>
+            <p class="e-content-p w8em">描述</p>
             <p class="e-content-p">{{detailData.description}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.native_label'>
-            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p w8em">母语名</p>
             <p class="e-content-p">{{detailData.native_label}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.short_name'>
-            <p class="e-content-p w5em">简称</p>
+            <p class="e-content-p w8em">简称</p>
             <p class="e-content-p">{{detailData.short_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.headquarters_location'>
-            <p class="e-content-p w5em">组织总部</p>
+            <p class="e-content-p w8em">组织总部</p>
             <p class="e-content-p">{{detailData.headquarters_location}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.type'>
-            <p class="e-content-p w5em">组织类型</p>
+            <p class="e-content-p w8em">组织类型</p>
             <p class="e-content-p">{{detailData.type}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.inception'>
-            <p class="e-content-p w5em">成立</p>
+            <p class="e-content-p w8em">成立</p>
             <p class="e-content-p">{{detailData.inception}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.member_count'>
-            <p class="e-content-p w5em">成员数</p>
+            <p class="e-content-p w8em">成员数</p>
             <p class="e-content-p">{{detailData.member_count}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.employees'>
-            <p class="e-content-p w5em">员工数</p>
+            <p class="e-content-p w8em">员工数</p>
             <p class="e-content-p">{{detailData.employees}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.political_ideology'>
-            <p class="e-content-p w5em">意识形态</p>
+            <p class="e-content-p w8em">意识形态</p>
             <p class="e-content-p">{{detailData.political_ideology}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.official_website'>
-            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p w8em">官网</p>
             <p class="e-content-p">{{detailData.official_website}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.telephone_number'>
-            <p class="e-content-p w5em">电话</p>
+            <p class="e-content-p w8em">电话</p>
             <p class="e-content-p">{{detailData.telephone_number}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
@@ -555,133 +555,133 @@
         </div>
         <div class="e-content" v-if='detailData.chinese_name'>
           <div class="e-content-d">
-            <p class="e-content-p w5em">全名</p>
+            <p class="e-content-p w8em">全名</p>
             <p class="e-content-p">{{detailData.chinese_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.entity_name'>
-            <p class="e-content-p w5em">母语名</p>
+            <p class="e-content-p w8em">母语名</p>
             <p class="e-content-p">{{detailData.entity_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.nickname'>
-            <p class="e-content-p w5em">昵称</p>
+            <p class="e-content-p w8em">昵称</p>
             <p class="e-content-p">{{detailData.nickname}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.date_of_birth'>
-            <p class="e-content-p w5em">出生日期</p>
+            <p class="e-content-p w8em">出生日期</p>
             <p class="e-content-p">{{detailData.date_of_birth}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.date_of_death'>
-            <p class="e-content-p w5em">死亡日期</p>
+            <p class="e-content-p w8em">死亡日期</p>
             <p class="e-content-p">{{detailData.date_of_death}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.date_of_disappearance'>
-            <p class="e-content-p w5em">失踪日期</p>
+            <p class="e-content-p w8em">失踪日期</p>
             <p class="e-content-p">{{detailData.date_of_disappearance}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.place_of_birth'>
-            <p class="e-content-p w5em">出生地</p>
+            <p class="e-content-p w8em">出生地</p>
             <p class="e-content-p">{{detailData.place_of_birth}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.country_of_citizenship'>
-            <p class="e-content-p w5em">国籍</p>
+            <p class="e-content-p w8em">国籍</p>
             <p class="e-content-p">{{detailData.country_of_citizenship}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.ethic_group'>
-            <p class="e-content-p w5em">所属民族</p>
+            <p class="e-content-p w8em">所属民族</p>
             <p class="e-content-p">{{detailData.ethic_group}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.religion'>
-            <p class="e-content-p w5em">宗教信仰</p>
+            <p class="e-content-p w8em">宗教信仰</p>
             <p class="e-content-p">{{detailData.religion}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.occupation'>
-            <p class="e-content-p w5em">从事职业</p>
+            <p class="e-content-p w8em">从事职业</p>
             <p class="e-content-p">{{detailData.occupation}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.military_rank'>
-            <p class="e-content-p w5em">军衔</p>
+            <p class="e-content-p w8em">军衔</p>
             <p class="e-content-p">{{detailData.military_rank}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.military_branch'>
-            <p class="e-content-p w5em">所属军种</p>
+            <p class="e-content-p w8em">所属军种</p>
             <p class="e-content-p">{{detailData.military_branch}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.member_of_political_party'>
-            <p class="e-content-p w5em">所属政党</p>
+            <p class="e-content-p w8em">所属政党</p>
             <p class="e-content-p">{{detailData.member_of_political_party}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.award_received'>
-            <p class="e-content-p w5em">荣誉</p>
+            <p class="e-content-p w8em">荣誉</p>
             <p class="e-content-p">{{detailData.award_received}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.e_mail'>
-            <p class="e-content-p w5em">邮箱</p>
+            <p class="e-content-p w8em">邮箱</p>
             <p class="e-content-p">{{detailData.e_mail}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.official_blog'>
-            <p class="e-content-p w5em">博客</p>
+            <p class="e-content-p w8em">博客</p>
             <p class="e-content-p">{{detailData.official_blog}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.official_website'>
-            <p class="e-content-p w5em">官网</p>
+            <p class="e-content-p w8em">官网</p>
             <p class="e-content-p">{{detailData.official_website}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.summary'>
-            <p class="e-content-p w5em">简介</p>
+            <p class="e-content-p w8em">简介</p>
             <p class="e-content-p">{{detailData.summary}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
@@ -696,42 +696,42 @@
         </div>
         <div class="e-content">
           <div class="e-content-d" v-if='detailData.title'>
-            <p class="e-content-p w5em">标题</p>
+            <p class="e-content-p w8em">标题</p>
             <p class="e-content-p">{{detailData.title}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.i_sn'>
-            <p class="e-content-p w5em">来源</p>
+            <p class="e-content-p w8em">来源</p>
             <p class="e-content-p">{{detailData.i_sn}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.from'>
-            <p class="e-content-p w5em">作者</p>
+            <p class="e-content-p w8em">作者</p>
             <p class="e-content-p">{{detailData.from}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.time'>
-            <p class="e-content-p w5em">时间</p>
+            <p class="e-content-p w8em">时间</p>
             <p class="e-content-p">{{detailData.time}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.channel'>
-            <p class="e-content-p w5em">通道</p>
+            <p class="e-content-p w8em">通道</p>
             <p class="e-content-p">{{detailData.channel}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="e-content-d" v-if='detailData.type'>
-            <p class="e-content-p w5em">类型</p>
+            <p class="e-content-p w8em">类型</p>
             <p class="e-content-p">{{detailData.type}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
@@ -747,7 +747,7 @@
         <!-- <div  v-for='entityItem in xiangguanEntity'> -->
         <div class="e-content" v-if="detailData.entity_type === 'human'">
           <div class="e-content-d-dis" v-if='xiangguanEntity.member_of&&xiangguanEntity.member_of.length'>
-            <p class="e-content-p w5em">组织</p>
+            <p class="e-content-p w8em">组织</p>
             <div class='w100'>
               <div class='flexDiv' v-for="it in xiangguanEntity.member_of">
                 <p class="e-content-p">{{it.name}}</p>
@@ -759,7 +759,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.employer&&xiangguanEntity.employer.length'>
-          <p class="e-content-p w5em">雇主</p>
+          <p class="e-content-p w8em">雇主</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.employer">
               <p class="e-content-p">{{it.name}}</p>
@@ -770,7 +770,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.educated_at&&xiangguanEntity.educated_at.length'>
-          <p class="e-content-p w5em">学习经历</p>
+          <p class="e-content-p w8em">学习经历</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.educated_at">
               <p class="e-content-p">{{it.name}}</p>
@@ -781,7 +781,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.work_at&&xiangguanEntity.work_at.length'>
-          <p class="e-content-p w5em">工作经历</p>
+          <p class="e-content-p w8em">工作经历</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.xiangguanEntity">
               <p class="e-content-p">{{it.name}}</p>
@@ -792,7 +792,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.father&&xiangguanEntity.father.length'>
-          <p class="e-content-p w5em">父亲</p>
+          <p class="e-content-p w8em">父亲</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.father">
               <p class="e-content-p">{{it.name}}</p>
@@ -803,7 +803,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.mother&&xiangguanEntity.mother.length'>
-          <p class="e-content-p w5em">母亲</p>
+          <p class="e-content-p w8em">母亲</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.mother">
               <p class="e-content-p">{{it.name}}</p>
@@ -814,7 +814,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.spouse&&xiangguanEntity.spouse.length'>
-          <p class="e-content-p w5em">配偶</p>
+          <p class="e-content-p w8em">配偶</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.spouse">
               <p class="e-content-p">{{it.name}}</p>
@@ -825,7 +825,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.child&&xiangguanEntity.child.length'>
-          <p class="e-content-p w5em">子女</p>
+          <p class="e-content-p w8em">子女</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.child">
               <p class="e-content-p">{{it.name}}</p>
@@ -836,7 +836,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.sibling&&xiangguanEntity.sibling.length'>
-          <p class="e-content-p w5em">兄弟姐妹</p>
+          <p class="e-content-p w8em">兄弟姐妹</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.sibling">
               <p class="e-content-p">{{it.name}}</p>
@@ -849,7 +849,7 @@
       </div>
       <div class="e-content" v-if="detailData.entity_type === 'organization'">
         <div class="e-content-d-dis" v-if='xiangguanEntity.founded_by&&xiangguanEntity.founded_by.length'>
-          <p class="e-content-p w5em">创办者</p>
+          <p class="e-content-p w8em">创办者</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.founded_by">
               <p class="e-content-p">{{it.name}}</p>
@@ -860,7 +860,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.chairperson&&xiangguanEntity.chairperson.length'>
-          <p class="e-content-p w5em">领袖</p>
+          <p class="e-content-p w8em">领袖</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.chairperson">
               <p class="e-content-p">{{it.name}}</p>
@@ -871,7 +871,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.chief_executive_officer&&xiangguanEntity.chief_executive_officer.length'>
-          <p class="e-content-p w5em">首席执行官</p>
+          <p class="e-content-p w8em">首席执行官</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.chief_executive_officer">
               <p class="e-content-p">{{it.name}}</p>
@@ -882,7 +882,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.business_division&&xiangguanEntity.business_division.length'>
-          <p class="e-content-p w5em">业务部门</p>
+          <p class="e-content-p w8em">业务部门</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.business_division">
               <p class="e-content-p">{{it.name}}</p>
@@ -893,7 +893,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.parent_organization&&xiangguanEntity.parent_organization.length'>
-          <p class="e-content-p w5em">上级部门</p>
+          <p class="e-content-p w8em">上级部门</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.parent_organization">
               <p class="e-content-p">{{it.name}}</p>
@@ -904,7 +904,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.subsidiary&&xiangguanEntity.subsidiary.length'>
-          <p class="e-content-p w5em">下级部门</p>
+          <p class="e-content-p w8em">下级部门</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.subsidiary">
               <p class="e-content-p">{{it.name}}</p>
@@ -917,7 +917,7 @@
       </div>
       <div class="e-content" v-if="detailData.entity_type === 'administrative'">
         <div class="e-content-d-dis" v-if='xiangguanEntity.head_of_state&&xiangguanEntity.head_of_state.length'>
-          <p class="e-content-p w5em">国家元首</p>
+          <p class="e-content-p w8em">国家元首</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.head_of_state">
               <p class="e-content-p">{{it.name}}</p>
@@ -928,7 +928,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.head_of_government&&xiangguanEntity.head_of_government.length'>
-          <p class="e-content-p w5em">政府首脑</p>
+          <p class="e-content-p w8em">政府首脑</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.head_of_government">
               <p class="e-content-p">{{it.name}}</p>
@@ -939,7 +939,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.office_held_by_head_of_government&&xiangguanEntity.office_held_by_head_of_government.length'>
-          <p class="e-content-p w5em">政府机构</p>
+          <p class="e-content-p w8em">政府机构</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.office_held_by_head_of_government">
               <p class="e-content-p">{{it.name}}</p>
@@ -950,7 +950,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.head_of_government&&xiangguanEntity.head_of_government.length'>
-          <p class="e-content-p w5em">政府首长</p>
+          <p class="e-content-p w8em">政府首长</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.head_of_government">
               <p class="e-content-p">{{it.name}}</p>
@@ -961,7 +961,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.legislative_body&&xiangguanEntity.legislative_body.length'>
-          <p class="e-content-p w5em">立法机构</p>
+          <p class="e-content-p w8em">立法机构</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.legislative_body">
               <p class="e-content-p">{{it.name}}</p>
@@ -972,7 +972,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.executive_body&&xiangguanEntity.executive_body.length'>
-          <p class="e-content-p w5em">执行政府</p>
+          <p class="e-content-p w8em">执行政府</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.executive_body">
               <p class="e-content-p">{{it.name}}</p>
@@ -983,7 +983,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.highest_judicial_authority&&xiangguanEntity.highest_judicial_authority.length'>
-          <p class="e-content-p w5em">最高司法机关</p>
+          <p class="e-content-p w8em">最高司法机关</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.highest_judicial_authority">
               <p class="e-content-p">{{it.name}}</p>
@@ -994,7 +994,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.located_in_the_administrative_territorial_entity&&xiangguanEntity.located_in_the_administrative_territorial_entity.length'>
-          <p class="e-content-p w5em">位于</p>
+          <p class="e-content-p w8em">位于</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.located_in_the_administrative_territorial_entity">
               <p class="e-content-p">{{it.name}}</p>
@@ -1005,7 +1005,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.contains_administrative_territorial_entity&&xiangguanEntity.contains_administrative_territorial_entity.length'>
-          <p class="e-content-p w5em">下属地区</p>
+          <p class="e-content-p w8em">下属地区</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.contains_administrative_territorial_entity">
               <p class="e-content-p">{{it.name}}</p>
@@ -1016,7 +1016,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.diplomatic_relation&&xiangguanEntity.diplomatic_relation.length'>
-          <p class="e-content-p w5em">邦交国家</p>
+          <p class="e-content-p w8em">邦交国家</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.diplomatic_relation">
               <p class="e-content-p">{{it.name}}</p>
@@ -1027,7 +1027,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.twinned_administrative_body&&xiangguanEntity.twinned_administrative_body.length'>
-          <p class="e-content-p w5em">友好城市</p>
+          <p class="e-content-p w8em">友好城市</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.twinned_administrative_body">
               <p class="e-content-p">{{it.name}}</p>
@@ -1038,7 +1038,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.shares_border_with&&xiangguanEntity.shares_border_with.length'>
-          <p class="e-content-p w5em">接壤于</p>
+          <p class="e-content-p w8em">接壤于</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.shares_border_with">
               <p class="e-content-p">{{it.name}}</p>
@@ -1051,7 +1051,7 @@
       </div>
       <div class="e-content" v-if="detailData.entity_type === 'weapon'">
         <div class="e-content-d-dis" v-if='xiangguanEntity.country_of_origin&&xiangguanEntity.country_of_origin.length'>
-          <p class="e-content-p w5em">原产国</p>
+          <p class="e-content-p w8em">原产国</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.country_of_origin">
               <p class="e-content-p">{{it.name}}</p>
@@ -1062,7 +1062,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.country&&xiangguanEntity.country.length'>
-          <p class="e-content-p w5em">服役国家</p>
+          <p class="e-content-p w8em">服役国家</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.country">
               <p class="e-content-p">{{it.name}}</p>
@@ -1073,7 +1073,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.manufacturer&&xiangguanEntity.manufacturer.length'>
-          <p class="e-content-p w5em">生产商</p>
+          <p class="e-content-p w8em">生产商</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.manufacturer">
               <p class="e-content-p">{{it.name}}</p>
@@ -1084,7 +1084,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.developer&&xiangguanEntity.developer.length'>
-          <p class="e-content-p w5em">开发者</p>
+          <p class="e-content-p w8em">开发者</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.developer">
               <p class="e-content-p">{{it.name}}</p>
@@ -1095,7 +1095,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.designed_by&&xiangguanEntity.designed_by.length'>
-          <p class="e-content-p w5em">设计者</p>
+          <p class="e-content-p w8em">设计者</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.designed_by">
               <p class="e-content-p">{{it.name}}</p>
@@ -1106,7 +1106,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.operator&&xiangguanEntity.operator.length'>
-          <p class="e-content-p w5em">使用者</p>
+          <p class="e-content-p w8em">使用者</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.operator">
               <p class="e-content-p">{{it.name}}</p>
@@ -1117,7 +1117,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.guidance_system&&xiangguanEntity.guidance_system.length'>
-          <p class="e-content-p w5em">制导系统</p>
+          <p class="e-content-p w8em">制导系统</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.guidance_system">
               <p class="e-content-p">{{it.name}}</p>
@@ -1128,7 +1128,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.ammunition&&xiangguanEntity.ammunition.length'>
-          <p class="e-content-p w5em">弹药</p>
+          <p class="e-content-p w8em">弹药</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.ammunition">
               <p class="e-content-p">{{it.name}}</p>
@@ -1139,7 +1139,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.powerplant&&xiangguanEntity.powerplant.length'>
-          <p class="e-content-p w5em">发动机</p>
+          <p class="e-content-p w8em">发动机</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.powerplant">
               <p class="e-content-p">{{it.name}}</p>
@@ -1150,7 +1150,7 @@
           </div>
         </div>
         <div class="e-content-d-dis" v-if='xiangguanEntity.avionics&&xiangguanEntity.avionics.length'>
-          <p class="e-content-p w5em">航空电子设备</p>
+          <p class="e-content-p w8em">航空电子设备</p>
           <div class='w100'>
             <div class='flexDiv' v-for="it in xiangguanEntity.avionics">
               <p class="e-content-p">{{it.name}}</p>
@@ -1169,7 +1169,7 @@
         <div v-for='docItem in xiangguanDoc'>
           <div class="e-content shuxingDiv">
             <div class="e-content-d">
-              <p class="e-content-p w5em">{{docItem.type}}</p>
+              <p class="e-content-p w8em">{{docItem.type}}</p>
               <p class="e-content-p">{{docItem.num}}</p>
               <div class="buttonD">
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addXiangguanDoc(docItem.ids)"></Button>
@@ -1195,7 +1195,7 @@
         <div v-for='eventItem in xiangguanEvent'>
           <div class="e-content shuxingDiv">
             <div class="e-content-d">
-              <p class="e-content-p w5em">{{eventItem.type}}</p>
+              <p class="e-content-p w8em">{{eventItem.type}}</p>
               <p class="e-content-p">{{eventItem.num}}</p>
               <div class="buttonD">
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addXiangguanEvent(eventItem.ids)"></Button>
@@ -1759,9 +1759,10 @@
   .w100 {
     width: 100%;
   }
-  .w5em {
-    width: 10em;
-    min-width: 5em;
+  .w8em {
+    width: 8em;
+    min-width: 8em;
+    max-width: 8em;
     margin: 0;
   }
   .mxw30 {

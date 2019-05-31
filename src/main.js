@@ -425,7 +425,10 @@ var store = new Vuex.Store({
       datas:{
         id:'',
         setLeft:0,
-        setTop:0
+        setTop:0,
+        title:'',
+        canText:'',
+        delText:''
       }
     }
   },

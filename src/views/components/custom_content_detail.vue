@@ -6,39 +6,39 @@
         <span>实体属性</span>
         <div slot="content" class="tableLine">
           <div class="econtent">
-            <p class="econtentp w5em">标题</p>
+            <p class="econtentp w8em">标题</p>
             <p class="econtentp" style="margin-right:3em;">{{tableData.title}}</p>
           </div>
           <div class="econtent" v-if='tableData.i_sn'>
-            <p class="econtentp w5em">来源</p>
+            <p class="econtentp w8em">来源</p>
             <p class="econtentp">{{tableData.i_sn}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="econtent" v-if='tableData.from'>
-            <p class="econtentp w5em">作者</p>
+            <p class="econtentp w8em">作者</p>
             <p class="econtentp">{{tableData.from}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="econtent" v-if='tableData.time'>
-            <p class="econtentp w5em">时间</p>
+            <p class="econtentp w8em">时间</p>
             <p class="econtentp">{{tableData.time}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="econtent" v-if='tableData.channel'>
-            <p class="econtentp w5em">通道</p>
+            <p class="econtentp w8em">通道</p>
             <p class="econtentp">{{tableData.channel}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
           <div class="econtent" v-if='tableData.type'>
-            <p class="econtentp w5em">类型</p>
+            <p class="econtentp w8em">类型</p>
             <p class="econtentp">{{tableData.type}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
@@ -51,10 +51,10 @@
         <span>相关实体</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
-            <p class="econtentp w5em">{{items.relation}}</p>
+            <p class="econtentp w8em">{{items.relation}}</p>
             <p class="econtentp">{{items.name}}</p>
             <div class="eButton">
-              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.id,'entity','')"></Button>
+              <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
             </div>
           </div>
           <div class="econtent" v-if='!xiangguanEntityItems.length>0'>
@@ -68,7 +68,7 @@
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
             
-            <p class="econtentp w5em">{{items.type}}</p>
+            <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'event',items.type)"></Button>
@@ -85,7 +85,7 @@
         <span>相关文档</span>
         <div slot="content" class="tableLine">
           <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0' v-for='items in xiangguanDoc.statistics'>
-            <p class="econtentp w5em">{{items.type}}</p>
+            <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(items.ids,'document','')"></Button>
@@ -454,9 +454,10 @@ import {
     min-width: 20px;
     margin: 0px 10px;
   }
-  .w5em {
-    width: 10em;
-    min-width: 5em;
+  .w8em {
+    width: 8em;
+    min-width: 8em;
+    max-width: 8em;
     margin: 0;
   }
   .tableLine>.econtent:nth-child(odd) {

@@ -239,13 +239,20 @@
           datas:{
             id:'',
             setLeft:0,
-            setTop:0
+            setTop:0,
+            title:'',
+            canText:'',
+            delText:''
           }
         };
+        
         workDatas.flag = true;
         workDatas.datas.id = id;
         workDatas.datas.setLeft = e.clientX;
         workDatas.datas.setTop = e.clientY;
+        workDatas.datas.title = '确定删除集合吗?';
+        workDatas.datas.canText = '取消?';
+        workDatas.datas.delText = '确定删除';
         this.$store.commit('setDelSetData',workDatas)
         // this.$emit('delId', id)
         // alert(id)

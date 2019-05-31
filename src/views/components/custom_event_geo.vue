@@ -11,8 +11,8 @@
           <!-- <p :style="{lineHeight:'28px',fontSize:'16px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" class="titleStyle">{{detailData.title}}</p> -->
         </div>
         <div>
-          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-if="detailData.description">{{detailData.event_content}}</p>
-          <p :style="{lineHeight:'22px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}" v-else class="desStyle">暂无简介</p>
+           <p class='desClass' :title='detailData.description' v-if="detailData.description">{{detailData.description}}</p>
+          <p class='desClass desStyle' v-else >暂无简介</p>
         </div>
       </div>
     </div>
@@ -458,6 +458,19 @@
   .bstyle:hover {
     color: rgba(51, 255, 255, 0.8) !important;
   }
+   .desClass{
+    line-height: 22px;
+    overflow: hidden;
+    white-space: wrap;
+    text-overflow: -o-ellipsis-lastline;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    height: 44px;
+    word-break: break-all;
+    }
 </style>
 
 
