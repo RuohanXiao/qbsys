@@ -10,7 +10,7 @@
         <div class="setTitle">{{setTitle}}</div>
         <div class="setButton">
             <div class="cancelB" style="color:rgba(204,255,255,0.5);" @click="modal1 = false">{{canText}}</div>
-            <div class="delB" style="color:#ccffff;" @click="del(setId)">{{delText}}</div>
+            <div class="delB" style="color:rgba(204,255,255,0.8);" @click="del(setId)">{{delText}}</div>
         </div>
         
     </Modal>
@@ -108,7 +108,7 @@ export default {
 <style>
     #delSet .ivu-modal-content{
         width:220px  !important;
-        
+        box-shadow: none !important;
     }
     
 </style>
@@ -130,8 +130,8 @@ export default {
         height: 30px;
        
         background-color: rgba(204,255,255,0.3);
-        box-shadow: 0px 0px 62px 0px 
-            #33ffff;
+        /* box-shadow: 0px 0px 62px 0px 
+            #33ffff; */
         border-radius: 5px;
         
         margin-left: 30px;
@@ -141,11 +141,15 @@ export default {
         text-align: center;
         cursor: pointer;
     }
+    .cancelB:hover{
+        color: rgba(204,255,255,0.8) !important;
+        background-color: rgba(204,255,255,0.5) !important;
+    }
     .delB{
         width: 70px;
         height: 30px;
-        color:'#fffff' !important;
-        background-color:rgba(51,255,255,0.7);
+        
+        background-color:rgba(51,255,255,0.5) !important;
         border-radius: 5px;
         
         font-family: MicrosoftYaHei;
@@ -154,6 +158,10 @@ export default {
         line-height: 30px;
         text-align: center;
         cursor: pointer;
+    }
+    .delB:hover{
+         color: #ccffff !important;
+        background-color:rgba(51,255,255,0.7) !important;
     }
 </style>
 

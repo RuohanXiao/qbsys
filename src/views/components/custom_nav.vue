@@ -202,7 +202,8 @@
           }).then(response => {
             mthis.items_gongzuoji = response.body.data
             console.log(response.body.data)
-            this.spinRight = false
+            mthis.spinRight = false
+            mthis.$forceUpdate()
           })
        },
        showTuji(){
