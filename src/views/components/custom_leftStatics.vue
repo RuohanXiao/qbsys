@@ -33,12 +33,13 @@
     cursor:pointer;
 }
 
-trNoClick{
+.trNoClick{
     height:25px;
 }
 
-trClick{
-    background-color: rgba(51,255,255,0.2);
+
+.trClick{
+    background-color: rgba(51,255,255,0.5) !important;
     color: #ccffff;
 }
 
@@ -121,14 +122,15 @@ trClick{
     cursor: default;
 }
 
+
 </style>
 
 
 
 <template>
 <div id='leftStatics' :style="{height:eDivH}">
-    <div :id='staticsData.firstLevelId' v-if='staticsData.subStatisticsAttr.length > 0' v-for='(staticsData,Index) in staticsDatas'>
-        <div :id="staticsData.firstLevelId + 'Name'">
+    <div :id='staticsData.firstLevelId'  v-for='(staticsData,Index) in staticsDatas'>
+        <div :id="staticsData.firstLevelId + 'Name'"  v-if='staticsData.subStatisticsAttr.length > 0'>
             <span class="separateLine"></span>
             <span style="margin-left:10px;font-size: 14px;">{{staticsData.firstLevelName}}</span>
         </div>
@@ -160,7 +162,7 @@ trClick{
                 </table>
             </panel>
         </Collapse>
-        <div style='background-color: rgba(0,0,0,0);font-size: 14px;padding-left: 24px;text-align: left;line-height: 30px;border-top: 0px solid #336666;border-bottom: 0px solid #336666;}' v-else>无统计项</div>
+        <!-- <div style='background-color: rgba(0,0,0,0);font-size: 14px;padding-left: 24px;text-align: left;line-height: 30px;border-top: 0px solid #336666;border-bottom: 0px solid #336666;}' v-else>无统计项</div> -->
     </div>
 </div>
     
@@ -198,6 +200,7 @@ export default {
         openPanelNames:{
             get:function(){
                 var mthis = this;
+                debugger
                 var openPanelNames = [];
                 mthis.staticsDatas.forEach(function(item,Index){
                     item.subStatisticsAttr.forEach(function(Iitem,index){
@@ -227,6 +230,7 @@ export default {
                         var itemCount = thirdLevel.length;
                         var moreItemcount = itemCount>5?itemCount-5:0;
                         var morethirdIds = 0;
+                        //var name_ = Iitem.secondLevelId;
                         var name = Index + '_' + index;
                         mthis.$set(mthis.displayItem, name, false)
                         mthis.$set(mthis.moreitemCount, name, moreItemcount)
@@ -361,6 +365,7 @@ export default {
         },
         selectedIds(el,ids){
             var mthis = this;
+            debugger
             /* if(el.style.backgroundColor ==='rgba(51, 255, 255, 0.2)'){
                 return;
             } */
