@@ -253,6 +253,7 @@
     name: "App",
     data() {
       return {
+        ifhasDoc:false,
         isBru:false,
         bruIds:[],
         bruStartX:0,
@@ -496,10 +497,10 @@
           let selectIds = []
           if(mthis.netToContentData.contentIds.type == 'push'){
             mthis.items = response.body.data.map(item =>({
-                title: item.title,      
+                title: item.en_title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.description,
+                text: item.en_description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
@@ -523,10 +524,10 @@
             mthis.analysisButton = true
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
-                title: item.title,      
+                title: item.en_title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.description,
+                text: item.en_description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
@@ -556,9 +557,7 @@
         deep:true,
         handler(newValue){
            var mthis = this
-            
-            
-            if(mthis.contentTimeCondition.type == 'cancel'){
+           if(mthis.contentTimeCondition.type == 'cancel'){
               console.log(3)
               console.log(mthis.prevItems)
               mthis.items =  mthis.deepClone(mthis.prevItems)
