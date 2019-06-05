@@ -3383,6 +3383,7 @@ export default {
         }, 
         setFeatureByIds(ids){
             var mthis = this;
+            debugger
             mthis.waiting();
             //mthis.$http.post("http://localhost:5000/getParamsByIds/", {
             mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
