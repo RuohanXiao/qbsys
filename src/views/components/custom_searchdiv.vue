@@ -4,31 +4,31 @@
       <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}" class="inputDiv">
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
           v-show="type==='net'" placeholder='' :remote='true' :loading-text='loadingT' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
-          <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
-            <Option v-for="(option, index) in opt1.data" :title="option.label" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
-              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)" />
-              <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
-          </OptionGroup>
-        </Select>
+              <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
+                <Option v-for="(option, index) in opt1.data" :title="option.label" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
+                  <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorChangeImg(option)"/>
+                  <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
+              </OptionGroup>
+            </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoGeo" :remote='begeoSea'
           clearable filterable class="scrollBarAble" v-show="type==='geo'" placeholder='' :remote-method="searchInfoGeo" :loading="loading2" :label-in-value="false" @on-change="v=>{setOption(v)}" @keyup.enter.native="enterGeoOption(options2[0].data[0])" @on-open-change="lightIcon">
-          <OptionGroup :label="opt.title" v-for="opt in options2" class="optionTitle">
-            <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
-              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
-              <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
-              <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic_diagra.png" :onerror="errorImg(option)"/>
-              <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;">{{option.labelvalue}}</span></Option>
-          </OptionGroup>
-        </Select>
+              <OptionGroup :label="opt.title" v-for="opt in options2" class="optionTitle">
+                <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
+                  <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
+                  <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
+                  <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic_diagra.png" :onerror="errorImg(option)"/>
+                  <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;">{{option.labelvalue}}</span></Option>
+              </OptionGroup>
+            </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoContent" filterable
           class="scrollBarAble" v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}" @on-open-change="lightIcon" @keyup.enter.native="enterContentOption(options3[0].data[0])">
-          <OptionGroup :label="opt.title" v-for="opt in options3"  class="optionTitle">
-            <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}"  @click.native="()=>{setOption(opt.data[index])}">
-              <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
-              <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
-              <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;opacit:0.5" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
-          </OptionGroup>
-        </Select>
+              <OptionGroup :label="opt.title" v-for="opt in options3"  class="optionTitle">
+                <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}"  @click.native="()=>{setOption(opt.data[index])}">
+                  <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
+                  <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
+                  <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;opacit:0.5" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
+              </OptionGroup>
+            </Select>
       </div>
       <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}" class="imgDiv"><i class="icon iconfont icon-search process-img" :class="(lightIconFlag)?'lightIcon':''" id='searchImg' style="position: absolute;top:1px;left:14px;width:25px;height:25px;"></i></div>
     </div>
@@ -60,8 +60,9 @@
         lightIconFlag: false,
         timer: null,
         optionNet: [],
-        loadingT:'加载中',
-        myMap: new Map()
+        loadingT: '加载中',
+        myMap: new Map(),
+        myMap1: new Map()
       }
     },
     methods: {
@@ -117,7 +118,6 @@
                     dataobj[type] = ids;
                   }
                 }
-                
                 this.$store.commit('setWorkSpaceAddData', dataobj)
               } else {
                 // alert('entity-detail接口异常')
@@ -175,16 +175,15 @@
                     return item.id
                   })
                   mthis.$store.commit('setNetToContentData', {
-                    'contentIds':{
-                      'type':'search',
+                    'contentIds': {
+                      'type': 'search',
                       'ids': ids
                     }
-                    
                   })
                 } else {
                   mthis.$store.commit('setNetToContentData', {
-                    'contentIds':{
-                      'type':'search',
+                    'contentIds': {
+                      'type': 'search',
                       'ids': []
                     }
                   })
@@ -213,15 +212,14 @@
                   var data = re[i];
                   var type = data.type;
                   if (type === 'document') {
-                    idsList=idsList.concat(data.ids);
+                    idsList = idsList.concat(data.ids);
                   }
                 }
                 if (idsList.length > 0) {
                   mthis.$store.commit('setNetToContentData', {
-                    
                     'contentIds': {
-                      'type':'search',
-                      'ids':idsList
+                      'type': 'search',
+                      'ids': idsList
                     }
                   })
                 } else {
@@ -248,52 +246,52 @@
         if (this.$store.state.tmss === 'geo') {
           mthis.inputInfoGeo = a.label
           if (a && a.value) {
-            if(a.itemType === 'set'){
+            if (a.itemType === 'set') {
               var setId = a.id
               var param = {
                 "timestamp": "loooooooooooooooooong_timestamp",
                 "idlist": [setId],
-                "query":"id",
+                "query": "id",
                 "label": "set",
                 "page": 1,
                 "pagesize": 30
               }
-              mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/load-set-data/",param)
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/load-set-data/", param)
                 .then(response => {
                   var datas = response.body.data[0].nodeIds
                   var noAreaIds = [];
                   var areaIds = [];
-                  for(let i = 0; i < datas.length; i++){
+                  for (let i = 0; i < datas.length; i++) {
                     var data = datas[i];
                     var type = data.type;
-                    if(type === 'entity' || type === 'event'){
+                    if (type === 'entity' || type === 'event') {
                       let ids = data.ids;
-                      for(let j = 0; j < ids.length; j++){
+                      for (let j = 0; j < ids.length; j++) {
                         let id = ids[j];
                         noAreaIds.push(id);
                       }
                     }
-                    if(type === 'area'){
+                    if (type === 'area') {
                       let ids = data.ids;
-                      for(let j = 0; j < ids.length; j++){
+                      for (let j = 0; j < ids.length; j++) {
                         let id = ids[j];
                         areaIds.push(id);
                       }
                     }
                   }
-                  if(areaIds.length > 0){
-                    mthis.$store.commit('setGeoWorkSetData_area',areaIds);
+                  if (areaIds.length > 0) {
+                    mthis.$store.commit('setGeoWorkSetData_area', areaIds);
                   }
-                  if(noAreaIds.length > 0){
-                    mthis.$store.commit('setGeoNoAreaDataGoInMap',noAreaIds);
+                  if (noAreaIds.length > 0) {
+                    mthis.$store.commit('setGeoNoAreaDataGoInMap', noAreaIds);
                   }
-                },function(error){
+                }, function(error) {
                   console.log('请求/load-set-data/失败！')
                 })
-            } else if(a.itemType === 'location'){
+            } else if (a.itemType === 'location') {
               mthis.$store.commit('setHLlocationIds', [a.value])
             } else {
-              mthis.$store.commit('setGeoNoAreaDataGoInMap',[a.id]);
+              mthis.$store.commit('setGeoNoAreaDataGoInMap', [a.id]);
             }
             /* if (a.type === 'human') {
               mthis.$store.commit('setSearchGeoEventResult', {
@@ -334,33 +332,34 @@
             break;
         }
       },
-      defaultImg(type, img) {
-        if(img){
-        var mthis = this
-          if(!util.checkImgExists(img)){
+      defaultImg(type, img, subtype) {
+        if (img) {
+          var mthis = this
+          if (!util.checkImgExists(img)) {
             if (this.myMap1.get(type) === 'entity') {
-               if (type === 'administrative') {
-                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/searchAdmin.png'
+              if (type === 'administrative') {
+                return (util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/searchAdmin.png'
               } else if (type === 'human') {
-                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/searchHuman.png'
+                return (util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/searchHuman.png'
               } else if (type === 'organization') {
-                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/searchOrg.png'
+                return (util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/searchOrg.png'
               } else if (type === 'weapon') {
-                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/weapon.png'
+                return (util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/weapon.png'
               } else {
-                return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image.png'
+                return (util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image.png'
               }
             } else if (this.myMap1.get(type) === 'event') {
-              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
+              return mthis.myMap.get(subtype).img
+              // return (util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/event.png'
             } else if (this.myMap1.get(type) === 'document') {
-              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
+              return (util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
             } else {
-              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image1.png'
+              return (util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image1.png'
             }
-          } else{
+          } else {
             return img
           }
-        }else{
+        } else {
           return ''
         }
       },
@@ -377,15 +376,15 @@
           this.src = util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
         }
       },
-       errorImg1(item) {
+      errorImg1(item) {
         if (item.type === 'administrative') {
-          return  util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
+          return util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchAdmin.png'
         } else if (item.type === 'human') {
-          return  util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
+          return util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchHuman.png'
         } else if (item.type === 'organization') {
-          return  util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
+          return util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/searchOrg.png'
         } else if (item.type === 'weapon') {
-          return  util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
+          return util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/weapon.png'
         } else {
           return util.checkImgExists(item.img) ? (item.img) : 'http://10.60.1.140/assets/images/image.png'
         }
@@ -438,7 +437,7 @@
                         "labelvalue": "(" + mthis.returnCHname(item.type) + ')',
                         "value": item.name,
                         "id": item.id,
-                        "img": mthis.defaultImg(item.type,'http://10.60.1.143/pic_lib/padded/'+idString+'.png'),
+                        "img": mthis.defaultImg(item.type, 'http://10.60.1.143/pic_lib/padded/' + idString + '.png', ''),
                         "type": item.type,
                         "itemType": 'entity'
                       })
@@ -497,9 +496,10 @@
                     optionsTemp.push(optionList)
                   }
                   setTimeout(function() {
+                    console.log(optionsTemp)
                     mthis.loading1 = false;
                     mthis.options1 = optionsTemp
-                    console.log(mthis.options1)
+                    mthis.$forceUpdate()
                   }, 200);
                 } else {}
               })
@@ -537,9 +537,8 @@
               if (response.body.timestamp == mthis.timestamp && response.body.code == 0) {
                 if (response.body.data.SearchEntity.length > 0) {
                   let optionList = new Object()
-                  
                   response.body.data.SearchEntity.map(item => {
-                    if(item.type === "locationName"){
+                    if (item.type === "locationName") {
                       /* optionLocationNames.push(item); */
                       var shortname = '';
                       if (item.name.length > 14) {
@@ -555,7 +554,7 @@
                         "id": item.id,
                         "img": '',
                         "type": 'location',
-                        "itemType":'location'
+                        "itemType": 'location'
                       }
                       optionLocationNameArr.push(queryObj);
                     } else {
@@ -590,7 +589,6 @@
                 }
                 if (response.body.data.SearchSet.length > 0) {
                   let optionList1 = new Object()
-                  
                   response.body.data.SearchSet.map(item => {
                     if (item.name.length > 14) {
                       item.shortname = item.name.substring(0, 13) + '...'
@@ -610,33 +608,123 @@
                     })
                   })
                 }
-                
               }
               setTimeout(function() {
                 mthis.loading2 = false;
-                if(optionLocationNameArr.length > 0){
+                if (optionLocationNameArr.length > 0) {
                   mthis.options2.push({
-                      title: '地名检索',
-                      data: optionLocationNameArr
-                    })
+                    title: '地名检索',
+                    data: optionLocationNameArr
+                  })
                 }
-                if(optionListArr.length > 0){
+                if (optionListArr.length > 0) {
                   mthis.options2.push({
-                      title: '实体检索',
-                      data: optionListArr
-                    })
+                    title: '实体检索',
+                    data: optionListArr
+                  })
                 }
-                if(optionListArr1.length > 0){
+                if (optionListArr1.length > 0) {
                   mthis.options2.push({
-                      title: '集合检索',
-                      data: optionListArr1
-                    })
+                    title: '集合检索',
+                    data: optionListArr1
+                  })
                 }
               }, 200);
             });
         } else {
           mthis.options2 = [];
         }
+      },
+      IsLoad(url, fun) {
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success: function(response) {
+            if ($.isFunction(fun)) {
+              fun(true);
+            }
+          },
+          error: function() {
+            if ($.isFunction(fun)) {
+              fun(false);
+            }
+          }
+        });
+      },
+      errorChangeImg(obj) {
+        var mthis = this
+        var isRunUrl = function(url) {
+          return new Promise(function(resolve, reject) {
+            // 测试链接连通性, 主要检测404错误
+            // 由于AJAX通常无法区分404和跨域问题
+            // 所以只能用script 或者 link标签
+            // link比script更容易捕获错误
+            var dom = document.createElement('link');
+            dom.href = url;
+            dom.rel = 'stylesheet';
+            document.head.appendChild(dom);
+            dom.onload = function() {
+              document.head.removeChild(dom);
+              resolve();
+            }
+            dom.onerror = reject;
+          });
+        }
+        isRunUrl('http://10.60.1.143/pic_lib/padded/' + obj.id + '.png').then(function(data) {
+          return 'http://10.60.1.143/pic_lib/padded/' + obj.id + '.png'
+          // //处理resolve的代码
+          // console.log("Promise被置为resolve", data);;
+        }, function(data) {
+          //处理reject的代码
+          // console .log("程序被置为了reject",data);
+          let type = obj.type
+          if (mthis.myMap1.get(type) === 'entity') {
+            if (type === 'administrative') {
+              return 'http://10.60.1.140/assets/images/searchAdmin.png'
+            } else if (type === 'human') {
+              return 'http://10.60.1.140/assets/images/searchHuman.png'
+            } else if (type === 'organization') {
+              return 'http://10.60.1.140/assets/images/searchOrg.png'
+            } else if (type === 'weapon') {
+              return 'http://10.60.1.140/assets/images/weapon.png'
+            } else {
+              return 'http://10.60.1.140/assets/images/image.png'
+            }
+          } else if (mthis.myMap1.get(type) === 'event') {
+            return mthis.myMap.get(subtype).img
+          } else if (mthis.myMap1.get(type) === 'document') {
+            return 'http://10.60.1.140/assets/images/content_node.png'
+          } else {
+            return 'http://10.60.1.140/assets/images/image1.png'
+          }
+        })
+        mthis.$forceUpdate()
+        // this.IsLoad('http://10.60.1.143/pic_lib/padded/' + obj.id + '.png', function(res) {
+        //   if (res) {
+        //     return 'http://10.60.1.143/pic_lib/padded/' + obj.id + '.png'
+        //   } else {
+        //     let type = obj.type
+        //     if (this.myMap1.get(type) === 'entity') {
+        //       if (type === 'administrative') {
+        //         return 'http://10.60.1.140/assets/images/searchAdmin.png'
+        //       } else if (type === 'human') {
+        //         return 'http://10.60.1.140/assets/images/searchHuman.png'
+        //       } else if (type === 'organization') {
+        //         return 'http://10.60.1.140/assets/images/searchOrg.png'
+        //       } else if (type === 'weapon') {
+        //         return 'http://10.60.1.140/assets/images/weapon.png'
+        //       } else {
+        //         return 'http://10.60.1.140/assets/images/image.png'
+        //       }
+        //     } else if (this.myMap1.get(type) === 'event') {
+        //       return mthis.myMap.get(subtype).img
+        //     } else if (this.myMap1.get(type) === 'document') {
+        //       return 'http://10.60.1.140/assets/images/content_node.png'
+        //     } else {
+        //       return 'http://10.60.1.140/assets/images/image1.png'
+        //     }
+        //   }
+        // })
       },
       searchInfoContent(query) {
         // var mthis = this;
@@ -770,7 +858,7 @@
     },
     created() {
       var mthis = this
-      mthis.loadingText = mthis.loadingT+mthis.loadingS
+      mthis.loadingText = mthis.loadingT + mthis.loadingS
       var ob = configer.loadxmlDoc(
         mthis.$store.state.ipConfig.xml_url + "/dictionary.xml"
       );
@@ -784,7 +872,7 @@
           });
         }
       }
-       var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
+      var ob1 = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
       var entityMainType = ob1.getElementsByTagName("entityMainType");
       mthis.myMap1 = new Map();
       for (var i = 0; i < entityMainType.length; i++) {
@@ -868,16 +956,13 @@
     text-overflow: ellipsis;
     overflow: hidden;
   }
-
-
-
-
-  .ivu-select-loading,.ivu-select-not-found li{
-    color:rgba(204,255,255,0.5) !important;
+  .ivu-select-loading,
+  .ivu-select-not-found li {
+    color: rgba(204, 255, 255, 0.5) !important;
     font-family: "微软雅黑" !important;
     font-size: 14px !important;
   }
   /* #queryInput:focus>.inputDiv+.imgDiv .process-img {
-                                            color: red;
-                                          } */
+                                                color: red;
+                                              } */
 </style>

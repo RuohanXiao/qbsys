@@ -2629,6 +2629,10 @@
                     node.image = 'http://10.60.1.140/assets/images/Organization.png'
                   } else if (node.data.entity_type === 'weapon') {
                     node.image = 'http://10.60.1.140/assets/images/weapon.png'
+                  } else if (node.data.entity_type === 'geographic_entity') {
+                    node.image = 'http://10.60.1.140/assets/images/image1.png'
+                  } else if (node.data.entity_type === 'project') {
+                    node.image = 'http://10.60.1.140/assets/images/image1.png'
                   } else {
                     node.image = 'http://10.60.1.140/assets/images/image1.png'
                   }

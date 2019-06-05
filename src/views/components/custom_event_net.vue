@@ -22,6 +22,8 @@
         <div class="e-title-d"></div>
         <p class="e-title-p">节点信息</p>
       </div>
+      <human-entity-table v-if="detailData.entity_type==='geographic_entity'" :tableData="detailData" :tableType='detailData.entity_type' :entDivH='entDivH'></human-entity-table>
+      <human-entity-table v-if="detailData.entity_type==='project'" :tableData="detailData" :tableType='detailData.entity_type' :entDivH='entDivH'></human-entity-table>
       <human-entity-table v-if="detailData.entity_type==='human'" :tableData="detailData" :tableType='detailData.entity_type' :entDivH='entDivH'></human-entity-table>
       <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
       <organization-entity-table v-show="detailData.entity_type==='organization'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
@@ -133,6 +135,10 @@
                 return 'http://10.60.1.140/assets/images/Organization.png'
               } else if (mthis.eventdata[0].entity_type === 'weapon') {
                 return 'http://10.60.1.140/assets/images/weapon.png'
+              } else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+                return 'http://10.60.1.140/assets/images/image1.png'
+              } else if (mthis.eventdata[0].entity_type === 'project') {
+                return 'http://10.60.1.140/assets/images/image1.png'
               } else {
                 return 'http://10.60.1.140/assets/images/image1.png'
               }
@@ -247,6 +253,10 @@
                     result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/Organization.png'
                   } else if (mthis.eventdata[0].entity_type === 'weapon') {
                     result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                  } else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
+                  } else if (mthis.eventdata[0].entity_type === 'project') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
                   } else {
                     result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
                   }
