@@ -1,7 +1,7 @@
 <template>
   <div :id="timechartdivId" @click="hideDiv()">
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
-    <div :style="{width:pwidth,height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
+    <div :style="{height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <!-- <Col span="1" />
         <Col span="20" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
@@ -21,7 +21,7 @@
       </Col>
       </Row>
     </div>
-    <div :style="{width:pwidth,borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
+    <div :style="{borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
       <!-- <echarts id='barchart' :options="bar" :style="{height: timepxdiv}" :auto-resize="true" ></echarts> -->
       <div :id="main1Id" :style="{width:pwidth}"></div>
@@ -174,6 +174,7 @@
                 mthis.boxSelEventIds.eventIds.push("event&" + j)
               }
             }
+            console.log(eventIds)
             mthis.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
             // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
             //         "selectedIds":this.geo_only_eventIds,
@@ -278,7 +279,7 @@
           grid: {
             top: "10%",
             right: "4%",
-            left: '50px',
+            left: '20px',
             bottom:'20%',
             containLabel: true  
           },
@@ -366,6 +367,7 @@
             },
             splitLine:{show:false},
             
+            
           },
           dataZoom: [{
               type: "slider",
@@ -435,7 +437,7 @@
             barGap:"-100%",
             // barWidth:'10px',
             barMaxWidth: "60px",
-            barWidth:'5px',
+            barWidth:'10px',
             // barMinHeight: '1px',
             barCategoryGap:'20px',
             itemStyle: {
@@ -497,7 +499,7 @@
                     type:'bar',
                     // barWidth:'10px',
                     barMaxWidth: '60px',
-                    barWidth:'5px',
+                    barWidth:'10px',
                     barMinHeight: '1px',
                     barCategoryGap : '60%',
                     data:mthis.dataBySeries.clickNum,
@@ -753,7 +755,13 @@
             
           }
         }else if(flag ==2){
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.timeTitle = '时间轴';
           mthis.resize();
           console.log(mthis.dataBySeries.date.length)
@@ -770,7 +778,16 @@
           mthis.charts.setOption(mthis.option)
           
         }else if(flag==3){
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.resize();
+          mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+          mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
           // mthis.option.xAxis.data = mthis.dataBySeries.date;
           // mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.colorFlag = 1;
@@ -779,7 +796,13 @@
           mthis.charts.setOption(mthis.option)
         }else{
           
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.dataBySeries.num = [];
           mthis.dataBySeries.date = [];
           mthis.dataBySeries.clickNum = [];
@@ -795,6 +818,7 @@
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
+      var mthis = this
       this.netHeightCount++;
       this.contentHeightCount++;
       this.geoHeightCount+=2;
@@ -814,6 +838,9 @@
       var zoomSize = 6;
       util.removeStorage("eventIds")
       // this.changHeightCount++
+      window.addEventListener('resize',function(){
+        mthis.resize()
+      })
     },
     computed:mapState ([
       'split','split_geo','splitWidth','tmss','selectNetNodes','geo_selected_param','geo_onlyselected_param']),
@@ -849,8 +876,8 @@
             //   }
             // }
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                  "eventids":mthis.geo_only_eventIds,
-                  "typeLabel":"event"
+                  "ids":mthis.geo_only_eventIds,
+                  
                 }).then(response =>{
                   if(response.body.code === 0){
                     
@@ -884,8 +911,8 @@
                 }
                 
                   mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                        "eventids":mthis.geoStatics_eventIds,
-                        "typeLabel":"event"
+                        "ids":mthis.geoStatics_eventIds,
+                        
                       }).then(response =>{
                         if(response.body.code === 0){
                             // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
@@ -904,7 +931,7 @@
                 
                 
               }
-              if(this.geo_selected_param.paramIds.length==0){
+              if(this.geo_selected_param.paramIds.length==0 && mthis.dataBySeries.date.length>0){
                   mthis.dataBySeries.clickNum = [];
                   
                 }
@@ -913,6 +940,7 @@
             
         },
       split_geo: function(va) {
+        
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         this.charts.resize({
@@ -921,6 +949,7 @@
         })
       },
       splitWidth: function(va) {
+        
         this.pwidth = document.documentElement.clientWidth * this.$store.state.split_geo - 20 + 'px'
       },
       geoHeightCount: function() {

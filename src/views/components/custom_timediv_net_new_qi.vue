@@ -98,6 +98,14 @@
           date: [],
           clickNum:[]
         },
+        dataEvents:{
+          date:[],
+          num:[]
+        },
+        dataDocs:{
+          date:[],
+          num:[]
+        },
         selectTime: false,
         // 右键点击柱子出现选中分析
         clcikShowDiv:false,
@@ -131,14 +139,16 @@
         echartsShowEnd:100,
         curInt:null,
         colorFlag:0,
-        selIdsArr:[]
+        selIdsArr:[],
+        reqType:'event'
         
       };
     },
     methods: {
+      
       query(){
         var mthis = this;
-        let eventIds = util.getStorage("eventIds",mthis.selIdsArr);
+        let eventIds = util.getStorage("allIds",mthis.selIdsArr);
         let selEventIds = []
             for(var i in eventIds){
               for(var j of eventIds[i]){
@@ -146,6 +156,7 @@
                 
               }
             }
+            console.log(selEventIds)
         this.$store.commit('setNetTimeCondition',selEventIds)
         this.boxSelEventIds.ids = selEventIds
             // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
@@ -250,7 +261,7 @@
           grid: {
             top: "10%",
             right: "4%",
-            left: '50px',
+            left: '20px',
             bottom:'20%',
             containLabel: true  
           },
@@ -591,7 +602,7 @@
           mthis.colorFlag = 1;
           mthis.charts.setOption(mthis.option)
          
-          let eventIds = util.getStorage("eventIds",params.dataIndex);
+          let eventIds = util.getStorage("allIds",params.dataIndex);
           mthis.clickEventIds.ids = eventIds
           mthis.$store.commit('setNetTimeCondition', eventIds)
           console.log(eventIds)
@@ -626,7 +637,7 @@
             mthis.clickdivLeft = event.clientX + 'px'
             mthis.clickdivTop = event.clientY + 'px'
             mthis.clcikShowDiv = true
-            let eventIds = util.getStorage("eventIds",params.dataIndex);
+            let eventIds = util.getStorage("allIds",params.dataIndex);
             mthis.clickEventIds.ids = eventIds
             // mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
             //     "selectedIds":mthis.selectionIdByType.eventIds,
@@ -658,7 +669,13 @@
             }
         }else if(flag ==2){
           // flag==2---->监听网络关系中的事件，显示数据
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.timeTitle = '时间轴';
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
@@ -671,15 +688,31 @@
         }else if(flag==3){
           mthis.resize();
           // flag==3--->数据透视点击事件，层叠显示
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           // mthis.option.xAxis.data = mthis.dataBySeries.date;
           // mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+          mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
           mthis.colorFlag = 1;
           // mthis.option.series[0].itemStyle.normal.color = "rgba(51,204,153,0.5)";
           mthis.charts.setOption(mthis.option)
         }else{
           // flag ==4--->网络关系事件节点为空，清空echarts
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
+          
           mthis.resize();
           mthis.dataBySeries.num = []
           mthis.dataBySeries.date = []
@@ -708,7 +741,7 @@
           height
         })
       },
-      
+   
         
       
     },
@@ -731,6 +764,9 @@
       // Enable data zoom when user click bar.
       var zoomSize = 6;
       // this.changHeightCount++
+      window.addEventListener('resize',function(){
+        that.resize()
+      })
     },
     computed: mapState([
       'split', 'split_net','splitWidth', 'tmss', 'selectNetNodes','selectionIdByType','netStaticsSelectedIds','netOnlyStaticsSelectedIds'
@@ -763,8 +799,8 @@
           
           
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "eventids":mthis.netOnlyStaticsSelectedIds.ids,
-            "typeLabel":"event"
+            "ids":mthis.netOnlyStaticsSelectedIds.ids,
+            
           }).then(response => {
             // mthis.dataBySeries.date = ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31','2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28']
             // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
@@ -774,7 +810,7 @@
               mthis.dataBySeries.num = response.body.data.count;
               mthis.dataBySeries.clickNum = [];
               mthis.loadEcharts(2)
-              util.writeStorage("eventIds",response.body.data.ids)
+              util.writeStorage("allIds",response.body.data.ids)
             }else{
               console.log("服务器error")
             }
@@ -787,11 +823,11 @@
       },
       netStaticsSelectedIds:function(){
           var mthis = this
-          
+          console.log(this.netStaticsSelectedIds)
           if(this.netStaticsSelectedIds.length>0){
               mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                  "eventids":mthis.netStaticsSelectedIds,
-                  "typeLabel":"event"
+                  "ids":mthis.netStaticsSelectedIds,
+                  
               }).then(response =>{
                   if(response.body.code === 0){
                       // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
@@ -814,36 +850,26 @@
 
       selectionIdByType:function(){
         var mthis = this
-        
-        if(this.selectionIdByType.eventIds.length>0){
-          
+        var oneFlag = true
+        console.log(this.selectionIdByType)
+        let allIds = []
+        if(this.selectionIdByType.eventIds.length>0 || this.selectionIdByType.contentIds.ids.length>0){
          
-          // mthis.$store.commit('setNetStaticsSelectedIds',[])
-          
-          
+          allIds = mthis.selectionIdByType.eventIds.concat(this.selectionIdByType.contentIds.ids)
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "eventids":mthis.selectionIdByType.eventIds,
-            "typeLabel":"event"
-          }).then(response => {
-            // mthis.dataBySeries.date = ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31','2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28']
-            // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
-            // mthis.loadEcharts(2)
-            if(response.body.code === 0){
+            "ids":allIds
+          }).then(response =>{
+            if(response.body.code ==0){
               mthis.dataBySeries.date = response.body.data.time;
               mthis.dataBySeries.num = response.body.data.count;
               mthis.dataBySeries.clickNum = [];
               mthis.loadEcharts(2)
-              util.writeStorage("eventIds",response.body.data.ids)
-            }else{
-              console.log("服务器error")
+              util.writeStorage("allIds",response.body.data.ids)
             }
-            
           })
-          
-           
         }
-        if(this.selectionIdByType.eventIds.length==0 && this.dataBySeries.date.length>0){
-          
+        if(this.selectionIdByType.eventIds.length==0  &&  this.selectionIdByType.contentIds.ids.length==0 && this.dataBySeries.date.length>0){
+          console.log('no data')
           // mthis.$store.commit('setNetStaticsSelectedIds',[])
           mthis.loadEcharts(4)
         }

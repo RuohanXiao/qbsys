@@ -543,7 +543,7 @@
           //  框选事件
           $container
             .on('mousedown', function(eventDown) {
-              console.log(111)
+             
               //  设置选择的标识
               var isSelect = true;
               //  创建选框节点
@@ -565,7 +565,7 @@
               //  监听鼠标移动事件
               $(selector).on('mousemove', function(eventMove) {
                 //  设置选框可见
-                console.log(2222)
+                
                 $selectBoxDashed.css('display', 'block');
                 //  根据鼠标移动，设置选框的位置、宽高
                 _x = eventMove.x || eventMove.clientX;
@@ -614,7 +614,7 @@
             })
             //  点选切换选中事件
             .on('click', '.select-item', function() {
-              // console.log("clcik")
+              
               
               // clearTimeout(timerClick);
               // var selThis = this;
@@ -650,7 +650,7 @@
         if(this.contentTimeOnlySel){
           this.selectAll()
         }else{
-          console.log("falsefalsefalsefalse")
+          
         }
         
       },
@@ -685,7 +685,7 @@
         
       },
       watchSelectCounter: function() {
-        // console.log("watchselectcounter")
+        
         
         // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         
@@ -699,24 +699,23 @@
         // for (let m = 0; m < selectList.length; m++) {
         //   this.selectArr.push(selectList[m].id)
         // }
-        // // console.log('==============++++++++++==============')
-        // // console.log(this.selectArr)
+        
         // this.$store.commit('setSelectContentNodes', [{
         //   ids: this.selectArr
         // }])
         
       },
       netToContentData: function() {
-        console.log(this.netToContentData)
+        
         var mthis = this
         
         if(this.netToContentData.contentIds.ids.length ==0){
-          console.log(0)
+          
           mthis.items = []
           
         }else if(this.netToContentData.contentIds.ids.length>0){
           mthis.spinShow = true
-          console.log(1)
+          
           mthis.items = []
           let contentIds = this.netToContentData.contentIds.ids
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
@@ -728,13 +727,17 @@
                 title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.text,
+                text: item.description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
                 check:true
               })
+              
             );
+            console.log(1)
+            mthis.prevItems = mthis.deepClone(mthis.items)
+            
             for(let i=0;i<mthis.items.length;i++){
               selectIds.push(mthis.items[i].id)
             }
@@ -744,22 +747,32 @@
             mthis.$store.commit('setContent2time',[{
               ids:selectIds
             }])
+            mthis.translateButton = true
+            mthis.analysisButton = true
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.text,
+                text: item.description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
                 check:false
               })
             );
+            console.log(2)
+            mthis.$store.commit('setSelectContentNodes', [{
+              ids: []
+            }])
+            mthis.$store.commit('setContent2time',[{
+              ids:[]
+            }])
+            mthis.prevItems = mthis.deepClone(mthis.items)
           }
           
           mthis.spinShow = false
-          console.log(2)
+          
           
          
         })
@@ -767,56 +780,46 @@
         }
         
       },
-      
-      'contentTimeCondition.type': function() {
-        var mthis = this
-        console.log(this.contentTimeCondition.type)
-        if(mthis.contentTimeCondition.type == 'cancel'){
-          mthis.items = mthis.prevItems;
-          let selIds = []
-          for(let i=0;i<mthis.items.length;i++){
-            selIds.push(mthis.items[i].id)
-            mthis.items[i].check = true
-          }
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: selIds
-          }])
-        }
-        if(mthis.contentTimeCondition.type == 'sel'){
-          if(mthis.contentTimeCondition.ids.length ==0){
-            mthis.items = mthis.prevItems;
-            let selIds = []
-            for(let i=0;i<mthis.items.length;i++){
-              selIds.push(mthis.items[i].id)
-              mthis.items[i].check = true
+      contentTimeCondition:{
+        deep:true,
+        handler(newValue){
+           var mthis = this
+            
+            
+            if(mthis.contentTimeCondition.type == 'cancel'){
+              console.log(3)
+              console.log(mthis.prevItems)
+              mthis.items =  mthis.deepClone(mthis.prevItems)
             }
-            mthis.$store.commit('setSelectContentNodes', [{
-              ids: selIds
-            }])
-         }
-          if(mthis.contentTimeCondition.ids.length>0){
-            let items = []
-            for(var i of mthis.contentTimeCondition.ids){
-              for(var j in mthis.items){
-                if(i == mthis.items[j].id){
-                  items.push(mthis.items[j])
-                  }
-                }
+            if(mthis.contentTimeCondition.type == 'sel'){
+              
+              if(mthis.contentTimeCondition.ids.length ==0){
+                console.log(4)
+                mthis.items = mthis.deepClone(mthis.prevItems)
               }
-            for(var m=0;m<items.length;m++){
-              items[m].check = false
+              if(mthis.contentTimeCondition.ids.length>0){
+                let items = []
+                for(var i of mthis.contentTimeCondition.ids){
+                  for(var j in mthis.prevItems){
+                    if(i == mthis.prevItems[j].id){
+                      items.push(mthis.deepClone(mthis.prevItems[j]))
+                      }
+                    }
+                  }
+                for(var m=0;m<items.length;m++){
+                  items[m].check = false
+                }
+                mthis.items = mthis.deepClone(items)
+               
+              
+              }
             }
-            mthis.items = items
-            mthis.$store.commit('setSelectContentNodes', [{
-              ids: []
-            }])
             }
-          
-        }
-        
-        
-          
+            
+            
       },
+      
+     
       searchContentResult: function(va) {
         var mthis = this
         mthis.page = 1
@@ -828,26 +831,26 @@
             
             
             $('.item-selected').removeClass('item-selected')
-            console.log(5)
+            
             // mthis.items = response.body.data
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.text,
+                text: item.description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
                 check:false
               })
             );
-            console.log(mthis.items)
-            mthis.prevItems = mthis.items
+            console.log(5)
+            mthis.prevItems = mthis.deepClone(mthis.items)
+            
             if(response.body.data.length ==30){
               mthis.moreLoading = true
             }
-            // console.log("datadatatdattatdtadt")
-            // console.log(mthis.items)
+           
             // mthis.data4 = []
             // for(let i=0;i<mthis.items.length;i++){
             //   let itemList = {};
@@ -859,7 +862,7 @@
             //   itemList.entity = mthis.content
             //   mthis.data4.push(itemList)
             // }
-            // console.log(mthis.data4)
+            
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
             mthis.$store.commit('setSelectContentNodes', [{
@@ -871,7 +874,7 @@
           } else {
             // mthis.showMore = false
             mthis.setMessage('未找到匹配的文章')
-            console.log(6)
+           
             mthis.items = []
 
           }
@@ -906,6 +909,11 @@
     },
     props: ['contentData'],
     methods: {
+      deepClone(obj){
+        let _obj = JSON.stringify(obj);
+        let objClone = JSON.parse(_obj);
+        return objClone
+      },
       keyD(e){
         
         var mthis = this;
@@ -950,8 +958,7 @@
             mthis.keyCount = mthis.keyCount - 1;
             mthis.prevKup = e.code
           }
-        console.log('keyup')
-        console.log(mthis.keyCount)
+        
       },
       clearBubble(e) {
         if (e.stopPropagation) {
@@ -1117,6 +1124,7 @@
         var mthis = this;
         check = !check;
         mthis.items[index].check = check;
+        mthis.prevItems = mthis.deepClone(mthis.items)
         timerClick = setTimeout(function(){
           var ids = mthis.selectContentNodes[0].ids
           if(ids.indexOf(id)>-1){
@@ -1218,6 +1226,7 @@
             continue
           }
         }
+       
         mthis.deleteButton = true
         mthis.analysisButton = true
         mthis.$store.commit('setSelectContentNodes', [{
@@ -1226,7 +1235,8 @@
         mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
-
+          console.log(6)
+        mthis.prevItems = mthis.deepClone(mthis.items)
         // let disselectDom = $('.contentDiv:not(.item-selected)')
         // disselectDom.addClass('item-selected')
         // this.watchSelectCounter++;
@@ -1234,8 +1244,7 @@
       },
       rightMenu(e){
         var mthis = this
-        // console.log("youjianyoujianyoujiainyoujian")
-        // console.dir(e)
+        
         let that = e.target
         if(that.tagName == "P"){
           that = that.parentNode
@@ -1249,8 +1258,7 @@
           $(that).addClass('item-selected')
           mthis.watchSelectCounter++;
         }
-        // console.log(event.pageX)
-        // console.log(event.pageY)
+        
         
       },
       togClass(e){
@@ -1268,7 +1276,7 @@
         timerClick = setTimeout(function(){
           
         if ($(that).hasClass('item-selected')) {
-          console.log(6)
+          
           $(that).removeClass('item-selected');
         } else {
           $(that).addClass('item-selected');
@@ -1280,7 +1288,7 @@
         var mthis = this
         if(this.deleteButton){
           mthis.items =  mthis.items.filter(item => item.check == false)
-          
+          mthis.prevItems = mthis.deepClone(mthis.items)
           mthis.$store.commit('setSelectContentNodes', [{
             ids: []
           }])
@@ -1295,7 +1303,7 @@
         // 判断是否是闰年，请求结束时间加一天
       isLeapYear(str){
           var newStr = str.split("-")
-          // console.log(newStr)
+          
               var year = parseInt(newStr[0])
               var month = parseInt(newStr[1])
               var day = parseInt(newStr[2])
@@ -1607,6 +1615,7 @@
             }
           }
         }
+        mthis.prevItems = mthis.deepClone(mthis.items)
       },
       fanxuan() {
         // document.getElementsByClassName("box");
@@ -1614,6 +1623,7 @@
         for(let i=0;i<this.items.length;i++){
           mthis.items[i].check = !mthis.items[i].check
         }
+        mthis.prevItems = mthis.deepClone(mthis.items)
         let selectList = []
         let selectContent = this.items.filter(item => item.check)
         for(let i=0;i<selectContent.length;i++){
@@ -1627,8 +1637,9 @@
           }])
       },
       removeAll() {
-        console.log(7)
+        
         this.items = []
+        this.prevItems = this.deepClone(this.items)
         // this.watchSelectCounter++;
         this.page = 1;
         this.$store.commit('setSelectContentNodes', [{
@@ -1680,7 +1691,7 @@
       },
       contentTranslate() {
         var mthis = this;
-        // console.log(this.translateButton)
+        
         if(this.translateButton){
           var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
@@ -1738,7 +1749,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(8)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据1', true)
@@ -1752,12 +1763,12 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(10)
+                
                 mthis.items = response.body.data.map(item =>({
                   title: item.title,      
                   i_sn: item.i_sn, 
                   id: item.id,
-                  text: item.text,
+                  text: item.description,
                   time: item.time,
                   from: item.from,     
                   img: "http://10.60.1.140/assets/images/content_node.png",
@@ -1780,7 +1791,7 @@
               if (response.body.data.length > 0) {
                 
                 // $('.item-selected').removeClass('item-selected')
-                console.log(11)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.setMessage('无匹配数据3')
@@ -1802,7 +1813,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(12)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据4', true)
@@ -1816,7 +1827,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(13)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据5', true)
@@ -1831,7 +1842,7 @@
                   title: item.title,      
                   i_sn: item.i_sn, 
                   id: item.id,
-                  text: item.text,
+                  text: item.description,
                   time: item.time,
                   from: item.from,     
                   img: "http://10.60.1.140/assets/images/content_node.png",
@@ -1839,7 +1850,7 @@
                 })
               );
                 // $('.item-selected').removeClass('item-selected')
-                console.log(14)
+                
                 mthis.$store.commit('setSelectContentNodes', [{
                   ids: []
                 }])
@@ -1871,7 +1882,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(15)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据7', true)
@@ -1885,7 +1896,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(16)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据8', true)
@@ -1897,7 +1908,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(17)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据9', true)
@@ -1919,7 +1930,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(18)
+                
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 mthis.alertNotice('无匹配数据10', true)
@@ -1933,7 +1944,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(19)
+                
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 mthis.alertNotice('无匹配数据11', true)
@@ -1948,7 +1959,7 @@
                   title: item.title,      
                   i_sn: item.i_sn, 
                   id: item.id,
-                  text: item.text,
+                  text: item.description,
                   time: item.time,
                   from: item.from,     
                   img: "http://10.60.1.140/assets/images/content_node.png",
@@ -1957,11 +1968,12 @@
               );
               
                 // $('.item-selected').removeClass('item-selected')
-                console.log(20)
+                
                 mthis.items = mthis.items.concat(nowItems)
-                mthis.prevItems = mthis.items
+                console.log(7)
+                mthis.prevItems = mthis.deepClone(mthis.items)
               } else {
-                // console.log('全部加载')
+                
                 // $('.layer').show().delay(3000).fadeOut()
                 mthis.setMessage('文档已经全部加载')
                 mthis.moreLoading = false
@@ -1988,7 +2000,7 @@
           let selData = {}
           selData.id = [];
           selData.title = ''
-          console.log(selData)
+          
           mthis.$store.commit('setContentSelData',selData)
           if(!mthis.showThumb){
             mthis.toContentDiv()
@@ -2023,7 +2035,7 @@
         // let selData = {}
         // selData.id = [];
         // selData.title = ''
-        // console.log(selData)
+        
         // this.$store.commit('setContentSelData',selData)
         // document.getElementById('contents').innerHTML = ''
         // document.getElementById('contentsTitle').innerHTML = ''
@@ -2031,14 +2043,14 @@
       },
       jiazai(){
         var mthis= this
-        // console.log($('#jiazaiDiv').offset())
+       
         if (timer) {
           clearTimeout(timer)
         }
         timer = setTimeout(function() {
           while($('#jiazaiDiv').offset().top < 1000){
             mthis.handleReachBottom()
-            // console.log('===============')
+            
             break;
           }
         }, 500);
@@ -2094,7 +2106,7 @@
           "type":"document"
         }).then(response =>{
           if(response.body.code ==0){
-            console.log(response.body.data)
+            
             mthis.selDocItems = response.body.data[1]
           }
         })
@@ -2305,7 +2317,7 @@
         let selData = {}
         selData.id = [id];
         selData.title = title
-        console.log(selData)
+        
         mthis.$store.commit('setContentSelData',selData)
         
         
@@ -2321,7 +2333,7 @@
           // mthis.printer(response.body.data[0].text, 'contents', 'pointer')
          
           document.getElementById('contentInfo').value = response.body.data[0].id;
-          var text = response.body.data[0].text.replace(/(\r\n)|(\n)/g, '<br>');
+          var text = response.body.data[0].description.replace(/(\r\n)|(\n)/g, '<br>');
           document.getElementById('contents').innerHTML = text
           document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
           document.getElementById('contentsTime').innerHTML = response.body.data[0].from + ((response.body.data[0].from !== '' && response.body.data[0].from !== undefined) ? '  |  ' : '') + response.body.data[0].time
@@ -2389,10 +2401,10 @@
     
       // this.initSelectBox('#contentchart')
       
-      // // console.log($('#jiazaiDiv').offset())
+      
       // window.addEventListener('scroll', this.handleScroll)
       // let contentChart = document.getElementById('contentchart');
-      // console.log(contentChart)
+      
       // var contentTimer = null;
       // $('#contentchart').click(function(){
       //   contentTimer = setTimeout(function(){
@@ -2403,7 +2415,7 @@
       //   clearTimeout(contentTimer);
       // });
       // $('#contentchart').on('keydown',function(e){
-      //   console.log('keydown')
+      
       //   if(mthis.$store.state.tmss === 'content') {
       //       var e = event || window.event || arguments.callee.caller.arguments[0];
       //       if (e && e.keyCode == 46) {

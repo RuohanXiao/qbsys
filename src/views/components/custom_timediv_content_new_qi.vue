@@ -1,7 +1,7 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId" @click="hideDiv()">
-    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" 
+    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" 
     @click="onchangHeightCount" v-show="showDocTime"></Icon>
     <div :style="{height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
@@ -144,13 +144,19 @@
       },
       query(){
         var mthis = this
-        let docIds = util.getStorage("docIds",mthis.selIdsArr);
+        let sendIds = []
+        let docIds = util.getStorage("docIds",mthis.selIdsArr)
         console.log(mthis.selIdsArr)
         console.log(docIds)
-        
+        for(var i in docIds){
+              for(var j of docIds[i]){
+                sendIds.push(j)
+              }
+            }
         mthis.sendDocIds.type = 'sel'
-        mthis.sendDocIds.ids = docIds
+        mthis.sendDocIds.ids = sendIds
         mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
+        console.log(mthis.$store.state.contentTimeCondition)
       },
       throttle(fn,delay,duration){
         if(timer){
@@ -188,12 +194,12 @@
             type:'brush',
             areas:[]
           })
+          console.log('brush',this.isBrush)
           
-          console.log("brush")
         }
       },
       hideDiv(){
-        
+        var mthis = this
         if(this.isClick){
           
           this.curInt = null;
@@ -239,7 +245,7 @@
           grid: {
             top: "10%",
             right: "4%",
-            left: '50px',
+            left: '20px',
             bottom:'20%',
             containLabel: true  
           },
@@ -609,6 +615,13 @@
             }
         }else if(flag ==2){
           // flag==2---->监听画布中的文档，显示数据
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.timeTitle = '时间轴';
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
@@ -622,7 +635,13 @@
         }else if(flag==3){
           mthis.resize();
           // flag==3--->数据透视点击事件，层叠显示
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
@@ -631,6 +650,13 @@
         }else{
           // flag ==4--->网络关系事件节点为空，清空echarts
           mthis.resize();
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.dataBySeries.num = []
           mthis.dataBySeries.date = []
           mthis.dataBySeries.clickNum= []
@@ -665,9 +691,12 @@
       // Enable data zoom when user click bar.
       var zoomSize = 6;
       // this.changHeightCount++
+      window.addEventListener('resize',function(){
+        that.resize()
+      })
     },
     computed:mapState ([
-      'split','splitWidth','tmss','conditionContent','content2time','showDocTime'
+      'split','splitWidth','tmss','conditionContent','content2time','showDocTime','split_content'
     ]),
     watch: {
       /* tmss: function(){
@@ -690,8 +719,8 @@
         var mthis = this;
         if(this.content2time[0].ids.length>0){
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "eventids":mthis.content2time[0].ids,
-            "typeLabel":"document"
+            "ids":mthis.content2time[0].ids
+            
             }).then(response =>{
               if(response.body.code ==0){
                 mthis.dataBySeries.date = response.body.data.time;
@@ -704,7 +733,7 @@
               }
             })
         }
-        if(this.content2time[0].ids.length ==0){
+        if(this.content2time[0].ids.length ==0 && mthis.dataBySeries.date.length>0 ){
           mthis.loadEcharts(4);
         }
       },
@@ -720,6 +749,16 @@
       //   })
       // },
       split: function(va) {
+        
+        let width = document.documentElement.clientWidth * va - 20 + 'px'
+        let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
+        this.charts.resize({
+          width,
+          height
+        })
+      },
+      split_content:function(va){
+        
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         this.charts.resize({
@@ -728,6 +767,7 @@
         })
       },
       splitWidth: function(va) {
+        
         this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       },
       geoHeightCount: function() {

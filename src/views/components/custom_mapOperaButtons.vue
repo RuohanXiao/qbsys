@@ -11,6 +11,10 @@
 </template>
 
 <style>
+.divStyle p{
+  font-size:12px;
+  font-family: inherit;
+}
 .button-none{
   cursor:default;
   color: rgba(51, 255, 255, 0.2) !important;

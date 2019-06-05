@@ -4,9 +4,9 @@
     <div class="demo-split" :style="{height:viewHeight}">
       <div :style="{height:vh20}">
       <Split v-model="split1" :max="max" :min="min">
-        <div slot="left" class="demo-split-pane" display='flex' :style="{height:vh20}">
-          <geo-map-div  id="geo" :style="{height:GeoHeight}" :geoData="geoData"></geo-map-div>
-          <time-chart-div :activeId='activeId'></time-chart-div>
+        <div slot="left" id='geomainDiv' class="demo-split-pane" display='flex' :style="{height:vh20}">
+          <geo-map-div  id="geo" :style="{height:GeoHeight,width:GeoWidth}" :geoData="geoData"></geo-map-div>  <!-- GeoHeight -->
+          <time-chart-div :activeId='activeId' :style="{width:GeoWidth}"></time-chart-div>
         </div>
         <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
           <event-chart-div id="right" :style="{height:vh20,maxHeight:vh20,minHeight:vh20}"></event-chart-div>
@@ -33,6 +33,7 @@
         flag: true,
         viewHeight: null,
         GeoHeight: null,
+        GeoWidth:null,
         splitWidth:null,
         geoData:null,
         activeId:'geo',
@@ -78,6 +79,16 @@
       mthis.vh20 = document.documentElement.clientHeight - 65 - 20 + 'px';
       mthis.viewHeight = mthis.$store.getters.getViewHeight
       mthis.GeoHeight = mthis.$store.getters.getNetDivHeight
+      window.onresize = function windowResize () {
+          // 通过捕获系统的onresize事件触发我们需要执行的事件
+          debugger
+          var geomainDiv = document.getElementById('geomainDiv');
+          if(geomainDiv !== undefined){
+            debugger
+            //mthis.GeoWidth = (window.innerWidth - 500) + 'px';
+          }
+          
+      }
     }
   }
 </script>
