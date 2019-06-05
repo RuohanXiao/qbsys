@@ -183,7 +183,7 @@
                   // mthis.optionNet.push(optionList)
                   // mthis.options1 = mthis.optionNet;
                   mthis.options1 = new Array(optionList)
-                  mthis.$forceUpdate()
+                  
                   // // console.log(mthis.options1)
                   mthis.loading1 = false;
                 } else {

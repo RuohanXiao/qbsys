@@ -44,6 +44,7 @@ export default {
   },
   //验证图片资源是否存在（404）
   checkImgExists(imgurl) {
+
     var ImgObj = new Image(); //判断图片是否存在  
     ImgObj.src = imgurl;
     //没有图片，则返回-1  
