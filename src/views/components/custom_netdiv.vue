@@ -8,19 +8,19 @@
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifhasNode? 'button-div':'button-div-disable'" @click="newCanvans">
             <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">清空画布</p>
+            <p class="img-content">清空</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('removeOther')">
             <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">反选节点</p>
+            <p class="img-content">反选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifhasNode? 'button-div': 'button-div-disable'" @click="triggerMethods('selectAll')">
             <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">全选节点</p>
+            <p class="img-content">全选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -32,13 +32,13 @@
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="nailNode">
             <Icon class="icon iconfont icon-nail-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">锁定节点</p>
+            <p class="img-content">锁定</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="unnailNode">
             <Icon class="icon iconfont icon-nail-copy-copy-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">解锁节点</p>
+            <p class="img-content">解锁</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
@@ -69,7 +69,7 @@
         <Tooltip placement="top" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('jutuan')">
             <Icon class="icon iconfont icon-jutuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">聚团</p>
+            <p class="img-content">自动</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
