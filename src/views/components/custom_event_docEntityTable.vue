@@ -121,7 +121,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
               </div>
             </div>
-            <div v-show="!ctrls[ind]&&items.data.length>5&&index<5" class="econtent blockStyle" v-for="(item,index) in items.data">
+            <div v-show="items.data.length>5&&index<5" class="econtent blockStyle" v-for="(item,index) in items.data">
               <p class="econtentp w8em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
               <p class="econtentp w8em" v-else :title="items.relation"></p>
               <p class="econtentp">{{item.name}}</p>
@@ -306,9 +306,9 @@
     },
     methods: {
      more(index) {
-                // this.ctrls[index].splice(index,1,!this.ctrls[index]) 
-                this.ctrls[index]=!this.ctrls[index]
-                this.$forceUpdate()
+                // // this.ctrls[index].splice(index,1,!this.ctrls[index]) 
+                // this.ctrls[index]=!this.ctrls[index]
+                // this.$forceUpdate()
             },
       addmultNodeToCanvans(obj, type, subType) {
         mthis.$store.commit('setAddNetNodes', {

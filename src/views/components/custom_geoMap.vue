@@ -2563,6 +2563,7 @@ export default {
         routeOrder(dataJson){
             var mthis = this
             var routeOrderArr = dataJson.sort(mthis.compare);
+            // var routeOrderArr ;
             var res = [];
             for(var i = 0; i < routeOrderArr.length - 1; i++){
                 var fromCoord = routeOrderArr[i].coordinate;
