@@ -229,7 +229,6 @@
             nodeIds.push(EventIds[i])
           }
           mthis.spinShow = true;
-          debugger
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
             'nodeIds': nodeIds,
             'type': 'geo'
