@@ -167,6 +167,8 @@
               // });
               let docOb = {}
               docOb.docIds = mthis.selectionIdByType.contentIds.ids
+              console.log('docOb=============================')
+              console.log(docOb)
               // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
               //   // mthis.evetdataFlag = true
               //   // mthis.evetdata = response.body.data[0].nodes
