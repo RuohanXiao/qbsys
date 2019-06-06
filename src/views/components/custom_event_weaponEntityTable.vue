@@ -297,7 +297,7 @@
           </div>
           <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
             <p class="econtentp" v-show="spinWaiting">相关实体加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关实体</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关实体</p>
           </div>
         </div>
       </panel>
@@ -315,7 +315,7 @@
           </div>
           <div class="econtent" v-if='!(xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">相关事件加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关事件</p>
           </div>
         </div>
       </panel>
@@ -332,7 +332,7 @@
           </div>
           <div class="econtent" v-if='!(xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">文档事件加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关文档</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关文档</p>
           </div>
         </div>
       </panel>

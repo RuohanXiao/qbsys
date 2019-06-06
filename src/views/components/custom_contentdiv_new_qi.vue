@@ -82,7 +82,7 @@
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="toNet">
             <Icon class="icon iconfont icon-tuisongzhiwangluo  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">网络</p>
+            <p class="img-content">推送网络</p>
           </div>
         </Tooltip>
         
@@ -165,7 +165,9 @@
       
     </div>
     <!-- 词云分析图 -->
-    
+      <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around'}">
+
+      </div>
     <!-- </Col> -->
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
@@ -1435,67 +1437,7 @@
       orderTimeUp() {
         var mthis = this
         mthis.items = mthis.deepClone(mthis.prevItems)
-        // mthis.order = '&isSortByTime=asc'
-        // mthis.page = 1
-        // return new Promise(resolve => {
-        //   if (mthis.contentTimeCondition.length === 2) {
-        //     let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-        //     let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-        //     mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-        //       if (response.body.data.length > 0) {
-                
-        //         $('.item-selected').removeClass('item-selected')
-                
-        //         mthis.items = response.body.data
-        //       } else {
-        //         mthis.alertNotice('无匹配数据1', true)
-        //       }
-        //       resolve();
-        //     })
-        //   } else if (mthis.contentTimeCondition.length === 1) {
-        //     let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-        //     let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-        //     mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-        //       if (response.body.data.length > 0) {
-                
-        //         $('.item-selected').removeClass('item-selected')
-                
-        //         mthis.items = response.body.data.map(item =>({
-        //           title: item.title,      
-        //           i_sn: item.i_sn, 
-        //           id: item.id,
-        //           text: item.description,
-        //           time: item.time,
-        //           from: item.from,     
-        //           img: "http://10.60.1.140/assets/images/content_node.png",
-        //           check:false
-        //         })
-        //       );
-        //       mthis.$store.commit('setSelectContentNodes', [{
-        //         ids: []
-        //       }])
-        //       mthis.$store.commit('setContent2time',[{
-        //         ids:[]
-        //       }])
-        //       } else {
-        //         mthis.alertNotice('无匹配数据2', true)
-        //       }
-        //       resolve();
-        //     })
-        //   } else {
-        //     mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
-        //       if (response.body.data.length > 0) {
-                
-        //         // $('.item-selected').removeClass('item-selected')
-                
-        //         mthis.items = response.body.data
-        //       } else {
-        //         mthis.setMessage('无匹配数据3')
-        //       }
-        //       resolve();
-        //     })
-        //   }
-        // });
+        
       },
       orderTimeDown() {
         var mthis = this

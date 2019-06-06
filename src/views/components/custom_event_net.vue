@@ -469,9 +469,13 @@
           padding-left:20px;
           text-align:left;
       } */
-  #nodeAttr p {
-    padding-left: 1em;
-    text-align: left;
+  #nodeAttr p{
+      padding-left:2em;
+      text-align:left;
+  }
+  #nodeAttr p:not(.w8em){
+      padding-left:1em;
+      text-align:left;
   }
   .tableStyle {
     width: 100%
@@ -540,6 +544,7 @@
     -webkit-box-orient: vertical;
     height: 44px;
     word-break: break-all;
+    color: rgba(204,255,255,0.5);
     }
 </style>
 
