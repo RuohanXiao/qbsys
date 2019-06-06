@@ -4,31 +4,31 @@
       <div :style="{float:'right',position:'absolute',verticalAlign: 'middle',lineHeight: '40px',width:'100%',height:'40px'}" class="inputDiv">
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoNet" filterable
           v-show="type==='net'" placeholder='' :remote='true' :loading-text='loadingT' :remote-method="searchInfoNet" :loading="loading1" :label-in-value="true" @keyup.enter.native="enterNetOption(options1[0].data[0])" @on-open-change="lightIcon">
-                <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
-                  <Option v-for="(option, index) in opt1.data" :title="option.label" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
-                    <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorChangeImg(option)"/>
-                    <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
-                </OptionGroup>
-              </Select>
+                  <OptionGroup :label="opt1.title" v-for="opt1 in options1" class="optionTitle">
+                    <Option v-for="(option, index) in opt1.data" :title="option.label" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt1.data[index])}">
+                      <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" @error="defaultImg1(this,option.type,option.img,option.itemType)" :src="option.img"/>
+                      <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/default.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
+                  </OptionGroup>
+                </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoGeo" :remote='begeoSea'
           clearable filterable class="scrollBarAble" v-show="type==='geo'" placeholder='' :remote-method="searchInfoGeo" :loading="loading2" :label-in-value="false" @on-change="v=>{setOption(v)}" @keyup.enter.native="enterGeoOption(options2[0].data[0])" @on-open-change="lightIcon">
-                <OptionGroup :label="opt.title" v-for="opt in options2" class="optionTitle">
-                  <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
-                    <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
-                    <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
-                    <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic_diagra.png" :onerror="errorImg(option)"/>
-                    <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;">{{option.labelvalue}}</span></Option>
-                </OptionGroup>
-              </Select>
+                  <OptionGroup :label="opt.title" v-for="opt in options2" class="optionTitle">
+                    <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}" @click.native="()=>{setOption(opt.data[index])}">
+                      <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
+                      <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
+                      <img v-else-if="option.type ==='location'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/thermodynamic_diagra.png" :onerror="errorImg(option)"/>
+                      <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;font-size: 12px;color: #ccffff;opacity: 0.5;">{{option.labelvalue}}</span></Option>
+                  </OptionGroup>
+                </Select>
         <Select id="queryInput" style="line-height: 50px;display: inline-block; vertical-align: middle;text-overflow:ellipsis;padding-left:40px;padding-top:2px;padding-right:10px;font-size: 18px,text-indent:3rem;min-height:40px" v-model="inputInfoContent" filterable
           class="scrollBarAble" v-show="type==='content'" remote placeholder='' :remote-method="searchInfoContent" :loading="loading3" :label-in-value="true" @on-change="v=>{setOption(v)}" @on-open-change="lightIcon" @keyup.enter.native="enterContentOption(options3[0].data[0])">
-                <OptionGroup :label="opt.title" v-for="opt in options3"  class="optionTitle">
-                  <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}"  @click.native="()=>{setOption(opt.data[index])}">
-                    <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
-                    <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
-                    <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;opacit:0.5" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
-                </OptionGroup>
-              </Select>
+                  <OptionGroup :label="opt.title" v-for="opt in options3"  class="optionTitle">
+                    <Option v-for="(option, index) in opt.data" :value="option.value" :key="index" :style="{lineHeight:'25px',display:'flex'}"  @click.native="()=>{setOption(opt.data[index])}">
+                      <img v-if="option.img !== ''" :style="{width:'25px',height:'25px',borderRadius:'50%'}" :src="option.img" :onerror="errorImg(option)"/>
+                      <img v-else-if="option.type ==='human'" :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_group.png" :onerror="errorImg(option)"/>
+                      <img v-else :style="{width:'25px',height:'25px',borderRadius:'50%'}" src="../../dist/assets/images/image_type.png" />{{option.labelShort}}<span style="float:right;opacit:0.5" :onerror="errorImg(option)">{{option.labelvalue}}</span></Option>
+                  </OptionGroup>
+                </Select>
       </div>
       <div align="center" :style="{float:'left',verticalAlign: 'middle',lineHeight: '40px',width:'40px',height:'40px'}" class="imgDiv"><i class="icon iconfont icon-search process-img" :class="(lightIconFlag)?'lightIcon':''" id='searchImg' style="position: absolute;top:1px;left:14px;width:25px;height:25px;"></i></div>
     </div>
@@ -338,6 +338,36 @@
             break;
         }
       },
+      defaultImg1(mthis,type, img, itemType) {
+        // console.log(subtype)
+        var img = new Image();
+        img.src = img
+        img.onload = function() {
+          mthis.src = img
+        };
+        img.onerror = function() {
+          if (itemType === 'entity') {
+            if (type === 'administrative') {
+              mthis.src =  'http://10.60.1.140/assets/images/searchAdmin.png'
+            } else if (type === 'human') {
+              mthis.src =  'http://10.60.1.140/assets/images/searchHuman.png'
+            } else if (type === 'organization') {
+              mthis.src =  'http://10.60.1.140/assets/images/searchOrg.png'
+            } else if (type === 'weapon') {
+              mthis.src =  'http://10.60.1.140/assets/images/weapon.png'
+            } else {
+              mthis.src =  'http://10.60.1.140/assets/images/image.png'
+            }
+          } else if (itemType === 'event') {
+            // mthis.src =  mthis.myMap.get(subtype).img
+             mthis.src =  'http://10.60.1.140/assets/images/event.png'
+          } else if (itemType === 'document') {
+            mthis.src =  'http://10.60.1.140/assets/images/content_node.png'
+          } else {
+            mthis.src =  'http://10.60.1.140/assets/images/image1.png'
+          }
+        };
+      },
       defaultImg(type, img, subtype) {
         if (img) {
           var mthis = this
@@ -412,38 +442,19 @@
               .then(response => {
                 if (response.body.timestamp == mthis.timestamp && response.body.code == 0) {
                   mthis.options1 = []
-                  // let optionList = {}
-                  // let optionListArr = []
-                  // for (let i = 0; i < response.body.data.nodes.length; i++) {
-                  //   optionListArr.push({
-                  //     "label": response.body.data.nodes[i].name,
-                  //     "value": query,
-                  //     "id": response.body.data.nodes[i].id,
-                  //     "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/default.png'),
-                  //     "type": response.body.data.nodes[i].type
-                  //   })
-                  // }
-                  // optionList.title = '实体检索'
-                  // optionList.data = optionListArr
-                  // mthis.options1 = new Array(optionList)
-                  // mthis.loading1 = false;
                   if (response.body.data.SearchEntity.length > 0) {
                     let optionList = new Object()
                     let optionListArr = new Array()
                     response.body.data.SearchEntity.map(item => {
-                      if (item.name.length > 14) {
-                        item.shortname = item.name.substring(0, 13) + '...'
-                      } else {
-                        item.shortname = item.name
-                      }
-                      let idString = item.id
                       optionListArr.push({
                         "label": item.name,
-                        "labelShort": item.shortname,
+                        "labelShort": (item.name.length > 14) ? (item.name.substring(0, 13) + '...') : item.name,
                         "labelvalue": "(" + mthis.returnCHname(item.type) + ')',
-                        "value": item.name,
+                        // "labelvalue": "()",
+                        "value": query,
                         "id": item.id,
-                        "img": mthis.defaultImg(item.type, 'http://10.60.1.143/pic_lib/padded/' + idString + '.png', ''),
+                        "img": mthis.defaultImg1(item.type, 'http://10.60.1.143/pic_lib/padded/' + item.id + '.png', ''),
+                        // "img": 'http://10.60.1.140/assets/images/searchSet.png',
                         "type": item.type,
                         "itemType": 'entity'
                       })
@@ -456,16 +467,11 @@
                     let optionList = new Object()
                     let optionListArr = new Array()
                     response.body.data.SearchSet.map(item => {
-                      if (item.name.length > 14) {
-                        item.shortname = item.name.substring(0, 13) + '...'
-                      } else {
-                        item.shortname = item.name
-                      }
                       optionListArr.push({
                         "label": item.name,
-                        "labelShort": item.shortname,
+                        "labelShort": (item.name.length > 14) ? (item.name.substring(0, 13) + '...') : item.name,
                         "labelvalue": '(集合)',
-                        "value": item.name,
+                        "value": query,
                         "id": item.id,
                         "img": 'http://10.60.1.140/assets/images/searchSet.png',
                         "type": item.type,
@@ -556,7 +562,7 @@
                         "label": item.name,
                         "labelShort": shortname,
                         "labelvalue": "(地区)",
-                        "value": item.id,
+                        "value": query,
                         "id": item.id,
                         "img": '',
                         "type": 'location',
@@ -584,7 +590,7 @@
                         "label": item.name,
                         "labelShort": item.shortname,
                         "labelvalue": "(" + mthis.returnCHname(item.type) + ')',
-                        "value": item.name,
+                        "value": query,
                         "id": item.id,
                         "img": item.img,
                         "type": item.type,
@@ -605,7 +611,7 @@
                       "label": item.name,
                       "labelShort": item.shortname,
                       "labelvalue": '(集合)',
-                      "value": item.name,
+                      "value": query,
                       "id": item.id,
                       // "img": util.checkImgExists(item.img) ? (item.img) : ('http://10.60.1.140/assets/images/default.png'),
                       "img": 'http://10.60.1.140/assets/images/searchSet.png',
@@ -661,10 +667,6 @@
         var mthis = this
         var isRunUrl = function(url) {
           return new Promise(function(resolve, reject) {
-            // 测试链接连通性, 主要检测404错误
-            // 由于AJAX通常无法区分404和跨域问题
-            // 所以只能用script 或者 link标签
-            // link比script更容易捕获错误
             var dom = document.createElement('link');
             dom.href = url;
             dom.rel = 'stylesheet';
@@ -765,6 +767,19 @@
               .then(response => {
                 if (response.body.timestamp == mthis.timestamp && response.body.code == 0) {
                   mthis.options3 = []
+                  let optionWord = {}
+                  let optionWordArr = []
+                  optionWordArr.push({
+                    "label": query,
+                    "labelShort": query,
+                    "value": query,
+                    "id": '',
+                    "itemType": 'keywords',
+                    "img": 'http://10.60.1.140/assets/images/image.png'
+                  })
+                  optionWord.title = '关键词检索'
+                  optionWord.data = optionWordArr
+                  optionsTemp.push(optionWord)
                   if (response.body.data.SearchEntity.length > 0) {
                     let optionList = new Object()
                     let optionListArr = new Array()
@@ -831,19 +846,19 @@
                     optionsTemp.push(optionList)
                   }
                   setTimeout(function() {
-                    let optionWord = {}
-                    let optionWordArr = []
-                    optionWordArr.push({
-                      "label": query,
-                      "labelShort": query,
-                      "value": query,
-                      "id": '',
-                      "itemType": 'keywords',
-                      "img": 'http://10.60.1.140/assets/images/image.png'
-                    })
-                    optionWord.title = '关键词检索'
-                    optionWord.data = optionWordArr
-                    optionsTemp.push(optionWord)
+                    // let optionWord = {}
+                    // let optionWordArr = []
+                    // optionWordArr.push({
+                    //   "label": query,
+                    //   "labelShort": query,
+                    //   "value": query,
+                    //   "id": '',
+                    //   "itemType": 'keywords',
+                    //   "img": 'http://10.60.1.140/assets/images/image.png'
+                    // })
+                    // optionWord.title = '关键词检索'
+                    // optionWord.data = optionWordArr
+                    // optionsTemp.push(optionWord)
                     mthis.loading3 = false;
                     mthis.options3 = optionsTemp
                   }, 200);
@@ -969,6 +984,6 @@
     font-size: 14px !important;
   }
   /* #queryInput:focus>.inputDiv+.imgDiv .process-img {
-                                                  color: red;
-                                                } */
+                                                    color: red;
+                                                  } */
 </style>
