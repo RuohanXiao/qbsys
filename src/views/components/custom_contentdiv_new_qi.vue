@@ -85,12 +85,7 @@
             <p class="img-content">网络</p>
           </div>
         </Tooltip>
-        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-tuisongzhikongjian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">空间</p>
-          </div>
-        </Tooltip> -->
+        
       </div>
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
@@ -157,51 +152,8 @@
             <p class="contentInfoTime" id='contentsTime'></p>
             <p style='margin:10px'><span id='contents'></span></p>
           </div>
-          <!-- 文档内容分析词云图 -->
-          <div id = "contentWordCloud" class="scrollBarAble" v-show='contentAna' :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}" style='z-index:100'>
-            <!-- <i-button type='info' size="large" :style="{position:'absolute',left:'50px',top:'70px'}" @click='changeChart(1)'>词云图</i-button>
-            <i-button type='info' size="large" :style="{position:'absolute',left:'150px',top:'70px'}" @click='changeChart(2)'>柱状图</i-button> -->
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)' style='z-index:101'></Icon>
-            <div  :style="{width:WCWidth,position:'absolute',display:'flex'}">
-              <div :style="{width:docWidth,height:ContentHeightList}" style="border-right:1px solid #336666">
-                <div class="e-title">
-                  <div class="e-title-d"></div>
-                  <p class="e-title-p">{{selDocItems.firstLevelName}}</p>
-                </div>
-                <Collapse simple id='nodeAttr' class='scrollBarAble'>
-                  <panel v-for="(list,index) in selDocItems.subStatisticsAttr" :key="index">
-                    <span>{{list.secondLevelName}}</span>
-                    <div slot="content" class="tableLine">
-                      <div class="econtent" v-for="(specifics,ind) in list.specificStaticsAttr" :key="ind">
-                        <p class="econtentp w8em">{{specifics.thirdLevelName}}</p>
-                        <p class="econtentp">{{specifics.count}}</p>
-                      </div>
-                    </div>
-                  </panel>
-                </Collapse>
-                
-                
-              </div>
-              <div :style="{width:barWidth,height:ContentHeightList}">
-                <div style='border-bottom:1px solid #336666'>
-                    <div id="worldCloud" :style="{width:barWidth,height:barHeight}"></div>
-                </div>
-                  <div style='border-bottom:1px solid #336666'>
-                    <div id="myChart" :style="{width:barWidth,height:barHeight}"></div>
-                  </div>
-                  
-              </div>
-            </div>
-            
-            
-            <!-- <div v-show='ifWord' >
-              <div id="worldCloud" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
-            </div>
-            <div v-show='ifBar' >
-              <div id="myChart" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
-            </div> -->
-            
-          </div>
+          
+          
         </div>
       </div>
       <!-- 列表图 -->
@@ -210,18 +162,11 @@
           <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
-      <div>
-        <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
-          <Row type="flex" justify="space-between" class="code-row-bg">
-              <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" class-name="docThunmsItem" v-for='itemObj in thumbDocIds'>
-                <img :src='itemObj.img' class="picsize">
-                <p class='nametext'>{{itemObj.title}}</p>
-              </Col>
-          </Row>
-        </div> -->
-      </div>
+      
     </div>
-    </Col>
+    <!-- 词云分析图 -->
+    
+    <!-- </Col> -->
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
     <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
@@ -1828,234 +1773,10 @@
           // });
         }
       },
-      changeChart(flag){
-        var mthis = this
-        if(flag ==1){
-          mthis.ifWord = true;
-          mthis.ifBar = false
-        }else{
-          mthis.ifWord = false;
-          mthis.ifBar = true
-        }
-      },
+      
       showContentAna(){
         var mthis = this
-        if(mthis.analysisButton){
-            mthis.contentAna = true;
-        // 控制时间轴不显示
-        mthis.$store.commit('setShowDocTime',false)
-        let selDocs = mthis.items.filter(item => item.check);
-        let contentIds = []
-        mthis.selDocItems = new Object();
-        for(let i=0;i<selDocs.length;i++){
-          contentIds.push(selDocs[i].id)
-        }
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
-          "nodeIds": contentIds,
-          "type":"document"
-        }).then(response =>{
-          if(response.body.code ==0){
-            
-            mthis.selDocItems = response.body.data[1]
-          }
-        })
-        // mthis.ifWord = true;
-        var worldCloudcharts=echarts.init(document.getElementById('worldCloud'));
-        var charts = echarts.init(document.getElementById('myChart'));
-        var worldCloudoption = new Object({
-          title: {
- 			        text: '关键词分析',
- 			        x: 'center',
- 			        textStyle: {
- 			            fontSize: 12,
- 			            color:'#FFFFFF'
- 			        }
- 
-           },
-           tooltip: {
- 			        show: true
-           },
-           series: [{
- 			        name: '关键词分析',
- 			        type: 'wordCloud',
- 			        sizeRange: [10, 18],
- 			        rotationRange: [0, 0],
- 			        textPadding: 0,
- 			        autoSize: {
- 			            enable: true,
- 			            minSize: 10
- 			        },
- 			        textStyle: {
- 			            normal: {
- 			                color: function() {
- 			                    return 'rgb(' + [
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160)
- 			                    ].join(',') + ')';
- 			                }
- 			            },
- 			            emphasis: {
- 			                shadowBlur: 10,
- 			                shadowColor: '#333'
- 			            }
- 			        },
- 			 	}]
-          
-        })
-        var JosnList = [];
- 
-        JosnList.push({
-            name: "Jayfee",
-            value: 520
-        }, {
-            name: "Nancy",
-            value: 520
-        }, {
-            name: "生活资源",
-            value: 520
-        }, {
-            name: "供热管理",
-            value: 520
-        }, {
-            name: "供气质量",
-            value: 520
-        }, {
-            name: "生活用水管理",
-            value: 520
-        }, {
-            name: "一次供水问题",
-            value: 520
-        }, {
-            name: "交通运输",
-            value: 520
-        }, {
-            name: "城市交通",
-            value: 520
-        }, {
-            name: "环境保护",
-            value: 520
-        }, {
-            name: "房地产管理",
-            value: 520
-        },  );
-        var colors = ['#66CDAA',  '#B8860B','#FF9080'];
-
-        var xData = function() {
-            var data = [];
-            for (var i = 1; i < 13; i++) {
-                data.push("地区"+i);
-            }
-            return data;
-        }();
-        var chartOption = new Object({
-          title: {
-            "text": "生产总值累计值\n",
-            subtext:"",
-            top:'12%',
-            "left": "10%",
-            "subtextStyle": {
-              "color": "#fff",
-              fontWeight:800,
-              fontSize:16
-            },
-            textStyle:{
-                "color": "#fff",
-              fontSize:28
-            }
-          },
-
-          backgroundColor: '#020306',
-          color: ['#4162ff', '#c78b42', '#CD3F2A', '#ff6e72', '#9692ff'],
-          tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                  type: 'shadow'
-              }
-          },
-          legend: {
-              top:'14%',
-              right:'30%',
-              textStyle:{
-                  color:'#FFFFFF'
-              },
-              orient: 'vertical',
-              data: ['第一产业', '第二产业', '第三产业', '']
-          },
-          grid: {
-              left: '10%',
-              right: '30%',
-              bottom: '20%',
-              top: '27%',
-              containLabel: true,
-              z: 22
-          },
-          yAxis: [{
-              type: 'value',
-              splitLine: {
-                  show: false,
-                  lineStyle: {
-                      color: ['#f2f2f2']
-                  }
-              },
-              axisLine: {
-                      lineStyle: {
-                          color: '#0c3b71'
-                      }
-                  },
-                  axisLabel: {
-                      color: 'rgb(170,170,170)',
-                      formatter: '{value} '
-                  }
-          }],
-          xAxis: [{
-              type: 'category',
-              axisLine: {
-                  lineStyle: {
-                      color: '#0c3b71'
-                  }
-              },
-              axisLabel: {
-                  show: true,
-                  color: 'rgb(170,170,170)',
-                  fontSize:14
-              },
-              data:xData
-          }],
-          series: [{
-                  name: '第一产业',
-                  type: 'bar',
-                  stack: '总量',
-                  barWidth: '16px',
-                  data: [80, 212, 101, 110, 80, 212, 101, 120, 113, 101, 120, 113],
-                  // markArea: areaStyle
-              },
-              {
-                  name: '第二产业',
-                  type: 'bar',
-                  stack: '总量',
-                  data: [90, 232, 251, 212, 101, 110,212, 101, 110, 10,  120, 113],
-                  // markArea: areaStyle
-              },
-              {
-                  name: '第三产业',
-                  type: 'bar',
-                  stack: '总量',
-                  data: [90, 232, 231, 134, 190, 90, 232, 251, 212, 101, 110, 10],
-                  // markArea: areaStyle
-              },
-              
-            
-          ]
-        })
-        charts.setOption(chartOption)
-        worldCloudoption.series[0].data = JosnList;
-  
-        worldCloudcharts.setOption(worldCloudoption);
-        mthis.analysisButton = false
-        }else{
-          mthis.setMessage("请选择至少一篇文章")
-        }
+        
         
       },
       showContent(id,title) {
