@@ -262,6 +262,7 @@
               mthis.xiangguanEntityItems.map((item,index) => {
                 mthis.ctrls.push(!index > 5)
               })
+              console.log(mthis.ctrls)
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }
             if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
