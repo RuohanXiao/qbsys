@@ -207,8 +207,7 @@
         prevKup:null,
         keyCount:0,
         isSel:null,
-        ifWord:false,
-        ifBar:false,
+        
         WCheight:0,
         WCWidth:0,
         docWidth:0,
@@ -442,10 +441,10 @@
           let selectIds = []
           if(mthis.netToContentData.contentIds.type == 'push'){
             mthis.items = response.body.data.map(item =>({
-                title: item.en_title,      
+                title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.en_description,
+                text: item.description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
@@ -469,10 +468,10 @@
             mthis.analysisButton = true
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
-                title: item.en_title,      
+                title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.en_description,
+                text: item.description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
@@ -541,6 +540,8 @@
         mthis.page = 1
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
+        console.log('sousuosousuo')
+        console.log(va)
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
@@ -1433,131 +1434,93 @@
       },
       orderTimeUp() {
         var mthis = this
-        mthis.order = '&isSortByTime=asc'
-        mthis.page = 1
-        return new Promise(resolve => {
-          if (mthis.contentTimeCondition.length === 2) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
+        mthis.items = mthis.deepClone(mthis.prevItems)
+        // mthis.order = '&isSortByTime=asc'
+        // mthis.page = 1
+        // return new Promise(resolve => {
+        //   if (mthis.contentTimeCondition.length === 2) {
+        //     let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+        //     let etime = util.getTimestamp(mthis.contentTimeCondition[1])
+        //     mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+        //       if (response.body.data.length > 0) {
                 
-                $('.item-selected').removeClass('item-selected')
+        //         $('.item-selected').removeClass('item-selected')
                 
-                mthis.items = response.body.data
-              } else {
-                mthis.alertNotice('无匹配数据1', true)
-              }
-              resolve();
-            })
-          } else if (mthis.contentTimeCondition.length === 1) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
+        //         mthis.items = response.body.data
+        //       } else {
+        //         mthis.alertNotice('无匹配数据1', true)
+        //       }
+        //       resolve();
+        //     })
+        //   } else if (mthis.contentTimeCondition.length === 1) {
+        //     let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+        //     let etime = util.getTimestamp(mthis.contentTimeCondition[0])
+        //     mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+        //       if (response.body.data.length > 0) {
                 
-                $('.item-selected').removeClass('item-selected')
+        //         $('.item-selected').removeClass('item-selected')
                 
-                mthis.items = response.body.data.map(item =>({
-                  title: item.title,      
-                  i_sn: item.i_sn, 
-                  id: item.id,
-                  text: item.description,
-                  time: item.time,
-                  from: item.from,     
-                  img: "http://10.60.1.140/assets/images/content_node.png",
-                  check:false
-                })
-              );
-              mthis.$store.commit('setSelectContentNodes', [{
-                ids: []
-              }])
-              mthis.$store.commit('setContent2time',[{
-                ids:[]
-              }])
-              } else {
-                mthis.alertNotice('无匹配数据2', true)
-              }
-              resolve();
-            })
-          } else {
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
+        //         mthis.items = response.body.data.map(item =>({
+        //           title: item.title,      
+        //           i_sn: item.i_sn, 
+        //           id: item.id,
+        //           text: item.description,
+        //           time: item.time,
+        //           from: item.from,     
+        //           img: "http://10.60.1.140/assets/images/content_node.png",
+        //           check:false
+        //         })
+        //       );
+        //       mthis.$store.commit('setSelectContentNodes', [{
+        //         ids: []
+        //       }])
+        //       mthis.$store.commit('setContent2time',[{
+        //         ids:[]
+        //       }])
+        //       } else {
+        //         mthis.alertNotice('无匹配数据2', true)
+        //       }
+        //       resolve();
+        //     })
+        //   } else {
+        //     mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+        //       if (response.body.data.length > 0) {
                 
-                // $('.item-selected').removeClass('item-selected')
+        //         // $('.item-selected').removeClass('item-selected')
                 
-                mthis.items = response.body.data
-              } else {
-                mthis.setMessage('无匹配数据3')
-              }
-              resolve();
-            })
-          }
-        });
+        //         mthis.items = response.body.data
+        //       } else {
+        //         mthis.setMessage('无匹配数据3')
+        //       }
+        //       resolve();
+        //     })
+        //   }
+        // });
       },
       orderTimeDown() {
         var mthis = this
-        mthis.order = '&isSortByTime=desc'
-        mthis.page = 1
-        return new Promise(resolve => {
-          if (mthis.contentTimeCondition.length === 2) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = response.body.data
-              } else {
-                mthis.alertNotice('无匹配数据4', true)
-              }
-              resolve();
-            })
-          } else if (mthis.contentTimeCondition.length === 1) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = response.body.data
-              } else {
-                mthis.alertNotice('无匹配数据5', true)
-              }
-              resolve();
-            })
-          } else {
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
-              
-              if (response.body.data.length > 0) {
-                mthis.items = response.body.data.map(item =>({
-                  title: item.title,      
-                  i_sn: item.i_sn, 
-                  id: item.id,
-                  text: item.description,
-                  time: item.time,
-                  from: item.from,     
-                  img: "http://10.60.1.140/assets/images/content_node.png",
-                  check:false
-                })
-              );
-                // $('.item-selected').removeClass('item-selected')
-                
-                mthis.$store.commit('setSelectContentNodes', [{
-                  ids: []
-                }])
-                mthis.$store.commit('setContent2time',[{
-                  ids:[]
-                }])
-              } else {
-                mthis.setMessage('无匹配数据6')
-              }
-              resolve();
-            })
+        
+        let hasTime = mthis.items.filter(item => item.time);
+        let noTime = mthis.items.filter(item => !item.time);
+        
+        for(var i=0;i<hasTime.length-1;i++){
+          for(var j=0;j<hasTime.length-1-i;j++){
+            
+            if(Date.parse(hasTime[j]['time']) < Date.parse(hasTime[j+1]['time'])){
+              var temp = hasTime[j];
+              hasTime[j] = hasTime[j + 1];
+              hasTime[j + 1] = temp;
+            }
           }
-        });
+        }
+        if(noTime.length>0){
+          mthis.items = hasTime.concat(noTime)
+        }else{
+          mthis.items = hasTime
+        }
+        
+        // mthis.$forceUpdate()
+        
       },
       showAlert(index) {
         // if ($(this).hasClass('selected'))

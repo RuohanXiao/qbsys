@@ -399,8 +399,8 @@
           },
           dataZoom: [{
               type: "slider",
-              start: 0,
-              end: 100,
+              start: 10,
+              end: 80,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -799,8 +799,8 @@
           //   mthis.option.dataZoom[0].start = 0
           //   mthis.option.dataZoom[0].end = 30
           // }
-          mthis.option.dataZoom[0].start = 0;
-          mthis.option.dataZoom[0].end = 100;
+          // mthis.option.dataZoom[0].start = 0;
+          // mthis.option.dataZoom[0].end = 100;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           // mthis.option.series[0].itemStyle.normal.color = '#33cc99'
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
@@ -910,7 +910,29 @@
                   
                 }).then(response =>{
                   if(response.body.code === 0){
-                       let dayCount = parseInt(response.body.data.time.length * 0.1)
+                      if(response.body.data.time.length<100){
+                          let timeLen = response.body.data.time.length
+                          let dayCount = parseInt((100 - response.body.data.time.length) /2)
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("eventIds",localIds)
+                          console.log('<100')
+                          console.log(mthis.dataBySeries.date.length)
+                      }else{
+                        let dayCount = parseInt(response.body.data.time.length * 0.1)
                        if(dayCount>0){
                           let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
                        
@@ -937,7 +959,7 @@
                           mthis.loadEcharts(2);
                           util.writeStorage("eventIds",response.body.data.ids)
                        }
-                       
+                      }
                        
                        
                   }else{
