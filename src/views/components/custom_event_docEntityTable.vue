@@ -106,12 +106,12 @@
         <span>相关实体</span>
         <div slot="content" class="tableLine">
           <!-- <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
-                  <p class="econtentp w8em">{{items.relation}}</p>
-                  <p class="econtentp">{{items.name}}</p>
-                  <div class="eButton">
-                    <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
-                  </div>
-                </div> -->
+                <p class="econtentp w8em">{{items.relation}}</p>
+                <p class="econtentp">{{items.name}}</p>
+                <div class="eButton">
+                  <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
+                </div>
+              </div> -->
           <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="(items,ind) in xiangguanEntityItems">
             <div v-show='ctrls[ind]||items.data.length<5' class="econtent blockStyle" v-for="(item,index) in items.data">
               <p class="econtentp w8em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
@@ -148,7 +148,7 @@
       <panel name="3">
         <span>相关事件</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0 && items.num>0' v-for='items in xiangguanEvent.statistics'>
+          <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
             <!-- <p class="econtentp w8em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
             <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
@@ -166,7 +166,7 @@
       <panel name="4">
         <span>相关文档</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0 && items.num>0' v-for='items in xiangguanDoc.statistics'>
+          <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0' v-for='items in xiangguanDoc.statistics'>
             <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
@@ -201,7 +201,11 @@
         linkObj: new Object(),
         myMap: new Map(),
         myMap1: new Map(),
-        ctrls: new Array()
+        ctrls: new Array(),
+        displayMore: {
+                    'from': true,
+                    'i_sn': true
+                }
       }
     },
     props: ['tableData', 'entDivH', 'tableType'],
@@ -255,8 +259,8 @@
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
               mthis.ctrls = new Array()
-              mthis.xiangguanEntityItems.map(item => {
-                mthis.ctrls.push(!item.data.length > 5)
+              mthis.xiangguanEntityItems.map((item,index) => {
+                mthis.ctrls.push(!index > 5)
               })
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }
