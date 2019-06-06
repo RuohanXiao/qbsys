@@ -145,7 +145,34 @@
       };
     },
     methods: {
-      
+      getDateStr(dayCount,addDayCount){
+        var dd = new Date(dayCount);
+        dd.setDate(dd.getDate()+addDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear(); 
+        var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
+        var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
+        return y+"-"+m+"-"+d; 
+      },
+      getDate(datestr){
+        var temp = datestr.split('-');
+        var date = new Date(temp[0], temp[1] - 1, temp[2]);
+    		return date;
+      },
+      formatEveryDay(start, end){
+        var mthis = this;
+        let dateList = []; 
+		    var startTime = mthis.getDate(start);
+		    var endTime = mthis.getDate(end);
+
+		    while ((endTime.getTime() - startTime.getTime()) >= 0) {
+		        var year = startTime.getFullYear();
+		        var month = startTime.getMonth() + 1 < 10 ? '0' + (startTime.getMonth() + 1) : startTime.getMonth() + 1;
+		        var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
+		        dateList.push(year + "-" + month + "-" + day); 
+		        startTime.setDate(startTime.getDate() + 1);
+		    }
+		    return dateList;
+      },
       query(){
         var mthis = this;
         let eventIds = util.getStorage("allIds",mthis.selIdsArr);
@@ -806,11 +833,30 @@
             // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
             // mthis.loadEcharts(2)
             if(response.body.code === 0){
-              mthis.dataBySeries.date = response.body.data.time;
-              mthis.dataBySeries.num = response.body.data.count;
-              mthis.dataBySeries.clickNum = [];
-              mthis.loadEcharts(2)
-              util.writeStorage("allIds",response.body.data.ids)
+              let dayCount = parseInt(response.body.data.time.length * 0.1)
+              if(dayCount>0){
+                let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                preDateList.pop();
+                aftDateList.shift();
+                let conCount = new Array(preDateList.length).fill('null');
+                let conIds = new Array(preDateList.length).fill([]);
+                let localIds = [];
+                mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                mthis.dataBySeries.clickNum = [];
+                mthis.loadEcharts(2);
+                util.writeStorage("allIds",localIds)
+                }else{
+                  mthis.dataBySeries.date = response.body.data.time;
+                  mthis.dataBySeries.num = response.body.data.count;
+                  mthis.dataBySeries.clickNum = [];
+                  mthis.loadEcharts(2);
+                  util.writeStorage("allIds",response.body.data.ids)
+                }
             }else{
               console.log("服务器error")
             }
@@ -860,11 +906,31 @@
             "ids":allIds
           }).then(response =>{
             if(response.body.code ==0){
-              mthis.dataBySeries.date = response.body.data.time;
-              mthis.dataBySeries.num = response.body.data.count;
-              mthis.dataBySeries.clickNum = [];
-              mthis.loadEcharts(2)
-              util.writeStorage("allIds",response.body.data.ids)
+              let dayCount = parseInt(response.body.data.time.length * 0.1)
+              if(dayCount>0){
+                let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                preDateList.pop();
+                aftDateList.shift();
+                let conCount = new Array(preDateList.length).fill('null');
+                let conIds = new Array(preDateList.length).fill([]);
+                let localIds = [];
+                mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                mthis.dataBySeries.clickNum = [];
+                mthis.loadEcharts(2);
+                util.writeStorage("allIds",localIds)
+                }else{
+                  mthis.dataBySeries.date = response.body.data.time;
+                  mthis.dataBySeries.num = response.body.data.count;
+                  mthis.dataBySeries.clickNum = [];
+                  mthis.loadEcharts(2);
+                  util.writeStorage("allIds",response.body.data.ids)
+                }
+              
             }
           })
         }
