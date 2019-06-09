@@ -44,6 +44,7 @@ export default {
   },
   //验证图片资源是否存在（404）
   checkImgExists(imgurl) {
+
     var ImgObj = new Image(); //判断图片是否存在  
     ImgObj.src = imgurl;
     //没有图片，则返回-1  
@@ -237,7 +238,7 @@ getNowFormatDate() {
         useIds = useIds.filter(item => item.length>0)
         return useIds
       }else{
-        let useIds  = idArr.slice(index[0],index[1])
+        let useIds  = idArr.slice(index[0],index[1]+1)
         useIds = useIds.filter(item => item.length>0)
         return useIds
       }

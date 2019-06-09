@@ -81,10 +81,8 @@
       mthis.GeoHeight = mthis.$store.getters.getNetDivHeight
       window.onresize = function windowResize () {
           // 通过捕获系统的onresize事件触发我们需要执行的事件
-          debugger
           var geomainDiv = document.getElementById('geomainDiv');
           if(geomainDiv !== undefined){
-            debugger
             //mthis.GeoWidth = (window.innerWidth - 500) + 'px';
           }
           

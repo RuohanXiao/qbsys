@@ -200,7 +200,6 @@ export default {
         openPanelNames:{
             get:function(){
                 var mthis = this;
-                debugger
                 var openPanelNames = [];
                 mthis.staticsDatas.forEach(function(item,Index){
                     item.subStatisticsAttr.forEach(function(Iitem,index){
@@ -365,7 +364,6 @@ export default {
         },
         selectedIds(el,ids){
             var mthis = this;
-            debugger
             /* if(el.style.backgroundColor ==='rgba(51, 255, 255, 0.2)'){
                 return;
             } */

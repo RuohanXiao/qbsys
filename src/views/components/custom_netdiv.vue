@@ -8,19 +8,19 @@
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifhasNode? 'button-div':'button-div-disable'" @click="newCanvans">
             <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">清空画布</p>
+            <p class="img-content">清空</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('removeOther')">
             <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">反选节点</p>
+            <p class="img-content">反选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifhasNode? 'button-div': 'button-div-disable'" @click="triggerMethods('selectAll')">
             <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">全选节点</p>
+            <p class="img-content">全选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
@@ -32,13 +32,13 @@
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="nailNode">
             <Icon class="icon iconfont icon-nail-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">锁定节点</p>
+            <p class="img-content">锁定</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="unnailNode">
             <Icon class="icon iconfont icon-nail-copy-copy-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">解锁节点</p>
+            <p class="img-content">解锁</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
@@ -69,7 +69,7 @@
         <Tooltip placement="top" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('jutuan')">
             <Icon class="icon iconfont icon-jutuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">聚团</p>
+            <p class="img-content">自动</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
@@ -537,7 +537,6 @@
         }
       },
       shortAllPath(ids) {
-        debugger;
         var mthis = this
         if (ids.length > 1) {
           mthis.$http
@@ -1128,7 +1127,8 @@
                     nodes.map(ite => {
                       ite.img = (ite.img) ? ite.img : ''
                       ite.loaded = true
-                      ite.name = (ite.name) ? ite.name : (ite.title.substring(0, 19) + '...')
+                      console.log(ite.title)
+                      ite.name = (ite.name) ? ite.name : ((ite.title+"").substring(0, 19) + '...')
                       return ite
                     })
                     links.map(ite => {
@@ -1288,13 +1288,12 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
-                //  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                 mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
                 setTimeout(function() {
                   mthis.netchart.selection(response.body.data.nodes.map(item => {
                     return item.id
                   }))
-                  // mthis.changNetchartMode('s')
                 }, 200);
               } else {
                 mthis.setMessage('未找到共指事件')
@@ -1319,7 +1318,7 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
-                //  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                 mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
                 setTimeout(function() {
                   mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -1566,7 +1565,7 @@
               Math.cos(ahd * i) * radius;
             mthis.netchart.updateStyle(mthis.selectionId[i])
             // mthis.netchart.lockNode(mthis.selectionId[i]);
-            // mthis.changNetchartMode('s')
+            mthis.changNetchartMode('s')
           }
         } else {
           // mthis.$Message.error('请选择节点进行矩形排列操作！')
@@ -2629,6 +2628,10 @@
                     node.image = 'http://10.60.1.140/assets/images/Organization.png'
                   } else if (node.data.entity_type === 'weapon') {
                     node.image = 'http://10.60.1.140/assets/images/weapon.png'
+                  } else if (node.data.entity_type === 'geographic_entity') {
+                    node.image = 'http://10.60.1.140/assets/images/image1.png'
+                  } else if (node.data.entity_type === 'project') {
+                    node.image = 'http://10.60.1.140/assets/images/image1.png'
                   } else {
                     node.image = 'http://10.60.1.140/assets/images/image1.png'
                   }
@@ -3544,15 +3547,17 @@
                   nodes: nodes,
                   links: []
                 });
+                mthis.changNetchartMode('r')
               } else {
                 mthis.setMessage("/event-detail/接口异常");
               }
             });
         }
-        mthis.netchart.selection(dataids)
+        // mthis.netchart.selection(dataids)
         setTimeout(() => {
-          console.log('==============contentIdsArry================')
-          console.log(dataids)
+          mthis.netchart.selection(dataids);
+        }, 200);
+        setTimeout(() => {
           mthis.square();
           mthis.spinShow = false;
         }, 500);
@@ -3583,11 +3588,10 @@
           mthis.netchart.lockNode(it);
           return it
         })
-        // contentIdsArry = contentIdsArry.concat(mthis.selectionId)
         setTimeout(() => {
           mthis.netchart.selection(contentIdsArry);
-          // console.log('==============contentIdsArry================')
-          // console.log(contentIdsArry)
+        }, 200);
+        setTimeout(() => {
           mthis.square();
           mthis.spinShow = false;
         }, 500);
@@ -3640,7 +3644,7 @@
           mthis.netchart.selection(arr);
           mthis.netchart.scrollIntoView(arr);
           mthis.netchart.updateSettings()
-          // mthis.changNetchartMode('r')
+          mthis.changNetchartMode('r')
           // alert(8)
           // mthis.netchart.selection(util.unique(arr))
           // mthis.netchart.lockNode(util.unique(arr))

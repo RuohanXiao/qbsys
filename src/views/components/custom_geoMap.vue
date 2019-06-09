@@ -2554,6 +2554,7 @@ export default {
         routeOrder(dataJson){
             var mthis = this
             var routeOrderArr = dataJson.sort(mthis.compare);
+            // var routeOrderArr ;
             var res = [];
             for(var i = 0; i < routeOrderArr.length - 1; i++){
                 var fromCoord = routeOrderArr[i].coordinate;
@@ -3374,7 +3375,6 @@ export default {
         }, 
         setFeatureByIds(ids){
             var mthis = this;
-            debugger
             mthis.waiting();
             //mthis.$http.post("http://localhost:5000/getParamsByIds/", {
             mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {

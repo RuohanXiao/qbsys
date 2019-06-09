@@ -4,7 +4,7 @@
       <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
       <div class="cardDiv">
         <div :style="{display: 'flex'}">
-          <span class='titleFront'>{{item.name}}</span>
+          <span class='titleFront'>{{item.name}}&nbsp;({{item.nodeIds.length}})</span>
           <Icon v-if="item.type === 'human'" class="icon iconfont icon-ren padd8 color515" size="20" />
           <Icon v-if="item.type === 'organization'" class="icon iconfont icon-zuzhi padd8 color515" size="20" />
           <Icon v-if="item.type === 'weapon'" class="icon iconfont icon-shouqiang padd8 color515" size="20" />
@@ -14,19 +14,20 @@
           <Icon v-if="item.type === 'mix'" class="icon iconfont icon-star1 padd8 color515" size="20" />
         </div>
         <div class="lineheight25">
-          <span class='cardFront'>描述:&nbsp;{{item.des}}</span>
+          <span class='cardFront'>{{item.des}}</span>
         </div>
         <div class="lineheight25">
-          <span class='cardFront'>创建时间:&nbsp;{{item.create_time}}</span> &nbsp;&nbsp;&nbsp;
-          <span class='cardFront'>创建人:&nbsp;{{item.create_user}}</span>
+          <span class='cardFront'>创建时间：&nbsp;{{item.create_time}}</span> &nbsp;&nbsp;&nbsp;
+          
         </div>
         <div class="lineheight25">
-          <span class='cardFront'>修改时间:&nbsp;{{item.modify_time}}</span> &nbsp;&nbsp;&nbsp;
-          <span class='cardFront'>修改人:&nbsp;{{item.modify_user}}</span>
+          <span class='cardFront'>创建人：&nbsp;{{item.create_user}}</span>
+          <!-- <span class='cardFront'>修改时间:&nbsp;{{item.modify_time}}</span> &nbsp;&nbsp;&nbsp;
+          <span class='cardFront'>修改人:&nbsp;{{item.modify_user}}</span> -->
         </div>
-        <div class="lineheight25">
+        <!-- <div class="lineheight25">
           <span class='cardFront'>数量:&nbsp;({{item.nodeIds.length}})</span>
-        </div>
+        </div> -->
       </div>
       </Col>
       <Col :sm="6" align="right" :style="{flexDirection: 'column'}">

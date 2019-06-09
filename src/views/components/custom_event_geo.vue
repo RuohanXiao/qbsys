@@ -25,6 +25,9 @@
       <!-- <human-entity-table v-show="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table> -->
       <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
       <organization-entity-table v-show="detailData.entity_type==='organization'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
+      <organization-entity-table v-show="detailData.entity_type==='geographic_entity'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
+      <organization-entity-table v-show="detailData.entity_type==='project'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
+      
       <!-- <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table> -->
       <event-entity-table v-show="detailData.entity_type==='event'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></event-entity-table>
       <!-- <doc-entity-table v-show="detailData.entity_type==='document'" :tableData="detailData" :entDivH='entDivH'></doc-entity-table> -->
@@ -118,6 +121,10 @@
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/Organization.png'
             } else if (mthis.eventdata[0].entity_type === 'weapon') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/weapon.png'
+            } else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image1.png'
+            } else if (mthis.eventdata[0].entity_type === 'project') {
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image1.png'
             } else {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/Organization.png'
             }
@@ -216,6 +223,10 @@
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/Organization.png'
                 } else if (mthis.eventdata[0].entity_type === 'weapon') {
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                 } else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
+                } else if (mthis.eventdata[0].entity_type === 'project') {
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
                 } else {
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
                 }
@@ -406,6 +417,10 @@
       text-align:left;
   } */
   #nodeAttr p{
+      padding-left:2em;
+      text-align:left;
+  }
+  #nodeAttr p:not(.w8em){
       padding-left:1em;
       text-align:left;
   }
@@ -470,6 +485,7 @@
     -webkit-box-orient: vertical;
     height: 44px;
     word-break: break-all;
+    color: rgba(204,255,255,0.5);
     }
 </style>
 

@@ -82,15 +82,10 @@
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="toNet">
             <Icon class="icon iconfont icon-tuisongzhiwangluo  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">网络</p>
+            <p class="img-content">推送网络</p>
           </div>
         </Tooltip>
-        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-tuisongzhikongjian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">空间</p>
-          </div>
-        </Tooltip> -->
+        
       </div>
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
@@ -157,51 +152,8 @@
             <p class="contentInfoTime" id='contentsTime'></p>
             <p style='margin:10px'><span id='contents'></span></p>
           </div>
-          <!-- 文档内容分析词云图 -->
-          <div id = "contentWordCloud" class="scrollBarAble" v-show='contentAna' :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}" style='z-index:100'>
-            <!-- <i-button type='info' size="large" :style="{position:'absolute',left:'50px',top:'70px'}" @click='changeChart(1)'>词云图</i-button>
-            <i-button type='info' size="large" :style="{position:'absolute',left:'150px',top:'70px'}" @click='changeChart(2)'>柱状图</i-button> -->
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)' style='z-index:101'></Icon>
-            <div  :style="{width:WCWidth,position:'absolute',display:'flex'}">
-              <div :style="{width:docWidth,height:ContentHeightList}" style="border-right:1px solid #336666">
-                <div class="e-title">
-                  <div class="e-title-d"></div>
-                  <p class="e-title-p">{{selDocItems.firstLevelName}}</p>
-                </div>
-                <Collapse simple id='nodeAttr' class='scrollBarAble'>
-                  <panel v-for="(list,index) in selDocItems.subStatisticsAttr" :key="index">
-                    <span>{{list.secondLevelName}}</span>
-                    <div slot="content" class="tableLine">
-                      <div class="econtent" v-for="(specifics,ind) in list.specificStaticsAttr" :key="ind">
-                        <p class="econtentp w8em">{{specifics.thirdLevelName}}</p>
-                        <p class="econtentp">{{specifics.count}}</p>
-                      </div>
-                    </div>
-                  </panel>
-                </Collapse>
-                
-                
-              </div>
-              <div :style="{width:barWidth,height:ContentHeightList}">
-                <div style='border-bottom:1px solid #336666'>
-                    <div id="worldCloud" :style="{width:barWidth,height:barHeight}"></div>
-                </div>
-                  <div style='border-bottom:1px solid #336666'>
-                    <div id="myChart" :style="{width:barWidth,height:barHeight}"></div>
-                  </div>
-                  
-              </div>
-            </div>
-            
-            
-            <!-- <div v-show='ifWord' >
-              <div id="worldCloud" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
-            </div>
-            <div v-show='ifBar' >
-              <div id="myChart" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
-            </div> -->
-            
-          </div>
+          
+          
         </div>
       </div>
       <!-- 列表图 -->
@@ -210,18 +162,13 @@
           <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
-      <div>
-        <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
-          <Row type="flex" justify="space-between" class="code-row-bg">
-              <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" class-name="docThunmsItem" v-for='itemObj in thumbDocIds'>
-                <img :src='itemObj.img' class="picsize">
-                <p class='nametext'>{{itemObj.title}}</p>
-              </Col>
-          </Row>
-        </div> -->
-      </div>
+      
     </div>
-    </Col>
+    <!-- 词云分析图 -->
+      <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around'}">
+
+      </div>
+    <!-- </Col> -->
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
     <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
@@ -253,6 +200,7 @@
     name: "App",
     data() {
       return {
+        ifhasDoc:false,
         isBru:false,
         bruIds:[],
         bruStartX:0,
@@ -261,8 +209,7 @@
         prevKup:null,
         keyCount:0,
         isSel:null,
-        ifWord:false,
-        ifBar:false,
+        
         WCheight:0,
         WCWidth:0,
         docWidth:0,
@@ -321,93 +268,7 @@
         showList: false,
         moreLoading: false,
         selectArr: [],
-        columns2: [{
-            title: 'Name',
-            key: 'name',
-            width: 100,
-            fixed: 'left'
-          },
-          {
-            title: 'Age',
-            key: 'age',
-            width: 100
-          },
-          {
-            title: 'Province',
-            key: 'province',
-            width: 100
-          },
-          {
-            title: 'City',
-            key: 'city',
-            width: 100
-          },
-          {
-            title: 'Address',
-            key: 'address',
-            width: 200
-          },
-          {
-            title: 'Postcode',
-            key: 'zip',
-            width: 100
-          },
-          {
-            title: 'Action',
-            key: 'action',
-            fixed: 'right',
-            width: 120,
-            render: (h, params) => {
-              return h('div', [
-                h('Button', {
-                  props: {
-                    type: 'text',
-                    size: 'small'
-                  }
-                }, 'View'),
-                h('Button', {
-                  props: {
-                    type: 'text',
-                    size: 'small'
-                  }
-                }, 'Edit')
-              ]);
-            }
-          }
-        ],
-        data3: [{
-            name: 'John Brown',
-            age: 18,
-            address: 'New York No. 1 Lake Park',
-            province: 'America',
-            city: 'New York',
-            zip: 100000
-          },
-          {
-            name: 'Jim Green',
-            age: 24,
-            address: 'Washington, D.C. No. 1 Lake Park',
-            province: 'America',
-            city: 'Washington, D.C.',
-            zip: 100000
-          },
-          {
-            name: 'Joe Black',
-            age: 30,
-            address: 'Sydney No. 1 Lake Park',
-            province: 'Australian',
-            city: 'Sydney',
-            zip: 100000
-          },
-          {
-            name: 'Jon Snow',
-            age: 26,
-            address: 'Ottawa No. 2 Lake Park',
-            province: 'Canada',
-            city: 'Ottawa',
-            zip: 100000
-          }
-        ],
+        
         columns3: [{
             title: 'Title',
             key: 'title',
@@ -459,34 +320,7 @@
           {
             title: 'Text',
             key: 'text',
-            // render:(h,params)=>{
-            //   let texts = '';
-            //   texts = params.row.text.substring(0,100) + '....';
-            //   let strTitle = '';
-            //   strTitle = params.row.text;
-            //   return h(
-            //     "tooltip",
-            //     {
-            //       props:{
-            //         placement:"bottom",
-            //         transfer:true,
-            //         marginLeft:'-30px',
-                   
-            //       }
-            //     },
-            //     [
-            //       texts,
-            //       h(
-            //         "div",
-            //         {
-            //           slot:"content",
-            //           style:{whiteSpace: "normal", wordBreak: "break-all",width:"900px",}
-            //         },
-            //         strTitle
-            //       )
-            //     ]
-            //   )
-            // }
+            
           },
           {
             title: 'Entity',
@@ -524,122 +358,7 @@
             text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
             entity: 'Trump',
           }
-        ],
-        initSelectBox: function(selector, selectCallback) {
-          var mthis = this
-          function clearBubble(e) {
-            if (e.stopPropagation) {
-              e.stopPropagation();
-            } else {
-              e.cancelBubble = true;
-            }
-            if (e.preventDefault) {
-              e.preventDefault();
-            } else {
-              e.returnValue = false;
-            }
-          }
-          var $container = $(selector);
-          //  框选事件
-          $container
-            .on('mousedown', function(eventDown) {
-             
-              //  设置选择的标识
-              var isSelect = true;
-              //  创建选框节点
-              var $selectBoxDashed = $('<div class="select-box-dashed"></div>');
-              $container.append($selectBoxDashed);
-              //  设置选框的初始位置
-              var startX = eventDown.x || eventDown.clientX;
-              var startY = eventDown.y || eventDown.clientY;
-              $selectBoxDashed.css({
-                left: startX,
-                top: startY,
-                
-              });
-              //  根据鼠标移动，设置选框宽高
-              var _x = null;
-              var _y = null;
-              //  清除事件冒泡、捕获
-              clearBubble(eventDown);
-              //  监听鼠标移动事件
-              $(selector).on('mousemove', function(eventMove) {
-                //  设置选框可见
-                
-                $selectBoxDashed.css('display', 'block');
-                //  根据鼠标移动，设置选框的位置、宽高
-                _x = eventMove.x || eventMove.clientX;
-                _y = eventMove.y || eventMove.clientY;
-                //  暂存选框的位置及宽高，用于将 select-item 选中
-                var _left = Math.min(_x, startX);
-                var _top = Math.min(_y, startY);
-                var _width = Math.abs(_x - startX);
-                var _height = Math.abs(_y - startY);
-                $selectBoxDashed.css({
-                  left: _left,
-                  top: _top,
-                  width: _width,
-                  height: _height
-                });
-                //  遍历容器中的选项，进行选中操作
-                $(selector).find('.select-item').each(function() {
-                  var $item = $(this);
-                  var itemX_pos = $item.prop('offsetWidth') + $item.prop('offsetLeft');
-                  var itemY_pos = $item.prop('offsetHeight') + $item.prop('offsetTop');
-                  //  判断 select-item 是否与选框有交集，添加选中的效果（ temp-selected ，在事件 mouseup 之后将 temp-selected 替换为 selected）
-                  var condition1 = itemX_pos > _left;
-                  var condition2 = itemY_pos > _top;
-                  var condition3 = $item.prop('offsetLeft') < (_left + _width);
-                  var condition4 = $item.prop('offsetTop') < (_top + _height);
-                  if (condition1 && condition2 && condition3 && condition4) {
-                    $item.addClass('temp-selected');
-                  } else {
-                    $item.removeClass('temp-selected');
-                  }
-                });
-                //  清除事件冒泡、捕获
-                clearBubble(eventMove);
-              });
-              $(document).on('mouseup', function() {
-                $(selector).off('mousemove');
-                // $(selector).find('.temp-selected').find('.contentDiv').addClass('item-selected')
-                $(selector)
-                  .find('.temp-selected')
-                  .removeClass('temp-selected').addClass('item-selected');
-                $selectBoxDashed.remove();
-                if (selectCallback) {
-                  selectCallback();
-                }
-              });
-            })
-            //  点选切换选中事件
-            .on('click', '.select-item', function() {
-              
-              
-              // clearTimeout(timerClick);
-              // var selThis = this;
-              // timerClick = setTimeout(function(){
-              //   if ($(selThis).hasClass('item-selected')) {
-              //   $(selThis).removeClass('item-selected');
-              // } else {
-              //   $(selThis).addClass('item-selected');
-              // }
-              // mthis.watchSelectCounter++;
-              
-              // },300)
-              
-            })
-          //  点选全选全不选
-          // .on('click', '.toggle-all-btn', function() {
-          //     if ($(this).attr('data-all')) {
-          //         $(this).removeAttr('data-all');
-          //         $container.find('.select-item').removeClass('selected');
-          //     } else {
-          //         $(this).attr('data-all', 1);
-          //         $container.find('.select-item').addClass('selected');
-          //     }
-          // });
-        }
+        ]
       };
     },
     computed: mapState([
@@ -784,9 +503,7 @@
         deep:true,
         handler(newValue){
            var mthis = this
-            
-            
-            if(mthis.contentTimeCondition.type == 'cancel'){
+           if(mthis.contentTimeCondition.type == 'cancel'){
               console.log(3)
               console.log(mthis.prevItems)
               mthis.items =  mthis.deepClone(mthis.prevItems)
@@ -825,6 +542,8 @@
         mthis.page = 1
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
+        console.log('sousuosousuo')
+        console.log(va)
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
@@ -881,7 +600,7 @@
         })
         // }
         // }
-        mthis.watchSelectCounter++;
+        
       },
       // netHeight: function() {
       //   var mthis = this;
@@ -1261,29 +980,7 @@
         
         
       },
-      togClass(e){
-        
-        
-        clearTimeout(timerClick);
-        var mthis = this;
-        
-        let that = e.target;
-        if(that.tagName == "P"){
-            that = that.parentNode
-          }else{
-              that = that
-          }
-        timerClick = setTimeout(function(){
-          
-        if ($(that).hasClass('item-selected')) {
-          
-          $(that).removeClass('item-selected');
-        } else {
-          $(that).addClass('item-selected');
-        }
-          mthis.watchSelectCounter++;
-        },300)
-      },
+      
       deleteNode(){
         var mthis = this
         if(this.deleteButton){
@@ -1739,131 +1436,33 @@
       },
       orderTimeUp() {
         var mthis = this
-        mthis.order = '&isSortByTime=asc'
-        mthis.page = 1
-        return new Promise(resolve => {
-          if (mthis.contentTimeCondition.length === 2) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = response.body.data
-              } else {
-                mthis.alertNotice('无匹配数据1', true)
-              }
-              resolve();
-            })
-          } else if (mthis.contentTimeCondition.length === 1) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = response.body.data.map(item =>({
-                  title: item.title,      
-                  i_sn: item.i_sn, 
-                  id: item.id,
-                  text: item.description,
-                  time: item.time,
-                  from: item.from,     
-                  img: "http://10.60.1.140/assets/images/content_node.png",
-                  check:false
-                })
-              );
-              mthis.$store.commit('setSelectContentNodes', [{
-                ids: []
-              }])
-              mthis.$store.commit('setContent2time',[{
-                ids:[]
-              }])
-              } else {
-                mthis.alertNotice('无匹配数据2', true)
-              }
-              resolve();
-            })
-          } else {
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                // $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = response.body.data
-              } else {
-                mthis.setMessage('无匹配数据3')
-              }
-              resolve();
-            })
-          }
-        });
+        mthis.items = mthis.deepClone(mthis.prevItems)
+        
       },
       orderTimeDown() {
         var mthis = this
-        mthis.order = '&isSortByTime=desc'
-        mthis.page = 1
-        return new Promise(resolve => {
-          if (mthis.contentTimeCondition.length === 2) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = response.body.data
-              } else {
-                mthis.alertNotice('无匹配数据4', true)
-              }
-              resolve();
-            })
-          } else if (mthis.contentTimeCondition.length === 1) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = response.body.data
-              } else {
-                mthis.alertNotice('无匹配数据5', true)
-              }
-              resolve();
-            })
-          } else {
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
-              
-              if (response.body.data.length > 0) {
-                mthis.items = response.body.data.map(item =>({
-                  title: item.title,      
-                  i_sn: item.i_sn, 
-                  id: item.id,
-                  text: item.description,
-                  time: item.time,
-                  from: item.from,     
-                  img: "http://10.60.1.140/assets/images/content_node.png",
-                  check:false
-                })
-              );
-                // $('.item-selected').removeClass('item-selected')
-                
-                mthis.$store.commit('setSelectContentNodes', [{
-                  ids: []
-                }])
-                mthis.$store.commit('setContent2time',[{
-                  ids:[]
-                }])
-              } else {
-                mthis.setMessage('无匹配数据6')
-              }
-              resolve();
-            })
+        
+        let hasTime = mthis.items.filter(item => item.time);
+        let noTime = mthis.items.filter(item => !item.time);
+        
+        for(var i=0;i<hasTime.length-1;i++){
+          for(var j=0;j<hasTime.length-1-i;j++){
+            
+            if(Date.parse(hasTime[j]['time']) < Date.parse(hasTime[j+1]['time'])){
+              var temp = hasTime[j];
+              hasTime[j] = hasTime[j + 1];
+              hasTime[j + 1] = temp;
+            }
           }
-        });
+        }
+        if(noTime.length>0){
+          mthis.items = hasTime.concat(noTime)
+        }else{
+          mthis.items = hasTime
+        }
+        
+        // mthis.$forceUpdate()
+        
       },
       showAlert(index) {
         // if ($(this).hasClass('selected'))
@@ -2079,234 +1678,10 @@
           // });
         }
       },
-      changeChart(flag){
-        var mthis = this
-        if(flag ==1){
-          mthis.ifWord = true;
-          mthis.ifBar = false
-        }else{
-          mthis.ifWord = false;
-          mthis.ifBar = true
-        }
-      },
+      
       showContentAna(){
         var mthis = this
-        if(mthis.analysisButton){
-            mthis.contentAna = true;
-        // 控制时间轴不显示
-        mthis.$store.commit('setShowDocTime',false)
-        let selDocs = mthis.items.filter(item => item.check);
-        let contentIds = []
-        mthis.selDocItems = new Object();
-        for(let i=0;i<selDocs.length;i++){
-          contentIds.push(selDocs[i].id)
-        }
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
-          "nodeIds": contentIds,
-          "type":"document"
-        }).then(response =>{
-          if(response.body.code ==0){
-            
-            mthis.selDocItems = response.body.data[1]
-          }
-        })
-        // mthis.ifWord = true;
-        var worldCloudcharts=echarts.init(document.getElementById('worldCloud'));
-        var charts = echarts.init(document.getElementById('myChart'));
-        var worldCloudoption = new Object({
-          title: {
- 			        text: '关键词分析',
- 			        x: 'center',
- 			        textStyle: {
- 			            fontSize: 12,
- 			            color:'#FFFFFF'
- 			        }
- 
-           },
-           tooltip: {
- 			        show: true
-           },
-           series: [{
- 			        name: '关键词分析',
- 			        type: 'wordCloud',
- 			        sizeRange: [10, 18],
- 			        rotationRange: [0, 0],
- 			        textPadding: 0,
- 			        autoSize: {
- 			            enable: true,
- 			            minSize: 10
- 			        },
- 			        textStyle: {
- 			            normal: {
- 			                color: function() {
- 			                    return 'rgb(' + [
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160)
- 			                    ].join(',') + ')';
- 			                }
- 			            },
- 			            emphasis: {
- 			                shadowBlur: 10,
- 			                shadowColor: '#333'
- 			            }
- 			        },
- 			 	}]
-          
-        })
-        var JosnList = [];
- 
-        JosnList.push({
-            name: "Jayfee",
-            value: 520
-        }, {
-            name: "Nancy",
-            value: 520
-        }, {
-            name: "生活资源",
-            value: 520
-        }, {
-            name: "供热管理",
-            value: 520
-        }, {
-            name: "供气质量",
-            value: 520
-        }, {
-            name: "生活用水管理",
-            value: 520
-        }, {
-            name: "一次供水问题",
-            value: 520
-        }, {
-            name: "交通运输",
-            value: 520
-        }, {
-            name: "城市交通",
-            value: 520
-        }, {
-            name: "环境保护",
-            value: 520
-        }, {
-            name: "房地产管理",
-            value: 520
-        },  );
-        var colors = ['#66CDAA',  '#B8860B','#FF9080'];
-
-        var xData = function() {
-            var data = [];
-            for (var i = 1; i < 13; i++) {
-                data.push("地区"+i);
-            }
-            return data;
-        }();
-        var chartOption = new Object({
-          title: {
-            "text": "生产总值累计值\n",
-            subtext:"",
-            top:'12%',
-            "left": "10%",
-            "subtextStyle": {
-              "color": "#fff",
-              fontWeight:800,
-              fontSize:16
-            },
-            textStyle:{
-                "color": "#fff",
-              fontSize:28
-            }
-          },
-
-          backgroundColor: '#020306',
-          color: ['#4162ff', '#c78b42', '#CD3F2A', '#ff6e72', '#9692ff'],
-          tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                  type: 'shadow'
-              }
-          },
-          legend: {
-              top:'14%',
-              right:'30%',
-              textStyle:{
-                  color:'#FFFFFF'
-              },
-              orient: 'vertical',
-              data: ['第一产业', '第二产业', '第三产业', '']
-          },
-          grid: {
-              left: '10%',
-              right: '30%',
-              bottom: '20%',
-              top: '27%',
-              containLabel: true,
-              z: 22
-          },
-          yAxis: [{
-              type: 'value',
-              splitLine: {
-                  show: false,
-                  lineStyle: {
-                      color: ['#f2f2f2']
-                  }
-              },
-              axisLine: {
-                      lineStyle: {
-                          color: '#0c3b71'
-                      }
-                  },
-                  axisLabel: {
-                      color: 'rgb(170,170,170)',
-                      formatter: '{value} '
-                  }
-          }],
-          xAxis: [{
-              type: 'category',
-              axisLine: {
-                  lineStyle: {
-                      color: '#0c3b71'
-                  }
-              },
-              axisLabel: {
-                  show: true,
-                  color: 'rgb(170,170,170)',
-                  fontSize:14
-              },
-              data:xData
-          }],
-          series: [{
-                  name: '第一产业',
-                  type: 'bar',
-                  stack: '总量',
-                  barWidth: '16px',
-                  data: [80, 212, 101, 110, 80, 212, 101, 120, 113, 101, 120, 113],
-                  // markArea: areaStyle
-              },
-              {
-                  name: '第二产业',
-                  type: 'bar',
-                  stack: '总量',
-                  data: [90, 232, 251, 212, 101, 110,212, 101, 110, 10,  120, 113],
-                  // markArea: areaStyle
-              },
-              {
-                  name: '第三产业',
-                  type: 'bar',
-                  stack: '总量',
-                  data: [90, 232, 231, 134, 190, 90, 232, 251, 212, 101, 110, 10],
-                  // markArea: areaStyle
-              },
-              
-            
-          ]
-        })
-        charts.setOption(chartOption)
-        worldCloudoption.series[0].data = JosnList;
-  
-        worldCloudcharts.setOption(worldCloudoption);
-        mthis.analysisButton = false
-        }else{
-          mthis.setMessage("请选择至少一篇文章")
-        }
+        
         
       },
       showContent(id,title) {

@@ -128,7 +128,14 @@
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/Organization.png'
             } else if (mthis.eventdata[0].entity_type === 'weapon') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/weapon.png'
-            } else {
+            } 
+            else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image1.png'
+            } 
+            else if (mthis.eventdata[0].entity_type === 'project') {
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image1.png'
+            } 
+            else {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/image1.png'
             }
         } else if (this.myMap.get(type) === 'event') {
@@ -225,6 +232,10 @@
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/Organization.png'
                 } else if (mthis.eventdata[0].entity_type === 'weapon') {
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                } else if (mthis.eventdata[0].entity_type === 'project') {
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
+                } else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
                 } else {
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
                 }
@@ -428,6 +439,10 @@
       text-align:left;
   } */
   #nodeAttr p{
+      padding-left:2em;
+      text-align:left;
+  }
+  #nodeAttr p:not(.w8em){
       padding-left:1em;
       text-align:left;
   }
@@ -492,6 +507,7 @@
     -webkit-box-orient: vertical;
     height: 44px;
     word-break: break-all;
+    color: rgba(204,255,255,0.5);
     }
 </style>
 
