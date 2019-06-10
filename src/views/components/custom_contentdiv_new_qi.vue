@@ -90,6 +90,7 @@
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
+        <operatorHub :style="{height:ContentHeight}" :operatorConfig="operatorConfig"></operatorHub>
         <div v-show="!showList">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !contentAna' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
@@ -184,6 +185,7 @@
   import worksetModal from "./custom_workSet_modal.vue";
   import echarts from 'echarts';
   import $ from "jquery";
+  import operatorHub from "./custom_operatorHub.vue"
   import {
     mapState,
     mapMutations
@@ -358,6 +360,56 @@
             text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
             entity: 'Trump',
           }
+        ],
+        operatorConfig:[
+                {
+                  name:'文档聚类',
+                  id:'docCluster',
+                  iconName:'icon-kongjianfenxi',
+                  disabled:true
+                },
+                {
+                    name:'主题分析',
+                    id:'topicClassification',
+                    iconName:'icon-kongjianfenxi',
+                    /* openFunction:'openHeat',
+                    closeFunction:'closeHeat', */
+                    operatorSurface:[
+                      {
+                        name:'半径大小',
+                        id:'heatRadius',
+                        type:'Slider',
+                        attrName:'radius',
+                        executeFunction:'setHeatMapRadius',
+                        value:{
+                          extent:[1,50],
+                          defaultValue:20
+                        }
+                      },{
+                        name:'热力模糊度',
+                        id:'heatBlur',
+                        type:'Slider',
+                        attrName:'blur',
+                        executeFunction:'setHeatMapBlur',
+                        value:{
+                          extent:[1,50],
+                          defaultValue:20
+                        }
+                      }
+                    ]
+                },
+                {
+                name:'倾向性分析',
+                id:'sentimentAnalysis',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                },
+                {
+                name:'文档摘要',
+                id:'docSummary',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                }
         ]
       };
     },
@@ -624,7 +676,7 @@
       }
     },
     components: {
-      InfiniteLoading,modalChart,worksetModal
+      InfiniteLoading,modalChart,worksetModal,operatorHub
     },
     props: ['contentData'],
     methods: {

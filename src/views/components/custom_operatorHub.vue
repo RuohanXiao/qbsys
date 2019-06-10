@@ -92,7 +92,7 @@
         </Row>
       </div>
       <CellGroup @on-click="selectOperator" v-if='header.isHub'>
-          <Cell :name="config.id" v-for="config in operatorConfig" class="operatorItem" >
+          <Cell :name="config.id" v-for="config in operatorConfig" class="operatorItem" :disabled="config.disabled===undefined||config.disabled===false?false:true">
             <Row>
               <Col span="5"><Icon :class="'icon iconfont '+config.iconName"/></Col>
               <Col span="19">{{config.name}}</Col>
@@ -116,39 +116,10 @@ import operator from "./custom_operator.vue"
                   closeFunction:''
                 },
                 operatorParams:[],
-                operatorConfig:[
-                  {
-                    name:'热力图',
-                    id:'heatMap',
-                    iconName:'icon-kongjianfenxi',
-                    openFunction:'openHeat',
-                    closeFunction:'closeHeat',
-                    operatorSurface:[
-                      {
-                        name:'半径大小',
-                        id:'heatRadius',
-                        type:'Slider',
-                        attrName:'radius',
-                        executeFunction:'setHeatMapRadius',
-                        value:{
-                          extent:[1,50],
-                          defaultValue:20
-                        }
-                      },{
-                        name:'热力模糊度',
-                        id:'heatBlur',
-                        type:'Slider',
-                        attrName:'blur',
-                        executeFunction:'setHeatMapBlur',
-                        value:{
-                          extent:[1,50],
-                          defaultValue:20
-                        }
-                      }
-                    ]}
-                ]
+                
             }
         },
+        props:['operatorConfig'],
         methods:{
           selectOperator(name){
             var mthis = this;
@@ -164,6 +135,9 @@ import operator from "./custom_operator.vue"
                 operName = config.name;
                 openFunction = config.openFunction;
                 closeFunction = config.closeFunction;
+                if(config.disabled === true){
+                  return
+                }
                 break;
               }
             }
