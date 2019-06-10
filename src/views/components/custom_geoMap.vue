@@ -189,7 +189,9 @@ top: 232px;
                         <input id="blur" type="range" min="1" max="50" step="1" value="15" @input='setBlur()'/>
                     </form>
                 </div>
+                <operatorHub :style="{height:mapHeight}" :operatorConfig="operatorConfig"></operatorHub>
             </div>
+            
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
         </div>
         <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
@@ -247,6 +249,7 @@ import imgSlider from "./custom_imgSlider"
 import routeLegend from './custom_routeLegend'
 import imgItemOpera from './custom_mapOperaButtons'
 import worksetModal from "./custom_workSet_modal.vue";
+import operatorHub from "./custom_operatorHub.vue"
 
 
 
@@ -365,7 +368,51 @@ export default {
                 'layerId':'OrgLayer',
                 'paramAttrs':['id','OrgName']
             }
-        }
+        },
+        operatorConfig:[
+                {
+                    name:'热力分析',
+                    id:'heatMap',
+                    iconName:'icon-kongjianfenxi',
+                    openFunction:'openHeat',
+                    closeFunction:'closeHeat',
+                    operatorSurface:[
+                      {
+                        name:'半径大小',
+                        id:'heatRadius',
+                        type:'Slider',
+                        attrName:'radius',
+                        executeFunction:'setHeatMapRadius',
+                        value:{
+                          extent:[1,50],
+                          defaultValue:20
+                        }
+                      },{
+                        name:'热力模糊度',
+                        id:'heatBlur',
+                        type:'Slider',
+                        attrName:'blur',
+                        executeFunction:'setHeatMapBlur',
+                        value:{
+                          extent:[1,50],
+                          defaultValue:20
+                        }
+                      }
+                    ]
+                },
+                {
+                name:'图层处理',
+                id:'layerHandle',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                },
+                {
+                name:'轨迹分析',
+                id:'locusAnalyse',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                }
+        ]
       } 
     },
     mounted() {
@@ -405,18 +452,6 @@ export default {
             } else {
                 e.returnValue = false;
             }
-        },
-        setBlur(){
-            var mthis = this;
-            var radius = document.getElementById('blur').value;
-            mthis.radius = parseInt(radius);
-            var heatmapLayer = mthis.getLayerById('heatmapLayer').setBlur(mthis.radius)
-        },
-        setRadius(){
-            var mthis = this;
-            var radius = document.getElementById('radius').value;
-            mthis.radius = parseInt(radius);
-            var heatmapLayer = mthis.getLayerById('heatmapLayer').setRadius(mthis.radius)
         },
         mapOperationClick(mapOperation){
             var mthis = this;
@@ -3578,10 +3613,32 @@ export default {
     },
     computed:mapState ([
       'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
-      'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte'
+      'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte',
+      'heatMapRadius','heatMapBlur','displayHeatMap'
     ]),
     
     watch:{
+        displayHeatMap(){
+            var mthis = this;
+             var heatMapLayer = mthis.getLayerById('heatmapLayer');
+            heatMapLayer.setVisible(mthis.displayHeatMap);
+            /* if(mthis.displayHeatMap){
+                heatMapLayer.setVisible(true);
+            } else {
+                heatMapLayer.setVisible(false);
+            } */
+            
+        },
+        heatMapRadius(){
+            var mthis = this;
+            var radius = mthis.heatMapRadius
+            mthis.getLayerById('heatmapLayer').setRadius(radius)
+        },
+        heatMapBlur(){
+            var mthis = this;
+            var blur = mthis.heatMapBlur
+            mthis.getLayerById('heatmapLayer').setBlur(blur)
+        },
         geoPromte:function(){
             this.Message(this.geoPromte)
         },
@@ -3994,7 +4051,8 @@ export default {
       imgSlider,
       routeLegend,
       imgItemOpera,
-      worksetModal
+      worksetModal,
+      operatorHub
     }
 }
 </script>

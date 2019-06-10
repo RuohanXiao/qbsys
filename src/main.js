@@ -431,6 +431,9 @@ var store = new Vuex.Store({
                 delText: ''
             }
         },
+        heatMapRadius:20,
+        heatMapBlur:20,
+        displayHeatMap:false
     },
     mutations: {
         setDelSetData(state, val) {
@@ -697,6 +700,18 @@ var store = new Vuex.Store({
         },
         setContentSelectedParam(state, val) {
             state.content_selected_param = val
+        },
+        newHeatMapRadius(state,val){
+          state.heatMapRadius = val;
+        },
+        newHeatMapBlur(state,val){
+          state.heatMapBlur = val;
+        },
+        openHeatMap(state){
+          state.displayHeatMap = true;
+        },
+        hideHeatMap(state){
+          state.displayHeatMap = false;
         }
     },
     getters: {
@@ -750,6 +765,20 @@ var store = new Vuex.Store({
         getSplitWidth: function(state) {
             return document.documentElement.clientWidth * state.split - 20 + 'px'
         }
+    },
+    actions:{
+      setHeatMapRadius(context,radius){
+        context.commit('newHeatMapRadius',radius);
+      },
+      setHeatMapBlur(context,blur){
+        context.commit('newHeatMapBlur',blur);
+      }, 
+      openHeat(context){
+        context.commit('openHeatMap');
+      },
+      closeHeat(context){
+        context.commit('hideHeatMap');
+      }
     }
 });
 const router = new VueRouter(RouterConfig);
