@@ -206,6 +206,7 @@ import {BezierSinglePoint, BezierLinePoints} from '../../dist/assets/js/geo/geom
 import {getThirdPoint} from '../../dist/assets/js/geo/geometryType/Arc.js'
 import util from '../../util/tools.js'
 import {rightMenu} from '../../dist/assets/js/rightMenu.js'
+import GSF from "../../dist/assets/js/geo/geoMethods.js"
 
 import VectorSource from 'ol/source/Vector'
 import VectorLayer from 'ol/layer/Vector'
@@ -776,14 +777,18 @@ export default {
         },
         selectAll(){
             var mthis = this;
+            var ids = [];
             mthis.geometrySelectedQBIds.length = 0;
             mthis.timeSelectedEventIds.length = 0;
             mthis.staticsSelectedEventIds.length = 0;
             var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
-            features.forEach(function(item){
+            for(let i = 0; i < features.length; i++){
+                var item = features[i];
                 var num = item.get('Params').length;
                 item.set('selectedNum',num,false);
-            });
+                GSF.getParamIdsFromFeature(item,ids);
+            }
+            mthis.geometrySelectedQBIds = ids;
             
         },
         returnToAllPoints(){
@@ -792,6 +797,7 @@ export default {
                 return;
             }
             mthis.geometrySelectedQBIds = [];
+            /* for(let i = ) */
             if(mthis.removeFeaturesArr.length > 0){
                 mthis.removeFeaturesArr.forEach(function(feature){
                     var featureId = feature.getId();
@@ -1072,7 +1078,6 @@ export default {
             mthis.setRightClickMenu_Area(coordinate)
         },
         QBStyleFunction(feature,resolution){
-            debugger
             var mthis = this;
             var featureType = feature.getId().split('&')[0];
             var selectedNum = feature.get('selectedNum');
@@ -1702,16 +1707,16 @@ export default {
             var promptType = ''
             var num = 0;
             if(type === 'Event'){
-                //url = 'http://10.60.1.141:5100/exploreEvent/'
-                url = 'http://localhost:5000/exploreEvent/'
+                url = 'http://10.60.1.141:5100/exploreEvent/'
+                //url = 'http://localhost:5000/exploreEvent/'
                 promptType = '事件数';
             } else if(type === 'Org'){
-                //url = 'http://10.60.1.141:5100/exploreOrg/'
-                url = 'http://localhost:5000/exploreOrg/'
+                url = 'http://10.60.1.141:5100/exploreOrg/'
+                //url = 'http://localhost:5000/exploreOrg/'
                 promptType = '组织机构数';
             } else if(type === 'GeoTar'){
-                //url = 'http://10.60.1.141:5100/exploreGeoTar/'
-                url = 'http://localhost:5000/exploreGeoTar/'
+                url = 'http://10.60.1.141:5100/exploreGeoTar/'
+                //url = 'http://localhost:5000/exploreGeoTar/'
                 promptType = '地理目标数';
             }
             
@@ -1919,8 +1924,6 @@ export default {
                 var coord = item.getGeometry().getCoordinates();
                 var isIn = geometry.intersectsCoordinate(coord);
                 if (isIn) {
-                    //item.setStyle(mthis.selectedstyle);
-                    //mthis.setSelectedEventFeatureParam(item,true);
                     mthis.geometrySelectedFeatures.push(item);
                     item.get('Params').forEach(function(Iitem){
                         frameselectedEventIds.push(Iitem.id);
@@ -2488,7 +2491,6 @@ export default {
             var noSelectedIds = [];
             if(keys.length > 0){
                 keys.forEach(function(key){
-                    //var id = mthis.QBIdsToFeatureIdList[key];
                     var index = util.itemIndexInArr(key,HLIds);
                     if(index === -1){
                         noSelectedIds.push(key)
@@ -2498,33 +2500,10 @@ export default {
                 })
             }
             var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
-            var featureNumList = mthis.getAllFeaturesNumByIds(noSelectedIds);
-            for(let i = 0; i < features.length; i++){
-                let feature = features[i];
-                let id = feature.getId();
-                if(featureNumList[id] === undefined){
-                    feature.set('selectedNum',-1,false);
-                } else {
-                    let num = featureNumList[id];
-                    feature.set('selectedNum',num,false);
-                }
-            }
+            GSF.setAllFeaturesStatus(noSelectedIds,noSelectedIds,features,mthis.QBIdsToFeatureIdList)
             mthis.geometrySelectedQBIds = noSelectedIds;
         },
-        getAllFeaturesNumByIds(ids){
-            var mthis = this;
-            var featureNumList = {};
-            for(let i = 0; i < ids.length; i++){
-                let id = ids[i];
-                let featureId = mthis.QBIdsToFeatureIdList[id];
-                if(featureNumList[featureId] === undefined){
-                    featureNumList[featureId] = 1;
-                } else {
-                    featureNumList[featureId]++;
-                }
-            }
-            return featureNumList;
-        },
+        
         getHighUpSelectedIds(){  //获取此时选择的上一级选择
             var mthis = this;
             var ids = [];
@@ -2752,90 +2731,14 @@ export default {
         },
         setFeatureStatusByIds(ids){
             var mthis = this;
-            mthis.getLayerById('heatmapLayer').getSource().clear();
-            var featureIds = [];
-            var selectedNum = [];
-            mthis.maxEventsNum = 0;
-            var heatSource = mthis.getLayerById('heatmapLayer').getSource();
-            ids.forEach(function(item){
-                var OId = mthis.getOIdFromId(item);
-                var featureId = mthis.QBIdsToFeatureIdList[OId].featureId;
-                var index = util.itemIndexInArr(featureId,featureIds);
-                if(index === -1){
-                    featureIds.push(featureId);
-                    selectedNum.push(1);
-                } else {
-                    ++selectedNum[index];
-                }
-            })
-            Object.keys(mthis.AllLayerList_conf).forEach(function(key){
-                var layerId = mthis.AllLayerList_conf[key].layerId;
-                var features = mthis.getLayerById(layerId).getSource().getFeatures();
-                for(let i = 0; i < features.length; i++){
-                    let feature = features[i];
-                    let id = feature.getId();
-                    let isSelected = false;
-                    let index = -1;
-                    for(let j = 0; j < featureIds.length; j++){
-                        if(id === featureIds[j]){
-                            isSelected = true;
-                            index = j;
-                            break;
-                        }
-                    }
-                    if(isSelected){
-                        
-                        feature.set('selectedNum',selectedNum[index],false);
-                        if(key === 'event'){
-                            var geometry = feature.getGeometry();
-                            if(geometry.getType() !== "MultiLineString"){
-                                var heatFeature = feature.clone();
-                                heatFeature.setId(id);
-                                heatFeature.setStyle(null);
-                                heatSource.addFeature(heatFeature);
-                                var num = heatFeature.get('selectedNum');
-                                if(num > mthis.maxEventsNum){
-                                    mthis.maxEventsNum = num;
-                                }
-                            } else {
-                                var multiLines = geometry.getCoordinates();
-                                var lineEventBeloneLocals = [];
-                                for(let v = 0; v < multiLines.length; v++){
-                                    var line = multiLines[v];
-                                    var length = line.length;
-                                    var rLine = [line[0],line[length - 1]];
-                                    rLine.forEach(function(pointCoor){
-                                        var coor = 'event&' + pointCoor[0] + '' + pointCoor[1];
-                                        var index = util.itemIndexInArr(coor,lineEventBeloneLocals);
-                                        if(index === -1){
-                                            if(heatSource.getFeatureById(coor)){
-                                                var fFeature = heatSource.getFeatureById(coor);
-                                                var num = fFeature.get('selectedNum');
-                                                fFeature.set('selectedNum',num+1,false);
-                                                if((num + 1) > mthis.maxEventsNum){
-                                                    mthis.maxEventsNum = num + 1;
-                                                }
-                                            } else {
-                                                var feature = new Feature({
-                                                    geometry: new Point(pointCoor)
-                                                });
-                                                feature.setId(coor);
-                                                feature.set('selectedNum',1,false);
-                                                heatSource.addFeature(feature);
-                                                lineEventBeloneLocals.push(coor);
-                                            }
-                                        } 
-                                    })
-                                }
-                            }
-                            
-                        }
-                        mthis.setFeatureStatus(feature,'life');
-                    } else {
-                        feature.set('selectedNum',0,false);
-                    }
-                }
-            })
+            var selectedFeatures = [];
+            var selectedFeatureIds = [];
+            var selectedIds = mthis.$store.state.geo_onlyselected_param;
+            GSF.getFeatureIdsByIds(selectedIds,mthis.QBIdsToFeatureIdList,selectedFeatureIds);
+            var selectedFeatures = this.qbMap.getFeaturesByIds(selectedFeatureIds,'QBLayer');
+            GSF.setFeaturesHalfOrHL(ids,selectedFeatures,mthis.QBIdsToFeatureIdList);
+            
+                   
         },
         getallEventIdsFromallEventIdsToFeaturesIds(){
             var mthis = this;
@@ -3237,31 +3140,29 @@ export default {
         },
         geoStaticsSelectedIds:function(){
             var mthis = this;
-            //if(mthis.staticsSelectedEventIds.length === 0 || mthis.staticsSelectedEventIds.length !== mthis.HLIds.length){
-                mthis.halfSelectedIds = mthis.HLIds;
-                var ids = [];
-                var keys = Object.keys(mthis.geoStaticsSelectedIds);
-                if(keys.length > 0){
-                    keys.forEach(function(key){
-                        var item = mthis.geoStaticsSelectedIds[key];
-                        if(item.indexOf('&') === -1){
-                            var id = 'org&'+item;
-                            ids.push(id)
-                        } else {
-                            ids.push(item)
-                        }
-                    })
-                }
-                mthis.staticsSelectedEventIds = ids;
-                if(mthis.halfSelectedIds.length > 0){
-                    mthis.halfSelectedIds.forEach(function(paramid){
-                        var layerId = mthis.getLayerIdByFeatureIdOrParamId(paramid);
-                        var OId = mthis.getOIdFromId(paramid);
-                        var featureId = mthis.QBIdsToFeatureIdList[OId].featureId;
-                        var feature = mthis.getLayerById(layerId).getSource().getFeatureById(featureId);
-                        mthis.setFeatureStatus(feature,'halflife')
-                    })
-                }
+            debugger
+            mthis.halfSelectedIds = mthis.HLIds;
+            var ids = [];
+            var keys = Object.keys(mthis.geoStaticsSelectedIds);
+            if(keys.length > 0){
+                keys.forEach(function(key){
+                    var item = mthis.geoStaticsSelectedIds[key];
+                    if(item.indexOf('&') === -1){
+                        var id = 'event&'+item;
+                        ids.push(id)
+                    } else {
+                        ids.push(item)
+                    }
+                })
+            }
+            mthis.staticsSelectedEventIds = ids;
+            if(mthis.halfSelectedIds.length > 0){
+                mthis.halfSelectedIds.forEach(function(paramid){
+                    var featureId = mthis.QBIdsToFeatureIdList[paramid];
+                    var feature = mthis.qbMap.getLayer('QBLayer').getSource().getFeatureById(featureId);
+                    feature.set('selectdNum',0,false)
+                })
+            }
         },
         staticsSelectedEventIds:function(){
             var mthis = this;
