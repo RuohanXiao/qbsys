@@ -114,6 +114,7 @@
     </div>
     <div :style="{height:nh_50,borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div id="netchart" :style="{height:nh_50}"></div>
+      <operatorHub :style="{height:nh_50}" :operatorConfig="operatorConfig"></operatorHub>
       <transition name="mybox">
         <div class="xuanfuAlert" v-show="popout">{{message.text}}</div>
       </transition>
@@ -142,6 +143,7 @@
   import html2canvas from "../../util/html2canvas.min.js";
   import Canvas2Image from "../../util/canvas2image.js";
   import configer from "../../util/configContrl.js";
+  import operatorHub from "./custom_operatorHub.vue"
   mock.test = 1;
   var timer1 = null;
   /* eslint-disable */
@@ -236,14 +238,35 @@
         hoverdNode: null,
         linkedNodeFlag: false,
         linkedNodesType: '',
-        linkedNodes: []
+        linkedNodes: [],
+        operatorConfig:[
+                {
+                  name:'文档聚类',
+                  id:'docCluster',
+                  iconName:'icon-kongjianfenxi',
+                  disabled:true
+                },
+                {
+                name:'倾向性分析',
+                id:'sentimentAnalysis',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                },
+                {
+                name:'文档摘要',
+                id:'docSummary',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                }
+        ]
       };
     },
     components: {
       modalChart,
       worksetModal,
       workatlasModal,
-      Canvas2Image
+      Canvas2Image,
+      operatorHub
     },
     methods: {
       keyD(e) {

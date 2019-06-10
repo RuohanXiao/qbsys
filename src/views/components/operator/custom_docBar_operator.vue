@@ -155,7 +155,7 @@
                 var y = evt.clientY;
                 
                 var ovdiv = document.createElement('div');
-                ovdiv.style ='position:absolute;z-index:11;';
+                ovdiv.style ='position:absolute;z-index:1001;';
                 ovdiv.class = 'rightMenuDiv';
                 ovdiv.id='rightClickMenu';
                 ovdiv.style.top = y + "px";
