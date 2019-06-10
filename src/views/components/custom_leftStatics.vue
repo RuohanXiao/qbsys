@@ -320,6 +320,7 @@ export default {
         },
         rightClickShow(eve,ids,conf){
             var mthis = this;
+            debugger
             var config = conf;
             if(config.length === 0){
                 return;

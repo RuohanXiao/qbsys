@@ -1,14 +1,14 @@
 <style>
 .closeHub{
     position: absolute;
-    z-index: 1000;
+    z-index: 10;
     /* width: 220px;
     overflow-y: scroll; */
 }
 .openHub{
   position: absolute;
-  z-index: 1000;
-  width: 230px;
+  z-index: 10;
+  width: 310px;
   overflow-y: scroll;
 }
 .openHub .pick{
@@ -61,6 +61,7 @@
 	font-stretch: normal;
 	letter-spacing: 0px;
 	color: #ccffff;
+  text-align: center;
 }
 .hubName{
   height:20px !important;
@@ -69,7 +70,10 @@
   display: inline;
   height:20px
 }
-
+.cancelImg{
+  position: absolute;
+  right: 0px;
+}
 .operHeaderName img{
   opacity: 0.4;
 }
@@ -81,14 +85,17 @@
 <template>
   <div :class="pickdown?'openHub':'closeHub'" id='operatorHub'>
     <div class='Hubimg pick' @click="pickdown = !pickdown"></div>
-    <Drawer class="drawer" placement="left" width="200" :mask="false" v-if="pickdown"  :closable="false" v-model="pickdown" :inner="true" :transfer="false">
+    <Drawer class="drawer" placement="left" width="280" :mask="false" v-if="pickdown"  :closable="false" v-model="pickdown" :inner="true" :transfer="false">
       <div slot='header' class="header">
         <Row class="hubName" v-if='header.isHub'>
               <Col span="24">{{header.title}}</Col>
         </Row>
         <Row v-else class="operHeaderName" type="flex" justify="center" align="middle">
-              <Col span="9"><img :src="require('../../dist/assets/images/back.png')" @click="cancelOperator" /></Col>
-              <Col span="15"><span>{{header.operatorName}}</span></Col>
+              <Col span="24">
+                <span>{{header.operatorName}}</span>
+                <img class='cancelImg' :src="require('../../dist/assets/images/back.png')" @click="cancelOperator" />
+              </Col>
+              <!-- <Col span="9"><img :src="require('../../dist/assets/images/back.png')" @click="cancelOperator" /></Col> -->
         </Row>
       </div>
       <CellGroup @on-click="selectOperator" v-if='header.isHub'>
@@ -99,7 +106,7 @@
             </Row>
           </Cell>
       </CellGroup>
-      <operator :operator='operatorParams'></operator>
+      <operator :operator='operatorParams' v-if="!header.isHub"></operator>
     </Drawer>
   </div>
 </template>
