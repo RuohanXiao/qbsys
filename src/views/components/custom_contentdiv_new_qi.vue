@@ -372,30 +372,53 @@
                     name:'主题分析',
                     id:'topicClassification',
                     iconName:'icon-kongjianfenxi',
-                    /* openFunction:'openHeat',
-                    closeFunction:'closeHeat', */
                     operatorSurface:[
                       {
-                        name:'半径大小',
+                        type:'docBar',
+                        title:'Venezuelan oil chief blames fire on opposition',
                         id:'heatRadius',
-                        type:'Slider',
-                        attrName:'radius',
-                        executeFunction:'setHeatMapRadius',
-                        value:{
-                          extent:[1,50],
-                          defaultValue:20
-                        }
-                      },{
-                        name:'热力模糊度',
-                        id:'heatBlur',
-                        type:'Slider',
-                        attrName:'blur',
-                        executeFunction:'setHeatMapBlur',
-                        value:{
-                          extent:[1,50],
-                          defaultValue:20
-                        }
-                      }
+                        attrName:'id',
+                        time:'2019-02-20',
+                        from:'华盛顿邮报',
+                        excuteFunction:'changeOperatorDocIds',
+                        rightMenuConfig:[{
+                            'name': '单个文档分析',
+                            'iconClassName': 'icon-ren',
+                            'excuteFunction':'singleDocAnaly'
+                          },
+                          {
+                            'name': '合并分析',
+                            'iconClassName': 'icon-ren',
+                            'excuteFunction':'multiDocAnaly'
+                          }
+                        ]
+                      },
+                      {
+                          operatorType:'dynamic',
+                          dynamicAttr:'seletedDocAttrList',
+                          paramCompare:{
+                            'id':'id',
+                            'title':'title',
+                            'time':'time',
+                            'from':'from'
+                          },
+                          dispose:{
+                            type:'docBar',
+                            excuteFunction:'changeOperatorDocIds',
+                            attrName:'id',
+                            rightMenuConfig:[{
+                                'name': '单个文档分析',
+                                'iconClassName': 'icon-ren',
+                                'excuteFunction':'singleDocAnaly'
+                              },
+                              {
+                                'name': '合并分析',
+                                'iconClassName': 'icon-ren',
+                                'excuteFunction':'multiDocAnaly'
+                              }
+                            ]
+                          }
+                      },
                     ]
                 },
                 {
@@ -1029,8 +1052,6 @@
           $(that).addClass('item-selected')
           mthis.watchSelectCounter++;
         }
-        
-        
       },
       
       deleteNode(){

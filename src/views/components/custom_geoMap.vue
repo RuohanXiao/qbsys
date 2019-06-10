@@ -382,7 +382,7 @@ export default {
                         id:'heatRadius',
                         type:'Slider',
                         attrName:'radius',
-                        executeFunction:'setHeatMapRadius',
+                        excuteFunction:'setHeatMapRadius',
                         value:{
                           extent:[1,50],
                           defaultValue:20
@@ -392,7 +392,7 @@ export default {
                         id:'heatBlur',
                         type:'Slider',
                         attrName:'blur',
-                        executeFunction:'setHeatMapBlur',
+                        excuteFunction:'setHeatMapBlur',
                         value:{
                           extent:[1,50],
                           defaultValue:20
