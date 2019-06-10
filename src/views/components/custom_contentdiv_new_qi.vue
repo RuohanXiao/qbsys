@@ -91,7 +91,7 @@
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
         <operatorHub :style="{height:ContentHeight}" :operatorConfig="operatorConfig"></operatorHub>
-        <div v-show="!showList">
+        <div v-show="!showList && !contentAna">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !contentAna' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow">
@@ -163,12 +163,39 @@
           <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
-      
-    </div>
-    <!-- 词云分析图 -->
-      <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around'}">
-
+      <!-- 词云分析图 -->
+      <div v-show="contentAna" :style="{width:contentAnaWidth}">
+        <div class="docMenu" :style="{display:'flex',width:'100%',height:'30px'}">
+          <RadioGroup v-model="changeBar">
+            <Radio label="词云"></Radio>
+            <Radio label="热词排序"></Radio>
+          </RadioGroup>
+          <div :style="{marginLeft:'10px'}">
+            <Dropdown>
+              <a href="javascript:void(0)">
+                  全部词性
+                  <Icon type="ios-arrow-down"></Icon>
+              </a>
+              <DropdownMenu slot="list">
+                  <DropdownItem>动词</DropdownItem>
+                  <DropdownItem>名词</DropdownItem>
+                  <DropdownItem>人名</DropdownItem>
+                  <DropdownItem>地名</DropdownItem>
+              </DropdownMenu>
+          </Dropdown>
+          </div>
+          
+        </div>
+        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around',width:'100%'}">
+          <div class="topItem">
+            <div class="itemHeader"></div>
+            <div class="topicItem"></div>
+          </div>
+          
+        </div>
       </div>
+    </div>
+    
     <!-- </Col> -->
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
@@ -202,6 +229,51 @@
     name: "App",
     data() {
       return {
+        topicDatas:[
+          [
+            {
+              name:'普京',
+              num:20
+            },
+            {
+              name:'特朗普',
+              num:18
+            },
+            {
+              name:'美国',
+              num:16
+            },
+            {
+              name:'俄罗斯',
+              num:14
+            },
+            {
+              name:'独裁',
+              num:12
+            },
+            {
+              name:'普京',
+              num:20
+            },
+            {
+              name:'普京',
+              num:8
+            },
+            {
+              name:'普京',
+              num:20
+            },
+            {
+              name:'普京',
+              num:20
+            },
+            {
+              name:'普京',
+              num:20
+            }
+          ]
+        ],
+        changeBar:'词云',
         ifhasDoc:false,
         isBru:false,
         bruIds:[],
@@ -1754,7 +1826,7 @@
       
       showContentAna(){
         var mthis = this
-        
+        mthis.contentAna = true
         
       },
       showContent(id,title) {
@@ -1825,15 +1897,16 @@
     },
     mounted() {
       var mthis = this
-      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 27 - 200 + 'px'
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
-      mthis.WCWidth = wwWidth   + 'px'
-      mthis.docWidth = (wwWidth * 0.5) + 'px'
-      mthis.barWidth = (wwWidth - (parseInt(mthis.docWidth.split('px')[0]))) + 'px'
+      console.log(wwWidth)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
+      // let divBox = document.getElementById('contentchart')
+      // console.log(window.getComputedStyle(divBox,null).width)
+
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
         //   // 跳转过来的
       //   mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
@@ -1847,37 +1920,7 @@
       window.divLength = 0;
       
     
-      // this.initSelectBox('#contentchart')
       
-      
-      // window.addEventListener('scroll', this.handleScroll)
-      // let contentChart = document.getElementById('contentchart');
-      
-      // var contentTimer = null;
-      // $('#contentchart').click(function(){
-      //   contentTimer = setTimeout(function(){
-      //      $('#contentchart').css("cursor","crosshair");
-      //      alert(1111)
-      //   },1000);
-      // },function(){
-      //   clearTimeout(contentTimer);
-      // });
-      // $('#contentchart').on('keydown',function(e){
-      
-      //   if(mthis.$store.state.tmss === 'content') {
-      //       var e = event || window.event || arguments.callee.caller.arguments[0];
-      //       if (e && e.keyCode == 46) {
-      //         mthis.deleteNode()
-      //         e.preventDefault();
-      //         e.stopPropagation();
-      //       }
-      //       if (e.keyCode == 65 && e.ctrlKey) {
-      //         mthis.selectAll()
-      //         e.preventDefault();
-      //         e.stopPropagation();
-      //       }
-      //     }
-      // })
     }
   };
 </script>
@@ -2372,5 +2415,8 @@
   .rightIcon:hover{
     opacity: 1;
     cursor: pointer;
+  }
+  .topItem{
+    border:'1px solid #336666';
   }
 </style>
