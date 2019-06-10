@@ -90,7 +90,7 @@
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
-        <operatorHub :style="{height:ContentHeight}" :operatorConfig="operatorConfig"></operatorHub>
+        <operatorHub :style="{height:ContentHeightList}" :operatorConfig="operatorConfig"></operatorHub>
         <div v-show="!showList && !contentAna">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !contentAna' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
@@ -158,15 +158,17 @@
         </div>
       </div>
       <!-- 列表图 -->
-      <div>
+      <div id="barList">
         <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
           <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
       <!-- 词云分析图 -->
-      <div v-show="contentAna" :style="{width:contentAnaWidth}">
-        <div class="docMenu" :style="{display:'flex',width:'100%',height:'30px'}">
-          <RadioGroup v-model="changeBar">
+      <div :style="{width:'100%',display:'flex'}">
+        <div :style="{width:leftMenu}"></div>
+      <div v-show="contentAna" :style="{height:ContentHeightList,overflowY:'scroll'}">
+        <div class="docMenu" :style="{display:'flex',width:'90%',height:'30px',lineHeight:'30px',justifyContent: 'flex-end'}">
+          <RadioGroup v-model="changeBar" @on-change='changeShow'>
             <Radio label="词云"></Radio>
             <Radio label="热词排序"></Radio>
           </RadioGroup>
@@ -186,13 +188,32 @@
           </div>
           
         </div>
-        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around',width:'100%'}">
-          <div class="topItem">
-            <div class="itemHeader"></div>
-            <div class="topicItem"></div>
+        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',width:'100%'}">
+          <div class="topItem" :style="{border:'1px solid #336666',order:orderCount}"
+          v-for="(list,index) in topicDatas" :key="index">
+            <div class="itemHeader" 
+            :style="{display:'flex',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-between'}">
+              <p :style="{marginLeft:'10px'}">普京：美国...(10)</p>
+              <div :style="{marginLeft:'10px'}">
+                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
+                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12"></Icon>
+              </div>
+            </div>
+            <div class="topicItem" v-show="ifTopic"
+            :style="{display:'flex',justifyContent:'space-between',margin:'10px',color:'#fff'}" 
+            v-for="(item,ind) in list[0].topic" :key="ind">
+              <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
+              <p :style="{fontSize:'12px',flex:'1',marginLeft:'5px'}">{{item.name}}</p>
+              <p :style="{fontSize:'12px'}">{{item.num}}</p>
+            </div>
+            <div :id='index+"wordChart"' v-show="!ifTopic" :style="{width:'180px',height:'310px'}">
+
+            </div>
           </div>
           
         </div>
+        
+      </div>
       </div>
     </div>
     
@@ -229,51 +250,158 @@
     name: "App",
     data() {
       return {
-        topicDatas:[
-          [
-            {
-              name:'普京',
-              num:20
-            },
-            {
-              name:'特朗普',
-              num:18
-            },
-            {
-              name:'美国',
-              num:16
-            },
-            {
-              name:'俄罗斯',
-              num:14
-            },
-            {
-              name:'独裁',
-              num:12
-            },
-            {
-              name:'普京',
-              num:20
-            },
-            {
-              name:'普京',
-              num:8
-            },
-            {
-              name:'普京',
-              num:20
-            },
-            {
-              name:'普京',
-              num:20
-            },
-            {
-              name:'普京',
-              num:20
+        // itemWidth:"20%",
+        leftMenu:'200px',
+        option:new Object({
+          title:{
+            name:'keyWords分析',
+            x:'center',
+            textStyle:{
+              fontSize:12,
+              color:'#ffffff'
             }
-          ]
+          },
+          tooltip: {
+ 			        show: true
+           },
+           series: [{
+ 			        name: 'keyWords分析',
+ 			        type: 'wordCloud',
+ 			        sizeRange: [10, 18],
+ 			        rotationRange: [0, 0],
+ 			        textPadding: 0,
+ 			        autoSize: {
+ 			            enable: true,
+ 			            minSize: 10
+ 			        },
+ 			        textStyle: {
+ 			            normal: {
+ 			                color: function() {
+ 			                    return 'rgb(' + [
+ 			                        Math.round(Math.random() * 160),
+ 			                        Math.round(Math.random() * 160),
+ 			                        Math.round(Math.random() * 160)
+ 			                    ].join(',') + ')';
+ 			                }
+ 			            },
+ 			            emphasis: {
+ 			                shadowBlur: 10,
+ 			                shadowColor: '#333'
+ 			            }
+               },
+               data:[{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},]
+ 			 	  }]
+        }),
+        ifTopic:true,
+        wordCloudOption:null,
+        topicDatas:[
+          [{topic:[
+            {name:'pujing',num:20},
+            {name:'telangpu',num:18},
+            {name:'pujing',num:16},
+            {name:'telangpu',num:14},
+            {name:'pujing',num:12},
+            {name:'telangpu',num:10},
+            {name:'pujing',num:8},
+            {name:'telangpu',num:6},
+            {name:'pujing',num:4},
+            {name:'telangpu',num:2},
+            ]},
+            {keyWords:[]}],
+            [{topic:[
+            {name:'pujing',num:20},
+            {name:'telangpu',num:18},
+            {name:'pujing',num:16},
+            {name:'telangpu',num:14},
+            {name:'pujing',num:12},
+            {name:'telangpu',num:10},
+            {name:'pujing',num:8},
+            {name:'telangpu',num:6},
+            {name:'pujing',num:4},
+            {name:'telangpu',num:2},
+            ]},
+            {keyWords:[]}],
+            [{topic:[
+            {name:'pujing',num:20},
+            {name:'telangpu',num:18},
+            {name:'pujing',num:16},
+            {name:'telangpu',num:14},
+            {name:'pujing',num:12},
+            {name:'telangpu',num:10},
+            {name:'pujing',num:8},
+            {name:'telangpu',num:6},
+            {name:'pujing',num:4},
+            {name:'telangpu',num:2},
+            ]},
+            {keyWords:[]}],
+            [{topic:[
+            {name:'pujing',num:20},
+            {name:'telangpu',num:18},
+            {name:'pujing',num:16},
+            {name:'telangpu',num:14},
+            {name:'pujing',num:12},
+            {name:'telangpu',num:10},
+            {name:'pujing',num:8},
+            {name:'telangpu',num:6},
+            {name:'pujing',num:4},
+            {name:'telangpu',num:2},
+            ]},
+            {keyWords:[]}],
+            [{topic:[
+            {name:'pujing',num:20},
+            {name:'telangpu',num:18},
+            {name:'pujing',num:16},
+            {name:'telangpu',num:14},
+            {name:'pujing',num:12},
+            {name:'telangpu',num:10},
+            {name:'pujing',num:8},
+            {name:'telangpu',num:6},
+            {name:'pujing',num:4},
+            {name:'telangpu',num:2},
+            ]},
+            {keyWords:[]}],
+            [{topic:[
+            {name:'pujing',num:20},
+            {name:'telangpu',num:18},
+            {name:'pujing',num:16},
+            {name:'telangpu',num:14},
+            {name:'pujing',num:12},
+            {name:'telangpu',num:10},
+            {name:'pujing',num:8},
+            {name:'telangpu',num:6},
+            {name:'pujing',num:4},
+            {name:'telangpu',num:2},
+            ]},
+            {keyWords:[]}],
+            [{topic:[
+            {name:'pujing',num:20},
+            {name:'telangpu',num:18},
+            {name:'pujing',num:16},
+            {name:'telangpu',num:14},
+            {name:'pujing',num:12},
+            {name:'telangpu',num:10},
+            {name:'pujing',num:8},
+            {name:'telangpu',num:6},
+            {name:'pujing',num:4},
+            {name:'telangpu',num:2},
+            ]},
+            {keyWords:[]}],
+            [{topic:[
+            {name:'pujing',num:20},
+            {name:'telangpu',num:18},
+            {name:'pujing',num:16},
+            {name:'telangpu',num:14},
+            {name:'pujing',num:12},
+            {name:'telangpu',num:10},
+            {name:'pujing',num:8},
+            {name:'telangpu',num:6},
+            {name:'pujing',num:4},
+            {name:'telangpu',num:2},
+            ]},
+            {keyWords:[]}],
         ],
-        changeBar:'词云',
+        changeBar:'热词排序',
+        orderCount:0,
         ifhasDoc:false,
         isBru:false,
         bruIds:[],
@@ -512,6 +640,16 @@
       'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes'
     ]),
     watch: {
+      topicDatas:function(){
+        var mthis = this;
+        if(mthis.topicDatas.length>0){
+          mthis.itemWidth = (100 / (mthis.topicDatas.length)) + '%';
+          console.log(1111)
+        }else{
+          mthis.itemWidth = '100%'
+        }
+        
+      },
       contentTimeOnlySel:function(){
         if(this.contentTimeOnlySel){
           this.selectAll()
@@ -763,8 +901,8 @@
         var Ele = document.getElementById('translatedDiv');
         var contentDiv = document.getElementById('contentInfo');
         
-        mthis.WCheight = (parseInt(mthis.ContentHeightList.split('px')[0]) - 45) + 'px'
-        mthis.barHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) /2 -0.8) + 'px'
+        // mthis.WCheight = (parseInt(mthis.ContentHeightList.split('px')[0]) - 45) + 'px'
+        // mthis.barHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) /2 -0.8) + 'px'
         if (Ele !== null) {
           Ele.style.height = mthis.ContentHeightList;
         }
@@ -775,6 +913,22 @@
     },
     props: ['contentData'],
     methods: {
+      changeShow(newValue){
+        var mthis = this
+        console.log(newValue)
+        console.log(typeof newValue)
+        if(newValue == '词云'){
+          mthis.ifTopic = false;
+          
+        }else{
+          mthis.ifTopic = true;
+        }
+      },
+      toTop(index){
+        var div = document.getElementsByClassName('topItem')[index];
+        div.style.order = this.orderCount - 1;
+        
+      },
       deepClone(obj){
         let _obj = JSON.stringify(obj);
         let objClone = JSON.parse(_obj);
@@ -1827,6 +1981,18 @@
       showContentAna(){
         var mthis = this
         mthis.contentAna = true
+        var charts = [];
+        var options = [];
+        var myWordCharts = []
+        for(var i=0;i<mthis.topicDatas.length;i++){
+          charts.push(i+'wordChart');
+          myWordCharts.push(i+'myChart');
+          options.push(mthis.option);
+        }
+        for(var j=0;j<myWordCharts.length;j++){
+          myWordCharts[j] = echarts.init(document.getElementById(charts[j]));
+          myWordCharts[j].setOption(options[j]);
+        }
         
       },
       showContent(id,title) {
@@ -1904,6 +2070,8 @@
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
+     
+      
       // let divBox = document.getElementById('contentchart')
       // console.log(window.getComputedStyle(divBox,null).width)
 
@@ -2418,5 +2586,25 @@
   }
   .topItem{
     border:'1px solid #336666';
+    margin:5px 0px 5px 5px;
+    font-family: MicrosoftYaHei;
+  }
+  .topItem .itemHeader{
+    color:rgba(51,255,255,0.4);
+  }
+  .bigNumber{
+    width:19px;
+    height:19px;
+    background-color: #cc3333;
+	  border-radius: 3px;
+    text-align: center;
+  }
+  .number{
+    width:19px;
+    height:19px;
+    background-color:rgba(51,255,255,0.3);
+    border-radius: 3px;
+    
+    text-align: center;
   }
 </style>
