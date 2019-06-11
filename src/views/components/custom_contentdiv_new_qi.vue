@@ -164,9 +164,9 @@
         </div>
       </div>
       <!-- 词云分析图 -->
-      <div :style="{width:'100%',display:'flex'}">
-        <div :style="{width:leftMenu}"></div>
-      <div v-show="contentAna" :style="{height:ContentHeightList,overflowY:'scroll'}">
+      <div :style="{width:contentAnaWidth}">
+      <!-- <div :style="{minWidth:leftMenu}"></div> -->
+      <div v-show="contentAna" :style="{height:ContentHeightList,overflowY:'scroll',position:'relative',left:'280px'}">
         <div class="docMenu" :style="{display:'flex',width:'90%',height:'30px',lineHeight:'30px',justifyContent: 'flex-end'}">
           <RadioGroup v-model="changeBar" @on-change='changeShow'>
             <Radio label="词云"></Radio>
@@ -188,27 +188,31 @@
           </div>
           
         </div>
-        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',width:'100%'}">
-          <div class="topItem" :style="{border:'1px solid #336666',order:orderCount}"
+        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',width:'100%',padding:'5px 0px 5px 5px'}">
+          <div class="topItem" 
+          :style="{border:'1px solid #336666',order:orderCount,width:topWidth,height:topHeight,display:'flex',flexDirection:'column'}"
           v-for="(list,index) in topicDatas" :key="index">
             <div class="itemHeader" 
             :style="{display:'flex',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-between'}">
               <p :style="{marginLeft:'10px'}">普京：美国...(10)</p>
-              <div :style="{marginLeft:'10px'}">
+              <div>
                 <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
-                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12"></Icon>
+                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
               </div>
             </div>
-            <div class="topicItem" v-show="ifTopic"
-            :style="{display:'flex',justifyContent:'space-between',margin:'10px',color:'#fff'}" 
-            v-for="(item,ind) in list[0].topic" :key="ind">
-              <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
-              <p :style="{fontSize:'12px',flex:'1',marginLeft:'5px'}">{{item.name}}</p>
-              <p :style="{fontSize:'12px'}">{{item.num}}</p>
+            <div v-show="ifTopic" :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
+              <div class="topicItem" 
+              :style="{display:'flex',justifyContent:'space-around',padding:'0px 5px 0px 5px',color:'#fff'}" 
+              v-for="(item,ind) in list[0].topic" :key="ind">
+                <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
+                <p :style="{fontSize:'12px',flex:'1',marginLeft:'5px'}">{{item.name}}</p>
+                <p :style="{fontSize:'12px'}">{{item.num}}</p>
+              </div>
             </div>
-            <div :id='index+"wordChart"' v-show="!ifTopic" :style="{width:'180px',height:'310px'}">
-
+            <div  v-show="!ifTopic">
+              <div :id='index+"wordChart"'></div>
             </div>
+            
           </div>
           
         </div>
@@ -251,7 +255,7 @@
     data() {
       return {
         // itemWidth:"20%",
-        leftMenu:'290px',
+        leftMenu:'280px',
         option:new Object({
           title:{
             name:'keyWords分析',
@@ -386,19 +390,9 @@
             {name:'telangpu',num:2},
             ]},
             {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
+            
+            
+            
         ],
         changeBar:'热词排序',
         orderCount:0,
@@ -411,12 +405,10 @@
         prevKup:null,
         keyCount:0,
         isSel:null,
-        
-        WCheight:0,
-        WCWidth:0,
-        docWidth:0,
-        barWidth:0,
-        barHeight:0,
+        itemWidth:0,
+        itemHeight:0,
+        topWidth:0,
+        topHeight:0,
         contentAnaWidth:0,
         prevItems:[],
         mouseStartX:0,
@@ -640,16 +632,7 @@
       'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes'
     ]),
     watch: {
-      topicDatas:function(){
-        var mthis = this;
-        if(mthis.topicDatas.length>0){
-          mthis.itemWidth = (100 / (mthis.topicDatas.length)) + '%';
-          console.log(1111)
-        }else{
-          mthis.itemWidth = '100%'
-        }
-        
-      },
+     
       contentTimeOnlySel:function(){
         if(this.contentTimeOnlySel){
           this.selectAll()
@@ -895,6 +878,7 @@
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
         mthis.ContentHeightList = mthis.$store.state.contentHeight - 75 + 22 + 'px';
+        console.log(mthis.ContentHeightList)
       },
       ContentHeightList: function() {
         var mthis = this;
@@ -923,6 +907,11 @@
         }else{
           mthis.ifTopic = true;
         }
+      },
+      delTopData(index){
+        console.log(index)
+        this.topicDatas.splice(index,1)
+        this.wordResize(this.topicDatas.length)
       },
       toTop(index){
         var div = document.getElementsByClassName('topItem')[index];
@@ -1977,20 +1966,51 @@
           // });
         }
       },
-      
+      wordResize(len){
+        var mthis = this;
+        if(len>6){
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
+          console.log(mthis.itemWidth)
+          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
+        }else if(len>1 && len <6){
+          mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
+          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+        }else if(len ==6){
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
+          console.log(mthis.itemWidth)
+          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+        }else if(len==1){
+          mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
+          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+        }
+      },
       showContentAna(){
         var mthis = this
         mthis.contentAna = true
         var charts = [];
         var options = [];
-        var myWordCharts = []
+        var myWordCharts = [];
+        let len = mthis.topicDatas.length;
+        mthis.wordResize(len)
+        
         for(var i=0;i<mthis.topicDatas.length;i++){
           charts.push(i+'wordChart');
           myWordCharts.push(i+'myChart');
           options.push(mthis.option);
         }
         for(var j=0;j<myWordCharts.length;j++){
-          myWordCharts[j] = echarts.init(document.getElementById(charts[j]));
+          myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          });
           myWordCharts[j].setOption(options[j]);
         }
         
@@ -2028,6 +2048,9 @@
         })
         
       },
+      risize(){
+        
+      },
       /* printer(text,contentid,pointerid){ 
           var l = text.length;
           var t = 0;
@@ -2063,14 +2086,15 @@
     },
     mounted() {
       var mthis = this
-      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 27 - 200 + 'px'
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px'
+      console.log(mthis.contentAnaWidth)
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
       console.log(wwWidth)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
-     
+      console.log(mthis.ContentHeight)
       
       // let divBox = document.getElementById('contentchart')
       // console.log(window.getComputedStyle(divBox,null).width)
@@ -2586,7 +2610,8 @@
   }
   .topItem{
     border:'1px solid #336666';
-    margin:5px 0px 5px 5px;
+    margin:0px 0px 5px 4px;
+    
     font-family: MicrosoftYaHei;
   }
   .topItem .itemHeader{
