@@ -84,7 +84,7 @@
 
 <template>
   <div :class="pickdown?'openHub':'closeHub'" id='operatorHub'>
-    <div class='Hubimg pick' @click="pickdown = !pickdown"></div>
+    <div class='Hubimg pick' @click="clickHub"></div>  <!-- pickdown = !pickdown -->
     <Drawer class="drawer" placement="left" width="280" :mask="false" v-if="pickdown"  :closable="false" v-model="pickdown" :inner="true" :transfer="false">
       <div slot='header' class="header">
         <Row class="hubName" v-if='header.isHub'>
@@ -128,6 +128,11 @@ import operator from "./custom_operator.vue"
         },
         props:['operatorConfig'],
         methods:{
+          clickHub(){
+            var mthis = this;
+            mthis.pickdown = !mthis.pickdown;
+            mthis.$$emit('isOpen',mthis.pickdown)
+          },
           selectOperator(name){
             var mthis = this;
             debugger

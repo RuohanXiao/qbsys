@@ -90,7 +90,7 @@
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
-        <operatorHub :style="{height:ContentHeightList}" :operatorConfig="operatorConfig"></operatorHub>
+        <operatorHub :style="{height:ContentHeightList}" :operatorConfig="operatorConfig" @isOpen="clickHub"></operatorHub>
         <div v-show="!showList && !contentAna">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !contentAna' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
@@ -897,6 +897,10 @@
     },
     props: ['contentData'],
     methods: {
+      clickHub(isOpen){
+        var mthis = this;
+        
+      },
       changeShow(newValue){
         var mthis = this
         console.log(newValue)
