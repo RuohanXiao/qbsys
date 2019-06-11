@@ -164,25 +164,25 @@
         </div>
       </div>
       <!-- 词云分析图 -->
-      <div :style="{width:contentAnaWidth}">
+      <div>
       <!-- <div :style="{minWidth:leftMenu}"></div> -->
-      <div v-show="contentAna" :style="{height:ContentHeightList,overflowY:'scroll',position:'relative',left:'280px'}">
+      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'280px'}">
         <div class="docMenu" :style="{display:'flex',width:'90%',height:'30px',lineHeight:'30px',justifyContent: 'flex-end'}">
           <RadioGroup v-model="changeBar" @on-change='changeShow'>
             <Radio label="词云"></Radio>
             <Radio label="热词排序"></Radio>
           </RadioGroup>
           <div :style="{marginLeft:'10px'}">
-            <Dropdown>
+            <Dropdown  @on-click='changeDrop'>
               <a href="javascript:void(0)">
                   全部词性
                   <Icon type="ios-arrow-down"></Icon>
               </a>
               <DropdownMenu slot="list">
-                  <DropdownItem>动词</DropdownItem>
-                  <DropdownItem>名词</DropdownItem>
-                  <DropdownItem>人名</DropdownItem>
-                  <DropdownItem>地名</DropdownItem>
+                  <DropdownItem name='verb'>动词</DropdownItem>
+                  <DropdownItem name='noun'>名词</DropdownItem>
+                  <DropdownItem name='names'>人名</DropdownItem>
+                  <DropdownItem name='location'>地名</DropdownItem>
               </DropdownMenu>
           </Dropdown>
           </div>
@@ -203,7 +203,7 @@
             <div v-show="ifTopic" :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
               <div class="topicItem" 
               :style="{display:'flex',justifyContent:'space-around',padding:'0px 5px 0px 5px',color:'#fff'}" 
-              v-for="(item,ind) in list[0].topic" :key="ind">
+              v-for="(item,ind) in list.topDatas" :key="ind">
                 <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
                 <p :style="{fontSize:'12px',flex:'1',marginLeft:'5px'}">{{item.name}}</p>
                 <p :style="{fontSize:'12px'}">{{item.num}}</p>
@@ -299,100 +299,38 @@
         ifTopic:true,
         wordCloudOption:null,
         topicDatas:[
-          [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            
-            
-            
+          {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20}]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]}
         ],
         changeBar:'热词排序',
         orderCount:0,
@@ -564,27 +502,9 @@
                     name:'主题分析',
                     id:'topicClassification',
                     iconName:'icon-kongjianfenxi',
+                    openFunction:'opentopicClassif',
+                    closeFunction:'closetopicClassif',
                     operatorSurface:[
-                      {
-                        type:'docBar',
-                        title:'Venezuelan oil chief blames fire on opposition',
-                        id:'heatRadius',
-                        attrName:'id',
-                        time:'2019-02-20',
-                        from:'华盛顿邮报',
-                        excuteFunction:'changeOperatorDocIds',
-                        rightMenuConfig:[{
-                            'name': '单个文档分析',
-                            'iconClassName': 'icon-ren',
-                            'excuteFunction':'singleDocAnaly'
-                          },
-                          {
-                            'name': '合并分析',
-                            'iconClassName': 'icon-ren',
-                            'excuteFunction':'multiDocAnaly'
-                          }
-                        ]
-                      },
                       {
                           operatorType:'dynamic',
                           dynamicAttr:'seletedDocAttrList',
@@ -629,10 +549,18 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes','topicClassifStatus'
     ]),
     watch: {
-     
+      topicClassifStatus:function(){
+        var mthis = this;
+        if(mthis.topicClassifStatus){
+          mthis.showContentAna()
+        }else{
+          mthis.contentAna = false
+        }
+        
+      },
       contentTimeOnlySel:function(){
         if(this.contentTimeOnlySel){
           this.selectAll()
@@ -724,6 +652,15 @@
             );
             console.log(1)
             mthis.prevItems = mthis.deepClone(mthis.items)
+            let selDocList = mthis.items.filter(item => item.check)
+            selDocList = selDocList.map(item =>({
+                      title: item.title,      
+                      id: item.id,
+                      time: item.time,
+                      from: item.from,     
+                    })
+                  );
+            mthis.$store.commit('setSeletedDocAttrList',selDocList)
             
             for(let i=0;i<mthis.items.length;i++){
               selectIds.push(mthis.items[i].id)
@@ -756,6 +693,8 @@
               ids:[]
             }])
             mthis.prevItems = mthis.deepClone(mthis.items)
+            
+            mthis.$store.commit('setSeletedDocAttrList',[])
           }
           
           mthis.spinShow = false
@@ -858,6 +797,8 @@
             mthis.$store.commit('setContent2time',[{
               ids:[]
             }])
+            
+            mthis.$store.commit('setSeletedDocAttrList',[])
           } else {
             // mthis.showMore = false
             mthis.setMessage('未找到匹配的文章')
@@ -899,7 +840,17 @@
     methods: {
       clickHub(isOpen){
         var mthis = this;
-        
+        if(!mthis.contentAna) return;
+        var topicAnaly = document.getElementById('topicAnaly');
+        if(isOpen){
+          topicAnaly.style.left = '280px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px';
+          mthis.wordResize(mthis.topicDatas.length)
+        }else{
+          topicAnaly.style.left = '0px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20  + 'px';
+          mthis.wordResize(mthis.topicDatas.length)
+        }
       },
       changeShow(newValue){
         var mthis = this
@@ -911,6 +862,9 @@
         }else{
           mthis.ifTopic = true;
         }
+      },
+      changeDrop(name){
+        alert(name)
       },
       delTopData(index){
         console.log(index)
@@ -1122,6 +1076,15 @@
           mthis.$store.commit('setContent2time',[{
             ids:mthis.bruIds
           }])
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
           mthis.isBru = false;
         }
         
@@ -1159,6 +1122,15 @@
           mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
         },300)
         
         
@@ -1239,6 +1211,14 @@
             continue
           }
         }
+        let selDocList = mthis.items.filter(item => item.check)
+        selDocList = selDocList.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
        
         mthis.deleteButton = true
         mthis.analysisButton = true
@@ -1248,6 +1228,7 @@
         mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
           console.log(6)
         mthis.prevItems = mthis.deepClone(mthis.items)
         // let disselectDom = $('.contentDiv:not(.item-selected)')
@@ -1284,6 +1265,7 @@
           mthis.$store.commit('setContent2time',[{
             ids:[]
           }])
+          mthis.$store.commit('setSeletedDocAttrList',[])
         }else{
           mthis.setMessage("请选择至少一篇文章")
         }
@@ -1600,10 +1582,19 @@
                 ids:[]
               }])
             }else{
-              return
+              
             }
           }
         }
+        let selDocList = mthis.items.filter(item => item.check)
+        selDocList = selDocList.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
         mthis.prevItems = mthis.deepClone(mthis.items)
       },
       fanxuan() {
@@ -1624,6 +1615,15 @@
         mthis.$store.commit('setContent2time',[{
             ids:selectList
           }])
+        let selDocList = []
+        selDocList = selectContent.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
       },
       removeAll() {
         
@@ -1637,6 +1637,7 @@
         this.$store.commit('setContent2time',[{
             ids:[]
           }])
+        this.$store.commit('setSelectContentNodes',[])
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({

@@ -437,14 +437,19 @@ var store = new Vuex.Store({
         displayHeatMap:false,
         topicClassifIds:[],
         seletedDocAttrList:[
-            {
-            title:'Venezuelan oil chief blames fire on opposition',
-            id:'heatRadius',
-            time:'2019-02-20',
-            from:'华盛顿邮报'}
-        ]
+            // {
+            // title:'Venezuelan oil chief blames fire on opposition',
+            // id:'heatRadius',
+            // time:'2019-02-20',
+            // from:'华盛顿邮报'}
+        ],
+        // 文档模块主题分析算子打开关闭标志
+        topicClassifStatus:false
     },
     mutations: {
+        setSeletedDocAttrList(state,val){
+            state.seletedDocAttrList = val
+        },
         setDelSetData(state, val) {
             state.delSetData = val
         },
@@ -730,8 +735,11 @@ var store = new Vuex.Store({
             debugger
             var index = util.itemIndexInArr(id,state.topicClassifIds);
             if(index !== -1){
-                state.topicClassifIds.slice(index,1)
+                state.topicClassifIds.splice(index,1)
             }
+        },
+        changetopicClassifStatus(state,status){
+            state.topicClassifStatus = status;
         }
     },
     getters: {
@@ -809,11 +817,18 @@ var store = new Vuex.Store({
           }
       },
       singleDocAnaly(context){
+        //   topicClassifIds
           alert('单个文档分析');
       },
       multiDocAnaly(context){
         alert('合并分析');
-    },
+        },
+        opentopicClassif(context){
+            context.commit('changetopicClassifStatus',true);
+        },
+        closetopicClassif(context){
+            context.commit('changetopicClassifStatus',false);
+        }
     }
 });
 const router = new VueRouter(RouterConfig);

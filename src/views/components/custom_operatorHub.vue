@@ -131,7 +131,7 @@ import operator from "./custom_operator.vue"
           clickHub(){
             var mthis = this;
             mthis.pickdown = !mthis.pickdown;
-            mthis.$$emit('isOpen',mthis.pickdown)
+            mthis.$emit('isOpen',mthis.pickdown)
           },
           selectOperator(name){
             var mthis = this;
