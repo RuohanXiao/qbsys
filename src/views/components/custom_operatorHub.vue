@@ -1,23 +1,23 @@
 <style>
 .closeHub{
     position: absolute;
-    z-index: 10;
+    z-index: 1000;
     /* width: 220px;
     overflow-y: scroll; */
 }
 .openHub{
   position: absolute;
-  z-index: 10;
+  z-index: 1000;
   width: 310px;
   overflow-y: scroll;
 }
 .openHub .pick{
   background-image: url('../../dist/assets/images/close_before.png');
-  margin-left:200px;
+  margin-left:280px;
 }
 .openHub .pick:hover{
   background-image: url('../../dist/assets/images/close_after.png');
-  margin-left:200px;
+  margin-left:280px;
 }
 .closeHub .pick{
   background-image: url('../../dist/assets/images/open_before.png')
