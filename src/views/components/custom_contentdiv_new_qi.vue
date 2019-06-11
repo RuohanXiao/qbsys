@@ -454,7 +454,7 @@
               })
               
             );
-            console.log(1)
+            // console.log(1)
             mthis.prevItems = mthis.deepClone(mthis.items)
             
             for(let i=0;i<mthis.items.length;i++){
@@ -480,7 +480,7 @@
                 check:false
               })
             );
-            console.log(2)
+            // console.log(2)
             mthis.$store.commit('setSelectContentNodes', [{
               ids: []
             }])
@@ -504,14 +504,14 @@
         handler(newValue){
            var mthis = this
            if(mthis.contentTimeCondition.type == 'cancel'){
-              console.log(3)
-              console.log(mthis.prevItems)
+              // console.log(3)
+              // console.log(mthis.prevItems)
               mthis.items =  mthis.deepClone(mthis.prevItems)
             }
             if(mthis.contentTimeCondition.type == 'sel'){
               
               if(mthis.contentTimeCondition.ids.length ==0){
-                console.log(4)
+                // console.log(4)
                 mthis.items = mthis.deepClone(mthis.prevItems)
               }
               if(mthis.contentTimeCondition.ids.length>0){
@@ -542,8 +542,8 @@
         mthis.page = 1
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
-        console.log('sousuosousuo')
-        console.log(va)
+        // console.log('sousuosousuo')
+        // console.log(va)
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
@@ -563,7 +563,7 @@
                 check:false
               })
             );
-            console.log(5)
+            // console.log(5)
             mthis.prevItems = mthis.deepClone(mthis.items)
             
             if(response.body.data.length ==30){
@@ -954,7 +954,7 @@
         mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
-          console.log(6)
+          // console.log(6)
         mthis.prevItems = mthis.deepClone(mthis.items)
         // let disselectDom = $('.contentDiv:not(.item-selected)')
         // disselectDom.addClass('item-selected')
@@ -1569,7 +1569,7 @@
                 // $('.item-selected').removeClass('item-selected')
                 
                 mthis.items = mthis.items.concat(nowItems)
-                console.log(7)
+                // console.log(7)
                 mthis.prevItems = mthis.deepClone(mthis.items)
               } else {
                 

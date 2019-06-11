@@ -1393,9 +1393,9 @@
                             mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
                         }
                         if (response.body.data[0].unknown !== new Object()) {
-                            // // console.log('------------有未知类型的节点--------------------')
-                            // // console.log(response.body.data[0].unknown)
-                            // // console.log('-----------------------------------------------')
+                            // // // console.log('------------有未知类型的节点--------------------')
+                            // // // console.log(response.body.data[0].unknown)
+                            // // // console.log('-----------------------------------------------')
                         }
                         mthis.spinWaiting = false
                     })
@@ -1437,14 +1437,14 @@
             },
             addSingleNodeToCanvans(id, type, subType) {
                 // ;
-                // console.log('this.tableData')
-                // console.log(this.tableData)
+                // // console.log('this.tableData')
+                // // console.log(this.tableData)
                 var mthis = this
                 if (type === 'entity') {
                     mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
                         "nodeIds": id
                     }).then(response => {
-                        // console.log(response)
+                        // // console.log(response)
                         let nodeArr = response.body.data[0].nodes.map(it => {
                             it.img = util.checkImgExists(it.img) ? (it.img) : 'http://10.60.1.140/assets/images/People.png'
                             return it.id
@@ -1462,7 +1462,7 @@
                     mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
                         "EventIds": id
                     }).then(response => {
-                        // console.log('response.body.data')
+                        // // console.log('response.body.data')
                         let nodes = new Array();
                         let links = new Array();
                         if (response.body.code === 0) {
@@ -1534,8 +1534,8 @@
         },
         watch: {
             tableData: function() {
-                // // console.log('===========custom_event_humanEntityTable --------tableData')
-                // // console.log(this.tableData)
+                // // // console.log('===========custom_event_humanEntityTable --------tableData')
+                // // // console.log(this.tableData)
                 let mthis = this
                 mthis.spinWaiting = true
                 mthis.xiangguanEntityItems = new Array()
@@ -1595,9 +1595,9 @@
                                 mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
                             }
                             if (response.body.data[0].unknown !== new Object()) {
-                                // // console.log('------------有未知类型的节点--------------------')
-                                // // console.log(response.body.data[0].unknown)
-                                // // console.log('-----------------------------------------------')
+                                // // // console.log('------------有未知类型的节点--------------------')
+                                // // // console.log(response.body.data[0].unknown)
+                                // // // console.log('-----------------------------------------------')
                             }
                         })
                     }

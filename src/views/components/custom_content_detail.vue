@@ -125,7 +125,7 @@ import {
     props: ['contentDivH'],
     // created(){
     //     let mthis = this
-    //     console.log(this.contentSelData)
+    //     // console.log(this.contentSelData)
     //     mthis.xiangguanEntityItems = new Array()
     //     mthis.xiangguanEntitys = new Object()
     //     mthis.xiangguanEvent = new Array()
@@ -233,7 +233,7 @@ import {
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds":id
           }).then(response => {
-            // console.log('response.body.data')
+            // // console.log('response.body.data')
             let nodes = new Array();
             let links = new Array();
             if(response.body.code === 0) {
@@ -307,7 +307,7 @@ import {
     computed: mapState(['contentSelData']),
     watch: {
       // tableData: function() {
-      //   // // console.log('===========custom_event_humanEntityTable --------tableData')
+      //   // // // console.log('===========custom_event_humanEntityTable --------tableData')
       //   let mthis = this
       //   mthis.spinWaiting = true
       //   mthis.xiangguanEntityItems = new Array()
@@ -359,9 +359,9 @@ import {
       //         mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
       //       }
       //       if (response.body.data[0].unknown !== new Object()) {
-      //         // // console.log('------------有未知类型的节点--------------------')
-      //         // // console.log(response.body.data[0].unknown)
-      //         // // console.log('-----------------------------------------------')
+      //         // // // console.log('------------有未知类型的节点--------------------')
+      //         // // // console.log(response.body.data[0].unknown)
+      //         // // // console.log('-----------------------------------------------')
       //       }
       //     })
       //   }
@@ -370,9 +370,9 @@ import {
       contentSelData:function(){
         
         var mthis = this
-        console.log("dbdbdbdbdbddbclickclickclick")
-        console.log(this.contentSelData.id)
-        console.log(this.contentSelData.title)
+        // console.log("dbdbdbdbdbddbclickclickclick")
+        // console.log(this.contentSelData.id)
+        // console.log(this.contentSelData.title)
         if(this.contentSelData.id.length>0){
 
         
@@ -390,7 +390,7 @@ import {
             // "NodeTypes":["document"],
             "TypeLabel": "all"
           }).then(response =>{
-           console.log(response)
+           // console.log(response)
             if(response.body.code ==0){
               if(response.body.data[0].RelatedEntity[mthis.contentSelData.id]){
                   mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.contentSelData.id].nodes;

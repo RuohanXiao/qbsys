@@ -567,12 +567,12 @@ export default {
                         }
                     });
                 } */
-                console.log('mthis.worksetData----------')
-                console.log(mthis.worksetData)
+                // console.log('mthis.worksetData----------')
+                // console.log(mthis.worksetData)
             }
             this.worksetType = "add";
             this.worksetFlag = this.worksetFlag + 1;
-            // // console.log(this.worksetData)
+            // // // console.log(this.worksetData)
         },
         heatMap_cilck(){
             var mthis = this
@@ -3823,8 +3823,8 @@ export default {
             mthis.HLIds = mthis.geometrySelectedEventIds;
             mthis.SelectedIds = mthis.geometrySelectedEventIds;
             var selectedEventsParam = mthis.geometrySelectedEventIds
-            console.log('============setGeoOnlyselectedParam3==================')
-            console.log(selectedEventsParam)
+            // console.log('============setGeoOnlyselectedParam3==================')
+            // console.log(selectedEventsParam)
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
             //mthis.HLIds = mthis.geometrySelectedEventIds
         },
