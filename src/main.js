@@ -168,6 +168,7 @@ import element from 'element-ui';
 import VueResource from 'vue-resource'
 // import infiniteScroll from 'v-infinite-scroll'
 import InfiniteLoading from 'vue-infinite-loading';
+import util from './util/tools.js'
 Vue.use(InfiniteLoading);
 Vue.use(VueResource);
 //   Vue.component(Select.name, Select)
@@ -433,9 +434,22 @@ var store = new Vuex.Store({
         },
         heatMapRadius:20,
         heatMapBlur:20,
-        displayHeatMap:false
+        displayHeatMap:false,
+        topicClassifIds:[],
+        seletedDocAttrList:[
+            // {
+            // title:'Venezuelan oil chief blames fire on opposition',
+            // id:'heatRadius',
+            // time:'2019-02-20',
+            // from:'华盛顿邮报'}
+        ],
+        // 文档模块主题分析算子打开关闭标志
+        topicClassifStatus:false
     },
     mutations: {
+        setSeletedDocAttrList(state,val){
+            state.seletedDocAttrList = val
+        },
         setDelSetData(state, val) {
             state.delSetData = val
         },
@@ -712,6 +726,20 @@ var store = new Vuex.Store({
         },
         hideHeatMap(state){
           state.displayHeatMap = false;
+        },
+        addDocIdsToList(state,id){
+            debugger
+            state.topicClassifIds.push(id);
+        },
+        removeDocIdsToList(state,id){
+            debugger
+            var index = util.itemIndexInArr(id,state.topicClassifIds);
+            if(index !== -1){
+                state.topicClassifIds.splice(index,1)
+            }
+        },
+        changetopicClassifStatus(state,status){
+            state.topicClassifStatus = status;
         }
     },
     getters: {
@@ -778,7 +806,29 @@ var store = new Vuex.Store({
       },
       closeHeat(context){
         context.commit('hideHeatMap');
-      }
+      },
+      changeOperatorDocIds(context,value){
+          var excute = value.excute;
+          var id = value.id;
+          if(excute === 'add'){
+            context.commit('addDocIdsToList',id);
+          } else {
+            context.commit('removeDocIdsToList',id);
+          }
+      },
+      singleDocAnaly(context){
+        //   topicClassifIds
+          alert('单个文档分析');
+      },
+      multiDocAnaly(context){
+        alert('合并分析');
+        },
+        opentopicClassif(context){
+            context.commit('changetopicClassifStatus',true);
+        },
+        closetopicClassif(context){
+            context.commit('changetopicClassifStatus',false);
+        }
     }
 });
 const router = new VueRouter(RouterConfig);

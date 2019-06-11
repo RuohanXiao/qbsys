@@ -8,16 +8,16 @@
 .openHub{
   position: absolute;
   z-index: 1000;
-  width: 230px;
+  width: 310px;
   overflow-y: scroll;
 }
 .openHub .pick{
   background-image: url('../../dist/assets/images/close_before.png');
-  margin-left:200px;
+  margin-left:280px;
 }
 .openHub .pick:hover{
   background-image: url('../../dist/assets/images/close_after.png');
-  margin-left:200px;
+  margin-left:280px;
 }
 .closeHub .pick{
   background-image: url('../../dist/assets/images/open_before.png')
@@ -61,6 +61,7 @@
 	font-stretch: normal;
 	letter-spacing: 0px;
 	color: #ccffff;
+  text-align: center;
 }
 .hubName{
   height:20px !important;
@@ -69,7 +70,10 @@
   display: inline;
   height:20px
 }
-
+.cancelImg{
+  position: absolute;
+  right: 0px;
+}
 .operHeaderName img{
   opacity: 0.4;
 }
@@ -80,26 +84,29 @@
 
 <template>
   <div :class="pickdown?'openHub':'closeHub'" id='operatorHub'>
-    <div class='Hubimg pick' @click="pickdown = !pickdown"></div>
-    <Drawer class="drawer" placement="left" width="200" :mask="false" v-if="pickdown"  :closable="false" v-model="pickdown" :inner="true" :transfer="false">
+    <div class='Hubimg pick' @click="clickHub"></div>  <!-- pickdown = !pickdown -->
+    <Drawer class="drawer" placement="left" width="280" :mask="false" v-if="pickdown"  :closable="false" v-model="pickdown" :inner="true" :transfer="false">
       <div slot='header' class="header">
         <Row class="hubName" v-if='header.isHub'>
               <Col span="24">{{header.title}}</Col>
         </Row>
         <Row v-else class="operHeaderName" type="flex" justify="center" align="middle">
-              <Col span="9"><img :src="require('../../dist/assets/images/back.png')" @click="cancelOperator" /></Col>
-              <Col span="15"><span>{{header.operatorName}}</span></Col>
+              <Col span="24">
+                <span>{{header.operatorName}}</span>
+                <img class='cancelImg' :src="require('../../dist/assets/images/back.png')" @click="cancelOperator" />
+              </Col>
+              <!-- <Col span="9"><img :src="require('../../dist/assets/images/back.png')" @click="cancelOperator" /></Col> -->
         </Row>
       </div>
       <CellGroup @on-click="selectOperator" v-if='header.isHub'>
-          <Cell :name="config.id" v-for="config in operatorConfig" class="operatorItem" >
+          <Cell :name="config.id" v-for="config in operatorConfig" class="operatorItem" :disabled="config.disabled===undefined||config.disabled===false?false:true">
             <Row>
               <Col span="5"><Icon :class="'icon iconfont '+config.iconName"/></Col>
               <Col span="19">{{config.name}}</Col>
             </Row>
           </Cell>
       </CellGroup>
-      <operator :operator='operatorParams'></operator>
+      <operator :operator='operatorParams' v-if="!header.isHub"></operator>
     </Drawer>
   </div>
 </template>
@@ -116,40 +123,16 @@ import operator from "./custom_operator.vue"
                   closeFunction:''
                 },
                 operatorParams:[],
-                operatorConfig:[
-                  {
-                    name:'热力图',
-                    id:'heatMap',
-                    iconName:'icon-kongjianfenxi',
-                    openFunction:'openHeat',
-                    closeFunction:'closeHeat',
-                    operatorSurface:[
-                      {
-                        name:'半径大小',
-                        id:'heatRadius',
-                        type:'Slider',
-                        attrName:'radius',
-                        executeFunction:'setHeatMapRadius',
-                        value:{
-                          extent:[1,50],
-                          defaultValue:20
-                        }
-                      },{
-                        name:'热力模糊度',
-                        id:'heatBlur',
-                        type:'Slider',
-                        attrName:'blur',
-                        executeFunction:'setHeatMapBlur',
-                        value:{
-                          extent:[1,50],
-                          defaultValue:20
-                        }
-                      }
-                    ]}
-                ]
+                
             }
         },
+        props:['operatorConfig'],
         methods:{
+          clickHub(){
+            var mthis = this;
+            mthis.pickdown = !mthis.pickdown;
+            mthis.$emit('isOpen',mthis.pickdown)
+          },
           selectOperator(name){
             var mthis = this;
             debugger
@@ -164,6 +147,9 @@ import operator from "./custom_operator.vue"
                 operName = config.name;
                 openFunction = config.openFunction;
                 closeFunction = config.closeFunction;
+                if(config.disabled === true){
+                  return
+                }
                 break;
               }
             }

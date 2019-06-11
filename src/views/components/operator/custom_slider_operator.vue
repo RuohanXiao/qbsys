@@ -24,8 +24,8 @@
                   attrName:mthis.sliderParams.attrName,
                   value:mthis.value,
               }
-              if(mthis.sliderParams.executeFunction !== undefined){
-                  param.executeFunction = mthis.sliderParams.executeFunction
+              if(mthis.sliderParams.excuteFunction !== undefined){
+                  param.excuteFunction = mthis.sliderParams.excuteFunction
               }
               mthis.$emit('param',param)
           }

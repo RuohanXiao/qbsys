@@ -189,7 +189,7 @@ top: 232px;
                         <input id="blur" type="range" min="1" max="50" step="1" value="15" @input='setBlur()'/>
                     </form>
                 </div>
-                <operatorHub :style="{height:mapHeight}"></operatorHub>
+                <operatorHub :style="{height:mapHeight}" :operatorConfig="operatorConfig"></operatorHub>
             </div>
             
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
@@ -368,7 +368,51 @@ export default {
                 'layerId':'OrgLayer',
                 'paramAttrs':['id','OrgName']
             }
-        }
+        },
+        operatorConfig:[
+                {
+                    name:'热力分析',
+                    id:'heatMap',
+                    iconName:'icon-kongjianfenxi',
+                    openFunction:'openHeat',
+                    closeFunction:'closeHeat',
+                    operatorSurface:[
+                      {
+                        name:'半径大小',
+                        id:'heatRadius',
+                        type:'Slider',
+                        attrName:'radius',
+                        excuteFunction:'setHeatMapRadius',
+                        value:{
+                          extent:[1,50],
+                          defaultValue:20
+                        }
+                      },{
+                        name:'热力模糊度',
+                        id:'heatBlur',
+                        type:'Slider',
+                        attrName:'blur',
+                        excuteFunction:'setHeatMapBlur',
+                        value:{
+                          extent:[1,50],
+                          defaultValue:20
+                        }
+                      }
+                    ]
+                },
+                {
+                name:'图层处理',
+                id:'layerHandle',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                },
+                {
+                name:'轨迹分析',
+                id:'locusAnalyse',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                }
+        ]
       } 
     },
     mounted() {

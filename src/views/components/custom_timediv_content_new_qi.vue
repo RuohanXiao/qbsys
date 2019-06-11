@@ -364,6 +364,8 @@
               type: "slider",
               start: 10,
               end: 80,
+              height:20,
+              top:90,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,

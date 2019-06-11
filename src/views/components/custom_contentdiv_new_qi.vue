@@ -90,7 +90,8 @@
     </div>
     <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
-        <div v-show="!showList">
+        <operatorHub :style="{height:ContentHeightList}" :operatorConfig="operatorConfig" @isOpen="clickHub"></operatorHub>
+        <div v-show="!showList && !contentAna">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !contentAna' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow">
@@ -157,17 +158,69 @@
         </div>
       </div>
       <!-- 列表图 -->
-      <div>
+      <div id="barList">
         <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
           <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
-      
-    </div>
-    <!-- 词云分析图 -->
-      <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around'}">
-
+      <!-- 词云分析图 -->
+      <div>
+      <!-- <div :style="{minWidth:leftMenu}"></div> -->
+      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'280px'}">
+        <div class="docMenu" :style="{display:'flex',width:'90%',height:'30px',lineHeight:'30px',justifyContent: 'flex-end'}">
+          <RadioGroup v-model="changeBar" @on-change='changeShow'>
+            <Radio label="词云"></Radio>
+            <Radio label="热词排序"></Radio>
+          </RadioGroup>
+          <div :style="{marginLeft:'10px'}">
+            <Dropdown  @on-click='changeDrop'>
+              <a href="javascript:void(0)">
+                  全部词性
+                  <Icon type="ios-arrow-down"></Icon>
+              </a>
+              <DropdownMenu slot="list">
+                  <DropdownItem name='verb'>动词</DropdownItem>
+                  <DropdownItem name='noun'>名词</DropdownItem>
+                  <DropdownItem name='names'>人名</DropdownItem>
+                  <DropdownItem name='location'>地名</DropdownItem>
+              </DropdownMenu>
+          </Dropdown>
+          </div>
+          
+        </div>
+        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',width:'100%',padding:'5px 0px 5px 5px'}">
+          <div class="topItem" 
+          :style="{border:'1px solid #336666',order:orderCount,width:topWidth,height:topHeight,display:'flex',flexDirection:'column'}"
+          v-for="(list,index) in topicDatas" :key="index">
+            <div class="itemHeader" 
+            :style="{display:'flex',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-between'}">
+              <p :style="{marginLeft:'10px'}">普京：美国...(10)</p>
+              <div>
+                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
+                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
+              </div>
+            </div>
+            <div v-show="ifTopic" :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
+              <div class="topicItem" 
+              :style="{display:'flex',justifyContent:'space-around',padding:'0px 5px 0px 5px',color:'#fff'}" 
+              v-for="(item,ind) in list.topDatas" :key="ind">
+                <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
+                <p :style="{fontSize:'12px',flex:'1',marginLeft:'5px'}">{{item.name}}</p>
+                <p :style="{fontSize:'12px'}">{{item.num}}</p>
+              </div>
+            </div>
+            <div  v-show="!ifTopic">
+              <div :id='index+"wordChart"'></div>
+            </div>
+            
+          </div>
+          
+        </div>
+        
       </div>
+      </div>
+    </div>
+    
     <!-- </Col> -->
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
@@ -184,6 +237,7 @@
   import worksetModal from "./custom_workSet_modal.vue";
   import echarts from 'echarts';
   import $ from "jquery";
+  import operatorHub from "./custom_operatorHub.vue"
   import {
     mapState,
     mapMutations
@@ -200,6 +254,86 @@
     name: "App",
     data() {
       return {
+        // itemWidth:"20%",
+        leftMenu:'280px',
+        option:new Object({
+          title:{
+            name:'keyWords分析',
+            x:'center',
+            textStyle:{
+              fontSize:12,
+              color:'#ffffff'
+            }
+          },
+          tooltip: {
+ 			        show: true
+           },
+           series: [{
+ 			        name: 'keyWords分析',
+ 			        type: 'wordCloud',
+ 			        sizeRange: [10, 18],
+ 			        rotationRange: [0, 0],
+ 			        textPadding: 0,
+ 			        autoSize: {
+ 			            enable: true,
+ 			            minSize: 10
+ 			        },
+ 			        textStyle: {
+ 			            normal: {
+ 			                color: function() {
+ 			                    return 'rgb(' + [
+ 			                        Math.round(Math.random() * 160),
+ 			                        Math.round(Math.random() * 160),
+ 			                        Math.round(Math.random() * 160)
+ 			                    ].join(',') + ')';
+ 			                }
+ 			            },
+ 			            emphasis: {
+ 			                shadowBlur: 10,
+ 			                shadowColor: '#333'
+ 			            }
+               },
+               data:[{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},]
+ 			 	  }]
+        }),
+        ifTopic:true,
+        wordCloudOption:null,
+        topicDatas:[
+          {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20}]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]}
+        ],
+        changeBar:'热词排序',
+        orderCount:0,
         ifhasDoc:false,
         isBru:false,
         bruIds:[],
@@ -209,12 +343,10 @@
         prevKup:null,
         keyCount:0,
         isSel:null,
-        
-        WCheight:0,
-        WCWidth:0,
-        docWidth:0,
-        barWidth:0,
-        barHeight:0,
+        itemWidth:0,
+        itemHeight:0,
+        topWidth:0,
+        topHeight:0,
         contentAnaWidth:0,
         prevItems:[],
         mouseStartX:0,
@@ -358,13 +490,77 @@
             text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
             entity: 'Trump',
           }
+        ],
+        operatorConfig:[
+                {
+                  name:'文档聚类',
+                  id:'docCluster',
+                  iconName:'icon-kongjianfenxi',
+                  disabled:true
+                },
+                {
+                    name:'主题分析',
+                    id:'topicClassification',
+                    iconName:'icon-kongjianfenxi',
+                    openFunction:'opentopicClassif',
+                    closeFunction:'closetopicClassif',
+                    operatorSurface:[
+                      {
+                          operatorType:'dynamic',
+                          dynamicAttr:'seletedDocAttrList',
+                          paramCompare:{
+                            'id':'id',
+                            'title':'title',
+                            'time':'time',
+                            'from':'from'
+                          },
+                          dispose:{
+                            type:'docBar',
+                            excuteFunction:'changeOperatorDocIds',
+                            attrName:'id',
+                            rightMenuConfig:[{
+                                'name': '单个文档分析',
+                                'iconClassName': 'icon-ren',
+                                'excuteFunction':'singleDocAnaly'
+                              },
+                              {
+                                'name': '合并分析',
+                                'iconClassName': 'icon-ren',
+                                'excuteFunction':'multiDocAnaly'
+                              }
+                            ]
+                          }
+                      },
+                    ]
+                },
+                {
+                name:'倾向性分析',
+                id:'sentimentAnalysis',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                },
+                {
+                name:'文档摘要',
+                id:'docSummary',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                }
         ]
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes','topicClassifStatus'
     ]),
     watch: {
+      topicClassifStatus:function(){
+        var mthis = this;
+        if(mthis.topicClassifStatus){
+          mthis.showContentAna()
+        }else{
+          mthis.contentAna = false
+        }
+        
+      },
       contentTimeOnlySel:function(){
         if(this.contentTimeOnlySel){
           this.selectAll()
@@ -456,6 +652,15 @@
             );
             // console.log(1)
             mthis.prevItems = mthis.deepClone(mthis.items)
+            let selDocList = mthis.items.filter(item => item.check)
+            selDocList = selDocList.map(item =>({
+                      title: item.title,      
+                      id: item.id,
+                      time: item.time,
+                      from: item.from,     
+                    })
+                  );
+            mthis.$store.commit('setSeletedDocAttrList',selDocList)
             
             for(let i=0;i<mthis.items.length;i++){
               selectIds.push(mthis.items[i].id)
@@ -488,6 +693,8 @@
               ids:[]
             }])
             mthis.prevItems = mthis.deepClone(mthis.items)
+            
+            mthis.$store.commit('setSeletedDocAttrList',[])
           }
           
           mthis.spinShow = false
@@ -590,6 +797,8 @@
             mthis.$store.commit('setContent2time',[{
               ids:[]
             }])
+            
+            mthis.$store.commit('setSeletedDocAttrList',[])
           } else {
             // mthis.showMore = false
             mthis.setMessage('未找到匹配的文章')
@@ -610,24 +819,63 @@
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
         mthis.ContentHeightList = mthis.$store.state.contentHeight - 75 + 22 + 'px';
+        console.log(mthis.ContentHeightList)
       },
       ContentHeightList: function() {
         var mthis = this;
         var Ele = document.getElementById('translatedDiv');
         var contentDiv = document.getElementById('contentInfo');
         
-        mthis.WCheight = (parseInt(mthis.ContentHeightList.split('px')[0]) - 45) + 'px'
-        mthis.barHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) /2 -0.8) + 'px'
+        // mthis.WCheight = (parseInt(mthis.ContentHeightList.split('px')[0]) - 45) + 'px'
+        // mthis.barHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) /2 -0.8) + 'px'
         if (Ele !== null) {
           Ele.style.height = mthis.ContentHeightList;
         }
       }
     },
     components: {
-      InfiniteLoading,modalChart,worksetModal
+      InfiniteLoading,modalChart,worksetModal,operatorHub
     },
     props: ['contentData'],
     methods: {
+      clickHub(isOpen){
+        var mthis = this;
+        if(!mthis.contentAna) return;
+        var topicAnaly = document.getElementById('topicAnaly');
+        if(isOpen){
+          topicAnaly.style.left = '280px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px';
+          mthis.wordResize(mthis.topicDatas.length)
+        }else{
+          topicAnaly.style.left = '0px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20  + 'px';
+          mthis.wordResize(mthis.topicDatas.length)
+        }
+      },
+      changeShow(newValue){
+        var mthis = this
+        console.log(newValue)
+        console.log(typeof newValue)
+        if(newValue == '词云'){
+          mthis.ifTopic = false;
+          
+        }else{
+          mthis.ifTopic = true;
+        }
+      },
+      changeDrop(name){
+        alert(name)
+      },
+      delTopData(index){
+        console.log(index)
+        this.topicDatas.splice(index,1)
+        this.wordResize(this.topicDatas.length)
+      },
+      toTop(index){
+        var div = document.getElementsByClassName('topItem')[index];
+        div.style.order = this.orderCount - 1;
+        
+      },
       deepClone(obj){
         let _obj = JSON.stringify(obj);
         let objClone = JSON.parse(_obj);
@@ -828,6 +1076,15 @@
           mthis.$store.commit('setContent2time',[{
             ids:mthis.bruIds
           }])
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
           mthis.isBru = false;
         }
         
@@ -865,6 +1122,15 @@
           mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
         },300)
         
         
@@ -945,6 +1211,14 @@
             continue
           }
         }
+        let selDocList = mthis.items.filter(item => item.check)
+        selDocList = selDocList.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
        
         mthis.deleteButton = true
         mthis.analysisButton = true
@@ -954,7 +1228,8 @@
         mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
-          // console.log(6)
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
+          console.log(6)
         mthis.prevItems = mthis.deepClone(mthis.items)
         // let disselectDom = $('.contentDiv:not(.item-selected)')
         // disselectDom.addClass('item-selected')
@@ -977,8 +1252,6 @@
           $(that).addClass('item-selected')
           mthis.watchSelectCounter++;
         }
-        
-        
       },
       
       deleteNode(){
@@ -992,6 +1265,7 @@
           mthis.$store.commit('setContent2time',[{
             ids:[]
           }])
+          mthis.$store.commit('setSeletedDocAttrList',[])
         }else{
           mthis.setMessage("请选择至少一篇文章")
         }
@@ -1308,10 +1582,19 @@
                 ids:[]
               }])
             }else{
-              return
+              
             }
           }
         }
+        let selDocList = mthis.items.filter(item => item.check)
+        selDocList = selDocList.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
         mthis.prevItems = mthis.deepClone(mthis.items)
       },
       fanxuan() {
@@ -1332,6 +1615,15 @@
         mthis.$store.commit('setContent2time',[{
             ids:selectList
           }])
+        let selDocList = []
+        selDocList = selectContent.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
       },
       removeAll() {
         
@@ -1345,6 +1637,7 @@
         this.$store.commit('setContent2time',[{
             ids:[]
           }])
+        this.$store.commit('setSelectContentNodes',[])
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
@@ -1678,10 +1971,53 @@
           // });
         }
       },
-      
+      wordResize(len){
+        var mthis = this;
+        if(len>6){
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
+          console.log(mthis.itemWidth)
+          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
+        }else if(len>1 && len <6){
+          mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
+          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+        }else if(len ==6){
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
+          console.log(mthis.itemWidth)
+          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+        }else if(len==1){
+          mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
+          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+        }
+      },
       showContentAna(){
         var mthis = this
+        mthis.contentAna = true
+        var charts = [];
+        var options = [];
+        var myWordCharts = [];
+        let len = mthis.topicDatas.length;
+        mthis.wordResize(len)
         
+        for(var i=0;i<mthis.topicDatas.length;i++){
+          charts.push(i+'wordChart');
+          myWordCharts.push(i+'myChart');
+          options.push(mthis.option);
+        }
+        for(var j=0;j<myWordCharts.length;j++){
+          myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          });
+          myWordCharts[j].setOption(options[j]);
+        }
         
       },
       showContent(id,title) {
@@ -1715,6 +2051,9 @@
           // mthis.dataexpand = response.body.data
           // mthis.singlePerson = (opt[1]>1)?false:true
         })
+        
+      },
+      risize(){
         
       },
       /* printer(text,contentid,pointerid){ 
@@ -1752,15 +2091,19 @@
     },
     mounted() {
       var mthis = this
-      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px'
+      console.log(mthis.contentAnaWidth)
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
-      mthis.WCWidth = wwWidth   + 'px'
-      mthis.docWidth = (wwWidth * 0.5) + 'px'
-      mthis.barWidth = (wwWidth - (parseInt(mthis.docWidth.split('px')[0]))) + 'px'
+      console.log(wwWidth)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
+      console.log(mthis.ContentHeight)
+      
+      // let divBox = document.getElementById('contentchart')
+      // console.log(window.getComputedStyle(divBox,null).width)
+
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
         //   // 跳转过来的
       //   mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
@@ -1774,37 +2117,7 @@
       window.divLength = 0;
       
     
-      // this.initSelectBox('#contentchart')
       
-      
-      // window.addEventListener('scroll', this.handleScroll)
-      // let contentChart = document.getElementById('contentchart');
-      
-      // var contentTimer = null;
-      // $('#contentchart').click(function(){
-      //   contentTimer = setTimeout(function(){
-      //      $('#contentchart').css("cursor","crosshair");
-      //      alert(1111)
-      //   },1000);
-      // },function(){
-      //   clearTimeout(contentTimer);
-      // });
-      // $('#contentchart').on('keydown',function(e){
-      
-      //   if(mthis.$store.state.tmss === 'content') {
-      //       var e = event || window.event || arguments.callee.caller.arguments[0];
-      //       if (e && e.keyCode == 46) {
-      //         mthis.deleteNode()
-      //         e.preventDefault();
-      //         e.stopPropagation();
-      //       }
-      //       if (e.keyCode == 65 && e.ctrlKey) {
-      //         mthis.selectAll()
-      //         e.preventDefault();
-      //         e.stopPropagation();
-      //       }
-      //     }
-      // })
     }
   };
 </script>
@@ -2299,5 +2612,29 @@
   .rightIcon:hover{
     opacity: 1;
     cursor: pointer;
+  }
+  .topItem{
+    border:'1px solid #336666';
+    margin:0px 0px 5px 4px;
+    
+    font-family: MicrosoftYaHei;
+  }
+  .topItem .itemHeader{
+    color:rgba(51,255,255,0.4);
+  }
+  .bigNumber{
+    width:19px;
+    height:19px;
+    background-color: #cc3333;
+	  border-radius: 3px;
+    text-align: center;
+  }
+  .number{
+    width:19px;
+    height:19px;
+    background-color:rgba(51,255,255,0.3);
+    border-radius: 3px;
+    
+    text-align: center;
   }
 </style>
