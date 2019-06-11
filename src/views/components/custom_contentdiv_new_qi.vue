@@ -251,7 +251,7 @@
     data() {
       return {
         // itemWidth:"20%",
-        leftMenu:'200px',
+        leftMenu:'290px',
         option:new Object({
           title:{
             name:'keyWords分析',
