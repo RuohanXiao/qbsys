@@ -358,7 +358,7 @@
   }
   .avatarStyle {
     width: 50px;
-    margin: 0 20px;
+    margin: 10px 20px;
   }
   .contentStyle {
     width: 100%;
