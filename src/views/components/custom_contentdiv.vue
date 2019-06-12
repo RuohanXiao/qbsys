@@ -854,6 +854,9 @@
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
+
+
+      
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
         //   // 跳转过来的
       //   mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {

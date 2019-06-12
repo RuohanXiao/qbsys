@@ -114,7 +114,7 @@
     </div>
     <div :style="{height:nh_50,borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div id="netchart" :style="{height:nh_50}"></div>
-      <operatorHub :style="{height:nh_50}" :operatorConfig="operatorConfig"></operatorHub>
+      <operatorHub :style="{height:nh_50,top:'55px'}" :operatorConfig="operatorConfig"></operatorHub>
       <transition name="mybox">
         <div class="xuanfuAlert" v-show="popout">{{message.text}}</div>
       </transition>
@@ -334,6 +334,9 @@
                     allNodesId.push(item.id)
                     return item
                   })
+                  let includeNode = response.body.data.filter(it =>{
+                    return util.ifInArr(it.id,allNodesId)
+                  })
 
 
                 } else {
@@ -343,12 +346,14 @@
       },
       jutuan() {
         // this.changeCenterNode()
-        this.changNetchartMode('d')
+        // this.changNetchartMode('d')
         // this.netchart.updateSettings({
         //       layout: {
         //         mode: 'dynamic'
         //       }
         //     })
+        this.netchart.updateSettings();
+        this.netchart.updateSize();
       },
       changeCenterNode(arr){
         let mthis = this 
@@ -365,36 +370,36 @@
       },
       changNetchartMode(n) {
         //更改样式mode
-        switch (n) {
-          case 'h':
-            this.netchart.updateSettings({
-              layout: {
-                mode: 'hierarchy'
-              }
-            })
-            break;
-          case 's':
-            this.netchart.updateSettings({
-              layout: {
-                mode: 'static'
-              }
-            })
-            break;
-          case 'r':
-            this.netchart.updateSettings({
-              layout: {
-                mode: 'radial'
-              }
-            })
-            break;
-          case 'd':
-            this.netchart.updateSettings({
-              layout: {
-                mode: 'dynamic'
-              }
-            })
-            break;
-        }
+        // switch (n) {
+        //   case 'h':
+        //     this.netchart.updateSettings({
+        //       layout: {
+        //         mode: 'hierarchy'
+        //       }
+        //     })
+        //     break;
+        //   case 's':
+        //     this.netchart.updateSettings({
+        //       layout: {
+        //         mode: 'static'
+        //       }
+        //     })
+        //     break;
+        //   case 'r':
+        //     this.netchart.updateSettings({
+        //       layout: {
+        //         mode: 'radial'
+        //       }
+        //     })
+        //     break;
+        //   case 'd':
+        //     this.netchart.updateSettings({
+        //       layout: {
+        //         mode: 'dynamic'
+        //       }
+        //     })
+        //     break;
+        // }
       },
       linkedKnowlage() {
         var mthis = this
@@ -428,7 +433,7 @@
           })
           .then(response => {
             if (response.body.code == 0) {
-              mthis.changNetchartMode('r')
+              // mthis.changNetchartMode('r')
               response.body.data.nodes.map(item => {
                 if (item.entity_type === 'document') {
                   item.name = item.title.substring(0, 19) + '...'
@@ -510,7 +515,7 @@
               this.star()
               break;
             case 'hierarchy':
-              this.hierarchy()
+              this.hierarchy1()
               break;
             case 'juhe':
               this.juhe()
@@ -581,7 +586,7 @@
             .then(response => {
               if (response.body.code === 0) {
                 if (response.body.data.nodes.length > 0) {
-                  mthis.changNetchartMode('r')//  mthis.changNetchartMode('d')
+                  // mthis.changNetchartMode('r')//  mthis.changNetchartMode('d')
                   mthis.netchart.addData(response.body.data)
                   mthis.netchart.selection(response.body.data.nodes.map(item => {
                     return item.id
@@ -610,7 +615,7 @@
             .then(response => {
               if (response.body.code === 0) {
                 if (response.body.data.nodes.length > 0) {
-                  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                  // mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                   response.body.data.nodes.map(item => {
                     if (item.entity_type === 'document') {
                       item.name = item.title.substring(0, 19) + '...'
@@ -969,7 +974,7 @@
                       }))
                     }
                   }
-                  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                  // mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                   mthis.netchart.addData({
                     'nodes': nodes,
                     'links': links
@@ -1099,7 +1104,7 @@
                       }
                       return ite
                     })
-                    mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                    // mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                     mthis.netchart.addData({
                       'nodes': nodes,
                       'links': links
@@ -1197,7 +1202,7 @@
                       ite.type = (ite.type) ? ite.type : ite.relation_name
                       return ite
                     })
-                    mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                    // mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                     mthis.netchart.addData({
                       'nodes': nodes,
                       'links': links
@@ -1350,7 +1355,7 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
-                 mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                //  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
                 setTimeout(function() {
                   mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -1380,7 +1385,7 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
-                 mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                //  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
                 setTimeout(function() {
                   mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -1510,7 +1515,7 @@
             //   Math.cos(ahd * index) * radius;
             // 锁定位置
             // lock
-            // mthis.netchart.lockNode(mthis.selectionId[index].id);
+            mthis.netchart.lockNode(mthis.selectionId[index].id);
           }
           mthis.netchart.addFocusNode(no1.id);
         } else {
@@ -1531,9 +1536,9 @@
             let no = mthis.netchart.getNode(this.selectionId[i]);
             no["x"] = no1["x"] + col * 150;
             no["y"] = no1["y"] + row * 150;
-            // mthis.netchart.lockNode(this.selectionId[i]);
+            mthis.netchart.lockNode(this.selectionId[i]);
           }
-          mthis.changNetchartMode('s')
+          // mthis.changNetchartMode('s')
           mthis.netchart.scrollIntoView(
             mthis.selectionId.map(item => {
               mthis.netchart.lockNode(item.id);
@@ -1628,8 +1633,8 @@
             nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
               Math.cos(ahd * i) * radius;
             mthis.netchart.updateStyle(mthis.selectionId[i])
-            // mthis.netchart.lockNode(mthis.selectionId[i]);
-            mthis.changNetchartMode('s')
+            mthis.netchart.lockNode(mthis.selectionId[i]);
+            // mthis.changNetchartMode('s')
           }
         } else {
           // mthis.$Message.error('请选择节点进行矩形排列操作！')
@@ -1638,7 +1643,7 @@
       },
       // 层级布局
       hierarchy() {
-        this.changNetchartMode('h');
+        // this.changNetchartMode('h');
         // setTimeout(function() {
         //   mthis.changNetchartMode('s')
         // }, 500);
@@ -1847,7 +1852,7 @@
         // {
         //   // console.log(key + "这个字母出现了" + obj[key] + "次");
         // }
-        this.changNetchartMode('h')
+        // this.changNetchartMode('h')
       },
       //保存工作集
       save() {
@@ -2452,10 +2457,10 @@
             //     toCenter:"geometric "
             // },
             twoRingRadialLayout: true,
-            layoutFreezeMinTimeout:300,
-            layoutFreezeTimeout: 1000,
-            incrementalLayoutMaxTime:1000,
-            initialLayoutMaxTime:1000,
+            // layoutFreezeMinTimeout:300,
+            layoutFreezeTimeout: 10000,
+            // incrementalLayoutMaxTime:1000,
+            // initialLayoutMaxTime:1000,
             globalLayoutOnChanges: false,
             nodeSpacing: 50,
             rowSpacing: 100
@@ -2868,7 +2873,7 @@
             // onSettingsChange(event) - 更改设置时调用的函数。
             // onTripleClick(event) - 当用户三次点击图表时调用的函数。用于自定义函数调用。
             onPointerDrag: function(event) {
-              mthis.changNetchartMode('s')
+              // mthis.changNetchartMode('s')
             },
             // onChartUpdate: function (event) {
             //     // console.log('-------------------------------------------------->>>onChartUpdate')
@@ -2886,6 +2891,7 @@
             },
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
+                mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
                 // if (event.clickNode) {}
                 // mthis.selectItem = event;
                 // mthis.selectionId = [];
@@ -2926,7 +2932,7 @@
                 return x.isLink;
               });
               if (event.clickNode || event.clickLink) {
-                mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
+                // mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
               } else {
                 // mthis.selectionId = null
               }
@@ -3117,7 +3123,7 @@
                   mthis.ifSelectTwoNode = false;
                   mthis.ifSelectOnlyTwoNode = false;
                   mthis.selectItem = null;
-                  mthis.changNetchartMode('s')
+                  // mthis.changNetchartMode('s')
                 }
               }, 200);
               if (mthis.netchart.exportData()) {
@@ -3631,7 +3637,7 @@
                   nodes: nodes,
                   links: []
                 });
-                mthis.changNetchartMode('r')
+                // mthis.changNetchartMode('r')
               } else {
                 mthis.setMessage("/event-detail/接口异常");
               }
