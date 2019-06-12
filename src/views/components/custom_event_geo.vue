@@ -331,7 +331,7 @@
   }
   .avatarStyle {
     width: 50px;
-    margin: 0 20px;
+    margin: 10px 20px;
   }
   .contentStyle {
     width: 100%;
@@ -489,6 +489,8 @@
     height: 44px;
     word-break: break-all;
     color: rgba(204,255,255,0.5);
+    vertical-align:middle;   
+    display:table-cell;   
     }
 </style>
 
