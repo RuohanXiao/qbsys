@@ -853,9 +853,9 @@
                           localIds = conIds.concat(response.body.data.ids).concat(conIds);
                           mthis.dataBySeries.clickNum = [];
                           mthis.loadEcharts(2);
-                          util.writeStorage("eventIds",localIds)
-                          // console.log('<100')
-                          // console.log(mthis.dataBySeries.date.length)
+                          util.writeStorage("allIds",localIds)
+                          console.log('<100')
+                          console.log(mthis.dataBySeries.date.length)
                       }else{
                         let dayCount = parseInt(response.body.data.time.length * 0.1)
                        if(dayCount>0){
@@ -952,9 +952,9 @@
                           localIds = conIds.concat(response.body.data.ids).concat(conIds);
                           mthis.dataBySeries.clickNum = [];
                           mthis.loadEcharts(2);
-                          util.writeStorage("eventIds",localIds)
-                          // console.log('<100')
-                          // console.log(mthis.dataBySeries.date.length)
+                          util.writeStorage("allIds",localIds)
+                          console.log('<100')
+                          console.log(mthis.dataBySeries.date.length)
                       }else{
                         let dayCount = parseInt(response.body.data.time.length * 0.1)
                        if(dayCount>0){

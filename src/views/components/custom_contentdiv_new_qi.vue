@@ -3,92 +3,94 @@
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px',border:'solid 1px #336666'}">
       <div class='divStyle'>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="removeAll">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="removeAll">
             <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">清空</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='fanxuan'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='fanxuan'>
             <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">反选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="selectAll">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="selectAll">
             <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">全选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="deleteNode()"> 
+          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="deleteNode()"> 
             <Icon class="icon iconfont icon-delete-name DVSL-bar-btn-new DVSL-bar-btn-back" size="26" ></Icon>
             <p class="img-content">删除</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="openCreateGroupModal">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="openCreateGroupModal">
             <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">创建集合</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='toContentDiv'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='toContentDiv'>
             <Icon class="icon iconfont icon-zhaiyaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">摘要图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="toThumbnails">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="toThumbnails">
             <Icon class="icon iconfont icon-suolvetu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">缩略图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='showAsList'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='showAsList'>
             <Icon class="icon iconfont icon-liebiaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">列表图</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='orderTimeUp'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='orderTimeUp'>
             <Icon class="icon iconfont icon-paixu--guanlian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">相关性排序</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='orderTimeDown'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='orderTimeDown'>
             <Icon class="icon iconfont icon-paixu--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">时间排序</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-custom" @click='contentTranslate'>
-            <Icon class="icon iconfont icon-selection-box" size="26"  :class="(translateButton)?'lightUp':''" ></Icon>
-            <p class="img-content"  :class="(translateButton)?'lightUp':''">翻译</p>
+          <div :class="ifShowDoc? 'button-div':'button-div-disable'" @click='contentTranslate'>
+            <Icon class="icon iconfont icon-selection-box" size="26"></Icon>
+            <p class="img-content">翻译</p>
           </div>
         </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-custom" @click="showContentAna">
-            <Icon class="icon iconfont icon-selection-box" size="26" :class="(analysisButton)?'lightUp':''"></Icon>
-            <p class="img-content" :class="(analysisButton)?'lightUp':''">分析</p>
-          </div>
-        </Tooltip>
+        
         <!-- <div class="divSplitLine"></div> -->
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="toNet">
+          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="toNet">
             <Icon class="icon iconfont icon-tuisongzhiwangluo  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">推送网络</p>
           </div>
         </Tooltip>
-        
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="cutScreen">
+            <Icon class="icon iconfont icon-cut DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">截屏</p>
+          </div>
+        </Tooltip>
       </div>
     </div>
-    <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
+    <div @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup"
+    :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
         <operatorHub :style="{height:ContentHeightList}" :operatorConfig="operatorConfig" @isOpen="clickHub"></operatorHub>
         <div v-show="!showList && !contentAna">
@@ -101,7 +103,7 @@
             </div>
           
             <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}"
-             @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup">
+             >
               <Row type="flex" justify="start">
 
                 <Col :sm="colSmnum" :lg="colLgNum" :md='colMdNum' align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
@@ -109,7 +111,6 @@
                   <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click='toSelIds(index,item.check,item.id,$event)' 
                   @dblclick="showContent(item.id,item.title)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
                   @mouseenter="addHover" @mouseleave="removeHover">
-                   
                       <img :src='item.img' class="picsize" :class="(item.check)?'item-selected':''" >
                       <p class='nametext' ref='docP'>{{item.title}}</p>
                    
@@ -188,24 +189,22 @@
           </div>
           
         </div>
-        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',width:'100%',padding:'5px 0px 5px 5px'}">
+        <div class="anaDoc" :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}">
           <div class="topItem" 
           :style="{border:'1px solid #336666',order:orderCount,width:topWidth,height:topHeight,display:'flex',flexDirection:'column'}"
           v-for="(list,index) in topicDatas" :key="index">
             <div class="itemHeader" 
-            :style="{display:'flex',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-between'}">
-              <p :style="{marginLeft:'10px'}">普京：美国...(10)</p>
-              <div>
-                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
-                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
-              </div>
+            :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
+              <p>普京：美国...(10)</p>
+              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
+              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
             </div>
             <div v-show="ifTopic" :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
               <div class="topicItem" 
-              :style="{display:'flex',justifyContent:'space-around',padding:'0px 5px 0px 5px',color:'#fff'}" 
+              :style="{display:'flex',justifyContent:'space-between',padding:'0px 1.25em 0px 1.25em',color:'#fff'}" 
               v-for="(item,ind) in list.topDatas" :key="ind">
                 <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
-                <p :style="{fontSize:'12px',flex:'1',marginLeft:'5px'}">{{item.name}}</p>
+                <p :style="{fontSize:'12px',flex:'1',paddingLeft:'1.25em'}">{{item.name}}</p>
                 <p :style="{fontSize:'12px'}">{{item.num}}</p>
               </div>
             </div>
@@ -214,7 +213,12 @@
             </div>
             
           </div>
-          
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
         </div>
         
       </div>
@@ -335,6 +339,8 @@
         changeBar:'热词排序',
         orderCount:0,
         ifhasDoc:false,
+        ifhasSel:false,
+        ifShowDoc:false,
         isBru:false,
         bruIds:[],
         bruStartX:0,
@@ -550,14 +556,42 @@
     },
     computed: mapState([
       'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes','topicClassifStatus'
-    ]),
+      ]),
+
+   
     watch: {
+      prevItems:{
+        handler(newVal,oldVal){
+          var mthis = this
+          if(mthis.prevItems.length>0){
+            mthis.ifhasDoc = true;
+            let buttonItems = mthis.prevItems.filter(item => item.check)
+            if(buttonItems.length>0){
+              mthis.ifhasSel = true
+            }else{
+              mthis.ifhasSel = false
+            }
+            
+          }else{
+            mthis.ifhasDoc = false
+            mthis.ifhasSel = false
+            mthis.ifShowDoc = false
+          }
+        },
+        deep:true,
+        immediate: true
+      },
       topicClassifStatus:function(){
         var mthis = this;
         if(mthis.topicClassifStatus){
           mthis.showContentAna()
+          mthis.ifhasDoc = false
+          mthis.ifhasSel = false
+          // mthis.ifShowDoc = false
         }else{
           mthis.contentAna = false
+          mthis.ifhasDoc = true
+          mthis.ifhasSel = true
         }
         
       },
@@ -671,7 +705,7 @@
             mthis.$store.commit('setContent2time',[{
               ids:selectIds
             }])
-            mthis.translateButton = true
+            mthis.ifShowDoc = true
             mthis.analysisButton = true
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
@@ -838,6 +872,10 @@
     },
     props: ['contentData'],
     methods: {
+      cutScreen(){
+        // 截屏事件
+      },
+
       clickHub(isOpen){
         var mthis = this;
         if(!mthis.contentAna) return;
@@ -1076,6 +1114,7 @@
           mthis.$store.commit('setContent2time',[{
             ids:mthis.bruIds
           }])
+          console.log(mthis.bruIds)
           let selDocList = mthis.items.filter(item => item.check)
           selDocList = selDocList.map(item =>({
                     title: item.title,      
@@ -1098,10 +1137,11 @@
         
         clearTimeout(timerClick);
         var mthis = this;
-        check = !check;
-        mthis.items[index].check = check;
-        mthis.prevItems = mthis.deepClone(mthis.items)
+        
         timerClick = setTimeout(function(){
+          check = !check;
+          mthis.items[index].check = check;
+          mthis.prevItems = mthis.deepClone(mthis.items)
           var ids = mthis.selectContentNodes[0].ids
           if(ids.indexOf(id)>-1){
             let index = ids.indexOf(id)
@@ -1676,13 +1716,13 @@
         this.showThumb = true
         this.colLgNum = 3
         this.colSmnum = 6
-        this.colMdNum= 4 
+        this.colMdNum= 4
        
       },
       contentTranslate() {
         var mthis = this;
         
-        if(this.translateButton){
+        if(this.ifShowDoc){
           var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
@@ -1909,7 +1949,7 @@
         this.colLgNum = 4
         this.colSmnum = 8
         this.colMdNum = 6
-        this.translateButton = false
+        this.ifShowDoc = false
         this.showList = false
         this.showThumb = false
         this.ifInfo = false
@@ -1982,19 +2022,19 @@
         }else if(len>1 && len <6){
           mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
-          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
         }else if(len ==6){
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
           console.log(mthis.itemWidth)
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
-          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
         }else if(len==1){
           mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
-          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
         }
       },
       showContentAna(){
@@ -2033,7 +2073,7 @@
         
         
         mthis.ifInfo = true
-        mthis.translateButton = true
+        mthis.ifShowDoc = true
         //  mock.get("/getContentInfo",{id:id}).then(function(res) {
         //   // 获取文本数据
         //   document.getElementById('contents').innerHTML = res.data.contents
@@ -2292,6 +2332,21 @@
     background: linear-gradient( 8deg, rgba(0, 0, 0, 0) 0%, rgba(51, 255, 255, 0.2) 40%, rgba(51, 255, 255, 0.3) 50%, rgba(51, 255, 255, 0.2) 60%, rgba(0, 0, 0, 0) 100%);
     /* 标准的语法 */
   }
+  .ivu-radio-wrapper{
+    color:#ccffff !important;
+  }
+  .ivu-radio-checked .ivu-radio-inner:after{
+    background-color:rgba(51,255,255,0.4) !important;
+  }
+  .ivu-dropdown-rel>a{
+    color:#ccffff;
+  }
+  .ivu-dropdown-rel>a:hover{
+    color:#33ffff;
+  }
+  #topicAnaly .ivu-dropdown-item{
+    padding-left:10px !important;
+  }
   .ivu-table{
     background-color: rgba(0, 0, 0, 0.8) !important;
     
@@ -2529,8 +2584,8 @@
     opacity: 1;
   }
   .picsize{
-    max-width:100px;
-    max-height:100px;
+    max-width:50px;
+    max-height:70px;
     width:100%;
     
     
@@ -2541,12 +2596,14 @@
     text-overflow: ellipsis;
     overflow-x: hidden;
     font-family: MicrosoftYaHei;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
     /* line-height: 30px; */
     letter-spacing: 0px;
     color: #ccffff;
+    max-width:70px;
+    margin-left: 3em;
   }
   
   .imgHover{
@@ -2615,9 +2672,12 @@
   }
   .topItem{
     border:'1px solid #336666';
-    margin:0px 0px 5px 4px;
-    
+    /* margin:0px 0px 1em 0.8em; */
+    margin-bottom:10px;
     font-family: MicrosoftYaHei;
+  }
+  .itemEmpty{
+    margin-bottom:10px;
   }
   .topItem .itemHeader{
     color:rgba(51,255,255,0.4);
@@ -2636,5 +2696,16 @@
     border-radius: 3px;
     
     text-align: center;
+  }
+  .itemHeader >p{
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    width:70%;
+    max-width: 70%;
+  }
+  .itemHeader >p:hover{
+    color:rgba(51, 255, 255, 1);
+    cursor:pointer;
   }
 </style>

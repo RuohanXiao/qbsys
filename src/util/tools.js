@@ -228,10 +228,10 @@ getNowFormatDate() {
   },
   // 写入本地存储
   writeStorage(name,ids){
-    localStorage.setItem(name,JSON.stringify(ids))
+    sessionStorage.setItem(name,JSON.stringify(ids))
   },
   getStorage(name,index){
-    var idArr = JSON.parse(localStorage.getItem(name))
+    var idArr = JSON.parse(sessionStorage.getItem(name))
     if(Array.isArray(index)){
       if(index[0] == index[1]){
         let useIds = idArr[index[0]]
@@ -251,7 +251,7 @@ getNowFormatDate() {
     
   },
   removeStorage(name){
-    localStorage.removeItem(name)
+    sessionStorage.removeItem(name)
   },
   // //xml转json
   // Xml2Json(xml) {

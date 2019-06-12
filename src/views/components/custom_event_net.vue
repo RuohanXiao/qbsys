@@ -531,6 +531,8 @@
     display: block;
     width: 100%;
   }
+  </style>
+  <style>
   .desClass{
     line-height: 22px;
     overflow: hidden;
