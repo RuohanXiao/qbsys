@@ -853,7 +853,7 @@
                           localIds = conIds.concat(response.body.data.ids).concat(conIds);
                           mthis.dataBySeries.clickNum = [];
                           mthis.loadEcharts(2);
-                          util.writeStorage("eventIds",localIds)
+                          util.writeStorage("allIds",localIds)
                           console.log('<100')
                           console.log(mthis.dataBySeries.date.length)
                       }else{
@@ -952,7 +952,7 @@
                           localIds = conIds.concat(response.body.data.ids).concat(conIds);
                           mthis.dataBySeries.clickNum = [];
                           mthis.loadEcharts(2);
-                          util.writeStorage("eventIds",localIds)
+                          util.writeStorage("allIds",localIds)
                           console.log('<100')
                           console.log(mthis.dataBySeries.date.length)
                       }else{

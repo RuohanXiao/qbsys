@@ -495,7 +495,7 @@
   .bstyle:hover {
     color: rgba(51, 255, 255, 0.8) !important;
   }
-   .desClass{
+   /* .desClass{
     line-height: 22px;
     overflow: hidden;
     white-space: wrap;
@@ -508,6 +508,6 @@
     height: 44px;
     word-break: break-all;
     color: rgba(204,255,255,0.5);
-    }
+    } */
 </style>
 

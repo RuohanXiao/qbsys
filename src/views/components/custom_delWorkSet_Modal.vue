@@ -127,7 +127,7 @@ export default {
     }
     .cancelB{
         width: 50px;
-        height: 30px;
+        height: 25px;
        
         background-color: rgba(204,255,255,0.3);
         /* box-shadow: 0px 0px 62px 0px 
@@ -137,7 +137,7 @@ export default {
         margin-left: 30px;
         font-family: MicrosoftYaHei;
 	    font-size: 14px;
-        line-height: 30px;
+        line-height: 25px;
         text-align: center;
         cursor: pointer;
     }
@@ -147,7 +147,7 @@ export default {
     }
     .delB{
         width: 70px;
-        height: 30px;
+        height: 25px;
         
         background-color:rgba(51,255,255,0.5) !important;
         border-radius: 5px;
@@ -155,7 +155,7 @@ export default {
         font-family: MicrosoftYaHei;
 	    font-size: 14px;
         margin-left:10px;
-        line-height: 30px;
+        line-height: 25px;
         text-align: center;
         cursor: pointer;
     }
