@@ -117,7 +117,7 @@
     
     methods: {
       openModifyGroupModal(setId) {
-        // // console.log(setId)
+        // // // console.log(setId)
         this.$store.commit('setOpenWorkSetFlag',{
           id:setId,
           type:'modify',
@@ -210,7 +210,7 @@
                 // let optionWordArr = []
                 let optionList = {}
                 let optionListArr = []
-                // // console.log(response.body)
+                // // // console.log(response.body)
                 // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
                 for (let i = 0; i < response.body.data.nodes.length; i++) {
                   // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
@@ -219,13 +219,13 @@
                     "label": response.body.data.nodes[i].name,
                     "value": response.body.data.nodes[i].id,
                     "id": response.body.data.nodes[i].id,
-                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image1.png'),
+                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/other.png'),
                     "type": response.body.data.nodes[i].type
                   })
                 }
-                // // console.log(optionListArr)
+                // // // console.log(optionListArr)
                 mthis.options1 = optionListArr;
-                // // console.log(mthis.options1)
+                // // // console.log(mthis.options1)
               })
           }, 200);
         } else {
@@ -264,7 +264,7 @@
         //   "label": "set",
         //   "type": "set"
         // }).then(response => {
-        //   // // console.log(response)
+        //   // // // console.log(response)
         //   if (response.body.code === 0) {
         //     // alert('删除成功！')
         //      if (mthis.$store.state.tmss === 'net') {
@@ -291,8 +291,8 @@
         // })
       },
       modData(id) {
-        // // console.log('modify');
-        // // console.log(id);
+        // // // console.log('modify');
+        // // // console.log(id);
         this.$store.commit('setWorkSpaceModal', {
           "id":id,
           "flag":true
@@ -355,7 +355,7 @@
           }
           
         }else if(tmss == 'content'){
-          console.log(datas)
+          // console.log(datas)
           let contentObj = {
             'type':'push',
             'ids':[]

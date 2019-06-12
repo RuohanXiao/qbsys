@@ -202,7 +202,7 @@
                 mthis.boxSelEventIds.eventIds.push("event&" + j)
               }
             }
-            console.log(eventIds)
+            // console.log(eventIds)
             mthis.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
             // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
             //         "selectedIds":this.geo_only_eventIds,
@@ -401,6 +401,8 @@
               type: "slider",
               start: 10,
               end: 80,
+              height:20,
+              top:90,
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -792,7 +794,7 @@
           }
           mthis.timeTitle = '时间轴';
           mthis.resize();
-          console.log(mthis.dataBySeries.date.length)
+          // console.log(mthis.dataBySeries.date.length)
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           // if(mthis.dataBySeries.date.length>10000){
           //   mthis.option.series[0].barWidth = '5px';
@@ -929,8 +931,8 @@
                           mthis.dataBySeries.clickNum = [];
                           mthis.loadEcharts(2);
                           util.writeStorage("eventIds",localIds)
-                          console.log('<100')
-                          console.log(mthis.dataBySeries.date.length)
+                          // console.log('<100')
+                          // console.log(mthis.dataBySeries.date.length)
                       }else{
                         let dayCount = parseInt(response.body.data.time.length * 0.1)
                        if(dayCount>0){
@@ -941,8 +943,8 @@
                           let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
                           preDateList.pop();
                           aftDateList.shift();
-                          console.log(preDateList.length)
-                          console.log(aftDateList)
+                          // console.log(preDateList.length)
+                          // console.log(aftDateList)
                           let conCount = new Array(preDateList.length).fill('null');
                           let conIds = new Array(preDateList.length).fill([]);
                           let localIds = [];
@@ -963,7 +965,7 @@
                        
                        
                   }else{
-                    console.log("服务器error")
+                    // console.log("服务器error")
                   }
                 })
 
@@ -999,7 +1001,7 @@
                             mthis.loadEcharts(3);
                             
                         }else{
-                          console.log("服务器error")
+                          // console.log("服务器error")
                         }
                       })
                 

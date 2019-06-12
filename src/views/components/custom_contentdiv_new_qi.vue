@@ -164,51 +164,55 @@
         </div>
       </div>
       <!-- 词云分析图 -->
-      <div :style="{width:'100%',display:'flex'}">
-        <div :style="{width:leftMenu}"></div>
-      <div v-show="contentAna" :style="{height:ContentHeightList,overflowY:'scroll'}">
+      <div>
+      <!-- <div :style="{minWidth:leftMenu}"></div> -->
+      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'280px'}">
         <div class="docMenu" :style="{display:'flex',width:'90%',height:'30px',lineHeight:'30px',justifyContent: 'flex-end'}">
           <RadioGroup v-model="changeBar" @on-change='changeShow'>
             <Radio label="词云"></Radio>
             <Radio label="热词排序"></Radio>
           </RadioGroup>
           <div :style="{marginLeft:'10px'}">
-            <Dropdown>
+            <Dropdown  @on-click='changeDrop'>
               <a href="javascript:void(0)">
                   全部词性
                   <Icon type="ios-arrow-down"></Icon>
               </a>
               <DropdownMenu slot="list">
-                  <DropdownItem>动词</DropdownItem>
-                  <DropdownItem>名词</DropdownItem>
-                  <DropdownItem>人名</DropdownItem>
-                  <DropdownItem>地名</DropdownItem>
+                  <DropdownItem name='verb'>动词</DropdownItem>
+                  <DropdownItem name='noun'>名词</DropdownItem>
+                  <DropdownItem name='names'>人名</DropdownItem>
+                  <DropdownItem name='location'>地名</DropdownItem>
               </DropdownMenu>
           </Dropdown>
           </div>
           
         </div>
-        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',width:'100%'}">
-          <div class="topItem" :style="{border:'1px solid #336666',order:orderCount}"
+        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',width:'100%',padding:'5px 0px 5px 5px'}">
+          <div class="topItem" 
+          :style="{border:'1px solid #336666',order:orderCount,width:topWidth,height:topHeight,display:'flex',flexDirection:'column'}"
           v-for="(list,index) in topicDatas" :key="index">
             <div class="itemHeader" 
             :style="{display:'flex',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-between'}">
               <p :style="{marginLeft:'10px'}">普京：美国...(10)</p>
-              <div :style="{marginLeft:'10px'}">
+              <div>
                 <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
-                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12"></Icon>
+                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
               </div>
             </div>
-            <div class="topicItem" v-show="ifTopic"
-            :style="{display:'flex',justifyContent:'space-between',margin:'10px',color:'#fff'}" 
-            v-for="(item,ind) in list[0].topic" :key="ind">
-              <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
-              <p :style="{fontSize:'12px',flex:'1',marginLeft:'5px'}">{{item.name}}</p>
-              <p :style="{fontSize:'12px'}">{{item.num}}</p>
+            <div v-show="ifTopic" :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
+              <div class="topicItem" 
+              :style="{display:'flex',justifyContent:'space-around',padding:'0px 5px 0px 5px',color:'#fff'}" 
+              v-for="(item,ind) in list.topDatas" :key="ind">
+                <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
+                <p :style="{fontSize:'12px',flex:'1',marginLeft:'5px'}">{{item.name}}</p>
+                <p :style="{fontSize:'12px'}">{{item.num}}</p>
+              </div>
             </div>
-            <div :id='index+"wordChart"' v-show="!ifTopic" :style="{width:'180px',height:'310px'}">
-
+            <div  v-show="!ifTopic">
+              <div :id='index+"wordChart"'></div>
             </div>
+            
           </div>
           
         </div>
@@ -251,7 +255,7 @@
     data() {
       return {
         // itemWidth:"20%",
-        leftMenu:'290px',
+        leftMenu:'280px',
         option:new Object({
           title:{
             name:'keyWords分析',
@@ -295,110 +299,38 @@
         ifTopic:true,
         wordCloudOption:null,
         topicDatas:[
-          [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
-            [{topic:[
-            {name:'pujing',num:20},
-            {name:'telangpu',num:18},
-            {name:'pujing',num:16},
-            {name:'telangpu',num:14},
-            {name:'pujing',num:12},
-            {name:'telangpu',num:10},
-            {name:'pujing',num:8},
-            {name:'telangpu',num:6},
-            {name:'pujing',num:4},
-            {name:'telangpu',num:2},
-            ]},
-            {keyWords:[]}],
+          {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20}]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],title:[],topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]}
         ],
         changeBar:'热词排序',
         orderCount:0,
@@ -411,12 +343,10 @@
         prevKup:null,
         keyCount:0,
         isSel:null,
-        
-        WCheight:0,
-        WCWidth:0,
-        docWidth:0,
-        barWidth:0,
-        barHeight:0,
+        itemWidth:0,
+        itemHeight:0,
+        topWidth:0,
+        topHeight:0,
         contentAnaWidth:0,
         prevItems:[],
         mouseStartX:0,
@@ -572,27 +502,9 @@
                     name:'主题分析',
                     id:'topicClassification',
                     iconName:'icon-kongjianfenxi',
+                    openFunction:'opentopicClassif',
+                    closeFunction:'closetopicClassif',
                     operatorSurface:[
-                      {
-                        type:'docBar',
-                        title:'Venezuelan oil chief blames fire on opposition',
-                        id:'heatRadius',
-                        attrName:'id',
-                        time:'2019-02-20',
-                        from:'华盛顿邮报',
-                        excuteFunction:'changeOperatorDocIds',
-                        rightMenuConfig:[{
-                            'name': '单个文档分析',
-                            'iconClassName': 'icon-ren',
-                            'excuteFunction':'singleDocAnaly'
-                          },
-                          {
-                            'name': '合并分析',
-                            'iconClassName': 'icon-ren',
-                            'excuteFunction':'multiDocAnaly'
-                          }
-                        ]
-                      },
                       {
                           operatorType:'dynamic',
                           dynamicAttr:'seletedDocAttrList',
@@ -637,16 +549,15 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes','topicClassifStatus'
     ]),
     watch: {
-      topicDatas:function(){
+      topicClassifStatus:function(){
         var mthis = this;
-        if(mthis.topicDatas.length>0){
-          mthis.itemWidth = (100 / (mthis.topicDatas.length)) + '%';
-          console.log(1111)
+        if(mthis.topicClassifStatus){
+          mthis.showContentAna()
         }else{
-          mthis.itemWidth = '100%'
+          mthis.contentAna = false
         }
         
       },
@@ -739,8 +650,17 @@
               })
               
             );
-            console.log(1)
+            // console.log(1)
             mthis.prevItems = mthis.deepClone(mthis.items)
+            let selDocList = mthis.items.filter(item => item.check)
+            selDocList = selDocList.map(item =>({
+                      title: item.title,      
+                      id: item.id,
+                      time: item.time,
+                      from: item.from,     
+                    })
+                  );
+            mthis.$store.commit('setSeletedDocAttrList',selDocList)
             
             for(let i=0;i<mthis.items.length;i++){
               selectIds.push(mthis.items[i].id)
@@ -765,7 +685,7 @@
                 check:false
               })
             );
-            console.log(2)
+            // console.log(2)
             mthis.$store.commit('setSelectContentNodes', [{
               ids: []
             }])
@@ -773,6 +693,8 @@
               ids:[]
             }])
             mthis.prevItems = mthis.deepClone(mthis.items)
+            
+            mthis.$store.commit('setSeletedDocAttrList',[])
           }
           
           mthis.spinShow = false
@@ -789,14 +711,14 @@
         handler(newValue){
            var mthis = this
            if(mthis.contentTimeCondition.type == 'cancel'){
-              console.log(3)
-              console.log(mthis.prevItems)
+              // console.log(3)
+              // console.log(mthis.prevItems)
               mthis.items =  mthis.deepClone(mthis.prevItems)
             }
             if(mthis.contentTimeCondition.type == 'sel'){
               
               if(mthis.contentTimeCondition.ids.length ==0){
-                console.log(4)
+                // console.log(4)
                 mthis.items = mthis.deepClone(mthis.prevItems)
               }
               if(mthis.contentTimeCondition.ids.length>0){
@@ -827,8 +749,8 @@
         mthis.page = 1
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
-        console.log('sousuosousuo')
-        console.log(va)
+        // console.log('sousuosousuo')
+        // console.log(va)
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
@@ -848,7 +770,7 @@
                 check:false
               })
             );
-            console.log(5)
+            // console.log(5)
             mthis.prevItems = mthis.deepClone(mthis.items)
             
             if(response.body.data.length ==30){
@@ -875,6 +797,8 @@
             mthis.$store.commit('setContent2time',[{
               ids:[]
             }])
+            
+            mthis.$store.commit('setSeletedDocAttrList',[])
           } else {
             // mthis.showMore = false
             mthis.setMessage('未找到匹配的文章')
@@ -895,6 +819,7 @@
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
         mthis.ContentHeightList = mthis.$store.state.contentHeight - 75 + 22 + 'px';
+        console.log(mthis.ContentHeightList)
       },
       ContentHeightList: function() {
         var mthis = this;
@@ -915,7 +840,17 @@
     methods: {
       clickHub(isOpen){
         var mthis = this;
-        
+        if(!mthis.contentAna) return;
+        var topicAnaly = document.getElementById('topicAnaly');
+        if(isOpen){
+          topicAnaly.style.left = '280px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px';
+          mthis.wordResize(mthis.topicDatas.length)
+        }else{
+          topicAnaly.style.left = '0px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20  + 'px';
+          mthis.wordResize(mthis.topicDatas.length)
+        }
       },
       changeShow(newValue){
         var mthis = this
@@ -927,6 +862,14 @@
         }else{
           mthis.ifTopic = true;
         }
+      },
+      changeDrop(name){
+        alert(name)
+      },
+      delTopData(index){
+        console.log(index)
+        this.topicDatas.splice(index,1)
+        this.wordResize(this.topicDatas.length)
       },
       toTop(index){
         var div = document.getElementsByClassName('topItem')[index];
@@ -1133,6 +1076,15 @@
           mthis.$store.commit('setContent2time',[{
             ids:mthis.bruIds
           }])
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
           mthis.isBru = false;
         }
         
@@ -1170,6 +1122,15 @@
           mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
         },300)
         
         
@@ -1250,6 +1211,14 @@
             continue
           }
         }
+        let selDocList = mthis.items.filter(item => item.check)
+        selDocList = selDocList.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
        
         mthis.deleteButton = true
         mthis.analysisButton = true
@@ -1259,6 +1228,7 @@
         mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
           console.log(6)
         mthis.prevItems = mthis.deepClone(mthis.items)
         // let disselectDom = $('.contentDiv:not(.item-selected)')
@@ -1295,6 +1265,7 @@
           mthis.$store.commit('setContent2time',[{
             ids:[]
           }])
+          mthis.$store.commit('setSeletedDocAttrList',[])
         }else{
           mthis.setMessage("请选择至少一篇文章")
         }
@@ -1611,10 +1582,19 @@
                 ids:[]
               }])
             }else{
-              return
+              
             }
           }
         }
+        let selDocList = mthis.items.filter(item => item.check)
+        selDocList = selDocList.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
         mthis.prevItems = mthis.deepClone(mthis.items)
       },
       fanxuan() {
@@ -1635,6 +1615,15 @@
         mthis.$store.commit('setContent2time',[{
             ids:selectList
           }])
+        let selDocList = []
+        selDocList = selectContent.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
       },
       removeAll() {
         
@@ -1648,6 +1637,7 @@
         this.$store.commit('setContent2time',[{
             ids:[]
           }])
+        this.$store.commit('setSelectContentNodes',[])
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
@@ -1872,7 +1862,7 @@
                 // $('.item-selected').removeClass('item-selected')
                 
                 mthis.items = mthis.items.concat(nowItems)
-                console.log(7)
+                // console.log(7)
                 mthis.prevItems = mthis.deepClone(mthis.items)
               } else {
                 
@@ -1981,20 +1971,51 @@
           // });
         }
       },
-      
+      wordResize(len){
+        var mthis = this;
+        if(len>6){
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
+          console.log(mthis.itemWidth)
+          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
+        }else if(len>1 && len <6){
+          mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
+          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+        }else if(len ==6){
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
+          console.log(mthis.itemWidth)
+          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+        }else if(len==1){
+          mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
+          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+        }
+      },
       showContentAna(){
         var mthis = this
         mthis.contentAna = true
         var charts = [];
         var options = [];
-        var myWordCharts = []
+        var myWordCharts = [];
+        let len = mthis.topicDatas.length;
+        mthis.wordResize(len)
+        
         for(var i=0;i<mthis.topicDatas.length;i++){
           charts.push(i+'wordChart');
           myWordCharts.push(i+'myChart');
           options.push(mthis.option);
         }
         for(var j=0;j<myWordCharts.length;j++){
-          myWordCharts[j] = echarts.init(document.getElementById(charts[j]));
+          myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          });
           myWordCharts[j].setOption(options[j]);
         }
         
@@ -2032,6 +2053,9 @@
         })
         
       },
+      risize(){
+        
+      },
       /* printer(text,contentid,pointerid){ 
           var l = text.length;
           var t = 0;
@@ -2067,14 +2091,15 @@
     },
     mounted() {
       var mthis = this
-      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 27 - 200 + 'px'
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px'
+      console.log(mthis.contentAnaWidth)
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
       console.log(wwWidth)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
-     
+      console.log(mthis.ContentHeight)
       
       // let divBox = document.getElementById('contentchart')
       // console.log(window.getComputedStyle(divBox,null).width)
@@ -2590,7 +2615,8 @@
   }
   .topItem{
     border:'1px solid #336666';
-    margin:5px 0px 5px 5px;
+    margin:0px 0px 5px 4px;
+    
     font-family: MicrosoftYaHei;
   }
   .topItem .itemHeader{
