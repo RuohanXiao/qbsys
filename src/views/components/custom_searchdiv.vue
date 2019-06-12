@@ -64,7 +64,7 @@
         myMap: new Map(),
         myMap1: new Map(),
         optionsTemp: new Array(),
-        localStorageTemp:new Array()
+        sessionStorageTemp:new Array()
       }
     },
     methods: {
@@ -86,8 +86,8 @@
       setOption(a) {
         var mthis = this;
         if (this.$store.state.tmss === 'net') {
-          mthis.localStorageTemp.push(a)
-          util.writeStorage('netSearchTemp',mthis.localStorageTemp)
+          mthis.sessionStorageTemp.push(a)
+          util.writeStorage('netSearchTemp',mthis.sessionStorageTemp)
           if (a.itemType === 'entity') {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', {
               'nodeIds': new Array(a.id)
@@ -165,7 +165,7 @@
           } else {}
         }
         if (this.$store.state.tmss === 'content') {
-          localStorage.setItem("contentSearchTemp",a);
+          sessionStorage.setItem("contentSearchTemp",a);
           if (a.itemType === 'entity') {
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-all/', {
               "NodeIds": new Array(a.id),
@@ -544,7 +544,7 @@
                 if (response.body.timestamp == mthis.timestamp && response.body.code == 0) {
                    mthis.options1 = new Array({
                     title:'历史搜索',
-                    data:JSON.parse(localStorage.getItem('netSearchTemp'))
+                    data:JSON.parse(sessionStorage.getItem('netSearchTemp'))
                   })
                   if (response.body.data.SearchEntity.length > 0) {
                     let optionList = new Object()
@@ -1007,7 +1007,8 @@
       // setTimeout(function(){
       //   this.loadingT = (this.loadingT == '加载中...') ? '加载中': (this.loadingT + '.');
       // }, 100);
-      util.writeStorage('netSearchTemp',new Array())
+      // util.writeStorage('netSearchTemp',new Array())
+      sessionStorage.setItem('netSearchTemp',JSON.stringify(new Array()))
     },
     created() {
       var mthis = this
