@@ -262,7 +262,7 @@
               mthis.xiangguanEntityItems.map((item,index) => {
                 mthis.ctrls.push(!index > 5)
               })
-              console.log(mthis.ctrls)
+              // console.log(mthis.ctrls)
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }
             if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
@@ -338,7 +338,7 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": id
           }).then(response => {
-            // console.log('response.body.data')
+            // // console.log('response.body.data')
             let nodes = new Array();
             let links = new Array();
             if (response.body.code === 0) {
@@ -407,7 +407,7 @@
     },
     watch: {
       tableData: function() {
-        // // console.log('===========custom_event_humanEntityTable --------tableData')
+        // // // console.log('===========custom_event_humanEntityTable --------tableData')
         let mthis = this
         mthis.spinWaiting = true
         mthis.xiangguanEntityItems = new Array()
@@ -469,9 +469,9 @@
                 mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
               }
               if (response.body.data[0].unknown !== new Object()) {
-                // // console.log('------------有未知类型的节点--------------------')
-                // // console.log(response.body.data[0].unknown)
-                // // console.log('-----------------------------------------------')
+                // // // console.log('------------有未知类型的节点--------------------')
+                // // // console.log(response.body.data[0].unknown)
+                // // // console.log('-----------------------------------------------')
               }
             })
           }

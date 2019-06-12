@@ -174,8 +174,8 @@
         var mthis = this
         let sendIds = []
         let docIds = util.getStorage("docIds",mthis.selIdsArr)
-        console.log(mthis.selIdsArr)
-        console.log(docIds)
+        // console.log(mthis.selIdsArr)
+        // console.log(docIds)
         for(var i in docIds){
               for(var j of docIds[i]){
                 sendIds.push(j)
@@ -184,7 +184,7 @@
         mthis.sendDocIds.type = 'sel'
         mthis.sendDocIds.ids = sendIds
         mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
-        console.log(mthis.$store.state.contentTimeCondition)
+        // console.log(mthis.$store.state.contentTimeCondition)
       },
       throttle(fn,delay,duration){
         if(timer){
@@ -213,7 +213,7 @@
         if(flag==1){
           this.clcikShowDiv = false
           this.$store.commit('setContentTimeOnlySel',true)
-          console.log("click")
+          // console.log("click")
         }else{
           this.$store.commit('setContentTimeOnlySel',true)
           this.boxSelShowDiv = false
@@ -222,7 +222,7 @@
             type:'brush',
             areas:[]
           })
-          console.log('brush',this.isBrush)
+          // console.log('brush',this.isBrush)
           
         }
       },
@@ -506,7 +506,7 @@
         
         mthis.charts.setOption(mthis.option)
         this.charts.on('datazoom',function(params){
-          console.log(params)
+          // console.log(params)
           if(params.hasOwnProperty('start')){
             mthis.echartsShowStart = params.start
             mthis.echartsShowEnd = params.end
@@ -537,7 +537,7 @@
               
               mthis.sendDocIds.type = 'cancel'
               mthis.sendDocIds.ids = []
-              console.log(mthis.sendDocIds)
+              // console.log(mthis.sendDocIds)
               mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
               
               mthis.isBrush = []
@@ -609,7 +609,7 @@
           mthis.sendDocIds.type = 'sel'
           mthis.sendDocIds.ids = docIds
           mthis.$store.commit('setContentTimeCondition',mthis.sendDocIds)
-          console.log(docIds)
+          // console.log(docIds)
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -783,8 +783,8 @@
                           let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
                           preDateList.pop();
                           aftDateList.shift();
-                          console.log(preDateList.length)
-                          console.log(aftDateList)
+                          // console.log(preDateList.length)
+                          // console.log(aftDateList)
                           let conCount = new Array(preDateList.length).fill('null');
                           let conIds = new Array(preDateList.length).fill([]);
                           let localIds = [];
@@ -804,7 +804,7 @@
                       }
                
               }else{
-                console.log('服务器error')
+                // console.log('服务器error')
               }
             })
         }

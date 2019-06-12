@@ -183,7 +183,7 @@
                 
               }
             }
-            console.log(selEventIds)
+            // console.log(selEventIds)
         this.$store.commit('setNetTimeCondition',selEventIds)
         this.boxSelEventIds.ids = selEventIds
             // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
@@ -199,7 +199,7 @@
             //           this.$store.commit('setNetTimeCondition',response.body.data.eventIds)
             //           this.boxSelEventIds.ids = response.body.data.eventIds
             //         }else{
-            //           console.log("服务器error")
+            //           // console.log("服务器error")
             //         }
                     
             //     })
@@ -542,7 +542,7 @@
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
             if(mthis.isDataZoom){
-              // console.log("lalalla")
+              // // console.log("lalalla")
               mthis.timeTitle = '时间轴'
               
               mthis.$store.commit('setNetTimeCondition',null)
@@ -556,7 +556,7 @@
               mthis.option.series[1].data = []
               mthis.colorFlag = 0;
               mthis.charts.setOption(mthis.option)
-              // console.log(mthis.boxSelEventIds)
+              // // console.log(mthis.boxSelEventIds)
             }
             
             
@@ -594,7 +594,7 @@
                 //       mthis.boxSelEventIds.title = ""
                 //       mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
                 //     }else{
-                //       console.log("服务器error")
+                //       // console.log("服务器error")
                 //     }
                     
                 // })
@@ -634,7 +634,7 @@
           let eventIds = util.getStorage("allIds",params.dataIndex);
           mthis.clickEventIds.ids = eventIds
           mthis.$store.commit('setNetTimeCondition', eventIds)
-          console.log(eventIds)
+          // console.log(eventIds)
           // mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
           //           "selectedIds":mthis.selectionIdByType.eventIds,
           //           "startTime":params.name,
@@ -647,7 +647,7 @@
                       
                       
           //         }else{
-          //           console.log("服务器error")
+          //           // console.log("服务器error")
           //         }
           //       })
           mthis.charts.dispatchAction({
@@ -678,7 +678,7 @@
                   
             //       mthis.clickEventIds.ids = response.body.data.eventIds
             //     }else{
-            //       console.log("服务器error")
+            //       // console.log("服务器error")
             //     }
                 
             // })
@@ -866,8 +866,8 @@
                           let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
                           preDateList.pop();
                           aftDateList.shift();
-                          console.log(preDateList.length)
-                          console.log(aftDateList)
+                          // console.log(preDateList.length)
+                          // console.log(aftDateList)
                           let conCount = new Array(preDateList.length).fill('null');
                           let conIds = new Array(preDateList.length).fill([]);
                           let localIds = [];
@@ -886,7 +886,7 @@
                        }
                       }
             }else{
-              console.log("服务器error")
+              // console.log("服务器error")
             }
             
           })
@@ -897,7 +897,7 @@
       },
       netStaticsSelectedIds:function(){
           var mthis = this
-          console.log(this.netStaticsSelectedIds)
+          // console.log(this.netStaticsSelectedIds)
           if(this.netStaticsSelectedIds.length>0){
               mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
                   "ids":mthis.netStaticsSelectedIds,
@@ -913,7 +913,7 @@
                       
                       mthis.loadEcharts(3)
                   }else{
-                    console.log("服务器error")
+                    // console.log("服务器error")
                   }
               })
           }
@@ -925,7 +925,7 @@
       selectionIdByType:function(){
         var mthis = this
         var oneFlag = true
-        console.log(this.selectionIdByType)
+        // console.log(this.selectionIdByType)
         let allIds = []
         if(this.selectionIdByType.eventIds.length>0 || this.selectionIdByType.contentIds.ids.length>0){
          
@@ -965,8 +965,8 @@
                           let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
                           preDateList.pop();
                           aftDateList.shift();
-                          console.log(preDateList.length)
-                          console.log(aftDateList)
+                          // console.log(preDateList.length)
+                          // console.log(aftDateList)
                           let conCount = new Array(preDateList.length).fill('null');
                           let conIds = new Array(preDateList.length).fill([]);
                           let localIds = [];
@@ -989,7 +989,7 @@
           })
         }
         if(this.selectionIdByType.eventIds.length==0  &&  this.selectionIdByType.contentIds.ids.length==0 && this.dataBySeries.date.length>0){
-          console.log('no data')
+          // console.log('no data')
           // mthis.$store.commit('setNetStaticsSelectedIds',[])
           mthis.loadEcharts(4)
         }

@@ -40,7 +40,7 @@ export default {
     ]),
     methods:{
         del(id){
-            console.log(id)
+            // console.log(id)
            
             var mthis = this
             let timestamp = new Date().getTime()
@@ -50,7 +50,7 @@ export default {
                 "label": "set",
                 "type": "set"
             }).then(response => {
-                // // console.log(response)
+                // // // console.log(response)
                 if (response.body.code === 0) {
                     // alert('删除成功！')
                     if (mthis.$store.state.tmss === 'net') {
@@ -81,7 +81,7 @@ export default {
     watch:{
         delSetData: function() {
             if(!this.delSetData.flag) return;
-            console.log(this.delSetData)
+            // console.log(this.delSetData)
             var mthis = this;
             
             var setContent = document.getElementsByClassName('ivu-modal-content')[0]

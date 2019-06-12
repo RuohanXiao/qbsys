@@ -8,22 +8,52 @@
 .openHub{
   position: absolute;
   z-index: 1000;
-  width: 310px;
+  width: 270px;
   overflow-y: scroll;
 }
 .openHub .pick{
   background-image: url('../../dist/assets/images/close_before.png');
-  margin-left:280px;
+  margin-left:240px;
+  /* -webkit-animation: openHubpick 1s infinite; 
+    animation: openHubpick 1s infinite; */
+    transition:margin-left 1s;
+  -moz-transition:margin-left 1s; /* Firefox 4 */
+  -webkit-transition:margin-left 1s; /* Safari and Chrome */
+  -o-transition:margin-left 1s; /* Opera */
+    
 }
 .openHub .pick:hover{
   background-image: url('../../dist/assets/images/close_after.png');
-  margin-left:280px;
+  margin-left:240px;
+  /* -webkit-animation: openHubpick 1s infinite; 
+    animation: openHubpick 1s infinite; */
+    transition:margin-left 0.5s;
+  -moz-transition:margin-left 0.5s; /* Firefox 4 */
+  -webkit-transition:margin-left 0.5s; /* Safari and Chrome */
+  -o-transition:margin-left 0.5s; /* Opera */
 }
 .closeHub .pick{
-  background-image: url('../../dist/assets/images/open_before.png')
+  background-image: url('../../dist/assets/images/open_before.png');
+  transition:margin-left 0.5s;
+  -moz-transition:margin-left 0.5s; /* Firefox 4 */
+  -webkit-transition:margin-left 0.5s; /* Safari and Chrome */
+  -o-transition:margin-left 0.5s; /* Opera */
 }
 .closeHub .pick:hover{
-  background-image: url('../../dist/assets/images/open_after.png')
+  background-image: url('../../dist/assets/images/open_after.png');
+  transition:margin-left 0.5s;
+  -moz-transition:margin-left 0.5s; /* Firefox 4 */
+  -webkit-transition:margin-left 0.5s; /* Safari and Chrome */
+  -o-transition:margin-left 0.5s; /* Opera */
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes openHubpick {
+    100% {margin-left: 240px;}
+}
+
+/* Standard syntax */
+@keyframes openHubpick {
+    100% {margin-left: 240px;}
 }
  .Hubimg{
   width:20px;
@@ -34,8 +64,9 @@
 }
 
 #operatorHub .ivu-drawer-left{
-  background-color: #33ffff !important;
-  border: solid 1px #366674 !important;
+  background-color: rgba(0,0,0,0.9) !important;
+  border-right: solid 1px #366 !important;
+  height: calc(100% - 2px);
 }
 #operatorHub .ivu-cell-main{
   width:100%;
@@ -48,15 +79,34 @@
    background-color: rgba(0,0,0,0.8);
    color:#ccffff!important;
  }
+
+#operatorHub .ivu-drawer-header{
+  border-bottom: solid 1px #366;
+  padding: 7px 16px !important;
+  background-color: rgba(51,255,255,0.1);
+}
+#operatorHub .ivu-cell-disabled, .ivu-cell-disabled:hover{
+  color:rgba(51,255,255,0.2);
+  background-color: transparent !important
+}
+#operatorHub .ivu-cell-link{
+    color: rgba(51,255,255,0.4) !important;
+}
+#operatorHub .ivu-cell-disabled .ivu-cell-link {
+    color: rgba(51,255,255,0.2) !important;
+}
 #operatorHub.ivu-cell-focus, .ivu-cell:hover{
   background-color: rgba(51, 255, 255, 0.2) !important;
 }
-#operatorHub .ivu-drawer-header{
-  border-bottom: solid 1px #366674;
+#operatorHub .ivu-cell:hover .ivu-cell-link{
+  color: rgba(51, 255, 255, 1) !important;
+}
+#operatorHub .ivu-cell-disabled:hover .ivu-cell-link{
+  color: rgba(51, 255, 255, 0.2) !important;
 }
 .header{
   font-family: MicrosoftYaHei;
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: normal;
 	font-stretch: normal;
 	letter-spacing: 0px;
@@ -85,9 +135,9 @@
 <template>
   <div :class="pickdown?'openHub':'closeHub'" id='operatorHub'>
     <div class='Hubimg pick' @click="clickHub"></div>  <!-- pickdown = !pickdown -->
-    <Drawer class="drawer" placement="left" width="280" :mask="false" v-if="pickdown"  :closable="false" v-model="pickdown" :inner="true" :transfer="false">
+    <Drawer class="drawer" placement="left" width="240" :mask="false"   :closable="false" v-model="pickdown" :inner="true" :transfer="false">
       <div slot='header' class="header">
-        <Row class="hubName" v-if='header.isHub'>
+        <Row class="hubName" v-if='header.isHub' type="flex" justify="center" align="middle">
               <Col span="24">{{header.title}}</Col>
         </Row>
         <Row v-else class="operHeaderName" type="flex" justify="center" align="middle">
@@ -101,7 +151,8 @@
       <CellGroup @on-click="selectOperator" v-if='header.isHub'>
           <Cell :name="config.id" v-for="config in operatorConfig" class="operatorItem" :disabled="config.disabled===undefined||config.disabled===false?false:true">
             <Row>
-              <Col span="5"><Icon :class="'icon iconfont '+config.iconName"/></Col>
+              <Col span="2"></Col>
+              <Col span="3"><Icon :class="'icon iconfont '+config.iconName"/></Col>
               <Col span="19">{{config.name}}</Col>
             </Row>
           </Cell>

@@ -380,8 +380,8 @@
         for (let m = 0; m < selectList.length; m++) {
           this.selectArr.push(selectList[m].id)
         }
-        // // console.log('==============++++++++++==============')
-        // // console.log(this.selectArr)
+        // // // console.log('==============++++++++++==============')
+        // // // console.log(this.selectArr)
         this.$store.commit('setSelectContentNodes', [{
           ids: this.selectArr
         }])
@@ -389,7 +389,7 @@
       netToContentData: function() {
         var mthis = this
         // alert('文档接受到了')
-        // // // console.log(this.netToContentData)
+        // // // // console.log(this.netToContentData)
         mthis.items = []
         let contentIds = this.netToContentData.contentIds
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
@@ -759,14 +759,14 @@
       },
       jiazai(){
         var mthis= this
-        // console.log($('#jiazaiDiv').offset())
+        // // console.log($('#jiazaiDiv').offset())
         if (timer) {
           clearTimeout(timer)
         }
         timer = setTimeout(function() {
           while($('#jiazaiDiv').offset().top < 1000){
             mthis.handleReachBottom()
-            // console.log('===============')
+            // // console.log('===============')
             break;
           }
         }, 500);
@@ -854,6 +854,9 @@
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
+
+
+      
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
         //   // 跳转过来的
       //   mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
@@ -867,7 +870,7 @@
       window.divLength = 0;
       this.initSelectBox('#contentchart')
       
-      // // console.log($('#jiazaiDiv').offset())
+      // // // console.log($('#jiazaiDiv').offset())
       // window.addEventListener('scroll', this.handleScroll)
     }
   };

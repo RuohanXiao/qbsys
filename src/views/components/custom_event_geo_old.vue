@@ -1133,8 +1133,8 @@
                 "nodeIds": a,
                 "TypeLabel": 'event'
               }).then(response => {
-                // // console.log('=============related event=============')
-                // // console.log(response)
+                // // // console.log('=============related event=============')
+                // // // console.log(response)
                 if (response.body.code == 0) {
                   let objArr = new Array()
                   for (let i = 0; i < response.body.data[0].nodes.length; i++) {
@@ -1186,8 +1186,8 @@
                       })
                     }
                   }
-                  // // console.log('objArr')
-                  // // console.log(objArr)
+                  // // // console.log('objArr')
+                  // // // console.log(objArr)
                 } else {
                   alert('相关文档查询接口异常')
                 }
@@ -1199,7 +1199,7 @@
     },
     methods: {
       errorImg(){
-        this.detailData.img = 'http://10.60.1.140/assets/images/image1.png'
+        this.detailData.img = 'http://10.60.1.140/assets/images/other.png'
       },
       changeDetailDiv(id, type) {
         var mthis = this
@@ -1214,15 +1214,15 @@
             "nodeIds": arr
           }).then(response => {
             let res = response.body.data[0]
-            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/image1.png'
+            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/other.png'
             this.detailData = res
           })
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related/', {
             "nodeIds": arr,
             "TypeLabel": 'entity'
           }).then(response => {
-            // // console.log('=============related entity=============')
-            // // console.log(response)
+            // // // console.log('=============related entity=============')
+            // // // console.log(response)
             if (response.body.code == 0) {
               // let ids = response.body.data[0].nodes.map(item=>{
               //   return item.id
@@ -1256,7 +1256,7 @@
           }).then(response => {
             // this.detailData = response.body.data[0]
             let res = response.body.data[0]
-            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/image1.png'
+            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/other.png'
             this.detailData = res
             this.detailData.entity_type = 'event'
           })
@@ -1264,8 +1264,8 @@
             "nodeIds": arr,
             "TypeLabel": 'event'
           }).then(response => {
-            // // console.log('=============related event=============')
-            // // console.log(response)
+            // // // console.log('=============related event=============')
+            // // // console.log(response)
           })
           // mock.get("/getXiangguanshijian",{id:id}).then(function(res) {
           //   //  获取相关实体
@@ -1276,7 +1276,7 @@
             "docIds": arr
           }).then(response => {
              let res = response.body.data[0]
-            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/image1.png'
+            res.img=(util.checkImgExists(response.body.data[0].img))?response.body.data[0].img:'http://10.60.1.140/assets/images/other.png'
             this.detailData = res
             mthis.detailData.entity_type = 'document'
           })
@@ -1284,8 +1284,8 @@
             "nodeIds": arr,
             "TypeLabel": 'document'
           }).then(response => {
-            // // console.log('=============related doc=============')
-            // // console.log(response)
+            // // // console.log('=============related doc=============')
+            // // // console.log(response)
           })
           // mock.get("/getXianguanwendang",{id:id}).then(function(res) {
           //   //  获取相关实体

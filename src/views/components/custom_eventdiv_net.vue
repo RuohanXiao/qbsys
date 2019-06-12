@@ -155,7 +155,7 @@
                   response.body.data[i].entity_type = 'event'
                   response.body.data[i].name = response.body.data[i].event_subtype
                 }
-                // // // console.log(util.hebing(mthis.evetdata,response.body.data))
+                // // // // console.log(util.hebing(mthis.evetdata,response.body.data))
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdataFlag = true
@@ -167,8 +167,8 @@
               // });
               let docOb = {}
               docOb.docIds = mthis.selectionIdByType.contentIds.ids
-              console.log('docOb=============================')
-              console.log(docOb)
+              // console.log('docOb=============================')
+              // console.log(docOb)
               // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
               //   // mthis.evetdataFlag = true
               //   // mthis.evetdata = response.body.data[0].nodes
@@ -181,7 +181,7 @@
                   response.body.data[i].name = response.body.data[i].title
                 }
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-                // // // console.log(util.hebing(mthis.evetdata,response.body.data))
+                // // // // console.log(util.hebing(mthis.evetdata,response.body.data))
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdataFlag = true
               })
@@ -193,8 +193,8 @@
           mthis.evetdata =  []
           mthis.evetdataFlag = false
         }
-        console.log('-------------------evetdata-----------------')
-        console.log(mthis.evetdata)
+        // console.log('-------------------evetdata-----------------')
+        // console.log(mthis.evetdata)
       },
       singlePerson: function() {
         this.single = this.singlePerson
@@ -282,7 +282,7 @@
       },
       clickLeftStatics(staticsClick){
         var mthis = this;
-        // // // console.log(staticsClick)
+        // // // // console.log(staticsClick)
         mthis.$store.commit('setNetStaticsSelectedIds',staticsClick);
       },
       hightLight(id) {},
