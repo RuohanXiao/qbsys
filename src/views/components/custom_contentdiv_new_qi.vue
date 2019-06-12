@@ -167,8 +167,8 @@
       <!-- 词云分析图 -->
       <div>
       <!-- <div :style="{minWidth:leftMenu}"></div> -->
-      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'280px'}">
-        <div class="docMenu" :style="{display:'flex',width:'90%',height:'30px',lineHeight:'30px',justifyContent: 'flex-end'}">
+      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'240px'}">
+        <div class="docMenu" :style="{display:'flex',width:'90%',height:'50px',justifyContent: 'flex-end',alignItems: 'center'}">
           <RadioGroup v-model="changeBar" @on-change='changeShow'>
             <Radio label="词云"></Radio>
             <Radio label="热词排序"></Radio>
@@ -187,6 +187,7 @@
               </DropdownMenu>
           </Dropdown>
           </div>
+          <div class="delB">清空分析结果</div>
           
         </div>
         <div class="anaDoc" :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}">
@@ -881,8 +882,8 @@
         if(!mthis.contentAna) return;
         var topicAnaly = document.getElementById('topicAnaly');
         if(isOpen){
-          topicAnaly.style.left = '280px';
-          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px';
+          topicAnaly.style.left = '240px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 242 + 'px';
           mthis.wordResize(mthis.topicDatas.length)
         }else{
           topicAnaly.style.left = '0px';
@@ -1096,41 +1097,41 @@
         this.clearBubble(eventMove)
       },
       kuangup(e){
-        if(!this.showThumb) return;
-        this.isSel = false;
-        var mthis = this;
+        // if(!this.showThumb) return;
+        // this.isSel = false;
+        // var mthis = this;
         
-        var selDiv = document.getElementById('selectDiv');
-        var selOutDiv = document.getElementById('selOutDiv');
-        selOutDiv.style.display = 'none';
-        selDiv.style.display = 'none';
+        // var selDiv = document.getElementById('selectDiv');
+        // var selOutDiv = document.getElementById('selOutDiv');
+        // selOutDiv.style.display = 'none';
+        // selDiv.style.display = 'none';
         
-        if(this.isBru){
-          mthis.bruIds= util.unique(mthis.bruIds);
+        // if(this.isBru){
+        //   mthis.bruIds= util.unique(mthis.bruIds);
           
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: mthis.bruIds
-          }])
-          mthis.$store.commit('setContent2time',[{
-            ids:mthis.bruIds
-          }])
-          console.log(mthis.bruIds)
-          let selDocList = mthis.items.filter(item => item.check)
-          selDocList = selDocList.map(item =>({
-                    title: item.title,      
-                    id: item.id,
-                    time: item.time,
-                    from: item.from,     
-                  })
-                );
-          mthis.$store.commit('setSeletedDocAttrList',selDocList)
-          mthis.isBru = false;
-        }
+        //   mthis.$store.commit('setSelectContentNodes', [{
+        //     ids: mthis.bruIds
+        //   }])
+        //   mthis.$store.commit('setContent2time',[{
+        //     ids:mthis.bruIds
+        //   }])
+        //   console.log(mthis.bruIds)
+        //   let selDocList = mthis.items.filter(item => item.check)
+        //   selDocList = selDocList.map(item =>({
+        //             title: item.title,      
+        //             id: item.id,
+        //             time: item.time,
+        //             from: item.from,     
+        //           })
+        //         );
+        //   mthis.$store.commit('setSeletedDocAttrList',selDocList)
+        //   mthis.isBru = false;
+        // }
         
-        $('#selectDiv').remove();
-        $('#selOutDiv').remove();
-        this.clearBubble(e)
-        $('#contentchart').off('mousemove');
+        // $('#selectDiv').remove();
+        // $('#selOutDiv').remove();
+        // this.clearBubble(e)
+        // $('#contentchart').off('mousemove');
       },
     toSelIds(index,check,id,evt){
         this.clearBubble(evt)
@@ -2131,7 +2132,7 @@
     },
     mounted() {
       var mthis = this
-      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px'
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 242 + 'px'
       console.log(mthis.contentAnaWidth)
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
       console.log(wwWidth)
@@ -2156,7 +2157,43 @@
       window.py = "";
       window.divLength = 0;
       
-    
+      document.onmouseup = function(e){
+        if(!mthis.showThumb) return;
+        mthis.isSel = false;
+        
+        
+        var selDiv = document.getElementById('selectDiv');
+        var selOutDiv = document.getElementById('selOutDiv');
+        selOutDiv.style.display = 'none';
+        selDiv.style.display = 'none';
+        
+        if(mthis.isBru){
+          mthis.bruIds= util.unique(mthis.bruIds);
+          
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: mthis.bruIds
+          }])
+          mthis.$store.commit('setContent2time',[{
+            ids:mthis.bruIds
+          }])
+          console.log(mthis.bruIds)
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
+          mthis.isBru = false;
+        }
+        
+        $('#selectDiv').remove();
+        $('#selOutDiv').remove();
+        mthis.clearBubble(e)
+        $('#contentchart').off('mousemove');
+      }
       
     }
   };
@@ -2708,4 +2745,23 @@
     color:rgba(51, 255, 255, 1);
     cursor:pointer;
   }
+  .delB{
+        width: 100px;
+        height: 30px;
+        
+        background-color:rgba(51,255,255,0.5) !important;
+        border-radius: 5px;
+        
+        font-family: MicrosoftYaHei;
+	      font-size: 14px;
+        
+        line-height: 30px;
+        text-align: center;
+        cursor: pointer;
+        margin-left:10px;
+    }
+    .delB:hover{
+        color: #ccffff !important;
+        background-color:rgba(51,255,255,0.7) !important;
+    }
 </style>
