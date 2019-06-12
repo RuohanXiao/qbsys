@@ -28,10 +28,10 @@
     border-top: 1px solid rgba(51, 255, 255, 0.5);
   }
   .docBarTitle {
-    text-align: center;
+    text-align: left;
     color: #ccffff;
     font-family: MicrosoftYaHei;
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 0px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -40,7 +40,7 @@
     -webkit-line-clamp: 2;
   }
   .docBarTime {
-    text-align: center;
+    text-align: left;
     font-family: PARaDOS;
     font-size: 12px;
     letter-spacing: 0px;
