@@ -323,24 +323,32 @@
       juhe(){
         let ids = this.selectionIdByTypeData.eventIds
         let mthis = this
+        let allNodes = mthis.netchart.nodes().map(item=>{
+            return item.id
+          })
+        let timestamp =  new Date().getTime()
         mthis.$http
-              .post(mthis.$store.state.ipConfig.api_url + "/event-detail/", {
-                EventIds: ids
+              .post(mthis.$store.state.ipConfig.api_url + "/aggregation/", {
+                allNodeIds: allNodes,
+                selectNodeIds: ids,
+                timestamp: timestamp
               })
               .then(response => {
+                console.log(response.body)
+                console.log(response.body.code === 0)
+                console.log(timestamp)
+                console.log(timestamp+'' === response.body.timestamp)
                 if (response.body.code === 0) {
-                  let allNodesId = new Array()
-                  mthis.netchart.nodes().map(item=>{
-                    allNodesId.push(item.id)
-                    return item
-                  })
-                  let includeNode = response.body.data.filter(it =>{
-                    return util.ifInArr(it.id,allNodesId)
-                  })
-
-
+                  if(timestamp+'' === response.body.timestamp) {
+                    ids.map(item=>{
+                      console.log(item)
+                      mthis.netchart.hideNode(item+'')
+                      return item
+                    })
+                    mthis.netchart.addData(response.body.data)
+                  }
                 } else {
-                  mthis.setMessage('聚合失败！查询事件信息异常')
+                  mthis.setMessage('聚合失败！aggregation异常')
                 }
               })
       },
@@ -1690,14 +1698,12 @@
                   nodeObj['x'] = item.order * 200 + x0
                   nodeObj['y'] = item.depth * 300 + y0
                   arrids.push(item.id)
-                  mthis.netchart.lockNode(item.id)
                   //如果该节点有子节点，继续添加进入栈底
                   if (item.children && item.children.length) {
                     // // console.log(item.children.length)
                     stack = stack.concat(item.children);
                   }
                 }
-                mthis.netchart.updateSettings();
               };
               //非递归深度优先实现
               let xpos = 0
@@ -1745,7 +1751,7 @@
                   // nodeObj['y'] = item.depth * 300 + y0
                   // // console.log(nodeObj['x'] + ' , ' + nodeObj['y'])
                   arrids.push(item.id)
-                  mthis.netchart.lockNode(item.id)
+                  // mthis.netchart.lockNode(item.id)
                   //如果该节点有子节点，继续添加进入栈顶
                   if (item.children && item.children.length) {
                     // len = item.children.length;
@@ -1761,8 +1767,15 @@
               // iterator1(response.body.data[0]);
               // // console.log('===============shen du=====================')
               iterator2(response.body.data[0]);
+              response.body.nodes.map(ite=>{
+                mthis.netchart.lockNode(ite)
+                return ite
+              })
             }
           });
+          mthis.netchart.updateStyle(nodesIDS);
+          mthis.netchart.updateSettings();
+          mthis.netchart.updateSize();
         } else {
           this.setMessage("请选择节点进行层级排列操作！");
         }
@@ -2817,7 +2830,31 @@
                 // link.lineWidth = 5;
               }
               // -- -------------------------------------
-              if (link.data.type !== undefined && link.data.type !== "") {
+              console.log(link.data)
+              if (link.data.num !== undefined && link.data.num !== "") {
+                // link.direction = [100, 100, 100, 100];
+                // link.fromDecoration = "arrow";
+                // link.toDecoration = "arrow";
+                // link.lineColor = 'rgba(51,255,255,0.2)'
+                link.items = [{
+                  // Default item places just as the regular label.
+                  // rotateWithLink: true,
+                  scaleWithZoom: false,
+                  // align: "center",
+                  text: link.data.num+'',
+                  // imageSlicing: [0, 0, 20, 20],
+                  textStyle: {
+                    font: "10px MicrosoftYaHei",
+                    fillColor: "#33ffff"
+                  },
+                  backgroundStyle: {
+                    //连线文字背景色
+                    fillColor: "rgba(0,0,0,0.8)"
+                    // fillColor: "rgba(51,255,255,0.2)"
+                  }
+                }];
+              }
+              else if (link.data.type !== undefined && link.data.type !== "") {
                 // link.label = link.data.type;
                 link.items = [{
                   // Default item places just as the regular label.
@@ -2835,21 +2872,22 @@
                     fillColor: "rgba(0,0,0,0.8)"
                   }
                 }];
-              } else {
-                link.direction = [100, 100, 100, 100];
-                link.fromDecoration = "arrow";
-                link.toDecoration = "arrow";
-                // link.lineColor = 'rgba(51,255,255,0.2)'
+              }  else{
+                // link.label = link.data.type;
                 link.items = [{
                   // Default item places just as the regular label.
-                  rotateWithLink: true,
-                  scaleWithZoom: true,
-                  align: "center",
-                  text: link.data.num,
-                  imageSlicing: [0, 0, 20, 20],
+                  text: link.data.type,
+                  // padding: 2,
+                  // scaleWithZoom: true,
+                  scaleWithZoom: false,
                   textStyle: {
-                    font: "12px MicrosoftYaHei",
+                    font: "10px MicrosoftYaHei",
                     fillColor: "#669999"
+                  },
+                  backgroundStyle: {
+                    //连线文字背景色
+                    // fillColor: "rgba(0,0,0,0)"
+                    fillColor: "rgba(0,0,0,0.8)"
                   }
                 }];
               }

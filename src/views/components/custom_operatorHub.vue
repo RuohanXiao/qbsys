@@ -12,7 +12,7 @@
   overflow-y: scroll;
 }
 .openHub .pick{
-  background-image: url('../../dist/assets/images/close_before.png');
+  background-image: url('http://10.60.1.140/assets/images/close_before.png');
   margin-left:240px;
   /* -webkit-animation: openHubpick 1s infinite; 
     animation: openHubpick 1s infinite; */
@@ -23,7 +23,7 @@
     
 }
 .openHub .pick:hover{
-  background-image: url('../../dist/assets/images/close_after.png');
+  background-image: url('http://10.60.1.140/assets/images/close_after.png');
   margin-left:240px;
   /* -webkit-animation: openHubpick 1s infinite; 
     animation: openHubpick 1s infinite; */
@@ -33,14 +33,14 @@
   -o-transition:margin-left 0.5s; /* Opera */
 }
 .closeHub .pick{
-  background-image: url('../../dist/assets/images/open_before.png');
+  background-image: url('http://10.60.1.140/assets/images/open_before.png');
   transition:margin-left 0.5s;
   -moz-transition:margin-left 0.5s; /* Firefox 4 */
   -webkit-transition:margin-left 0.5s; /* Safari and Chrome */
   -o-transition:margin-left 0.5s; /* Opera */
 }
 .closeHub .pick:hover{
-  background-image: url('../../dist/assets/images/open_after.png');
+  background-image: url('http://10.60.1.140/assets/images/open_after.png');
   transition:margin-left 0.5s;
   -moz-transition:margin-left 0.5s; /* Firefox 4 */
   -webkit-transition:margin-left 0.5s; /* Safari and Chrome */
@@ -143,7 +143,7 @@
         <Row v-else class="operHeaderName" type="flex" justify="center" align="middle">
               <Col span="24">
                 <span>{{header.operatorName}}</span>
-                <img class='cancelImg' :src="require('../../dist/assets/images/back.png')" @click="cancelOperator" />
+                <img class='cancelImg' src="http://10.60.1.140/assets/images/back.png" @click="cancelOperator" />
               </Col>
               <!-- <Col span="9"><img :src="require('../../dist/assets/images/back.png')" @click="cancelOperator" /></Col> -->
         </Row>
