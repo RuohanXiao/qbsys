@@ -67,7 +67,7 @@
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifShowDoc? 'button-div':'button-div-disable'" @click='contentTranslate'>
-            <Icon class="icon iconfont icon-selection-box" size="26"></Icon>
+            <Icon class="icon iconfont icon-translate2" size="26"></Icon>
             <p class="img-content">翻译</p>
           </div>
         </Tooltip>
@@ -168,7 +168,7 @@
       <div>
       <!-- <div :style="{minWidth:leftMenu}"></div> -->
       <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'240px'}">
-        <div class="docMenu" :style="{display:'flex',width:'90%',height:'50px',justifyContent: 'flex-end',alignItems: 'center'}">
+        <div class="docMenu" :style="{display:'flex',paddingRight: '5px',height:'50px',justifyContent: 'flex-end',alignItems: 'center'}">
           <RadioGroup v-model="changeBar" @on-change='changeShow'>
             <Radio label="词云"></Radio>
             <Radio label="热词排序"></Radio>
@@ -187,7 +187,7 @@
               </DropdownMenu>
           </Dropdown>
           </div>
-          <div class="delB">清空分析结果</div>
+          <div class="delB" @click='topicDatas=[]'>清空分析结果</div>
           
         </div>
         <div class="anaDoc" :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}">
@@ -196,7 +196,7 @@
           v-for="(list,index) in topicDatas" :key="index">
             <div class="itemHeader" 
             :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
-              <p>普京：美国...(10)</p>
+              <p class='docAnaTitle' @click="showAllTitle(index,$event);closeShowTitle()">普京：美国...(10)</p>
               <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
               <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
             </div>
@@ -221,6 +221,15 @@
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
         </div>
+        <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
+            :style="{display:'none'}">
+              <div v-for="(item,index) in list.docDatas" :key="index" :style="{display:'flex',marginBottom:'5px',cursor:'pointer'}" :title="item.title">
+                  <p class="itemTitle" :style="{color:'#fff'}">{{item.title}}</p>
+                  <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px'}">{{item.time}}</p>
+                  <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)',marginLeft:'5px'}"></p>
+                  <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px'}">{{item.from}}</p>
+                </div>
+            </div>
         
       </div>
       </div>
@@ -259,8 +268,8 @@
     name: "App",
     data() {
       return {
-        // itemWidth:"20%",
-        leftMenu:'280px',
+        showAllDocCount:0,
+        myWordCharts:[],
         option:new Object({
           title:{
             name:'keyWords分析',
@@ -275,64 +284,376 @@
            },
            series: [{
  			        name: 'keyWords分析',
- 			        type: 'wordCloud',
+               type: 'wordCloud',
+               shape: 'circle',
  			        sizeRange: [10, 18],
  			        rotationRange: [0, 0],
- 			        textPadding: 0,
+              textPadding: 0,
+               
  			        autoSize: {
  			            enable: true,
  			            minSize: 10
  			        },
  			        textStyle: {
  			            normal: {
- 			                color: function() {
- 			                    return 'rgb(' + [
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160)
- 			                    ].join(',') + ')';
+ 			                color: function(params) {
+                           var colorList = ['#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff']
+                           return colorList[params.dataIndex]
  			                }
- 			            },
+                   },
+                
  			            emphasis: {
  			                shadowBlur: 10,
  			                shadowColor: '#333'
  			            }
                },
-               data:[{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},]
+               right: null,
+               bottom: null,
+               left:'center',
+               top:'center',
+               data:[
+                 {name:'Jayfee',value:200},
+                 {name:'Jayfee',value:120},
+                 {name:'Jayfee',value:180},
+                 {name:'Jayfee',value:120},
+                 {name:'Jayfee',value:320},
+                 {name:'Jayfee',value:220},
+                 {name:'Jayfee',value:190},
+                 {name:'Jayfee',value:200},
+                 {name:'Jayfee',value:200},
+                 {name:'Jayfee',value:180},
+                 {name:'Jayfee',value:170},
+                 {name:'Jayfee',value:160},
+                 {name:'Jayfee',value:150},
+                 {name:'Jayfee',value:140},
+                 {name:'Jayfee',value:130},
+                 {name:'Jayfee',value:240},
+                 {name:'Jayfee',value:160},
+                 {name:'Jayfee',value:260},
+                 {name:'Jayfee',value:250},
+                 {name:'Jayfee',value:150},
+                 {name:'Jayfee',value:130},
+                 {name:'Jayfee',value:110},
+                 {name:'Jayfee',value:120},
+                 {name:'Jayfee',value:150},
+                 {name:'Jayfee',value:160},
+                 {name:'Jayfee',value:170},
+                 {name:'Jayfee',value:180},
+                 {name:'Jayfee',value:220},
+                 {name:'Jayfee',value:210},
+                 {name:'Jayfee',value:230},
+                 {name:'Jayfee',value:120},
+                 {name:'Jayfee',value:150},
+                 {name:'Jayfee',value:210},
+                 {name:'Jayfee',value:230},
+                 {name:'Jayfee',value:250},
+                 {name:'Jayfee',value:216},
+                 {name:'Jayfee',value:250},
+                 {name:'Jayfee',value:197},
+                 {name:'Jayfee',value:198},
+                 {name:'Jayfee',value:183},
+                 {name:'Jayfee',value:182},
+                 {name:'Jayfee',value:179},
+                 {name:'Jayfee',value:178},
+                 {name:'Jayfee',value:165},
+                 {name:'Jayfee',value:168},
+                 {name:'Jayfee',value:164},
+                 {name:'Jayfee',value:165},
+                 {name:'Jayfee',value:234},
+                 {name:'Jayfee',value:246},
+                 {name:'Jayfee',value:238}
+                 ]
  			 	  }]
         }),
         ifTopic:true,
         wordCloudOption:null,
         topicDatas:[
-          {ids:[],title:[],topDatas:[
+          {ids:[],docDatas:[
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            }
+          ],
+          topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20}]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]}
@@ -342,6 +663,7 @@
         ifhasDoc:false,
         ifhasSel:false,
         ifShowDoc:false,
+        prevIfhasSel:false,
         isBru:false,
         bruIds:[],
         bruStartX:0,
@@ -593,6 +915,7 @@
           mthis.contentAna = false
           mthis.ifhasDoc = true
           mthis.ifhasSel = true
+          
         }
         
       },
@@ -876,7 +1199,24 @@
       cutScreen(){
         // 截屏事件
       },
-
+      showAllTitle(index,e){
+        var mthis = this
+        mthis.clearBubble(e)
+        if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
+          var pTitle = document.getElementsByClassName('docAnaTitle')[index]
+          document.getElementsByClassName('allTitle')[index].style.display = 'block'
+          document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft + 'px';
+          document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20 + 'px';
+          mthis.showAllDocCount = mthis.showAllDocCount + 1;
+        }else{
+          document.getElementsByClassName('allTitle')[index].style.display = 'none';
+          mthis.showAllDocCount = mthis.showAllDocCount - 1;
+        }
+        
+      },
+      closeShowTitle(){
+        
+      },
       clickHub(isOpen){
         var mthis = this;
         if(!mthis.contentAna) return;
@@ -903,7 +1243,7 @@
         }
       },
       changeDrop(name){
-        alert(name)
+        console(name)
       },
       delTopData(index){
         console.log(index)
@@ -1927,6 +2267,8 @@
       },
       hideContentDiv(flag){
         var mthis = this
+        mthis.ifhasDoc = true;
+        mthis.ifhasSel = mthis.prevIfhasSel;
         if(flag ==1){
           mthis.ifInfo = false
           mthis.$store.state.contentSelShowFlag = false
@@ -2020,51 +2362,79 @@
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           mthis.topHeight = 330 + 'px'
           mthis.itemHeight = 300 + 'px'
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize({
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          })
+          
+        }
         }else if(len>1 && len <6){
           mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize({
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          })
+          }
         }else if(len ==6){
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
           console.log(mthis.itemWidth)
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize({
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          })
+          }
         }else if(len==1){
           mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize({
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          })
+          }
         }
       },
       showContentAna(){
         var mthis = this
         mthis.contentAna = true
+        mthis.changeBar = '热词排序'
         var charts = [];
         var options = [];
-        var myWordCharts = [];
+        mthis.myWordCharts = [];
         let len = mthis.topicDatas.length;
         mthis.wordResize(len)
         
         for(var i=0;i<mthis.topicDatas.length;i++){
           charts.push(i+'wordChart');
-          myWordCharts.push(i+'myChart');
+          mthis.myWordCharts.push(i+'myChart');
           options.push(mthis.option);
         }
-        for(var j=0;j<myWordCharts.length;j++){
-          myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
+        for(var j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
             width:mthis.itemWidth,
             height:mthis.itemHeight
           });
-          myWordCharts[j].setOption(options[j]);
+          mthis.myWordCharts[j].setOption(options[j]);
         }
         
       },
       showContent(id,title) {
         clearTimeout(timerClick);
         var mthis = this
-        
+        mthis.ifhasDoc = false;
+        mthis.prevIfhasSel = mthis.ifhasSel;
+        mthis.ifhasSel = false;
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}
         selData.id = [id];
@@ -2156,7 +2526,10 @@
       window.px = "";
       window.py = "";
       window.divLength = 0;
-      
+      document.onclick = function(){
+        if(!mthis.showAllDocCount) return;
+        $('.allTitle').css('display','none');
+      }
       document.onmouseup = function(e){
         if(!mthis.showThumb) return;
         mthis.isSel = false;
@@ -2228,6 +2601,7 @@
     -webkit-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     -moz-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
+    background-color: rgba(51,255,255,0.2);
   }
   /* 角标折角 */
   /* .contentDiv ::before {
@@ -2247,8 +2621,8 @@
                 box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
               } */
   .contentTitle {
-    padding: 0 25px 0 5px;
-    text-align: center;
+    /* padding: 0 25px 0 5px; */
+    text-align: left;
     color: #ccffff;
     cursor: pointer;
     font-family: MicrosoftYaHei;
@@ -2279,7 +2653,7 @@
     line-height: 19px !important;
   }
   .contentTime {
-    text-align: center;
+    text-align: left;
     padding: 0 5px 5px 5px;
     height: 35px;
     font-family: PARaDOS;
@@ -2654,59 +3028,7 @@
     background-color: #003333;
 	  border: solid 2px #ccffff;
   }
- #contentWordCloud{
-   border-right:1px solid #336666;
-   border-left:1px solid #336666;
-   
- }
-.e-title {
-    height: 30px;
-    background-color: rgba(51, 255, 255, 0.2);
-    border-top: solid 1px #366674;
-    border-bottom: solid 1px #366674;
-    display: flex;
-  }
-  .e-title-p {
-    height: 18px;
-    font-family: MicrosoftYaHei;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 28px;
-    letter-spacing: 0px;
-    color: #ccffff;
-  }
-  .e-title-d {
-    width: 4px;
-    height: 16px;
-    background-color: #009999;
-    margin: 6px 6px;
-  }
-  .econtent {
-    display: flex;
-    height: auto;
-    min-height: 30px;
-  }
-  
-  .w8em {
-    width: 8em;
-    min-width: 8em;
-    max-width: 8em;
-    margin: 0;
-  }
-  .tableLine>.econtent:nth-child(odd) {
-    background-color: rgba(51, 255, 255, 0.05);
-  }
-  .tableLine>.econtent:nth-child(odd):hover {
-    background-color: rgba(51, 255, 255, 0.2);
-  }
-  .tableLine>.econtent:nth-child(even):hover {
-    background-color: rgba(51, 255, 255, 0.2);
-  }
-  .rightIcon:hover{
-    opacity: 1;
-    cursor: pointer;
-  }
+
   .topItem{
     border:'1px solid #336666';
     /* margin:0px 0px 1em 0.8em; */
@@ -2745,6 +3067,13 @@
     color:rgba(51, 255, 255, 1);
     cursor:pointer;
   }
+  .itemTitle{
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    width:200px;
+    max-width: 200px;
+  }
   .delB{
         width: 100px;
         height: 30px;
@@ -2763,5 +3092,15 @@
     .delB:hover{
         color: #ccffff !important;
         background-color:rgba(51,255,255,0.7) !important;
+    }
+    .allTitle{
+      position:absolute;
+      z-index:99;
+      border:solid 1px #336666;
+      border-radius:10px;
+      background-color:black;
+      padding:10px 10px 0px 10px;
+      max-height:300px;
+      overflow-y:scroll;
     }
 </style>

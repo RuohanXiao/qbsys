@@ -547,7 +547,7 @@
     word-break: break-all;
     color: rgba(204,255,255,0.5);
     vertical-align:middle;   
-    display:table-cell;   
+    /* display:table-cell;    */
     }
 </style>
 

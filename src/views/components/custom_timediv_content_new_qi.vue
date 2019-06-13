@@ -8,13 +8,13 @@
         <!-- <Col span="3"/> -->
         <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
         <Col span="1"  class="bottom">
-        <Tooltip content="放大" placement="bottom">
+        <!-- <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
-        </Tooltip>
+        </Tooltip> -->
         </Col>
         <Col span="1" class="bottom">
-        <Tooltip content="缩小" placement="bottom">
-          <Icon class="icon iconfont icon-zoom-out process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+        <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip>
         </Col>
         <Col span="1" class="bottom" />
@@ -25,7 +25,14 @@
     <div :style="{borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
       <!-- <echarts id='barchart' :options="bar" :style="{height: timepxdiv}" :auto-resize="true" ></echarts> -->
-      <div :id="main1Id" :style="{width:pwidth}"></div>
+      <div  v-show="showEchart">
+          <div :id="main1Id" :style="{width:pwidth}"></div>
+      </div>
+      
+      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '20px'}">
+        <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
+        <p>选中文档可查看时间轴</p>
+      </div>
     </div>
     </Col>
     <div class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" v-show="clcikShowDiv" @mouseleave="clcikShowDiv=false">
@@ -64,6 +71,7 @@
     name: "",
     data() {
       return {
+        showEchart:false,
         timeTitle: '请选择节点',
         timechartdivId:'timechartdiv_' + this.activeId,
         arrowDownId:'arrowDown_'+ this.activeId,
@@ -738,10 +746,14 @@
       'dataBySeries.date':{
        
         handler:function(newVal,oldVal){
-        
+          
           
           this.dataBySeries.clickNum = new Array(newVal.length).fill(null)
-          
+          if(newVal.length>0){
+            this.showEchart = true
+          }else{
+            this.showEchart = false
+          }
         }
 
       },
