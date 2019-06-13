@@ -180,7 +180,7 @@ top: 232px;
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
                 <transition name="prompt"><div v-if="promptflag" class='promptmessage'>{{promptMessage}}</div></transition>
-                <div class='heatMapFormDiv' v-if='heatMapVisible' >
+                <!-- <div class='heatMapFormDiv' v-if='heatMapVisible' >
                     <div class='heatSettingName'>热力设置</div>
                     <form class='heatMapForm'>
                         <label>半径大小</label><br/>
@@ -188,7 +188,7 @@ top: 232px;
                         <label>模糊度大小</label><br/>
                         <input id="blur" type="range" min="1" max="50" step="1" value="15" @input='setBlur()'/>
                     </form>
-                </div>
+                </div> -->
                 <operatorHub :style="{height:mapHeight}" :operatorConfig="operatorConfig"></operatorHub>
             </div>
             
@@ -3652,6 +3652,7 @@ export default {
             //var source = mthis.getLayerById('HLAreaLayer').getSource();
             //source.clear();
             var feature;
+            debugger
             for(let i = 0; i < ids.length; i++){
                 var type = ids[i].split('_')[1];
                 var id = ids[i].split('_')[0];
@@ -3911,38 +3912,6 @@ export default {
     　　　　 deep: true,
             immediate: true
         },
-        /* geoTimeCondition:function(){
-            var mthis = this;
-            var type = mthis.geoTimeCondition.type;
-            var timeSelectedIds = mthis.geoTimeCondition.eventIds;
-            if(type === 'notAnalysis'){
-                mthis.timeSelectedEventIds = timeSelectedIds;
-                mthis.halfSelectedIds = mthis.HLIds;
-                var ids = [];
-                if(mthis.timeSelectedEventIds.length > 0){
-                    mthis.timeSelectedEventIds.forEach(function(item){
-                        if(item.indexOf('&') === -1){
-                            var id = 'org&'+item;
-                            ids.push(id)
-                        } else {
-                            ids.push(item)
-                        }
-                    })
-                }
-                mthis.staticsSelectedEventIds = ids;
-                if(mthis.halfSelectedIds.length > 0){
-                    mthis.halfSelectedIds.forEach(function(paramid){
-                        var layerId = mthis.getLayerIdByFeatureIdOrParamId(paramid);
-                        var OId = mthis.getOIdFromId(paramid);
-                        var featureId = mthis.allEventIdsToFeaturesIdsList[OId].featureId;
-                        var feature = mthis.getLayerById(layerId).getSource().getFeatureById(featureId);
-                        mthis.setFeatureStatus(feature,'halflife')
-                    })
-                }
-            } else {
-                mthis.timeSelectedEventIdsOnly = timeSelectedIds;
-            }
-        }, */
         timeCondition:function(){
             var mthis = this;
             var ids = [];
