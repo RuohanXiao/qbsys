@@ -265,6 +265,7 @@
                 }
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdataFlag = true
+                
               })
           }, 200);
         } else {

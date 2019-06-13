@@ -8,13 +8,13 @@
         <Col span="20" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
         <Col span="21" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
         <Col span="1" class="bottom">
-        <Tooltip content="放大" placement="bottom">
+        <!-- <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
-        </Tooltip>
+        </Tooltip> -->
         </Col>
         <Col span="1" class="bottom">
-        <Tooltip content="缩小" placement="bottom">
-          <Icon class="icon iconfont icon-zoom-out process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+        <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip>
         </Col>
         <Col span="1" class="bottom" />
@@ -25,7 +25,14 @@
     <div :style="{borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
       <!-- <echarts id='barchart' :options="bar" :style="{height: timepxdiv}" :auto-resize="true" ></echarts> -->
-      <div :id="main1Id" :style="{width:pwidth}"></div>
+      <div  v-show="showEchart">
+          <div :id="main1Id" :style="{width:pwidth}"></div>
+      </div>
+      
+      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '20px'}">
+        <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
+        <p>选中事件或文档可查看时间轴</p>
+      </div>
     </div>
     </Col>
     <!-- <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="toGeoAna(1)">选中分析</div>
@@ -69,6 +76,7 @@
     name: "",
     data() {
       return {
+        showEchart:false,
         timeTitle: '请选择节点',
         timechartdivId: 'timechartdiv_' + this.activeId,
         arrowDownId: 'arrowDown_' + this.activeId,
@@ -815,7 +823,11 @@
         handler:function(newVal,oldVal){
           
           this.dataBySeries.clickNum = new Array(newVal.length).fill(null)
-          
+          if(newVal.length>0){
+            this.showEchart = true
+          }else{
+            this.showEchart = false
+          }
         }
 
       },
@@ -853,9 +865,9 @@
                           localIds = conIds.concat(response.body.data.ids).concat(conIds);
                           mthis.dataBySeries.clickNum = [];
                           mthis.loadEcharts(2);
-                          util.writeStorage("eventIds",localIds)
-                          // console.log('<100')
-                          // console.log(mthis.dataBySeries.date.length)
+                          util.writeStorage("allIds",localIds)
+                          console.log('<100')
+                          console.log(mthis.dataBySeries.date.length)
                       }else{
                         let dayCount = parseInt(response.body.data.time.length * 0.1)
                        if(dayCount>0){
@@ -952,9 +964,9 @@
                           localIds = conIds.concat(response.body.data.ids).concat(conIds);
                           mthis.dataBySeries.clickNum = [];
                           mthis.loadEcharts(2);
-                          util.writeStorage("eventIds",localIds)
-                          // console.log('<100')
-                          // console.log(mthis.dataBySeries.date.length)
+                          util.writeStorage("allIds",localIds)
+                          console.log('<100')
+                          console.log(mthis.dataBySeries.date.length)
                       }else{
                         let dayCount = parseInt(response.body.data.time.length * 0.1)
                        if(dayCount>0){

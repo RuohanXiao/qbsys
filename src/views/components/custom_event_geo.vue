@@ -20,7 +20,7 @@
     <div>
       <div class="e-title">
         <div class="e-title-d"></div>
-        <p class="e-title-p">节点信息{{detailData.entity_type}}</p>
+        <p class="e-title-p">节点信息</p>
       </div>
       <!-- <human-entity-table v-show="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table> -->
       <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
@@ -305,10 +305,13 @@
       }
     },
     mounted() {
+
+
       this.selectDivHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 8 + 30 + "px";
       this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 12 + "px";
       this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
-      this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 60 + "px";
+      this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 60 -20 + "px";
+      this.entDivHTitle = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 30 -20 + "px";
       var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
       var entityMainType = ob.getElementsByTagName("entityMainType");
       this.myMap = new Map();
@@ -328,7 +331,7 @@
   }
   .avatarStyle {
     width: 50px;
-    margin: 0 20px;
+    margin: 10px 20px;
   }
   .contentStyle {
     width: 100%;
@@ -473,7 +476,7 @@
   .bstyle:hover {
     color: rgba(51, 255, 255, 0.8) !important;
   }
-   .desClass{
+   /* .desClass{
     line-height: 22px;
     overflow: hidden;
     white-space: wrap;
@@ -486,7 +489,7 @@
     height: 44px;
     word-break: break-all;
     color: rgba(204,255,255,0.5);
-    }
+    } */
 </style>
 
 

@@ -3,92 +3,94 @@
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px',border:'solid 1px #336666'}">
       <div class='divStyle'>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="removeAll">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="removeAll">
             <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">清空</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='fanxuan'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='fanxuan'>
             <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">反选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="selectAll">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="selectAll">
             <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">全选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="deleteNode()"> 
+          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="deleteNode()"> 
             <Icon class="icon iconfont icon-delete-name DVSL-bar-btn-new DVSL-bar-btn-back" size="26" ></Icon>
             <p class="img-content">删除</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="openCreateGroupModal">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="openCreateGroupModal">
             <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">创建集合</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='toContentDiv'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='toContentDiv'>
             <Icon class="icon iconfont icon-zhaiyaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">摘要图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="toThumbnails">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="toThumbnails">
             <Icon class="icon iconfont icon-suolvetu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">缩略图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='showAsList'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='showAsList'>
             <Icon class="icon iconfont icon-liebiaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">列表图</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='orderTimeUp'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='orderTimeUp'>
             <Icon class="icon iconfont icon-paixu--guanlian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">相关性排序</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='orderTimeDown'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='orderTimeDown'>
             <Icon class="icon iconfont icon-paixu--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">时间排序</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-custom" @click='contentTranslate'>
-            <Icon class="icon iconfont icon-selection-box" size="26"  :class="(translateButton)?'lightUp':''" ></Icon>
-            <p class="img-content"  :class="(translateButton)?'lightUp':''">翻译</p>
+          <div :class="ifShowDoc? 'button-div':'button-div-disable'" @click='contentTranslate'>
+            <Icon class="icon iconfont icon-translate2" size="26"></Icon>
+            <p class="img-content">翻译</p>
           </div>
         </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-custom" @click="showContentAna">
-            <Icon class="icon iconfont icon-selection-box" size="26" :class="(analysisButton)?'lightUp':''"></Icon>
-            <p class="img-content" :class="(analysisButton)?'lightUp':''">分析</p>
-          </div>
-        </Tooltip>
+        
         <!-- <div class="divSplitLine"></div> -->
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="toNet">
+          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="toNet">
             <Icon class="icon iconfont icon-tuisongzhiwangluo  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">推送网络</p>
           </div>
         </Tooltip>
-        
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="cutScreen">
+            <Icon class="icon iconfont icon-cut DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">截屏</p>
+          </div>
+        </Tooltip>
       </div>
     </div>
-    <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
+    <div @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup"
+    :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
         <operatorHub :style="{height:ContentHeightList}" :operatorConfig="operatorConfig" @isOpen="clickHub"></operatorHub>
         <div v-show="!showList && !contentAna">
@@ -101,7 +103,7 @@
             </div>
           
             <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}"
-             @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup">
+             >
               <Row type="flex" justify="start">
 
                 <Col :sm="colSmnum" :lg="colLgNum" :md='colMdNum' align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
@@ -109,7 +111,6 @@
                   <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click='toSelIds(index,item.check,item.id,$event)' 
                   @dblclick="showContent(item.id,item.title)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
                   @mouseenter="addHover" @mouseleave="removeHover">
-                   
                       <img :src='item.img' class="picsize" :class="(item.check)?'item-selected':''" >
                       <p class='nametext' ref='docP'>{{item.title}}</p>
                    
@@ -166,8 +167,8 @@
       <!-- 词云分析图 -->
       <div>
       <!-- <div :style="{minWidth:leftMenu}"></div> -->
-      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'280px'}">
-        <div class="docMenu" :style="{display:'flex',width:'90%',height:'30px',lineHeight:'30px',justifyContent: 'flex-end'}">
+      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'240px'}">
+        <div class="docMenu" :style="{display:'flex',paddingRight: '5px',height:'50px',justifyContent: 'flex-end',alignItems: 'center'}">
           <RadioGroup v-model="changeBar" @on-change='changeShow'>
             <Radio label="词云"></Radio>
             <Radio label="热词排序"></Radio>
@@ -186,26 +187,25 @@
               </DropdownMenu>
           </Dropdown>
           </div>
+          <div class="delB" @click='topicDatas=[]'>清空分析结果</div>
           
         </div>
-        <div class="anaDoc" :style="{display:'flex',flexWrap:'wrap',width:'100%',padding:'5px 0px 5px 5px'}">
+        <div class="anaDoc" :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}">
           <div class="topItem" 
           :style="{border:'1px solid #336666',order:orderCount,width:topWidth,height:topHeight,display:'flex',flexDirection:'column'}"
           v-for="(list,index) in topicDatas" :key="index">
             <div class="itemHeader" 
-            :style="{display:'flex',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-between'}">
-              <p :style="{marginLeft:'10px'}">普京：美国...(10)</p>
-              <div>
-                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
-                <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
-              </div>
+            :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
+              <p class='docAnaTitle' @click="showAllTitle(index,$event);closeShowTitle()">普京：美国...(10)</p>
+              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
+              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
             </div>
             <div v-show="ifTopic" :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
               <div class="topicItem" 
-              :style="{display:'flex',justifyContent:'space-around',padding:'0px 5px 0px 5px',color:'#fff'}" 
+              :style="{display:'flex',justifyContent:'space-between',padding:'0px 1.25em 0px 1.25em',color:'#fff'}" 
               v-for="(item,ind) in list.topDatas" :key="ind">
                 <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
-                <p :style="{fontSize:'12px',flex:'1',marginLeft:'5px'}">{{item.name}}</p>
+                <p :style="{fontSize:'12px',flex:'1',paddingLeft:'1.25em'}">{{item.name}}</p>
                 <p :style="{fontSize:'12px'}">{{item.num}}</p>
               </div>
             </div>
@@ -214,8 +214,22 @@
             </div>
             
           </div>
-          
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
         </div>
+        <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
+            :style="{display:'none'}">
+              <div v-for="(item,index) in list.docDatas" :key="index" :style="{display:'flex',marginBottom:'5px',cursor:'pointer'}" :title="item.title">
+                  <p class="itemTitle" :style="{color:'#fff'}">{{item.title}}</p>
+                  <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px'}">{{item.time}}</p>
+                  <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)',marginLeft:'5px'}"></p>
+                  <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px'}">{{item.from}}</p>
+                </div>
+            </div>
         
       </div>
       </div>
@@ -254,8 +268,8 @@
     name: "App",
     data() {
       return {
-        // itemWidth:"20%",
-        leftMenu:'280px',
+        showAllDocCount:0,
+        myWordCharts:[],
         option:new Object({
           title:{
             name:'keyWords分析',
@@ -270,64 +284,376 @@
            },
            series: [{
  			        name: 'keyWords分析',
- 			        type: 'wordCloud',
+               type: 'wordCloud',
+               shape: 'circle',
  			        sizeRange: [10, 18],
  			        rotationRange: [0, 0],
- 			        textPadding: 0,
+              textPadding: 0,
+               
  			        autoSize: {
  			            enable: true,
  			            minSize: 10
  			        },
  			        textStyle: {
  			            normal: {
- 			                color: function() {
- 			                    return 'rgb(' + [
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160)
- 			                    ].join(',') + ')';
+ 			                color: function(params) {
+                           var colorList = ['#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff']
+                           return colorList[params.dataIndex]
  			                }
- 			            },
+                   },
+                
  			            emphasis: {
  			                shadowBlur: 10,
  			                shadowColor: '#333'
  			            }
                },
-               data:[{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},{name:'Jayfee',value:520},]
+               right: null,
+               bottom: null,
+               left:'center',
+               top:'center',
+               data:[
+                 {name:'Jayfee',value:200},
+                 {name:'Jayfee',value:120},
+                 {name:'Jayfee',value:180},
+                 {name:'Jayfee',value:120},
+                 {name:'Jayfee',value:320},
+                 {name:'Jayfee',value:220},
+                 {name:'Jayfee',value:190},
+                 {name:'Jayfee',value:200},
+                 {name:'Jayfee',value:200},
+                 {name:'Jayfee',value:180},
+                 {name:'Jayfee',value:170},
+                 {name:'Jayfee',value:160},
+                 {name:'Jayfee',value:150},
+                 {name:'Jayfee',value:140},
+                 {name:'Jayfee',value:130},
+                 {name:'Jayfee',value:240},
+                 {name:'Jayfee',value:160},
+                 {name:'Jayfee',value:260},
+                 {name:'Jayfee',value:250},
+                 {name:'Jayfee',value:150},
+                 {name:'Jayfee',value:130},
+                 {name:'Jayfee',value:110},
+                 {name:'Jayfee',value:120},
+                 {name:'Jayfee',value:150},
+                 {name:'Jayfee',value:160},
+                 {name:'Jayfee',value:170},
+                 {name:'Jayfee',value:180},
+                 {name:'Jayfee',value:220},
+                 {name:'Jayfee',value:210},
+                 {name:'Jayfee',value:230},
+                 {name:'Jayfee',value:120},
+                 {name:'Jayfee',value:150},
+                 {name:'Jayfee',value:210},
+                 {name:'Jayfee',value:230},
+                 {name:'Jayfee',value:250},
+                 {name:'Jayfee',value:216},
+                 {name:'Jayfee',value:250},
+                 {name:'Jayfee',value:197},
+                 {name:'Jayfee',value:198},
+                 {name:'Jayfee',value:183},
+                 {name:'Jayfee',value:182},
+                 {name:'Jayfee',value:179},
+                 {name:'Jayfee',value:178},
+                 {name:'Jayfee',value:165},
+                 {name:'Jayfee',value:168},
+                 {name:'Jayfee',value:164},
+                 {name:'Jayfee',value:165},
+                 {name:'Jayfee',value:234},
+                 {name:'Jayfee',value:246},
+                 {name:'Jayfee',value:238}
+                 ]
  			 	  }]
         }),
         ifTopic:true,
         wordCloudOption:null,
         topicDatas:[
-          {ids:[],title:[],topDatas:[
+          {ids:[],docDatas:[
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            }
+          ],
+          topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20}]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],title:[],topDatas:[
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]}
@@ -335,6 +661,9 @@
         changeBar:'热词排序',
         orderCount:0,
         ifhasDoc:false,
+        ifhasSel:false,
+        ifShowDoc:false,
+        prevIfhasSel:false,
         isBru:false,
         bruIds:[],
         bruStartX:0,
@@ -550,14 +879,43 @@
     },
     computed: mapState([
       'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes','topicClassifStatus'
-    ]),
+      ]),
+
+   
     watch: {
+      prevItems:{
+        handler(newVal,oldVal){
+          var mthis = this
+          if(mthis.prevItems.length>0){
+            mthis.ifhasDoc = true;
+            let buttonItems = mthis.prevItems.filter(item => item.check)
+            if(buttonItems.length>0){
+              mthis.ifhasSel = true
+            }else{
+              mthis.ifhasSel = false
+            }
+            
+          }else{
+            mthis.ifhasDoc = false
+            mthis.ifhasSel = false
+            mthis.ifShowDoc = false
+          }
+        },
+        deep:true,
+        immediate: true
+      },
       topicClassifStatus:function(){
         var mthis = this;
         if(mthis.topicClassifStatus){
           mthis.showContentAna()
+          mthis.ifhasDoc = false
+          mthis.ifhasSel = false
+          // mthis.ifShowDoc = false
         }else{
           mthis.contentAna = false
+          mthis.ifhasDoc = true
+          mthis.ifhasSel = true
+          
         }
         
       },
@@ -671,7 +1029,7 @@
             mthis.$store.commit('setContent2time',[{
               ids:selectIds
             }])
-            mthis.translateButton = true
+            mthis.ifShowDoc = true
             mthis.analysisButton = true
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
@@ -838,13 +1196,34 @@
     },
     props: ['contentData'],
     methods: {
+      cutScreen(){
+        // 截屏事件
+      },
+      showAllTitle(index,e){
+        var mthis = this
+        mthis.clearBubble(e)
+        if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
+          var pTitle = document.getElementsByClassName('docAnaTitle')[index]
+          document.getElementsByClassName('allTitle')[index].style.display = 'block'
+          document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft + 'px';
+          document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20 + 'px';
+          mthis.showAllDocCount = mthis.showAllDocCount + 1;
+        }else{
+          document.getElementsByClassName('allTitle')[index].style.display = 'none';
+          mthis.showAllDocCount = mthis.showAllDocCount - 1;
+        }
+        
+      },
+      closeShowTitle(){
+        
+      },
       clickHub(isOpen){
         var mthis = this;
         if(!mthis.contentAna) return;
         var topicAnaly = document.getElementById('topicAnaly');
         if(isOpen){
-          topicAnaly.style.left = '280px';
-          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px';
+          topicAnaly.style.left = '240px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 242 + 'px';
           mthis.wordResize(mthis.topicDatas.length)
         }else{
           topicAnaly.style.left = '0px';
@@ -864,7 +1243,7 @@
         }
       },
       changeDrop(name){
-        alert(name)
+        console(name)
       },
       delTopData(index){
         console.log(index)
@@ -1058,50 +1437,52 @@
         this.clearBubble(eventMove)
       },
       kuangup(e){
-        if(!this.showThumb) return;
-        this.isSel = false;
-        var mthis = this;
+        // if(!this.showThumb) return;
+        // this.isSel = false;
+        // var mthis = this;
         
-        var selDiv = document.getElementById('selectDiv');
-        var selOutDiv = document.getElementById('selOutDiv');
-        selOutDiv.style.display = 'none';
-        selDiv.style.display = 'none';
+        // var selDiv = document.getElementById('selectDiv');
+        // var selOutDiv = document.getElementById('selOutDiv');
+        // selOutDiv.style.display = 'none';
+        // selDiv.style.display = 'none';
         
-        if(this.isBru){
-          mthis.bruIds= util.unique(mthis.bruIds);
+        // if(this.isBru){
+        //   mthis.bruIds= util.unique(mthis.bruIds);
           
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: mthis.bruIds
-          }])
-          mthis.$store.commit('setContent2time',[{
-            ids:mthis.bruIds
-          }])
-          let selDocList = mthis.items.filter(item => item.check)
-          selDocList = selDocList.map(item =>({
-                    title: item.title,      
-                    id: item.id,
-                    time: item.time,
-                    from: item.from,     
-                  })
-                );
-          mthis.$store.commit('setSeletedDocAttrList',selDocList)
-          mthis.isBru = false;
-        }
+        //   mthis.$store.commit('setSelectContentNodes', [{
+        //     ids: mthis.bruIds
+        //   }])
+        //   mthis.$store.commit('setContent2time',[{
+        //     ids:mthis.bruIds
+        //   }])
+        //   console.log(mthis.bruIds)
+        //   let selDocList = mthis.items.filter(item => item.check)
+        //   selDocList = selDocList.map(item =>({
+        //             title: item.title,      
+        //             id: item.id,
+        //             time: item.time,
+        //             from: item.from,     
+        //           })
+        //         );
+        //   mthis.$store.commit('setSeletedDocAttrList',selDocList)
+        //   mthis.isBru = false;
+        // }
         
-        $('#selectDiv').remove();
-        $('#selOutDiv').remove();
-        this.clearBubble(e)
-        $('#contentchart').off('mousemove');
+        // $('#selectDiv').remove();
+        // $('#selOutDiv').remove();
+        // this.clearBubble(e)
+        // $('#contentchart').off('mousemove');
       },
     toSelIds(index,check,id,evt){
         this.clearBubble(evt)
         
         clearTimeout(timerClick);
         var mthis = this;
-        check = !check;
-        mthis.items[index].check = check;
-        mthis.prevItems = mthis.deepClone(mthis.items)
+        
         timerClick = setTimeout(function(){
+          check = !check;
+          mthis.items[index].check = check;
+          mthis.prevItems = mthis.deepClone(mthis.items)
           var ids = mthis.selectContentNodes[0].ids
           if(ids.indexOf(id)>-1){
             let index = ids.indexOf(id)
@@ -1676,13 +2057,13 @@
         this.showThumb = true
         this.colLgNum = 3
         this.colSmnum = 6
-        this.colMdNum= 4 
+        this.colMdNum= 4
        
       },
       contentTranslate() {
         var mthis = this;
         
-        if(this.translateButton){
+        if(this.ifShowDoc){
           var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
@@ -1886,6 +2267,8 @@
       },
       hideContentDiv(flag){
         var mthis = this
+        mthis.ifhasDoc = true;
+        mthis.ifhasSel = mthis.prevIfhasSel;
         if(flag ==1){
           mthis.ifInfo = false
           mthis.$store.state.contentSelShowFlag = false
@@ -1909,7 +2292,7 @@
         this.colLgNum = 4
         this.colSmnum = 8
         this.colMdNum = 6
-        this.translateButton = false
+        this.ifShowDoc = false
         this.showList = false
         this.showThumb = false
         this.ifInfo = false
@@ -1979,51 +2362,79 @@
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           mthis.topHeight = 330 + 'px'
           mthis.itemHeight = 300 + 'px'
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize({
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          })
+          
+        }
         }else if(len>1 && len <6){
           mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
-          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize({
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          })
+          }
         }else if(len ==6){
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
           console.log(mthis.itemWidth)
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
-          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize({
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          })
+          }
         }else if(len==1){
           mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
-          mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize({
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          })
+          }
         }
       },
       showContentAna(){
         var mthis = this
         mthis.contentAna = true
+        mthis.changeBar = '热词排序'
         var charts = [];
         var options = [];
-        var myWordCharts = [];
+        mthis.myWordCharts = [];
         let len = mthis.topicDatas.length;
         mthis.wordResize(len)
         
         for(var i=0;i<mthis.topicDatas.length;i++){
           charts.push(i+'wordChart');
-          myWordCharts.push(i+'myChart');
+          mthis.myWordCharts.push(i+'myChart');
           options.push(mthis.option);
         }
-        for(var j=0;j<myWordCharts.length;j++){
-          myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
+        for(var j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
             width:mthis.itemWidth,
             height:mthis.itemHeight
           });
-          myWordCharts[j].setOption(options[j]);
+          mthis.myWordCharts[j].setOption(options[j]);
         }
         
       },
       showContent(id,title) {
         clearTimeout(timerClick);
         var mthis = this
-        
+        mthis.ifhasDoc = false;
+        mthis.prevIfhasSel = mthis.ifhasSel;
+        mthis.ifhasSel = false;
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}
         selData.id = [id];
@@ -2033,7 +2444,7 @@
         
         
         mthis.ifInfo = true
-        mthis.translateButton = true
+        mthis.ifShowDoc = true
         //  mock.get("/getContentInfo",{id:id}).then(function(res) {
         //   // 获取文本数据
         //   document.getElementById('contents').innerHTML = res.data.contents
@@ -2091,7 +2502,7 @@
     },
     mounted() {
       var mthis = this
-      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 282 + 'px'
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 242 + 'px'
       console.log(mthis.contentAnaWidth)
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
       console.log(wwWidth)
@@ -2115,8 +2526,47 @@
       window.px = "";
       window.py = "";
       window.divLength = 0;
-      
-    
+      document.onclick = function(){
+        if(!mthis.showAllDocCount) return;
+        $('.allTitle').css('display','none');
+      }
+      document.onmouseup = function(e){
+        if(!mthis.showThumb) return;
+        mthis.isSel = false;
+        
+        
+        var selDiv = document.getElementById('selectDiv');
+        var selOutDiv = document.getElementById('selOutDiv');
+        selOutDiv.style.display = 'none';
+        selDiv.style.display = 'none';
+        
+        if(mthis.isBru){
+          mthis.bruIds= util.unique(mthis.bruIds);
+          
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: mthis.bruIds
+          }])
+          mthis.$store.commit('setContent2time',[{
+            ids:mthis.bruIds
+          }])
+          console.log(mthis.bruIds)
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
+          mthis.isBru = false;
+        }
+        
+        $('#selectDiv').remove();
+        $('#selOutDiv').remove();
+        mthis.clearBubble(e)
+        $('#contentchart').off('mousemove');
+      }
       
     }
   };
@@ -2151,6 +2601,7 @@
     -webkit-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     -moz-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
+    background-color: rgba(51,255,255,0.2);
   }
   /* 角标折角 */
   /* .contentDiv ::before {
@@ -2170,8 +2621,8 @@
                 box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
               } */
   .contentTitle {
-    padding: 0 25px 0 5px;
-    text-align: center;
+    /* padding: 0 25px 0 5px; */
+    text-align: left;
     color: #ccffff;
     cursor: pointer;
     font-family: MicrosoftYaHei;
@@ -2202,7 +2653,7 @@
     line-height: 19px !important;
   }
   .contentTime {
-    text-align: center;
+    text-align: left;
     padding: 0 5px 5px 5px;
     height: 35px;
     font-family: PARaDOS;
@@ -2291,6 +2742,21 @@
     /* Firefox 3.6 - 15*/
     background: linear-gradient( 8deg, rgba(0, 0, 0, 0) 0%, rgba(51, 255, 255, 0.2) 40%, rgba(51, 255, 255, 0.3) 50%, rgba(51, 255, 255, 0.2) 60%, rgba(0, 0, 0, 0) 100%);
     /* 标准的语法 */
+  }
+  .ivu-radio-wrapper{
+    color:#ccffff !important;
+  }
+  .ivu-radio-checked .ivu-radio-inner:after{
+    background-color:rgba(51,255,255,0.4) !important;
+  }
+  .ivu-dropdown-rel>a{
+    color:#ccffff;
+  }
+  .ivu-dropdown-rel>a:hover{
+    color:#33ffff;
+  }
+  #topicAnaly .ivu-dropdown-item{
+    padding-left:10px !important;
   }
   .ivu-table{
     background-color: rgba(0, 0, 0, 0.8) !important;
@@ -2529,8 +2995,8 @@
     opacity: 1;
   }
   .picsize{
-    max-width:100px;
-    max-height:100px;
+    max-width:50px;
+    max-height:70px;
     width:100%;
     
     
@@ -2541,12 +3007,14 @@
     text-overflow: ellipsis;
     overflow-x: hidden;
     font-family: MicrosoftYaHei;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
     /* line-height: 30px; */
     letter-spacing: 0px;
     color: #ccffff;
+    max-width:70px;
+    margin-left: 3em;
   }
   
   .imgHover{
@@ -2560,64 +3028,15 @@
     background-color: #003333;
 	  border: solid 2px #ccffff;
   }
- #contentWordCloud{
-   border-right:1px solid #336666;
-   border-left:1px solid #336666;
-   
- }
-.e-title {
-    height: 30px;
-    background-color: rgba(51, 255, 255, 0.2);
-    border-top: solid 1px #366674;
-    border-bottom: solid 1px #366674;
-    display: flex;
-  }
-  .e-title-p {
-    height: 18px;
-    font-family: MicrosoftYaHei;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 28px;
-    letter-spacing: 0px;
-    color: #ccffff;
-  }
-  .e-title-d {
-    width: 4px;
-    height: 16px;
-    background-color: #009999;
-    margin: 6px 6px;
-  }
-  .econtent {
-    display: flex;
-    height: auto;
-    min-height: 30px;
-  }
-  
-  .w8em {
-    width: 8em;
-    min-width: 8em;
-    max-width: 8em;
-    margin: 0;
-  }
-  .tableLine>.econtent:nth-child(odd) {
-    background-color: rgba(51, 255, 255, 0.05);
-  }
-  .tableLine>.econtent:nth-child(odd):hover {
-    background-color: rgba(51, 255, 255, 0.2);
-  }
-  .tableLine>.econtent:nth-child(even):hover {
-    background-color: rgba(51, 255, 255, 0.2);
-  }
-  .rightIcon:hover{
-    opacity: 1;
-    cursor: pointer;
-  }
+
   .topItem{
     border:'1px solid #336666';
-    margin:0px 0px 5px 4px;
-    
+    /* margin:0px 0px 1em 0.8em; */
+    margin-bottom:10px;
     font-family: MicrosoftYaHei;
+  }
+  .itemEmpty{
+    margin-bottom:10px;
   }
   .topItem .itemHeader{
     color:rgba(51,255,255,0.4);
@@ -2637,4 +3056,51 @@
     
     text-align: center;
   }
+  .itemHeader >p{
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    width:70%;
+    max-width: 70%;
+  }
+  .itemHeader >p:hover{
+    color:rgba(51, 255, 255, 1);
+    cursor:pointer;
+  }
+  .itemTitle{
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    width:200px;
+    max-width: 200px;
+  }
+  .delB{
+        width: 100px;
+        height: 30px;
+        
+        background-color:rgba(51,255,255,0.5) !important;
+        border-radius: 5px;
+        
+        font-family: MicrosoftYaHei;
+	      font-size: 14px;
+        
+        line-height: 30px;
+        text-align: center;
+        cursor: pointer;
+        margin-left:10px;
+    }
+    .delB:hover{
+        color: #ccffff !important;
+        background-color:rgba(51,255,255,0.7) !important;
+    }
+    .allTitle{
+      position:absolute;
+      z-index:99;
+      border:solid 1px #336666;
+      border-radius:10px;
+      background-color:black;
+      padding:10px 10px 0px 10px;
+      max-height:300px;
+      overflow-y:scroll;
+    }
 </style>

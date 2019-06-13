@@ -432,11 +432,11 @@ var store = new Vuex.Store({
                 delText: ''
             }
         },
-        heatMapRadius:20,
-        heatMapBlur:20,
-        displayHeatMap:false,
-        topicClassifIds:[],
-        seletedDocAttrList:[
+        heatMapRadius: 20,
+        heatMapBlur: 20,
+        displayHeatMap: false,
+        topicClassifIds: [],
+        seletedDocAttrList: [
             // {
             // title:'Venezuelan oil chief blames fire on opposition',
             // id:'heatRadius',
@@ -444,10 +444,10 @@ var store = new Vuex.Store({
             // from:'华盛顿邮报'}
         ],
         // 文档模块主题分析算子打开关闭标志
-        topicClassifStatus:false
+        topicClassifStatus: false
     },
     mutations: {
-        setSeletedDocAttrList(state,val){
+        setSeletedDocAttrList(state, val) {
             state.seletedDocAttrList = val
         },
         setDelSetData(state, val) {
@@ -715,30 +715,30 @@ var store = new Vuex.Store({
         setContentSelectedParam(state, val) {
             state.content_selected_param = val
         },
-        newHeatMapRadius(state,val){
-          state.heatMapRadius = val;
+        newHeatMapRadius(state, val) {
+            state.heatMapRadius = val;
         },
-        newHeatMapBlur(state,val){
-          state.heatMapBlur = val;
+        newHeatMapBlur(state, val) {
+            state.heatMapBlur = val;
         },
-        openHeatMap(state){
-          state.displayHeatMap = true;
+        openHeatMap(state) {
+            state.displayHeatMap = true;
         },
-        hideHeatMap(state){
-          state.displayHeatMap = false;
+        hideHeatMap(state) {
+            state.displayHeatMap = false;
         },
-        addDocIdsToList(state,id){
+        addDocIdsToList(state, id) {
             debugger
             state.topicClassifIds.push(id);
         },
-        removeDocIdsToList(state,id){
+        removeDocIdsToList(state, id) {
             debugger
-            var index = util.itemIndexInArr(id,state.topicClassifIds);
-            if(index !== -1){
-                state.topicClassifIds.splice(index,1)
+            var index = util.itemIndexInArr(id, state.topicClassifIds);
+            if (index !== -1) {
+                state.topicClassifIds.splice(index, 1)
             }
         },
-        changetopicClassifStatus(state,status){
+        changetopicClassifStatus(state, status) {
             state.topicClassifStatus = status;
         }
     },
@@ -794,40 +794,40 @@ var store = new Vuex.Store({
             return document.documentElement.clientWidth * state.split - 20 + 'px'
         }
     },
-    actions:{
-      setHeatMapRadius(context,radius){
-        context.commit('newHeatMapRadius',radius);
-      },
-      setHeatMapBlur(context,blur){
-        context.commit('newHeatMapBlur',blur);
-      }, 
-      openHeat(context){
-        context.commit('openHeatMap');
-      },
-      closeHeat(context){
-        context.commit('hideHeatMap');
-      },
-      changeOperatorDocIds(context,value){
-          var excute = value.excute;
-          var id = value.id;
-          if(excute === 'add'){
-            context.commit('addDocIdsToList',id);
-          } else {
-            context.commit('removeDocIdsToList',id);
-          }
-      },
-      singleDocAnaly(context){
-        //   topicClassifIds
-          alert('单个文档分析');
-      },
-      multiDocAnaly(context){
-        alert('合并分析');
+    actions: {
+        setHeatMapRadius(context, radius) {
+            context.commit('newHeatMapRadius', radius);
         },
-        opentopicClassif(context){
-            context.commit('changetopicClassifStatus',true);
+        setHeatMapBlur(context, blur) {
+            context.commit('newHeatMapBlur', blur);
         },
-        closetopicClassif(context){
-            context.commit('changetopicClassifStatus',false);
+        openHeat(context) {
+            context.commit('openHeatMap');
+        },
+        closeHeat(context) {
+            context.commit('hideHeatMap');
+        },
+        changeOperatorDocIds(context, value) {
+            var excute = value.excute;
+            var id = value.id;
+            if (excute === 'add') {
+                context.commit('addDocIdsToList', id);
+            } else {
+                context.commit('removeDocIdsToList', id);
+            }
+        },
+        singleDocAnaly(context) {
+            //   topicClassifIds
+            alert('单个文档分析');
+        },
+        multiDocAnaly(context) {
+            alert('合并分析');
+        },
+        opentopicClassif(context) {
+            context.commit('changetopicClassifStatus', true);
+        },
+        closetopicClassif(context) {
+            context.commit('changetopicClassifStatus', false);
         }
     }
 });

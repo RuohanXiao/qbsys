@@ -114,7 +114,7 @@
     </div>
     <div :style="{height:nh_50,borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div id="netchart" :style="{height:nh_50}"></div>
-      <operatorHub :style="{height:nh_50}" :operatorConfig="operatorConfig"></operatorHub>
+      <operatorHub :style="{height:nh_50,top:'55px'}" :operatorConfig="operatorConfig"></operatorHub>
       <transition name="mybox">
         <div class="xuanfuAlert" v-show="popout">{{message.text}}</div>
       </transition>
@@ -323,32 +323,45 @@
       juhe(){
         let ids = this.selectionIdByTypeData.eventIds
         let mthis = this
+        let allNodes = mthis.netchart.nodes().map(item=>{
+            return item.id
+          })
+        let timestamp =  new Date().getTime()
         mthis.$http
-              .post(mthis.$store.state.ipConfig.api_url + "/event-detail/", {
-                EventIds: ids
+              .post(mthis.$store.state.ipConfig.api_url + "/aggregation/", {
+                allNodeIds: allNodes,
+                selectNodeIds: ids,
+                timestamp: timestamp
               })
               .then(response => {
+                console.log(response.body)
+                console.log(response.body.code === 0)
+                console.log(timestamp)
+                console.log(timestamp+'' === response.body.timestamp)
                 if (response.body.code === 0) {
-                  let allNodesId = new Array()
-                  mthis.netchart.nodes().map(item=>{
-                    allNodesId.push(item.id)
-                    return item
-                  })
-
-
+                  if(timestamp+'' === response.body.timestamp) {
+                    ids.map(item=>{
+                      console.log(item)
+                      mthis.netchart.hideNode(item+'')
+                      return item
+                    })
+                    mthis.netchart.addData(response.body.data)
+                  }
                 } else {
-                  mthis.setMessage('聚合失败！查询事件信息异常')
+                  mthis.setMessage('聚合失败！aggregation异常')
                 }
               })
       },
       jutuan() {
         // this.changeCenterNode()
-        this.changNetchartMode('d')
+        // this.changNetchartMode('d')
         // this.netchart.updateSettings({
         //       layout: {
         //         mode: 'dynamic'
         //       }
         //     })
+        this.netchart.updateSettings();
+        this.netchart.updateSize();
       },
       changeCenterNode(arr){
         let mthis = this 
@@ -365,36 +378,36 @@
       },
       changNetchartMode(n) {
         //更改样式mode
-        switch (n) {
-          case 'h':
-            this.netchart.updateSettings({
-              layout: {
-                mode: 'hierarchy'
-              }
-            })
-            break;
-          case 's':
-            this.netchart.updateSettings({
-              layout: {
-                mode: 'static'
-              }
-            })
-            break;
-          case 'r':
-            this.netchart.updateSettings({
-              layout: {
-                mode: 'radial'
-              }
-            })
-            break;
-          case 'd':
-            this.netchart.updateSettings({
-              layout: {
-                mode: 'dynamic'
-              }
-            })
-            break;
-        }
+        // switch (n) {
+        //   case 'h':
+        //     this.netchart.updateSettings({
+        //       layout: {
+        //         mode: 'hierarchy'
+        //       }
+        //     })
+        //     break;
+        //   case 's':
+        //     this.netchart.updateSettings({
+        //       layout: {
+        //         mode: 'static'
+        //       }
+        //     })
+        //     break;
+        //   case 'r':
+        //     this.netchart.updateSettings({
+        //       layout: {
+        //         mode: 'radial'
+        //       }
+        //     })
+        //     break;
+        //   case 'd':
+        //     this.netchart.updateSettings({
+        //       layout: {
+        //         mode: 'dynamic'
+        //       }
+        //     })
+        //     break;
+        // }
       },
       linkedKnowlage() {
         var mthis = this
@@ -428,7 +441,7 @@
           })
           .then(response => {
             if (response.body.code == 0) {
-              mthis.changNetchartMode('r')
+              // mthis.changNetchartMode('r')
               response.body.data.nodes.map(item => {
                 if (item.entity_type === 'document') {
                   item.name = item.title.substring(0, 19) + '...'
@@ -510,7 +523,7 @@
               this.star()
               break;
             case 'hierarchy':
-              this.hierarchy()
+              this.hierarchy1()
               break;
             case 'juhe':
               this.juhe()
@@ -581,7 +594,7 @@
             .then(response => {
               if (response.body.code === 0) {
                 if (response.body.data.nodes.length > 0) {
-                  mthis.changNetchartMode('r')//  mthis.changNetchartMode('d')
+                  // mthis.changNetchartMode('r')//  mthis.changNetchartMode('d')
                   mthis.netchart.addData(response.body.data)
                   mthis.netchart.selection(response.body.data.nodes.map(item => {
                     return item.id
@@ -610,7 +623,7 @@
             .then(response => {
               if (response.body.code === 0) {
                 if (response.body.data.nodes.length > 0) {
-                  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                  // mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                   response.body.data.nodes.map(item => {
                     if (item.entity_type === 'document') {
                       item.name = item.title.substring(0, 19) + '...'
@@ -969,7 +982,7 @@
                       }))
                     }
                   }
-                  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                  // mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                   mthis.netchart.addData({
                     'nodes': nodes,
                     'links': links
@@ -1099,7 +1112,7 @@
                       }
                       return ite
                     })
-                    mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                    // mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                     mthis.netchart.addData({
                       'nodes': nodes,
                       'links': links
@@ -1197,7 +1210,7 @@
                       ite.type = (ite.type) ? ite.type : ite.relation_name
                       return ite
                     })
-                    mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                    // mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                     mthis.netchart.addData({
                       'nodes': nodes,
                       'links': links
@@ -1350,7 +1363,7 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
-                 mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                //  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
                 setTimeout(function() {
                   mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -1380,7 +1393,7 @@
           }).then(response => {
             if (response.body.code === 0) {
               if (response.body.data.nodes.length > 0) {
-                 mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
+                //  mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                 mthis.netchart.addData(response.body.data)
                 setTimeout(function() {
                   mthis.netchart.selection(response.body.data.nodes.map(item => {
@@ -1510,7 +1523,7 @@
             //   Math.cos(ahd * index) * radius;
             // 锁定位置
             // lock
-            // mthis.netchart.lockNode(mthis.selectionId[index].id);
+            mthis.netchart.lockNode(mthis.selectionId[index].id);
           }
           mthis.netchart.addFocusNode(no1.id);
         } else {
@@ -1531,9 +1544,9 @@
             let no = mthis.netchart.getNode(this.selectionId[i]);
             no["x"] = no1["x"] + col * 150;
             no["y"] = no1["y"] + row * 150;
-            // mthis.netchart.lockNode(this.selectionId[i]);
+            mthis.netchart.lockNode(this.selectionId[i]);
           }
-          mthis.changNetchartMode('s')
+          // mthis.changNetchartMode('s')
           mthis.netchart.scrollIntoView(
             mthis.selectionId.map(item => {
               mthis.netchart.lockNode(item.id);
@@ -1628,8 +1641,8 @@
             nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
               Math.cos(ahd * i) * radius;
             mthis.netchart.updateStyle(mthis.selectionId[i])
-            // mthis.netchart.lockNode(mthis.selectionId[i]);
-            mthis.changNetchartMode('s')
+            mthis.netchart.lockNode(mthis.selectionId[i]);
+            // mthis.changNetchartMode('s')
           }
         } else {
           // mthis.$Message.error('请选择节点进行矩形排列操作！')
@@ -1638,7 +1651,7 @@
       },
       // 层级布局
       hierarchy() {
-        this.changNetchartMode('h');
+        // this.changNetchartMode('h');
         // setTimeout(function() {
         //   mthis.changNetchartMode('s')
         // }, 500);
@@ -1685,14 +1698,12 @@
                   nodeObj['x'] = item.order * 200 + x0
                   nodeObj['y'] = item.depth * 300 + y0
                   arrids.push(item.id)
-                  mthis.netchart.lockNode(item.id)
                   //如果该节点有子节点，继续添加进入栈底
                   if (item.children && item.children.length) {
                     // // console.log(item.children.length)
                     stack = stack.concat(item.children);
                   }
                 }
-                mthis.netchart.updateSettings();
               };
               //非递归深度优先实现
               let xpos = 0
@@ -1740,7 +1751,7 @@
                   // nodeObj['y'] = item.depth * 300 + y0
                   // // console.log(nodeObj['x'] + ' , ' + nodeObj['y'])
                   arrids.push(item.id)
-                  mthis.netchart.lockNode(item.id)
+                  // mthis.netchart.lockNode(item.id)
                   //如果该节点有子节点，继续添加进入栈顶
                   if (item.children && item.children.length) {
                     // len = item.children.length;
@@ -1756,8 +1767,15 @@
               // iterator1(response.body.data[0]);
               // // console.log('===============shen du=====================')
               iterator2(response.body.data[0]);
+              response.body.nodes.map(ite=>{
+                mthis.netchart.lockNode(ite)
+                return ite
+              })
             }
           });
+          mthis.netchart.updateStyle(nodesIDS);
+          mthis.netchart.updateSettings();
+          mthis.netchart.updateSize();
         } else {
           this.setMessage("请选择节点进行层级排列操作！");
         }
@@ -1847,7 +1865,7 @@
         // {
         //   // console.log(key + "这个字母出现了" + obj[key] + "次");
         // }
-        this.changNetchartMode('h')
+        // this.changNetchartMode('h')
       },
       //保存工作集
       save() {
@@ -2452,10 +2470,10 @@
             //     toCenter:"geometric "
             // },
             twoRingRadialLayout: true,
-            layoutFreezeMinTimeout:300,
-            layoutFreezeTimeout: 1000,
-            incrementalLayoutMaxTime:1000,
-            initialLayoutMaxTime:1000,
+            // layoutFreezeMinTimeout:300,
+            layoutFreezeTimeout: 10000,
+            // incrementalLayoutMaxTime:1000,
+            // initialLayoutMaxTime:1000,
             globalLayoutOnChanges: false,
             nodeSpacing: 50,
             rowSpacing: 100
@@ -2812,7 +2830,31 @@
                 // link.lineWidth = 5;
               }
               // -- -------------------------------------
-              if (link.data.type !== undefined && link.data.type !== "") {
+              console.log(link.data)
+              if (link.data.num !== undefined && link.data.num !== "") {
+                // link.direction = [100, 100, 100, 100];
+                // link.fromDecoration = "arrow";
+                // link.toDecoration = "arrow";
+                // link.lineColor = 'rgba(51,255,255,0.2)'
+                link.items = [{
+                  // Default item places just as the regular label.
+                  // rotateWithLink: true,
+                  scaleWithZoom: false,
+                  // align: "center",
+                  text: link.data.num+'',
+                  // imageSlicing: [0, 0, 20, 20],
+                  textStyle: {
+                    font: "10px MicrosoftYaHei",
+                    fillColor: "#33ffff"
+                  },
+                  backgroundStyle: {
+                    //连线文字背景色
+                    fillColor: "rgba(0,0,0,0.8)"
+                    // fillColor: "rgba(51,255,255,0.2)"
+                  }
+                }];
+              }
+              else if (link.data.type !== undefined && link.data.type !== "") {
                 // link.label = link.data.type;
                 link.items = [{
                   // Default item places just as the regular label.
@@ -2830,21 +2872,22 @@
                     fillColor: "rgba(0,0,0,0.8)"
                   }
                 }];
-              } else {
-                link.direction = [100, 100, 100, 100];
-                link.fromDecoration = "arrow";
-                link.toDecoration = "arrow";
-                // link.lineColor = 'rgba(51,255,255,0.2)'
+              }  else{
+                // link.label = link.data.type;
                 link.items = [{
                   // Default item places just as the regular label.
-                  rotateWithLink: true,
-                  scaleWithZoom: true,
-                  align: "center",
-                  text: link.data.num,
-                  imageSlicing: [0, 0, 20, 20],
+                  text: link.data.type,
+                  // padding: 2,
+                  // scaleWithZoom: true,
+                  scaleWithZoom: false,
                   textStyle: {
-                    font: "12px MicrosoftYaHei",
+                    font: "10px MicrosoftYaHei",
                     fillColor: "#669999"
+                  },
+                  backgroundStyle: {
+                    //连线文字背景色
+                    // fillColor: "rgba(0,0,0,0)"
+                    fillColor: "rgba(0,0,0,0.8)"
                   }
                 }];
               }
@@ -2868,7 +2911,7 @@
             // onSettingsChange(event) - 更改设置时调用的函数。
             // onTripleClick(event) - 当用户三次点击图表时调用的函数。用于自定义函数调用。
             onPointerDrag: function(event) {
-              mthis.changNetchartMode('s')
+              // mthis.changNetchartMode('s')
             },
             // onChartUpdate: function (event) {
             //     // console.log('-------------------------------------------------->>>onChartUpdate')
@@ -2886,6 +2929,7 @@
             },
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
+                mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
                 // if (event.clickNode) {}
                 // mthis.selectItem = event;
                 // mthis.selectionId = [];
@@ -2926,7 +2970,7 @@
                 return x.isLink;
               });
               if (event.clickNode || event.clickLink) {
-                mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
+                // mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
               } else {
                 // mthis.selectionId = null
               }
@@ -3117,7 +3161,7 @@
                   mthis.ifSelectTwoNode = false;
                   mthis.ifSelectOnlyTwoNode = false;
                   mthis.selectItem = null;
-                  mthis.changNetchartMode('s')
+                  // mthis.changNetchartMode('s')
                 }
               }, 200);
               if (mthis.netchart.exportData()) {
@@ -3631,7 +3675,7 @@
                   nodes: nodes,
                   links: []
                 });
-                mthis.changNetchartMode('r')
+                // mthis.changNetchartMode('r')
               } else {
                 mthis.setMessage("/event-detail/接口异常");
               }
