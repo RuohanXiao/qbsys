@@ -1,6 +1,6 @@
 <style>
 .operatorDiv{
-    /* margin: 10px auto; */
+    margin: 10px auto;
     color: rgba(51,255,255,0.4);
     font-family: MicrosoftYaHei;
 	/* font-size: 14px; */
@@ -15,6 +15,7 @@
         <Row v-for="item in operatorData" type="flex" justify="center" id="asssss">
             <sliderOperator v-if="item.type === 'Slider'" :sliderParams='item' @param="setParam"></sliderOperator>
             <docBar v-if="item.type === 'docBar'" :Params='item' @param="setParam"></docBar>
+            <selectOperator v-if="item.type === 'Select'" :Params='item' @param="setParam"></selectOperator>
         </Row>
     </div>
 </template>
@@ -22,6 +23,7 @@
 
 import sliderOperator from "./operator/custom_slider_operator.vue"
 import docBar from "./operator/custom_docBar_operator.vue"
+import selectOperator from "./operator/custom_select_operator.vue"
     export default {
         data () {
             return {
@@ -102,7 +104,8 @@ import docBar from "./operator/custom_docBar_operator.vue"
         },
         components: {
           sliderOperator,
-          docBar
+          docBar,
+          selectOperator
         }
     }
 </script>

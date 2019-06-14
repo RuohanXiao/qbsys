@@ -444,7 +444,9 @@ var store = new Vuex.Store({
             // from:'华盛顿邮报'}
         ],
         // 文档模块主题分析算子打开关闭标志
-        topicClassifStatus: false
+        topicClassifStatus: false,
+        thematicLayerName:[],
+        openthematicLayer:false
     },
     mutations: {
         setSeletedDocAttrList(state, val) {
@@ -740,6 +742,15 @@ var store = new Vuex.Store({
         },
         changetopicClassifStatus(state, status) {
             state.topicClassifStatus = status;
+        },
+        setThematicLayerName(state,names){
+            state.thematicLayerName = names;
+        },
+        openThematicLayer(state){
+            state.openthematicLayer = true;
+        },
+        closeThematicLayer(state){
+            state.openthematicLayer = false;
         }
     },
     getters: {
@@ -828,7 +839,19 @@ var store = new Vuex.Store({
         },
         closetopicClassif(context) {
             context.commit('changetopicClassifStatus', false);
-        }
+        },
+        selectThematiclayer(context,names){
+            debugger
+            context.commit('setThematicLayerName', [names]);
+            
+        },
+        openThematicLayer(context){
+            context.commit('openThematicLayer');
+        },
+        closeThematicLayer(context){
+            context.commit('closeThematicLayer');
+            context.commit('setThematicLayerName',[]);
+        },
     }
 });
 const router = new VueRouter(RouterConfig);

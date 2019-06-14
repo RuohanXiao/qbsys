@@ -159,8 +159,8 @@ top: 232px;
 .heatMapFormDiv{
     position: absolute;
     z-index: 9;
-    top: 120px;
-    left: 100px;
+    bottom: 200px;
+    right: 100px;
     background-color: rgba(0,0,0,0.8);
 }
 .heatMapForm{
@@ -180,21 +180,17 @@ top: 232px;
         <div id='mapDIV'>
             <div id='locationRoute_Map' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
                 <transition name="prompt"><div v-if="promptflag" class='promptmessage'>{{promptMessage}}</div></transition>
-                <!-- <div class='heatMapFormDiv' v-if='heatMapVisible' >
-                    <div class='heatSettingName'>热力设置</div>
-                    <form class='heatMapForm'>
-                        <label>半径大小</label><br/>
-                        <input id="radius" type="range" min="1" max="50" step="1" value="15" @input='setRadius()'/><br/>
-                        <label>模糊度大小</label><br/>
-                        <input id="blur" type="range" min="1" max="50" step="1" value="15" @input='setBlur()'/>
-                    </form>
-                </div> -->
+                <div class='heatMapFormDiv' v-if='legend' >
+                    <div class='heatSettingName'>图例</div>
+                    <img :src="url" v-for="url in legendURL"/>
+                </div>
                 <operatorHub :style="{height:mapHeight}" :operatorConfig="operatorConfig"></operatorHub>
             </div>
             
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
         </div>
         <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
+        <!-- <thematicLayer @name="importThematicLayer"></thematicLayer> -->
     </div>
 </template>
 
@@ -237,6 +233,8 @@ import {stopPropagation} from 'ol/events/Event';
 import Heatmap from 'ol/layer/Heatmap';
 import Circle from '@turf/circle'
 import echarts from 'echarts'
+import ImageLayer from 'ol/layer/Image';
+import ImageWMS from 'ol/source/ImageWMS';
 
 
 import flexslider from 'flexslider'
@@ -250,6 +248,7 @@ import routeLegend from './custom_routeLegend'
 import imgItemOpera from './custom_mapOperaButtons'
 import worksetModal from "./custom_workSet_modal.vue";
 import operatorHub from "./custom_operatorHub.vue"
+/* import thematicLayer from "./custom_thematicLayer.vue" */
 
 
 
@@ -381,7 +380,7 @@ export default {
                         name:'半径大小',
                         id:'heatRadius',
                         type:'Slider',
-                        attrName:'radius',
+                        attrName:'radius', 
                         excuteFunction:'setHeatMapRadius',
                         value:{
                           extent:[1,50],
@@ -404,7 +403,25 @@ export default {
                 name:'图层处理',
                 id:'layerHandle',
                 iconName:'icon-kongjianfenxi',
-                disabled:true
+                openFunction:'openThematicLayer',
+                closeFunction:'closeThematicLayer',
+                operatorSurface:[
+                      {
+                        name:'选择专题图层',
+                        id:'selectThematiclayer',
+                        type:'Select',
+                        attrName:'thematiclayerName', 
+                        excuteFunction:'selectThematiclayer',
+                        value:{
+                          options:[
+                              {
+                                  name:'中东个别国家什叶派与逊尼派分布',
+                                  value:'ThematicLayer:shiahandsunni'
+                              }
+                          ]
+                        }
+                      }
+                    ]
                 },
                 {
                 name:'轨迹分析',
@@ -412,7 +429,9 @@ export default {
                 iconName:'icon-kongjianfenxi',
                 disabled:true
                 }
-        ]
+        ],
+        legend:false,
+        legendURL:[]
       } 
     },
     mounted() {
@@ -515,6 +534,7 @@ export default {
         }, */
         openWorkset() {
             var mthis = this;
+            debugger
             this.worksetInfo = {
                 title: "",
                 des: "",
@@ -1019,6 +1039,7 @@ export default {
         },
         rightClickEvent(){
             var mthis = this;
+            debugger
             var areaIds= mthis.AreaIds;
             var geometryList = [];
             for(let i = 0; i < areaIds.length; i++){
@@ -3614,10 +3635,44 @@ export default {
     computed:mapState ([
       'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
       'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte',
-      'heatMapRadius','heatMapBlur','displayHeatMap'
+      'heatMapRadius','heatMapBlur','displayHeatMap','openthematicLayer','thematicLayerName'
     ]),
     
     watch:{
+        thematicLayerName(){
+            var mthis = this;
+            var source = mthis.getLayerById('ThematicLayer').getSource();
+            var params = {
+                'FORMAT': 'image/png',
+                'VERSION': '1.1.1',
+                'LAYERS': mthis.thematicLayerName,
+            }
+            mthis.legendURL = mthis.thematicLayerName.map(function(item){
+                return 'http://10.60.1.142:8082/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + item;
+            })/* 'http://10.60.1.142:8082/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=ThematicLayer:shiahandsunni'; */
+            mthis.legend = true;
+            source.updateParams(params);
+        },
+        openthematicLayer(){
+            var mthis = this;
+            debugger
+            if(mthis.openthematicLayer){
+                var wmsLayer = new ImageLayer({
+                    visible: true,
+                    id:'ThematicLayer',
+                    source: new ImageWMS({
+                        ratio: 1,
+                        url: 'http://10.60.1.142:8082/geoserver/ThematicLayer/wms?',
+                    })
+                });
+                mthis.routeMap.addlayer(wmsLayer)
+            } else {
+                var layer = mthis.getLayerById('ThematicLayer');
+                mthis.routeMap.map.removeLayer(layer);
+                mthis.legendURL = [];
+                mthis.legend = false;
+            }
+        },
         displayHeatMap(){
             var mthis = this;
              var heatMapLayer = mthis.getLayerById('heatmapLayer');
@@ -4021,7 +4076,8 @@ export default {
       routeLegend,
       imgItemOpera,
       worksetModal,
-      operatorHub
+      operatorHub,
+      /* thematicLayer */
     }
 }
 </script>
