@@ -201,17 +201,17 @@
         </div>
         <div class="anaDoc" :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}">
           <div class="topItem animaTopItem" 
-          :style="{border:'1px solid #336666',order:orderCount,width:topWidth,height:topHeight,display:'flex',flexDirection:'column'}"
+          :style="{border:'1px solid #336666',order:0,width:topWidth,height:topHeight,display:'flex',flexDirection:'column'}"
           v-for="(list,index) in topicDatas" :key="index" :id="index">
             <div class="itemHeader" 
             :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
               <p class='docAnaTitle' @click="showAllTitle(index,$event);closeShowTitle()">普京：美国...(10)</p>
-              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
+              <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
               <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
             </div>
             <div v-show="ifTopic" :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
               <div class="topicItem" 
-              :style="{display:'flex',justifyContent:'space-between',padding:'0px 1.25em 0px 1.25em',color:'#fff'}" 
+              :style="{display:'flex',justifyContent:'space-around',padding:'0px 1.25em 0px 1.25em',color:'#fff'}" 
               v-for="(item,ind) in list.topDatas" :key="ind">
                 <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
                 <p :style="{fontSize:'12px',flex:'1',paddingLeft:'1.25em'}">{{item.name}}</p>
@@ -311,12 +311,12 @@
  			            normal: {
  			                color: function(params) {
                            var colorList = ['#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff']
-                           return colorList[params.dataIndex]
+                           return colorList[Math.floor(Math.random()*6)]
  			                }
                    },
                 
  			            emphasis: {
- 			                shadowBlur: 10,
+ 			                // shadowBlur: 10,
  			                shadowColor: '#333'
  			            }
                },
@@ -1237,11 +1237,11 @@
         if(isOpen){
           topicAnaly.style.left = '240px';
           mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 242 + 'px';
-          mthis.wordResize(mthis.topicDatas.length)
+          mthis.wordResize(document.getElementsByClassName('topItem').length)
         }else{
           topicAnaly.style.left = '0px';
           mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20  + 'px';
-          mthis.wordResize(mthis.topicDatas.length)
+          mthis.wordResize(document.getElementsByClassName('topItem').length)
         }
       },
       changeShow(newValue){
@@ -1274,8 +1274,9 @@
         
       },
       toTop(index){
-        var div = document.getElementsByClassName('topItem')[index];
-        div.style.order = this.orderCount - 1;
+        var div = document.getElementById(index);
+        this.orderCount = this.orderCount -1;
+        div.style.order = this.orderCount ;
         
       },
       deepClone(obj){
@@ -2385,11 +2386,14 @@
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           mthis.topHeight = 330 + 'px'
           mthis.itemHeight = 300 + 'px'
+          
           for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize({
+          mthis.myWordCharts[j].resize(
+            {
             width:mthis.itemWidth,
             height:mthis.itemHeight
-          })
+          }
+          )
           
         }
         }else if(len>1 && len <6){
@@ -2397,11 +2401,15 @@
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          
+          
           for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize({
+          mthis.myWordCharts[j].resize(
+            {
             width:mthis.itemWidth,
             height:mthis.itemHeight
-          })
+          }
+          )
           }
         }else if(len ==6){
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
@@ -2409,22 +2417,28 @@
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          
           for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize({
+          mthis.myWordCharts[j].resize(
+            {
             width:mthis.itemWidth,
             height:mthis.itemHeight
-          })
+          }
+          )
           }
         }else if(len==1){
           mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          
           for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize({
+          mthis.myWordCharts[j].resize(
+            {
             width:mthis.itemWidth,
             height:mthis.itemHeight
-          })
+          }
+          )
           }
         }
         
@@ -2450,6 +2464,8 @@
             height:mthis.itemHeight
           });
           mthis.myWordCharts[j].setOption(options[j]);
+          // mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]));
+          // mthis.myWordCharts[j].setOption(options[j]);
         }
         
       },
