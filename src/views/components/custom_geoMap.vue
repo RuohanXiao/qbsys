@@ -534,7 +534,7 @@ export default {
         }, */
         openWorkset() {
             var mthis = this;
-            debugger
+            
             this.worksetInfo = {
                 title: "",
                 des: "",
@@ -1039,7 +1039,7 @@ export default {
         },
         rightClickEvent(){
             var mthis = this;
-            debugger
+            
             var areaIds= mthis.AreaIds;
             var geometryList = [];
             for(let i = 0; i < areaIds.length; i++){
@@ -3655,7 +3655,7 @@ export default {
         },
         openthematicLayer(){
             var mthis = this;
-            debugger
+            
             if(mthis.openthematicLayer){
                 var wmsLayer = new ImageLayer({
                     visible: true,
@@ -3707,7 +3707,7 @@ export default {
             //var source = mthis.getLayerById('HLAreaLayer').getSource();
             //source.clear();
             var feature;
-            debugger
+            
             for(let i = 0; i < ids.length; i++){
                 var type = ids[i].split('_')[1];
                 var id = ids[i].split('_')[0];

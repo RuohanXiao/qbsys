@@ -20,7 +20,7 @@
         methods:{
             changeValue(){
               var mthis = this;
-              debugger
+              
               
               var param = {
                   attrName:mthis.Params.attrName,
@@ -37,7 +37,7 @@
             /*Value:{
                 handler: function() {
                     var mthis = this;
-                    debugger
+                    
                     mthis.value = mthis.Value;
                 },
                 immediate: true

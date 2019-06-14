@@ -34,7 +34,7 @@ import selectOperator from "./operator/custom_select_operator.vue"
         methods:{
             setParam(param){
                 var mthis = this;
-                debugger
+                
                 var excuteFunction = param.excuteFunction;
                 if(excuteFunction !== undefined && excuteFunction !== ''){
                     if(param.value !== undefined){
@@ -99,7 +99,7 @@ import selectOperator from "./operator/custom_select_operator.vue"
         },
         watch:{
             operatorData(){
-                debugger
+                
             }
         },
         components: {
