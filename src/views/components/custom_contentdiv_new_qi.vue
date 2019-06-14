@@ -167,7 +167,16 @@
       <!-- 词云分析图 -->
       <div>
       <!-- <div :style="{minWidth:leftMenu}"></div> -->
+      <div>
+
+     
       <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'240px'}">
+        <div :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}" v-if="ifResize">
+          <Spin size="large" fix v-if="ifResize">
+                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+              </Spin>
+        </div>
         <div class="docMenu" :style="{display:'flex',paddingRight: '5px',height:'50px',justifyContent: 'flex-end',alignItems: 'center'}">
           <RadioGroup v-model="changeBar" @on-change='changeShow'>
             <Radio label="词云"></Radio>
@@ -191,9 +200,9 @@
           
         </div>
         <div class="anaDoc" :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}">
-          <div class="topItem" 
+          <div class="topItem animaTopItem" 
           :style="{border:'1px solid #336666',order:orderCount,width:topWidth,height:topHeight,display:'flex',flexDirection:'column'}"
-          v-for="(list,index) in topicDatas" :key="index">
+          v-for="(list,index) in topicDatas" :key="index" :id="index">
             <div class="itemHeader" 
             :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
               <p class='docAnaTitle' @click="showAllTitle(index,$event);closeShowTitle()">普京：美国...(10)</p>
@@ -221,17 +230,20 @@
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
         </div>
-        <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
-            :style="{display:'none'}">
-              <div v-for="(item,index) in list.docDatas" :key="index" :style="{display:'flex',marginBottom:'5px',cursor:'pointer'}" :title="item.title">
-                  <p class="itemTitle" :style="{color:'#fff'}">{{item.title}}</p>
-                  <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px'}">{{item.time}}</p>
-                  <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)',marginLeft:'5px'}"></p>
-                  <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px'}">{{item.from}}</p>
-                </div>
-            </div>
+        
         
       </div>
+      
+      </div>
+      <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
+          :style="{opacity:0}">
+          <div v-for="(item,index) in list.docDatas" :key="index" :style="{display:'flex',marginBottom:'5px',cursor:'pointer'}" :title="item.title">
+              <p class="itemTitle" :style="{color:'#fff'}">{{item.title}}</p>
+              <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px',width:'70px'}">{{item.time}}</p>
+              <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)'}"></p>
+              <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'7px',width:'70px'}">{{item.from}}</p>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -268,6 +280,7 @@
     name: "App",
     data() {
       return {
+        ifResize:false,
         showAllDocCount:0,
         myWordCharts:[],
         option:new Object({
@@ -1202,14 +1215,14 @@
       showAllTitle(index,e){
         var mthis = this
         mthis.clearBubble(e)
-        if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
-          var pTitle = document.getElementsByClassName('docAnaTitle')[index]
-          document.getElementsByClassName('allTitle')[index].style.display = 'block'
-          document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft + 'px';
-          document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20 + 'px';
+        if(document.getElementsByClassName('allTitle')[index].style.opacity == 0){
+          var pTitle = document.getElementById(index)
+          document.getElementsByClassName('allTitle')[index].style.opacity = 1
+          document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+252 + 'px';
+          document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20+65 + 'px';
           mthis.showAllDocCount = mthis.showAllDocCount + 1;
         }else{
-          document.getElementsByClassName('allTitle')[index].style.display = 'none';
+          document.getElementsByClassName('allTitle')[index].style.opacity = 0;
           mthis.showAllDocCount = mthis.showAllDocCount - 1;
         }
         
@@ -1246,9 +1259,19 @@
         console(name)
       },
       delTopData(index){
+        var mthis = this
+        document.getElementById(index).setAttribute('style','opacity:0;width:0');
+        mthis.ifResize = true
+        setTimeout(()=>{
+          
+          document.getElementById(index).remove();
+          let len = document.getElementsByClassName('topItem').length
+          mthis.wordResize(len)
+          mthis.ifResize = false
+        },800)
         console.log(index)
-        this.topicDatas.splice(index,1)
-        this.wordResize(this.topicDatas.length)
+        
+        
       },
       toTop(index){
         var div = document.getElementsByClassName('topItem')[index];
@@ -2404,6 +2427,7 @@
           })
           }
         }
+        
       },
       showContentAna(){
         var mthis = this
@@ -2528,7 +2552,7 @@
       window.divLength = 0;
       document.onclick = function(){
         if(!mthis.showAllDocCount) return;
-        $('.allTitle').css('display','none');
+        $('.allTitle').css('opacity',0);
       }
       document.onmouseup = function(e){
         if(!mthis.showThumb) return;
@@ -3034,6 +3058,7 @@
     /* margin:0px 0px 1em 0.8em; */
     margin-bottom:10px;
     font-family: MicrosoftYaHei;
+    
   }
   .itemEmpty{
     margin-bottom:10px;
@@ -3099,8 +3124,13 @@
       border:solid 1px #336666;
       border-radius:10px;
       background-color:black;
-      padding:10px 10px 0px 10px;
+      padding:10px 0px 0px 10px;
       max-height:300px;
       overflow-y:scroll;
+      transition:all 0.8s ease;
+    }
+    .animaTopItem{
+      transition:all 0.8s ease;
+      /* transition:width 0.7s ease; */
     }
 </style>
