@@ -294,7 +294,7 @@
                   // console.log('请求/load-set-data/失败！')
                 })
             } else if (a.itemType === 'location') {
-              mthis.$store.commit('setHLlocationIds', [a.value])
+              mthis.$store.commit('setHLlocationIds', [a.id])
             } else {
               mthis.$store.commit('setGeoNoAreaDataGoInMap', [a.id]);
             }
