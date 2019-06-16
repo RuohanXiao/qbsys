@@ -89,15 +89,6 @@ var map = function(target){
             //callBack(rcL,)
 
         })
-        /* $(this.map.getViewport()).on("contextmenu", function(event){
-            debugger
-            event.preventDefault();//屏蔽自带的右键事件
-            var rcL = RClickLayer;
-            var coordinate = mthis.map.getEventCoordinate(event);
-            debugger
-            //callBack(rcL,)
-
-        }); */
     };
     //地图显示
     this.map.getView().fit(bounds, this.map.getSize());

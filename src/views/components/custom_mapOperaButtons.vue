@@ -58,6 +58,7 @@ export default {
         buttonParamArr:[//AT(AllTime)：永远点亮； HD(HaveData):有(组织机构和事件)数据时点亮； HSD(HavaSelectedData):当有数据被选中时点亮； HDD(HaveDeleteData):当有被删除的数据时被点亮； 
                         // HL(HaveLocation):当有高亮的行政区时被点亮； NT(NoTime):永远不被点亮  HCD(HaveClearData):当有数据（包括地图上高亮的面数据）时被点亮
                         //HSE(HaveSelectedEvent):当有事件数据被选择时点亮；HASD(HaveAnySelectedData):当有任何数据时（组织机构、事件以及区域）点亮
+                        //OT(OpenThematic):打开专题图之后
           /* {
             'id':'location_AT',
             'name':'定位',
@@ -154,14 +155,14 @@ export default {
           },
           {'id':'separate'},
           {
-            'id':'leadingInPic_NT',
+            'id':'leadingInThematic_AT',
             'name':'导入图',
             'imgClass':'icon-daoru',
-            'isOpen':false
+            'isOpen':true
           },
           {
-            'id':'exportPic_NT',
-            'name':'导出图',
+            'id':'closeThematic_OT',
+            'name':'关闭图',
             'imgClass':'icon-daochu',
             'isOpen':false
           },
