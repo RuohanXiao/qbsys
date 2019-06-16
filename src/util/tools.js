@@ -235,8 +235,10 @@ getNowFormatDate() {
     if(Array.isArray(index)){
       if(index[0] == index[1]){
         let useIds = idArr[index[0]]
+        let reUseIds = []
         useIds = useIds.filter(item => item.length>0)
-        return useIds
+        reUseIds.push(useIds)
+        return reUseIds
       }else{
         let useIds  = idArr.slice(index[0],index[1]+1)
         useIds = useIds.filter(item => item.length>0)
