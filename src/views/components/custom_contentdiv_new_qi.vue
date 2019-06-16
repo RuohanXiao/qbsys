@@ -1531,6 +1531,7 @@
               mthis.wordResize(len)
               mthis.ifResize = false
             },800)
+            mthis.topicDatas[index].ids = []
         }else{
           document.getElementById(index+'word').setAttribute('style','opacity:0;width:0');
             mthis.ifResize = true
@@ -1544,6 +1545,7 @@
               
               mthis.ifResize = false
             },800)
+            mthis.topicDatas[index].ids = []
         }
         
         console.log(index)
