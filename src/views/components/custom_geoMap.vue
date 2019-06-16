@@ -190,7 +190,7 @@ top: 232px;
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
         </div>
         <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
-        <!-- <thematicLayer @name="importThematicLayer"></thematicLayer> -->
+        <thematicLayer @name="importThematicLayer" @visable="setVisabale" @selectedThematics="selectThematics" v-if="openThematicModal"></thematicLayer>
     </div>
 </template>
 
@@ -248,7 +248,7 @@ import routeLegend from './custom_routeLegend'
 import imgItemOpera from './custom_mapOperaButtons'
 import worksetModal from "./custom_workSet_modal.vue";
 import operatorHub from "./custom_operatorHub.vue"
-/* import thematicLayer from "./custom_thematicLayer.vue" */
+import thematicLayer from "./custom_thematicLayer.vue"
 
 
 
@@ -431,7 +431,9 @@ export default {
                 }
         ],
         legend:false,
-        legendURL:[]
+        legendURL:[],
+        openThematicModal:false,
+        hasTheamatic:false
       } 
     },
     mounted() {
@@ -501,8 +503,95 @@ export default {
                 mthis.drawExplore(mapOperation)
             } else if(mapOperationId == 'createWorkSpace_HASD'){
                 mthis.openWorkset();
+            } else if(mapOperationId == 'leadingInThematic_AT'){
+                mthis.openThematic();
+            } else if(mapOperationId == 'closeThematic_OT'){
+                mthis.closeThematic();
             }
         },
+        closeThematic(){
+            var mthis = this;
+            debugger
+            var layers = mthis.routeMap.map.getLayers().getArray();
+            for(let i = 0; i < layers.length; i++){
+                var layer = layers[i];
+                if(layer.getProperties().id !== undefined && layer.getProperties().id.split('_')[0] === 'ThematicLayer'){
+                    mthis.routeMap.map.removeLayer(layer);
+                }
+            }
+            /* var layer = mthis.getLayerById('ThematicLayer');
+            mthis.routeMap.map.removeLayer(layer);
+            mthis.legendURL = [];
+            mthis.legend = false; */
+        },
+        openThematic(){
+            var mthis = this;
+            mthis.openThematicModal = true;
+        },
+        setVisabale(){
+            var mthis = this;
+            mthis.openThematicModal = false;
+        },
+        selectThematics(selectedThematics){
+            debugger
+            var mthis = this;
+            for(let i = 0; i < selectedThematics.length; i++){
+                let thematic = selectedThematics[i];
+                let extent = thematic.extent;
+                let layerId = 'ThematicLayer_' + thematic.thematicName;
+                if(mthis.getLayerById(layerId) === undefined){
+                    let legendurl = 'http://10.60.1.142:8082/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + thematic.thematicName;
+                    let wmsLayer = new ImageLayer({
+                        visible: true,
+                        id:layerId,
+                        source: new ImageWMS({
+                            ratio: 1,
+                            url: 'http://10.60.1.142:8082/geoserver/ThematicLayer/wms?',
+                            params:{
+                                'FORMAT': 'image/png',
+                                'VERSION': '1.1.1',
+                                'LAYERS': thematic.thematicName,
+                            }
+                        })
+                    });
+                    debugger
+                    var layersArray = mthis.routeMap.map.getLayers();
+                    layersArray.insertAt(2,wmsLayer)
+                    /* mthis.routeMap.addlayer(wmsLayer); */
+                    mthis.legendURL.push(legendurl);
+                    mthis.hasTheamatic = true;
+                    mthis.isOperateButtonsHLOrDim()
+                    /* mthis.routeMap.map.getView().fit(extent, mthis.routeMap.map.getSize()); */
+                    mthis.routeMap.map.getView().animate({
+                        center: getCenter(extent),
+                        duration: 1000
+                    });
+                    
+                    
+                }
+            }
+            mthis.legend = true;
+        },
+        /* openthematicLayer(){
+            var mthis = this;
+            
+            if(mthis.openthematicLayer){
+                var wmsLayer = new ImageLayer({
+                    visible: true,
+                    id:'ThematicLayer',
+                    source: new ImageWMS({
+                        ratio: 1,
+                        url: 'http://10.60.1.142:8082/geoserver/ThematicLayer/wms?',
+                    })
+                });
+                mthis.routeMap.addlayer(wmsLayer)
+            } else {
+                var layer = mthis.getLayerById('ThematicLayer');
+                mthis.routeMap.map.removeLayer(layer);
+                mthis.legendURL = [];
+                mthis.legend = false;
+            }
+        }, */
         /* openWorkset(){
             var mthis = this;
             mthis.worksetFlag += 1;
@@ -600,17 +689,20 @@ export default {
                     });
                 }
                 if (areaIds.length > 0){
+                    debugger
                     mthis.$http.post("http://10.60.1.141:5100/search-Area/", {
-                        ids: areaIds
+                        nodeIds: areaIds
                     }).then(response => {
                         if (response.body.code === 0) {
                             mthis.worksetData[2].type = "area";
                             response.body.data.map(item => {
-                                item.img = "http://10.60.1.140/assets/images/event.png"
+                                item.img = "http://10.60.1.140/assets/images/map-before.png"
                                 return item
                             })
                             mthis.worksetData[2].data = response.body.data;
                         }
+                    }).catch(function(error){
+                        alert('创建集合时查询区域失败！错误代码：'+error.status)
                     });
                 }
                 /* if (mthis.selectionIdByType.contentIds.ids.length > 0) {
@@ -3570,6 +3662,17 @@ export default {
                         'isOpen':false
                     })
                 }
+                if(mthis.hasTheamatic){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'OT',
+                        'isOpen':true
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'OT',
+                        'isOpen':false
+                    })
+                }
 
             } else {
                 mthis.changeButtonParam=[
@@ -3627,52 +3730,32 @@ export default {
                         'isOpen':true
                     })
                 }
+                if(mthis.hasTheamatic){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'OT',
+                        'isOpen':true
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'OT',
+                        'isOpen':false
+                    })
+                }
             }
             
+        },
+        importThematicLayer(name){
+            debugger
         }
 
     },
     computed:mapState ([
       'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
       'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte',
-      'heatMapRadius','heatMapBlur','displayHeatMap','openthematicLayer','thematicLayerName'
+      'heatMapRadius','heatMapBlur','displayHeatMap'
     ]),
     
     watch:{
-        thematicLayerName(){
-            var mthis = this;
-            var source = mthis.getLayerById('ThematicLayer').getSource();
-            var params = {
-                'FORMAT': 'image/png',
-                'VERSION': '1.1.1',
-                'LAYERS': mthis.thematicLayerName,
-            }
-            mthis.legendURL = mthis.thematicLayerName.map(function(item){
-                return 'http://10.60.1.142:8082/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + item;
-            })/* 'http://10.60.1.142:8082/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=ThematicLayer:shiahandsunni'; */
-            mthis.legend = true;
-            source.updateParams(params);
-        },
-        openthematicLayer(){
-            var mthis = this;
-            
-            if(mthis.openthematicLayer){
-                var wmsLayer = new ImageLayer({
-                    visible: true,
-                    id:'ThematicLayer',
-                    source: new ImageWMS({
-                        ratio: 1,
-                        url: 'http://10.60.1.142:8082/geoserver/ThematicLayer/wms?',
-                    })
-                });
-                mthis.routeMap.addlayer(wmsLayer)
-            } else {
-                var layer = mthis.getLayerById('ThematicLayer');
-                mthis.routeMap.map.removeLayer(layer);
-                mthis.legendURL = [];
-                mthis.legend = false;
-            }
-        },
         displayHeatMap(){
             var mthis = this;
              var heatMapLayer = mthis.getLayerById('heatmapLayer');
@@ -4077,7 +4160,7 @@ export default {
       imgItemOpera,
       worksetModal,
       operatorHub,
-      /* thematicLayer */
+      thematicLayer
     }
 }
 </script>

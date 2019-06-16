@@ -451,6 +451,7 @@
       },
       searchInfo(query) {
         var mthis = this;
+        debugger
         this.loading1 = true;
         if (mthis.searchWorkspaceTitle !== "") {
           if (this.timer) {

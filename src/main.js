@@ -732,7 +732,7 @@ var store = new Vuex.Store({
             state.displayHeatMap = false;
         },
         addDocIdsToList(state, id) {
-            
+            debugger
             state.topicClassifIds.push(id);
         },
         exSinDocAna(state){
@@ -742,7 +742,7 @@ var store = new Vuex.Store({
             state.ifMulDocAna ++;
         },
         removeDocIdsToList(state, id) {
-            
+            debugger
             var index = util.itemIndexInArr(id, state.topicClassifIds);
             if (index !== -1) {
                 state.topicClassifIds.splice(index, 1)
@@ -851,7 +851,7 @@ var store = new Vuex.Store({
             context.commit('changetopicClassifStatus', false);
         },
         selectThematiclayer(context,names){
-            
+            debugger
             context.commit('setThematicLayerName', [names]);
             
         },
