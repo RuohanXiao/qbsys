@@ -444,9 +444,18 @@ var store = new Vuex.Store({
             // from:'华盛顿邮报'}
         ],
         // 文档模块主题分析算子打开关闭标志
-        topicClassifStatus: false
+        topicClassifStatus: false,
+        groupParams: new Object(),
+        groupFlag: false,
+        communityData: new Object()
     },
     mutations: {
+        setCommunityData(state, val) {
+            state.communityData = val
+        },
+        setGroupFlag(state, val) {
+            state.groupFlag = val
+        },
         setSeletedDocAttrList(state, val) {
             state.seletedDocAttrList = val
         },
@@ -715,6 +724,9 @@ var store = new Vuex.Store({
         setContentSelectedParam(state, val) {
             state.content_selected_param = val
         },
+        setGroupParams(state, val) {
+            state.groupParams = val;
+        },
         newHeatMapRadius(state, val) {
             state.heatMapRadius = val;
         },
@@ -795,6 +807,9 @@ var store = new Vuex.Store({
         }
     },
     actions: {
+        setGroup(context, value) {
+            context.commit('setGroupParams', value);
+        },
         setHeatMapRadius(context, radius) {
             context.commit('newHeatMapRadius', radius);
         },

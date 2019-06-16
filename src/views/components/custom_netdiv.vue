@@ -12,6 +12,12 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('remove')">
+            <Icon class="icon iconfont icon-delete-point DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">删除</p>
+          </div>
+        </Tooltip>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('removeOther')">
             <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">反选</p>
@@ -73,18 +79,18 @@
           </div>
         </Tooltip>
         <!-- <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('toGeo')">
-            <Icon class="icon iconfont icon-tuisongzhikongjian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">推送空间</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('toContent')">
-            <Icon class="icon iconfont icon-tuisongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">推送文档</p>
-          </div>
-        </Tooltip> -->
+            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('toGeo')">
+                <Icon class="icon iconfont icon-tuisongzhikongjian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                <p class="img-content">推送空间</p>
+              </div>
+            </Tooltip>
+            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('toContent')">
+                <Icon class="icon iconfont icon-tuisongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+                <p class="img-content">推送文档</p>
+              </div>
+            </Tooltip> -->
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
           <div class="button-div" @click="openCreatProjectModal('import')">
@@ -153,6 +159,7 @@
     name: "App",
     data() {
       return {
+        linkTemp: new Object(),
         prevKdown: null,
         prevKup: null,
         keyCount: 0,
@@ -239,25 +246,34 @@
         linkedNodeFlag: false,
         linkedNodesType: '',
         linkedNodes: [],
-        operatorConfig:[
-                {
-                  name:'文档聚类',
-                  id:'docCluster',
-                  iconName:'icon-kongjianfenxi',
-                  disabled:true
-                },
-                {
-                name:'倾向性分析',
-                id:'sentimentAnalysis',
-                iconName:'icon-kongjianfenxi',
-                disabled:true
-                },
-                {
-                name:'文档摘要',
-                id:'docSummary',
-                iconName:'icon-kongjianfenxi',
-                disabled:true
-                }
+        operatorConfig: [
+          // {
+          //   name:'文档聚类',
+          //   id:'docCluster',
+          //   iconName:'icon-kongjianfenxi',
+          //   disabled:true
+          // },
+          // {
+          // name:'倾向性分析',
+          // id:'sentimentAnalysis',
+          // iconName:'icon-kongjianfenxi',
+          // disabled:true
+          // },
+          // {
+          // name:'文档摘要',
+          // id:'docSummary',
+          // iconName:'icon-kongjianfenxi',
+          // disabled:true
+          // }
+          {
+            name: '社区发现',
+            id: 'community',
+            iconName: 'icon-kongjianfenxi',
+            // openFunction:'communityDiscovery',
+            // closeFunction:'disCommunityDiscovery',
+            operatorSurface: [],
+            disabled: false
+          }
         ]
       };
     },
@@ -269,6 +285,12 @@
       operatorHub
     },
     methods: {
+      communityDiscovery() {
+        alert(1)
+      },
+      disCommunityDiscovery() {
+        alert(2)
+      },
       keyD(e) {
         var mthis = this;
         if (mthis.keyCount < 0) {
@@ -320,37 +342,38 @@
           e.returnValue = false;
         }
       },
-      juhe(){
-        let ids = this.selectionIdByTypeData.eventIds
+      juhe() {
+        let contentIds = this.selectionIdByTypeData.contentIds.ids;
+        let ids = contentIds.length > 0 ? contentIds.concat(this.selectionIdByTypeData.eventIds) : this.selectionIdByTypeData.eventIds
         let mthis = this
-        let allNodes = mthis.netchart.nodes().map(item=>{
-            return item.id
-          })
-        let timestamp =  new Date().getTime()
+        let allNodes = mthis.netchart.nodes().map(item => {
+          return item.id
+        })
+        let timestamp = new Date().getTime()
         mthis.$http
-              .post(mthis.$store.state.ipConfig.api_url + "/aggregation/", {
-                allNodeIds: allNodes,
-                selectNodeIds: ids,
-                timestamp: timestamp
-              })
-              .then(response => {
-                console.log(response.body)
-                console.log(response.body.code === 0)
-                console.log(timestamp)
-                console.log(timestamp+'' === response.body.timestamp)
-                if (response.body.code === 0) {
-                  if(timestamp+'' === response.body.timestamp) {
-                    ids.map(item=>{
-                      console.log(item)
-                      mthis.netchart.hideNode(item+'')
-                      return item
-                    })
-                    mthis.netchart.addData(response.body.data)
-                  }
-                } else {
-                  mthis.setMessage('聚合失败！aggregation异常')
-                }
-              })
+          .post(mthis.$store.state.ipConfig.api_url + "/aggregation/", {
+            allNodeIds: allNodes,
+            selectNodeIds: ids,
+            timestamp: timestamp
+          })
+          .then(response => {
+            console.log(response.body)
+            console.log(response.body.code === 0)
+            console.log(timestamp)
+            console.log(timestamp + '' === response.body.timestamp)
+            if (response.body.code === 0) {
+              if (timestamp + '' === response.body.timestamp) {
+                ids.map(item => {
+                  console.log(item)
+                  mthis.netchart.hideNode(item + '')
+                  return item
+                })
+                mthis.netchart.addData(response.body.data)
+              }
+            } else {
+              mthis.setMessage('聚合失败！aggregation异常')
+            }
+          })
       },
       jutuan() {
         // this.changeCenterNode()
@@ -363,15 +386,15 @@
         this.netchart.updateSettings();
         this.netchart.updateSize();
       },
-      changeCenterNode(arr){
-        let mthis = this 
+      changeCenterNode(arr) {
+        let mthis = this
         // console.log(mthis.selectionId)
         this.netchart.updateSettings({
           navigation: {
             focusNodeExpansionRadius: 3,
             // initialNodes: mthis.selectionId,
             initialNodes: ['3e875d823b6e314db9c239058866fb8f'],
-            mode:"focusnodes",
+            mode: "focusnodes",
             expandOnClick: false
           }
         })
@@ -1203,7 +1226,7 @@
                       ite.img = (ite.img) ? ite.img : ''
                       ite.loaded = true
                       // console.log(ite.title)
-                      ite.name = (ite.name) ? ite.name : ((ite.title+"").substring(0, 19) + '...')
+                      ite.name = (ite.name) ? ite.name : ((ite.title + "").substring(0, 19) + '...')
                       return ite
                     })
                     links.map(ite => {
@@ -1523,7 +1546,8 @@
             //   Math.cos(ahd * index) * radius;
             // 锁定位置
             // lock
-            mthis.netchart.lockNode(mthis.selectionId[index].id);
+            mthis.netchart.lockNode(mthis.selectionId[i]);
+            mthis.netchart.updateStyle(mthis.selectionId[i]);
           }
           mthis.netchart.addFocusNode(no1.id);
         } else {
@@ -1553,7 +1577,6 @@
               return item.id;
             })
           );
-
           mthis.netchart.updateStyle(this.selectionId);
           mthis.netchart.updateSettings();
           mthis.netchart.updateSize();
@@ -1767,7 +1790,7 @@
               // iterator1(response.body.data[0]);
               // // console.log('===============shen du=====================')
               iterator2(response.body.data[0]);
-              response.body.nodes.map(ite=>{
+              response.body.nodes.map(ite => {
                 mthis.netchart.lockNode(ite)
                 return ite
               })
@@ -1866,6 +1889,8 @@
         //   // console.log(key + "这个字母出现了" + obj[key] + "次");
         // }
         // this.changNetchartMode('h')
+        console.log(this.netchart.nodes())
+        this.netchart.expandNode(this.selectionId[0])
       },
       //保存工作集
       save() {
@@ -2433,7 +2458,6 @@
             focusNodeExpansionRadius: 1,
             mode: "showall",
             expandOnClick: false
-
           },
           // legend: { enabled: true },
           legend: {
@@ -2575,8 +2599,10 @@
               // node.labelStyle.margin = 2
               // ---------------------------------------
               // 具体类型节点样式
-              if (node.userLock){
-                node.items= [{
+              node.shadowColor = ''
+              node.shadowBlur = 0
+              if (node.userLock) {
+                node.items = [{
                   image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
                   //    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
                   // "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
@@ -2598,26 +2624,26 @@
               }
               if (node.data.entity_type === "event") {
                 if (node.selected) {
-                  node.shadowBlur = 25;
                   node.lineColor = mthis.selectLineColor;
-                  node.shadowColor = mthis.selectShadowColor;
+                  // node.shadowBlur = 25;
+                  // node.shadowColor = mthis.selectShadowColor;
                   node.lineWidth = 3;
                   if (node.hightLight) {
-                    node.shadowBlur = 20;
                     node.lineColor = mthis.hightlightLineColor;
-                    node.shadowColor = mthis.hightlightShadowColor;
+                    // node.shadowBlur = 20;
+                    // node.shadowColor = mthis.hightlightShadowColor;
                     node.lineWidth = 3;
                   }
                 } else if (node.hovered) {
                   node.lineWidth = 3;
-                  node.shadowColor = "#009999";
-                  node.shadowBlur = 20;
+                  // node.shadowColor = "#009999";
+                  // node.shadowBlur = 20;
                   node.lineColor = "#009999";
                 } else {
                   node.lineColor = "#006666";
                   node.lineWidth = 3;
-                  node.shadowColor = "rgba(0,0,0,0)";
-                  node.shadowBlur = 20;
+                  // node.shadowColor = "rgba(0,0,0,0)";
+                  // node.shadowBlur = 20;
                 }
                 node.fillColor = "#003333";
                 node.display = "text";
@@ -2625,36 +2651,32 @@
                 node.borderRadius = 5;
                 let mapItem = mthis.myMap.get(node.data.event_subtype)
                 node.image = mapItem ? mapItem.img : "http://10.60.1.140/assets/images/event.png";
-                // node.image = util.checkImg(node.data.img).then(function(data){ return data? (node.data.img) : 'http://10.60.1.140/assets/images/event.png'})
-                // node.image = util.checkImgExists(node.data.img) ?
-                //     node.data.img :
-                //     "http://10.60.1.140/assets/images/event.png";
               } else if (node.data.entity_type === "content" || node.data.entity_type === "document") {
                 if (node.selected) {
                   node.lineColor = mthis.selectLineColor;
-                  node.shadowColor = mthis.selectShadowColor;
-                  node.shadowBlur = 25;
+                  // node.shadowColor = mthis.selectShadowColor;
+                  // node.shadowBlur = 25;
                   node.lineWidth = 5;
                   node.fillColor = "#003333";
                   if (node.hightLight) {
-                    node.shadowBlur = 20;
                     node.fillColor = "#003333";
                     node.lineColor = mthis.hightlightLineColor
-                    node.shadowColor = mthis.hightlightDocShadowColor;
+                    // node.shadowBlur = 20;
+                    // node.shadowColor = mthis.hightlightDocShadowColor;
                     node.lineWidth = 5;
                   }
                 } else if (node.hovered) {
                   node.lineWidth = 5;
-                  node.shadowColor = "#009999";
-                  node.shadowBlur = 20;
+                  // node.shadowColor = "#009999";
+                  // node.shadowBlur = 20;
                   node.fillColor = "#003333";
                   node.lineColor = "#009999";
                 } else {
                   node.fillColor = "rgba(0,0,0,0)";
                   node.lineColor = "rgba(0,0,0,0)";
                   node.lineWidth = 5;
-                  node.shadowColor = "rgba(0,0,0,0)";
-                  node.shadowBlur = 20;
+                  // node.shadowColor = "rgba(0,0,0,0)";
+                  // node.shadowBlur = 20;
                 }
                 node.display = "rectangle";
                 node.image = "http://10.60.1.140/assets/images/content_node.png";
@@ -2662,26 +2684,25 @@
                 node.radius = 25;
               } else if (node.data.entity_type === "other") {
                 if (node.selected) {
-                  node.shadowBlur = 25;
                   node.lineColor = mthis.selectLineColor;
-                  node.shadowColor = mthis.selectShadowColor;
-                  node.shadowBlur = 25;
-                  node.lineWidth = 5;
+                  // node.shadowColor = mthis.selectShadowColor;
+                  // node.shadowBlur = 25;
+                  node.lineWidth = 10;
                   if (node.hightLight) {
-                    node.shadowBlur = 20;
                     node.lineColor = mthis.hightlightLineColor;
-                    node.shadowColor = mthis.hightlightShadowColor;
+                    // node.shadowBlur = 20;
+                    // node.shadowColor = mthis.hightlightShadowColor;
                   }
                 } else if (node.hovered) {
-                  node.lineWidth = 5;
-                  node.shadowColor = "#009999";
+                  node.lineWidth = 10;
+                  // node.shadowColor = "#009999";
+                  // node.shadowBlur = 20;
                   node.lineColor = "#009999";
-                  node.shadowBlur = 20;
                 } else {
                   node.lineColor = "#006666";
-                  node.lineWidth = 5;
-                  node.shadowColor = "rgba(0,0,0,0)";
-                  node.shadowBlur = 20;
+                  node.lineWidth = 10;
+                  // node.shadowColor = "rgba(0,0,0,0)";
+                  // node.shadowBlur = 20;
                 }
                 node.radius = 25;
                 node.fillColor = "#003333";
@@ -2690,29 +2711,29 @@
               } else {
                 if (node.selected) {
                   node.lineColor = mthis.selectLineColor
-                  node.shadowColor = mthis.selectShadowColor;
                   node.fillColor = "#003333";
-                  node.shadowBlur = 25;
-                  node.lineWidth = 5;
+                  // node.shadowColor = mthis.selectShadowColor;
+                  // node.shadowBlur = 25;
+                  node.lineWidth = 10;
                   if (node.hightLight) {
-                    node.shadowBlur = 20;
                     node.fillColor = "#003333";
                     node.lineColor = mthis.hightlightLineColor;
-                    node.shadowColor = mthis.hightlightDocShadowColor;
-                    node.lineWidth = 3;
+                    // node.shadowBlur = 20;
+                    // node.shadowColor = mthis.hightlightDocShadowColor;
+                    node.lineWidth = 8;
                   }
                 } else if (node.hovered) {
-                  node.lineWidth = 3;
-                  node.shadowColor = "#009999";
-                  node.shadowBlur = 20;
+                  node.lineWidth = 10;
+                  // node.shadowColor = "#009999";
+                  // node.shadowBlur = 20;
                   node.fillColor = "#003333";
                   node.lineColor = "#009999";
                 } else {
                   node.fillColor = "#003333";
                   node.lineColor = "#006666";
-                  node.lineWidth = 3;
-                  node.shadowColor = "rgba(0,0,0,0)";
-                  node.shadowBlur = 20;
+                  node.lineWidth = 10;
+                  // node.shadowColor = "rgba(0,0,0,0)";
+                  // node.shadowBlur = 20;
                 }
                 node.display = "image";
                 //判断图片资源是否存在
@@ -2830,7 +2851,6 @@
                 // link.lineWidth = 5;
               }
               // -- -------------------------------------
-              console.log(link.data)
               if (link.data.num !== undefined && link.data.num !== "") {
                 // link.direction = [100, 100, 100, 100];
                 // link.fromDecoration = "arrow";
@@ -2841,7 +2861,7 @@
                   // rotateWithLink: true,
                   scaleWithZoom: false,
                   // align: "center",
-                  text: link.data.num+'',
+                  text: link.data.num + '',
                   // imageSlicing: [0, 0, 20, 20],
                   textStyle: {
                     font: "10px MicrosoftYaHei",
@@ -2853,8 +2873,7 @@
                     // fillColor: "rgba(51,255,255,0.2)"
                   }
                 }];
-              }
-              else if (link.data.type !== undefined && link.data.type !== "") {
+              } else if (link.data.type !== undefined && link.data.type !== "") {
                 // link.label = link.data.type;
                 link.items = [{
                   // Default item places just as the regular label.
@@ -2872,7 +2891,7 @@
                     fillColor: "rgba(0,0,0,0.8)"
                   }
                 }];
-              }  else{
+              } else {
                 // link.label = link.data.type;
                 link.items = [{
                   // Default item places just as the regular label.
@@ -2912,6 +2931,8 @@
             // onTripleClick(event) - 当用户三次点击图表时调用的函数。用于自定义函数调用。
             onPointerDrag: function(event) {
               // mthis.changNetchartMode('s')
+              console.log('-----s----------')
+              console.log(event)
             },
             // onChartUpdate: function (event) {
             //     // console.log('-------------------------------------------------->>>onChartUpdate')
@@ -2940,6 +2961,7 @@
                 // }
               } else {
                 mthis.selectionId = [];
+                // mthis.operatorConfig[0].disable=true;
                 mthis.selectItem = null;
                 mthis.selectionIdByTypeData = new Object({
                   nodeIds: [],
@@ -2949,6 +2971,13 @@
                     'ids': []
                   }
                 });
+                mthis.netchart.nodes().map(item => {
+                  item.opacity = 1;
+                  mthis.netchart.updateStyle(item.id)
+                  return item.id
+                })
+                mthis.linkTemp = new Object();
+                mthis.$store.commit('setGroupFlag', false)
                 mthis.$store.commit("setSelectNetNodes", [{
                   ids: mthis.selectionId
                 }]);
@@ -3008,11 +3037,45 @@
                 clearTimeout(timer);
               }
               timer = setTimeout(function() {
-                let eslect = event.selection.filter(it => {
-                  return it.isNode
-                }).map(item => {
-                  return item.id;
-                });
+                mthis.fromTemp = new Array()
+                mthis.netchart.nodes().map(item => {
+                  item.opacity = 1;
+                  mthis.netchart.updateStyle(item.id)
+                  return item.id
+                })
+                let lf = new Array()
+                let lt = new Array()
+                let eslect = new Array()
+                mthis.linkTemp = new Object()
+                for (let i = 0; i < event.selection.length; i++) {
+                  if (event.selection[i].isNode) {
+                    eslect.push(event.selection[i].id)
+                  } else if (event.selection[i].isLink) {
+                    lf.push(event.selection[i].from.id)
+                    lt.push(event.selection[i].to.id)
+                  } else {}
+                }
+                mthis.linkTemp = new Object({
+                  fromList: lf,
+                  toList: lt
+                })
+                // console.log(eslect)
+                // console.log(lselect)
+                // let eslect = event.selection.filter(it => {
+                //   return it.isNode
+                // }).map(item => {
+                //   return item.id;
+                // });
+                // let lselect = event.selection.filter(it => {
+                //   return it.isLink
+                // }).map(item => {
+                //   mthis.fromTemp.push(item.from)
+                //   mthis.toTemp.push(item.to)
+                //   return {
+                //     fromList:mthis.fromTemp,
+                //     toList:mthis.toTemp
+                //   };
+                // });
                 if (mthis.linkedNodeFlag && eslect.length > 0) {
                   //链向标&&选中节点
                   mthis.readyToLink(eslect)
@@ -3028,7 +3091,9 @@
                 mthis.hightlightShadowColor = '#009999'
                 let netchartnodes = mthis.netchart.nodes()
                 for (let i = 0; i < netchartnodes.length; i++) {
-                  mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
+                  let no = mthis.netchart.getNode(netchartnodes[i].id)
+                  no.hightLight = false;
+                  // no.draggable = false;
                   mthis.netchart.updateStyle(netchartnodes[i].id)
                 }
                 if (mthis.netchart.nodes().length > 0) {
@@ -3037,6 +3102,7 @@
                   mthis.ifhasNode = false
                 }
                 if (event.selection.length > 0) {
+                  // mthis.operatorConfig[0].disable=true;
                   mthis.ifhasNode = true
                   let selectN = {
                     nodes: event.selection.map(item => {
@@ -3167,6 +3233,7 @@
               if (mthis.netchart.exportData()) {
                 mthis.workatlastData[0].data = mthis.netchart.exportData();
               }
+              // mthis.operatorConfig[0].disable=false;
             }
           },
           toolbar: {
@@ -3241,6 +3308,39 @@
       'netKeyboards'
     ]),
     watch: {
+      linkTemp: function() {
+        var mthis = this
+        // if (mthis.linkTemp.fromList.length == mthis.linkTemp.toList.length && mthis.linkTemp.fromList.length > 0) {
+        //   mthis.$http
+        //     .post(mthis.$store.state.ipConfig.api_url + "/community/", {
+        //       from_ids: mthis.linkTemp.fromList,
+        //       to_ids: mthis.linkTemp.toList
+        //     })
+        //     .then(response => {
+        //       if(response.body.code === 0) {
+        //         for(let num = 0; num<response.body.data[0].group.length;num++){
+                  
+        //         }
+        //       }
+        //     })
+        // }
+
+        //  mthis.operatorConfig[0].operatorSurface.push({
+        //   name: '社区发现',
+        //   id: 'community',
+        //   type: 'group',
+        //   excuteFunction: 'setGroup',
+        //   value: mthis.linkTemp
+        // })
+        mthis.operatorConfig[0].operatorSurface=new Array({
+          name: '分析结果',
+          id: 'community',
+          type: 'group',
+          excuteFunction: 'setGroup',
+          value: mthis.linkTemp
+        })
+        mthis.$store.commit("setCommunityData", mthis.linkTemp);
+      },
       //全局监听消息提示
       netPromte: function() {
         this.setMessage(this.netPromte)
@@ -3610,7 +3710,9 @@
         let netchartnodes = mthis.netchart.nodes()
         for (let i = 0; i < netchartnodes.length; i++) {
           allNodIds.push(netchartnodes[i].id);
-          mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
+          let no = mthis.netchart.getNode(netchartnodes[i].id)
+          no.hightLight = false;
+          no.opacity = 0.5;
         }
         if (mthis.netStaticsSelectedIds.length > 0) {
           mthis.selectLineColor = '#009999'
@@ -3618,10 +3720,12 @@
           mthis.hightlightLineColor = '#ccffff'
           mthis.hightlightShadowColor = '#33ffff'
           for (let i = 0; i < mthis.netStaticsSelectedIds.length; i++) {
-            arr.push(mthis.netStaticsSelectedIds[i]);
-            mthis.netchart.getNode(
+            let no = mthis.netchart.getNode(
               mthis.netStaticsSelectedIds[i]
-            ).hightLight = true;
+            )
+            arr.push(mthis.netStaticsSelectedIds[i]);
+            no.opacity = 1;
+            no.hightLight = true;
             mthis.netchart.updateStyle(mthis.netStaticsSelectedIds[i])
           }
         }
@@ -3731,7 +3835,10 @@
         let netchartnodes = mthis.netchart.nodes()
         for (let i = 0; i < netchartnodes.length; i++) {
           allNodIds.push(netchartnodes[i].id);
-          mthis.netchart.getNode(netchartnodes[i].id).hightLight = false;
+          let no = mthis.netchart.getNode(netchartnodes[i].id)
+          no.hightLight = false;
+          no.opacity = 0.5;
+          // no.draggable = false;
         }
         if (mthis.netTimeCondition != null && mthis.netTimeCondition.length > 0) {
           mthis.selectLineColor = '#009999'
@@ -3740,9 +3847,13 @@
           mthis.hightlightShadowColor = '#33ffff'
           for (let i = 0; i < mthis.netTimeCondition.length; i++) {
             arr.push(mthis.netTimeCondition[i]);
-            mthis.netchart.getNode(
-              mthis.netTimeCondition[i]
-            ).hightLight = true;
+            let no = mthis.netchart.getNode(mthis.netTimeCondition[i])
+            no.hightLight = true;
+            no.opacity = 1;
+            // no.draggable = true;
+            // mthis.netchart.getNode(
+            //   mthis.netTimeCondition[i]
+            // ).hightLight = true;
             mthis.netchart.updateStyle(mthis.netTimeCondition[i])
           }
         } else {

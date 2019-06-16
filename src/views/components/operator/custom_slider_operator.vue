@@ -18,7 +18,7 @@
         methods:{
             changeValue(){
               var mthis = this;
-              debugger
+              // debugger
               
               var param = {
                   attrName:mthis.sliderParams.attrName,
@@ -35,7 +35,7 @@
             Value:{
                 handler: function() {
                     var mthis = this;
-                    debugger
+                    // debugger
                     mthis.value = mthis.Value;
                 },
                 immediate: true
@@ -44,7 +44,7 @@
             /* sliderParams:{
                 handler: function() {
                     var mthis = this;
-                    debugger
+                    // debugger
                     mthis.value = mthis.Value;
                 },
                 deep: true,
@@ -67,7 +67,7 @@
             Value:{
                 get(){
                     var mthis = this;
-                    debugger
+                    // debugger
                     var setterValue = mthis.sliderParams.value.defaultValue;
                     if(setterValue === undefined){
                         return mthis.extent[0];

@@ -13,13 +13,14 @@
 <template>
     <div class="operatorDiv">
         <Row v-for="item in operatorData" type="flex" justify="center" id="asssss">
+            <groupOperator v-if="item.type === 'group'" :Params='item' @param="setParam"></groupOperator>
             <sliderOperator v-if="item.type === 'Slider'" :sliderParams='item' @param="setParam"></sliderOperator>
             <docBar v-if="item.type === 'docBar'" :Params='item' @param="setParam"></docBar>
         </Row>
     </div>
 </template>
 <script>
-
+import groupOperator from "./operator/custom_group_operator.vue"
 import sliderOperator from "./operator/custom_slider_operator.vue"
 import docBar from "./operator/custom_docBar_operator.vue"
     export default {
@@ -32,7 +33,6 @@ import docBar from "./operator/custom_docBar_operator.vue"
         methods:{
             setParam(param){
                 var mthis = this;
-                debugger
                 var excuteFunction = param.excuteFunction;
                 if(excuteFunction !== undefined && excuteFunction !== ''){
                     if(param.value !== undefined){
@@ -97,12 +97,13 @@ import docBar from "./operator/custom_docBar_operator.vue"
         },
         watch:{
             operatorData(){
-                debugger
+                // debugger
             }
         },
         components: {
           sliderOperator,
-          docBar
+          docBar,
+          groupOperator
         }
     }
 </script>

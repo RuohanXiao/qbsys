@@ -3652,7 +3652,7 @@ export default {
             //var source = mthis.getLayerById('HLAreaLayer').getSource();
             //source.clear();
             var feature;
-            debugger
+            // debugger
             for(let i = 0; i < ids.length; i++){
                 var type = ids[i].split('_')[1];
                 var id = ids[i].split('_')[0];
