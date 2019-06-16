@@ -44,6 +44,7 @@ export default {
   },
   //验证图片资源是否存在（404）
   checkImgExists(imgurl) {
+
     var ImgObj = new Image(); //判断图片是否存在  
     ImgObj.src = imgurl;
     //没有图片，则返回-1  
@@ -227,17 +228,19 @@ getNowFormatDate() {
   },
   // 写入本地存储
   writeStorage(name,ids){
-    localStorage.setItem(name,JSON.stringify(ids))
+    sessionStorage.setItem(name,JSON.stringify(ids))
   },
   getStorage(name,index){
-    var idArr = JSON.parse(localStorage.getItem(name))
+    var idArr = JSON.parse(sessionStorage.getItem(name))
     if(Array.isArray(index)){
       if(index[0] == index[1]){
         let useIds = idArr[index[0]]
+        let reUseIds = []
         useIds = useIds.filter(item => item.length>0)
-        return useIds
+        reUseIds.push(useIds)
+        return reUseIds
       }else{
-        let useIds  = idArr.slice(index[0],index[1])
+        let useIds  = idArr.slice(index[0],index[1]+1)
         useIds = useIds.filter(item => item.length>0)
         return useIds
       }
@@ -250,7 +253,7 @@ getNowFormatDate() {
     
   },
   removeStorage(name){
-    localStorage.removeItem(name)
+    sessionStorage.removeItem(name)
   },
   // //xml转json
   // Xml2Json(xml) {

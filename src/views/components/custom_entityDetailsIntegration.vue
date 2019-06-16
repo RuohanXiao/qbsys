@@ -11,6 +11,9 @@
           <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='human'" ></entityDetailsTableHuman>
           <entityDetailsTableAdministrative :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='administrative'"></entityDetailsTableAdministrative>
           <entityDetailsTableOrganization :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='organization'"></entityDetailsTableOrganization>
+          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='geographic_entity'" ></entityDetailsTableHuman>
+          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='project'" ></entityDetailsTableHuman>
+
         </div>
     </div>
 </template>

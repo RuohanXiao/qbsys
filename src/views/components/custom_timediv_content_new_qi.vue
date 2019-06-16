@@ -1,20 +1,20 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId" @click="hideDiv()">
-    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" 
+    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" 
     @click="onchangHeightCount" v-show="showDocTime"></Icon>
     <div :style="{height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <!-- <Col span="3"/> -->
-        <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
+        <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'#ccffff',fontSize:'14px'}">时间轴&nbsp;&nbsp;{{timeTitle}}</span></Col>
         <Col span="1"  class="bottom">
-        <Tooltip content="放大" placement="bottom">
+        <!-- <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
-        </Tooltip>
+        </Tooltip> -->
         </Col>
         <Col span="1" class="bottom">
-        <Tooltip content="缩小" placement="bottom">
-          <Icon class="icon iconfont icon-zoom-out process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+        <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip>
         </Col>
         <Col span="1" class="bottom" />
@@ -25,7 +25,14 @@
     <div :style="{borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
       <!-- <echarts id='barchart' :options="bar" :style="{height: timepxdiv}" :auto-resize="true" ></echarts> -->
-      <div :id="main1Id" :style="{width:pwidth}"></div>
+      <div  v-show="showEchart">
+          <div :id="main1Id" :style="{width:pwidth}"></div>
+      </div>
+      
+      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '20px'}">
+        <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
+        <p style='color:#ccffff;font-size:14px;'>选中文档可查看时间轴</p>
+      </div>
     </div>
     </Col>
     <div class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" v-show="clcikShowDiv" @mouseleave="clcikShowDiv=false">
@@ -64,7 +71,8 @@
     name: "",
     data() {
       return {
-        timeTitle: '请选择节点',
+        showEchart:false,
+        timeTitle: '',
         timechartdivId:'timechartdiv_' + this.activeId,
         arrowDownId:'arrowDown_'+ this.activeId,
         timechartctrlId:'timechartctrl_'+ this.activeId,
@@ -124,6 +132,35 @@
       };
     },
     methods: {
+      
+      getDateStr(dayCount,addDayCount){
+        var dd = new Date(dayCount);
+        dd.setDate(dd.getDate()+addDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear(); 
+        var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
+        var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
+        return y+"-"+m+"-"+d; 
+      },
+      getDate(datestr){
+        var temp = datestr.split('-');
+        var date = new Date(temp[0], temp[1] - 1, temp[2]);
+    		return date;
+      },
+      formatEveryDay(start, end){
+        var mthis = this;
+        let dateList = []; 
+		    var startTime = mthis.getDate(start);
+		    var endTime = mthis.getDate(end);
+
+		    while ((endTime.getTime() - startTime.getTime()) >= 0) {
+		        var year = startTime.getFullYear();
+		        var month = startTime.getMonth() + 1 < 10 ? '0' + (startTime.getMonth() + 1) : startTime.getMonth() + 1;
+		        var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
+		        dateList.push(year + "-" + month + "-" + day); 
+		        startTime.setDate(startTime.getDate() + 1);
+		    }
+		    return dateList;
+      },
       onchangHeightCount(){
         var mthis = this;
         var tmss = mthis.$store.state.tmss;
@@ -144,13 +181,20 @@
       },
       query(){
         var mthis = this
-        let docIds = util.getStorage("docIds",mthis.selIdsArr);
+        let sendIds = []
+        let docIds = util.getStorage("docIds",mthis.selIdsArr)
         console.log(mthis.selIdsArr)
         console.log(docIds)
-        
+        for(var i in docIds){
+              for(var j of docIds[i]){
+                sendIds.push(j)
+              }
+            }
+        console.log(sendIds)
         mthis.sendDocIds.type = 'sel'
-        mthis.sendDocIds.ids = docIds
+        mthis.sendDocIds.ids = sendIds
         mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
+        // console.log(mthis.$store.state.contentTimeCondition)
       },
       throttle(fn,delay,duration){
         if(timer){
@@ -178,22 +222,22 @@
       toGeoAna(flag){
         if(flag==1){
           this.clcikShowDiv = false
-          this.$store.commit('setContentTimeOnlySel',true)
-          console.log("click")
+          this.$store.commit('setContentTimeOnlySel',this.sendDocIds.ids)
+          // console.log("click")
         }else{
-          this.$store.commit('setContentTimeOnlySel',true)
+          this.$store.commit('setContentTimeOnlySel',this.sendDocIds.ids)
           this.boxSelShowDiv = false
           this.isDataZoom = false
           this.charts.dispatchAction({
             type:'brush',
             areas:[]
           })
+          // console.log('brush',this.isBrush)
           
-          console.log("brush")
         }
       },
       hideDiv(){
-        
+        var mthis = this
         if(this.isClick){
           
           this.curInt = null;
@@ -239,7 +283,7 @@
           grid: {
             top: "10%",
             right: "4%",
-            left: '50px',
+            left: '20px',
             bottom:'20%',
             containLabel: true  
           },
@@ -328,8 +372,10 @@
           },
           dataZoom: [{
               type: "slider",
-              start: 0,
-              end: 100,
+              start: 10,
+              end: 80,
+              height:20,
+              top:'bottom',
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -470,7 +516,7 @@
         
         mthis.charts.setOption(mthis.option)
         this.charts.on('datazoom',function(params){
-          console.log(params)
+          // console.log(params)
           if(params.hasOwnProperty('start')){
             mthis.echartsShowStart = params.start
             mthis.echartsShowEnd = params.end
@@ -489,19 +535,19 @@
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
              mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
              mthis.isDataZoom = true
-             mthis.$store.commit('setContentTimeOnlySel',false)
+             mthis.$store.commit('setContentTimeOnlySel',[])
           }
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
             
             if(mthis.isDataZoom){
               
-              mthis.timeTitle = '时间轴'
+              
               let cancelTime = []
               
               mthis.sendDocIds.type = 'cancel'
               mthis.sendDocIds.ids = []
-              console.log(mthis.sendDocIds)
+              // console.log(mthis.sendDocIds)
               mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
               
               mthis.isBrush = []
@@ -573,7 +619,7 @@
           mthis.sendDocIds.type = 'sel'
           mthis.sendDocIds.ids = docIds
           mthis.$store.commit('setContentTimeCondition',mthis.sendDocIds)
-          console.log(docIds)
+          // console.log(docIds)
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -609,7 +655,14 @@
             }
         }else if(flag ==2){
           // flag==2---->监听画布中的文档，显示数据
-          mthis.timeTitle = '时间轴';
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
+          
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           mthis.option.xAxis.boundaryGap = true;
@@ -622,7 +675,13 @@
         }else if(flag==3){
           mthis.resize();
           // flag==3--->数据透视点击事件，层叠显示
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
@@ -631,13 +690,20 @@
         }else{
           // flag ==4--->网络关系事件节点为空，清空echarts
           mthis.resize();
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.dataBySeries.num = []
           mthis.dataBySeries.date = []
           mthis.dataBySeries.clickNum= []
           mthis.option.xAxis.data = []
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
-          mthis.timeTitle = '请选择节点'
+          
           mthis.charts.setOption(mthis.option)
           
         }
@@ -665,9 +731,12 @@
       // Enable data zoom when user click bar.
       var zoomSize = 6;
       // this.changHeightCount++
+      window.addEventListener('resize',function(){
+        that.resize()
+      })
     },
     computed:mapState ([
-      'split','splitWidth','tmss','conditionContent','content2time','showDocTime'
+      'split','splitWidth','tmss','conditionContent','content2time','showDocTime','split_content'
     ]),
     watch: {
       /* tmss: function(){
@@ -679,10 +748,14 @@
       'dataBySeries.date':{
        
         handler:function(newVal,oldVal){
-        
+          
           
           this.dataBySeries.clickNum = new Array(newVal.length).fill(null)
-          
+          if(newVal.length>0){
+            this.showEchart = true
+          }else{
+            this.showEchart = false
+          }
         }
 
       },
@@ -690,21 +763,66 @@
         var mthis = this;
         if(this.content2time[0].ids.length>0){
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "eventids":mthis.content2time[0].ids,
-            "typeLabel":"document"
-            }).then(response =>{
+            "ids":mthis.content2time[0].ids
+          }).then(response =>{
               if(response.body.code ==0){
-                mthis.dataBySeries.date = response.body.data.time;
-                mthis.dataBySeries.num = response.body.data.count;
-                mthis.dataBySeries.clickNum = [];
-                mthis.loadEcharts(2);
-                util.writeStorage("docIds",response.body.data.ids)
+                if(response.body.data.time.length<100){
+                          let timeLen = response.body.data.time.length
+                          let dayCount = parseInt((100 - response.body.data.time.length) /2)
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("docIds",localIds)
+                          console.log('<100')
+                          console.log(mthis.dataBySeries.date.length)
+                      }else{
+                        let dayCount = parseInt(response.body.data.time.length * 0.1)
+                       if(dayCount>0){
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                       
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          // console.log(preDateList.length)
+                          // console.log(aftDateList)
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("docIds",localIds)
+                      }else{
+                          mthis.dataBySeries.date = response.body.data.time;
+                          mthis.dataBySeries.num = response.body.data.count;
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("docIds",response.body.data.ids)
+                       }
+                      }
+               
               }else{
-                console.log('服务器error')
+                // console.log('服务器error')
               }
             })
         }
-        if(this.content2time[0].ids.length ==0){
+        if(this.content2time[0].ids.length ==0 && mthis.dataBySeries.date.length>0 ){
           mthis.loadEcharts(4);
         }
       },
@@ -720,6 +838,16 @@
       //   })
       // },
       split: function(va) {
+        
+        let width = document.documentElement.clientWidth * va - 20 + 'px'
+        let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
+        this.charts.resize({
+          width,
+          height
+        })
+      },
+      split_content:function(va){
+        
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         this.charts.resize({
@@ -728,6 +856,7 @@
         })
       },
       splitWidth: function(va) {
+        
         this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       },
       geoHeightCount: function() {

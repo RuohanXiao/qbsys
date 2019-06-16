@@ -3,99 +3,97 @@
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px',border:'solid 1px #336666'}">
       <div class='divStyle'>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="removeAll">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="removeAll">
             <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">清空</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='fanxuan'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='fanxuan'>
             <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">反选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="selectAll">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="selectAll">
             <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">全选</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="deleteNode()"> 
+          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="deleteNode()"> 
             <Icon class="icon iconfont icon-delete-name DVSL-bar-btn-new DVSL-bar-btn-back" size="26" ></Icon>
             <p class="img-content">删除</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="openCreateGroupModal">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="openCreateGroupModal">
             <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">创建集合</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='toContentDiv'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='toContentDiv'>
             <Icon class="icon iconfont icon-zhaiyaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">摘要图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="toThumbnails">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="toThumbnails">
             <Icon class="icon iconfont icon-suolvetu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">缩略图</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='showAsList'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='showAsList'>
             <Icon class="icon iconfont icon-liebiaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">列表图</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='orderTimeUp'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='orderTimeUp'>
             <Icon class="icon iconfont icon-paixu--guanlian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">相关性排序</p>
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click='orderTimeDown'>
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='orderTimeDown'>
             <Icon class="icon iconfont icon-paixu--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">时间排序</p>
           </div>
         </Tooltip>
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-custom" @click='contentTranslate'>
-            <Icon class="icon iconfont icon-selection-box" size="26"  :class="(translateButton)?'lightUp':''" ></Icon>
-            <p class="img-content"  :class="(translateButton)?'lightUp':''">翻译</p>
+          <div :class="ifShowDoc? 'button-div':'button-div-disable'" @click='contentTranslate'>
+            <Icon class="icon iconfont icon-translate2" size="26"></Icon>
+            <p class="img-content">翻译</p>
           </div>
         </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-custom" @click="showContentAna">
-            <Icon class="icon iconfont icon-selection-box" size="26" :class="(analysisButton)?'lightUp':''"></Icon>
-            <p class="img-content" :class="(analysisButton)?'lightUp':''">分析</p>
-          </div>
-        </Tooltip>
+        
         <!-- <div class="divSplitLine"></div> -->
         <div class="divSplitLine"></div>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="toNet">
+          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="toNet">
             <Icon class="icon iconfont icon-tuisongzhiwangluo  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">网络</p>
+            <p class="img-content">推送网络</p>
           </div>
         </Tooltip>
-        <!-- <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div">
-            <Icon class="icon iconfont icon-tuisongzhikongjian  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">空间</p>
+        <div class="divSplitLine"></div>
+        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
+          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="cutScreen">
+            <Icon class="icon iconfont icon-cut DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
+            <p class="img-content">截屏</p>
           </div>
-        </Tooltip> -->
+        </Tooltip>
       </div>
     </div>
-    <div :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
+    <div @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup"
+    :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
       <div :style="{margin:'0,5px'}">
-        <div v-show="!showList">
+        <operatorHub :style="{height:ContentHeightList}" :operatorConfig="operatorConfig" @isOpen="clickHub"></operatorHub>
+        <div v-show="!showList && !contentAna">
           <Scroll :on-reach-bottom="handleReachBottom" v-show='!ifInfo && !contentAna' :height=ContentHeight>
             <div id='spin' v-if="spinShow" :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}">
               <Spin size="large" fix v-if="spinShow">
@@ -105,7 +103,7 @@
             </div>
           
             <div id="contentchart" class="scrollBarAble" @mousewheel="jiazai" aria-autocomplete="true" :style="{height:ContentHeight}"
-             @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup">
+             >
               <Row type="flex" justify="start">
 
                 <Col :sm="colSmnum" :lg="colLgNum" :md='colMdNum' align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
@@ -113,7 +111,6 @@
                   <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click='toSelIds(index,item.check,item.id,$event)' 
                   @dblclick="showContent(item.id,item.title)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
                   @mouseenter="addHover" @mouseleave="removeHover">
-                   
                       <img :src='item.img' class="picsize" :class="(item.check)?'item-selected':''" >
                       <p class='nametext' ref='docP'>{{item.title}}</p>
                    
@@ -157,71 +154,139 @@
             <p class="contentInfoTime" id='contentsTime'></p>
             <p style='margin:10px'><span id='contents'></span></p>
           </div>
-          <!-- 文档内容分析词云图 -->
-          <div id = "contentWordCloud" class="scrollBarAble" v-show='contentAna' :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}" style='z-index:100'>
-            <!-- <i-button type='info' size="large" :style="{position:'absolute',left:'50px',top:'70px'}" @click='changeChart(1)'>词云图</i-button>
-            <i-button type='info' size="large" :style="{position:'absolute',left:'150px',top:'70px'}" @click='changeChart(2)'>柱状图</i-button> -->
-            <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" :style="{position:'absolute',right:'15px',top:'70px'}" size="26" @click='hideContentDiv(2)' style='z-index:101'></Icon>
-            <div  :style="{width:WCWidth,position:'absolute',display:'flex'}">
-              <div :style="{width:docWidth,height:ContentHeightList}" style="border-right:1px solid #336666">
-                <div class="e-title">
-                  <div class="e-title-d"></div>
-                  <p class="e-title-p">{{selDocItems.firstLevelName}}</p>
-                </div>
-                <Collapse simple id='nodeAttr' class='scrollBarAble'>
-                  <panel v-for="(list,index) in selDocItems.subStatisticsAttr" :key="index">
-                    <span>{{list.secondLevelName}}</span>
-                    <div slot="content" class="tableLine">
-                      <div class="econtent" v-for="(specifics,ind) in list.specificStaticsAttr" :key="ind">
-                        <p class="econtentp w8em">{{specifics.thirdLevelName}}</p>
-                        <p class="econtentp">{{specifics.count}}</p>
-                      </div>
-                    </div>
-                  </panel>
-                </Collapse>
-                
-                
-              </div>
-              <div :style="{width:barWidth,height:ContentHeightList}">
-                <div style='border-bottom:1px solid #336666'>
-                    <div id="worldCloud" :style="{width:barWidth,height:barHeight}"></div>
-                </div>
-                  <div style='border-bottom:1px solid #336666'>
-                    <div id="myChart" :style="{width:barWidth,height:barHeight}"></div>
-                  </div>
-                  
-              </div>
-            </div>
-            
-            
-            <!-- <div v-show='ifWord' >
-              <div id="worldCloud" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
-            </div>
-            <div v-show='ifBar' >
-              <div id="myChart" style="position:absolute;left: 50px;right:50px;top:100px;" :style="{width:WCWidth,height:WCheight}"></div>
-            </div> -->
-            
-          </div>
+          
+          
         </div>
       </div>
       <!-- 列表图 -->
-      <div>
+      <div id="barList">
         <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
           <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
       </div>
+      <!-- 词云分析图 -->
       <div>
-        <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
-          <Row type="flex" justify="space-between" class="code-row-bg">
-              <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" class-name="docThunmsItem" v-for='itemObj in thumbDocIds'>
-                <img :src='itemObj.img' class="picsize">
-                <p class='nametext'>{{itemObj.title}}</p>
-              </Col>
-          </Row>
-        </div> -->
+      <!-- <div :style="{minWidth:leftMenu}"></div> -->
+      <div>
+
+     
+      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'250px'}">
+        <div :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}" v-if="ifResize">
+          <Spin size="large" fix v-if="ifResize">
+                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+              </Spin>
+        </div>
+        <div class="docMenu" id="topMenuall" :style="{display:'flex',paddingRight: '5px',height:'50px',justifyContent: 'flex-end',alignItems: 'center'}">
+          <RadioGroup v-model="changeBar" @on-change='changeShow'>
+            <Radio label="词云"></Radio>
+            <Radio label="排序"></Radio>
+          </RadioGroup>
+          <div :style="{marginLeft:'10px'}">
+            <Dropdown  @on-click='changeDrop'>
+              <a href="javascript:void(0)">
+                 {{dropPlace}}
+                <Icon type="ios-arrow-down"></Icon>
+                
+                <!-- <span>&#xe62c;</span> -->
+              </a>
+              <!-- <Icon class="icon iconfont icon-drop-dropdown"></Icon>   -->
+              <DropdownMenu slot="list">
+                  <DropdownItem name='keywords'>关键词</DropdownItem>
+                  <DropdownItem name='PER'>人名</DropdownItem>
+                  <DropdownItem name='LOC'>地名</DropdownItem>
+                  <DropdownItem name='ORG'>机构名</DropdownItem>
+                  <DropdownItem name='N'>名词</DropdownItem>
+                  <DropdownItem name='V'>动词</DropdownItem>
+                  <DropdownItem name='J'>形容词</DropdownItem>
+                  <DropdownItem name='R'>副词</DropdownItem>
+                  <DropdownItem name='P'>代词</DropdownItem>
+                  <DropdownItem name='C'>连词</DropdownItem>
+                  <DropdownItem name='O'>其他</DropdownItem>
+              </DropdownMenu>
+          </Dropdown>
+          </div>
+          <div class="delB" @click='topicDatas=[]'>清空分析结果</div>
+          
+        </div>
+        <div class="anaDoc" >
+          <div :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}" v-show="ifTopic">
+          <div class="topItem animaTopItem" 
+          :style="{border:'1px solid #336666',order:0,width:topWidth,height:topHeight,display:'flex',flexDirection:'column',resize:'auto'}"
+          v-for="(list,index) in topicDatas" :key="index" :id="index">
+            <div class="itemHeader" 
+            :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
+              <div :style="{width:'70%',display:'flex',flexWrap:'nowrap'}" class="headerTitle">
+                <p class='docAnaTitle' @click="showAllTitle(index,$event,1);closeShowTitle()">{{list.docDatas[0].title}}</p>
+                &nbsp;&nbsp;<span>{{list.docDatas.length}}</span>
+              </div>
+              
+              <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
+              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,1)"></Icon>
+            </div>
+            <div :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
+              <div class="topicItem" 
+              :style="{display:'flex',justifyContent:'space-around',padding:'0px 1.25em 0px 1.25em',color:'#fff'}" 
+              v-for="(item,ind) in list.topDatas_10" :key="ind">
+                <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
+                <p :style="{fontSize:'12px',flex:'1',paddingLeft:'1.25em',maxWidth: '80%',overflow: 'hidden',textOverflow: 'ellipsis',whiteSpace: 'nowrap'}">{{item.name}}</p>
+                <p :style="{fontSize:'12px'}">{{item.value}}</p>
+              </div>
+            </div>
+            
+            
+          </div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          </div>
+          <div  v-show="!ifTopic" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around'}">
+              <div class="topWord animaTopItem"
+              :style="{border:'1px solid #336666',order:0,width:itemWidth,height:topHeight,display:'flex',flexDirection:'column',marginBottom:'10px'}"
+          v-for="(list,index) in topicDatas" :id="index+'word'">
+              <div class="itemHeader" 
+                :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
+                 <div :style="{width:'70%',display:'flex',flexWrap:'nowrap'}" class="headerTitle">
+                    <p class='docAnaTitle' @click="showAllTitle(index,$event,2);closeShowTitle()">{{list.docDatas[0].title}}</p>
+                    &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
+                  </div>
+                  
+                      <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
+                  
+                  
+                  <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,2)"></Icon>
+                </div>
+              <div :id='index+"wordChart"'></div>
+          </div>
+          <div class="itemEmpty" :style="{width:itemWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:itemWidth,height:'0px',visibility: 'hidden'}"></div>
+          
+          </div>
+          
+        </div>
+        
+        
+      </div>
+      
+      </div>
+      <div v-if="ifRenderAllTitle">
+      <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
+          :style="{display:'none'}">
+          <div v-for="(item,index) in list.docDatas" :style="{display:'flex',marginBottom:'5px',cursor:'pointer'}" :title="item.title">
+              <p class="itemTitle" :style="{color:'#fff'}">{{item.title}}</p>
+              <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px',width:'70px'}">{{item.time}}</p>
+              <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)'}"></p>
+              <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'7px',width:'70px'}">{{item.from}}</p>
+          </div>
+        </div>
+        </div>
       </div>
     </div>
-    </Col>
+    
+    <!-- </Col> -->
     <!-- flag 是modal显示开关，eventData是modal左侧列表数据 -->
     <modal-chart :flag="modal01" :edata="eventData"></modal-chart>
     <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
@@ -237,6 +302,7 @@
   import worksetModal from "./custom_workSet_modal.vue";
   import echarts from 'echarts';
   import $ from "jquery";
+  import operatorHub from "./custom_operatorHub.vue"
   import {
     mapState,
     mapMutations
@@ -253,6 +319,357 @@
     name: "App",
     data() {
       return {
+        topicIndex:0,
+        dropPlace:'关键词',
+        ifRenderAllTitle:false,
+        openHub:false,
+        ifResize:false,
+        showAllDocCount:0,
+        myWordCharts:[],
+        option:new Object({
+          title:{
+            name:'keyWords分析',
+            x:'center',
+            textStyle:{
+              fontSize:12,
+              color:'#ffffff'
+            }
+          },
+          tooltip: {
+ 			        show: true
+           },
+           series: [{
+ 			        name: '关键词',
+               type: 'wordCloud',
+               shape: 'circle',
+ 			        sizeRange: [10, 18],
+ 			        rotationRange: [0, 0],
+              textPadding: 0,
+               
+ 			        autoSize: {
+ 			            enable: true,
+ 			            minSize: 10
+ 			        },
+ 			        textStyle: {
+ 			            normal: {
+ 			                color: function(params) {
+                           var colorList = ['#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff']
+                           return colorList[Math.floor(Math.random()*6)]
+ 			                }
+                   },
+                
+ 			            emphasis: {
+ 			                // shadowBlur: 10,
+ 			                shadowColor: '#333'
+ 			            }
+               },
+               right: null,
+               bottom: null,
+               left:'center',
+               top:'center',
+               data:[]
+ 			 	  }]
+        }),
+        ifTopic:true,
+        wordCloudOption:null,
+        topicDatas:[],
+        topicDatas1:[
+          {ids:[],docDatas:[
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            },
+            {
+              title:'Venezuelan oil chief blames fire on opposition',
+              id:'heatRadius',
+              time:'2019-02-20',
+              from:'华盛顿邮报'
+            }
+          ],
+          topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20}]},
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+
+            ],
+            topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]},
+            {ids:[],docDatas:[
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              },
+              {
+                title:'Venezuelan oil chief blames fire on opposition',
+                id:'heatRadius',
+                time:'2019-02-20',
+                from:'华盛顿邮报'
+              }
+            ],
+            topDatas:[
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
+            {name:'pujing',num:20},{name:'pujing',num:20},]}
+        ],
+        changeBar:'热词排序',
+        orderCount:0,
+        ifhasDoc:false,
+        ifhasSel:false,
+        ifShowDoc:false,
+        prevIfhasSel:false,
         isBru:false,
         bruIds:[],
         bruStartX:0,
@@ -261,13 +678,10 @@
         prevKup:null,
         keyCount:0,
         isSel:null,
-        ifWord:false,
-        ifBar:false,
-        WCheight:0,
-        WCWidth:0,
-        docWidth:0,
-        barWidth:0,
-        barHeight:0,
+        itemWidth:0,
+        itemHeight:0,
+        topWidth:0,
+        topHeight:0,
         contentAnaWidth:0,
         prevItems:[],
         mouseStartX:0,
@@ -321,93 +735,7 @@
         showList: false,
         moreLoading: false,
         selectArr: [],
-        columns2: [{
-            title: 'Name',
-            key: 'name',
-            width: 100,
-            fixed: 'left'
-          },
-          {
-            title: 'Age',
-            key: 'age',
-            width: 100
-          },
-          {
-            title: 'Province',
-            key: 'province',
-            width: 100
-          },
-          {
-            title: 'City',
-            key: 'city',
-            width: 100
-          },
-          {
-            title: 'Address',
-            key: 'address',
-            width: 200
-          },
-          {
-            title: 'Postcode',
-            key: 'zip',
-            width: 100
-          },
-          {
-            title: 'Action',
-            key: 'action',
-            fixed: 'right',
-            width: 120,
-            render: (h, params) => {
-              return h('div', [
-                h('Button', {
-                  props: {
-                    type: 'text',
-                    size: 'small'
-                  }
-                }, 'View'),
-                h('Button', {
-                  props: {
-                    type: 'text',
-                    size: 'small'
-                  }
-                }, 'Edit')
-              ]);
-            }
-          }
-        ],
-        data3: [{
-            name: 'John Brown',
-            age: 18,
-            address: 'New York No. 1 Lake Park',
-            province: 'America',
-            city: 'New York',
-            zip: 100000
-          },
-          {
-            name: 'Jim Green',
-            age: 24,
-            address: 'Washington, D.C. No. 1 Lake Park',
-            province: 'America',
-            city: 'Washington, D.C.',
-            zip: 100000
-          },
-          {
-            name: 'Joe Black',
-            age: 30,
-            address: 'Sydney No. 1 Lake Park',
-            province: 'Australian',
-            city: 'Sydney',
-            zip: 100000
-          },
-          {
-            name: 'Jon Snow',
-            age: 26,
-            address: 'Ottawa No. 2 Lake Park',
-            province: 'Canada',
-            city: 'Ottawa',
-            zip: 100000
-          }
-        ],
+        
         columns3: [{
             title: 'Title',
             key: 'title',
@@ -459,34 +787,7 @@
           {
             title: 'Text',
             key: 'text',
-            // render:(h,params)=>{
-            //   let texts = '';
-            //   texts = params.row.text.substring(0,100) + '....';
-            //   let strTitle = '';
-            //   strTitle = params.row.text;
-            //   return h(
-            //     "tooltip",
-            //     {
-            //       props:{
-            //         placement:"bottom",
-            //         transfer:true,
-            //         marginLeft:'-30px',
-                   
-            //       }
-            //     },
-            //     [
-            //       texts,
-            //       h(
-            //         "div",
-            //         {
-            //           slot:"content",
-            //           style:{whiteSpace: "normal", wordBreak: "break-all",width:"900px",}
-            //         },
-            //         strTitle
-            //       )
-            //     ]
-            //   )
-            // }
+            
           },
           {
             title: 'Entity',
@@ -525,132 +826,154 @@
             entity: 'Trump',
           }
         ],
-        initSelectBox: function(selector, selectCallback) {
-          var mthis = this
-          function clearBubble(e) {
-            if (e.stopPropagation) {
-              e.stopPropagation();
-            } else {
-              e.cancelBubble = true;
-            }
-            if (e.preventDefault) {
-              e.preventDefault();
-            } else {
-              e.returnValue = false;
-            }
-          }
-          var $container = $(selector);
-          //  框选事件
-          $container
-            .on('mousedown', function(eventDown) {
-              console.log(111)
-              //  设置选择的标识
-              var isSelect = true;
-              //  创建选框节点
-              var $selectBoxDashed = $('<div class="select-box-dashed"></div>');
-              $container.append($selectBoxDashed);
-              //  设置选框的初始位置
-              var startX = eventDown.x || eventDown.clientX;
-              var startY = eventDown.y || eventDown.clientY;
-              $selectBoxDashed.css({
-                left: startX,
-                top: startY,
-                
-              });
-              //  根据鼠标移动，设置选框宽高
-              var _x = null;
-              var _y = null;
-              //  清除事件冒泡、捕获
-              clearBubble(eventDown);
-              //  监听鼠标移动事件
-              $(selector).on('mousemove', function(eventMove) {
-                //  设置选框可见
-                console.log(2222)
-                $selectBoxDashed.css('display', 'block');
-                //  根据鼠标移动，设置选框的位置、宽高
-                _x = eventMove.x || eventMove.clientX;
-                _y = eventMove.y || eventMove.clientY;
-                //  暂存选框的位置及宽高，用于将 select-item 选中
-                var _left = Math.min(_x, startX);
-                var _top = Math.min(_y, startY);
-                var _width = Math.abs(_x - startX);
-                var _height = Math.abs(_y - startY);
-                $selectBoxDashed.css({
-                  left: _left,
-                  top: _top,
-                  width: _width,
-                  height: _height
-                });
-                //  遍历容器中的选项，进行选中操作
-                $(selector).find('.select-item').each(function() {
-                  var $item = $(this);
-                  var itemX_pos = $item.prop('offsetWidth') + $item.prop('offsetLeft');
-                  var itemY_pos = $item.prop('offsetHeight') + $item.prop('offsetTop');
-                  //  判断 select-item 是否与选框有交集，添加选中的效果（ temp-selected ，在事件 mouseup 之后将 temp-selected 替换为 selected）
-                  var condition1 = itemX_pos > _left;
-                  var condition2 = itemY_pos > _top;
-                  var condition3 = $item.prop('offsetLeft') < (_left + _width);
-                  var condition4 = $item.prop('offsetTop') < (_top + _height);
-                  if (condition1 && condition2 && condition3 && condition4) {
-                    $item.addClass('temp-selected');
-                  } else {
-                    $item.removeClass('temp-selected');
-                  }
-                });
-                //  清除事件冒泡、捕获
-                clearBubble(eventMove);
-              });
-              $(document).on('mouseup', function() {
-                $(selector).off('mousemove');
-                // $(selector).find('.temp-selected').find('.contentDiv').addClass('item-selected')
-                $(selector)
-                  .find('.temp-selected')
-                  .removeClass('temp-selected').addClass('item-selected');
-                $selectBoxDashed.remove();
-                if (selectCallback) {
-                  selectCallback();
+        operatorConfig:[
+                {
+                  name:'文档聚类',
+                  id:'docCluster',
+                  iconName:'icon-kongjianfenxi',
+                  disabled:true
+                },
+                {
+                    name:'主题分析',
+                    id:'topicClassification',
+                    iconName:'icon-kongjianfenxi',
+                    openFunction:'opentopicClassif',
+                    closeFunction:'closetopicClassif',
+                    operatorSurface:[
+                      {
+                          operatorType:'dynamic',
+                          dynamicAttr:'seletedDocAttrList',
+                          paramCompare:{
+                            'id':'id',
+                            'title':'title',
+                            'time':'time',
+                            'from':'from'
+                          },
+                          dispose:{
+                            type:'docBar',
+                            excuteFunction:'changeOperatorDocIds',
+                            attrName:'id',
+                            rightMenuConfig:[{
+                                'name': '单个文档分析',
+                                'iconClassName': 'icon-ren',
+                                'excuteFunction':'singleDocAnaly'
+                              },
+                              {
+                                'name': '合并分析',
+                                'iconClassName': 'icon-ren',
+                                'excuteFunction':'multiDocAnaly'
+                              }
+                            ]
+                          }
+                      },
+                    ]
+                },
+                {
+                name:'倾向性分析',
+                id:'sentimentAnalysis',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                },
+                {
+                name:'文档摘要',
+                id:'docSummary',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
                 }
-              });
-            })
-            //  点选切换选中事件
-            .on('click', '.select-item', function() {
-              // console.log("clcik")
-              
-              // clearTimeout(timerClick);
-              // var selThis = this;
-              // timerClick = setTimeout(function(){
-              //   if ($(selThis).hasClass('item-selected')) {
-              //   $(selThis).removeClass('item-selected');
-              // } else {
-              //   $(selThis).addClass('item-selected');
-              // }
-              // mthis.watchSelectCounter++;
-              
-              // },300)
-              
-            })
-          //  点选全选全不选
-          // .on('click', '.toggle-all-btn', function() {
-          //     if ($(this).attr('data-all')) {
-          //         $(this).removeAttr('data-all');
-          //         $container.find('.select-item').removeClass('selected');
-          //     } else {
-          //         $(this).attr('data-all', 1);
-          //         $container.find('.select-item').addClass('selected');
-          //     }
-          // });
-        }
+        ]
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes'
-    ]),
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes','topicClassifStatus',
+      'ifSinDocAna','ifMulDocAna'
+      ]),
+
+   
     watch: {
+      
+      topicDatas:function(){
+        
+        this.$nextTick(function(){
+          var mthis = this
+          mthis.ifRenderAllTitle = true
+          var charts = [];
+          var options = [];
+          for(let i=0;i<mthis.topicDatas.length;i++){
+                charts.push(i+'wordChart');
+                mthis.myWordCharts.push(i+'myChart');
+                options.push(mthis.option);
+              }
+              
+               for(let j=0;j<mthis.myWordCharts.length;j++){
+              options[j].series[0].data = mthis.topicDatas[j].topDatas;
+                 
+              mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
+                width:mthis.itemWidth,
+                height:mthis.itemHeight
+              });
+              mthis.myWordCharts[j].setOption(options[j]);
+              
+            }
+            
+        })
+      },
+      
+      ifSinDocAna:function(){
+        var mthis = this
+        if(this.ifSinDocAna){
+          mthis.showContentAna('keywords','single',mthis.$store.state.topicClassifIds)
+          mthis.dropPlace = '关键词'
+        }
+        
+      },
+      ifMulDocAna:function(){
+        var mthis = this
+        if(this.ifMulDocAna){
+          mthis.showContentAna('keywords','group',mthis.$store.state.topicClassifIds)
+          mthis.dropPlace = '关键词'
+        }
+      },
+      prevItems:{
+        handler(newVal,oldVal){
+          var mthis = this
+          if(mthis.prevItems.length>0){
+            mthis.ifhasDoc = true;
+            let buttonItems = mthis.prevItems.filter(item => item.check)
+            if(buttonItems.length>0){
+              mthis.ifhasSel = true
+            }else{
+              mthis.ifhasSel = false
+            }
+            
+          }else{
+            mthis.ifhasDoc = false
+            mthis.ifhasSel = false
+            mthis.ifShowDoc = false
+          }
+        },
+        deep:true,
+        immediate: true
+      },
+      topicClassifStatus:function(){
+        var mthis = this;
+        if(mthis.topicClassifStatus){
+          mthis.showContentAna('keywords','group',mthis.$store.state.selectContentNodes[0].ids)
+          mthis.ifhasDoc = false
+          mthis.ifhasSel = false
+          // mthis.ifShowDoc = false
+        }else{
+          mthis.contentAna = false
+          mthis.ifhasDoc = true
+          mthis.ifhasSel = true
+          
+        }
+        
+      },
       contentTimeOnlySel:function(){
-        if(this.contentTimeOnlySel){
+        if(this.contentTimeOnlySel.length>0){
           this.selectAll()
         }else{
-          console.log("falsefalsefalsefalse")
+          
         }
         
       },
@@ -685,7 +1008,7 @@
         
       },
       watchSelectCounter: function() {
-        // console.log("watchselectcounter")
+        
         
         // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
         
@@ -699,24 +1022,23 @@
         // for (let m = 0; m < selectList.length; m++) {
         //   this.selectArr.push(selectList[m].id)
         // }
-        // // console.log('==============++++++++++==============')
-        // // console.log(this.selectArr)
+        
         // this.$store.commit('setSelectContentNodes', [{
         //   ids: this.selectArr
         // }])
         
       },
       netToContentData: function() {
-        console.log(this.netToContentData)
+        
         var mthis = this
         
         if(this.netToContentData.contentIds.ids.length ==0){
-          console.log(0)
+          
           mthis.items = []
           
         }else if(this.netToContentData.contentIds.ids.length>0){
           mthis.spinShow = true
-          console.log(1)
+          
           mthis.items = []
           let contentIds = this.netToContentData.contentIds.ids
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
@@ -728,13 +1050,26 @@
                 title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.text,
+                text: item.description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
                 check:true
               })
+              
             );
+            // console.log(1)
+            mthis.prevItems = mthis.deepClone(mthis.items)
+            let selDocList = mthis.items.filter(item => item.check)
+            selDocList = selDocList.map(item =>({
+                      title: item.title,      
+                      id: item.id,
+                      time: item.time,
+                      from: item.from,     
+                    })
+                  );
+            mthis.$store.commit('setSeletedDocAttrList',selDocList)
+            
             for(let i=0;i<mthis.items.length;i++){
               selectIds.push(mthis.items[i].id)
             }
@@ -744,22 +1079,34 @@
             mthis.$store.commit('setContent2time',[{
               ids:selectIds
             }])
+            mthis.ifShowDoc = true
+            mthis.analysisButton = true
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.text,
+                text: item.description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
                 check:false
               })
             );
+            // console.log(2)
+            mthis.$store.commit('setSelectContentNodes', [{
+              ids: []
+            }])
+            mthis.$store.commit('setContent2time',[{
+              ids:[]
+            }])
+            mthis.prevItems = mthis.deepClone(mthis.items)
+            
+            mthis.$store.commit('setSeletedDocAttrList',[])
           }
           
           mthis.spinShow = false
-          console.log(2)
+          
           
          
         })
@@ -767,87 +1114,77 @@
         }
         
       },
-      
-      'contentTimeCondition.type': function() {
-        var mthis = this
-        console.log(this.contentTimeCondition.type)
-        if(mthis.contentTimeCondition.type == 'cancel'){
-          mthis.items = mthis.prevItems;
-          let selIds = []
-          for(let i=0;i<mthis.items.length;i++){
-            selIds.push(mthis.items[i].id)
-            mthis.items[i].check = true
-          }
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: selIds
-          }])
-        }
-        if(mthis.contentTimeCondition.type == 'sel'){
-          if(mthis.contentTimeCondition.ids.length ==0){
-            mthis.items = mthis.prevItems;
-            let selIds = []
-            for(let i=0;i<mthis.items.length;i++){
-              selIds.push(mthis.items[i].id)
-              mthis.items[i].check = true
+      contentTimeCondition:{
+        deep:true,
+        handler(newValue){
+           var mthis = this
+           if(mthis.contentTimeCondition.type == 'cancel'){
+              // console.log(3)
+              // console.log(mthis.prevItems)
+              mthis.items =  mthis.deepClone(mthis.prevItems)
             }
-            mthis.$store.commit('setSelectContentNodes', [{
-              ids: selIds
-            }])
-         }
-          if(mthis.contentTimeCondition.ids.length>0){
-            let items = []
-            for(var i of mthis.contentTimeCondition.ids){
-              for(var j in mthis.items){
-                if(i == mthis.items[j].id){
-                  items.push(mthis.items[j])
-                  }
-                }
+            if(mthis.contentTimeCondition.type == 'sel'){
+              
+              if(mthis.contentTimeCondition.ids.length ==0){
+                // console.log(4)
+                mthis.items = mthis.deepClone(mthis.prevItems)
               }
-            for(var m=0;m<items.length;m++){
-              items[m].check = false
+              if(mthis.contentTimeCondition.ids.length>0){
+                let items = []
+                for(var i of mthis.contentTimeCondition.ids){
+                  for(var j in mthis.prevItems){
+                    if(i == mthis.prevItems[j].id){
+                      items.push(mthis.deepClone(mthis.prevItems[j]))
+                      }
+                    }
+                  }
+                for(var m=0;m<items.length;m++){
+                  items[m].check = false
+                }
+                mthis.items = mthis.deepClone(items)
+               
+              
+              }
             }
-            mthis.items = items
-            mthis.$store.commit('setSelectContentNodes', [{
-              ids: []
-            }])
             }
-          
-        }
-        
-        
-          
+            
+            
       },
+      
+     
       searchContentResult: function(va) {
         var mthis = this
         mthis.page = 1
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
+        // console.log('sousuosousuo')
+        // console.log(va)
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
             
             
             $('.item-selected').removeClass('item-selected')
-            console.log(5)
+            
             // mthis.items = response.body.data
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
                 i_sn: item.i_sn, 
                 id: item.id,
-                text: item.text,
+                text: item.description,
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
                 check:false
               })
             );
-            console.log(mthis.items)
-            mthis.prevItems = mthis.items
+            // console.log(5)
+            mthis.prevItems = mthis.deepClone(mthis.items)
+            
             if(response.body.data.length ==30){
               mthis.moreLoading = true
             }
-            // console.log("datadatatdattatdtadt")
-            // console.log(mthis.items)
+           
             // mthis.data4 = []
             // for(let i=0;i<mthis.items.length;i++){
             //   let itemList = {};
@@ -859,7 +1196,7 @@
             //   itemList.entity = mthis.content
             //   mthis.data4.push(itemList)
             // }
-            // console.log(mthis.data4)
+            
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
             mthis.$store.commit('setSelectContentNodes', [{
@@ -868,17 +1205,19 @@
             mthis.$store.commit('setContent2time',[{
               ids:[]
             }])
+            
+            mthis.$store.commit('setSeletedDocAttrList',[])
           } else {
             // mthis.showMore = false
             mthis.setMessage('未找到匹配的文章')
-            console.log(6)
+           
             mthis.items = []
 
           }
         })
         // }
         // }
-        mthis.watchSelectCounter++;
+        
       },
       // netHeight: function() {
       //   var mthis = this;
@@ -888,24 +1227,187 @@
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
         mthis.ContentHeightList = mthis.$store.state.contentHeight - 75 + 22 + 'px';
+        console.log(mthis.ContentHeightList)
       },
       ContentHeightList: function() {
         var mthis = this;
         var Ele = document.getElementById('translatedDiv');
         var contentDiv = document.getElementById('contentInfo');
         
-        mthis.WCheight = (parseInt(mthis.ContentHeightList.split('px')[0]) - 45) + 'px'
-        mthis.barHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) /2 -0.8) + 'px'
+        // mthis.WCheight = (parseInt(mthis.ContentHeightList.split('px')[0]) - 45) + 'px'
+        // mthis.barHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) /2 -0.8) + 'px'
         if (Ele !== null) {
           Ele.style.height = mthis.ContentHeightList;
         }
       }
     },
     components: {
-      InfiniteLoading,modalChart,worksetModal
+      InfiniteLoading,modalChart,worksetModal,operatorHub
     },
     props: ['contentData'],
     methods: {
+      cutScreen(){
+        // 截屏事件
+      },
+     
+      showAllTitle(index,e,flag){
+        var mthis = this
+        mthis.clearBubble(e)
+        if(flag ==1){
+            if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
+            var pTitle = document.getElementById(index)
+            if(!mthis.openHub){
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+260 + 'px';
+            }else{
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+10 + 'px';
+              
+            }
+            
+            document.getElementsByClassName('allTitle')[index].style.display = 'block'
+            
+            document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20+65 + 'px';
+            mthis.showAllDocCount = mthis.showAllDocCount + 1;
+          }else{
+            document.getElementsByClassName('allTitle')[index].style.display = 'none';
+            mthis.showAllDocCount = mthis.showAllDocCount - 1;
+          }
+        }else{
+          if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
+            var pTitle = document.getElementById(index+'word')
+            if(!mthis.openHub){
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+250 + 'px';
+            }else{
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+10 + 'px';
+              
+            }
+            
+            document.getElementsByClassName('allTitle')[index].style.display = 'block'
+            
+            document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20+65 + 'px';
+            mthis.showAllDocCount = mthis.showAllDocCount + 1;
+          }else{
+            document.getElementsByClassName('allTitle')[index].style.display = 'none';
+            mthis.showAllDocCount = mthis.showAllDocCount - 1;
+          }
+        }
+        
+        
+      },
+      closeShowTitle(){
+        
+      },
+      clickHub(isOpen){
+        var mthis = this;
+        if(!mthis.contentAna) return;
+        var topicAnaly = document.getElementById('topicAnaly');
+        if(isOpen){
+          topicAnaly.style.left = '240px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 252 + 'px';
+          mthis.wordResize(document.getElementsByClassName('topItem').length)
+          mthis.openHub = false
+        }else{
+          topicAnaly.style.left = '0px';
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20  + 'px';
+          mthis.wordResize(document.getElementsByClassName('topItem').length)
+          mthis.openHub = true
+        }
+        
+      },
+      changeShow(newValue){
+        var mthis = this
+        console.log(newValue)
+        console.log(typeof newValue)
+        if(newValue == '词云'){
+          mthis.ifTopic = false;
+          mthis.wordResize(document.getElementsByClassName('topItem').length);
+        }else{
+          mthis.ifTopic = true;
+          mthis.wordResize(document.getElementsByClassName('topItem').length);
+        }
+      },
+      changeDrop(name){
+        console.log(name)
+        var mthis = this;
+        switch(name){
+          case 'PER' : mthis.dropPlace = '人名';break;
+          case 'LOC' : mthis.dropPlace = '地名';break;
+          case 'ORG' : mthis.dropPlace = '机构名';break;
+          case 'N' : mthis.dropPlace = '名词';break;
+          case 'V' : mthis.dropPlace = '动词';break;
+          case 'J' : mthis.dropPlace = '形容词';break;
+          case 'R' : mthis.dropPlace = '副词';break;
+          case 'P' : mthis.dropPlace = '代词';break;
+          case 'C' : mthis.dropPlace = '连词';break;
+          case 'keywords' : mthis.dropPlace = '关键词';break;
+          
+          case 'O' : mthis.dropPlace = '其他';break;
+          default: mthis.dropPlace = '关键词';break;
+        }
+       
+        let type = '';
+        let ids = []
+        if(mthis.topicDatas.length==1){
+          type = 'group';
+          ids = mthis.topicDatas[0].ids
+        }else if(mthis.topicDatas.length>1){
+          type = 'single';
+          for(let i=0;i<mthis.topicDatas.length;i++){
+            ids.push(mthis.topicDatas[i].ids[0])
+          }
+        }
+        mthis.showContentAna(name,type,ids)
+      },
+      delTopData(index,flag){
+        var mthis = this
+        if(flag ==1){
+            document.getElementById(index).setAttribute('style','opacity:0;width:0');
+            mthis.ifResize = true
+            setTimeout(()=>{
+              
+              document.getElementById(index).remove();
+              let len = document.getElementsByClassName('topItem').length;
+              document.getElementById(index+'word').remove();
+              mthis.wordResize(len)
+              
+              mthis.ifResize = false
+            },800)
+        }else{
+          document.getElementById(index+'word').setAttribute('style','opacity:0;width:0');
+            mthis.ifResize = true
+            setTimeout(()=>{
+              
+              document.getElementById(index+'word').remove();
+              let len = document.getElementsByClassName('topItem').length;
+              document.getElementById(index).remove();
+              mthis.wordResize(len)
+              
+              
+              mthis.ifResize = false
+            },800)
+        }
+        
+        console.log(index)
+        
+        
+      },
+      toTop(index){
+        var div = document.getElementById(index);
+        var divWord = document.getElementById(index+'word');
+        this.orderCount = this.orderCount -1;
+        div.style.order = this.orderCount ;
+        divWord.style.order = this.orderCount ;
+       
+        $('#topicAnaly').animate({scrollTop:0},500)
+        
+        
+        
+        
+      },
+      deepClone(obj){
+        let _obj = JSON.stringify(obj);
+        let objClone = JSON.parse(_obj);
+        return objClone
+      },
       keyD(e){
         
         var mthis = this;
@@ -950,8 +1452,7 @@
             mthis.keyCount = mthis.keyCount - 1;
             mthis.prevKup = e.code
           }
-        console.log('keyup')
-        console.log(mthis.keyCount)
+        
       },
       clearBubble(e) {
         if (e.stopPropagation) {
@@ -1084,40 +1585,52 @@
         this.clearBubble(eventMove)
       },
       kuangup(e){
-        if(!this.showThumb) return;
-        this.isSel = false;
-        var mthis = this;
+        // if(!this.showThumb) return;
+        // this.isSel = false;
+        // var mthis = this;
         
-        var selDiv = document.getElementById('selectDiv');
-        var selOutDiv = document.getElementById('selOutDiv');
-        selOutDiv.style.display = 'none';
-        selDiv.style.display = 'none';
+        // var selDiv = document.getElementById('selectDiv');
+        // var selOutDiv = document.getElementById('selOutDiv');
+        // selOutDiv.style.display = 'none';
+        // selDiv.style.display = 'none';
         
-        if(this.isBru){
-          mthis.bruIds= util.unique(mthis.bruIds);
+        // if(this.isBru){
+        //   mthis.bruIds= util.unique(mthis.bruIds);
           
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: mthis.bruIds
-          }])
-          mthis.$store.commit('setContent2time',[{
-            ids:mthis.bruIds
-          }])
-          mthis.isBru = false;
-        }
+        //   mthis.$store.commit('setSelectContentNodes', [{
+        //     ids: mthis.bruIds
+        //   }])
+        //   mthis.$store.commit('setContent2time',[{
+        //     ids:mthis.bruIds
+        //   }])
+        //   console.log(mthis.bruIds)
+        //   let selDocList = mthis.items.filter(item => item.check)
+        //   selDocList = selDocList.map(item =>({
+        //             title: item.title,      
+        //             id: item.id,
+        //             time: item.time,
+        //             from: item.from,     
+        //           })
+        //         );
+        //   mthis.$store.commit('setSeletedDocAttrList',selDocList)
+        //   mthis.isBru = false;
+        // }
         
-        $('#selectDiv').remove();
-        $('#selOutDiv').remove();
-        this.clearBubble(e)
-        $('#contentchart').off('mousemove');
+        // $('#selectDiv').remove();
+        // $('#selOutDiv').remove();
+        // this.clearBubble(e)
+        // $('#contentchart').off('mousemove');
       },
     toSelIds(index,check,id,evt){
         this.clearBubble(evt)
         
         clearTimeout(timerClick);
         var mthis = this;
-        check = !check;
-        mthis.items[index].check = check;
+        
         timerClick = setTimeout(function(){
+          check = !check;
+          mthis.items[index].check = check;
+          mthis.prevItems = mthis.deepClone(mthis.items)
           var ids = mthis.selectContentNodes[0].ids
           if(ids.indexOf(id)>-1){
             let index = ids.indexOf(id)
@@ -1138,6 +1651,15 @@
           mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
         },300)
         
         
@@ -1218,6 +1740,15 @@
             continue
           }
         }
+        let selDocList = mthis.items.filter(item => item.check)
+        selDocList = selDocList.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
+       
         mthis.deleteButton = true
         mthis.analysisButton = true
         mthis.$store.commit('setSelectContentNodes', [{
@@ -1226,7 +1757,9 @@
         mthis.$store.commit('setContent2time',[{
             ids:ids
           }])
-
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
+          console.log(6)
+        mthis.prevItems = mthis.deepClone(mthis.items)
         // let disselectDom = $('.contentDiv:not(.item-selected)')
         // disselectDom.addClass('item-selected')
         // this.watchSelectCounter++;
@@ -1234,8 +1767,7 @@
       },
       rightMenu(e){
         var mthis = this
-        // console.log("youjianyoujianyoujiainyoujian")
-        // console.dir(e)
+        
         let that = e.target
         if(that.tagName == "P"){
           that = that.parentNode
@@ -1249,331 +1781,26 @@
           $(that).addClass('item-selected')
           mthis.watchSelectCounter++;
         }
-        // console.log(event.pageX)
-        // console.log(event.pageY)
-        
       },
-      togClass(e){
-        
-        
-        clearTimeout(timerClick);
-        var mthis = this;
-        
-        let that = e.target;
-        if(that.tagName == "P"){
-            that = that.parentNode
-          }else{
-              that = that
-          }
-        timerClick = setTimeout(function(){
-          
-        if ($(that).hasClass('item-selected')) {
-          console.log(6)
-          $(that).removeClass('item-selected');
-        } else {
-          $(that).addClass('item-selected');
-        }
-          mthis.watchSelectCounter++;
-        },300)
-      },
+      
       deleteNode(){
         var mthis = this
         if(this.deleteButton){
           mthis.items =  mthis.items.filter(item => item.check == false)
-          
+          mthis.prevItems = mthis.deepClone(mthis.items)
           mthis.$store.commit('setSelectContentNodes', [{
             ids: []
           }])
           mthis.$store.commit('setContent2time',[{
             ids:[]
           }])
+          mthis.$store.commit('setSeletedDocAttrList',[])
         }else{
           mthis.setMessage("请选择至少一篇文章")
         }
         
       },
-        // 判断是否是闰年，请求结束时间加一天
-      isLeapYear(str){
-          var newStr = str.split("-")
-          // console.log(newStr)
-              var year = parseInt(newStr[0])
-              var month = parseInt(newStr[1])
-              var day = parseInt(newStr[2])
-              switch(month){
-                  case 1: 
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break ;
-                    case 2:
-                    if(day<28){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day =28){
-                      let cond1 = year % 4 == 0;
-                      let cond2 = year % 100 != 0 ;
-                      let cond3 = year % 400 ==0 ;
-                      let cond = cond1 && cond2 || cond3 ;
-                      if(cond){
-                        day = "29"
-                        newStr.splice(2,1,day)
-                        newStr = newStr.join("-")
-                        return newStr
-                      }else{
-                        month += 1;
-                        if(month<10){
-                          month = "0" + month
-                        }
-                        day = "01"
-                        newStr.splice(2,1,day)
-                        newStr.splice(1,1,month)
-                        newStr = newStr.join("-")
-                        return newStr
-                      }
 
-                    }else if(day =29){
-                      month += 1;
-                        if(month<10){
-                          month = "0" + month
-                        }
-                        day = "01"
-                        newStr.splice(2,1,day)
-                        newStr.splice(1,1,month)
-                        newStr = newStr.join("-")
-                        return newStr
-                    }
-                    break;
-                    case 3:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 4:
-                    if(day<30){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=30){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 5:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 6:
-                    if(day<30){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=30){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }break;
-                    case 7:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 8:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 9:
-                    if(day<30){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=30){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }break;
-                    case 10:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 11:
-                    if(day<30){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=30){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }break;
-                    case 12:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    default:break;
-              }
-        },
       //无限滚动加载触发方法
       infiniteHandler($state) {
       setTimeout(() => {
@@ -1603,10 +1830,20 @@
                 ids:[]
               }])
             }else{
-              return
+              
             }
           }
         }
+        let selDocList = mthis.items.filter(item => item.check)
+        selDocList = selDocList.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
+        mthis.prevItems = mthis.deepClone(mthis.items)
       },
       fanxuan() {
         // document.getElementsByClassName("box");
@@ -1614,6 +1851,7 @@
         for(let i=0;i<this.items.length;i++){
           mthis.items[i].check = !mthis.items[i].check
         }
+        mthis.prevItems = mthis.deepClone(mthis.items)
         let selectList = []
         let selectContent = this.items.filter(item => item.check)
         for(let i=0;i<selectContent.length;i++){
@@ -1625,10 +1863,20 @@
         mthis.$store.commit('setContent2time',[{
             ids:selectList
           }])
+        let selDocList = []
+        selDocList = selectContent.map(item =>({
+                  title: item.title,      
+                  id: item.id,
+                  time: item.time,
+                  from: item.from,     
+                })
+              );
+        mthis.$store.commit('setSeletedDocAttrList',selDocList)
       },
       removeAll() {
-        console.log(7)
+        
         this.items = []
+        this.prevItems = this.deepClone(this.items)
         // this.watchSelectCounter++;
         this.page = 1;
         this.$store.commit('setSelectContentNodes', [{
@@ -1637,6 +1885,7 @@
         this.$store.commit('setContent2time',[{
             ids:[]
           }])
+        this.$store.commit('setSelectContentNodes',[])
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
@@ -1675,13 +1924,13 @@
         this.showThumb = true
         this.colLgNum = 3
         this.colSmnum = 6
-        this.colMdNum= 4 
+        this.colMdNum= 4
        
       },
       contentTranslate() {
         var mthis = this;
-        // console.log(this.translateButton)
-        if(this.translateButton){
+        
+        if(this.ifShowDoc){
           var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
@@ -1728,131 +1977,33 @@
       },
       orderTimeUp() {
         var mthis = this
-        mthis.order = '&isSortByTime=asc'
-        mthis.page = 1
-        return new Promise(resolve => {
-          if (mthis.contentTimeCondition.length === 2) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                console.log(8)
-                mthis.items = response.body.data
-              } else {
-                mthis.alertNotice('无匹配数据1', true)
-              }
-              resolve();
-            })
-          } else if (mthis.contentTimeCondition.length === 1) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                console.log(10)
-                mthis.items = response.body.data.map(item =>({
-                  title: item.title,      
-                  i_sn: item.i_sn, 
-                  id: item.id,
-                  text: item.text,
-                  time: item.time,
-                  from: item.from,     
-                  img: "http://10.60.1.140/assets/images/content_node.png",
-                  check:false
-                })
-              );
-              mthis.$store.commit('setSelectContentNodes', [{
-                ids: []
-              }])
-              mthis.$store.commit('setContent2time',[{
-                ids:[]
-              }])
-              } else {
-                mthis.alertNotice('无匹配数据2', true)
-              }
-              resolve();
-            })
-          } else {
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                // $('.item-selected').removeClass('item-selected')
-                console.log(11)
-                mthis.items = response.body.data
-              } else {
-                mthis.setMessage('无匹配数据3')
-              }
-              resolve();
-            })
-          }
-        });
+        mthis.items = mthis.deepClone(mthis.prevItems)
+        
       },
       orderTimeDown() {
         var mthis = this
-        mthis.order = '&isSortByTime=desc'
-        mthis.page = 1
-        return new Promise(resolve => {
-          if (mthis.contentTimeCondition.length === 2) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                console.log(12)
-                mthis.items = response.body.data
-              } else {
-                mthis.alertNotice('无匹配数据4', true)
-              }
-              resolve();
-            })
-          } else if (mthis.contentTimeCondition.length === 1) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                console.log(13)
-                mthis.items = response.body.data
-              } else {
-                mthis.alertNotice('无匹配数据5', true)
-              }
-              resolve();
-            })
-          } else {
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
-              
-              if (response.body.data.length > 0) {
-                mthis.items = response.body.data.map(item =>({
-                  title: item.title,      
-                  i_sn: item.i_sn, 
-                  id: item.id,
-                  text: item.text,
-                  time: item.time,
-                  from: item.from,     
-                  img: "http://10.60.1.140/assets/images/content_node.png",
-                  check:false
-                })
-              );
-                // $('.item-selected').removeClass('item-selected')
-                console.log(14)
-                mthis.$store.commit('setSelectContentNodes', [{
-                  ids: []
-                }])
-                mthis.$store.commit('setContent2time',[{
-                  ids:[]
-                }])
-              } else {
-                mthis.setMessage('无匹配数据6')
-              }
-              resolve();
-            })
+        
+        let hasTime = mthis.items.filter(item => item.time);
+        let noTime = mthis.items.filter(item => !item.time);
+        
+        for(var i=0;i<hasTime.length-1;i++){
+          for(var j=0;j<hasTime.length-1-i;j++){
+            
+            if(Date.parse(hasTime[j]['time']) < Date.parse(hasTime[j+1]['time'])){
+              var temp = hasTime[j];
+              hasTime[j] = hasTime[j + 1];
+              hasTime[j + 1] = temp;
+            }
           }
-        });
+        }
+        if(noTime.length>0){
+          mthis.items = hasTime.concat(noTime)
+        }else{
+          mthis.items = hasTime
+        }
+        
+        // mthis.$forceUpdate()
+        
       },
       showAlert(index) {
         // if ($(this).hasClass('selected'))
@@ -1871,7 +2022,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(15)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据7', true)
@@ -1885,7 +2036,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(16)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据8', true)
@@ -1897,7 +2048,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(17)
+                
                 mthis.items = response.body.data
               } else {
                 mthis.alertNotice('无匹配数据9', true)
@@ -1919,7 +2070,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(18)
+                
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 mthis.alertNotice('无匹配数据10', true)
@@ -1933,7 +2084,7 @@
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
-                console.log(19)
+                
                 mthis.items = mthis.items.concat(response.body.data)
               } else {
                 mthis.alertNotice('无匹配数据11', true)
@@ -1948,7 +2099,7 @@
                   title: item.title,      
                   i_sn: item.i_sn, 
                   id: item.id,
-                  text: item.text,
+                  text: item.description,
                   time: item.time,
                   from: item.from,     
                   img: "http://10.60.1.140/assets/images/content_node.png",
@@ -1957,11 +2108,12 @@
               );
               
                 // $('.item-selected').removeClass('item-selected')
-                console.log(20)
+                
                 mthis.items = mthis.items.concat(nowItems)
-                mthis.prevItems = mthis.items
+                // console.log(7)
+                mthis.prevItems = mthis.deepClone(mthis.items)
               } else {
-                // console.log('全部加载')
+                
                 // $('.layer').show().delay(3000).fadeOut()
                 mthis.setMessage('文档已经全部加载')
                 mthis.moreLoading = false
@@ -1982,13 +2134,15 @@
       },
       hideContentDiv(flag){
         var mthis = this
+        mthis.ifhasDoc = true;
+        mthis.ifhasSel = mthis.prevIfhasSel;
         if(flag ==1){
           mthis.ifInfo = false
           mthis.$store.state.contentSelShowFlag = false
           let selData = {}
           selData.id = [];
           selData.title = ''
-          console.log(selData)
+          
           mthis.$store.commit('setContentSelData',selData)
           if(!mthis.showThumb){
             mthis.toContentDiv()
@@ -2005,7 +2159,7 @@
         this.colLgNum = 4
         this.colSmnum = 8
         this.colMdNum = 6
-        this.translateButton = false
+        this.ifShowDoc = false
         this.showList = false
         this.showThumb = false
         this.ifInfo = false
@@ -2023,7 +2177,7 @@
         // let selData = {}
         // selData.id = [];
         // selData.title = ''
-        // console.log(selData)
+        
         // this.$store.commit('setContentSelData',selData)
         // document.getElementById('contents').innerHTML = ''
         // document.getElementById('contentsTitle').innerHTML = ''
@@ -2031,14 +2185,14 @@
       },
       jiazai(){
         var mthis= this
-        // console.log($('#jiazaiDiv').offset())
+       
         if (timer) {
           clearTimeout(timer)
         }
         timer = setTimeout(function() {
           while($('#jiazaiDiv').offset().top < 1000){
             mthis.handleReachBottom()
-            // console.log('===============')
+            
             break;
           }
         }, 500);
@@ -2067,250 +2221,144 @@
           // });
         }
       },
-      changeChart(flag){
-        var mthis = this
-        if(flag ==1){
-          mthis.ifWord = true;
-          mthis.ifBar = false
-        }else{
-          mthis.ifWord = false;
-          mthis.ifBar = true
+      wordResize(len){
+        var mthis = this;
+        if(len>6){
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
+          console.log(mthis.itemWidth)
+          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
+          
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+            mthis.myWordCharts[j].resize(
+              {
+              width:mthis.itemWidth,
+              height:mthis.itemHeight
+            }
+            )
+          
         }
-      },
-      showContentAna(){
-        var mthis = this
-        if(mthis.analysisButton){
-            mthis.contentAna = true;
-        // 控制时间轴不显示
-        mthis.$store.commit('setShowDocTime',false)
-        let selDocs = mthis.items.filter(item => item.check);
-        let contentIds = []
-        mthis.selDocItems = new Object();
-        for(let i=0;i<selDocs.length;i++){
-          contentIds.push(selDocs[i].id)
-        }
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
-          "nodeIds": contentIds,
-          "type":"document"
-        }).then(response =>{
-          if(response.body.code ==0){
-            console.log(response.body.data)
-            mthis.selDocItems = response.body.data[1]
+        }else if(len>1 && len <6){
+          mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
+          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
+          
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize(
+            {
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
           }
-        })
-        // mthis.ifWord = true;
-        var worldCloudcharts=echarts.init(document.getElementById('worldCloud'));
-        var charts = echarts.init(document.getElementById('myChart'));
-        var worldCloudoption = new Object({
-          title: {
- 			        text: '关键词分析',
- 			        x: 'center',
- 			        textStyle: {
- 			            fontSize: 12,
- 			            color:'#FFFFFF'
- 			        }
- 
-           },
-           tooltip: {
- 			        show: true
-           },
-           series: [{
- 			        name: '关键词分析',
- 			        type: 'wordCloud',
- 			        sizeRange: [10, 18],
- 			        rotationRange: [0, 0],
- 			        textPadding: 0,
- 			        autoSize: {
- 			            enable: true,
- 			            minSize: 10
- 			        },
- 			        textStyle: {
- 			            normal: {
- 			                color: function() {
- 			                    return 'rgb(' + [
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160),
- 			                        Math.round(Math.random() * 160)
- 			                    ].join(',') + ')';
- 			                }
- 			            },
- 			            emphasis: {
- 			                shadowBlur: 10,
- 			                shadowColor: '#333'
- 			            }
- 			        },
- 			 	}]
+          )
+          }
+        }else if(len ==6){
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
+          console.log(mthis.itemWidth)
+          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
+          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize(
+            {
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          }
+          )
+          }
+        }else if(len==1){
+          mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 1.1) + 'px';
+          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
+          for(let j=0;j<mthis.myWordCharts.length;j++){
+          mthis.myWordCharts[j].resize(
+            {
+            width:mthis.itemWidth,
+            height:mthis.itemHeight
+          }
+          )
+          }
+        }
+        
+      },
+      showContentAna(val,type,ids){
+        var mthis = this
+        mthis.ifRenderAllTitle= false
+        mthis.contentAna = true
+        mthis.changeBar = '排序'
+        mthis.ifTopic = true;
+        switch(val){
+          case 'PER' : mthis.option.series[0].name = '人名';break;
+          case 'LOC' : mthis.option.series[0].name = '地名';break;
+          case 'ORG' : mthis.option.series[0].name = '机构名';break;
+          case 'N' : mthis.option.series[0].name = '名词';break;
+          case 'V' : mthis.option.series[0].name = '动词';break;
+          case 'J' : mthis.option.series[0].name = '形容词';break;
+          case 'R' : mthis.option.series[0].name = '副词';break;
+          case 'P' : mthis.option.series[0].name = '代词';break;
+          case 'C' : mthis.option.series[0].name = '连词';break;
+          case 'keywords' : mthis.option.series[0].name = '关键词';break;
+          
+          case 'O' : mthis.option.series[0].name = '其他';break;
+          default:mthis.option.series[0].name = '关键词';break;
+        }
+        if(mthis.myWordCharts.length>0){
+          for(let i=0;i<mthis.myWordCharts.length;i++){
+            mthis.myWordCharts[i].clear()
+          }
+        }
+        mthis.myWordCharts = [];
+        
+          
+        return new Promise(resolve =>{
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-top/',{
+            ids:ids,
+            typeLabel:type,
+            word:val
+          }).then(response =>{
+            if(response.body.code ==0){
+              mthis.topicDatas = response.body.data
+              console.log(mthis.topicDatas)
+              let len = mthis.topicDatas.length;
+              mthis.wordResize(len)
+              for(let i=0;i<mthis.topicDatas.length;i++){
+                console.log(mthis.topicDatas[i].docDatas)
+                
+              }
+            }
+          })
+        }).then(()=>{
+          
+          
           
         })
-        var JosnList = [];
- 
-        JosnList.push({
-            name: "Jayfee",
-            value: 520
-        }, {
-            name: "Nancy",
-            value: 520
-        }, {
-            name: "生活资源",
-            value: 520
-        }, {
-            name: "供热管理",
-            value: 520
-        }, {
-            name: "供气质量",
-            value: 520
-        }, {
-            name: "生活用水管理",
-            value: 520
-        }, {
-            name: "一次供水问题",
-            value: 520
-        }, {
-            name: "交通运输",
-            value: 520
-        }, {
-            name: "城市交通",
-            value: 520
-        }, {
-            name: "环境保护",
-            value: 520
-        }, {
-            name: "房地产管理",
-            value: 520
-        },  );
-        var colors = ['#66CDAA',  '#B8860B','#FF9080'];
-
-        var xData = function() {
-            var data = [];
-            for (var i = 1; i < 13; i++) {
-                data.push("地区"+i);
-            }
-            return data;
-        }();
-        var chartOption = new Object({
-          title: {
-            "text": "生产总值累计值\n",
-            subtext:"",
-            top:'12%',
-            "left": "10%",
-            "subtextStyle": {
-              "color": "#fff",
-              fontWeight:800,
-              fontSize:16
-            },
-            textStyle:{
-                "color": "#fff",
-              fontSize:28
-            }
-          },
-
-          backgroundColor: '#020306',
-          color: ['#4162ff', '#c78b42', '#CD3F2A', '#ff6e72', '#9692ff'],
-          tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                  type: 'shadow'
-              }
-          },
-          legend: {
-              top:'14%',
-              right:'30%',
-              textStyle:{
-                  color:'#FFFFFF'
-              },
-              orient: 'vertical',
-              data: ['第一产业', '第二产业', '第三产业', '']
-          },
-          grid: {
-              left: '10%',
-              right: '30%',
-              bottom: '20%',
-              top: '27%',
-              containLabel: true,
-              z: 22
-          },
-          yAxis: [{
-              type: 'value',
-              splitLine: {
-                  show: false,
-                  lineStyle: {
-                      color: ['#f2f2f2']
-                  }
-              },
-              axisLine: {
-                      lineStyle: {
-                          color: '#0c3b71'
-                      }
-                  },
-                  axisLabel: {
-                      color: 'rgb(170,170,170)',
-                      formatter: '{value} '
-                  }
-          }],
-          xAxis: [{
-              type: 'category',
-              axisLine: {
-                  lineStyle: {
-                      color: '#0c3b71'
-                  }
-              },
-              axisLabel: {
-                  show: true,
-                  color: 'rgb(170,170,170)',
-                  fontSize:14
-              },
-              data:xData
-          }],
-          series: [{
-                  name: '第一产业',
-                  type: 'bar',
-                  stack: '总量',
-                  barWidth: '16px',
-                  data: [80, 212, 101, 110, 80, 212, 101, 120, 113, 101, 120, 113],
-                  // markArea: areaStyle
-              },
-              {
-                  name: '第二产业',
-                  type: 'bar',
-                  stack: '总量',
-                  data: [90, 232, 251, 212, 101, 110,212, 101, 110, 10,  120, 113],
-                  // markArea: areaStyle
-              },
-              {
-                  name: '第三产业',
-                  type: 'bar',
-                  stack: '总量',
-                  data: [90, 232, 231, 134, 190, 90, 232, 251, 212, 101, 110, 10],
-                  // markArea: areaStyle
-              },
-              
-            
-          ]
-        })
-        charts.setOption(chartOption)
-        worldCloudoption.series[0].data = JosnList;
-  
-        worldCloudcharts.setOption(worldCloudoption);
-        mthis.analysisButton = false
-        }else{
-          mthis.setMessage("请选择至少一篇文章")
-        }
+        
         
       },
       showContent(id,title) {
         clearTimeout(timerClick);
         var mthis = this
-        
+        mthis.ifhasDoc = false;
+        mthis.prevIfhasSel = mthis.ifhasSel;
+        mthis.ifhasSel = false;
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}
         selData.id = [id];
         selData.title = title
-        console.log(selData)
+        
         mthis.$store.commit('setContentSelData',selData)
         
         
         mthis.ifInfo = true
-        mthis.translateButton = true
+        mthis.ifShowDoc = true
         //  mock.get("/getContentInfo",{id:id}).then(function(res) {
         //   // 获取文本数据
         //   document.getElementById('contents').innerHTML = res.data.contents
@@ -2321,13 +2369,16 @@
           // mthis.printer(response.body.data[0].text, 'contents', 'pointer')
          
           document.getElementById('contentInfo').value = response.body.data[0].id;
-          var text = response.body.data[0].text.replace(/(\r\n)|(\n)/g, '<br>');
+          var text = response.body.data[0].description.replace(/(\r\n)|(\n)/g, '<br>');
           document.getElementById('contents').innerHTML = text
           document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
           document.getElementById('contentsTime').innerHTML = response.body.data[0].from + ((response.body.data[0].from !== '' && response.body.data[0].from !== undefined) ? '  |  ' : '') + response.body.data[0].time
           // mthis.dataexpand = response.body.data
           // mthis.singlePerson = (opt[1]>1)?false:true
         })
+        
+      },
+      risize(){
         
       },
       /* printer(text,contentid,pointerid){ 
@@ -2365,15 +2416,19 @@
     },
     mounted() {
       var mthis = this
-      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 252 + 'px'
+      console.log(mthis.contentAnaWidth)
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
-      mthis.WCWidth = wwWidth   + 'px'
-      mthis.docWidth = (wwWidth * 0.5) + 'px'
-      mthis.barWidth = (wwWidth - (parseInt(mthis.docWidth.split('px')[0]))) + 'px'
+      console.log(wwWidth)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
+      console.log(mthis.ContentHeight)
+      
+      // let divBox = document.getElementById('contentchart')
+      // console.log(window.getComputedStyle(divBox,null).width)
+
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
         //   // 跳转过来的
       //   mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
@@ -2385,39 +2440,48 @@
       window.px = "";
       window.py = "";
       window.divLength = 0;
+      document.onclick = function(){
+        if(!mthis.showAllDocCount) return;
+        $('.allTitle').css('display','none');
+      }
+      document.onmouseup = function(e){
+        if(!mthis.showThumb) return;
+        mthis.isSel = false;
+        
+        
+        var selDiv = document.getElementById('selectDiv');
+        var selOutDiv = document.getElementById('selOutDiv');
+        selOutDiv.style.display = 'none';
+        selDiv.style.display = 'none';
+        
+        if(mthis.isBru){
+          mthis.bruIds= util.unique(mthis.bruIds);
+          
+          mthis.$store.commit('setSelectContentNodes', [{
+            ids: mthis.bruIds
+          }])
+          mthis.$store.commit('setContent2time',[{
+            ids:mthis.bruIds
+          }])
+          console.log(mthis.bruIds)
+          let selDocList = mthis.items.filter(item => item.check)
+          selDocList = selDocList.map(item =>({
+                    title: item.title,      
+                    id: item.id,
+                    time: item.time,
+                    from: item.from,     
+                  })
+                );
+          mthis.$store.commit('setSeletedDocAttrList',selDocList)
+          mthis.isBru = false;
+        }
+        
+        $('#selectDiv').remove();
+        $('#selOutDiv').remove();
+        mthis.clearBubble(e)
+        $('#contentchart').off('mousemove');
+      }
       
-    
-      // this.initSelectBox('#contentchart')
-      
-      // // console.log($('#jiazaiDiv').offset())
-      // window.addEventListener('scroll', this.handleScroll)
-      // let contentChart = document.getElementById('contentchart');
-      // console.log(contentChart)
-      // var contentTimer = null;
-      // $('#contentchart').click(function(){
-      //   contentTimer = setTimeout(function(){
-      //      $('#contentchart').css("cursor","crosshair");
-      //      alert(1111)
-      //   },1000);
-      // },function(){
-      //   clearTimeout(contentTimer);
-      // });
-      // $('#contentchart').on('keydown',function(e){
-      //   console.log('keydown')
-      //   if(mthis.$store.state.tmss === 'content') {
-      //       var e = event || window.event || arguments.callee.caller.arguments[0];
-      //       if (e && e.keyCode == 46) {
-      //         mthis.deleteNode()
-      //         e.preventDefault();
-      //         e.stopPropagation();
-      //       }
-      //       if (e.keyCode == 65 && e.ctrlKey) {
-      //         mthis.selectAll()
-      //         e.preventDefault();
-      //         e.stopPropagation();
-      //       }
-      //     }
-      // })
     }
   };
 </script>
@@ -2451,6 +2515,7 @@
     -webkit-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     -moz-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
+    background-color: rgba(51,255,255,0.2);
   }
   /* 角标折角 */
   /* .contentDiv ::before {
@@ -2470,8 +2535,8 @@
                 box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), -1px 1px 1px rgba(0, 0, 0, 0.2);
               } */
   .contentTitle {
-    padding: 0 25px 0 5px;
-    text-align: center;
+    /* padding: 0 25px 0 5px; */
+    text-align: left;
     color: #ccffff;
     cursor: pointer;
     font-family: MicrosoftYaHei;
@@ -2502,7 +2567,7 @@
     line-height: 19px !important;
   }
   .contentTime {
-    text-align: center;
+    text-align: left;
     padding: 0 5px 5px 5px;
     height: 35px;
     font-family: PARaDOS;
@@ -2591,6 +2656,21 @@
     /* Firefox 3.6 - 15*/
     background: linear-gradient( 8deg, rgba(0, 0, 0, 0) 0%, rgba(51, 255, 255, 0.2) 40%, rgba(51, 255, 255, 0.3) 50%, rgba(51, 255, 255, 0.2) 60%, rgba(0, 0, 0, 0) 100%);
     /* 标准的语法 */
+  }
+  .ivu-radio-wrapper{
+    color:#ccffff !important;
+  }
+  .ivu-radio-checked .ivu-radio-inner:after{
+    background-color:rgba(51,255,255,0.4) !important;
+  }
+  .ivu-dropdown-rel>a{
+    color:#ccffff;
+  }
+  .ivu-dropdown-rel>a:hover{
+    color:#33ffff;
+  }
+  #topicAnaly .ivu-dropdown-item{
+    padding-left:10px !important;
   }
   .ivu-table{
     background-color: rgba(0, 0, 0, 0.8) !important;
@@ -2829,8 +2909,8 @@
     opacity: 1;
   }
   .picsize{
-    max-width:100px;
-    max-height:100px;
+    max-width:50px;
+    max-height:70px;
     width:100%;
     
     
@@ -2841,12 +2921,14 @@
     text-overflow: ellipsis;
     overflow-x: hidden;
     font-family: MicrosoftYaHei;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
     /* line-height: 30px; */
     letter-spacing: 0px;
     color: #ccffff;
+    max-width:70px;
+    margin-left: 3em;
   }
   
   .imgHover{
@@ -2860,57 +2942,93 @@
     background-color: #003333;
 	  border: solid 2px #ccffff;
   }
- #contentWordCloud{
-   border-right:1px solid #336666;
-   border-left:1px solid #336666;
-   
- }
-.e-title {
-    height: 30px;
-    background-color: rgba(51, 255, 255, 0.2);
-    border-top: solid 1px #366674;
-    border-bottom: solid 1px #366674;
-    display: flex;
-  }
-  .e-title-p {
-    height: 18px;
+
+  .topItem{
+    border:'1px solid #336666';
+    /* margin:0px 0px 1em 0.8em; */
+    margin-bottom:10px;
     font-family: MicrosoftYaHei;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    line-height: 28px;
-    letter-spacing: 0px;
-    color: #ccffff;
+    
   }
-  .e-title-d {
-    width: 4px;
-    height: 16px;
-    background-color: #009999;
-    margin: 6px 6px;
+  .itemEmpty{
+    margin-bottom:10px;
   }
-  .econtent {
-    display: flex;
-    height: auto;
-    min-height: 30px;
+  .topItem .itemHeader{
+    color:rgba(51,255,255,0.4);
   }
-  
-  .w8em {
-    width: 8em;
-    min-width: 8em;
-    max-width: 8em;
-    margin: 0;
+  .bigNumber{
+    width:19px;
+    height:19px;
+    background-color: #cc3333;
+	  border-radius: 3px;
+    text-align: center;
   }
-  .tableLine>.econtent:nth-child(odd) {
-    background-color: rgba(51, 255, 255, 0.05);
+  .number{
+    width:19px;
+    height:19px;
+    background-color:rgba(51,255,255,0.3);
+    border-radius: 3px;
+    
+    text-align: center;
   }
-  .tableLine>.econtent:nth-child(odd):hover {
-    background-color: rgba(51, 255, 255, 0.2);
+  .itemHeader .headerTitle{
+    font-size:14px;
+    color:rgba(51, 255, 255, 0.4);
+    font-size: 16px;
+    align-items: center;
   }
-  .tableLine>.econtent:nth-child(even):hover {
-    background-color: rgba(51, 255, 255, 0.2);
+  .itemHeader .docAnaTitle{
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    /* width:70%;
+    max-width: 70%; */
+    
   }
-  .rightIcon:hover{
-    opacity: 1;
-    cursor: pointer;
+  .itemHeader .headerTitle:hover{
+    color:rgba(51, 255, 255, 1);
+    cursor:pointer;
   }
+  .itemTitle{
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    width:200px;
+    max-width: 200px;
+  }
+  .delB{
+        width: 100px;
+        height: 30px;
+        
+        background-color:rgba(51,255,255,0.5) !important;
+        border-radius: 5px;
+        
+        font-family: MicrosoftYaHei;
+	      font-size: 14px;
+        
+        line-height: 30px;
+        text-align: center;
+        cursor: pointer;
+        margin-left:10px;
+    }
+    .delB:hover{
+        color: #ccffff !important;
+        background-color:rgba(51,255,255,0.7) !important;
+    }
+    .allTitle{
+      position:absolute;
+      z-index:99;
+      border:solid 1px #336666;
+      border-radius:10px;
+      background-color:black;
+      padding:10px 0px 0px 10px;
+      max-height:300px;
+      min-height:80px;
+      overflow-y:scroll;
+      transition:all 0.8s ease;
+    }
+    .animaTopItem{
+      transition:all 0.8s ease;
+      /* transition:width 0.7s ease; */
+    }
 </style>

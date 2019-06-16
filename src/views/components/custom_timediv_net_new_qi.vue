@@ -8,13 +8,13 @@
         <Col span="20" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
         <Col span="21" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
         <Col span="1" class="bottom">
-        <Tooltip content="放大" placement="bottom">
+        <!-- <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
-        </Tooltip>
+        </Tooltip> -->
         </Col>
         <Col span="1" class="bottom">
-        <Tooltip content="缩小" placement="bottom">
-          <Icon class="icon iconfont icon-zoom-out process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+        <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip>
         </Col>
         <Col span="1" class="bottom" />
@@ -25,7 +25,14 @@
     <div :style="{borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
       <!-- <echarts id='barchart' :options="bar" :style="{height: timepxdiv}" :auto-resize="true" ></echarts> -->
-      <div :id="main1Id" :style="{width:pwidth}"></div>
+      <div  v-show="showEchart">
+          <div :id="main1Id" :style="{width:pwidth}"></div>
+      </div>
+      
+      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '20px'}">
+        <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
+        <p>选中事件或文档可查看时间轴</p>
+      </div>
     </div>
     </Col>
     <!-- <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="toGeoAna(1)">选中分析</div>
@@ -69,6 +76,7 @@
     name: "",
     data() {
       return {
+        showEchart:false,
         timeTitle: '请选择节点',
         timechartdivId: 'timechartdiv_' + this.activeId,
         arrowDownId: 'arrowDown_' + this.activeId,
@@ -97,6 +105,14 @@
           num: [],
           date: [],
           clickNum:[]
+        },
+        dataEvents:{
+          date:[],
+          num:[]
+        },
+        dataDocs:{
+          date:[],
+          num:[]
         },
         selectTime: false,
         // 右键点击柱子出现选中分析
@@ -131,14 +147,43 @@
         echartsShowEnd:100,
         curInt:null,
         colorFlag:0,
-        selIdsArr:[]
+        selIdsArr:[],
+        reqType:'event'
         
       };
     },
     methods: {
+      getDateStr(dayCount,addDayCount){
+        var dd = new Date(dayCount);
+        dd.setDate(dd.getDate()+addDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear(); 
+        var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
+        var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
+        return y+"-"+m+"-"+d; 
+      },
+      getDate(datestr){
+        var temp = datestr.split('-');
+        var date = new Date(temp[0], temp[1] - 1, temp[2]);
+    		return date;
+      },
+      formatEveryDay(start, end){
+        var mthis = this;
+        let dateList = []; 
+		    var startTime = mthis.getDate(start);
+		    var endTime = mthis.getDate(end);
+
+		    while ((endTime.getTime() - startTime.getTime()) >= 0) {
+		        var year = startTime.getFullYear();
+		        var month = startTime.getMonth() + 1 < 10 ? '0' + (startTime.getMonth() + 1) : startTime.getMonth() + 1;
+		        var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
+		        dateList.push(year + "-" + month + "-" + day); 
+		        startTime.setDate(startTime.getDate() + 1);
+		    }
+		    return dateList;
+      },
       query(){
         var mthis = this;
-        let eventIds = util.getStorage("eventIds",mthis.selIdsArr);
+        let eventIds = util.getStorage("allIds",mthis.selIdsArr);
         let selEventIds = []
             for(var i in eventIds){
               for(var j of eventIds[i]){
@@ -146,6 +191,7 @@
                 
               }
             }
+            // console.log(selEventIds)
         this.$store.commit('setNetTimeCondition',selEventIds)
         this.boxSelEventIds.ids = selEventIds
             // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
@@ -161,7 +207,7 @@
             //           this.$store.commit('setNetTimeCondition',response.body.data.eventIds)
             //           this.boxSelEventIds.ids = response.body.data.eventIds
             //         }else{
-            //           console.log("服务器error")
+            //           // console.log("服务器error")
             //         }
                     
             //     })
@@ -250,7 +296,7 @@
           grid: {
             top: "10%",
             right: "4%",
-            left: '50px',
+            left: '20px',
             bottom:'20%',
             containLabel: true  
           },
@@ -339,8 +385,10 @@
           },
           dataZoom: [{
               type: "slider",
-              start: 0,
-              end: 100,
+              start: 10,
+              end: 80,
+              height:20,
+              top:'bottom',
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -502,7 +550,7 @@
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
             if(mthis.isDataZoom){
-              // console.log("lalalla")
+              // // console.log("lalalla")
               mthis.timeTitle = '时间轴'
               
               mthis.$store.commit('setNetTimeCondition',null)
@@ -516,7 +564,7 @@
               mthis.option.series[1].data = []
               mthis.colorFlag = 0;
               mthis.charts.setOption(mthis.option)
-              // console.log(mthis.boxSelEventIds)
+              // // console.log(mthis.boxSelEventIds)
             }
             
             
@@ -554,7 +602,7 @@
                 //       mthis.boxSelEventIds.title = ""
                 //       mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
                 //     }else{
-                //       console.log("服务器error")
+                //       // console.log("服务器error")
                 //     }
                     
                 // })
@@ -591,10 +639,10 @@
           mthis.colorFlag = 1;
           mthis.charts.setOption(mthis.option)
          
-          let eventIds = util.getStorage("eventIds",params.dataIndex);
+          let eventIds = util.getStorage("allIds",params.dataIndex);
           mthis.clickEventIds.ids = eventIds
           mthis.$store.commit('setNetTimeCondition', eventIds)
-          console.log(eventIds)
+          // console.log(eventIds)
           // mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
           //           "selectedIds":mthis.selectionIdByType.eventIds,
           //           "startTime":params.name,
@@ -607,7 +655,7 @@
                       
                       
           //         }else{
-          //           console.log("服务器error")
+          //           // console.log("服务器error")
           //         }
           //       })
           mthis.charts.dispatchAction({
@@ -626,7 +674,7 @@
             mthis.clickdivLeft = event.clientX + 'px'
             mthis.clickdivTop = event.clientY + 'px'
             mthis.clcikShowDiv = true
-            let eventIds = util.getStorage("eventIds",params.dataIndex);
+            let eventIds = util.getStorage("allIds",params.dataIndex);
             mthis.clickEventIds.ids = eventIds
             // mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
             //     "selectedIds":mthis.selectionIdByType.eventIds,
@@ -638,7 +686,7 @@
                   
             //       mthis.clickEventIds.ids = response.body.data.eventIds
             //     }else{
-            //       console.log("服务器error")
+            //       // console.log("服务器error")
             //     }
                 
             // })
@@ -658,7 +706,13 @@
             }
         }else if(flag ==2){
           // flag==2---->监听网络关系中的事件，显示数据
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.timeTitle = '时间轴';
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
@@ -671,15 +725,31 @@
         }else if(flag==3){
           mthis.resize();
           // flag==3--->数据透视点击事件，层叠显示
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           // mthis.option.xAxis.data = mthis.dataBySeries.date;
           // mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+          mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
           mthis.colorFlag = 1;
           // mthis.option.series[0].itemStyle.normal.color = "rgba(51,204,153,0.5)";
           mthis.charts.setOption(mthis.option)
         }else{
           // flag ==4--->网络关系事件节点为空，清空echarts
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
+          
           mthis.resize();
           mthis.dataBySeries.num = []
           mthis.dataBySeries.date = []
@@ -708,7 +778,7 @@
           height
         })
       },
-      
+   
         
       
     },
@@ -731,6 +801,9 @@
       // Enable data zoom when user click bar.
       var zoomSize = 6;
       // this.changHeightCount++
+      window.addEventListener('resize',function(){
+        that.resize()
+      })
     },
     computed: mapState([
       'split', 'split_net','splitWidth', 'tmss', 'selectNetNodes','selectionIdByType','netStaticsSelectedIds','netOnlyStaticsSelectedIds'
@@ -750,7 +823,11 @@
         handler:function(newVal,oldVal){
           
           this.dataBySeries.clickNum = new Array(newVal.length).fill(null)
-          
+          if(newVal.length>0){
+            this.showEchart = true
+          }else{
+            this.showEchart = false
+          }
         }
 
       },
@@ -763,20 +840,65 @@
           
           
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "eventids":mthis.netOnlyStaticsSelectedIds.ids,
-            "typeLabel":"event"
+            "ids":mthis.netOnlyStaticsSelectedIds.ids,
+            
           }).then(response => {
             // mthis.dataBySeries.date = ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31','2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28']
             // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
             // mthis.loadEcharts(2)
             if(response.body.code === 0){
-              mthis.dataBySeries.date = response.body.data.time;
-              mthis.dataBySeries.num = response.body.data.count;
-              mthis.dataBySeries.clickNum = [];
-              mthis.loadEcharts(2)
-              util.writeStorage("eventIds",response.body.data.ids)
+              if(response.body.data.time.length<100){
+                          let timeLen = response.body.data.time.length
+                          let dayCount = parseInt((100 - response.body.data.time.length) /2)
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("allIds",localIds)
+                          console.log('<100')
+                          console.log(mthis.dataBySeries.date.length)
+                      }else{
+                        let dayCount = parseInt(response.body.data.time.length * 0.1)
+                       if(dayCount>0){
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                       
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          // console.log(preDateList.length)
+                          // console.log(aftDateList)
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("allIds",localIds)
+                      }else{
+                          mthis.dataBySeries.date = response.body.data.time;
+                          mthis.dataBySeries.num = response.body.data.count;
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("allIds",response.body.data.ids)
+                       }
+                      }
             }else{
-              console.log("服务器error")
+              // console.log("服务器error")
             }
             
           })
@@ -787,11 +909,11 @@
       },
       netStaticsSelectedIds:function(){
           var mthis = this
-          
+          // console.log(this.netStaticsSelectedIds)
           if(this.netStaticsSelectedIds.length>0){
               mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                  "eventids":mthis.netStaticsSelectedIds,
-                  "typeLabel":"event"
+                  "ids":mthis.netStaticsSelectedIds,
+                  
               }).then(response =>{
                   if(response.body.code === 0){
                       // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
@@ -803,7 +925,7 @@
                       
                       mthis.loadEcharts(3)
                   }else{
-                    console.log("服务器error")
+                    // console.log("服务器error")
                   }
               })
           }
@@ -814,36 +936,72 @@
 
       selectionIdByType:function(){
         var mthis = this
-        
-        if(this.selectionIdByType.eventIds.length>0){
-          
+        var oneFlag = true
+        // console.log(this.selectionIdByType)
+        let allIds = []
+        if(this.selectionIdByType.eventIds.length>0 || this.selectionIdByType.contentIds.ids.length>0){
          
-          // mthis.$store.commit('setNetStaticsSelectedIds',[])
-          
-          
+          allIds = mthis.selectionIdByType.eventIds.concat(this.selectionIdByType.contentIds.ids)
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "eventids":mthis.selectionIdByType.eventIds,
-            "typeLabel":"event"
-          }).then(response => {
-            // mthis.dataBySeries.date = ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31','2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28']
-            // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
-            // mthis.loadEcharts(2)
-            if(response.body.code === 0){
-              mthis.dataBySeries.date = response.body.data.time;
-              mthis.dataBySeries.num = response.body.data.count;
-              mthis.dataBySeries.clickNum = [];
-              mthis.loadEcharts(2)
-              util.writeStorage("eventIds",response.body.data.ids)
-            }else{
-              console.log("服务器error")
+            "ids":allIds
+          }).then(response =>{
+            if(response.body.code ==0){
+              if(response.body.data.time.length<100){
+                          let timeLen = response.body.data.time.length
+                          let dayCount = parseInt((100 - response.body.data.time.length) /2)
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("allIds",localIds)
+                          console.log('<100')
+                          console.log(mthis.dataBySeries.date.length)
+                      }else{
+                        let dayCount = parseInt(response.body.data.time.length * 0.1)
+                       if(dayCount>0){
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                       
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          // console.log(preDateList.length)
+                          // console.log(aftDateList)
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("allIds",localIds)
+                      }else{
+                          mthis.dataBySeries.date = response.body.data.time;
+                          mthis.dataBySeries.num = response.body.data.count;
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("allIds",response.body.data.ids)
+                       }
+                      }
+              
             }
-            
           })
-          
-           
         }
-        if(this.selectionIdByType.eventIds.length==0 && this.dataBySeries.date.length>0){
-          
+        if(this.selectionIdByType.eventIds.length==0  &&  this.selectionIdByType.contentIds.ids.length==0 && this.dataBySeries.date.length>0){
+          // console.log('no data')
           // mthis.$store.commit('setNetStaticsSelectedIds',[])
           mthis.loadEcharts(4)
         }

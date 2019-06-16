@@ -22,6 +22,8 @@
         <div class="e-title-d"></div>
         <p class="e-title-p">节点信息</p>
       </div>
+      <human-entity-table v-if="detailData.entity_type==='geographic_entity'" :tableData="detailData" :tableType='detailData.entity_type' :entDivH='entDivH'></human-entity-table>
+      <human-entity-table v-if="detailData.entity_type==='project'" :tableData="detailData" :tableType='detailData.entity_type' :entDivH='entDivH'></human-entity-table>
       <human-entity-table v-if="detailData.entity_type==='human'" :tableData="detailData" :tableType='detailData.entity_type' :entDivH='entDivH'></human-entity-table>
       <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
       <organization-entity-table v-show="detailData.entity_type==='organization'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
@@ -118,8 +120,8 @@
         },[]);
       },
       defaultImg(type, img, subtype) {
-        // console.log('==================')
-        // console.log(util.checkImgExists(img))
+        // // console.log('==================')
+        // // console.log(util.checkImgExists(img))
         if(img){
         var mthis = this
         if (mthis.eventdata[0]) {
@@ -133,8 +135,12 @@
                 return 'http://10.60.1.140/assets/images/Organization.png'
               } else if (mthis.eventdata[0].entity_type === 'weapon') {
                 return 'http://10.60.1.140/assets/images/weapon.png'
+              } else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+                return 'http://10.60.1.140/assets/images/other.png'
+              } else if (mthis.eventdata[0].entity_type === 'project') {
+                return 'http://10.60.1.140/assets/images/other.png'
               } else {
-                return 'http://10.60.1.140/assets/images/image1.png'
+                return 'http://10.60.1.140/assets/images/other.png'
               }
             } else if (this.myMap.get(type) === 'event') {
               return mthis.myMap1.get(subtype).img
@@ -142,7 +148,7 @@
             } else if (this.myMap.get(type) === 'document') {
               return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/content_node.png'
             } else {
-              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/image1.png'
+              return (img && util.checkImgExists(img)) ? img : 'http://10.60.1.140/assets/images/other.png'
             }
           } else{
             return img
@@ -180,8 +186,8 @@
           //   "NodeIds": arr,
           //   "TypeLabel": 'event'
           // }).then(response => {
-          //   // // console.log('=============related event=============')
-          //   // // console.log(response)
+          //   // // // console.log('=============related event=============')
+          //   // // // console.log(response)
           // })
         }
         if (mthis.myMap.get(type) === 'document') {
@@ -214,7 +220,7 @@
         } else if(this.detailData.entity_type === 'document'){
           this.autoImg = 'http://10.60.1.140/assets/images/content_node.png'
         } else if(this.detailData.entity_type === 'other'){
-          this.autoImg = 'http://10.60.1.140/assets/images/image1.png'
+          this.autoImg = 'http://10.60.1.140/assets/images/other.png'
         }else {
           this.autoImg=this.defaultImg(this.detailData.entity_type,'http://10.60.1.143/pic_lib/padded/'+this.detailData.id+'.png','')
         }
@@ -247,8 +253,12 @@
                     result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/Organization.png'
                   } else if (mthis.eventdata[0].entity_type === 'weapon') {
                     result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                  } else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/other.png'
+                  } else if (mthis.eventdata[0].entity_type === 'project') {
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/other.png'
                   } else {
-                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
+                    result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/other.png'
                   }
                   mthis.detailData = result
                 })
@@ -272,7 +282,7 @@
                 mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
                   "docIds": a
                 }).then(response => {
-                  // console.log(response.body.data[0])
+                  // // console.log(response.body.data[0])
                   let result = new Object();
                   result = response.body.data[0]
                   result.entity_type = 'document'
@@ -280,18 +290,18 @@
                   result.name = response.body.data[0].title.substring(0, 19) + '...'
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/content_node.png'
                   mthis.detailData = result
-                  // console.log('mthis.detailData')
-                  // console.log(mthis.detailData)
+                  // // console.log('mthis.detailData')
+                  // // console.log(mthis.detailData)
                 })
               } else {
-                // // console.log('未找到匹配的类型')
+                // // // console.log('未找到匹配的类型')
               }
             }
             // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
           }, 200);
         } else {
-          // // console.log('=======mthis.eventdata取值异常')
-          // // console.log(mthis.eventdata)
+          // // // console.log('=======mthis.eventdata取值异常')
+          // // // console.log(mthis.eventdata)
         }
         
         mthis.nowSelData =mthis.arrayUnique(mthis.eventdata,'id')
@@ -334,9 +344,8 @@
       this.selectDivHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 8 + 30 + "px";
       this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 12 + "px";
       this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
-      this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 60 + "px";
-
-      this.entDivHTitle = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 30 + "px";
+      this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 60 -20 + "px";
+      this.entDivHTitle = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 30 -20 + "px";
       var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
       var entityMainType = ob.getElementsByTagName("entityMainType");
       this.myMap = new Map();
@@ -351,17 +360,17 @@
       var eventType = ob1.getElementsByTagName("event2chinese");
       this.myMapevent = new Map();
       for (let items of eventType) {
-        // console.log('-----mymapevent------')
-        // console.log(items)
-        // console.log(items.getElementsByTagName("eventType")[0].textContent)
-        // console.log(items.getElementsByTagName("eventCHType")[0].textContent)
+        // // console.log('-----mymapevent------')
+        // // console.log(items)
+        // // console.log(items.getElementsByTagName("eventType")[0].textContent)
+        // // console.log(items.getElementsByTagName("eventCHType")[0].textContent)
         this.myMapevent.set(items.getElementsByTagName("eventType")[0].textContent, {
           name: items.getElementsByTagName("eventCHType")[0].textContent
         });
       }
       this.nowSelData = this.eventdata;
-      // console.log(this.eventdata)
-      // console.log(this.nowSelData)
+      // // console.log(this.eventdata)
+      // // console.log(this.nowSelData)
       
     }
   }
@@ -372,7 +381,7 @@
   }
   .avatarStyle {
     width: 50px;
-    margin: 0 20px;
+    margin: 10px 20px;
   }
   .contentStyle {
     width: 100%;
@@ -459,9 +468,13 @@
           padding-left:20px;
           text-align:left;
       } */
-  #nodeAttr p {
-    padding-left: 1em;
-    text-align: left;
+  #nodeAttr p{
+      padding-left:2em;
+      text-align:left;
+  }
+  #nodeAttr p:not(.w8em){
+      padding-left:1em;
+      text-align:left;
   }
   .tableStyle {
     width: 100%
@@ -518,6 +531,8 @@
     display: block;
     width: 100%;
   }
+  </style>
+  <style>
   .desClass{
     line-height: 22px;
     overflow: hidden;
@@ -530,6 +545,9 @@
     -webkit-box-orient: vertical;
     height: 44px;
     word-break: break-all;
+    color: rgba(204,255,255,0.5);
+    vertical-align:middle;   
+    /* display:table-cell;    */
     }
 </style>
 

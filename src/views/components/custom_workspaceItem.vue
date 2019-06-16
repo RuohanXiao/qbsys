@@ -4,7 +4,7 @@
       <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
       <div class="cardDiv">
         <div :style="{display: 'flex'}">
-          <span class='titleFront'>{{item.name}}</span>
+          <span class='titleFront'>{{item.name}}&nbsp;({{item.nodeIds.length}})</span>
           <Icon v-if="item.type === 'human'" class="icon iconfont icon-ren padd8 color515" size="20" />
           <Icon v-if="item.type === 'organization'" class="icon iconfont icon-zuzhi padd8 color515" size="20" />
           <Icon v-if="item.type === 'weapon'" class="icon iconfont icon-shouqiang padd8 color515" size="20" />
@@ -14,19 +14,20 @@
           <Icon v-if="item.type === 'mix'" class="icon iconfont icon-star1 padd8 color515" size="20" />
         </div>
         <div class="lineheight25">
-          <span class='cardFront'>描述:&nbsp;{{item.des}}</span>
+          <span class='cardFront'>{{item.des}}</span>
         </div>
         <div class="lineheight25">
-          <span class='cardFront'>创建时间:&nbsp;{{item.create_time}}</span> &nbsp;&nbsp;&nbsp;
-          <span class='cardFront'>创建人:&nbsp;{{item.create_user}}</span>
+          <span class='cardFront'>创建时间：&nbsp;{{item.create_time}}</span> &nbsp;&nbsp;&nbsp;
+          
         </div>
         <div class="lineheight25">
-          <span class='cardFront'>修改时间:&nbsp;{{item.modify_time}}</span> &nbsp;&nbsp;&nbsp;
-          <span class='cardFront'>修改人:&nbsp;{{item.modify_user}}</span>
+          <span class='cardFront'>创建人：&nbsp;{{item.create_user}}</span>
+          <!-- <span class='cardFront'>修改时间:&nbsp;{{item.modify_time}}</span> &nbsp;&nbsp;&nbsp;
+          <span class='cardFront'>修改人:&nbsp;{{item.modify_user}}</span> -->
         </div>
-        <div class="lineheight25">
+        <!-- <div class="lineheight25">
           <span class='cardFront'>数量:&nbsp;({{item.nodeIds.length}})</span>
-        </div>
+        </div> -->
       </div>
       </Col>
       <Col :sm="6" align="right" :style="{flexDirection: 'column'}">
@@ -116,7 +117,7 @@
     
     methods: {
       openModifyGroupModal(setId) {
-        // // console.log(setId)
+        // // // console.log(setId)
         this.$store.commit('setOpenWorkSetFlag',{
           id:setId,
           type:'modify',
@@ -209,7 +210,7 @@
                 // let optionWordArr = []
                 let optionList = {}
                 let optionListArr = []
-                // // console.log(response.body)
+                // // // console.log(response.body)
                 // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
                 for (let i = 0; i < response.body.data.nodes.length; i++) {
                   // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
@@ -218,13 +219,13 @@
                     "label": response.body.data.nodes[i].name,
                     "value": response.body.data.nodes[i].id,
                     "id": response.body.data.nodes[i].id,
-                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/image1.png'),
+                    "img": util.checkImgExists(response.body.data.nodes[i].img) ? (response.body.data.nodes[i].img) : ('http://10.60.1.140/assets/images/other.png'),
                     "type": response.body.data.nodes[i].type
                   })
                 }
-                // // console.log(optionListArr)
+                // // // console.log(optionListArr)
                 mthis.options1 = optionListArr;
-                // // console.log(mthis.options1)
+                // // // console.log(mthis.options1)
               })
           }, 200);
         } else {
@@ -251,7 +252,7 @@
         workDatas.datas.setLeft = e.clientX;
         workDatas.datas.setTop = e.clientY;
         workDatas.datas.title = '确定删除集合吗?';
-        workDatas.datas.canText = '取消?';
+        workDatas.datas.canText = '取消';
         workDatas.datas.delText = '确定删除';
         this.$store.commit('setDelSetData',workDatas)
         // this.$emit('delId', id)
@@ -263,7 +264,7 @@
         //   "label": "set",
         //   "type": "set"
         // }).then(response => {
-        //   // // console.log(response)
+        //   // // // console.log(response)
         //   if (response.body.code === 0) {
         //     // alert('删除成功！')
         //      if (mthis.$store.state.tmss === 'net') {
@@ -290,8 +291,8 @@
         // })
       },
       modData(id) {
-        // // console.log('modify');
-        // // console.log(id);
+        // // // console.log('modify');
+        // // // console.log(id);
         this.$store.commit('setWorkSpaceModal', {
           "id":id,
           "flag":true
@@ -354,7 +355,7 @@
           }
           
         }else if(tmss == 'content'){
-          console.log(datas)
+          // console.log(datas)
           let contentObj = {
             'type':'push',
             'ids':[]

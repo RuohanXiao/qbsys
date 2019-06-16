@@ -106,12 +106,12 @@
         <span>相关实体</span>
         <div slot="content" class="tableLine">
           <!-- <div class="econtent" v-if='xiangguanEntityItems.length>0' v-for="items in xiangguanEntityItems">
-                  <p class="econtentp w8em">{{items.relation}}</p>
-                  <p class="econtentp">{{items.name}}</p>
-                  <div class="eButton">
-                    <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
-                  </div>
-                </div> -->
+                <p class="econtentp w8em">{{items.relation}}</p>
+                <p class="econtentp">{{items.name}}</p>
+                <div class="eButton">
+                  <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
+                </div>
+              </div> -->
           <div class="econtent allowWrap" v-if='xiangguanEntityItems.length>0' v-for="(items,ind) in xiangguanEntityItems">
             <div v-show='ctrls[ind]||items.data.length<5' class="econtent blockStyle" v-for="(item,index) in items.data">
               <p class="econtentp w8em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
@@ -121,7 +121,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small' @click="addSingleNodeToCanvans(item.id,'entity','')"></Button>
               </div>
             </div>
-            <div v-show="!ctrls[ind]&&items.data.length>5&&index<5" class="econtent blockStyle" v-for="(item,index) in items.data">
+            <div v-show="items.data.length>5&&index<5" class="econtent blockStyle" v-for="(item,index) in items.data">
               <p class="econtentp w8em" v-if='index==0' :title="items.relation">{{items.relation}}</p>
               <p class="econtentp w8em" v-else :title="items.relation"></p>
               <p class="econtentp">{{item.name}}</p>
@@ -140,7 +140,7 @@
           </div>
           <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
             <p class="econtentp" v-show="spinWaiting">相关实体加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关实体</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关实体</p>
           </div>
         </div>
       </panel>
@@ -148,7 +148,7 @@
       <panel name="3">
         <span>相关事件</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0 && items.num>0' v-for='items in xiangguanEvent.statistics'>
+          <div class="econtent" v-if='xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0' v-for='items in xiangguanEvent.statistics'>
             <!-- <p class="econtentp w8em">{{myMap1.get(items.type.toLowerCase().replace(/-/, "_")).name}}</p> -->
             <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
@@ -158,7 +158,7 @@
           </div>
           <div class="econtent" v-if='!(xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">相关事件加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关事件</p>
           </div>
         </div>
       </panel>
@@ -166,7 +166,7 @@
       <panel name="4">
         <span>相关文档</span>
         <div slot="content" class="tableLine">
-          <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0 && items.num>0' v-for='items in xiangguanDoc.statistics'>
+          <div class="econtent" v-if='xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0' v-for='items in xiangguanDoc.statistics'>
             <p class="econtentp w8em">{{items.type}}</p>
             <p class="econtentp">{{items.num}}</p>
             <div class="eButton">
@@ -175,7 +175,7 @@
           </div>
           <div class="econtent" v-if='!(xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">文档事件加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关文档</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关文档</p>
           </div>
         </div>
       </panel>
@@ -201,7 +201,11 @@
         linkObj: new Object(),
         myMap: new Map(),
         myMap1: new Map(),
-        ctrls: new Array()
+        ctrls: new Array(),
+        displayMore: {
+                    'from': true,
+                    'i_sn': true
+                }
       }
     },
     props: ['tableData', 'entDivH', 'tableType'],
@@ -255,9 +259,10 @@
               mthis.linkObj = response.body.data[0].RelatedEntity[mthis.tableData.id].links
               mthis.xiangguanEntityItems = response.body.data[0].RelatedEntity[mthis.tableData.id].nodes
               mthis.ctrls = new Array()
-              mthis.xiangguanEntityItems.map(item => {
-                mthis.ctrls.push(!item.data.length > 5)
+              mthis.xiangguanEntityItems.map((item,index) => {
+                mthis.ctrls.push(!index > 5)
               })
+              // console.log(mthis.ctrls)
               mthis.xiangguanEntitys = response.body.data[0].RelatedEntity[mthis.tableData.id]
             }
             if (response.body.data[0].RelatedEvent[mthis.tableData.id]) {
@@ -301,9 +306,9 @@
     },
     methods: {
      more(index) {
-                // this.ctrls[index].splice(index,1,!this.ctrls[index]) 
-                this.ctrls[index]=!this.ctrls[index]
-                this.$forceUpdate()
+                // // this.ctrls[index].splice(index,1,!this.ctrls[index]) 
+                // this.ctrls[index]=!this.ctrls[index]
+                // this.$forceUpdate()
             },
       addmultNodeToCanvans(obj, type, subType) {
         mthis.$store.commit('setAddNetNodes', {
@@ -333,7 +338,7 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": id
           }).then(response => {
-            // console.log('response.body.data')
+            // // console.log('response.body.data')
             let nodes = new Array();
             let links = new Array();
             if (response.body.code === 0) {
@@ -402,7 +407,7 @@
     },
     watch: {
       tableData: function() {
-        // // console.log('===========custom_event_humanEntityTable --------tableData')
+        // // // console.log('===========custom_event_humanEntityTable --------tableData')
         let mthis = this
         mthis.spinWaiting = true
         mthis.xiangguanEntityItems = new Array()
@@ -464,9 +469,9 @@
                 mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
               }
               if (response.body.data[0].unknown !== new Object()) {
-                // // console.log('------------有未知类型的节点--------------------')
-                // // console.log(response.body.data[0].unknown)
-                // // console.log('-----------------------------------------------')
+                // // // console.log('------------有未知类型的节点--------------------')
+                // // // console.log(response.body.data[0].unknown)
+                // // // console.log('-----------------------------------------------')
               }
             })
           }

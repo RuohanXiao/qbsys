@@ -3,6 +3,8 @@
   <entityMainType> 
     <tyeName>entity</tyeName>  
     <includeType> 
+      <tyeName>geographic_entity</tyeName>  
+      <tyeName>project</tyeName>  
       <tyeName>administrative</tyeName>  
       <tyeName>human</tyeName>  
       <tyeName>organization</tyeName>  

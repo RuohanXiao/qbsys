@@ -297,7 +297,7 @@
           </div>
           <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
             <p class="econtentp" v-show="spinWaiting">相关实体加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关实体</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关实体</p>
           </div>
         </div>
       </panel>
@@ -315,7 +315,7 @@
           </div>
           <div class="econtent" v-if='!(xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">相关事件加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关事件</p>
           </div>
         </div>
       </panel>
@@ -332,7 +332,7 @@
           </div>
           <div class="econtent" v-if='!(xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">文档事件加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关文档</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关文档</p>
           </div>
         </div>
       </panel>
@@ -418,7 +418,7 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": id
           }).then(response => {
-            // console.log('response.body.data')
+            // // console.log('response.body.data')
             let nodes = new Array();
             let links = new Array();
             if (response.body.code === 0) {
@@ -488,7 +488,7 @@
     },
     watch: {
       tableData: function() {
-        // // console.log('===========custom_event_humanEntityTable --------tableData')
+        // // // console.log('===========custom_event_humanEntityTable --------tableData')
         let mthis = this
         mthis.xiangguanEntityItems = new Array()
         mthis.xiangguanEntitys = new Object()
@@ -549,9 +549,9 @@
                 mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
               }
               if (response.body.data[0].unknown !== new Object()) {
-                // // console.log('------------有未知类型的节点--------------------')
-                // // console.log(response.body.data[0].unknown)
-                // // console.log('-----------------------------------------------')
+                // // // console.log('------------有未知类型的节点--------------------')
+                // // // console.log(response.body.data[0].unknown)
+                // // // console.log('-----------------------------------------------')
               }
             })
           }

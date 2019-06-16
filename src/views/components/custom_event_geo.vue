@@ -20,11 +20,14 @@
     <div>
       <div class="e-title">
         <div class="e-title-d"></div>
-        <p class="e-title-p">节点信息{{detailData.entity_type}}</p>
+        <p class="e-title-p">节点信息</p>
       </div>
       <!-- <human-entity-table v-show="detailData.entity_type==='human'" :tableData="detailData" :entDivH='entDivH'></human-entity-table> -->
       <administrative-entity-table v-show="detailData.entity_type==='administrative'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></administrative-entity-table>
       <organization-entity-table v-show="detailData.entity_type==='organization'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
+      <organization-entity-table v-show="detailData.entity_type==='geographic_entity'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
+      <organization-entity-table v-show="detailData.entity_type==='project'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></organization-entity-table>
+      
       <!-- <weapon-entity-table v-show="detailData.entity_type==='weapon'" :tableData="detailData" :entDivH='entDivH'></weapon-entity-table> -->
       <event-entity-table v-show="detailData.entity_type==='event'" :tableType='detailData.entity_type' :tableData="detailData" :entDivH='entDivH'></event-entity-table>
       <!-- <doc-entity-table v-show="detailData.entity_type==='document'" :tableData="detailData" :entDivH='entDivH'></doc-entity-table> -->
@@ -118,6 +121,10 @@
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/Organization.png'
             } else if (mthis.eventdata[0].entity_type === 'weapon') {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/weapon.png'
+            } else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/other.png'
+            } else if (mthis.eventdata[0].entity_type === 'project') {
+              return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/other.png'
             } else {
               return util.checkImgExists(img) ? (img) : 'http://10.60.1.140/assets/images/Organization.png'
             }
@@ -130,8 +137,8 @@
         }
       },
       changeDetailDiv(id, type, ob) {
-        // console.log('-------------------ob')
-        // console.log(ob)
+        // // console.log('-------------------ob')
+        // // console.log(ob)
         var mthis = this
         let arr = []
         arr.push(id)
@@ -159,8 +166,8 @@
           //   "NodeIds": arr,
           //   "TypeLabel": 'event'
           // }).then(response => {
-          //   // // console.log('=============related event=============')
-          //   // // console.log(response)
+          //   // // // console.log('=============related event=============')
+          //   // // // console.log(response)
           // })
         }
         if (mthis.myMap.get(type) === 'document') {
@@ -188,7 +195,7 @@
     },
     watch: {
       eventdata: function() {
-        console.log(this.eventdata)
+        // console.log(this.eventdata)
         // ;
         var mthis = this
         if (typeof(mthis.eventdata) === "object" && mthis.eventdata.concat && mthis.eventdata.length > 0) {
@@ -216,8 +223,12 @@
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/Organization.png'
                 } else if (mthis.eventdata[0].entity_type === 'weapon') {
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/weapon.png'
+                 } else if (mthis.eventdata[0].entity_type === 'geographic_entity') {
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/other.png'
+                } else if (mthis.eventdata[0].entity_type === 'project') {
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/other.png'
                 } else {
-                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/image1.png'
+                  result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/other.png'
                 }
                 mthis.detailData = result
               })
@@ -227,8 +238,8 @@
               mthis.selectTag = detailId
               let result = mthis.eventdata[0]
               result.name = result.name.replace(/ /,'_')
-              // console.log('**************')
-              // console.log(mthis.eventdata[0])
+              // // console.log('**************')
+              // // console.log(mthis.eventdata[0])
               result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
               result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
               result.entity_type='event'
@@ -243,7 +254,7 @@
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
                 "docIds": a
               }).then(response => {
-                // console.log(response.body.data[0])
+                // // console.log(response.body.data[0])
                 let result = new Object();
                 result = response.body.data[0]
                 result.entity_type = 'document'
@@ -251,17 +262,17 @@
                 result.name = response.body.data[0].title.substring(0, 19) + '...'
                 result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/content_node.png'
                 mthis.detailData = result
-                // console.log('mthis.detailData')
-                // console.log(mthis.detailData)
+                // // console.log('mthis.detailData')
+                // // console.log(mthis.detailData)
               })
             } else {
-              // // console.log('未找到匹配的类型')
+              // // // console.log('未找到匹配的类型')
             }
             // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
           }, 200);
         } else {
-          // // console.log('=======mthis.eventdata取值异常')
-          // // console.log(mthis.eventdata)
+          // // // console.log('=======mthis.eventdata取值异常')
+          // // // console.log(mthis.eventdata)
         }
       }
     },
@@ -294,10 +305,13 @@
       }
     },
     mounted() {
+
+
       this.selectDivHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 8 + 30 + "px";
       this.selectHeight = (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 12 + "px";
       this.eDivH = document.documentElement.clientHeight - 65 - 20 - 16 - 45 + 'px';
-      this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 60 + "px";
+      this.entDivH = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 60 -20 + "px";
+      this.entDivHTitle = document.documentElement.clientHeight * 0.8 - 10 - 16 - 30 - 75 - (64 + 70 + 30 + 20) * 0.2 + 8 - 30 -20 + "px";
       var ob = configer.loadxmlDoc(this.$store.state.ipConfig.xml_url + "/entityTypeTable.xml");
       var entityMainType = ob.getElementsByTagName("entityMainType");
       this.myMap = new Map();
@@ -317,7 +331,7 @@
   }
   .avatarStyle {
     width: 50px;
-    margin: 0 20px;
+    margin: 10px 20px;
   }
   .contentStyle {
     width: 100%;
@@ -406,6 +420,10 @@
       text-align:left;
   } */
   #nodeAttr p{
+      padding-left:2em;
+      text-align:left;
+  }
+  #nodeAttr p:not(.w8em){
       padding-left:1em;
       text-align:left;
   }
@@ -458,7 +476,7 @@
   .bstyle:hover {
     color: rgba(51, 255, 255, 0.8) !important;
   }
-   .desClass{
+   /* .desClass{
     line-height: 22px;
     overflow: hidden;
     white-space: wrap;
@@ -470,7 +488,8 @@
     -webkit-box-orient: vertical;
     height: 44px;
     word-break: break-all;
-    }
+    color: rgba(204,255,255,0.5);
+    } */
 </style>
 
 

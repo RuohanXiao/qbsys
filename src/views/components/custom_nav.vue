@@ -159,10 +159,11 @@
     ]),
     watch: {
       refSet:function(){
-        this.showGongzuoji()
-        
-      },
-      
+        var mthis = this
+        setTimeout(() => {
+          mthis.showGongzuoji()
+        }, 200);
+      }
     },
     mounted() {
       this.contentHeight = this.$store.getters.getViewHeight
@@ -201,7 +202,7 @@
             "pagesize": 30
           }).then(response => {
             mthis.items_gongzuoji = response.body.data
-            console.log(response.body.data)
+            // console.log(response.body.data)
             mthis.spinRight = false
             mthis.$forceUpdate()
           })

@@ -35,6 +35,10 @@
             <Avatar class="circle-img" v-else :src="targetData.img" :style="{width:'50px',height:'50px'}" />
           </div>
           <div class='addTarget'>
+            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.entity_type =='geographic_entity'" ></entityDetailsTableHuman>
+            
+            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.entity_type =='project'" ></entityDetailsTableHuman>
+            
             <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.entity_type =='human'" ></entityDetailsTableHuman>
             <entityDetailsTableAdministrative :Entitydetail="targetData" v-if="targetData.entity_type =='administrative'"></entityDetailsTableAdministrative>
             <entityDetailsTableOrganization :Entitydetail="targetData" v-if="targetData.entity_type =='organization'"></entityDetailsTableOrganization>

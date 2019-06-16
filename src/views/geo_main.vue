@@ -5,7 +5,7 @@
       <div :style="{height:vh20}">
       <Split v-model="split1" :max="max" :min="min">
         <div slot="left" id='geomainDiv' class="demo-split-pane" display='flex' :style="{height:vh20}">
-          <geo-map-div  id="geo" :style="{height:GeoHeight,width:GeoWidth}" :geoData="geoData"></geo-map-div>  <!-- GeoHeight -->
+          <geo-map-div  id="geo" :style="{height:GeoHeight,width:'calc(100% - 20px)'}" :geoData="geoData"></geo-map-div>  <!-- GeoHeight -->
           <time-chart-div :activeId='activeId' :style="{width:GeoWidth}"></time-chart-div>
         </div>
         <div slot="right" class="scroll-bar demo-split-pane paneRight" :style="{height:vh20,maxHeight:vh20,marginRight:'2.3vw'}">
@@ -82,10 +82,8 @@
       mthis.GeoHeight = mthis.$store.getters.getNetDivHeight
       window.onresize = function windowResize () {
           // 通过捕获系统的onresize事件触发我们需要执行的事件
-          debugger
           var geomainDiv = document.getElementById('geomainDiv');
           if(geomainDiv !== undefined){
-            debugger
             //mthis.GeoWidth = (window.innerWidth - 500) + 'px';
           }
           

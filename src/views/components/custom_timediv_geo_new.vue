@@ -1,19 +1,19 @@
 <template>
   <div :id="timechartdivId" @click="hideDiv()">
     <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
-    <div :style="{width:pwidth,height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
+    <div :style="{height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <!-- <Col span="1" />
         <Col span="20" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
         <Col span="21" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
         <Col span="1" class="bottom">
-        <Tooltip content="放大" placement="bottom">
+        <!-- <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
-        </Tooltip>
+        </Tooltip> -->
         </Col>
         <Col span="1" class="bottom">
-        <Tooltip content="缩小" placement="bottom">
-          <Icon class="icon iconfont icon-zoom-out process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+        <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip>
         </Col>
         <Col span="1" class="bottom" />
@@ -21,10 +21,17 @@
       </Col>
       </Row>
     </div>
-    <div :style="{width:pwidth,borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
+    <div :style="{borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
       <!-- <echarts id='barchart' :options="bar" :style="{height: timepxdiv}" :auto-resize="true" ></echarts> -->
-      <div :id="main1Id" :style="{width:pwidth}"></div>
+      <div  v-show="showEchart">
+          <div :id="main1Id" :style="{width:pwidth}"></div>
+      </div>
+      
+      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '20px'}">
+        <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
+        <p>选择事件可查看时间轴</p>
+      </div>
     </div>
     </Col>
     <!-- <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" @click="toGeoAna(1)">选中分析</div>
@@ -66,6 +73,7 @@
     name: "",
     data() {
       return {
+        showEchart:false,
         timeStaticsData:timeStaticsData,
         timeTitle: '请选择节点',
         timechartdivId:'timechartdiv_' + this.activeId,
@@ -138,6 +146,34 @@
       };
     },
     methods: {
+      getDateStr(dayCount,addDayCount){
+        var dd = new Date(dayCount);
+        dd.setDate(dd.getDate()+addDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear(); 
+        var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
+        var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
+        return y+"-"+m+"-"+d; 
+      },
+      getDate(datestr){
+        var temp = datestr.split('-');
+        var date = new Date(temp[0], temp[1] - 1, temp[2]);
+    		return date;
+      },
+      formatEveryDay(start, end){
+        var mthis = this;
+        let dateList = []; 
+		    var startTime = mthis.getDate(start);
+		    var endTime = mthis.getDate(end);
+
+		    while ((endTime.getTime() - startTime.getTime()) >= 0) {
+		        var year = startTime.getFullYear();
+		        var month = startTime.getMonth() + 1 < 10 ? '0' + (startTime.getMonth() + 1) : startTime.getMonth() + 1;
+		        var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
+		        dateList.push(year + "-" + month + "-" + day); 
+		        startTime.setDate(startTime.getDate() + 1);
+		    }
+		    return dateList;
+      },
       delSel(){
         alert('删除')
       },
@@ -174,6 +210,7 @@
                 mthis.boxSelEventIds.eventIds.push("event&" + j)
               }
             }
+            // console.log(eventIds)
             mthis.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
             // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
             //         "selectedIds":this.geo_only_eventIds,
@@ -278,7 +315,7 @@
           grid: {
             top: "10%",
             right: "4%",
-            left: '50px',
+            left: '20px',
             bottom:'20%',
             containLabel: true  
           },
@@ -366,11 +403,14 @@
             },
             splitLine:{show:false},
             
+            
           },
           dataZoom: [{
               type: "slider",
-              start: 0,
-              end: 100,
+              start: 10,
+              end: 80,
+              height:20,
+              top:'bottom',
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -435,7 +475,7 @@
             barGap:"-100%",
             // barWidth:'10px',
             barMaxWidth: "60px",
-            barWidth:'5px',
+            barWidth:'10px',
             // barMinHeight: '1px',
             barCategoryGap:'20px',
             itemStyle: {
@@ -497,7 +537,7 @@
                     type:'bar',
                     // barWidth:'10px',
                     barMaxWidth: '60px',
-                    barWidth:'5px',
+                    barWidth:'10px',
                     barMinHeight: '1px',
                     barCategoryGap : '60%',
                     data:mthis.dataBySeries.clickNum,
@@ -753,16 +793,24 @@
             
           }
         }else if(flag ==2){
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.timeTitle = '时间轴';
           mthis.resize();
-          console.log(mthis.dataBySeries.date.length)
+          // console.log(mthis.dataBySeries.date.length)
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           // if(mthis.dataBySeries.date.length>10000){
           //   mthis.option.series[0].barWidth = '5px';
           //   mthis.option.dataZoom[0].start = 0
           //   mthis.option.dataZoom[0].end = 30
           // }
+          // mthis.option.dataZoom[0].start = 0;
+          // mthis.option.dataZoom[0].end = 100;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           // mthis.option.series[0].itemStyle.normal.color = '#33cc99'
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
@@ -770,7 +818,16 @@
           mthis.charts.setOption(mthis.option)
           
         }else if(flag==3){
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.resize();
+          mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+          mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
           // mthis.option.xAxis.data = mthis.dataBySeries.date;
           // mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.colorFlag = 1;
@@ -779,7 +836,13 @@
           mthis.charts.setOption(mthis.option)
         }else{
           
-          
+          mthis.isDataZoom = false
+          if(mthis.isBrush){
+            mthis.charts.dispatchAction({
+              type:'brush',
+              areas:[]
+            })
+          }
           mthis.dataBySeries.num = [];
           mthis.dataBySeries.date = [];
           mthis.dataBySeries.clickNum = [];
@@ -795,6 +858,7 @@
     // props: ['splitWidth', 'split'],
     //调用
     mounted() {
+      var mthis = this
       this.netHeightCount++;
       this.contentHeightCount++;
       this.geoHeightCount+=2;
@@ -814,6 +878,9 @@
       var zoomSize = 6;
       util.removeStorage("eventIds")
       // this.changHeightCount++
+      window.addEventListener('resize',function(){
+        mthis.resize()
+      })
     },
     computed:mapState ([
       'split','split_geo','splitWidth','tmss','selectNetNodes','geo_selected_param','geo_onlyselected_param']),
@@ -829,7 +896,11 @@
         
           
           this.dataBySeries.clickNum = new Array(newVal.length).fill(null)
-          
+          if(newVal.length>0){
+            this.showEchart = true
+          }else{
+            this.showEchart = false
+          }
         }
 
       },
@@ -849,20 +920,64 @@
             //   }
             // }
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                  "eventids":mthis.geo_only_eventIds,
-                  "typeLabel":"event"
+                  "ids":mthis.geo_only_eventIds,
+                  
                 }).then(response =>{
                   if(response.body.code === 0){
-                    
-                       mthis.dataBySeries.date = response.body.data.time;
-                       mthis.dataBySeries.num = response.body.data.count;
+                      if(response.body.data.time.length<100){
+                          let timeLen = response.body.data.time.length
+                          let dayCount = parseInt((100 - response.body.data.time.length) /2)
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("eventIds",localIds)
+                          // console.log('<100')
+                          // console.log(mthis.dataBySeries.date.length)
+                      }else{
+                        let dayCount = parseInt(response.body.data.time.length * 0.1)
+                       if(dayCount>0){
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
                        
-                       mthis.dataBySeries.clickNum = [];
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          // console.log(preDateList.length)
+                          // console.log(aftDateList)
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("eventIds",localIds)
+                      }else{
+                          mthis.dataBySeries.date = response.body.data.time;
+                          mthis.dataBySeries.num = response.body.data.count;
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("eventIds",response.body.data.ids)
+                       }
+                      }
                        
-                       mthis.loadEcharts(2);
-                       util.writeStorage("eventIds",response.body.data.ids)
+                       
                   }else{
-                    console.log("服务器error")
+                    // console.log("服务器error")
                   }
                 })
 
@@ -884,8 +999,8 @@
                 }
                 
                   mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                        "eventids":mthis.geoStatics_eventIds,
-                        "typeLabel":"event"
+                        "ids":mthis.geoStatics_eventIds,
+                        
                       }).then(response =>{
                         if(response.body.code === 0){
                             // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
@@ -898,13 +1013,13 @@
                             mthis.loadEcharts(3);
                             
                         }else{
-                          console.log("服务器error")
+                          // console.log("服务器error")
                         }
                       })
                 
                 
               }
-              if(this.geo_selected_param.paramIds.length==0){
+              if(this.geo_selected_param.paramIds.length==0 && mthis.dataBySeries.date.length>0){
                   mthis.dataBySeries.clickNum = [];
                   
                 }
@@ -913,6 +1028,7 @@
             
         },
       split_geo: function(va) {
+        
         let width = document.documentElement.clientWidth * va - 20 + 'px'
         let height = document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         this.charts.resize({
@@ -921,6 +1037,7 @@
         })
       },
       splitWidth: function(va) {
+        
         this.pwidth = document.documentElement.clientWidth * this.$store.state.split_geo - 20 + 'px'
       },
       geoHeightCount: function() {

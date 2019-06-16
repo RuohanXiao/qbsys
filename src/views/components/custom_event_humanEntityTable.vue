@@ -24,7 +24,7 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.chinese_name_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.chinese_name.length>5&&displayMore['chinese_name']" @click="clickMore('chinese_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chinese_name) === 'object'&&tableData.chinese_name.length>5&&displayMore['chinese_name']" @click="clickMore('chinese_name')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chinese_name) === 'object'&&index>=5&&!displayMore['chinese_name']" v-for="(occ,index) in tableData.chinese_name">
@@ -35,7 +35,7 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.occupation_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.chinese_name.length>5&&!displayMore['chinese_name']" @click="clickCutOut('chinese_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chinese_name) === 'object'&&tableData.chinese_name.length>5&&!displayMore['chinese_name']" @click="clickCutOut('chinese_name')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
@@ -59,7 +59,7 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.entity_name_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.entity_name.length>5&&displayMore['entity_name']" @click="clickMore('entity_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.entity_name) === 'object'&&tableData.entity_name.length>5&&displayMore['entity_name']" @click="clickMore('entity_name')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.entity_name) === 'object'&&index>=5&&!displayMore['entity_name']" v-for="(occ,index) in tableData.entity_name">
@@ -70,7 +70,7 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.occupation_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.entity_name.length>5&&!displayMore['entity_name']" @click="clickCutOut('entity_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.entity_name) === 'object'&&tableData.entity_name.length>5&&!displayMore['entity_name']" @click="clickCutOut('entity_name')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
@@ -94,7 +94,7 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.nickname_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.nickname.length>5&&displayMore['nickname']" @click="clickMore('nickname')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.nickname) === 'object'&&tableData.nickname.length>5&&displayMore['nickname']" @click="clickMore('nickname')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.nickname) === 'object'&&index>=5&&!displayMore['nickname']" v-for="(occ,index) in tableData.nickname">
@@ -105,7 +105,7 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.occupation_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.nickname.length>5&&!displayMore['nickname']" @click="clickCutOut('nickname')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.nickname) === 'object'&&tableData.nickname.length>5&&!displayMore['nickname']" @click="clickCutOut('nickname')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
@@ -129,7 +129,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.date_of_birth_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.date_of_birth.length>5&&displayMore['date_of_birth']" @click="clickMore('date_of_birth')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.date_of_birth) === 'object'&&tableData.date_of_birth.length>5&&displayMore['date_of_birth']" @click="clickMore('date_of_birth')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.date_of_birth) === 'object'&&index>=5&&!displayMore['date_of_birth']" v-for="(occ,index) in tableData.date_of_birth">
@@ -140,7 +140,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.date_of_birth_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.date_of_birth.length>5&&!displayMore['date_of_birth']" @click="clickCutOut('date_of_birth')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.date_of_birth) === 'object'&&tableData.date_of_birth.length>5&&!displayMore['date_of_birth']" @click="clickCutOut('date_of_birth')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
@@ -164,7 +164,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.date_of_death_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.date_of_death.length>5&&displayMore['date_of_death']" @click="clickMore('date_of_death')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.date_of_death) === 'object'&&tableData.date_of_death.length>5&&displayMore['date_of_death']" @click="clickMore('date_of_death')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.date_of_death) === 'object'&&index>=5&&!displayMore['date_of_death']" v-for="(occ,index) in tableData.date_of_death">
@@ -175,7 +175,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.date_of_death_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.date_of_death.length>5&&!displayMore['date_of_death']" @click="clickCutOut('date_of_death')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.date_of_death) === 'object'&&tableData.date_of_death.length>5&&!displayMore['date_of_death']" @click="clickCutOut('date_of_death')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
@@ -199,7 +199,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.date_of_disappearance_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.date_of_disappearance.length>5&&displayMore['date_of_disappearance']" @click="clickMore('date_of_disappearance')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.date_of_disappearance) === 'object'&&tableData.date_of_disappearance.length>5&&displayMore['date_of_disappearance']" @click="clickMore('date_of_disappearance')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.date_of_disappearance) === 'object'&&index>=5&&!displayMore['date_of_disappearance']" v-for="(occ,index) in tableData.date_of_disappearance">
@@ -210,7 +210,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.date_of_disappearance_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.date_of_disappearance.length>5&&!displayMore['date_of_disappearance']" @click="clickCutOut('date_of_disappearance')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.date_of_disappearance) === 'object'&&tableData.date_of_disappearance.length>5&&!displayMore['date_of_disappearance']" @click="clickCutOut('date_of_disappearance')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
@@ -237,7 +237,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.place_of_birth_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.place_of_birth.length>5&&displayMore['place_of_birth']" @click="clickMore('place_of_birth')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.place_of_birth) === 'object'&&tableData.place_of_birth.length>5&&displayMore['place_of_birth']" @click="clickMore('place_of_birth')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.place_of_birth) === 'object'&&index>=5&&!displayMore['place_of_birth']" v-for="(occ,index) in tableData.place_of_birth">
@@ -248,7 +248,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.place_of_birth_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.place_of_birth.length>5&&!displayMore['place_of_birth']" @click="clickCutOut('place_of_birth')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.place_of_birth) === 'object'&&tableData.place_of_birth.length>5&&!displayMore['place_of_birth']" @click="clickCutOut('place_of_birth')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
@@ -268,7 +268,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.country_of_citizenship_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.country_of_citizenship.length>5&&displayMore['country_of_citizenship']" @click="clickMore('country_of_citizenship')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.country_of_citizenship) === 'object'&&tableData.country_of_citizenship.length>5&&displayMore['country_of_citizenship']" @click="clickMore('country_of_citizenship')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
             <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.country_of_citizenship) === 'object'&&index>=5&&!displayMore['country_of_citizenship']" v-for="(occ,index) in tableData.country_of_citizenship">
@@ -279,7 +279,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.country_of_citizenship_ids[index],'entity','')" size='small'></Button>
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.country_of_citizenship.length>5&&!displayMore['country_of_citizenship']" @click="clickCutOut('country_of_citizenship')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.country_of_citizenship) === 'object'&&tableData.country_of_citizenship.length>5&&!displayMore['country_of_citizenship']" @click="clickCutOut('country_of_citizenship')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
@@ -735,7 +735,7 @@
           </div>
           <div class="econtent" v-if='xiangguanEntityItems.length ==0'>
             <p class="econtentp" v-show="spinWaiting">相关实体加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关实体</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关实体</p>
           </div>
           <!-- <div class="econtent" v-else>
                   <p class="econtentp">暂无相关实体</p>
@@ -756,7 +756,7 @@
           </div>
           <div class="econtent" v-if='!(xiangguanEvent.statistics&&xiangguanEvent.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">相关事件加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关事件</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关事件</p>
           </div>
         </div>
       </panel>
@@ -773,7 +773,7 @@
           </div>
           <div class="econtent" v-if='!(xiangguanDoc.statistics&&xiangguanDoc.statistics.length>0)'>
             <p class="econtentp" v-show="spinWaiting">文档事件加载中···</p>
-            <p class="econtentp" v-show="!spinWaiting">暂无相关文档</p>
+            <p class="econtentp" style="padding-left:2em;" v-show="!spinWaiting">暂无相关文档</p>
           </div>
         </div>
       </panel>
@@ -887,9 +887,9 @@
               mthis.xiangguanDoc = response.body.data[0].RelatedDocument[mthis.tableData.id]
             }
             if (response.body.data[0].unknown !== new Object()) {
-              // // console.log('------------有未知类型的节点--------------------')
-              // // console.log(response.body.data[0].unknown)
-              // // console.log('-----------------------------------------------')
+              // // // console.log('------------有未知类型的节点--------------------')
+              // // // console.log(response.body.data[0].unknown)
+              // // // console.log('-----------------------------------------------')
             }
             mthis.spinWaiting = false
           })
@@ -957,7 +957,7 @@
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', {
             "EventIds": id
           }).then(response => {
-            // console.log('response.body.data')
+            // // console.log('response.body.data')
             let nodes = new Array();
             let links = new Array();
             if (response.body.code === 0) {
