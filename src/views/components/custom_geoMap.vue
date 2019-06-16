@@ -511,7 +511,6 @@ export default {
         },
         closeThematic(){
             var mthis = this;
-            debugger
             var layers = mthis.routeMap.map.getLayers().getArray();
             for(let i = 0; i < layers.length; i++){
                 var layer = layers[i];
@@ -533,7 +532,6 @@ export default {
             mthis.openThematicModal = false;
         },
         selectThematics(selectedThematics){
-            debugger
             var mthis = this;
             for(let i = 0; i < selectedThematics.length; i++){
                 let thematic = selectedThematics[i];
@@ -554,7 +552,6 @@ export default {
                             }
                         })
                     });
-                    debugger
                     var layersArray = mthis.routeMap.map.getLayers();
                     layersArray.insertAt(2,wmsLayer)
                     /* mthis.routeMap.addlayer(wmsLayer); */
@@ -689,7 +686,6 @@ export default {
                     });
                 }
                 if (areaIds.length > 0){
-                    debugger
                     mthis.$http.post("http://10.60.1.141:5100/search-Area/", {
                         nodeIds: areaIds
                     }).then(response => {
@@ -3745,7 +3741,6 @@ export default {
             
         },
         importThematicLayer(name){
-            debugger
         }
 
     },

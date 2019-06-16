@@ -905,7 +905,6 @@
               }
               
                for(let j=0;j<mthis.myWordCharts.length;j++){
-                debugger
               options[j].series[0].data = mthis.topicDatas[j].topDatas;
                  
               mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{

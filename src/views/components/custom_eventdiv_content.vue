@@ -124,14 +124,20 @@
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['selectContentNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType','contentTimeCondition']),
+    computed: mapState(['selectContentNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType','contentTimeCondition','contentTimeOnlySel']),
     watch: {
+      contentTimeOnlySel(){
+        var mthis = this;
+        mthis.staticsDatas = mthis.contentTimeOnlySel;
+      },
       contentTimeCondition:{
         handler(newValue) {
                 var mthis = this;
-                debugger
-                var ids = mthis.contentTimeCondition.ids;
-                mthis.hlids = ids;
+                var type = mthis.contentTimeCondition.type;
+                if(type !== "static"){
+                  var ids = mthis.contentTimeCondition.ids;
+                  mthis.hlids = ids;
+                }
     　　　　 },
     　　　　 deep: true,
             immediate: true
@@ -321,7 +327,12 @@
     methods: {
       clickRightMenu(rightCilckArgu){
         var mthis = this;
-        var buttonId = rightCilckArgu.buttonId;
+        if(rightCilckArgu.buttonId === "onlylookit"){
+          mthis.$store.commit('setContentTimeOnlySel',rightCilckArgu.nsIds);
+        }
+        /* mthis.staticsDatas = mthis.contentTimeOnlySel; */
+        
+        /* var buttonId = rightCilckArgu.buttonId;
         var oids = rightCilckArgu.nsIds;
         var ids = []
         for(let i = 0; i < oids.length; i++){
@@ -342,8 +353,12 @@
       },
       clickLeftStatics(staticsClick){
         var mthis = this;
+        var param = {
+          type:'static',
+          ids:staticsClick
+        };
         // // // // console.log(staticsClick)
-        mthis.$store.commit('setContentStaticsSelectedIds',staticsClick);
+        mthis.$store.commit('setContentTimeCondition',param); */
       },
       hightLight(id) {},
       changTab(a) {

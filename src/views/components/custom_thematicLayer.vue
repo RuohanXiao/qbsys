@@ -408,13 +408,11 @@ import util from '../../util/tools.js'
         },
         methods: {
           setvisible(visable){
-            debugger 
             var mthis = this;
             mthis.$emit('visable',visable)
           },
             selectThematic(name){
                 var mthis = this;
-                debugger
                 var selectedThematics = mthis.thematics.filter(function(thematic){
                   if(thematic.thematicName === name){
                     return thematic
@@ -445,24 +443,20 @@ import util from '../../util/tools.js'
             },
             ok(){
               var mthis = this;
-              debugger
               mthis.$emit('selectedThematics',mthis.thematicCons)
               mthis.setvisible(false);
             },
             cancel() {
               var mthis = this;
-              debugger
               mthis.$Modal.remove()
             },
             searchInfo(query) {
                 var mthis = this;
-                debugger
                 var queryWord = mthis.searchWord;
                 if(queryWord !== ''){
                      mthis.$http.post("http://localhost:5000/searchthematic/", {
                         queryWord: queryWord
                     }).then(response => {
-                        debugger
                         if(response.body.code === 0){
                             mthis.thematics = response.body.data;
                         }
@@ -475,7 +469,6 @@ import util from '../../util/tools.js'
         },
         /* mounted(){
           var mthis = this;
-          debugger
           var ThematicMap = new map('thematicShow');
           var worldLabelLayer = new TileLayer({  //世界底图标注图层
             visible: true,
