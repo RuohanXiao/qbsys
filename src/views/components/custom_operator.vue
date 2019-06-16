@@ -1,6 +1,6 @@
 <style>
 .operatorDiv{
-    /* margin: 10px auto; */
+    margin: 10px auto;
     color: rgba(51,255,255,0.4);
     font-family: MicrosoftYaHei;
 	/* font-size: 14px; */
@@ -16,6 +16,7 @@
             <groupOperator v-if="item.type === 'group'" :Params='item' @param="setParam"></groupOperator>
             <sliderOperator v-if="item.type === 'Slider'" :sliderParams='item' @param="setParam"></sliderOperator>
             <docBar v-if="item.type === 'docBar'" :Params='item' @param="setParam"></docBar>
+            <selectOperator v-if="item.type === 'Select'" :Params='item' @param="setParam"></selectOperator>
         </Row>
     </div>
 </template>
@@ -23,6 +24,7 @@
 import groupOperator from "./operator/custom_group_operator.vue"
 import sliderOperator from "./operator/custom_slider_operator.vue"
 import docBar from "./operator/custom_docBar_operator.vue"
+import selectOperator from "./operator/custom_select_operator.vue"
     export default {
         data () {
             return {
@@ -33,6 +35,7 @@ import docBar from "./operator/custom_docBar_operator.vue"
         methods:{
             setParam(param){
                 var mthis = this;
+                
                 var excuteFunction = param.excuteFunction;
                 if(excuteFunction !== undefined && excuteFunction !== ''){
                     if(param.value !== undefined){
@@ -97,13 +100,14 @@ import docBar from "./operator/custom_docBar_operator.vue"
         },
         watch:{
             operatorData(){
-                // debugger
+                
             }
         },
         components: {
           sliderOperator,
           docBar,
-          groupOperator
+          groupOperator,
+          selectOperator
         }
     }
 </script>

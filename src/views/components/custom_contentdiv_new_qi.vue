@@ -170,57 +170,70 @@
       <div>
 
      
-      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'240px'}">
+      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'250px'}">
         <div :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}" v-if="ifResize">
           <Spin size="large" fix v-if="ifResize">
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
                 <div>Loading</div>
               </Spin>
         </div>
-        <div class="docMenu" :style="{display:'flex',paddingRight: '5px',height:'50px',justifyContent: 'flex-end',alignItems: 'center'}">
+        <div class="docMenu" id="topMenuall" :style="{display:'flex',paddingRight: '5px',height:'50px',justifyContent: 'flex-end',alignItems: 'center'}">
           <RadioGroup v-model="changeBar" @on-change='changeShow'>
             <Radio label="词云"></Radio>
-            <Radio label="热词排序"></Radio>
+            <Radio label="排序"></Radio>
           </RadioGroup>
           <div :style="{marginLeft:'10px'}">
             <Dropdown  @on-click='changeDrop'>
               <a href="javascript:void(0)">
-                  全部词性
-                  <Icon type="ios-arrow-down"></Icon>
+                 {{dropPlace}}
+                <Icon type="ios-arrow-down"></Icon>
+                
+                <!-- <span>&#xe62c;</span> -->
               </a>
+              <!-- <Icon class="icon iconfont icon-drop-dropdown"></Icon>   -->
               <DropdownMenu slot="list">
-                  <DropdownItem name='verb'>动词</DropdownItem>
-                  <DropdownItem name='noun'>名词</DropdownItem>
-                  <DropdownItem name='names'>人名</DropdownItem>
-                  <DropdownItem name='location'>地名</DropdownItem>
+                  <DropdownItem name='keywords'>关键词</DropdownItem>
+                  <DropdownItem name='PER'>人名</DropdownItem>
+                  <DropdownItem name='LOC'>地名</DropdownItem>
+                  <DropdownItem name='ORG'>机构名</DropdownItem>
+                  <DropdownItem name='N'>名词</DropdownItem>
+                  <DropdownItem name='V'>动词</DropdownItem>
+                  <DropdownItem name='J'>形容词</DropdownItem>
+                  <DropdownItem name='R'>副词</DropdownItem>
+                  <DropdownItem name='P'>代词</DropdownItem>
+                  <DropdownItem name='C'>连词</DropdownItem>
+                  <DropdownItem name='O'>其他</DropdownItem>
               </DropdownMenu>
           </Dropdown>
           </div>
           <div class="delB" @click='topicDatas=[]'>清空分析结果</div>
           
         </div>
-        <div class="anaDoc" :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}">
+        <div class="anaDoc" >
+          <div :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}" v-show="ifTopic">
           <div class="topItem animaTopItem" 
-          :style="{border:'1px solid #336666',order:orderCount,width:topWidth,height:topHeight,display:'flex',flexDirection:'column'}"
+          :style="{border:'1px solid #336666',order:0,width:topWidth,height:topHeight,display:'flex',flexDirection:'column',resize:'auto'}"
           v-for="(list,index) in topicDatas" :key="index" :id="index">
             <div class="itemHeader" 
             :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
-              <p class='docAnaTitle' @click="showAllTitle(index,$event);closeShowTitle()">普京：美国...(10)</p>
-              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="toTop(index)"></Icon>
-              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index)"></Icon>
+              <div :style="{width:'70%',display:'flex',flexWrap:'nowrap'}" class="headerTitle">
+                <p class='docAnaTitle' @click="showAllTitle(index,$event,1);closeShowTitle()">{{list.docDatas[0].title}}</p>
+                &nbsp;&nbsp;<span>{{list.docDatas.length}}</span>
+              </div>
+              
+              <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
+              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,1)"></Icon>
             </div>
-            <div v-show="ifTopic" :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
+            <div :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
               <div class="topicItem" 
-              :style="{display:'flex',justifyContent:'space-between',padding:'0px 1.25em 0px 1.25em',color:'#fff'}" 
-              v-for="(item,ind) in list.topDatas" :key="ind">
+              :style="{display:'flex',justifyContent:'space-around',padding:'0px 1.25em 0px 1.25em',color:'#fff'}" 
+              v-for="(item,ind) in list.topDatas_10" :key="ind">
                 <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
-                <p :style="{fontSize:'12px',flex:'1',paddingLeft:'1.25em'}">{{item.name}}</p>
-                <p :style="{fontSize:'12px'}">{{item.num}}</p>
+                <p :style="{fontSize:'12px',flex:'1',paddingLeft:'1.25em',maxWidth: '80%',overflow: 'hidden',textOverflow: 'ellipsis',whiteSpace: 'nowrap'}">{{item.name}}</p>
+                <p :style="{fontSize:'12px'}">{{item.value}}</p>
               </div>
             </div>
-            <div  v-show="!ifTopic">
-              <div :id='index+"wordChart"'></div>
-            </div>
+            
             
           </div>
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
@@ -229,20 +242,46 @@
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
+          </div>
+          <div  v-show="!ifTopic" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around'}">
+              <div class="topWord animaTopItem"
+              :style="{border:'1px solid #336666',order:0,width:itemWidth,height:topHeight,display:'flex',flexDirection:'column',marginBottom:'10px'}"
+          v-for="(list,index) in topicDatas" :id="index+'word'">
+              <div class="itemHeader" 
+                :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
+                 <div :style="{width:'70%',display:'flex',flexWrap:'nowrap'}" class="headerTitle">
+                    <p class='docAnaTitle' @click="showAllTitle(index,$event,2);closeShowTitle()">{{list.docDatas[0].title}}</p>
+                    &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
+                  </div>
+                  
+                      <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
+                  
+                  
+                  <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,2)"></Icon>
+                </div>
+              <div :id='index+"wordChart"'></div>
+          </div>
+          <div class="itemEmpty" :style="{width:itemWidth,height:'0px',visibility: 'hidden'}"></div>
+          <div class="itemEmpty" :style="{width:itemWidth,height:'0px',visibility: 'hidden'}"></div>
+          
+          </div>
+          
         </div>
         
         
       </div>
       
       </div>
+      <div v-if="ifRenderAllTitle">
       <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
-          :style="{opacity:0}">
-          <div v-for="(item,index) in list.docDatas" :key="index" :style="{display:'flex',marginBottom:'5px',cursor:'pointer'}" :title="item.title">
+          :style="{display:'none'}">
+          <div v-for="(item,index) in list.docDatas" :style="{display:'flex',marginBottom:'5px',cursor:'pointer'}" :title="item.title">
               <p class="itemTitle" :style="{color:'#fff'}">{{item.title}}</p>
               <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px',width:'70px'}">{{item.time}}</p>
               <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)'}"></p>
               <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'7px',width:'70px'}">{{item.from}}</p>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -280,6 +319,10 @@
     name: "App",
     data() {
       return {
+        topicIndex:0,
+        dropPlace:'关键词',
+        ifRenderAllTitle:false,
+        openHub:false,
         ifResize:false,
         showAllDocCount:0,
         myWordCharts:[],
@@ -296,7 +339,7 @@
  			        show: true
            },
            series: [{
- 			        name: 'keyWords分析',
+ 			        name: '关键词',
                type: 'wordCloud',
                shape: 'circle',
  			        sizeRange: [10, 18],
@@ -311,12 +354,12 @@
  			            normal: {
  			                color: function(params) {
                            var colorList = ['#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff']
-                           return colorList[params.dataIndex]
+                           return colorList[Math.floor(Math.random()*6)]
  			                }
                    },
                 
  			            emphasis: {
- 			                shadowBlur: 10,
+ 			                // shadowBlur: 10,
  			                shadowColor: '#333'
  			            }
                },
@@ -324,63 +367,13 @@
                bottom: null,
                left:'center',
                top:'center',
-               data:[
-                 {name:'Jayfee',value:200},
-                 {name:'Jayfee',value:120},
-                 {name:'Jayfee',value:180},
-                 {name:'Jayfee',value:120},
-                 {name:'Jayfee',value:320},
-                 {name:'Jayfee',value:220},
-                 {name:'Jayfee',value:190},
-                 {name:'Jayfee',value:200},
-                 {name:'Jayfee',value:200},
-                 {name:'Jayfee',value:180},
-                 {name:'Jayfee',value:170},
-                 {name:'Jayfee',value:160},
-                 {name:'Jayfee',value:150},
-                 {name:'Jayfee',value:140},
-                 {name:'Jayfee',value:130},
-                 {name:'Jayfee',value:240},
-                 {name:'Jayfee',value:160},
-                 {name:'Jayfee',value:260},
-                 {name:'Jayfee',value:250},
-                 {name:'Jayfee',value:150},
-                 {name:'Jayfee',value:130},
-                 {name:'Jayfee',value:110},
-                 {name:'Jayfee',value:120},
-                 {name:'Jayfee',value:150},
-                 {name:'Jayfee',value:160},
-                 {name:'Jayfee',value:170},
-                 {name:'Jayfee',value:180},
-                 {name:'Jayfee',value:220},
-                 {name:'Jayfee',value:210},
-                 {name:'Jayfee',value:230},
-                 {name:'Jayfee',value:120},
-                 {name:'Jayfee',value:150},
-                 {name:'Jayfee',value:210},
-                 {name:'Jayfee',value:230},
-                 {name:'Jayfee',value:250},
-                 {name:'Jayfee',value:216},
-                 {name:'Jayfee',value:250},
-                 {name:'Jayfee',value:197},
-                 {name:'Jayfee',value:198},
-                 {name:'Jayfee',value:183},
-                 {name:'Jayfee',value:182},
-                 {name:'Jayfee',value:179},
-                 {name:'Jayfee',value:178},
-                 {name:'Jayfee',value:165},
-                 {name:'Jayfee',value:168},
-                 {name:'Jayfee',value:164},
-                 {name:'Jayfee',value:165},
-                 {name:'Jayfee',value:234},
-                 {name:'Jayfee',value:246},
-                 {name:'Jayfee',value:238}
-                 ]
+               data:[]
  			 	  }]
         }),
         ifTopic:true,
         wordCloudOption:null,
-        topicDatas:[
+        topicDatas:[],
+        topicDatas1:[
           {ids:[],docDatas:[
             {
               title:'Venezuelan oil chief blames fire on opposition',
@@ -891,11 +884,55 @@
       };
     },
     computed: mapState([
-      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes','topicClassifStatus'
+      'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes','topicClassifStatus',
+      'ifSinDocAna','ifMulDocAna'
       ]),
 
    
     watch: {
+      
+      topicDatas:function(){
+        
+        this.$nextTick(function(){
+          var mthis = this
+          mthis.ifRenderAllTitle = true
+          var charts = [];
+          var options = [];
+          for(let i=0;i<mthis.topicDatas.length;i++){
+                charts.push(i+'wordChart');
+                mthis.myWordCharts.push(i+'myChart');
+                options.push(mthis.option);
+              }
+              
+               for(let j=0;j<mthis.myWordCharts.length;j++){
+              options[j].series[0].data = mthis.topicDatas[j].topDatas;
+                 
+              mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
+                width:mthis.itemWidth,
+                height:mthis.itemHeight
+              });
+              mthis.myWordCharts[j].setOption(options[j]);
+              
+            }
+            
+        })
+      },
+      
+      ifSinDocAna:function(){
+        var mthis = this
+        if(this.ifSinDocAna){
+          mthis.showContentAna('keywords','single',mthis.$store.state.topicClassifIds)
+          mthis.dropPlace = '关键词'
+        }
+        
+      },
+      ifMulDocAna:function(){
+        var mthis = this
+        if(this.ifMulDocAna){
+          mthis.showContentAna('keywords','group',mthis.$store.state.topicClassifIds)
+          mthis.dropPlace = '关键词'
+        }
+      },
       prevItems:{
         handler(newVal,oldVal){
           var mthis = this
@@ -920,7 +957,7 @@
       topicClassifStatus:function(){
         var mthis = this;
         if(mthis.topicClassifStatus){
-          mthis.showContentAna()
+          mthis.showContentAna('keywords','group',mthis.$store.state.selectContentNodes[0].ids)
           mthis.ifhasDoc = false
           mthis.ifhasSel = false
           // mthis.ifShowDoc = false
@@ -933,7 +970,7 @@
         
       },
       contentTimeOnlySel:function(){
-        if(this.contentTimeOnlySel){
+        if(this.contentTimeOnlySel.length>0){
           this.selectAll()
         }else{
           
@@ -1212,19 +1249,48 @@
       cutScreen(){
         // 截屏事件
       },
-      showAllTitle(index,e){
+     
+      showAllTitle(index,e,flag){
         var mthis = this
         mthis.clearBubble(e)
-        if(document.getElementsByClassName('allTitle')[index].style.opacity == 0){
-          var pTitle = document.getElementById(index)
-          document.getElementsByClassName('allTitle')[index].style.opacity = 1
-          document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+252 + 'px';
-          document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20+65 + 'px';
-          mthis.showAllDocCount = mthis.showAllDocCount + 1;
+        if(flag ==1){
+            if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
+            var pTitle = document.getElementById(index)
+            if(!mthis.openHub){
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+260 + 'px';
+            }else{
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+10 + 'px';
+              
+            }
+            
+            document.getElementsByClassName('allTitle')[index].style.display = 'block'
+            
+            document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20+65 + 'px';
+            mthis.showAllDocCount = mthis.showAllDocCount + 1;
+          }else{
+            document.getElementsByClassName('allTitle')[index].style.display = 'none';
+            mthis.showAllDocCount = mthis.showAllDocCount - 1;
+          }
         }else{
-          document.getElementsByClassName('allTitle')[index].style.opacity = 0;
-          mthis.showAllDocCount = mthis.showAllDocCount - 1;
+          if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
+            var pTitle = document.getElementById(index+'word')
+            if(!mthis.openHub){
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+250 + 'px';
+            }else{
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+10 + 'px';
+              
+            }
+            
+            document.getElementsByClassName('allTitle')[index].style.display = 'block'
+            
+            document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20+65 + 'px';
+            mthis.showAllDocCount = mthis.showAllDocCount + 1;
+          }else{
+            document.getElementsByClassName('allTitle')[index].style.display = 'none';
+            mthis.showAllDocCount = mthis.showAllDocCount - 1;
+          }
         }
+        
         
       },
       closeShowTitle(){
@@ -1236,13 +1302,16 @@
         var topicAnaly = document.getElementById('topicAnaly');
         if(isOpen){
           topicAnaly.style.left = '240px';
-          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 242 + 'px';
-          mthis.wordResize(mthis.topicDatas.length)
+          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 252 + 'px';
+          mthis.wordResize(document.getElementsByClassName('topItem').length)
+          mthis.openHub = false
         }else{
           topicAnaly.style.left = '0px';
           mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20  + 'px';
-          mthis.wordResize(mthis.topicDatas.length)
+          mthis.wordResize(document.getElementsByClassName('topItem').length)
+          mthis.openHub = true
         }
+        
       },
       changeShow(newValue){
         var mthis = this
@@ -1250,32 +1319,88 @@
         console.log(typeof newValue)
         if(newValue == '词云'){
           mthis.ifTopic = false;
-          
+          mthis.wordResize(document.getElementsByClassName('topItem').length);
         }else{
           mthis.ifTopic = true;
+          mthis.wordResize(document.getElementsByClassName('topItem').length);
         }
       },
       changeDrop(name){
-        console(name)
-      },
-      delTopData(index){
-        var mthis = this
-        document.getElementById(index).setAttribute('style','opacity:0;width:0');
-        mthis.ifResize = true
-        setTimeout(()=>{
+        console.log(name)
+        var mthis = this;
+        switch(name){
+          case 'PER' : mthis.dropPlace = '人名';break;
+          case 'LOC' : mthis.dropPlace = '地名';break;
+          case 'ORG' : mthis.dropPlace = '机构名';break;
+          case 'N' : mthis.dropPlace = '名词';break;
+          case 'V' : mthis.dropPlace = '动词';break;
+          case 'J' : mthis.dropPlace = '形容词';break;
+          case 'R' : mthis.dropPlace = '副词';break;
+          case 'P' : mthis.dropPlace = '代词';break;
+          case 'C' : mthis.dropPlace = '连词';break;
+          case 'keywords' : mthis.dropPlace = '关键词';break;
           
-          document.getElementById(index).remove();
-          let len = document.getElementsByClassName('topItem').length
-          mthis.wordResize(len)
-          mthis.ifResize = false
-        },800)
+          case 'O' : mthis.dropPlace = '其他';break;
+          default: mthis.dropPlace = '关键词';break;
+        }
+       
+        let type = '';
+        let ids = []
+        if(mthis.topicDatas.length==1){
+          type = 'group';
+          ids = mthis.topicDatas[0].ids
+        }else if(mthis.topicDatas.length>1){
+          type = 'single';
+          for(let i=0;i<mthis.topicDatas.length;i++){
+            ids.push(mthis.topicDatas[i].ids[0])
+          }
+        }
+        mthis.showContentAna(name,type,ids)
+      },
+      delTopData(index,flag){
+        var mthis = this
+        if(flag ==1){
+            document.getElementById(index).setAttribute('style','opacity:0;width:0');
+            mthis.ifResize = true
+            setTimeout(()=>{
+              
+              document.getElementById(index).remove();
+              let len = document.getElementsByClassName('topItem').length;
+              document.getElementById(index+'word').remove();
+              mthis.wordResize(len)
+              
+              mthis.ifResize = false
+            },800)
+        }else{
+          document.getElementById(index+'word').setAttribute('style','opacity:0;width:0');
+            mthis.ifResize = true
+            setTimeout(()=>{
+              
+              document.getElementById(index+'word').remove();
+              let len = document.getElementsByClassName('topItem').length;
+              document.getElementById(index).remove();
+              mthis.wordResize(len)
+              
+              
+              mthis.ifResize = false
+            },800)
+        }
+        
         console.log(index)
         
         
       },
       toTop(index){
-        var div = document.getElementsByClassName('topItem')[index];
-        div.style.order = this.orderCount - 1;
+        var div = document.getElementById(index);
+        var divWord = document.getElementById(index+'word');
+        this.orderCount = this.orderCount -1;
+        div.style.order = this.orderCount ;
+        divWord.style.order = this.orderCount ;
+       
+        $('#topicAnaly').animate({scrollTop:0},500)
+        
+        
+        
         
       },
       deepClone(obj){
@@ -1675,288 +1800,7 @@
         }
         
       },
-        // 判断是否是闰年，请求结束时间加一天
-      isLeapYear(str){
-          var newStr = str.split("-")
-          
-              var year = parseInt(newStr[0])
-              var month = parseInt(newStr[1])
-              var day = parseInt(newStr[2])
-              switch(month){
-                  case 1: 
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break ;
-                    case 2:
-                    if(day<28){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day =28){
-                      let cond1 = year % 4 == 0;
-                      let cond2 = year % 100 != 0 ;
-                      let cond3 = year % 400 ==0 ;
-                      let cond = cond1 && cond2 || cond3 ;
-                      if(cond){
-                        day = "29"
-                        newStr.splice(2,1,day)
-                        newStr = newStr.join("-")
-                        return newStr
-                      }else{
-                        month += 1;
-                        if(month<10){
-                          month = "0" + month
-                        }
-                        day = "01"
-                        newStr.splice(2,1,day)
-                        newStr.splice(1,1,month)
-                        newStr = newStr.join("-")
-                        return newStr
-                      }
 
-                    }else if(day =29){
-                      month += 1;
-                        if(month<10){
-                          month = "0" + month
-                        }
-                        day = "01"
-                        newStr.splice(2,1,day)
-                        newStr.splice(1,1,month)
-                        newStr = newStr.join("-")
-                        return newStr
-                    }
-                    break;
-                    case 3:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 4:
-                    if(day<30){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=30){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 5:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 6:
-                    if(day<30){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=30){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }break;
-                    case 7:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 8:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 9:
-                    if(day<30){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=30){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }break;
-                    case 10:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    case 11:
-                    if(day<30){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=30){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }break;
-                    case 12:
-                    if(day<31){
-                      day +=1;
-                      if(day<10){
-                        day = "0" +day
-                      }
-                      newStr.splice(2,1,day)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }else if(day=31){
-                      month += 1;
-                      if(month<10){
-                        month = "0" + month
-                      }
-                      day = "01";
-                      newStr.splice(2,1,day)
-                      newStr.splice(1,1,month)
-                      newStr = newStr.join("-")
-                      return newStr
-                    }
-                    break;
-                    default:break;
-              }
-        },
       //无限滚动加载触发方法
       infiniteHandler($state) {
       setTimeout(() => {
@@ -2380,77 +2224,123 @@
       wordResize(len){
         var mthis = this;
         if(len>6){
-          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
           console.log(mthis.itemWidth)
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           mthis.topHeight = 330 + 'px'
           mthis.itemHeight = 300 + 'px'
+          
           for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize({
-            width:mthis.itemWidth,
-            height:mthis.itemHeight
-          })
+            mthis.myWordCharts[j].resize(
+              {
+              width:mthis.itemWidth,
+              height:mthis.itemHeight
+            }
+            )
           
         }
         }else if(len>1 && len <6){
           mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
-          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
+          
           for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize({
+          mthis.myWordCharts[j].resize(
+            {
             width:mthis.itemWidth,
             height:mthis.itemHeight
-          })
+          }
+          )
           }
         }else if(len ==6){
-          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 6.3) + 'px';
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
           console.log(mthis.itemWidth)
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
           for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize({
+          mthis.myWordCharts[j].resize(
+            {
             width:mthis.itemWidth,
             height:mthis.itemHeight
-          })
+          }
+          )
           }
         }else if(len==1){
           mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
-          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / len) + 'px';
+          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 1.1) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
+          mthis.topHeight = 330 + 'px'
+          mthis.itemHeight = 300 + 'px'
           for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize({
+          mthis.myWordCharts[j].resize(
+            {
             width:mthis.itemWidth,
             height:mthis.itemHeight
-          })
+          }
+          )
           }
         }
         
       },
-      showContentAna(){
+      showContentAna(val,type,ids){
         var mthis = this
+        mthis.ifRenderAllTitle= false
         mthis.contentAna = true
-        mthis.changeBar = '热词排序'
-        var charts = [];
-        var options = [];
+        mthis.changeBar = '排序'
+        mthis.ifTopic = true;
+        switch(val){
+          case 'PER' : mthis.option.series[0].name = '人名';break;
+          case 'LOC' : mthis.option.series[0].name = '地名';break;
+          case 'ORG' : mthis.option.series[0].name = '机构名';break;
+          case 'N' : mthis.option.series[0].name = '名词';break;
+          case 'V' : mthis.option.series[0].name = '动词';break;
+          case 'J' : mthis.option.series[0].name = '形容词';break;
+          case 'R' : mthis.option.series[0].name = '副词';break;
+          case 'P' : mthis.option.series[0].name = '代词';break;
+          case 'C' : mthis.option.series[0].name = '连词';break;
+          case 'keywords' : mthis.option.series[0].name = '关键词';break;
+          
+          case 'O' : mthis.option.series[0].name = '其他';break;
+          default:mthis.option.series[0].name = '关键词';break;
+        }
+        if(mthis.myWordCharts.length>0){
+          for(let i=0;i<mthis.myWordCharts.length;i++){
+            mthis.myWordCharts[i].clear()
+          }
+        }
         mthis.myWordCharts = [];
-        let len = mthis.topicDatas.length;
-        mthis.wordResize(len)
         
-        for(var i=0;i<mthis.topicDatas.length;i++){
-          charts.push(i+'wordChart');
-          mthis.myWordCharts.push(i+'myChart');
-          options.push(mthis.option);
-        }
-        for(var j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
-            width:mthis.itemWidth,
-            height:mthis.itemHeight
-          });
-          mthis.myWordCharts[j].setOption(options[j]);
-        }
+          
+        return new Promise(resolve =>{
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-top/',{
+            ids:ids,
+            typeLabel:type,
+            word:val
+          }).then(response =>{
+            if(response.body.code ==0){
+              mthis.topicDatas = response.body.data
+              console.log(mthis.topicDatas)
+              let len = mthis.topicDatas.length;
+              mthis.wordResize(len)
+              for(let i=0;i<mthis.topicDatas.length;i++){
+                console.log(mthis.topicDatas[i].docDatas)
+                
+              }
+            }
+          })
+        }).then(()=>{
+          
+          
+          
+        })
+        
         
       },
       showContent(id,title) {
@@ -2526,7 +2416,7 @@
     },
     mounted() {
       var mthis = this
-      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 242 + 'px'
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 252 + 'px'
       console.log(mthis.contentAnaWidth)
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
       console.log(wwWidth)
@@ -2552,7 +2442,7 @@
       window.divLength = 0;
       document.onclick = function(){
         if(!mthis.showAllDocCount) return;
-        $('.allTitle').css('opacity',0);
+        $('.allTitle').css('display','none');
       }
       document.onmouseup = function(e){
         if(!mthis.showThumb) return;
@@ -3081,14 +2971,21 @@
     
     text-align: center;
   }
-  .itemHeader >p{
+  .itemHeader .headerTitle{
+    font-size:14px;
+    color:rgba(51, 255, 255, 0.4);
+    font-size: 16px;
+    align-items: center;
+  }
+  .itemHeader .docAnaTitle{
     text-overflow:ellipsis;
     white-space: nowrap;
     overflow:hidden;
-    width:70%;
-    max-width: 70%;
+    /* width:70%;
+    max-width: 70%; */
+    
   }
-  .itemHeader >p:hover{
+  .itemHeader .headerTitle:hover{
     color:rgba(51, 255, 255, 1);
     cursor:pointer;
   }
@@ -3126,6 +3023,7 @@
       background-color:black;
       padding:10px 0px 0px 10px;
       max-height:300px;
+      min-height:80px;
       overflow-y:scroll;
       transition:all 0.8s ease;
     }

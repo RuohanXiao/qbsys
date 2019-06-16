@@ -410,7 +410,7 @@ var store = new Vuex.Store({
             title: ''
         },
         // 文档时间轴只看它时显示标志
-        contentTimeOnlySel: false,
+        contentTimeOnlySel: [],
         // 快捷键监听参数
         netKeyboards: [],
         geoKeyboards: [],
@@ -436,6 +436,8 @@ var store = new Vuex.Store({
         heatMapBlur: 20,
         displayHeatMap: false,
         topicClassifIds: [],
+        ifSinDocAna: 0,
+        ifMulDocAna: 0,
         seletedDocAttrList: [
             // {
             // title:'Venezuelan oil chief blames fire on opposition',
@@ -448,6 +450,8 @@ var store = new Vuex.Store({
         groupParams: new Object(),
         groupFlag: false,
         communityData: new Object()
+        thematicLayerName: [],
+        openthematicLayer: false
     },
     mutations: {
         setCommunityData(state, val) {
@@ -740,11 +744,15 @@ var store = new Vuex.Store({
             state.displayHeatMap = false;
         },
         addDocIdsToList(state, id) {
-            debugger
             state.topicClassifIds.push(id);
         },
+        exSinDocAna(state) {
+            state.ifSinDocAna++;
+        },
+        exMulDocAna(state) {
+            state.ifMulDocAna++;
+        },
         removeDocIdsToList(state, id) {
-            debugger
             var index = util.itemIndexInArr(id, state.topicClassifIds);
             if (index !== -1) {
                 state.topicClassifIds.splice(index, 1)
@@ -752,6 +760,15 @@ var store = new Vuex.Store({
         },
         changetopicClassifStatus(state, status) {
             state.topicClassifStatus = status;
+        },
+        setThematicLayerName(state, names) {
+            state.thematicLayerName = names;
+        },
+        openThematicLayer(state) {
+            state.openthematicLayer = true;
+        },
+        closeThematicLayer(state) {
+            state.openthematicLayer = false;
         }
     },
     getters: {
@@ -833,17 +850,30 @@ var store = new Vuex.Store({
         },
         singleDocAnaly(context) {
             //   topicClassifIds
-            alert('单个文档分析');
+            // alert('单个文档分析');
+            context.commit('exSinDocAna', true)
         },
         multiDocAnaly(context) {
-            alert('合并分析');
+
+            context.commit('exMulDocAna', true)
         },
         opentopicClassif(context) {
             context.commit('changetopicClassifStatus', true);
         },
         closetopicClassif(context) {
             context.commit('changetopicClassifStatus', false);
-        }
+        },
+        selectThematiclayer(context, names) {
+            context.commit('setThematicLayerName', [names]);
+
+        },
+        openThematicLayer(context) {
+            context.commit('openThematicLayer');
+        },
+        closeThematicLayer(context) {
+            context.commit('closeThematicLayer');
+            context.commit('setThematicLayerName', []);
+        },
     }
 });
 const router = new VueRouter(RouterConfig);

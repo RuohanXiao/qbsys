@@ -6,7 +6,7 @@
     <div :style="{height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <!-- <Col span="3"/> -->
-        <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
+        <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'#ccffff',fontSize:'14px'}">时间轴&nbsp;&nbsp;{{timeTitle}}</span></Col>
         <Col span="1"  class="bottom">
         <!-- <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
@@ -31,7 +31,7 @@
       
       <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '20px'}">
         <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
-        <p>选中文档可查看时间轴</p>
+        <p style='color:#ccffff;font-size:14px;'>选中文档可查看时间轴</p>
       </div>
     </div>
     </Col>
@@ -72,7 +72,7 @@
     data() {
       return {
         showEchart:false,
-        timeTitle: '请选择节点',
+        timeTitle: '',
         timechartdivId:'timechartdiv_' + this.activeId,
         arrowDownId:'arrowDown_'+ this.activeId,
         timechartctrlId:'timechartctrl_'+ this.activeId,
@@ -132,6 +132,7 @@
       };
     },
     methods: {
+      
       getDateStr(dayCount,addDayCount){
         var dd = new Date(dayCount);
         dd.setDate(dd.getDate()+addDayCount);//获取AddDayCount天后的日期
@@ -182,13 +183,14 @@
         var mthis = this
         let sendIds = []
         let docIds = util.getStorage("docIds",mthis.selIdsArr)
-        // console.log(mthis.selIdsArr)
-        // console.log(docIds)
+        console.log(mthis.selIdsArr)
+        console.log(docIds)
         for(var i in docIds){
               for(var j of docIds[i]){
                 sendIds.push(j)
               }
             }
+        console.log(sendIds)
         mthis.sendDocIds.type = 'sel'
         mthis.sendDocIds.ids = sendIds
         mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
@@ -220,10 +222,10 @@
       toGeoAna(flag){
         if(flag==1){
           this.clcikShowDiv = false
-          this.$store.commit('setContentTimeOnlySel',true)
+          this.$store.commit('setContentTimeOnlySel',this.sendDocIds.ids)
           // console.log("click")
         }else{
-          this.$store.commit('setContentTimeOnlySel',true)
+          this.$store.commit('setContentTimeOnlySel',this.sendDocIds.ids)
           this.boxSelShowDiv = false
           this.isDataZoom = false
           this.charts.dispatchAction({
@@ -373,7 +375,7 @@
               start: 10,
               end: 80,
               height:20,
-              top:90,
+              top:'bottom',
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
@@ -533,14 +535,14 @@
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
              mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
              mthis.isDataZoom = true
-             mthis.$store.commit('setContentTimeOnlySel',false)
+             mthis.$store.commit('setContentTimeOnlySel',[])
           }
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
             
             if(mthis.isDataZoom){
               
-              mthis.timeTitle = '时间轴'
+              
               let cancelTime = []
               
               mthis.sendDocIds.type = 'cancel'
@@ -660,7 +662,7 @@
               areas:[]
             })
           }
-          mthis.timeTitle = '时间轴';
+          
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           mthis.option.xAxis.boundaryGap = true;
@@ -701,7 +703,7 @@
           mthis.option.xAxis.data = []
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
-          mthis.timeTitle = '请选择节点'
+          
           mthis.charts.setOption(mthis.option)
           
         }

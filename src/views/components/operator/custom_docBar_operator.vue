@@ -122,7 +122,7 @@
         methods:{
             clickDocBar(){
               var mthis = this;
-              // debugger
+              
               mthis.selected = !mthis.selected;
               var attrName = mthis.Params.attrName;
               var getValue = mthis.Params[attrName];
@@ -139,7 +139,7 @@
           },
             clickRightButton(excuteFunction){
                 var mthis = this;
-                // debugger
+                
                 var param = {};
                 if(excuteFunction !== undefined){
                   param['excuteFunction'] = excuteFunction

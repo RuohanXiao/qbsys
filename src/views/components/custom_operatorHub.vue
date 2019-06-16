@@ -186,7 +186,7 @@ import operator from "./custom_operator.vue"
           },
           selectOperator(name){
             var mthis = this;
-            // debugger
+            
             var params = [];
             var operName = '';
             var openFunction = '';
