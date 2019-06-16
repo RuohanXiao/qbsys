@@ -218,10 +218,12 @@
             :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
               <div :style="{width:'70%',display:'flex',flexWrap:'nowrap'}" class="headerTitle">
                 <p class='docAnaTitle' @click="showAllTitle(index,$event,1);closeShowTitle()">{{list.docDatas[0].title}}</p>
-                &nbsp;&nbsp;<span>{{list.docDatas.length}}</span>
+                &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
               </div>
+              <a href="#topMenuall">
+                <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
+              </a>
               
-              <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
               <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,1)"></Icon>
             </div>
             <div :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
@@ -243,7 +245,7 @@
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
           </div>
-          <div  v-show="!ifTopic" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around'}">
+          <div  v-show="!ifTopic" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around'}" id='testWord'>
               <div class="topWord animaTopItem"
               :style="{border:'1px solid #336666',order:0,width:itemWidth,height:topHeight,display:'flex',flexDirection:'column',marginBottom:'10px'}"
           v-for="(list,index) in topicDatas" :id="index+'word'">
@@ -253,8 +255,10 @@
                     <p class='docAnaTitle' @click="showAllTitle(index,$event,2);closeShowTitle()">{{list.docDatas[0].title}}</p>
                     &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
                   </div>
-                  
-                      <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
+                      <a href="#topMenuall">
+                        <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
+                      </a>
+                      
                   
                   
                   <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,2)"></Icon>
@@ -319,6 +323,9 @@
     name: "App",
     data() {
       return {
+        options:[],
+        charts:[],
+        docAnaCount:0,
         topicIndex:0,
         dropPlace:'关键词',
         ifRenderAllTitle:false,
@@ -841,7 +848,8 @@
                     closeFunction:'closetopicClassif',
                     operatorSurface:[
                       {
-                          operatorType:'dynamic',
+                        operatorType:'topicClassification',
+                          /* operatorType:'dynamic',
                           dynamicAttr:'seletedDocAttrList',
                           paramCompare:{
                             'id':'id',
@@ -864,7 +872,7 @@
                                 'excuteFunction':'multiDocAnaly'
                               }
                             ]
-                          }
+                          } */
                       },
                     ]
                 },
@@ -890,47 +898,134 @@
 
    
     watch: {
-      
+      options:function(){
+        var mthis = this
+        if(this.options.length>0){
+          console.log(mthis.topicDatas.length)
+         
+          console.log(mthis.myWordCharts)
+          console.log(mthis.charts)
+          setTimeout(function(){
+            for(let j=0;j<mthis.topicDatas.length;j++){
+                  mthis.myWordCharts[j] = echarts.init(document.getElementById(mthis.charts[j]),'',{
+                    width:mthis.itemWidth,
+                    height:mthis.itemHeight
+                  });
+                  mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
+                  mthis.myWordCharts[j].setOption(mthis.options[j]);
+                  console.log(mthis.myWordCharts[j])
+                  console.log(mthis.options[j].series[0].data)
+                }
+          },300)
+          
+        }
+        
+      },
       topicDatas:function(){
         
         this.$nextTick(function(){
           var mthis = this
           mthis.ifRenderAllTitle = true
-          var charts = [];
-          var options = [];
+          mthis.myWordCharts = [];
+        
+          mthis.options = [];
+          mthis.charts = [];
           for(let i=0;i<mthis.topicDatas.length;i++){
-                charts.push(i+'wordChart');
+                mthis.charts.push(i+'wordChart');
                 mthis.myWordCharts.push(i+'myChart');
-                options.push(mthis.option);
+                mthis.options.push(mthis.option);
               }
               
-               for(let j=0;j<mthis.myWordCharts.length;j++){
-              options[j].series[0].data = mthis.topicDatas[j].topDatas;
-                 
-              mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
-                width:mthis.itemWidth,
-                height:mthis.itemHeight
-              });
-              mthis.myWordCharts[j].setOption(options[j]);
-              
-            }
-            
+              //  for(let j=0;j<mthis.myWordCharts.length;j++){
+              //     mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
+                    
+              //     mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
+              //       width:mthis.itemWidth,
+              //       height:mthis.itemHeight
+              //     });
+              //     mthis.myWordCharts[j].setOption(options[j]);
+                  
+              //   }
+            mthis.wordResize(mthis.topicDatas.length)
         })
       },
       
       ifSinDocAna:function(){
         var mthis = this
         if(this.ifSinDocAna){
-          mthis.showContentAna('keywords','single',mthis.$store.state.topicClassifIds)
+          
+          // mthis.getDocAna('keywords','single',mthis.$store.state.topicSelIds)
+          
           mthis.dropPlace = '关键词'
-        }
+          mthis.option.series[0].name = '关键词'
+          let dropItems = mthis.deepClone(mthis.topicDatas)
+          let useIds = []
+          let topicSelId = mthis.$store.state.topicSelIds
+          for(let m=0;m<topicSelId.length;m++){
+            let pId = new Array(1)
+            pId[0] = topicSelId[m]
+            useIds.push(pId)
+          }
+          
+          for(let j=0;j<dropItems.length;j++){
+            useIds.push(dropItems[j].ids)
+          }
+          mthis.$store.state.topicSelIds = []
+          mthis.topicDatas = [];
+          mthis.options = [];
+          mthis.charts = [];
+          
+          mthis.changeBar = '排序'
+          mthis.ifTopic = true
+          
+          if(mthis.myWordCharts.length>0){
+            for(let i=0;i<mthis.myWordCharts.length;i++){
+              mthis.myWordCharts[i].clear()
+            }
+          }
+          mthis.myWordCharts = [];
+          let leng = useIds.length;
+          console.log(useIds.length)
+          for(let m=0;m<leng;m++){
+            mthis.getDropDatas(useIds[m],'keywords')
+          }
+          
+          }
         
       },
       ifMulDocAna:function(){
         var mthis = this
         if(this.ifMulDocAna){
-          mthis.showContentAna('keywords','group',mthis.$store.state.topicClassifIds)
-          mthis.dropPlace = '关键词'
+          // mthis.getDocAna('keywords','group',mthis.$store.state.topicSelIds)
+         mthis.dropPlace = '关键词'
+          mthis.option.series[0].name = '关键词'
+          let dropItems = mthis.deepClone(mthis.topicDatas)
+          let useIds = []
+          
+          useIds.push(mthis.$store.state.topicSelIds)
+          
+          for(let j=0;j<dropItems.length;j++){
+            useIds.push(dropItems[j].ids)
+          }
+          mthis.$store.state.topicSelIds = []
+          mthis.topicDatas = [];
+          mthis.options = [];
+          mthis.charts = [];
+          
+          mthis.changeBar = '排序'
+          mthis.ifTopic = true
+          
+          if(mthis.myWordCharts.length>0){
+            for(let i=0;i<mthis.myWordCharts.length;i++){
+              mthis.myWordCharts[i].clear()
+            }
+          }
+          mthis.myWordCharts = [];
+          let leng = useIds.length;
+          console.log(useIds.length)
+          for(let m=0;m<leng;m++){
+            mthis.getDropDatas(useIds[m],'keywords')
+          }
         }
       },
       prevItems:{
@@ -970,12 +1065,18 @@
         
       },
       contentTimeOnlySel:function(){
-        if(this.contentTimeOnlySel.length>0){
-          this.selectAll()
-        }else{
-          
-        }
-        
+        var mthis = this
+        let items = []
+        for(var i of mthis.contentTimeOnlySel){
+            for(var j in mthis.prevItems){
+                if(i == mthis.prevItems[j].id){
+                    items.push(mthis.deepClone(mthis.prevItems[j]))
+                    }
+                  }
+                }
+            
+         mthis.items = mthis.deepClone(items)
+         mthis.selectAll()
       },
       contentPromte:function(){
         this.setMessage(this.contentPromte)
@@ -1065,7 +1166,8 @@
                       title: item.title,      
                       id: item.id,
                       time: item.time,
-                      from: item.from,     
+                      from: item.from,
+                      check:false     
                     })
                   );
             mthis.$store.commit('setSeletedDocAttrList',selDocList)
@@ -1114,23 +1216,13 @@
         }
         
       },
-      contentTimeCondition:{
-        deep:true,
-        handler(newValue){
-           var mthis = this
-           if(mthis.contentTimeCondition.type == 'cancel'){
-              // console.log(3)
-              // console.log(mthis.prevItems)
+      'contentTimeCondition.ids':function(){
+            var mthis = this;
+            if(mthis.contentTimeCondition.ids.length ==0){
               mthis.items =  mthis.deepClone(mthis.prevItems)
-            }
-            if(mthis.contentTimeCondition.type == 'sel'){
+            }else if(mthis.contentTimeCondition.ids.length>0){
               
-              if(mthis.contentTimeCondition.ids.length ==0){
-                // console.log(4)
-                mthis.items = mthis.deepClone(mthis.prevItems)
-              }
-              if(mthis.contentTimeCondition.ids.length>0){
-                let items = []
+              let items = []
                 for(var i of mthis.contentTimeCondition.ids){
                   for(var j in mthis.prevItems){
                     if(i == mthis.prevItems[j].id){
@@ -1142,14 +1234,45 @@
                   items[m].check = false
                 }
                 mthis.items = mthis.deepClone(items)
+
+            }
+      },
+      // contentTimeCondition:{
+      //   deep:true,
+      //   handler(newValue){
+      //      var mthis = this
+      //      if(mthis.contentTimeCondition.type == 'cancel'){
+      //         // console.log(3)
+      //         // console.log(mthis.prevItems)
+      //         mthis.items =  mthis.deepClone(mthis.prevItems)
+      //       }
+      //       if(mthis.contentTimeCondition.type == 'sel'){
+              
+      //         if(mthis.contentTimeCondition.ids.length ==0){
+      //           // console.log(4)
+      //           mthis.items = mthis.deepClone(mthis.prevItems)
+      //         }
+      //         if(mthis.contentTimeCondition.ids.length>0){
+      //           let items = []
+      //           for(var i of mthis.contentTimeCondition.ids){
+      //             for(var j in mthis.prevItems){
+      //               if(i == mthis.prevItems[j].id){
+      //                 items.push(mthis.deepClone(mthis.prevItems[j]))
+      //                 }
+      //               }
+      //             }
+      //           for(var m=0;m<items.length;m++){
+      //             items[m].check = false
+      //           }
+      //           mthis.items = mthis.deepClone(items)
                
               
-              }
-            }
-            }
+      //         }
+      //       }
+      //       }
             
             
-      },
+      // },
       
      
       searchContentResult: function(va) {
@@ -1325,37 +1448,75 @@
           mthis.wordResize(document.getElementsByClassName('topItem').length);
         }
       },
+      getDropDatas(ids,name){
+        var mthis = this;
+        
+        let type = ''
+        if(ids.length>0){
+          type = 'group'
+        }else{
+          type = 'single'
+        }
+        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-top/',{
+            ids:ids,
+            typeLabel:type,
+            word:name
+          }).then(response =>{
+            if(response.body.code ==0){
+              mthis.topicDatas = mthis.topicDatas.concat(response.body.data)
+            }
+          })
+          
+      },
       changeDrop(name){
         console.log(name)
         var mthis = this;
+        let dropItems = mthis.deepClone(mthis.topicDatas)
+        mthis.topicDatas = [];
+        mthis.options = [];
+        mthis.charts = [];
         switch(name){
-          case 'PER' : mthis.dropPlace = '人名';break;
-          case 'LOC' : mthis.dropPlace = '地名';break;
-          case 'ORG' : mthis.dropPlace = '机构名';break;
-          case 'N' : mthis.dropPlace = '名词';break;
-          case 'V' : mthis.dropPlace = '动词';break;
-          case 'J' : mthis.dropPlace = '形容词';break;
-          case 'R' : mthis.dropPlace = '副词';break;
-          case 'P' : mthis.dropPlace = '代词';break;
-          case 'C' : mthis.dropPlace = '连词';break;
-          case 'keywords' : mthis.dropPlace = '关键词';break;
+          case 'PER' : mthis.dropPlace = '人名';mthis.option.series[0].name = '人名';break;
+          case 'LOC' : mthis.dropPlace = '地名';mthis.option.series[0].name = '地名';break;
+          case 'ORG' : mthis.dropPlace = '机构名';mthis.option.series[0].name = '机构名';break;
+          case 'N' : mthis.dropPlace = '名词'; mthis.option.series[0].name = '名词';break;
+          case 'V' : mthis.dropPlace = '动词';mthis.option.series[0].name = '动词';break;
+          case 'J' : mthis.dropPlace = '形容词'; mthis.option.series[0].name = '形容词';break;
+          case 'R' : mthis.dropPlace = '副词';mthis.option.series[0].name = '副词';break;
+          case 'P' : mthis.dropPlace = '代词';mthis.option.series[0].name = '代词';break;
+          case 'C' : mthis.dropPlace = '连词';mthis.option.series[0].name = '连词';break;
+          case 'keywords' : mthis.dropPlace = '关键词';mthis.option.series[0].name = '关键词';break;
           
-          case 'O' : mthis.dropPlace = '其他';break;
-          default: mthis.dropPlace = '关键词';break;
+          case 'O' : mthis.dropPlace = '其他';mthis.option.series[0].name = '其他';break;
+          default: mthis.dropPlace = '关键词';mthis.option.series[0].name = '关键词';break;
         }
-       
-        let type = '';
-        let ids = []
-        if(mthis.topicDatas.length==1){
-          type = 'group';
-          ids = mthis.topicDatas[0].ids
-        }else if(mthis.topicDatas.length>1){
-          type = 'single';
-          for(let i=0;i<mthis.topicDatas.length;i++){
-            ids.push(mthis.topicDatas[i].ids[0])
+        mthis.changeBar = '排序'
+        mthis.ifTopic = true
+        
+        if(mthis.myWordCharts.length>0){
+          for(let i=0;i<mthis.myWordCharts.length;i++){
+            mthis.myWordCharts[i].clear()
           }
         }
-        mthis.showContentAna(name,type,ids)
+        mthis.myWordCharts = [];
+        let leng = dropItems.length;
+        
+        for(let m=0;m<leng;m++){
+          mthis.getDropDatas(dropItems[m].ids,name)
+        }
+        
+        // let type = '';
+        // let ids = []
+        // if(mthis.topicDatas.length==1){
+        //   type = 'group';
+        //   ids = mthis.topicDatas[0].ids
+        // }else if(mthis.topicDatas.length>1){
+        //   type = 'single';
+        //   for(let i=0;i<mthis.topicDatas.length;i++){
+        //     ids.push(mthis.topicDatas[i].ids[0])
+        //   }
+        // }
+        // mthis.showContentAna(name,type,ids)
       },
       delTopData(index,flag){
         var mthis = this
@@ -1368,7 +1529,6 @@
               let len = document.getElementsByClassName('topItem').length;
               document.getElementById(index+'word').remove();
               mthis.wordResize(len)
-              
               mthis.ifResize = false
             },800)
         }else{
@@ -1396,8 +1556,8 @@
         this.orderCount = this.orderCount -1;
         div.style.order = this.orderCount ;
         divWord.style.order = this.orderCount ;
-       
-        $('#topicAnaly').animate({scrollTop:0},500)
+        
+        // $('#topicAnaly').animate({scrollTop:0},500)
         
         
         
@@ -1656,7 +1816,8 @@
                     title: item.title,      
                     id: item.id,
                     time: item.time,
-                    from: item.from,     
+                    from: item.from,
+                    check:false    
                   })
                 );
           mthis.$store.commit('setSeletedDocAttrList',selDocList)
@@ -1745,7 +1906,8 @@
                   title: item.title,      
                   id: item.id,
                   time: item.time,
-                  from: item.from,     
+                  from: item.from,
+                  check:false     
                 })
               );
        
@@ -1758,7 +1920,7 @@
             ids:ids
           }])
         mthis.$store.commit('setSeletedDocAttrList',selDocList)
-          console.log(6)
+          
         mthis.prevItems = mthis.deepClone(mthis.items)
         // let disselectDom = $('.contentDiv:not(.item-selected)')
         // disselectDom.addClass('item-selected')
@@ -1839,7 +2001,8 @@
                   title: item.title,      
                   id: item.id,
                   time: item.time,
-                  from: item.from,     
+                  from: item.from,
+                  check:false     
                 })
               );
         mthis.$store.commit('setSeletedDocAttrList',selDocList)
@@ -1868,7 +2031,8 @@
                   title: item.title,      
                   id: item.id,
                   time: item.time,
-                  from: item.from,     
+                  from: item.from,
+                  check:false     
                 })
               );
         mthis.$store.commit('setSeletedDocAttrList',selDocList)
@@ -2272,7 +2436,7 @@
           )
           }
         }else if(len==1){
-          mthis.topWidth = (100 / len).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
+          mthis.topWidth = (100 / 1.1).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 1.1) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
@@ -2287,6 +2451,41 @@
           )
           }
         }
+        
+      },
+      getDocAna(val,type,ids){
+        var mthis = this;
+        mthis.ifRenderAllTitle= false
+        mthis.changeBar = '排序'
+        mthis.ifTopic = true
+        mthis.option.series[0].name = '关键词'
+        if(mthis.myWordCharts.length>0){
+          for(let i=0;i<mthis.myWordCharts.length;i++){
+            mthis.myWordCharts[i].clear()
+          }
+        }
+        mthis.myWordCharts = [];
+        mthis.options = []
+        mthis.charts = []
+        return new Promise(resolve =>{
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-top/',{
+            ids:ids,
+            typeLabel:type,
+            word:val
+          }).then(response =>{
+            if(response.body.code ==0){
+              mthis.topicDatas = mthis.topicDatas.concat(response.body.data)
+              console.log(mthis.topicDatas)
+              let len = mthis.topicDatas.length;
+              mthis.wordResize(len)
+              
+            }
+          })
+        }).then(()=>{
+          
+          
+          
+        })
         
       },
       showContentAna(val,type,ids){
@@ -2317,7 +2516,8 @@
         }
         mthis.myWordCharts = [];
         
-          
+        mthis.options = [];
+        mthis.charts = []
         return new Promise(resolve =>{
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-top/',{
             ids:ids,
@@ -2469,7 +2669,8 @@
                     title: item.title,      
                     id: item.id,
                     time: item.time,
-                    from: item.from,     
+                    from: item.from,
+                    check:false     
                   })
                 );
           mthis.$store.commit('setSeletedDocAttrList',selDocList)

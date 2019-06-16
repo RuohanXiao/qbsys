@@ -436,6 +436,7 @@ var store = new Vuex.Store({
         heatMapBlur: 20,
         displayHeatMap: false,
         topicClassifIds: [],
+        topicSelIds:[],
         ifSinDocAna:0,
         ifMulDocAna:0,
         seletedDocAttrList: [
@@ -448,9 +449,17 @@ var store = new Vuex.Store({
         // 文档模块主题分析算子打开关闭标志
         topicClassifStatus: false,
         thematicLayerName:[],
-        openthematicLayer:false
+        openthematicLayer:false,
+        // 文档数据透视点击传给主题分析的IDS
+        docAnaSelIds:[]
     },
     mutations: {
+        setDocAnaSelIds(state,val){
+            state.docAnaSelIds = val
+        },
+        setTopicSelIds(state,val){
+            state.topicSelIds = val
+        },
         setSeletedDocAttrList(state, val) {
             state.seletedDocAttrList = val
         },

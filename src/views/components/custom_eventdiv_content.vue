@@ -330,6 +330,7 @@
         if(rightCilckArgu.buttonId === "onlylookit"){
           mthis.$store.commit('setContentTimeOnlySel',rightCilckArgu.nsIds);
         }
+      },
         /* mthis.staticsDatas = mthis.contentTimeOnlySel; */
         
         /* var buttonId = rightCilckArgu.buttonId;
@@ -350,7 +351,7 @@
         } else if(buttonId === 'delete'){
           // alert('delete')
         }
-      },
+      }, */
       clickLeftStatics(staticsClick){
         var mthis = this;
         var param = {
@@ -358,7 +359,8 @@
           ids:staticsClick
         };
         // // // // console.log(staticsClick)
-        mthis.$store.commit('setContentTimeCondition',param); */
+        mthis.$store.commit('setContentTimeCondition',param);
+        mthis.$store.commit('setDocAnaSelIds',param.ids)
       },
       hightLight(id) {},
       changTab(a) {
