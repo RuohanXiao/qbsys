@@ -175,10 +175,10 @@ top: 232px;
 </style>
 
 <template>
-    <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv' tabindex="1" @keydown="keyD" style="outline:none;">
+    <!-- <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv' tabindex="1" @keydown="keyD" style="outline:none;">
         <imgItemOpera :changeButton='changeButtonParam' @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
         <div id='mapDIV'>
-            <div id='mainMap' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
+            <div id='mainMap' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" > 
                 <transition name="prompt"><div v-if="promptflag" class='promptmessage'>{{promptMessage}}</div></transition>
                 <div class='heatMapFormDiv' v-if='heatMapVisible' >
                     <div class='heatSettingName'>热力设置</div>
@@ -192,6 +192,23 @@ top: 232px;
             </div>
         </div>
         <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
+    </div> -->
+    <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv' tabindex="1" @keydown="keyD" style="outline:none;">
+        <imgItemOpera :changeButton='changeButtonParam' @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
+        <div id='mapDIV'>
+            <div id='mainMap' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
+                <transition name="prompt"><div v-if="promptflag" class='promptmessage'>{{promptMessage}}</div></transition>
+                <div class='heatMapFormDiv' v-if='legend' >
+                    <div class='heatSettingName'>图例</div>
+                    <img :src="url" v-for="url in legendURL"/>
+                </div>
+                <operatorHub :style="{height:mapHeight}" :operatorConfig="operatorConfig"></operatorHub>
+            </div>
+            
+            <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
+        </div>
+        <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
+        <thematicLayer @name="importThematicLayer" @visable="setVisabale" @selectedThematics="selectThematics" v-if="openThematicModal"></thematicLayer>
     </div>
 </template>
 
@@ -245,7 +262,9 @@ import '../../dist/assets/styles/geo/mapInit.css'
 import imgSlider from "./custom_imgSlider"
 import routeLegend from './custom_routeLegend'
 import imgItemOpera from './custom_mapOperaButtons'
-import worksetModal from "./custom_workSet_modal.vue";
+import worksetModal from "./custom_workSet_modal.vue"
+import operatorHub from "./custom_operatorHub.vue"
+import thematicLayer from "./custom_thematicLayer.vue"
 
 
 
@@ -365,7 +384,74 @@ export default {
                 'paramAttrs':['id','OrgName']
             }
         },
-        qbstyles:{}
+        qbstyles:{},
+        operatorConfig:[
+                {
+                    name:'热力分析',
+                    id:'heatMap',
+                    iconName:'icon-kongjianfenxi',
+                    openFunction:'openHeat',
+                    closeFunction:'closeHeat',
+                    operatorSurface:[
+                      {
+                        name:'半径大小',
+                        id:'heatRadius',
+                        type:'Slider',
+                        attrName:'radius', 
+                        excuteFunction:'setHeatMapRadius',
+                        value:{
+                          extent:[1,50],
+                          defaultValue:20
+                        }
+                      },{
+                        name:'热力模糊度',
+                        id:'heatBlur',
+                        type:'Slider',
+                        attrName:'blur',
+                        excuteFunction:'setHeatMapBlur',
+                        value:{
+                          extent:[1,50],
+                          defaultValue:20
+                        }
+                      }
+                    ]
+                },
+                {
+                name:'图层处理',
+                id:'layerHandle',
+                iconName:'icon-kongjianfenxi',
+                disabled:true,
+                /* openFunction:'openThematicLayer',
+                closeFunction:'closeThematicLayer',
+                operatorSurface:[
+                      {
+                        name:'选择专题图层',
+                        id:'selectThematiclayer',
+                        type:'Select',
+                        attrName:'thematiclayerName', 
+                        excuteFunction:'selectThematiclayer',
+                        value:{
+                          options:[
+                              {
+                                  name:'中东个别国家什叶派与逊尼派分布',
+                                  value:'ThematicLayer:shiahandsunni'
+                              }
+                          ]
+                        }
+                      }
+                    ] */
+                },
+                {
+                name:'轨迹分析',
+                id:'locusAnalyse',
+                iconName:'icon-kongjianfenxi',
+                disabled:true
+                }
+        ],
+        legend:false,
+        legendURL:[],
+        openThematicModal:false,
+        hasTheamatic:false
                 
         } 
     },
@@ -448,7 +534,71 @@ export default {
                 mthis.drawExplore(mapOperation)
             } else if(mapOperationId == 'createWorkSpace_HASD'){
                 mthis.openWorkset();
+            } else if(mapOperationId == 'leadingInThematic_AT'){
+                mthis.openThematic();
+            } else if(mapOperationId == 'closeThematic_OT'){
+                mthis.closeThematic();
             }
+        },
+        closeThematic(){
+            var mthis = this;
+            var layers = mthis.routeMap.map.getLayers().getArray();
+            for(let i = 0; i < layers.length; i++){
+                var layer = layers[i];
+                if(layer.getProperties().id !== undefined && layer.getProperties().id.split('_')[0] === 'ThematicLayer'){
+                    mthis.routeMap.map.removeLayer(layer);
+                }
+            }
+            /* var layer = mthis.getLayerById('ThematicLayer');
+            mthis.routeMap.map.removeLayer(layer);
+            mthis.legendURL = [];
+            mthis.legend = false; */
+        },
+        openThematic(){
+            var mthis = this;
+            mthis.openThematicModal = true;
+        },
+        setVisabale(){
+            var mthis = this;
+            mthis.openThematicModal = false;
+        },
+        selectThematics(selectedThematics){
+            var mthis = this;
+            for(let i = 0; i < selectedThematics.length; i++){
+                let thematic = selectedThematics[i];
+                let extent = thematic.extent;
+                let layerId = 'ThematicLayer_' + thematic.thematicName;
+                if(mthis.getLayerById(layerId) === undefined){
+                    let legendurl = 'http://10.60.1.142:8082/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=' + thematic.thematicName;
+                    let wmsLayer = new ImageLayer({
+                        visible: true,
+                        id:layerId,
+                        source: new ImageWMS({
+                            ratio: 1,
+                            url: 'http://10.60.1.142:8082/geoserver/ThematicLayer/wms?',
+                            params:{
+                                'FORMAT': 'image/png',
+                                'VERSION': '1.1.1',
+                                'LAYERS': thematic.thematicName,
+                            }
+                        })
+                    });
+                    var layersArray = mthis.routeMap.map.getLayers();
+                    layersArray.insertAt(2,wmsLayer)
+                    /* mthis.routeMap.addlayer(wmsLayer); */
+                    mthis.legendURL.push(legendurl);
+                    mthis.hasTheamatic = true;
+                    mthis.isOperateButtonsHLOrDim()
+                    /* mthis.routeMap.map.getView().fit(extent, mthis.routeMap.map.getSize()); */
+                    mthis.routeMap.map.getView().animate({
+                        center: getCenter(extent),
+                        duration: 1000
+                    });
+                    
+                    
+                }
+            }
+            mthis.legend = true;
         },
         openWorkset() {
             var mthis = this;
@@ -1037,26 +1187,43 @@ export default {
         },
         pointerMoveselectfilterFun(feature,layer){
             var mthis = this;
-            if(layer.get('id') === "eventsPointsLayer"){
-                if(feature.getStyle().getImage().getFill().getColor() === mthis.lifePointColor){
+            if(layer.get('id') === "QBLayer"){
+                if(feature.get('selectedNum') > 0){
                     return true
                 } else {
                     return false
                 }
             } else {
-                if(feature.getStyle().getImage().getOpacity() === 1){
-                    return true
-                } else {
-                    return false
-                }
+                return false
             }
         },
         selectfilterStyleFun(feature,resolution){
-            var iconStyle = new Style({
-                image: new Icon(({
-                    src: require('../../dist/assets/images/geo/Organization_Selected.png')
-                }))
-            });
+            var mthis = this;
+            var iconStyle = null;
+            var type = feature.getId().split('&')[0];
+            if(type === 'org'){
+                iconStyle = new Style({
+                    image: new Icon(({
+                        src: require('../../dist/assets/images/geo/Organization_Selected.png')
+                    }))
+                });
+            } else {
+                iconStyle = new Style({
+                    image : new CircleStyle({
+                        radius : 5,
+                        fill : new Fill({
+                            color : mthis.lifePointColor //'#33ffff'
+                        })
+                    }),
+                    stroke: new Stroke({
+                        width: 5,
+                        color: mthis.lifePointColor
+                    }),
+                    fill: new Fill({
+                        color: mthis.lifePointColor
+                    })
+                })
+            }
             return iconStyle
         },
         clickselectfilterFun(feature,layer){
@@ -1195,7 +1362,7 @@ export default {
                     id:'HLAreaLayer'
                 });
                 
-                var QBlayer = new VectorLayer({  //事件图层
+                var QBlayer = new VectorLayer({  //
                     source: new VectorSource({
                     }),
                     id:'QBLayer',
@@ -1217,6 +1384,180 @@ export default {
                 mthis.qbMap.addLayer(QBlayer);
                 mthis.qbMap.addLayer(heatMapLayer);
                 mthis.qbMap.addRightClickInLayer(QBlayer,mthis.rightClickFun);  //添加HLArealayers上的右键点击事件
+
+                mthis.selectPointerMove = new Select({
+                    condition: pointerMove,
+                    layers:[QBlayer],
+                    filter:mthis.pointerMoveselectfilterFun,
+                    style:mthis.selectfilterStyleFun   
+                });
+                mthis.selectClick = new Select({
+                    condition: click,
+                    layers:[QBlayer,HLArealayer],
+                    filter:mthis.clickselectfilterFun,
+                    style:new Style({
+                        fill: new Fill({ //矢量图层填充颜色，以及透明度
+                            color: 'rgba(51, 255, 255, 0.0)'
+                        }),
+                        stroke: new Stroke({ //边界样式
+                            color: 'rgba(51, 255, 255, 0)',
+                            width: 0
+                        })
+                    })
+                });
+                mthis.qbMap.addInteraction(mthis.selectPointerMove);
+                mthis.qbMap.addInteraction(mthis.selectClick);
+                mthis.selectPointerMove.on('select', function(e) {
+                    debugger
+                    var selectFeatures = e.selected
+                    var deselectFeatures = e.deselected
+                    if(deselectFeatures.length > 0){
+                        for(let i = 0; i < deselectFeatures.length; i++){
+                            if(deselectFeatures[i].getId().split('&')[0] === 'event'){
+                                if(mthis.pointMoveListenerKey !== null && mthis.pointMoveListenerKey.type !== undefined && mthis.pointMoveListenerKey.type === "postcompose"){
+                                    unByKey(mthis.pointMoveListenerKey);
+                                }
+                                mthis.removeOverlays('pointMoveOverlay_Event');
+                            } else {
+                                setTimeout(function(){
+                                    mthis.removeOverlays('pointMoveOverlay_Org');
+                                },100)
+                            }
+                        }
+                    }
+                    if(selectFeatures.length > 0){
+                        for(let i = 0; i < selectFeatures.length; i++){
+                            if(selectFeatures[i].getId().split('&')[0] === 'event'){
+                                //mthis.pointSelectedAnimation(selectFeatures[i],'pointMove');
+                                //鼠标悬浮时的信息框
+                                mthis.setPointMoveOverlay_Event(selectFeatures[i]);
+                            } else {
+                                setTimeout(function(){
+                                    mthis.setPointMoveOverlay_Org(selectFeatures[i]);
+                                },100)
+                            }
+                        }
+                    }
+                });
+                mthis.selectClick.on('select', function(e) {
+                    mthis.deleteSelectClickFeatures();
+                    var selectFeatures = e.selected;
+                    var deselectFeatures = e.deselected;
+                    var num = 0;
+                    
+                    if(deselectFeatures.length > 0){
+                        var paramFeatures = [];
+                        for(let i = 0; i < selectFeatures.length; i++){
+                            let feature = selectFeatures[i];
+                            var id = feature.getId();
+                            let index = id.indexOf('&');
+                            if(index != -1){
+                                paramFeatures.push(feature);
+                            }
+                        }
+                        if(paramFeatures.length > 0){
+                            paramFeatures.forEach(function(feature){
+                                /* mthis.setFeatureStatus(feature,'die'); */
+                                feature.set('selectedNum',-1,false);
+                                mthis.geometrySelectedEventIds = [];
+                            })
+                        }
+                    }
+                    if(selectFeatures.length > 0){
+                        //mthis.deleteSelectClickFeatures();
+                        var HLIds = mthis.HLIds;
+                        var paramIds = [];
+                        for(let i = 0; i < selectFeatures.length; i++){
+                            var id = selectFeatures[i].getId();
+                            let index = id.indexOf('&');
+                            if(index != -1){
+                                //let oId = id.split('&')[1];
+                                paramIds.push(id);
+                            }
+                        }
+                        if(paramIds.length > 0){
+                            mthis.geometrySelectedEventIds = [];
+                            var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
+                            if(features.length > 0){
+                                features.forEach(function(item) {
+                                    var isIN = false;
+                                    for(var i = 0; i < paramIds.length; i++){
+                                        var featureId = paramIds[i];
+                                        var itemId = item.getId();
+                                        if (itemId === featureId) {
+                                            isIN = true;
+                                            break;
+                                        }
+                                    }
+                                    if(isIN){
+                                        item.get('Params').forEach(function(Iitem){
+                                            mthis.$set(mthis.geometrySelectedEventIds,num,Iitem.id);
+                                            num++;
+                                        })
+                                        var selectedNum = item.get('Params').length;
+                                        item.set('selectedNum',selectedNum,false)
+                                        /* mthis.setFeatureStatus(item,'life'); */
+                                    } else{
+                                        item.set('selectedNum',-1,false)
+                                        /* mthis.setFeatureStatus(item,'die'); */
+                                    }
+                                });
+                            }
+                            /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+                                var layerId = mthis.AllLayerList_conf[key].layerId;
+                                var features = mthis.getLayerById(layerId).getSource().getFeatures();
+                                if(features.length > 0){
+                                    features.forEach(function(item) {
+                                        var isIN = false;
+                                        for(var i = 0; i < paramIds.length; i++){
+                                            var featureId = paramIds[i];
+                                            var itemId = item.getId();
+                                            if (itemId === featureId) {
+                                                isIN = true;
+                                                break;
+                                            }
+                                        }
+                                        if(isIN){
+                                            item.get('Params').forEach(function(Iitem){
+                                                mthis.$set(mthis.geometrySelectedEventIds,num,Iitem.id);
+                                                num++;
+                                            })
+                                            mthis.setFeatureStatus(item,'life');
+                                        } else{
+                                            mthis.setFeatureStatus(item,'die');
+                                        }
+                                    });
+                                }
+                            }) */
+                        } else {
+                            for(let i = 0; i < selectFeatures.length; i++){
+                                var feature = selectFeatures[i];
+                                var status = feature.get("status");
+                                var id = feature.getId();
+                                var index = util.itemIndexInArr(id,mthis.AreaIds);
+                                if(status === undefined){
+                                    feature.setProperties({"status":"die"}, false)
+                                    mthis.setAreaStyle(feature,'die');
+                                    if(index !== -1){
+                                        mthis.AreaIds.splice(index,1);
+                                    }
+                                } else if(status === "life"){
+                                    feature.setProperties({"status":"die"}, false)
+                                    mthis.setAreaStyle(feature,'die');
+                                    if(index !== -1){
+                                        mthis.AreaIds.splice(index,1);
+                                    }
+                                } else{
+                                    feature.setProperties({"status":"life"}, false)
+                                    mthis.setAreaStyle(feature,'life');
+                                    if(index === -1){
+                                        mthis.AreaIds.push(id);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
             }  
         },
         setAreaStyle(feature,status){
@@ -1740,6 +2081,7 @@ export default {
                     }
                     mthis.cancelSelectQB();
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer');
+                    mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
                     mthis.hide();
                 },function(error){
                     alert("探索失败!");
@@ -2335,6 +2677,7 @@ export default {
         },
         weightFunction(feature){
             var mthis = this;
+            debugger
             var we = feature.get('selectedNum') / mthis.maxEventsNum;
             var weight = we>0.5?we:0.5;
             return weight
@@ -2917,15 +3260,16 @@ export default {
                         var type = featureId.split('&')[0];
                         var num = feature.get("Params").length
                         if(type === 'event'){
-                            addFeatures_Event.push(feature);
+                            //addFeatures_Event.push(feature);
                             eventNum += num;
                         } else if(type === 'org'){
-                            addFeatures_Org.push(feature)
+                            //addFeatures_Org.push(feature)
                             orgNum += num;
                         }
                     }
-                    mthis.addFeaturesToLayer(addFeatures_Org,'org');
-                    mthis.addFeaturesToLayer(addFeatures_Event,'event')
+                    /* mthis.addFeaturesToLayer(addFeatures_Org,'org');
+                    mthis.addFeaturesToLayer(addFeatures_Event,'event') */
+                    mthis.qbMap.addFeatures(addfeatures,'QBLayer')
                     //if(orgNum > 0){
                         mes.push('组织机构：' + orgNum + ' 处');
                     //}
@@ -2968,6 +3312,10 @@ export default {
                 {
                     'id_suf':'HASD',
                     'isOpen':true
+                },
+                {
+                    'id_suf':'OT',
+                    'isOpen':true
                 }
             ]
             
@@ -2976,10 +3324,26 @@ export default {
     },
     computed:mapState ([
       'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
-      'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte'
+      'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte',
+      'heatMapRadius','heatMapBlur','displayHeatMap'
     ]),
     
     watch:{
+        displayHeatMap(){
+            var mthis = this;
+            var heatMapLayer = mthis.getLayerById('heatmapLayer');
+            heatMapLayer.setVisible(mthis.displayHeatMap);    
+        },
+        heatMapRadius(){
+            var mthis = this;
+            var radius = mthis.heatMapRadius
+            mthis.getLayerById('heatmapLayer').setRadius(radius)
+        },
+        heatMapBlur(){
+            var mthis = this;
+            var blur = mthis.heatMapBlur
+            mthis.getLayerById('heatmapLayer').setBlur(blur)
+        },
         geoPromte:function(){
             this.Message(this.geoPromte)
         },
@@ -3088,6 +3452,7 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
+            debugger
             var data = mthis.$store.state.netToGeoData;
             var ids = [];
             var keys = Object.keys(data);
@@ -3116,8 +3481,8 @@ export default {
         geoStaticsOnlyLookSelectedIds(){
             var mthis = this;
             debugger
-            var ids = [];
-            if(mthis.geoStaticsOnlyLookSelectedIds.length > 0){
+            var ids = mthis.geoStaticsOnlyLookSelectedIds;
+            /* if(mthis.geoStaticsOnlyLookSelectedIds.length > 0){
                 mthis.geoStaticsOnlyLookSelectedIds.forEach(function(item){
                     if(item.indexOf('&') === -1){
                         var id = 'org&'+item;
@@ -3126,14 +3491,16 @@ export default {
                         ids.push(item)
                     }
                 })
-            }
-            Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+            } */
+            /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
                 var layerId = mthis.AllLayerList_conf[key].layerId;
                 var features = mthis.getLayerById(layerId).getSource().getFeatures();
                 for(let i = 0; i < features.length; i++){
                     mthis.setFeatureStatus(features[i],'die');
                 }
-            })
+            }) */
+            var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
+            GSF.setAllFeaturesStatus(ids,ids,features,mthis.QBIdsToFeatureIdList);
             mthis.HLIds = mthis.geoStaticsOnlyLookSelectedIds;
             mthis.SelectedIds = mthis.geoStaticsOnlyLookSelectedIds;
             var selectedEventsParam = mthis.geoStaticsOnlyLookSelectedIds
@@ -3176,6 +3543,7 @@ export default {
         },
         timeSelectedEventIds:function(){
             var mthis = this;
+            debugger
             mthis.HLIds = mthis.timeSelectedEventIds
             var selectedEventsParam = {
                 type:'GeoTime',
@@ -3185,15 +3553,18 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
+            debugger
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
             mthis.SelectedIds = mthis.timeSelectedEventIdsOnly;
-            Object.keys(mthis.AllLayerList_conf).forEach(function(key){
+            var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
+            GSF.setAllFeaturesStatus(mthis.SelectedIds,mthis.SelectedIds,features,mthis.QBIdsToFeatureIdList)
+            /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
                 var layerId = mthis.AllLayerList_conf[key].layerId;
                 var features = mthis.getLayerById(layerId).getSource().getFeatures();
                 for(let i = 0; i < features.length; i++){
                     mthis.setFeatureStatus(features[i],'die');
                 }
-            })
+            }) */
             var selectedEventsParam = mthis.timeSelectedEventIdsOnly
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
@@ -3208,13 +3579,14 @@ export default {
         geoTimeCondition:{
             handler(newValue) {
                 var mthis = this;
+                debugger
                 var type = mthis.geoTimeCondition.type;
                 var timeSelectedIds = mthis.geoTimeCondition.eventIds;
                 if(type === 'notAnalysis'){
                     mthis.timeSelectedEventIds = timeSelectedIds;
                     mthis.halfSelectedIds = mthis.HLIds;
-                    var ids = [];
-                    if(mthis.timeSelectedEventIds.length > 0){
+                    //var ids = mthis.timeSelectedEventIds;
+                    /* if(mthis.timeSelectedEventIds.length > 0){
                         mthis.timeSelectedEventIds.forEach(function(item){
                             if(item.indexOf('&') === -1){
                                 var id = 'org&'+item;
@@ -3223,10 +3595,11 @@ export default {
                                 ids.push(item)
                             }
                         })
-                    }
-                    mthis.timeSelectedEventIds = ids;
-                    mthis.$store.commit('setGeoStaticsHLItemIds',ids);
-                    if(mthis.halfSelectedIds.length > 0){
+                    } */
+                    //mthis.timeSelectedEventIds = ids;
+                    mthis.$store.commit('setGeoStaticsHLItemIds',timeSelectedIds);
+                    //GSF.setFeaturesHalfOrHL()
+                    /* if(mthis.halfSelectedIds.length > 0){
                         mthis.halfSelectedIds.forEach(function(paramid){
                             var layerId = mthis.getLayerIdByFeatureIdOrParamId(paramid);
                             var OId = mthis.getOIdFromId(paramid);
@@ -3234,7 +3607,7 @@ export default {
                             var feature = mthis.getLayerById(layerId).getSource().getFeatureById(featureId);
                             mthis.setFeatureStatus(feature,'halflife')
                         })
-                    }
+                    } */
                 } else if(type === 'analysis'){
                     mthis.timeSelectedEventIdsOnly = timeSelectedIds;
                 } else if(type === 'cancelBox'){
@@ -3347,10 +3720,12 @@ export default {
         },
     },
     components: {
-      imgSlider,
-      routeLegend,
-      imgItemOpera,
-      worksetModal
+        imgSlider,
+        routeLegend,
+        imgItemOpera,
+        worksetModal,
+        operatorHub,
+        thematicLayer
     }
 }
 </script>

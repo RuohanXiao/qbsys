@@ -167,6 +167,7 @@
       },
       geo_onlyselected_param: function() {
         var mthis = this;
+        debugger
         var OrgIds = [];
         var EventIds = [];
         mthis.geo_onlyselected_param.forEach(function(id) {
@@ -372,9 +373,9 @@
       clickRightMenu(rightCilckArgu) {
         var mthis = this;
         var buttonId = rightCilckArgu.buttonId;
-        var oids = rightCilckArgu.nsIds;
-        var ids = []
-        for (let i = 0; i < oids.length; i++) {
+        //var oids = rightCilckArgu.nsIds;
+        var ids = rightCilckArgu.nsIds;
+        /* for (let i = 0; i < oids.length; i++) {
           let id = oids[i];
           let index = id.indexOf('&');
           if (index === -1) {
@@ -382,7 +383,7 @@
           } else {
             ids.push(id)
           }
-        }
+        } */
         if (buttonId === 'onlylookit') {
           mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', ids)
         } else if (buttonId === 'delete') {

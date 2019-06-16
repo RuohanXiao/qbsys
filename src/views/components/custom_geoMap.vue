@@ -3754,13 +3754,7 @@ export default {
         displayHeatMap(){
             var mthis = this;
              var heatMapLayer = mthis.getLayerById('heatmapLayer');
-            heatMapLayer.setVisible(mthis.displayHeatMap);
-            /* if(mthis.displayHeatMap){
-                heatMapLayer.setVisible(true);
-            } else {
-                heatMapLayer.setVisible(false);
-            } */
-            
+            heatMapLayer.setVisible(mthis.displayHeatMap);    
         },
         heatMapRadius(){
             var mthis = this;
