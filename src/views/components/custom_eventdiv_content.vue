@@ -124,8 +124,18 @@
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['selectContentNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType']),
+    computed: mapState(['selectContentNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType','contentTimeCondition']),
     watch: {
+      contentTimeCondition:{
+        handler(newValue) {
+                var mthis = this;
+                debugger
+                var ids = mthis.contentTimeCondition.ids;
+                mthis.hlids = ids;
+    　　　　 },
+    　　　　 deep: true,
+            immediate: true
+      },
       // selectionIdByType: function() {
       //   // // // // console.log(this.selectionIdByType)
       //   var mthis = this;
