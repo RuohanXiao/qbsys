@@ -836,7 +836,7 @@
         geo_onlyselected_param:function(){
           
           var mthis = this
-         
+         debugger
           if(this.geo_onlyselected_param.length>0){
              mthis.geo_only_eventIds = [];
 

@@ -1707,16 +1707,16 @@ export default {
             var promptType = ''
             var num = 0;
             if(type === 'Event'){
-                url = 'http://10.60.1.141:5100/exploreEvent/'
-                //url = 'http://localhost:5000/exploreEvent/'
+                //url = 'http://10.60.1.141:5100/exploreEvent/'
+                url = 'http://localhost:5000/exploreEvent/'
                 promptType = '事件数';
             } else if(type === 'Org'){
-                url = 'http://10.60.1.141:5100/exploreOrg/'
-                //url = 'http://localhost:5000/exploreOrg/'
+                //url = 'http://10.60.1.141:5100/exploreOrg/'
+                url = 'http://localhost:5000/exploreOrg/'
                 promptType = '组织机构数';
             } else if(type === 'GeoTar'){
-                url = 'http://10.60.1.141:5100/exploreGeoTar/'
-                //url = 'http://localhost:5000/exploreGeoTar/'
+                //url = 'http://10.60.1.141:5100/exploreGeoTar/'
+                url = 'http://localhost:5000/exploreGeoTar/'
                 promptType = '地理目标数';
             }
             
@@ -3115,6 +3115,7 @@ export default {
         },
         geoStaticsOnlyLookSelectedIds(){
             var mthis = this;
+            debugger
             var ids = [];
             if(mthis.geoStaticsOnlyLookSelectedIds.length > 0){
                 mthis.geoStaticsOnlyLookSelectedIds.forEach(function(item){
