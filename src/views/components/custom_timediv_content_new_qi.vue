@@ -183,13 +183,14 @@
         var mthis = this
         let sendIds = []
         let docIds = util.getStorage("docIds",mthis.selIdsArr)
-        // console.log(mthis.selIdsArr)
-        // console.log(docIds)
+        console.log(mthis.selIdsArr)
+        console.log(docIds)
         for(var i in docIds){
               for(var j of docIds[i]){
                 sendIds.push(j)
               }
             }
+        console.log(sendIds)
         mthis.sendDocIds.type = 'sel'
         mthis.sendDocIds.ids = sendIds
         mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
