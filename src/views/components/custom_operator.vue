@@ -13,6 +13,7 @@
 <template>
     <div class="operatorDiv">
         <Row v-for="item in operatorData" type="flex" justify="center" id="asssss">
+            <groupOperator v-if="item.type === 'group'" :Params='item' @param="setParam"></groupOperator>
             <sliderOperator v-if="item.type === 'Slider'" :sliderParams='item' @param="setParam"></sliderOperator>
             <docBar v-if="item.type === 'docBar'" :Params='item' @param="setParam"></docBar>
             <selectOperator v-if="item.type === 'Select'" :Params='item' @param="setParam"></selectOperator>
@@ -21,7 +22,7 @@
     </div>
 </template>
 <script>
-
+import groupOperator from "./operator/custom_group_operator.vue"
 import sliderOperator from "./operator/custom_slider_operator.vue"
 import docBar from "./operator/custom_docBar_operator.vue"
 import selectOperator from "./operator/custom_select_operator.vue"
@@ -110,7 +111,9 @@ import topicClassifi from "./operator/custom_topicClassifi.vue"
           sliderOperator,
           docBar,
           selectOperator,
-          topicClassifi
+          topicClassifi,
+          groupOperator,
+          selectOperator
         }
     }
 </script>

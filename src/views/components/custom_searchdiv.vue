@@ -528,6 +528,10 @@
       },
       searchInfoNet(query) {
         var mthis = this;
+        // console.log('============')
+        // console.log(JSON.parse(sessionStorage.getItem('netSearchTemp')).map(item=>{
+
+        // }))
         mthis.timestamp = new Date().getTime()
         mthis.loading1 = true;
         mthis.optionsTemp = new Array()
