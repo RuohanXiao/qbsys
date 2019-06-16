@@ -410,7 +410,7 @@ var store = new Vuex.Store({
             title: ''
         },
         // 文档时间轴只看它时显示标志
-        contentTimeOnlySel: false,
+        contentTimeOnlySel: [],
         // 快捷键监听参数
         netKeyboards: [],
         geoKeyboards: [],
@@ -436,6 +436,8 @@ var store = new Vuex.Store({
         heatMapBlur: 20,
         displayHeatMap: false,
         topicClassifIds: [],
+        ifSinDocAna:0,
+        ifMulDocAna:0,
         seletedDocAttrList: [
             // {
             // title:'Venezuelan oil chief blames fire on opposition',
@@ -733,6 +735,12 @@ var store = new Vuex.Store({
             
             state.topicClassifIds.push(id);
         },
+        exSinDocAna(state){
+            state.ifSinDocAna ++;
+        },
+        exMulDocAna(state){
+            state.ifMulDocAna ++;
+        },
         removeDocIdsToList(state, id) {
             
             var index = util.itemIndexInArr(id, state.topicClassifIds);
@@ -829,10 +837,12 @@ var store = new Vuex.Store({
         },
         singleDocAnaly(context) {
             //   topicClassifIds
-            alert('单个文档分析');
+            // alert('单个文档分析');
+            context.commit('exSinDocAna',true)
         },
         multiDocAnaly(context) {
-            alert('合并分析');
+            
+            context.commit('exMulDocAna',true)
         },
         opentopicClassif(context) {
             context.commit('changetopicClassifStatus', true);
