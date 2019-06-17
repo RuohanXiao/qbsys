@@ -2495,7 +2495,7 @@
             // },
             gravity: {
               from: "node",
-              to: "nearestLockedNode",
+              to: "node",
               strength: 0.05
             },
             twoRingRadialLayout: true,
@@ -2626,6 +2626,8 @@
                   }
                 }]
                 // node.items = [{text:"Locked", px:0.5, py:-0.5}]
+              } else if (node.autoLock) {
+
               } else {
                 node.items = [];
               }
@@ -3720,7 +3722,7 @@
           allNodIds.push(netchartnodes[i].id);
           let no = mthis.netchart.getNode(netchartnodes[i].id)
           no.hightLight = false;
-          no.opacity = 0.5;
+          no.opacity = 0.35;
         }
         if (mthis.netStaticsSelectedIds.length > 0) {
           mthis.selectLineColor = '#009999'
@@ -3845,7 +3847,7 @@
           allNodIds.push(netchartnodes[i].id);
           let no = mthis.netchart.getNode(netchartnodes[i].id)
           no.hightLight = false;
-          no.opacity = 0.5;
+          no.opacity = 0.35;
           // no.draggable = false;
         }
         if (mthis.netTimeCondition != null && mthis.netTimeCondition.length > 0) {
