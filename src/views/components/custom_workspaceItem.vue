@@ -4,7 +4,7 @@
       <Col :sm="18" align="start" :style="{paddingLeft:'15px'}">
       <div class="cardDiv">
         <div :style="{display: 'flex'}">
-          <span class='titleFront'>{{item.name}}&nbsp;({{item.nodeIds.length}})</span>
+          <span class='titleFront'>{{item.name}}&nbsp;({{item.nodeIds[0].ids.length}})</span>
           <Icon v-if="item.type === 'human'" class="icon iconfont icon-ren padd8 color515" size="20" />
           <Icon v-if="item.type === 'organization'" class="icon iconfont icon-zuzhi padd8 color515" size="20" />
           <Icon v-if="item.type === 'weapon'" class="icon iconfont icon-shouqiang padd8 color515" size="20" />

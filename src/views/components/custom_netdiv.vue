@@ -2984,7 +2984,8 @@
                   return item.id
                 })
                 mthis.linkTemp = new Object();
-                mthis.$store.commit('setGroupFlag', false)
+                
+                mthis.$store.commit('setNetSwitch',++mthis.$store.state.netSwitch)
                 mthis.$store.commit("setSelectNetNodes", [{
                   ids: mthis.selectionId
                 }]);
