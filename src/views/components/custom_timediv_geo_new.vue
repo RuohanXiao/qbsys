@@ -211,7 +211,7 @@
                 mthis.boxSelEventIds.eventIds.push("event&" + j)
               }
             }
-            // console.log(eventIds)
+            console.log(this.toGeoEventIds)
             mthis.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
             // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
             //         "selectedIds":this.geo_only_eventIds,

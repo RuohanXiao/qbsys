@@ -27,7 +27,7 @@
           </div>
         </Tooltip>
         <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="openCreateGroupModal">
+          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="openCreateGroupModal">
             <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
             <p class="img-content">创建集合</p>
           </div>
@@ -671,7 +671,7 @@
             {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
             {name:'pujing',num:20},{name:'pujing',num:20},]}
         ],
-        changeBar:'热词排序',
+        changeBar:'排序',
         orderCount:0,
         ifhasDoc:false,
         ifhasSel:false,
@@ -846,6 +846,7 @@
                     iconName:'icon-kongjianfenxi',
                     openFunction:'opentopicClassif',
                     closeFunction:'closetopicClassif',
+                    disabled:true,
                     operatorSurface:[
                       {
                         operatorType:'topicClassification',
@@ -952,80 +953,60 @@
       
       ifSinDocAna:function(){
         var mthis = this
+        let name = mthis.dropPlace;
+        let val = '';
+        switch(name){
+          case '人名' : val = 'PER';break;
+          case '地名' : val = 'PER';break;
+          case '机构名' : val='ORG'; break;
+          case '名词' : val='N';break;
+          case '动词' : val = 'V';break;
+          case '形容词' : val = 'J';break;
+          case '副词' : val = 'R';break;
+          case '代词' : val = 'P';break;
+          case '连词' : val = 'C';break;
+          case '关键词' : val = 'keywords';break;
+          
+          case '其他' : val = 'O';break;
+          default: val = 'keywords';break;
+        }
         if(this.ifSinDocAna){
+          let ids = mthis.$store.state.topicSelIds
+          mthis.$store.commit('setTopicSelIds',[])
+          mthis.getDocAna(val,'single',ids);
           
-          // mthis.getDocAna('keywords','single',mthis.$store.state.topicSelIds)
           
-          mthis.dropPlace = '关键词'
-          mthis.option.series[0].name = '关键词'
-          let dropItems = mthis.deepClone(mthis.topicDatas)
-          let useIds = []
-          let topicSelId = mthis.$store.state.topicSelIds
-          for(let m=0;m<topicSelId.length;m++){
-            let pId = new Array(1)
-            pId[0] = topicSelId[m]
-            useIds.push(pId)
-          }
-          
-          for(let j=0;j<dropItems.length;j++){
-            useIds.push(dropItems[j].ids)
-          }
-          mthis.$store.state.topicSelIds = []
-          mthis.topicDatas = [];
-          mthis.options = [];
-          mthis.charts = [];
-          
-          mthis.changeBar = '排序'
-          mthis.ifTopic = true
-          
-          if(mthis.myWordCharts.length>0){
-            for(let i=0;i<mthis.myWordCharts.length;i++){
-              mthis.myWordCharts[i].clear()
-            }
-          }
-          mthis.myWordCharts = [];
-          let leng = useIds.length;
-          console.log(useIds.length)
-          for(let m=0;m<leng;m++){
-            mthis.getDropDatas(useIds[m],'keywords')
-          }
-          
-          }
         
+        }
       },
       ifMulDocAna:function(){
         var mthis = this
         if(this.ifMulDocAna){
-          // mthis.getDocAna('keywords','group',mthis.$store.state.topicSelIds)
-         mthis.dropPlace = '关键词'
-          mthis.option.series[0].name = '关键词'
-          let dropItems = mthis.deepClone(mthis.topicDatas)
-          let useIds = []
-          
-          useIds.push(mthis.$store.state.topicSelIds)
-          
-          for(let j=0;j<dropItems.length;j++){
-            useIds.push(dropItems[j].ids)
+          let name = mthis.dropPlace;
+          let val = '';
+          switch(name){
+            case '人名' : val = 'PER';break;
+            case '地名' : val = 'PER';break;
+            case '机构名' : val='ORG'; break;
+            case '名词' : val='N';break;
+            case '动词' : val = 'V';break;
+            case '形容词' : val = 'J';break;
+            case '副词' : val = 'R';break;
+            case '代词' : val = 'P';break;
+            case '连词' : val = 'C';break;
+            case '关键词' : val = 'keywords';break;
+            
+            case '其他' : val = 'O';break;
+            default: val = 'keywords';break;
           }
-          mthis.$store.state.topicSelIds = []
-          mthis.topicDatas = [];
-          mthis.options = [];
-          mthis.charts = [];
+          if(this.ifSinDocAna){
+          let ids = mthis.$store.state.topicSelIds
+          mthis.$store.commit('setTopicSelIds',[])
+          mthis.getDocAna(val,'group',ids);
           
-          mthis.changeBar = '排序'
-          mthis.ifTopic = true
           
-          if(mthis.myWordCharts.length>0){
-            for(let i=0;i<mthis.myWordCharts.length;i++){
-              mthis.myWordCharts[i].clear()
-            }
-          }
-          mthis.myWordCharts = [];
-          let leng = useIds.length;
-          console.log(useIds.length)
-          for(let m=0;m<leng;m++){
-            mthis.getDropDatas(useIds[m],'keywords')
-          }
+        
+        }
         }
       },
       prevItems:{
@@ -1036,14 +1017,17 @@
             let buttonItems = mthis.prevItems.filter(item => item.check)
             if(buttonItems.length>0){
               mthis.ifhasSel = true
+              mthis.operatorConfig[1].disabled = false
             }else{
               mthis.ifhasSel = false
+              mthis.operatorConfig[1].disabled = true
             }
             
           }else{
             mthis.ifhasDoc = false
             mthis.ifhasSel = false
             mthis.ifShowDoc = false
+            mthis.operatorConfig[1].disabled = true
           }
         },
         deep:true,
@@ -1521,31 +1505,45 @@
       delTopData(index,flag){
         var mthis = this
         if(flag ==1){
-            document.getElementById(index).setAttribute('style','opacity:0;width:0');
+            let wid = document.getElementById(index).style.width
+            // let Topstyle= document.getElementById(index).getAttribute('style');
+            $('#'+index).css('width',0)
+            $('#'+index).css('opacity',0)
+            // console.log(Topstyle)
+            // Topstyle[width] =0;
+            // Topstyle.opacity =0;
+            // document.getElementById(index).setAttribute('style',Topstyle);
+            // document.getElementById(index).setAttribute('style','opacity:0;width:0');
             mthis.ifResize = true
             setTimeout(()=>{
               
-              document.getElementById(index).remove();
-              let len = document.getElementsByClassName('topItem').length;
-              document.getElementById(index+'word').remove();
-              mthis.wordResize(len)
+              $('#'+index).css('width',wid)
+              $('#'+index).css('opacity',1)
+              // document.getElementById(index).remove();
+              // let len = document.getElementsByClassName('topItem').length;
+              // document.getElementById(index+'word').remove();
+
+              // mthis.wordResize(len)
+              mthis.topicDatas.splice(index,1);
+              mthis.wordResize(mthis.topicDatas.length)
               mthis.ifResize = false
             },800)
-            mthis.topicDatas[index].ids = []
+            
         }else{
-          document.getElementById(index+'word').setAttribute('style','opacity:0;width:0');
+          let wid = document.getElementById(index+'word').style.width
+          
+          $('#'+index+'word').css('width',0)
+            $('#'+index+'word').css('opacity',0)
             mthis.ifResize = true
             setTimeout(()=>{
+              $('#'+index+'word').css('width',wid)
+              $('#'+index+'word').css('opacity',1)
               
-              document.getElementById(index+'word').remove();
-              let len = document.getElementsByClassName('topItem').length;
-              document.getElementById(index).remove();
-              mthis.wordResize(len)
-              
-              
+              mthis.topicDatas.splice(index,1);
+              mthis.wordResize(mthis.topicDatas.length)
               mthis.ifResize = false
             },800)
-            mthis.topicDatas[index].ids = []
+            
         }
         
         console.log(index)
@@ -2460,7 +2458,7 @@
         mthis.ifRenderAllTitle= false
         mthis.changeBar = '排序'
         mthis.ifTopic = true
-        mthis.option.series[0].name = '关键词'
+        mthis.option.series[0].name = mthis.dropPlace
         if(mthis.myWordCharts.length>0){
           for(let i=0;i<mthis.myWordCharts.length;i++){
             mthis.myWordCharts[i].clear()
@@ -2476,7 +2474,7 @@
             word:val
           }).then(response =>{
             if(response.body.code ==0){
-              mthis.topicDatas = mthis.topicDatas.concat(response.body.data)
+              mthis.topicDatas = response.body.data.concat(mthis.topicDatas)
               console.log(mthis.topicDatas)
               let len = mthis.topicDatas.length;
               mthis.wordResize(len)
