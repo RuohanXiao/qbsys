@@ -13,17 +13,20 @@
 <template>
     <div class="operatorDiv">
         <Row v-for="item in operatorData" type="flex" justify="center" id="asssss">
+            <groupOperator v-if="item.type === 'group'" :Params='item' @param="setParam"></groupOperator>
             <sliderOperator v-if="item.type === 'Slider'" :sliderParams='item' @param="setParam"></sliderOperator>
             <docBar v-if="item.type === 'docBar'" :Params='item' @param="setParam"></docBar>
             <selectOperator v-if="item.type === 'Select'" :Params='item' @param="setParam"></selectOperator>
+            <topicClassifi v-if="item.type === 'topicClassification'"></topicClassifi>
         </Row>
     </div>
 </template>
 <script>
-
+import groupOperator from "./operator/custom_group_operator.vue"
 import sliderOperator from "./operator/custom_slider_operator.vue"
 import docBar from "./operator/custom_docBar_operator.vue"
 import selectOperator from "./operator/custom_select_operator.vue"
+import topicClassifi from "./operator/custom_topicClassifi.vue"
     export default {
         data () {
             return {
@@ -61,7 +64,6 @@ import selectOperator from "./operator/custom_select_operator.vue"
                         var oper = Operator[i];
                         var operatorType = oper.operatorType;
                         if(operatorType === 'dynamic'){
-                            
                             var dispose = oper.dispose;
                             var paramCompare = oper.paramCompare;
                             var att = oper.dynamicAttr;
@@ -89,6 +91,9 @@ import selectOperator from "./operator/custom_select_operator.vue"
                                 }
                                 operatordata.push(dynamicOperaItem)
                             }
+                        }else if(operatorType === 'topicClassification'){
+                            
+                            operatordata.push({'type':'topicClassification'});
                         } else {
                             operatordata.push(oper)
                         }
@@ -105,6 +110,9 @@ import selectOperator from "./operator/custom_select_operator.vue"
         components: {
           sliderOperator,
           docBar,
+          selectOperator,
+          topicClassifi,
+          groupOperator,
           selectOperator
         }
     }

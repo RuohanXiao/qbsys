@@ -5,7 +5,8 @@
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
         <!-- <Col span="1" />
         <Col span="20" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
-        <Col span="21" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col>
+        <!-- <Col span="21" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
+        <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'#ccffff',fontSize:'14px'}">时间轴&nbsp;&nbsp;{{timeTitle}}</span></Col>
         <Col span="1" class="bottom">
         <!-- <Tooltip content="放大" placement="bottom">
           <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
@@ -28,9 +29,9 @@
           <div :id="main1Id" :style="{width:pwidth}"></div>
       </div>
       
-      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '20px'}">
+      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '29px'}">
         <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
-        <p>选择事件可查看时间轴</p>
+        <p style='color:#ccffff;font-size:14px;'>选中事件可查看时间轴</p>
       </div>
     </div>
     </Col>
@@ -75,7 +76,7 @@
       return {
         showEchart:false,
         timeStaticsData:timeStaticsData,
-        timeTitle: '请选择节点',
+        timeTitle: '',
         timechartdivId:'timechartdiv_' + this.activeId,
         arrowDownId:'arrowDown_'+ this.activeId,
         timechartctrlId:'timechartctrl_'+ this.activeId,
@@ -210,7 +211,7 @@
                 mthis.boxSelEventIds.eventIds.push(j)
               }
             }
-            // console.log(eventIds)
+            console.log(this.toGeoEventIds)
             mthis.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
             // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
             //         "selectedIds":this.geo_only_eventIds,
@@ -287,6 +288,7 @@
           this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
           this.curInt = null;
           this.colorFlag = 0;
+          this.timeTitle = ''
           // this.option.series[0].itemStyle.normal.color = '#33cc99'
           this.option.series[1].data = []
           
@@ -558,7 +560,7 @@
           width: document.documentElement.clientWidth * mthis.$store.state.split_net - 20 + 'px',
           height: document.documentElement.clientHeight * 0.2 - 10 + 20 - 55 + 'px'
         });
-        mthis.timeTitle = '请选择节点'
+        // mthis.timeTitle = '请选择节点'
         mthis.option.xAxis.data = mthis.dataBySeries.date;
         mthis.option.series[0].data = mthis.dataBySeries.num;
         mthis.option.series[1].data = mthis.dataBySeries.clickNum;
@@ -598,8 +600,8 @@
           if (params.batch[0].areas.length === 0) {
             if(mthis.isDataZoom){
               
-              mthis.timeTitle = '时间轴'
-              
+              // mthis.timeTitle = '时间轴'
+              mthis.timeTitle = ''
               mthis.isBrush = []
               mthis.boxSelShowDiv = false
               mthis.boxSelEventIds.eventIds = []
@@ -802,7 +804,7 @@
               areas:[]
             })
           }
-          mthis.timeTitle = '时间轴';
+          mthis.timeTitle = '';
           mthis.resize();
           // console.log(mthis.dataBySeries.date.length)
           mthis.option.xAxis.data = mthis.dataBySeries.date;
@@ -851,7 +853,7 @@
           mthis.option.xAxis.data = [];
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
-          mthis.timeTitle = '请选择节点'
+          // mthis.timeTitle = '请选择节点'
           mthis.charts.setOption(mthis.option)
         }
 

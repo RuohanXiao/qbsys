@@ -437,6 +437,7 @@ var store = new Vuex.Store({
         heatMapBlur: 20,
         displayHeatMap: false,
         topicClassifIds: [],
+        topicSelIds:[],
         ifSinDocAna:0,
         ifMulDocAna:0,
         seletedDocAttrList: [
@@ -449,9 +450,28 @@ var store = new Vuex.Store({
         // 文档模块主题分析算子打开关闭标志
         topicClassifStatus: false,
         thematicLayerName:[],
-        openthematicLayer:false
+        openthematicLayer:false,
+        // 文档数据透视点击传给主题分析的IDS
+        docAnaSelIds:[],
+    
+        groupParams: new Object(),
+        groupFlag: false,
+        communityData: new Object(),
+        // thematicLayerName: [],
+        // openthematicLayer: false
     },
     mutations: {
+        setDocAnaSelIds(state,val){
+            state.docAnaSelIds = val
+        },
+        setTopicSelIds(state,val){
+            state.topicSelIds = val},
+        setCommunityData(state, val) {
+            state.communityData = val
+        },
+        setGroupFlag(state, val) {
+            state.groupFlag = val
+        },
         setSeletedDocAttrList(state, val) {
             state.seletedDocAttrList = val
         },
@@ -723,6 +743,9 @@ var store = new Vuex.Store({
         setContentSelectedParam(state, val) {
             state.content_selected_param = val
         },
+        setGroupParams(state, val) {
+            state.groupParams = val;
+        },
         newHeatMapRadius(state, val) {
             state.heatMapRadius = val;
         },
@@ -738,11 +761,11 @@ var store = new Vuex.Store({
         addDocIdsToList(state, id) {
             state.topicClassifIds.push(id);
         },
-        exSinDocAna(state){
-            state.ifSinDocAna ++;
+        exSinDocAna(state) {
+            state.ifSinDocAna++;
         },
-        exMulDocAna(state){
-            state.ifMulDocAna ++;
+        exMulDocAna(state) {
+            state.ifMulDocAna++;
         },
         removeDocIdsToList(state, id) {
             var index = util.itemIndexInArr(id, state.topicClassifIds);
@@ -753,13 +776,13 @@ var store = new Vuex.Store({
         changetopicClassifStatus(state, status) {
             state.topicClassifStatus = status;
         },
-        setThematicLayerName(state,names){
+        setThematicLayerName(state, names) {
             state.thematicLayerName = names;
         },
-        openThematicLayer(state){
+        openThematicLayer(state) {
             state.openthematicLayer = true;
         },
-        closeThematicLayer(state){
+        closeThematicLayer(state) {
             state.openthematicLayer = false;
         }
     },
@@ -816,6 +839,9 @@ var store = new Vuex.Store({
         }
     },
     actions: {
+        setGroup(context, value) {
+            context.commit('setGroupParams', value);
+        },
         setHeatMapRadius(context, radius) {
             context.commit('newHeatMapRadius', radius);
         },
@@ -840,11 +866,11 @@ var store = new Vuex.Store({
         singleDocAnaly(context) {
             //   topicClassifIds
             // alert('单个文档分析');
-            context.commit('exSinDocAna',true)
+            context.commit('exSinDocAna', true)
         },
         multiDocAnaly(context) {
-            
-            context.commit('exMulDocAna',true)
+
+            context.commit('exMulDocAna', true)
         },
         opentopicClassif(context) {
             context.commit('changetopicClassifStatus', true);
@@ -852,16 +878,16 @@ var store = new Vuex.Store({
         closetopicClassif(context) {
             context.commit('changetopicClassifStatus', false);
         },
-        selectThematiclayer(context,names){
+        selectThematiclayer(context, names) {
             context.commit('setThematicLayerName', [names]);
-            
+
         },
-        openThematicLayer(context){
+        openThematicLayer(context) {
             context.commit('openThematicLayer');
         },
-        closeThematicLayer(context){
+        closeThematicLayer(context) {
             context.commit('closeThematicLayer');
-            context.commit('setThematicLayerName',[]);
+            context.commit('setThematicLayerName', []);
         },
     }
 });

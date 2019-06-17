@@ -29,7 +29,7 @@
           <div :id="main1Id" :style="{width:pwidth}"></div>
       </div>
       
-      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '20px'}">
+      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '29px'}">
         <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
         <p style='color:#ccffff;font-size:14px;'>选中文档可查看时间轴</p>
       </div>
@@ -191,7 +191,7 @@
               }
             }
         console.log(sendIds)
-        mthis.sendDocIds.type = 'sel'
+        mthis.sendDocIds.type = 'time'
         mthis.sendDocIds.ids = sendIds
         mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
         // console.log(mthis.$store.state.contentTimeCondition)
@@ -239,14 +239,14 @@
       hideDiv(){
         var mthis = this
         if(this.isClick){
-          
+          this.timeTitle = ''
           this.curInt = null;
           
           this.option.series[1].data = []
           let cancelTime = []
           cancelTime.push(this.dataBySeries.date[0])
           cancelTime.push(this.dataBySeries.date[this.dataBySeries.date.length -1])
-          mthis.sendDocIds.type = 'cancel';
+          mthis.sendDocIds.type = 'time';
           mthis.sendDocIds.ids = []
           this.$store.commit('setContentTimeCondition',mthis.sendDocIds)
           this.colorFlag = 0;
@@ -535,7 +535,7 @@
             var startAndEnd = params.batch[0].areas[0].coordRanges[0];
              mthis.boxdivLeft = params.batch[0].areas[0].range[1] + 20 +'px'
              mthis.isDataZoom = true
-             mthis.$store.commit('setContentTimeOnlySel',[])
+            //  mthis.$store.commit('setContentTimeOnlySel',[])
           }
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
@@ -545,11 +545,11 @@
               
               let cancelTime = []
               
-              mthis.sendDocIds.type = 'cancel'
+              mthis.sendDocIds.type = 'time'
               mthis.sendDocIds.ids = []
               // console.log(mthis.sendDocIds)
               mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
-              
+              mthis.timeTitle = ''
               mthis.isBrush = []
               mthis.boxSelShowDiv = false
               mthis.isDataZoom = false
@@ -616,7 +616,7 @@
           mthis.charts.setOption(mthis.option)
           let docIds = util.getStorage("docIds",params.dataIndex);
           mthis.clickEventIds.ids = docIds
-          mthis.sendDocIds.type = 'sel'
+          mthis.sendDocIds.type = 'time'
           mthis.sendDocIds.ids = docIds
           mthis.$store.commit('setContentTimeCondition',mthis.sendDocIds)
           // console.log(docIds)
@@ -638,7 +638,7 @@
              mthis.clickdivTop = event.clientY + 'px'
              let docIds = util.getStorage("docIds",params.dataIndex);
              mthis.clickEventIds.ids = docIds
-             mthis.sendDocIds.type = 'sel'
+             mthis.sendDocIds.type = 'time'
              mthis.sendDocIds.ids = docIds
              mthis.$store.commit('setContentTimeCondition',mthis.sendDocIds)
             
@@ -655,6 +655,7 @@
             }
         }else if(flag ==2){
           // flag==2---->监听画布中的文档，显示数据
+          mthis.timeTitle = ''
           mthis.isDataZoom = false
           if(mthis.isBrush){
             mthis.charts.dispatchAction({
@@ -736,9 +737,39 @@
       })
     },
     computed:mapState ([
-      'split','splitWidth','tmss','conditionContent','content2time','showDocTime','split_content'
+      'split','splitWidth','tmss','conditionContent','content2time','showDocTime','split_content','contentTimeCondition'
     ]),
     watch: {
+      contentTimeCondition:{
+        handler(newValue) {
+                var mthis = this;
+                var type = mthis.contentTimeCondition.type;
+                if(type !== "time"){
+                  let ids = mthis.contentTimeCondition.ids;
+                  if(ids.length>0){
+                    mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+                        "ids":ids,
+                      }).then(response =>{
+                        if(response.body.code === 0){
+                            // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
+                            for(let i=0;i<response.body.data.time.length;i++){
+                              let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
+                              mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
+                              
+                            }
+                            
+                            mthis.loadEcharts(3)
+                        }else{
+                          // console.log("服务器error")
+                        }
+                    })
+                }
+                
+            }
+    　　　　 },
+    　　　　 deep: true,
+            immediate: true
+      },
       /* tmss: function(){
         var mthis = this;
         if(mthis.tmss == 'geo'){

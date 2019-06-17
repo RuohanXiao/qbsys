@@ -26,6 +26,13 @@
               </div>
             </div>
           </Tab-pane>
+          <Tab-pane label="分析结果" name='analysisResults' :style="{fontSize: '18px',height:viewHeight_30}" id='analysisResults' v-if='gFlag'>
+            <!-- <Spin size="large"  v-if="spinShow1">
+               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+            </Spin> -->
+            <div class='groupStyle' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">第{{index}}社区</div>
+          </Tab-pane>
         </Tabs>
       </div>
       <modal-chart-detail :nodeId='modalNodeId' :flag='detailModalFlag' @detailModalFlag='setFlagToFalse'></modal-chart-detail>
@@ -49,6 +56,7 @@
     data() {
       return {
         spinShow:false,
+        spinShow1:false,
         eDiv: '',
         vh20: 0,
         selectTime: false,
@@ -100,6 +108,8 @@
             {'name':'删除','id':'delete','iconClassName':'icon-ren'}
         ],
         openPanelNames:[],
+        gFlag:false,
+        groupItems:new Array()
       };
     },
     components: {
@@ -113,12 +123,38 @@
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType']),
+    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType','groupFlag','communityData']),
     watch: {
       // contentStatisticsResult:function(){
       //   var mthis = this;
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
+      communityData:function(){
+
+      },
+      groupFlag:function(){
+        var mthis = this
+        mthis.groupItems = new Array()
+        mthis.gFlag = mthis.groupFlag
+        if(!mthis.groupFlag){
+          // this.tabSelectNetValue = 'mubiaoxiangqingNet';
+          mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
+        } else {
+          mthis.$store.commit("setTabSelectNet", "analysisResults");
+          if (mthis.communityData.fromList.length == mthis.communityData.toList.length && mthis.communityData.fromList.length > 0) {
+            mthis.$http
+              .post(mthis.$store.state.ipConfig.api_url + "/community/", {
+                from_ids: mthis.communityData.fromList,
+                to_ids: mthis.communityData.toList
+              })
+              .then(response => {
+                if(response.body.code === 0) {
+                  mthis.groupItems = response.body.data[0].groups
+                }
+              })
+          }
+        }
+      },
       selectionIdByType: function() {
         var mthis = this;
         mthis.evetdataFlag = false
@@ -256,6 +292,10 @@
       }
     },
     methods: {
+      highLightNodes(mt,nodeIds){
+        console.log(mt)
+        this.$store.commit('setNetStaticsSelectedIds',nodeIds);
+      },
       clickRightMenu(rightCilckArgu){
         var mthis = this;
         var buttonId = rightCilckArgu.buttonId;
@@ -374,6 +414,30 @@
 </style>
 
 <style>
+  .groupStyle{
+    font-family: MicrosoftYaHei;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #ccffff;
+    padding: 0 15px;
+    cursor: pointer;
+    height: 30px;
+  }
+
+  #analysisResults>.groupStyle:nth-child(odd) {
+    background-color: rgba(51, 255, 255, 0.05);
+  }
+  #analysisResults>.groupStyle:nth-child(odd):hover {
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+  #analysisResults>.groupStyle:nth-child(even):hover {
+    background-color: rgba(51, 255, 255, 0.2);
+  }
+
+
   #tab1 .ivu-tabs-nav-wrap {
     overflow: hidden;
     margin-bottom: 0px;
