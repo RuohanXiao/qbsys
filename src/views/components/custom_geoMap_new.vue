@@ -159,8 +159,8 @@ top: 232px;
 .heatMapFormDiv{
     position: absolute;
     z-index: 9;
-    top: 120px;
-    left: 100px;
+    bottom: 200px;
+    right: 100px;
     background-color: rgba(0,0,0,0.8);
 }
 .heatMapForm{
@@ -208,7 +208,7 @@ top: 232px;
             <div id='HeatMap_Map' :style="{display:'none',height:mapHeight,width:'100%',backgroundColor:'black'}" ></div>
         </div>
         <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
-        <thematicLayer @name="importThematicLayer" @visable="setVisabale" @selectedThematics="selectThematics" v-if="openThematicModal"></thematicLayer>
+        <thematicLayer @visable="setVisabale" @selectedThematics="selectThematics" v-if="openThematicModal"></thematicLayer> <!--  @name="importThematicLayer" -->
     </div>
 </template>
 
@@ -253,7 +253,8 @@ import {stopPropagation} from 'ol/events/Event';
 import Heatmap from 'ol/layer/Heatmap';
 import Circle from '@turf/circle'
 import echarts from 'echarts'
-
+import ImageLayer from 'ol/layer/Image';
+import ImageWMS from 'ol/source/ImageWMS';
 
 import 'ol/ol.css'
 import '../../dist/assets/styles/geo/demo.css'
@@ -451,7 +452,8 @@ export default {
         legend:false,
         legendURL:[],
         openThematicModal:false,
-        hasTheamatic:false
+        hasTheamatic:false,
+        waitCount:1,
                 
         } 
     },
@@ -542,7 +544,7 @@ export default {
         },
         closeThematic(){
             var mthis = this;
-            var layers = mthis.routeMap.map.getLayers().getArray();
+            var layers = mthis.qbMap.getLayers().getArray();
             for(let i = 0; i < layers.length; i++){
                 var layer = layers[i];
                 if(layer.getProperties().id !== undefined && layer.getProperties().id.split('_')[0] === 'ThematicLayer'){
@@ -564,6 +566,7 @@ export default {
         },
         selectThematics(selectedThematics){
             var mthis = this;
+            debugger
             for(let i = 0; i < selectedThematics.length; i++){
                 let thematic = selectedThematics[i];
                 let extent = thematic.extent;
@@ -583,17 +586,14 @@ export default {
                             }
                         })
                     });
-                    var layersArray = mthis.routeMap.map.getLayers();
+                    var layersArray = mthis.qbMap.getLayers();
                     layersArray.insertAt(2,wmsLayer)
                     /* mthis.routeMap.addlayer(wmsLayer); */
                     mthis.legendURL.push(legendurl);
                     mthis.hasTheamatic = true;
                     mthis.isOperateButtonsHLOrDim()
                     /* mthis.routeMap.map.getView().fit(extent, mthis.routeMap.map.getSize()); */
-                    mthis.routeMap.map.getView().animate({
-                        center: getCenter(extent),
-                        duration: 1000
-                    });
+                    mthis.qbMap.viewAnimate(extent);
                     
                     
                 }
@@ -834,9 +834,8 @@ export default {
         
         clearAll(){
             var mthis = this;;
-            mthis.getLayerById('eventsPointsLayer').getSource().clear();
+            mthis.getLayerById('QBLayer').getSource().clear();
             mthis.getLayerById('HLAreaLayer').getSource().clear();
-            mthis.getLayerById('OrgLayer').getSource().clear();
             mthis.geometrySelectedQBIds = [];
             mthis.timeSelectedEventIds = [];
             mthis.staticsSelectedEventIds = [];
@@ -845,10 +844,6 @@ export default {
             mthis.allAreaIds = [];
             mthis.QBIdsToFeatureIdList = new Object();
             mthis.removeQBIdsList = new Object();
-            Object.keys(mthis.AnimationFun).forEach(function(key){
-                mthis.qbMap.map.un('postcompose', mthis.AnimationFun[key]);
-            })
-            mthis.AnimationFun = new Object();
         },
         pushToNet(){
             var mthis = this;
@@ -857,12 +852,12 @@ export default {
             var metalworkIds = mthis.HLIds;
             if(metalworkIds.length > 0){
                 metalworkIds.forEach(function(id){
-                    var type = id.split('&')[0];
-                    var Id = id.split('&')[1];
+                    var featureId = mthis.QBIdsToFeatureIdList[id];
+                    var type = featureId.split('&')[0]
                     if(type === 'event'){
-                        eventIds.push(Id);
+                        eventIds.push(id);
                     } else {
-                        nodeIds.push(Id);
+                        nodeIds.push(id);
                     }
                 })
             }
@@ -1070,7 +1065,7 @@ export default {
                 var geometry = feature.getGeometry();
                 var geometryStr = new GeoJSON().writeGeometry(geometry)
                 geometryList.push(geometryStr);
-                
+                //mthis.exploreQB([geometryStr],'Org');
             }
             mthis.exploreQB(geometryList,'Org');
             mthis.deleteRightMenu();
@@ -1086,7 +1081,7 @@ export default {
                 var geometry = feature.getGeometry();
                 var geometryStr = new GeoJSON().writeGeometry(geometry)
                 geometryList.push(geometryStr);
-                
+                //mthis.exploreQB([geometryStr],'GeoTar');
             }
             mthis.exploreQB(geometryList,'GeoTar');
             mthis.deleteRightMenu();
@@ -2060,8 +2055,38 @@ export default {
                 url = 'http://localhost:5000/exploreGeoTar/'
                 promptType = '地理目标数';
             }
-            
-            mthis.waiting();
+            mthis.geometrySelectedQBIds = [];
+            var num = geometryArr.length;
+            for(let i = 0; i < num; i++){
+                mthis.waiting();
+                var geometry = geometryArr[i];
+                mthis.$http.post(url, {
+                    'geometry':[geometry]
+                }).then(response => {
+                    
+                    var OrgGeojson = response.body.data.Features;
+                    var addfeatures = (new GeoJSON()).readFeatures(OrgGeojson);
+                    for(let i = 0; i < addfeatures.length; i++){
+                        let feature = addfeatures[i];
+                        let featureId = feature.getId();
+                        let params = feature.get('Params');
+                        for(let j = 0; j < params.length; j++){
+                            let param = params[j];
+                            let id = param.id;
+                            mthis.QBIdsToFeatureIdList[id] = featureId;
+                            mthis.geometrySelectedQBIds.push(id)
+                        }
+                    }
+                    //mthis.cancelSelectQB();
+                    mthis.qbMap.addFeatures(addfeatures,'QBLayer');
+                    mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
+                    mthis.hide(num);
+                },function(error){
+                    alert("探索失败!");
+                    mthis.hide(num);
+                })
+            }
+            /* mthis.waiting();
             mthis.$http.post(url, {
                     'geometry':geometryArr
                 }).then(response => {
@@ -2086,7 +2111,7 @@ export default {
                 },function(error){
                     alert("探索失败!");
                     mthis.hide();
-                })
+                }) */
         },
         /* addQBFeaturesCancelExist(features){
 
@@ -3079,9 +3104,7 @@ export default {
             var selectedIds = mthis.$store.state.geo_onlyselected_param;
             GSF.getFeatureIdsByIds(selectedIds,mthis.QBIdsToFeatureIdList,selectedFeatureIds);
             var selectedFeatures = this.qbMap.getFeaturesByIds(selectedFeatureIds,'QBLayer');
-            GSF.setFeaturesHalfOrHL(ids,selectedFeatures,mthis.QBIdsToFeatureIdList);
-            
-                   
+            GSF.setFeaturesHalfOrHL(ids,selectedFeatures,mthis.QBIdsToFeatureIdList);   
         },
         getallEventIdsFromallEventIdsToFeaturesIds(){
             var mthis = this;
@@ -3185,29 +3208,45 @@ export default {
                 mthis.promptflag = false;
             },3000);
         },
-        waiting(){  
+        waiting(count){  
             var mthis = this;
-            mthis.hide();
-            var procbg = document.createElement("div"); //首先创建一个div    
-            procbg.setAttribute("id","WaitCover"); //定义该div的id    
-            procbg.style.background = "#000000";    
-            procbg.style.width = "100%";    
-            procbg.style.height = "100%";    
-            procbg.style.position = "fixed";    
-            procbg.style.top = "0";    
-            procbg.style.left = "0";    
-            procbg.style.zIndex = "500000";    
-            procbg.style.opacity = "0.6";  
-            procbg.style.cursor='wait';  
-            procbg.style.filter = "Alpha(opacity=70)";    
-            document.body.appendChild(procbg);    
+            /* mthis.hide(); */
+            debugger
+            if(document.getElementById('WaitCover') === null){
+                var procbg = document.createElement("div"); //首先创建一个div    
+                procbg.setAttribute("id","WaitCover"); //定义该div的id    
+                procbg.style.background = "#000000";    
+                procbg.style.width = "100%";    
+                procbg.style.height = "100%";    
+                procbg.style.position = "fixed";    
+                procbg.style.top = "0";    
+                procbg.style.left = "0";    
+                procbg.style.zIndex = "500000";    
+                procbg.style.opacity = "0.6";  
+                procbg.style.cursor='wait';  
+                procbg.style.filter = "Alpha(opacity=70)";    
+                document.body.appendChild(procbg); 
+            }   
         },
     //取消遮罩    
-        hide() {    
+        hide(count) {
+            var mthis = this; 
+            debugger
             var mybg = document.getElementById("WaitCover");
             if(mybg){
+                var num = 1
+                if(count !== undefined){
+                    num = count;
+                }
                 var body = document.getElementsByTagName("body");
-                body[0].removeChild(mybg)
+                var waitCount = mthis.waitCount;
+                if(num === waitCount){
+                    body[0].removeChild(mybg);
+                    mthis.waitCount = 1;
+                } else {
+                    mthis.waitCount++
+                }
+                
             }   
         }, 
         setFeatureByIds(ids){
@@ -3288,38 +3327,143 @@ export default {
         },
         isOperateButtonsHLOrDim(){
             var mthis = this;
-            mthis.changeButtonParam=[
-                {
-                    'id_suf':'HD',
-                    'isOpen':true
-                },
-                {
-                    'id_suf':'HCD',
-                    'isOpen':true
-                },
-                {
-                    'id_suf':'HSD',
-                    'isOpen':true
-                },
-                {
-                    'id_suf':'HDD',
-                    'isOpen':true
-                },
-                {
-                    'id_suf':'HL',
-                    'isOpen':true
-                },
-                {
-                    'id_suf':'HASD',
-                    'isOpen':true
-                },
-                {
-                    'id_suf':'OT',
-                    'isOpen':true
+            if($.isEmptyObject(mthis.QBIdsToFeatureIdList)){
+                mthis.changeButtonParam=[
+                        {
+                            'id_suf':'HSD',
+                            'isOpen':false
+                        },
+                        {
+                            'id_suf':'HD',
+                            'isOpen':false
+                        }
+                    ]
+                mthis.heatMapVisible = false;  //关闭热力设置按钮
+                if($.isEmptyObject(mthis.removeEventIdList)){
+                    mthis.changeButtonParam.push({
+
+                            'id_suf':'HDD',
+                            'isOpen':false
+                        })
+                        
+                } else {
+                    mthis.changeButtonParam.push({
+                            'id_suf':'HDD',
+                            'isOpen':true
+                        })
                 }
-            ]
+                if(mthis.AreaIds.length == 0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HL',
+                        'isOpen':false
+                    })
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HCD',
+                        'isOpen':false
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HL',
+                        'isOpen':true
+                    })
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HCD',
+                        'isOpen':true
+                    })
+                }
+                if(mthis.AreaIds.length > 0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HASD',
+                        'isOpen':true
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HASD',
+                        'isOpen':false
+                    })
+                }
+                if(mthis.hasTheamatic){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'OT',
+                        'isOpen':true
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'OT',
+                        'isOpen':false
+                    })
+                }
+
+            } else {
+                mthis.changeButtonParam=[
+                    {
+                        'id_suf':'HD',
+                        'isOpen':true
+                    },
+                    {
+                        'id_suf':'HCD',
+                        'isOpen':true
+                    }
+                ]
+                if(mthis.HLIds.length > 0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HSD',
+                        'isOpen':true
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HSD',
+                        'isOpen':false
+                    })
+                    mthis.heatMapVisible = false;  //关闭热力设置按钮
+                }
+                if($.isEmptyObject(mthis.removeEventIdList)){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HDD',
+                        'isOpen':false
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HDD',
+                        'isOpen':true
+                    })
+                }
+                if(mthis.AreaIds.length == 0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HL',
+                        'isOpen':false
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HL',
+                        'isOpen':true
+                    })
+                }
+                if(mthis.AreaIds.length == 0 && mthis.SelectedIds.length ==0){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HASD',
+                        'isOpen':false
+                    })
+                } else{
+                    mthis.changeButtonParam.push({
+                        'id_suf':'HASD',
+                        'isOpen':true
+                    })
+                }
+                if(mthis.hasTheamatic){
+                    mthis.changeButtonParam.push({
+                        'id_suf':'OT',
+                        'isOpen':true
+                    })
+                } else {
+                    mthis.changeButtonParam.push({
+                        'id_suf':'OT',
+                        'isOpen':false
+                    })
+                }
+            }
             
-        }
+        },
 
     },
     computed:mapState ([
@@ -3481,30 +3625,30 @@ export default {
         geoStaticsOnlyLookSelectedIds(){
             var mthis = this;
             debugger
+            var eventIds = [];
+            var orgIds = [];
             var ids = mthis.geoStaticsOnlyLookSelectedIds;
-            /* if(mthis.geoStaticsOnlyLookSelectedIds.length > 0){
-                mthis.geoStaticsOnlyLookSelectedIds.forEach(function(item){
-                    if(item.indexOf('&') === -1){
-                        var id = 'org&'+item;
-                        ids.push(id)
-                    } else {
-                        ids.push(item)
-                    }
-                })
-            } */
-            /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
-                var layerId = mthis.AllLayerList_conf[key].layerId;
-                var features = mthis.getLayerById(layerId).getSource().getFeatures();
-                for(let i = 0; i < features.length; i++){
-                    mthis.setFeatureStatus(features[i],'die');
-                }
-            }) */
             var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
             GSF.setAllFeaturesStatus(ids,ids,features,mthis.QBIdsToFeatureIdList);
             mthis.HLIds = mthis.geoStaticsOnlyLookSelectedIds;
             mthis.SelectedIds = mthis.geoStaticsOnlyLookSelectedIds;
             var selectedEventsParam = mthis.geoStaticsOnlyLookSelectedIds
-            mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
+            for(let i = 0; i < selectedEventsParam.length; i++){
+                var paramId = selectedEventsParam[i];
+                var featureId = mthis.QBIdsToFeatureIdList[paramId];
+                var type = featureId.split('&')[0];
+                if(type === 'event'){
+                    eventIds.push(paramId);
+                } else {
+                    orgIds.push(paramId);
+                }
+            }
+            var selectedHastypeParam = {
+                'eventIds':eventIds,
+                'orgIds':orgIds
+            }
+            mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam);
+            mthis.$store.commit('setGeoHastypeParam',selectedHastypeParam); 
         },
         geoStaticsSelectedIds:function(){
             var mthis = this;
@@ -3515,12 +3659,13 @@ export default {
             if(keys.length > 0){
                 keys.forEach(function(key){
                     var item = mthis.geoStaticsSelectedIds[key];
-                    if(item.indexOf('&') === -1){
+                    ids.push(item)
+                    /* if(item.indexOf('&') === -1){
                         var id = 'event&'+item;
                         ids.push(id)
                     } else {
                         ids.push(item)
-                    }
+                    } */
                 })
             }
             mthis.staticsSelectedEventIds = ids;
@@ -3554,26 +3699,53 @@ export default {
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
             debugger
+            var eventIds = [];
+            var orgIds = [];
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
             mthis.SelectedIds = mthis.timeSelectedEventIdsOnly;
             var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
             GSF.setAllFeaturesStatus(mthis.SelectedIds,mthis.SelectedIds,features,mthis.QBIdsToFeatureIdList)
-            /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
-                var layerId = mthis.AllLayerList_conf[key].layerId;
-                var features = mthis.getLayerById(layerId).getSource().getFeatures();
-                for(let i = 0; i < features.length; i++){
-                    mthis.setFeatureStatus(features[i],'die');
-                }
-            }) */
             var selectedEventsParam = mthis.timeSelectedEventIdsOnly
+            for(let i = 0; i < selectedEventsParam.length; i++){
+                var paramId = selectedEventsParam[i];
+                var featureId = mthis.QBIdsToFeatureIdList[paramId];
+                var type = featureId.split('&')[0];
+                if(type === 'event'){
+                    eventIds.push(paramId);
+                } else {
+                    orgIds.push(paramId);
+                }
+            }
+            var selectedHastypeParam = {
+                'eventIds':eventIds,
+                'orgIds':orgIds
+            }
+            mthis.$store.commit('setGeoHastypeParam',selectedHastypeParam); 
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
         geometrySelectedQBIds:function(){
             var mthis = this;
             debugger
+            var eventIds = [];
+            var orgIds = [];
             mthis.HLIds = mthis.geometrySelectedQBIds;
             mthis.SelectedIds = mthis.geometrySelectedQBIds;
             var selectedEventsParam = mthis.geometrySelectedQBIds
+            for(let i = 0; i < selectedEventsParam.length; i++){
+                var paramId = selectedEventsParam[i];
+                var featureId = mthis.QBIdsToFeatureIdList[paramId];
+                var type = featureId.split('&')[0];
+                if(type === 'event'){
+                    eventIds.push(paramId);
+                } else {
+                    orgIds.push(paramId);
+                }
+            }
+            var selectedHastypeParam = {
+                'eventIds':eventIds,
+                'orgIds':orgIds
+            }
+            mthis.$store.commit('setGeoHastypeParam',selectedHastypeParam); 
             mthis.$store.commit('setGeoOnlyselectedParam',selectedEventsParam); 
         },
         geoTimeCondition:{
