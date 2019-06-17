@@ -999,7 +999,7 @@
             case '其他' : val = 'O';break;
             default: val = 'keywords';break;
           }
-          if(this.ifSinDocAna){
+          if(this.ifMulDocAna){
           let ids = mthis.$store.state.topicSelIds
           mthis.$store.commit('setTopicSelIds',[])
           mthis.getDocAna(val,'group',ids);

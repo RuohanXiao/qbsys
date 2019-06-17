@@ -437,9 +437,9 @@ var store = new Vuex.Store({
         heatMapBlur: 20,
         displayHeatMap: false,
         topicClassifIds: [],
-        topicSelIds:[],
-        ifSinDocAna:0,
-        ifMulDocAna:0,
+        topicSelIds: [],
+        ifSinDocAna: 0,
+        ifMulDocAna: 0,
         seletedDocAttrList: [
             // {
             // title:'Venezuelan oil chief blames fire on opposition',
@@ -449,23 +449,30 @@ var store = new Vuex.Store({
         ],
         // 文档模块主题分析算子打开关闭标志
         topicClassifStatus: false,
-        thematicLayerName:[],
-        openthematicLayer:false,
+        thematicLayerName: [],
+        openthematicLayer: false,
         // 文档数据透视点击传给主题分析的IDS
-        docAnaSelIds:[],
-    
+        docAnaSelIds: [],
+
         groupParams: new Object(),
         groupFlag: false,
         communityData: new Object(),
+        thematicLayerName: [],
+        openthematicLayer: false,
+        netSwitch: 0,
         // thematicLayerName: [],
         // openthematicLayer: false
     },
     mutations: {
-        setDocAnaSelIds(state,val){
+        setNetSwitch(state, val) {
+            state.netSwitch = val
+        },
+        setDocAnaSelIds(state, val) {
             state.docAnaSelIds = val
         },
-        setTopicSelIds(state,val){
-            state.topicSelIds = val},
+        setTopicSelIds(state, val) {
+            state.topicSelIds = val
+        },
         setCommunityData(state, val) {
             state.communityData = val
         },

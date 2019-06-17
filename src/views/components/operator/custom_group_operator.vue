@@ -20,7 +20,7 @@
   <Col span="24">
   <div class='buttonGroup'>
     <p>{{Params.name}}
-      <Switch style="float: right;" v-model="switch1">
+      <Switch style="float: right;" v-model="switch1" @on-change="change">
         <span slot="open">开</span>
         <span slot="close">关</span>
       </Switch>
@@ -29,6 +29,10 @@
   </Col>
 </template>
 <script>
+  import {
+    mapState,
+    mapMutations
+  } from 'vuex'
   export default {
     data() {
       return {
@@ -36,17 +40,29 @@
       }
     },
     props: ['Params'],
-    methods: {},
-    watch: {
-      switch1(){
+    methods: {
+      change(status){
+        console.log(status)
         this.$store.commit('setGroupFlag', this.switch1)
         this.$store.commit("setTabSelectNet", "analysisResults");
       },
+    },
+    watch: {
+      netSwitch(){
+        this.switch1 = false
+        this.$store.commit('setGroupFlag', this.switch1)
+        this.$store.commit("setTabSelectNet", "analysisResults");
+      },
+      // switch1(){
+      //   console.log(this.switch1)
+      //   this.$store.commit('setGroupFlag', this.switch1)
+      //   this.$store.commit("setTabSelectNet", "analysisResults");
+      // },
       Params() {
         console.log('====================params')
         console.log(this.Params)
       }
     },
-    // computed: mapState(['groupFlag'])
+    computed: mapState(['netSwitch'])
   }
 </script>
