@@ -78,6 +78,7 @@
         eDivH: '',
         selectHeight: '',
         entDivH: '',
+        entDivHTitle: '',
         entityT: '',
         dicMap: new Map(),
         // dicMap:{

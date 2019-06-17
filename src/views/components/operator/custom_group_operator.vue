@@ -21,10 +21,11 @@
   <div class='buttonGroup'>
     <p>{{Params.name}}
       <Switch style="float: right;" v-model="switch1" @on-change="change">
-        <span slot="open">开</span>
-        <span slot="close">关</span>
+        <!-- <span slot="open">开</span>
+        <span slot="close">关</span> -->
       </Switch>
     </p>
+    <button  @on-click="change">ss</button>
   </div>
   </Col>
 </template>
