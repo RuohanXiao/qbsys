@@ -449,7 +449,7 @@ var store = new Vuex.Store({
         topicClassifStatus: false,
         groupParams: new Object(),
         groupFlag: false,
-        communityData: new Object()
+        communityData: new Object(),
         thematicLayerName: [],
         openthematicLayer: false
     },

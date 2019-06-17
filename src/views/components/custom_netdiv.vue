@@ -2493,6 +2493,11 @@
             //     fromCenter:"geometric", // "geometric"
             //     toCenter:"geometric "
             // },
+            gravity: {
+              from: "node",
+              to: "nearestLockedNode",
+              strength: 0.05
+            },
             twoRingRadialLayout: true,
             // layoutFreezeMinTimeout:300,
             layoutFreezeTimeout: 10000,
@@ -2601,6 +2606,8 @@
               // 具体类型节点样式
               node.shadowColor = ''
               node.shadowBlur = 0
+              console.log('------------------')
+              console.log(node)
               if (node.userLock) {
                 node.items = [{
                   image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
@@ -2625,25 +2632,25 @@
               if (node.data.entity_type === "event") {
                 if (node.selected) {
                   node.lineColor = mthis.selectLineColor;
-                  // node.shadowBlur = 25;
-                  // node.shadowColor = mthis.selectShadowColor;
+                  node.shadowBlur = 25;
+                  node.shadowColor = mthis.selectShadowColor;
                   node.lineWidth = 3;
                   if (node.hightLight) {
                     node.lineColor = mthis.hightlightLineColor;
-                    // node.shadowBlur = 20;
-                    // node.shadowColor = mthis.hightlightShadowColor;
+                    node.shadowBlur = 20;
+                    node.shadowColor = mthis.hightlightShadowColor;
                     node.lineWidth = 3;
                   }
                 } else if (node.hovered) {
                   node.lineWidth = 3;
-                  // node.shadowColor = "#009999";
-                  // node.shadowBlur = 20;
+                  node.shadowColor = "#009999";
+                  node.shadowBlur = 20;
                   node.lineColor = "#009999";
                 } else {
                   node.lineColor = "#006666";
                   node.lineWidth = 3;
-                  // node.shadowColor = "rgba(0,0,0,0)";
-                  // node.shadowBlur = 20;
+                  node.shadowColor = "rgba(0,0,0,0)";
+                  node.shadowBlur = 20;
                 }
                 node.fillColor = "#003333";
                 node.display = "text";
@@ -2654,29 +2661,29 @@
               } else if (node.data.entity_type === "content" || node.data.entity_type === "document") {
                 if (node.selected) {
                   node.lineColor = mthis.selectLineColor;
-                  // node.shadowColor = mthis.selectShadowColor;
-                  // node.shadowBlur = 25;
+                  node.shadowColor = mthis.selectShadowColor;
+                  node.shadowBlur = 25;
                   node.lineWidth = 5;
                   node.fillColor = "#003333";
                   if (node.hightLight) {
                     node.fillColor = "#003333";
                     node.lineColor = mthis.hightlightLineColor
-                    // node.shadowBlur = 20;
-                    // node.shadowColor = mthis.hightlightDocShadowColor;
+                    node.shadowBlur = 20;
+                    node.shadowColor = mthis.hightlightDocShadowColor;
                     node.lineWidth = 5;
                   }
                 } else if (node.hovered) {
                   node.lineWidth = 5;
-                  // node.shadowColor = "#009999";
-                  // node.shadowBlur = 20;
+                  node.shadowColor = "#009999";
+                  node.shadowBlur = 20;
                   node.fillColor = "#003333";
                   node.lineColor = "#009999";
                 } else {
                   node.fillColor = "rgba(0,0,0,0)";
                   node.lineColor = "rgba(0,0,0,0)";
                   node.lineWidth = 5;
-                  // node.shadowColor = "rgba(0,0,0,0)";
-                  // node.shadowBlur = 20;
+                  node.shadowColor = "rgba(0,0,0,0)";
+                  node.shadowBlur = 20;
                 }
                 node.display = "rectangle";
                 node.image = "http://10.60.1.140/assets/images/content_node.png";
@@ -2685,24 +2692,24 @@
               } else if (node.data.entity_type === "other") {
                 if (node.selected) {
                   node.lineColor = mthis.selectLineColor;
-                  // node.shadowColor = mthis.selectShadowColor;
-                  // node.shadowBlur = 25;
-                  node.lineWidth = 10;
+                  node.shadowColor = mthis.selectShadowColor;
+                  node.shadowBlur = 25;
+                  node.lineWidth = 5;
                   if (node.hightLight) {
                     node.lineColor = mthis.hightlightLineColor;
-                    // node.shadowBlur = 20;
-                    // node.shadowColor = mthis.hightlightShadowColor;
+                    node.shadowBlur = 20;
+                    node.shadowColor = mthis.hightlightShadowColor;
                   }
                 } else if (node.hovered) {
-                  node.lineWidth = 10;
-                  // node.shadowColor = "#009999";
-                  // node.shadowBlur = 20;
+                  node.lineWidth = 5;
+                  node.shadowColor = "#009999";
+                  node.shadowBlur = 20;
                   node.lineColor = "#009999";
                 } else {
                   node.lineColor = "#006666";
-                  node.lineWidth = 10;
-                  // node.shadowColor = "rgba(0,0,0,0)";
-                  // node.shadowBlur = 20;
+                  node.lineWidth = 5;
+                  node.shadowColor = "rgba(0,0,0,0)";
+                  node.shadowBlur = 20;
                 }
                 node.radius = 25;
                 node.fillColor = "#003333";
@@ -2712,28 +2719,28 @@
                 if (node.selected) {
                   node.lineColor = mthis.selectLineColor
                   node.fillColor = "#003333";
-                  // node.shadowColor = mthis.selectShadowColor;
-                  // node.shadowBlur = 25;
-                  node.lineWidth = 10;
+                  node.shadowColor = mthis.selectShadowColor;
+                  node.shadowBlur = 25;
+                  node.lineWidth = 5;
                   if (node.hightLight) {
                     node.fillColor = "#003333";
                     node.lineColor = mthis.hightlightLineColor;
-                    // node.shadowBlur = 20;
-                    // node.shadowColor = mthis.hightlightDocShadowColor;
-                    node.lineWidth = 8;
+                    node.shadowBlur = 20;
+                    node.shadowColor = mthis.hightlightDocShadowColor;
+                    node.lineWidth = 3;
                   }
                 } else if (node.hovered) {
-                  node.lineWidth = 10;
-                  // node.shadowColor = "#009999";
-                  // node.shadowBlur = 20;
+                  node.lineWidth = 3;
+                  node.shadowColor = "#009999";
+                  node.shadowBlur = 20;
                   node.fillColor = "#003333";
                   node.lineColor = "#009999";
                 } else {
                   node.fillColor = "#003333";
                   node.lineColor = "#006666";
-                  node.lineWidth = 10;
-                  // node.shadowColor = "rgba(0,0,0,0)";
-                  // node.shadowBlur = 20;
+                  node.lineWidth = 3;
+                  node.shadowColor = "rgba(0,0,0,0)";
+                  node.shadowBlur = 20;
                 }
                 node.display = "image";
                 //判断图片资源是否存在
