@@ -456,10 +456,14 @@ var store = new Vuex.Store({
         groupParams: new Object(),
         groupFlag: false,
         communityData: new Object(),
+        netSwitch:0,
         // thematicLayerName: [],
         // openthematicLayer: false
     },
     mutations: {
+        setNetSwitch(state,val){
+            state.netSwitch = val
+        },
         setDocAnaSelIds(state,val){
             state.docAnaSelIds = val
         },
