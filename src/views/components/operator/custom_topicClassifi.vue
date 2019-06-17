@@ -3,7 +3,7 @@
         
         <Row>
             <Col span="24" v-for="(item,index) in items" :key="index">
-                <div class="docBarDiv select-item" :class="item.check?'item-selected':''" @contextmenu.prevent="rightMenu($event)" @click='clickDocBar(index,item.check,item.id,$event)'>
+                <div class="docBarDiv select-item" :class="item.check?'item-selected':''" @contextmenu.prevent="rightMenu($event)" @click='clickDocBar(index,item.check,item.id,$event)' :title="item.title">
                     <p class="docBarTitle">{{item.title}}</p>
                     <p class="docBarTime">{{item.time}}&nbsp;|&nbsp;{{item.from}}</p>
                     <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 " :style="{padding:'0 !important'}" size="25"></Icon>  

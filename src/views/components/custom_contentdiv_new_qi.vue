@@ -279,11 +279,11 @@
       <div v-if="ifRenderAllTitle">
       <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
           :style="{display:'none'}">
-          <div v-for="(item,index) in list.docDatas" :style="{display:'flex',marginBottom:'5px',cursor:'pointer'}" :title="item.title">
-              <p class="itemTitle" :style="{color:'#fff'}">{{item.title}}</p>
+          <div class='textTitle' v-for="(item,index) in list.docDatas" :style="{display:'flex',justifyContent:'space-around',marginBottom:'5px'}" >
+              <p class="itemTitle" :style="{color:'#fff'}" :title="item.title">{{item.title}}</p>
               <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px',width:'70px'}">{{item.time}}</p>
               <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)'}"></p>
-              <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'7px',width:'70px'}">{{item.from}}</p>
+              <p class="itemFrom" :style="{fontSize:'10px',color:'#ccffff',marginLeft:'7px',width:'70px' }" :title="item.from">{{item.from}}</p>
           </div>
         </div>
         </div>
@@ -323,6 +323,7 @@
     name: "App",
     data() {
       return {
+        loadingCount:0,
         options:[],
         charts:[],
         docAnaCount:0,
@@ -349,13 +350,13 @@
  			        name: '关键词',
                type: 'wordCloud',
                shape: 'circle',
- 			        sizeRange: [10, 18],
+ 			        sizeRange: [14, 24],
  			        rotationRange: [0, 0],
               textPadding: 0,
                
  			        autoSize: {
  			            enable: true,
- 			            minSize: 10
+ 			            minSize: 14
  			        },
  			        textStyle: {
  			            normal: {
@@ -377,301 +378,11 @@
                data:[]
  			 	  }]
         }),
-        ifTopic:true,
+        ifTopic:false,
         wordCloudOption:null,
         topicDatas:[],
-        topicDatas1:[
-          {ids:[],docDatas:[
-            {
-              title:'Venezuelan oil chief blames fire on opposition',
-              id:'heatRadius',
-              time:'2019-02-20',
-              from:'华盛顿邮报'
-            },
-            {
-              title:'Venezuelan oil chief blames fire on opposition',
-              id:'heatRadius',
-              time:'2019-02-20',
-              from:'华盛顿邮报'
-            },
-            {
-              title:'Venezuelan oil chief blames fire on opposition',
-              id:'heatRadius',
-              time:'2019-02-20',
-              from:'华盛顿邮报'
-            },
-            {
-              title:'Venezuelan oil chief blames fire on opposition',
-              id:'heatRadius',
-              time:'2019-02-20',
-              from:'华盛顿邮报'
-            },
-            {
-              title:'Venezuelan oil chief blames fire on opposition',
-              id:'heatRadius',
-              time:'2019-02-20',
-              from:'华盛顿邮报'
-            }
-          ],
-          topDatas:[
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20}]},
-            {ids:[],docDatas:[
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              }
-            ],
-            topDatas:[
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],docDatas:[
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              }
-            ],
-            topDatas:[
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],docDatas:[
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              }
-            ],
-            topDatas:[
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],docDatas:[
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              }
-            ],
-            topDatas:[
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],docDatas:[
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              }
-            ],
-            topDatas:[
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],docDatas:[
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              }
-
-            ],
-            topDatas:[
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},]},
-            {ids:[],docDatas:[
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              },
-              {
-                title:'Venezuelan oil chief blames fire on opposition',
-                id:'heatRadius',
-                time:'2019-02-20',
-                from:'华盛顿邮报'
-              }
-            ],
-            topDatas:[
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},{name:'pujing',num:20},
-            {name:'pujing',num:20},{name:'pujing',num:20},]}
-        ],
-        changeBar:'排序',
+        
+        changeBar:'词云',
         orderCount:0,
         ifhasDoc:false,
         ifhasSel:false,
@@ -899,29 +610,30 @@
 
    
     watch: {
-      options:function(){
-        var mthis = this
-        if(this.options.length>0){
-          console.log(mthis.topicDatas.length)
+      
+      // options:function(){
+      //   var mthis = this
+      //   if(this.options.length>0){
+      //     console.log(mthis.topicDatas.length)
          
-          console.log(mthis.myWordCharts)
-          console.log(mthis.charts)
-          setTimeout(function(){
-            for(let j=0;j<mthis.topicDatas.length;j++){
-                  mthis.myWordCharts[j] = echarts.init(document.getElementById(mthis.charts[j]),'',{
-                    width:mthis.itemWidth,
-                    height:mthis.itemHeight
-                  });
-                  mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
-                  mthis.myWordCharts[j].setOption(mthis.options[j]);
-                  console.log(mthis.myWordCharts[j])
-                  console.log(mthis.options[j].series[0].data)
-                }
-          },300)
+      //     console.log(mthis.myWordCharts)
+      //     console.log(mthis.charts)
+      //     setTimeout(function(){
+      //       for(let j=0;j<mthis.topicDatas.length;j++){
+      //             mthis.myWordCharts[j] = echarts.init(document.getElementById(mthis.charts[j]),'',{
+      //               width:mthis.itemWidth,
+      //               height:mthis.itemHeight
+      //             });
+      //             mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
+      //             mthis.myWordCharts[j].setOption(mthis.options[j]);
+      //             console.log(mthis.myWordCharts[j])
+      //             console.log(mthis.options[j].series[0].data)
+      //           }
+      //     },300)
           
-        }
+      //   }
         
-      },
+      // },
       topicDatas:function(){
         
         this.$nextTick(function(){
@@ -937,16 +649,16 @@
                 mthis.options.push(mthis.option);
               }
               
-              //  for(let j=0;j<mthis.myWordCharts.length;j++){
-              //     mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
+               for(let j=0;j<mthis.myWordCharts.length;j++){
+                  mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
                     
-              //     mthis.myWordCharts[j] = echarts.init(document.getElementById(charts[j]),'',{
-              //       width:mthis.itemWidth,
-              //       height:mthis.itemHeight
-              //     });
-              //     mthis.myWordCharts[j].setOption(options[j]);
+                  mthis.myWordCharts[j] = echarts.init(document.getElementById(mthis.charts[j]),'',{
+                    width:mthis.itemWidth,
+                    height:mthis.itemHeight
+                  });
+                  mthis.myWordCharts[j].setOption(mthis.options[j]);
                   
-              //   }
+                }
             mthis.wordResize(mthis.topicDatas.length)
         })
       },
@@ -1360,13 +1072,14 @@
       showAllTitle(index,e,flag){
         var mthis = this
         mthis.clearBubble(e)
+        console.log(mthis.openHub)
         if(flag ==1){
             if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
             var pTitle = document.getElementById(index)
             if(!mthis.openHub){
               document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+260 + 'px';
             }else{
-              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+10 + 'px';
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft + 10 + 'px';
               
             }
             
@@ -1384,7 +1097,7 @@
             if(!mthis.openHub){
               document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+250 + 'px';
             }else{
-              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+10 + 'px';
+              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft + 'px';
               
             }
             
@@ -1435,7 +1148,7 @@
           mthis.wordResize(document.getElementsByClassName('topItem').length);
         }
       },
-      getDropDatas(ids,name){
+      getDropDatas(ids,name,len){
         var mthis = this;
         
         let type = ''
@@ -1450,7 +1163,12 @@
             word:name
           }).then(response =>{
             if(response.body.code ==0){
-              mthis.topicDatas = mthis.topicDatas.concat(response.body.data)
+              mthis.topicDatas = mthis.topicDatas.concat(response.body.data);
+              mthis.loadingCount ++;
+              if(mthis.loadingCount == len){
+                mthis.ifResize = false
+                mthis.loadingCount = 0
+              }
             }
           })
           
@@ -1477,8 +1195,8 @@
           case 'O' : mthis.dropPlace = '其他';mthis.option.series[0].name = '其他';break;
           default: mthis.dropPlace = '关键词';mthis.option.series[0].name = '关键词';break;
         }
-        mthis.changeBar = '排序'
-        mthis.ifTopic = true
+        mthis.changeBar = '词云'
+        mthis.ifTopic = false
         
         if(mthis.myWordCharts.length>0){
           for(let i=0;i<mthis.myWordCharts.length;i++){
@@ -1487,9 +1205,10 @@
         }
         mthis.myWordCharts = [];
         let leng = dropItems.length;
+        mthis.ifResize = true
         
         for(let m=0;m<leng;m++){
-          mthis.getDropDatas(dropItems[m].ids,name)
+          mthis.getDropDatas(dropItems[m].ids,name,leng)
         }
         
         // let type = '';
@@ -2404,7 +2123,7 @@
               height:mthis.itemHeight
             }
             )
-          
+         
         }
         }else if(len>1 && len <6){
           mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
@@ -2422,6 +2141,7 @@
           }
           )
           }
+         
         }else if(len ==6){
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
           console.log(mthis.itemWidth)
@@ -2438,6 +2158,7 @@
           }
           )
           }
+          
         }else if(len==1){
           mthis.topWidth = (100 / 1.1).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 1.1) + 'px';
@@ -2453,14 +2174,16 @@
           }
           )
           }
+          
         }
         
       },
       getDocAna(val,type,ids){
         var mthis = this;
         mthis.ifRenderAllTitle= false
-        mthis.changeBar = '排序'
-        mthis.ifTopic = true
+        mthis.changeBar = '词云'
+        mthis.ifTopic = false
+        mthis.ifResize = true
         mthis.option.series[0].name = mthis.dropPlace
         if(mthis.myWordCharts.length>0){
           for(let i=0;i<mthis.myWordCharts.length;i++){
@@ -2481,7 +2204,7 @@
               console.log(mthis.topicDatas)
               let len = mthis.topicDatas.length;
               mthis.wordResize(len)
-              
+              mthis.ifResize = false
             }
           })
         }).then(()=>{
@@ -2495,8 +2218,9 @@
         var mthis = this
         mthis.ifRenderAllTitle= false
         mthis.contentAna = true
-        mthis.changeBar = '排序'
-        mthis.ifTopic = true;
+        mthis.changeBar = '词云'
+        mthis.ifTopic = false;
+        mthis.ifResize = true
         switch(val){
           case 'PER' : mthis.option.series[0].name = '人名';break;
           case 'LOC' : mthis.option.series[0].name = '地名';break;
@@ -2532,10 +2256,7 @@
               console.log(mthis.topicDatas)
               let len = mthis.topicDatas.length;
               mthis.wordResize(len)
-              for(let i=0;i<mthis.topicDatas.length;i++){
-                console.log(mthis.topicDatas[i].docDatas)
-                
-              }
+              mthis.ifResize = false
             }
           })
         }).then(()=>{
@@ -2864,14 +2585,24 @@
   .ivu-radio-wrapper{
     color:#ccffff !important;
   }
-  .ivu-radio-checked .ivu-radio-inner:after{
-    background-color:rgba(51,255,255,0.4) !important;
+  .ivu-radio-wrapper-checked{
+    color:rgba(51,255,255,1) !important;
+  }
+    
+  .ivu-radio-checked  .ivu-radio-inner:after{
+    background-color:rgba(51,255,255,1) !important;
   }
   .ivu-dropdown-rel>a{
     color:#ccffff;
   }
   .ivu-dropdown-rel>a:hover{
     color:#33ffff;
+  }
+  .ivu-dropdown-rel>a:hover .ivu-icon-ios-arrow-down:before{
+    content: url('../../dist/assets/images/keyownhover.png') !important;
+  }
+  .ivu-icon-ios-arrow-down:before {
+    content: url('../../dist/assets/images/keyown.png') !important;
   }
   #topicAnaly .ivu-dropdown-item{
     padding-left:10px !important;
@@ -3200,24 +2931,30 @@
     width:200px;
     max-width: 200px;
   }
+  .itemFrom{
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+  }
   .delB{
         width: 100px;
-        height: 30px;
+        height: 26px;
         
         background-color:rgba(51,255,255,0.5) !important;
         border-radius: 5px;
         
         font-family: MicrosoftYaHei;
-	      font-size: 14px;
-        
-        line-height: 30px;
+	      font-size: 12px;
+        color:rgba(204,255,255,1);
+        line-height: 26px;
         text-align: center;
         cursor: pointer;
         margin-left:10px;
     }
     .delB:hover{
-        color: #ccffff !important;
-        background-color:rgba(51,255,255,0.7) !important;
+        /* color:rgba(204,255,255,1) !important; */
+        /* color: #ccffff !important; */
+        background-color:rgba(51,255,255,0.6) !important;
     }
     .allTitle{
       position:absolute;
@@ -3229,10 +2966,21 @@
       max-height:300px;
       min-height:80px;
       overflow-y:scroll;
-      transition:all 0.8s ease;
+      /* transition:all 0.8s ease; */
     }
     .animaTopItem{
       transition:all 0.8s ease;
       /* transition:width 0.7s ease; */
     }
+    #topicAnaly .ivu-dropdown-item {
+      padding-left: 10px !important;
+      color: rgba(51,255,255,0.4);
+      line-height: 26px;
+    }
+    #topicAnaly .ivu-dropdown-item:hover {
+      color: rgba(51,255,255,1);
+    }
+    /* .textTitle:hover{
+      background-color: rgba(51, 255, 255, 0.2);
+    } */
 </style>
