@@ -220,9 +220,9 @@
                 <p class='docAnaTitle' @click="showAllTitle(index,$event,1);closeShowTitle()">{{list.docDatas[0].title}}</p>
                 &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
               </div>
-              <a href="#topMenuall">
+              
                 <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
-              </a>
+              
               
               <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,1)"></Icon>
             </div>
@@ -255,9 +255,9 @@
                     <p class='docAnaTitle' @click="showAllTitle(index,$event,2);closeShowTitle()">{{list.docDatas[0].title}}</p>
                     &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
                   </div>
-                      <a href="#topMenuall">
+                      
                         <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
-                      </a>
+                      
                       
                   
                   
@@ -1406,14 +1406,17 @@
       clickHub(isOpen){
         var mthis = this;
         if(!mthis.contentAna) return;
-        var topicAnaly = document.getElementById('topicAnaly');
+        var topicAnalyDiv = document.getElementById('topicAnaly');
+        
         if(isOpen){
-          topicAnaly.style.left = '240px';
+          
+          topicAnalyDiv.style.left = '240px';
           mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 252 + 'px';
           mthis.wordResize(document.getElementsByClassName('topItem').length)
           mthis.openHub = false
         }else{
-          topicAnaly.style.left = '0px';
+          
+          topicAnalyDiv.style.left = '0px';
           mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20  + 'px';
           mthis.wordResize(document.getElementsByClassName('topItem').length)
           mthis.openHub = true
@@ -1557,7 +1560,7 @@
         div.style.order = this.orderCount ;
         divWord.style.order = this.orderCount ;
         
-        // $('#topicAnaly').animate({scrollTop:0},500)
+        $('#topicAnaly').animate({scrollTop:0},500)
         
         
         
