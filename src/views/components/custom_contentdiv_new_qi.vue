@@ -877,7 +877,7 @@
             mthis.$store.commit('setContent2time',[{
               ids:selectIds
             }])
-            mthis.ifShowDoc = true
+            // mthis.ifShowDoc = true
             mthis.analysisButton = true
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
