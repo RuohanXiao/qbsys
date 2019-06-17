@@ -293,7 +293,7 @@ export default {
         polygonLayer:null,
         diePointColor:'#9eb2b1', //'#33ffff',//初始化加载时的实体点颜色
         lifePointColor: '#ff9900',//拉框选中后的实体点颜色
-        halflifePointColor:'rgba(255,204,102,0.5)',
+        halflifePointColor:'#93bdbb',//'rgba(255,204,102,0.5)',
         frameSelectedEntityPoints : [],  //拉框时选择的所有实体点
         draw:null,
         selectPointerMove : null,
@@ -621,9 +621,9 @@ export default {
                 }
             ];
             var orgIds = [];
-            var eventIds = [];
-            var areaIds = [];
-            for(let i = 0; i < mthis.SelectedIds.length; i++){
+            var eventIds = mthis.geo_hastype_param.eventIds;
+            var areaIds = mthis.geo_hastype_param.orgIds;
+            /* for(let i = 0; i < mthis.SelectedIds.length; i++){
                 let id = mthis.SelectedIds[i];
                 let type = id.split('&')[0];
                 let oid = id.split('&')[1];
@@ -632,7 +632,7 @@ export default {
                 } else {
                     orgIds.push(oid);
                 }
-            }
+            } */
             for(let i = 0; i < mthis.AreaIds.length; i++){
                 let id = mthis.AreaIds[i];
                 areaIds.push(id);
@@ -668,7 +668,7 @@ export default {
                 }
                 if (areaIds.length > 0){
                     mthis.$http.post("http://10.60.1.141:5100/search-Area/", {
-                        ids: areaIds
+                        nodeIds: areaIds
                     }).then(response => {
                         if (response.body.code === 0) {
                             mthis.worksetData[2].type = "area";
@@ -2082,7 +2082,7 @@ export default {
                     // debugger
                     allIds = mthis.asynAddgeometrySelectedQBIds(Ids,allIds,num);
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer');
-                    mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
+                    /* mthis.qbMap.addFeatures(addfeatures,'heatmapLayer'); */
                     mthis.hide(num);
                 },function(error){
                     alert("探索失败!");
@@ -2198,9 +2198,12 @@ export default {
         },
         changedrawType(object){
             var mthis = this
+            debugger
             var mapDiv = document.getElementById('mainMap')
             mapDiv.style.cursor = 'crosshair';
             mthis.qbMap.removeInteraction(mthis.draw);
+            mthis.qbMap.removeInteraction(mthis.selectPointerMove);
+            mthis.qbMap.removeInteraction(mthis.selectClick);
             //map.removeInteraction(mthis.selectClick_area);
             //矢量图层是用来渲染矢量数据的图层类型，在OpenLayers里，它是可以定制的，可以控制它的透明度，颜色，以及加载在上面的要素形状等。
             var Vecsource = new VectorSource({
@@ -2242,6 +2245,10 @@ export default {
 
         draw_polygon(draw) {
             var mthis = this
+            /* draw.on('drawstart',function(){
+                debugger
+                mthis.removeSelectedPoints();
+            }); */
             draw.on('drawend', function(obj) {
                 var feature = obj.feature;
                 var geometry = feature.getGeometry();
@@ -2250,6 +2257,12 @@ export default {
                 mthis.timeSelectedEventIds.length = 0;
                 mthis.staticsSelectedEventIds.length = 0;
                 mthis.qbMap.map.removeInteraction(draw);
+                mthis.deleteSelectClickFeatures();//清除Interaction中select的释放feature
+                setTimeout(function(){
+                    mthis.qbMap.addInteraction(mthis.selectPointerMove);
+                    mthis.qbMap.addInteraction(mthis.selectClick);
+                    //mthis.routeMap.map.addInteraction(mthis.selectClick_area);
+                },1000)
                 mthis.qbMap.map.getView().animate({
                     center: getCenter(geometry.getExtent()),
                     duration: 1000
@@ -2261,7 +2274,7 @@ export default {
         //颜色转换，移除被选择的实体点
         removeSelectedPoints(){
             var mthis = this
-            var selectingPointSource = mthis.getLayerById("eventsPointsLayer").getSource();
+            var selectingPointSource = mthis.qbMap.getLayer("QBLayer").getSource();
             selectingPointSource.getFeatures().forEach(function(item){
                 if(item.getStyle() !== null && item.getStyle().getImage().getFill().getColor() === 'rgba(102,153,153,1)'){
                     /* item.setStyle(mthis.noSelectedstyle); */
@@ -2693,7 +2706,7 @@ export default {
             var mthis = this;
             // debugger
             var we = feature.get('selectedNum') / mthis.maxEventsNum;
-            var weight = we>0.5?we:0.5;
+            var weight = we<0.5&&we>0?0.5:we;
             return weight
         },
         getWfsData(featureTypes,filter) {   //mthis.getWfsData(featureTypes,filter);
@@ -3091,9 +3104,24 @@ export default {
             var selectedFeatures = [];
             var selectedFeatureIds = [];
             var selectedIds = mthis.$store.state.geo_onlyselected_param;
+            mthis.qbMap.getLayer('heatmapLayer').getSource().clear();
             GSF.getFeatureIdsByIds(selectedIds,mthis.QBIdsToFeatureIdList,selectedFeatureIds);
             var selectedFeatures = this.qbMap.getFeaturesByIds(selectedFeatureIds,'QBLayer');
-            GSF.setFeaturesHalfOrHL(ids,selectedFeatures,mthis.QBIdsToFeatureIdList);   
+            GSF.setFeaturesHalfOrHL(ids,selectedFeatures,mthis.QBIdsToFeatureIdList);
+            mthis.maxEventsNum = mthis.getMaxWeight(selectedFeatures);
+            mthis.qbMap.addFeatures(selectedFeatures,'heatmapLayer');
+        },
+        getMaxWeight(features){
+            var mthis = this;
+            var max = 0;
+            for(let i = 0; i < features.length; i++){
+                var feature = features[i];
+                var selectedNum = feature.get('selectedNum');
+                if(selectedNum > max){
+                    max = selectedNum;
+                }
+            }
+            return max;
         },
         getallEventIdsFromallEventIdsToFeaturesIds(){
             var mthis = this;
@@ -3301,7 +3329,7 @@ export default {
                             }
                         })
                     }
-                    mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
+                    /* mthis.qbMap.addFeatures(addfeatures,'heatmapLayer'); */
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer')
                     mes.push('组织机构：' + orgNum + ' 处');
                     mes.push('事件：' + eventNum + ' 件');
@@ -3455,7 +3483,7 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
+      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','geo_hastype_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
       'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte',
       'heatMapRadius','heatMapBlur','displayHeatMap'
     ]),
