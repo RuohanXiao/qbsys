@@ -209,8 +209,8 @@ var store = new Vuex.Store({
             api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
             map_url: 'http://10.60.1.142:8082', //地图脚本服务地址
             api_event_test_url: 'http://10.60.1.141:5100', //事件时间轴测试接口
-            // xml_url: 'http://10.60.1.140/assets' // 部署路径
-            xml_url: './src/dist/assets' // 本地路径
+            xml_url: 'http://10.60.1.140/assets' // 部署路径
+            //xml_url: './src/dist/assets' // 本地路径
         },
         // ipConfig: {
         //   // api_url:'http://10.60.1.140:5001', //部署服务器api地址
@@ -369,6 +369,7 @@ var store = new Vuex.Store({
             eventId: []
         },
         geo_onlyselected_param: [],
+        geo_hastype_param:{},
         content_selected_param: {
             type: '',
             params: {}
@@ -436,9 +437,9 @@ var store = new Vuex.Store({
         heatMapBlur: 20,
         displayHeatMap: false,
         topicClassifIds: [],
-        topicSelIds:[],
-        ifSinDocAna:0,
-        ifMulDocAna:0,
+        topicSelIds: [],
+        ifSinDocAna: 0,
+        ifMulDocAna: 0,
         seletedDocAttrList: [
             // {
             // title:'Venezuelan oil chief blames fire on opposition',
@@ -448,27 +449,30 @@ var store = new Vuex.Store({
         ],
         // 文档模块主题分析算子打开关闭标志
         topicClassifStatus: false,
-        thematicLayerName:[],
-        openthematicLayer:false,
+        thematicLayerName: [],
+        openthematicLayer: false,
         // 文档数据透视点击传给主题分析的IDS
-        docAnaSelIds:[],
-    
+        docAnaSelIds: [],
+
         groupParams: new Object(),
         groupFlag: false,
         communityData: new Object(),
-        netSwitch:0,
+        thematicLayerName: [],
+        openthematicLayer: false,
+        netSwitch: 0,
         // thematicLayerName: [],
         // openthematicLayer: false
     },
     mutations: {
-        setNetSwitch(state,val){
+        setNetSwitch(state, val) {
             state.netSwitch = val
         },
-        setDocAnaSelIds(state,val){
+        setDocAnaSelIds(state, val) {
             state.docAnaSelIds = val
         },
-        setTopicSelIds(state,val){
-            state.topicSelIds = val},
+        setTopicSelIds(state, val) {
+            state.topicSelIds = val
+        },
         setCommunityData(state, val) {
             state.communityData = val
         },
@@ -739,6 +743,9 @@ var store = new Vuex.Store({
         },
         setGeoOnlyselectedParam(state, val) {
             state.geo_onlyselected_param = val
+        },
+        setGeoHastypeParam(state, val){
+            state.geo_hastype_param = val
         },
         setContentSelectedParam(state, val) {
             state.content_selected_param = val

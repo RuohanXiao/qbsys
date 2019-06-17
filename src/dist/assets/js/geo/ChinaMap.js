@@ -66,7 +66,6 @@ var map = function(target){
         //设置视图
         view: view
     });
-    //this.map.addControl();
     this.addlayer = function(layer){
     	this.map.addLayer(layer);
     };
@@ -79,15 +78,12 @@ var map = function(target){
     
     this.addRightClickInLayer = function(layer,callBack){
         var mthis = this;
-        //var RClickLayer = layer;
         var mapDiv = mthis.map.getViewport();
         mapDiv.addEventListener("contextmenu", function(event){
             event.preventDefault();//屏蔽自带的右键事件
             var RClickLayer = layer;
             var coordinate = mthis.map.getEventCoordinate(event);
             callBack(layer,coordinate);
-            //callBack(rcL,)
-
         })
     };
     //地图显示
