@@ -453,8 +453,8 @@ export default {
         legendURL:[],
         openThematicModal:false,
         hasTheamatic:false,
-        waitCount:1,
-                
+        asynwaitCount:1,
+        asynAddIdsCount:1,   
         } 
     },
     mounted() {
@@ -2042,6 +2042,7 @@ export default {
             var url = '';
             var promptType = ''
             var num = 0;
+            var allIds = [];
             if(type === 'Event'){
                 url = 'http://10.60.1.141:5100/exploreEvent/'
                 //url = 'http://localhost:5000/exploreEvent/'
@@ -2063,7 +2064,7 @@ export default {
                 mthis.$http.post(url, {
                     'geometry':[geometry]
                 }).then(response => {
-                    
+                    var Ids = [];
                     var OrgGeojson = response.body.data.Features;
                     var addfeatures = (new GeoJSON()).readFeatures(OrgGeojson);
                     for(let i = 0; i < addfeatures.length; i++){
@@ -2074,10 +2075,12 @@ export default {
                             let param = params[j];
                             let id = param.id;
                             mthis.QBIdsToFeatureIdList[id] = featureId;
-                            mthis.geometrySelectedQBIds.push(id)
+                            //mthis.geometrySelectedQBIds.push(id)
+                            Ids.push(id);
                         }
                     }
-                    //mthis.cancelSelectQB();
+                    debugger
+                    allIds = mthis.asynAddgeometrySelectedQBIds(Ids,allIds,num);
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer');
                     mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
                     mthis.hide(num);
@@ -2086,36 +2089,22 @@ export default {
                     mthis.hide(num);
                 })
             }
-            /* mthis.waiting();
-            mthis.$http.post(url, {
-                    'geometry':geometryArr
-                }).then(response => {
-                    mthis.geometrySelectedQBIds = [];
-                    var OrgGeojson = response.body.data.Features;
-                    var addfeatures = (new GeoJSON()).readFeatures(OrgGeojson);
-                    for(let i = 0; i < addfeatures.length; i++){
-                        let feature = addfeatures[i];
-                        let featureId = feature.getId();
-                        let params = feature.get('Params');
-                        for(let j = 0; j < params.length; j++){
-                            let param = params[j];
-                            let id = param.id;
-                            mthis.QBIdsToFeatureIdList[id] = featureId;
-                            mthis.geometrySelectedQBIds.push(id)
-                        }
-                    }
-                    mthis.cancelSelectQB();
-                    mthis.qbMap.addFeatures(addfeatures,'QBLayer');
-                    mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
-                    mthis.hide();
-                },function(error){
-                    alert("探索失败!");
-                    mthis.hide();
-                }) */
         },
-        /* addQBFeaturesCancelExist(features){
-
-        }, */
+        asynAddgeometrySelectedQBIds(ids,allIds,count){
+            var mthis = this;
+            /* var allIds = []; */
+            var a = [];
+            if(mthis.asynAddIdsCount === count){
+                a = allIds.concat(ids);
+                mthis.geometrySelectedQBIds = allIds;
+                mthis.asynAddIdsCount = 1;
+                return null;
+            } else {
+                a = allIds.concat(ids);
+                mthis.asynAddIdsCount++;
+                return a;
+            }
+        },
         cancelSelectQB(){
             var mthis = this;
             var existQBfeatures = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
@@ -3239,12 +3228,12 @@ export default {
                     num = count;
                 }
                 var body = document.getElementsByTagName("body");
-                var waitCount = mthis.waitCount;
-                if(num === waitCount){
+                var asynwaitCount = mthis.asynwaitCount;
+                if(num === asynwaitCount){
                     body[0].removeChild(mybg);
-                    mthis.waitCount = 1;
+                    mthis.asynwaitCount = 1;
                 } else {
-                    mthis.waitCount++
+                    mthis.asynwaitCount++
                 }
                 
             }   
