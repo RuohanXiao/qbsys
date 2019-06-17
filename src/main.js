@@ -457,7 +457,7 @@ var store = new Vuex.Store({
         groupFlag: false,
         communityData: new Object(),
         thematicLayerName: [],
-        openthematicLayer: false
+        openthematicLayer: false,
         netSwitch: 0,
         // thematicLayerName: [],
         // openthematicLayer: false
