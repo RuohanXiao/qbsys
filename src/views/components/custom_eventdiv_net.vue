@@ -14,9 +14,9 @@
             </div>
           </Tab-pane>
           <Tab-pane label="数据透视" name='toushi' :style="{fontSize: '18px',height:viewHeight_30}" id='toushi'>
-            <Spin size="large"  v-if="spinShow">
-               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
-                <div>Loading</div>
+            <Spin size="large" v-if="spinShow">
+              <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+              <div>Loading</div>
             </Spin>
             <left-statics :staticsDatas='staticsDatas' :openPanelNames='openPanelNames' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'net' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
@@ -27,7 +27,19 @@
             </div>
           </Tab-pane>
           <Tab-pane label="分析结果" name='analysisResults' :style="{fontSize: '18px',height:viewHeight_30}" id='analysisResults' v-if='gFlag'>
-            <div class="scrollBarAble" :style="{height:eventItemHeight,minHeight:eventItemHeight}"><div class='groupStyle' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">第{{index+1}}社区     (共{{gitem.length}}个节点)</div></div>
+            <div class="scrollBarAble" :style="{height:eventItemHeight,minHeight:eventItemHeight}">
+              <div class='groupStyle' v-if='$store.state.methodType=="community"' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">第{{index+1}}社区 ({{gitem.length}}) </div>
+              <div class='groupStyle' v-if='$store.state.methodType=="labelprop"' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">标签传播{{index+1}} ({{gitem.length}}) </div>
+              <div class='groupStyle' v-if='$store.state.methodType=="cc"' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">弱连通分量{{index+1}} ({{gitem.length}}) </div>
+              <!-- <Collapse simple class='scrollBarAble'>
+                <panel class='groupStyle' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">
+                  <span>第{{index+1}}社区 (共{{gitem.length}}个节点)</span>
+                  <div slot="content" class="tableLine" v-for="(ite,ind) in communityData">
+                    {{ite}}
+                  </div>
+                </panel>
+              </Collapse> -->
+            </div>
           </Tab-pane>
         </Tabs>
       </div>
@@ -42,6 +54,7 @@
   import percentBar from './custom_percentBar'
   import leftStatics from './custom_leftStatics'
   import eventNet from './custom_event_net'
+  import communityDiv from './custom_community_div'
   import {
     mapState,
     mapMutations
@@ -51,8 +64,8 @@
   export default {
     data() {
       return {
-        spinShow:false,
-        spinShow1:false,
+        spinShow: false,
+        spinShow1: false,
         eDiv: '',
         vh20: 0,
         selectTime: false,
@@ -61,7 +74,7 @@
         tabSelectNetValue: 'mubiaoxiangqingNet',
         modalNodeId: '',
         contentStatisticsdata: {},
-        evetdataFlag:false,
+        evetdataFlag: false,
         statisticsNameList: {
           'entity': '实体',
           'human': '人物',
@@ -94,45 +107,52 @@
         eventheight: 0,
         eventItemHeight: 0,
         closable: true,
-        staticsDatas:[],
+        staticsDatas: [],
         nodeTypedata: null,
         staticsIds: [],
         single: false,
         resArr: [],
-        rightClickConf : [
-            {'name':'只选中它','id':'onlylookit','iconClassName':'icon-ren'},
-            {'name':'删除','id':'delete','iconClassName':'icon-ren'}
+        rightClickConf: [{
+            'name': '只选中它',
+            'id': 'onlylookit',
+            'iconClassName': 'icon-ren'
+          },
+          {
+            'name': '删除',
+            'id': 'delete',
+            'iconClassName': 'icon-ren'
+          }
         ],
-        openPanelNames:[],
-        gFlag:false,
-        groupItems:new Array()
+        openPanelNames: [],
+        gFlag: false,
+        groupItems: new Array()
       };
     },
     components: {
       modalChartDetail,
       percentBar,
       leftStatics,
-      eventNet
+      eventNet,
+      communityDiv
     },
     // computed: {
     //   menuitemClasses: function() {
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType','groupFlag','communityData']),
+    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType', 'groupFlag', 'communityData']),
     watch: {
       // contentStatisticsResult:function(){
       //   var mthis = this;
       //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
       // },
-      communityData:function(){
-
+      communityData: function() {
       },
-      groupFlag:function(){
+      groupFlag: function() {
         var mthis = this
         mthis.groupItems = new Array()
         mthis.gFlag = mthis.groupFlag
-        if(!mthis.groupFlag){
+        if (!mthis.groupFlag) {
           // this.tabSelectNetValue = 'mubiaoxiangqingNet';
           mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
         } else {
@@ -141,10 +161,11 @@
             mthis.$http
               .post(mthis.$store.state.ipConfig.api_url + "/community/", {
                 from_ids: mthis.communityData.fromList,
-                to_ids: mthis.communityData.toList
+                to_ids: mthis.communityData.toList,
+                method: mthis.$store.state.methodType
               })
               .then(response => {
-                if(response.body.code === 0) {
+                if (response.body.code === 0) {
                   mthis.groupItems = response.body.data[0].groups
                 }
               })
@@ -162,7 +183,7 @@
               let nodeOb = {}
               nodeOb.nodeIds = mthis.selectionIdByType.nodeIds
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/entity-info/', nodeOb).then(response => {
-                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data[0].nodes)
+                mthis.evetdata = util.hebing(mthis.evetdata, response.body.data[0].nodes)
                 mthis.evetdataFlag = true
               })
             }
@@ -181,7 +202,7 @@
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/event-detail/', eventOb).then(response => {
                 // mthis.evetdataFlag = true
                 // mthis.evetdata = response.body.data[0].nodes
-                for(let i = 0; i < response.body.data.length;i++){
+                for (let i = 0; i < response.body.data.length; i++) {
                   // response.body.data[i].id = response.body.data[i].id
                   // response.body.data[i].entity_type = response.body.data[i].event_type
                   response.body.data[i].entity_type = 'event'
@@ -189,7 +210,7 @@
                 }
                 // // // // console.log(util.hebing(mthis.evetdata,response.body.data))
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                mthis.evetdata = util.hebing(mthis.evetdata, response.body.data)
                 mthis.evetdataFlag = true
               })
             }
@@ -205,24 +226,24 @@
               //   // mthis.evetdataFlag = true
               //   // mthis.evetdata = response.body.data[0].nodes
               // })
-               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
+              mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
                 // mthis.evetdataFlag = true
                 // mthis.evetdata = response.body.data[0].nodes
-                for(let i = 0; i < response.body.data.length;i++){
+                for (let i = 0; i < response.body.data.length; i++) {
                   response.body.data[i].entity_type = 'document'
                   response.body.data[i].name = response.body.data[i].title
                 }
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 // // // // console.log(util.hebing(mthis.evetdata,response.body.data))
-                mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
+                mthis.evetdata = util.hebing(mthis.evetdata, response.body.data)
                 mthis.evetdataFlag = true
               })
             }
           }, 200);
         } else {
           // mthis.$set(mthis.evetdata,0,null)
-          mthis.$set(mthis.evetdata,0,[])
-          mthis.evetdata =  []
+          mthis.$set(mthis.evetdata, 0, [])
+          mthis.evetdata = []
           mthis.evetdataFlag = false
         }
         // console.log('-------------------evetdata-----------------')
@@ -247,52 +268,52 @@
       },
       selectNetNodes: function() {
         var mthis = this;
-        if(mthis.selectNetNodes[0].ids.length > 1){
+        if (mthis.selectNetNodes[0].ids.length > 1) {
           mthis.spinShow = true;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
-          'nodeIds': mthis.selectNetNodes[0].ids,
-          'type':'net'
+            'nodeIds': mthis.selectNetNodes[0].ids,
+            'type': 'net'
           }).then(response => {
-              mthis.staticsDatas = response.body.data;
-              mthis.openPanelNames = [];
-              if(!mthis.staticsDatas){
-                  return;
-              }
-              //mthis.staticsdatas = mthis.staticsDatas;
-              mthis.staticsDatas.forEach(function(item){
-                  item.subStatisticsAttr.forEach(function(Iitem){
-                      /* var thirdLevel = Iitem.specificStaticsAttr
-                      var itemCount = thirdLevel.length;
-                      var moreItemcount = itemCount>5?itemCount-5:0;
-                      var morethirdIds = 0;
-                      if(itemCount>5){
-                          for(let i = 5; i < itemCount; i++){
-                              var tItem = thirdLevel[i];
-                              var count = tItem.count;
-                              morethirdIds += count;
-                          }
-                      } */
-                      mthis.openPanelNames.push(Iitem.secondLevelId);
-                  })
+            mthis.staticsDatas = response.body.data;
+            mthis.openPanelNames = [];
+            if (!mthis.staticsDatas) {
+              return;
+            }
+            //mthis.staticsdatas = mthis.staticsDatas;
+            mthis.staticsDatas.forEach(function(item) {
+              item.subStatisticsAttr.forEach(function(Iitem) {
+                /* var thirdLevel = Iitem.specificStaticsAttr
+                var itemCount = thirdLevel.length;
+                var moreItemcount = itemCount>5?itemCount-5:0;
+                var morethirdIds = 0;
+                if(itemCount>5){
+                    for(let i = 5; i < itemCount; i++){
+                        var tItem = thirdLevel[i];
+                        var count = tItem.count;
+                        morethirdIds += count;
+                    }
+                } */
+                mthis.openPanelNames.push(Iitem.secondLevelId);
               })
-              mthis.spinShow = false;
-          //mthis.$data.staticsDatas.splice(0,0,response.body.data);
-          /* response.body.data.forEach(function(item,index){
-          mthis.$set(mthis.staticsDatas,index,item)
-          }) */
             })
-          } else {
             mthis.spinShow = false;
-            mthis.staticsDatas = [];
-          }
+            //mthis.$data.staticsDatas.splice(0,0,response.body.data);
+            /* response.body.data.forEach(function(item,index){
+            mthis.$set(mthis.staticsDatas,index,item)
+            }) */
+          })
+        } else {
+          mthis.spinShow = false;
+          mthis.staticsDatas = [];
+        }
       }
     },
     methods: {
-      highLightNodes(mt,nodeIds){
+      highLightNodes(mt, nodeIds) {
         console.log(mt)
-        this.$store.commit('setNetStaticsSelectedIds',nodeIds);
+        this.$store.commit('setNetStaticsSelectedIds', nodeIds);
       },
-      clickRightMenu(rightCilckArgu){
+      clickRightMenu(rightCilckArgu) {
         var mthis = this;
         var buttonId = rightCilckArgu.buttonId;
         var oids = rightCilckArgu.nsIds;
@@ -307,19 +328,19 @@
           }
         } */
         var params = {
-          'type':'',
-          'ids':oids
+          'type': '',
+          'ids': oids
         }
-        if(buttonId === 'onlylookit'){
+        if (buttonId === 'onlylookit') {
           mthis.$store.commit('setNetOnlyStaticsSelectedIds', params)
-        } else if(buttonId === 'delete'){
+        } else if (buttonId === 'delete') {
           alert('请期待...')
         }
       },
-      clickLeftStatics(staticsClick){
+      clickLeftStatics(staticsClick) {
         var mthis = this;
         // // // // console.log(staticsClick)
-        mthis.$store.commit('setNetStaticsSelectedIds',staticsClick);
+        mthis.$store.commit('setNetStaticsSelectedIds', staticsClick);
       },
       hightLight(id) {},
       changTab(a) {
@@ -410,7 +431,7 @@
 </style>
 
 <style>
-  .groupStyle{
+  .groupStyle {
     font-family: MicrosoftYaHei;
     font-size: 13px;
     font-weight: normal;
@@ -422,7 +443,6 @@
     cursor: pointer;
     height: 30px;
   }
-
   #analysisResults .groupStyle:nth-child(odd) {
     background-color: rgba(51, 255, 255, 0.05);
   }
@@ -432,8 +452,6 @@
   #analysisResults .groupStyle:nth-child(even):hover {
     background-color: rgba(51, 255, 255, 0.2);
   }
-
-
   #tab1 .ivu-tabs-nav-wrap {
     overflow: hidden;
     margin-bottom: 0px;
@@ -629,5 +647,4 @@
     color: #ccffff;
     opacity: 0.5;
   }
-  
 </style>

@@ -460,10 +460,14 @@ var store = new Vuex.Store({
         thematicLayerName: [],
         openthematicLayer: false,
         netSwitch: 0,
-        // thematicLayerName: [],
-        // openthematicLayer: false
+        methodType: 'community'
+            // thematicLayerName: [],
+            // openthematicLayer: false
     },
     mutations: {
+        setMethodType(state, val) {
+            state.methodType = val
+        },
         setNetSwitch(state, val) {
             state.netSwitch = val
         },
