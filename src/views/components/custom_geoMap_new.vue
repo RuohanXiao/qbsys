@@ -621,9 +621,9 @@ export default {
                 }
             ];
             var orgIds = [];
-            var eventIds = [];
-            var areaIds = [];
-            for(let i = 0; i < mthis.SelectedIds.length; i++){
+            var eventIds = mthis.geo_hastype_param.eventIds;
+            var areaIds = mthis.geo_hastype_param.orgIds;
+            /* for(let i = 0; i < mthis.SelectedIds.length; i++){
                 let id = mthis.SelectedIds[i];
                 let type = id.split('&')[0];
                 let oid = id.split('&')[1];
@@ -632,7 +632,7 @@ export default {
                 } else {
                     orgIds.push(oid);
                 }
-            }
+            } */
             for(let i = 0; i < mthis.AreaIds.length; i++){
                 let id = mthis.AreaIds[i];
                 areaIds.push(id);
@@ -668,7 +668,7 @@ export default {
                 }
                 if (areaIds.length > 0){
                     mthis.$http.post("http://10.60.1.141:5100/search-Area/", {
-                        ids: areaIds
+                        nodeIds: areaIds
                     }).then(response => {
                         if (response.body.code === 0) {
                             mthis.worksetData[2].type = "area";
@@ -2082,7 +2082,7 @@ export default {
                     debugger
                     allIds = mthis.asynAddgeometrySelectedQBIds(Ids,allIds,num);
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer');
-                    mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
+                    /* mthis.qbMap.addFeatures(addfeatures,'heatmapLayer'); */
                     mthis.hide(num);
                 },function(error){
                     alert("探索失败!");
@@ -3091,9 +3091,24 @@ export default {
             var selectedFeatures = [];
             var selectedFeatureIds = [];
             var selectedIds = mthis.$store.state.geo_onlyselected_param;
+            mthis.qbMap.getLayer('heatmapLayer').getSource().clear();
             GSF.getFeatureIdsByIds(selectedIds,mthis.QBIdsToFeatureIdList,selectedFeatureIds);
             var selectedFeatures = this.qbMap.getFeaturesByIds(selectedFeatureIds,'QBLayer');
-            GSF.setFeaturesHalfOrHL(ids,selectedFeatures,mthis.QBIdsToFeatureIdList);   
+            GSF.setFeaturesHalfOrHL(ids,selectedFeatures,mthis.QBIdsToFeatureIdList);
+            mthis.maxEventsNum = mthis.getMaxWeight(selectedFeatures);
+            mthis.qbMap.addFeatures(selectedFeatures,'heatmapLayer');
+        },
+        getMaxWeight(features){
+            var mthis = this;
+            var max = 0;
+            for(let i = 0; i < features.length; i++){
+                var feature = features[i];
+                var selectedNum = feature.get('selectedNum');
+                if(selectedNum > max){
+                    max = selectedNum;
+                }
+            }
+            return max;
         },
         getallEventIdsFromallEventIdsToFeaturesIds(){
             var mthis = this;
@@ -3301,7 +3316,7 @@ export default {
                             }
                         })
                     }
-                    mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
+                    /* mthis.qbMap.addFeatures(addfeatures,'heatmapLayer'); */
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer')
                     mes.push('组织机构：' + orgNum + ' 处');
                     mes.push('事件：' + eventNum + ' 件');
@@ -3455,7 +3470,7 @@ export default {
 
     },
     computed:mapState ([
-      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
+      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','geo_hastype_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
       'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte',
       'heatMapRadius','heatMapBlur','displayHeatMap'
     ]),
