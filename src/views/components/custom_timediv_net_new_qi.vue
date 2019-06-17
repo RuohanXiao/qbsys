@@ -929,7 +929,7 @@
                   
               }).then(response =>{
                   if(response.body.code === 0){
-                      // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(0)
+                      mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
                       for(let i=0;i<response.body.data.time.length;i++){
                         let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
                         mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
