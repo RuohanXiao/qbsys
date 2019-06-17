@@ -27,11 +27,7 @@
             </div>
           </Tab-pane>
           <Tab-pane label="分析结果" name='analysisResults' :style="{fontSize: '18px',height:viewHeight_30}" id='analysisResults' v-if='gFlag'>
-            <!-- <Spin size="large"  v-if="spinShow1">
-               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
-                <div>Loading</div>
-            </Spin> -->
-            <div class='groupStyle' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">第{{index}}社区</div>
+            <div class="scrollBarAble" :style="{height:eventItemHeight,minHeight:eventItemHeight}"><div class='groupStyle' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">第{{index+1}}社区     (共{{gitem.length}}个节点)</div></div>
           </Tab-pane>
         </Tabs>
       </div>
@@ -427,13 +423,13 @@
     height: 30px;
   }
 
-  #analysisResults>.groupStyle:nth-child(odd) {
+  #analysisResults .groupStyle:nth-child(odd) {
     background-color: rgba(51, 255, 255, 0.05);
   }
-  #analysisResults>.groupStyle:nth-child(odd):hover {
+  #analysisResults .groupStyle:nth-child(odd):hover {
     background-color: rgba(51, 255, 255, 0.2);
   }
-  #analysisResults>.groupStyle:nth-child(even):hover {
+  #analysisResults .groupStyle:nth-child(even):hover {
     background-color: rgba(51, 255, 255, 0.2);
   }
 

@@ -566,7 +566,7 @@ export default {
         },
         selectThematics(selectedThematics){
             var mthis = this;
-            debugger
+            // debugger
             for(let i = 0; i < selectedThematics.length; i++){
                 let thematic = selectedThematics[i];
                 let extent = thematic.extent;
@@ -1056,7 +1056,7 @@ export default {
         },
         rightClickOrg(){
             var mthis = this;
-            debugger
+            // debugger
             var areaIds= mthis.AreaIds;
             var geometryList = [];
             for(let i = 0; i < areaIds.length; i++){
@@ -1403,7 +1403,7 @@ export default {
                 mthis.qbMap.addInteraction(mthis.selectPointerMove);
                 mthis.qbMap.addInteraction(mthis.selectClick);
                 mthis.selectPointerMove.on('select', function(e) {
-                    debugger
+                    // debugger
                     var selectFeatures = e.selected
                     var deselectFeatures = e.deselected
                     if(deselectFeatures.length > 0){
@@ -1421,7 +1421,7 @@ export default {
                         }
                     }
                     if(selectFeatures.length > 0){
-                        debugger
+                        // debugger
                         for(let i = 0; i < selectFeatures.length; i++){
                             if(selectFeatures[i].getId().split('&')[0] === 'event'){
                                 //mthis.pointSelectedAnimation(selectFeatures[i],'pointMove');
@@ -1437,7 +1437,7 @@ export default {
                 });
                 mthis.selectClick.on('select', function(e) {
                     mthis.deleteSelectClickFeatures();
-                    debugger
+                    // debugger
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected;
                     var num = 0;
@@ -2079,7 +2079,7 @@ export default {
                             Ids.push(id);
                         }
                     }
-                    debugger
+                    // debugger
                     allIds = mthis.asynAddgeometrySelectedQBIds(Ids,allIds,num);
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer');
                     mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
@@ -2351,7 +2351,7 @@ export default {
 
         boxSelectedQB(geometry){   
             var mthis = this
-            debugger
+            // debugger
             var num = 0;
             var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
             if(features.length !== 0){
@@ -2691,7 +2691,7 @@ export default {
         },
         weightFunction(feature){
             var mthis = this;
-            debugger
+            // debugger
             var we = feature.get('selectedNum') / mthis.maxEventsNum;
             var weight = we>0.5?we:0.5;
             return weight
@@ -2798,7 +2798,7 @@ export default {
         },
         deletePoints(){
             var mthis = this;
-            debugger
+            // debugger
             var selectedIds = mthis.$store.state.geo_onlyselected_param;
             if(selectedIds.length > 0){
                 selectedIds.forEach(function(item){
@@ -3200,7 +3200,7 @@ export default {
         waiting(count){  
             var mthis = this;
             /* mthis.hide(); */
-            debugger
+            // debugger
             if(document.getElementById('WaitCover') === null){
                 var procbg = document.createElement("div"); //首先创建一个div    
                 procbg.setAttribute("id","WaitCover"); //定义该div的id    
@@ -3220,7 +3220,7 @@ export default {
     //取消遮罩    
         hide(count) {
             var mthis = this; 
-            debugger
+            // debugger
             var mybg = document.getElementById("WaitCover");
             if(mybg){
                 var num = 1
@@ -3252,7 +3252,7 @@ export default {
                     var addFeatures_Event = [];
                     var eventGeoJson = response.body.data.Features;
                     var addfeatures = (new GeoJSON()).readFeatures(eventGeoJson);
-                    debugger
+                    // debugger
 
 
                     /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
@@ -3463,7 +3463,7 @@ export default {
     watch:{
         displayHeatMap(){
             var mthis = this;
-            debugger
+            // debugger
             var heatMapLayer = mthis.getLayerById('heatmapLayer');
             heatMapLayer.setVisible(mthis.displayHeatMap);    
         },
@@ -3585,7 +3585,7 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
-            debugger
+            // debugger
             var data = mthis.$store.state.netToGeoData;
             var ids = [];
             var keys = Object.keys(data);
@@ -3613,7 +3613,7 @@ export default {
         },
         geoStaticsOnlyLookSelectedIds(){
             var mthis = this;
-            debugger
+            // debugger
             var eventIds = [];
             var orgIds = [];
             var ids = mthis.geoStaticsOnlyLookSelectedIds;
@@ -3641,7 +3641,7 @@ export default {
         },
         geoStaticsSelectedIds:function(){
             var mthis = this;
-            debugger
+            // debugger
             mthis.halfSelectedIds = mthis.HLIds;
             var ids = [];
             var keys = Object.keys(mthis.geoStaticsSelectedIds);
@@ -3677,7 +3677,7 @@ export default {
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            debugger
+            // debugger
             mthis.HLIds = mthis.timeSelectedEventIds
             var selectedEventsParam = {
                 type:'GeoTime',
@@ -3687,7 +3687,7 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
-            debugger
+            // debugger
             var eventIds = [];
             var orgIds = [];
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
@@ -3714,7 +3714,7 @@ export default {
         },
         geometrySelectedQBIds:function(){
             var mthis = this;
-            debugger
+            // debugger
             var eventIds = [];
             var orgIds = [];
             mthis.HLIds = mthis.geometrySelectedQBIds;
@@ -3740,7 +3740,7 @@ export default {
         geoTimeCondition:{
             handler(newValue) {
                 var mthis = this;
-                debugger
+                // debugger
                 var type = mthis.geoTimeCondition.type;
                 var timeSelectedIds = mthis.geoTimeCondition.eventIds;
                 if(type === 'notAnalysis'){

@@ -167,7 +167,6 @@
       },
       geo_hastype_param:function(){
         var mthis = this;
-        debugger
         var OrgIds = mthis.geo_hastype_param.orgIds;
         var EventIds = mthis.geo_hastype_param.eventIds;
         var num = OrgIds.length + EventIds.length;
@@ -225,7 +224,6 @@
       },
       geo_onlyselected_param: function() {
         var mthis = this;
-        debugger
         if (mthis.geo_onlyselected_param.length > 1) {
           var nodeIds = mthis.geo_onlyselected_param;
           /* for (let i = 0; i < OrgIds.length; i++) {
