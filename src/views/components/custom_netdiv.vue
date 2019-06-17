@@ -327,8 +327,6 @@
           mthis.keyCount = mthis.keyCount - 1;
           mthis.prevKup = e.code
         }
-        // console.log('keyup')
-        // console.log(mthis.keyCount)
       },
       clearBubble(e) {
         if (e.stopPropagation) {
@@ -357,14 +355,9 @@
             timestamp: timestamp
           })
           .then(response => {
-            console.log(response.body)
-            console.log(response.body.code === 0)
-            console.log(timestamp)
-            console.log(timestamp + '' === response.body.timestamp)
             if (response.body.code === 0) {
               if (timestamp + '' === response.body.timestamp) {
                 ids.map(item => {
-                  console.log(item)
                   mthis.netchart.hideNode(item + '')
                   return item
                 })
@@ -388,7 +381,6 @@
       },
       changeCenterNode(arr) {
         let mthis = this
-        // console.log(mthis.selectionId)
         this.netchart.updateSettings({
           navigation: {
             focusNodeExpansionRadius: 3,
@@ -486,7 +478,6 @@
           })
       },
       nailNode() {
-        // console.log(this.selectionId)
         for (let i = 0; i < this.selectionId.length; i++) {
           this.netchart.lockNode(this.selectionId[i])
           // util.promisify(lockNode,[this.selectionId[i]],this.netchart).then(
@@ -496,7 +487,6 @@
         }
       },
       unnailNode() {
-        // console.log(this.selectionId)
         for (let i = 0; i < this.selectionId.length; i++) {
           // util.promisify(unlockNode,[this.selectionId[i]],this.netchart).then(
           //   alert('aa')
@@ -608,7 +598,6 @@
       shortPath(ids) {
         if (ids.length > 1) {
           var mthis = this
-          // // console.log(ids);
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + "/ShortPath/", {
               NodeIds_single: ids,
               NodeIds_double: [],
@@ -691,8 +680,6 @@
           },
           time: ""
         }];
-        // // // console.log('=====selectionId==========')
-        // // // console.log(mthis.selectionId)
         setTimeout(() => {
           let ddata = mthis.netchart.exportData();
           mthis.workatlastData = [{
@@ -713,7 +700,6 @@
           this.workatlasType = type;
           this.workatlasFlag = this.workatlasFlag + 1;
         }, 200);
-        // // // console.log(this.worksetData)
       },
       openCreateGroupModal() {
         var mthis = this;
@@ -738,8 +724,6 @@
             data: []
           },
         ];
-        // // // console.log('=====setSelectionIdByType==========')
-        // // // console.log(mthis.selectionIdByTypeData)
         if (mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.ids.length > 0) {
           if (mthis.selectionIdByTypeData.nodeIds.length > 0) {
             mthis.$http
@@ -789,12 +773,9 @@
                 }
               });
           }
-          // console.log('mthis.worksetData----------')
-          // console.log(mthis.worksetData)
         }
         this.worksetType = "add";
         this.worksetFlag = this.worksetFlag + 1;
-        // // // console.log(this.worksetData)
       },
       startTimer(v) {
         var mthis = this;
@@ -949,8 +930,6 @@
           let arrList_net = new Array();
           let arrList_event = new Array();
           let arrList_doc = new Array();
-          // console.log('===============selectionIdByTypeData==============================')
-          // console.log(mthis.selectionIdByTypeData)
           let arrList = new Array().concat(mthis.selectionIdByTypeData.nodeIds).concat(mthis.selectionIdByTypeData.eventIds).concat(mthis.selectionIdByTypeData.contentIds.ids)
           // // let arrTypeList_net = new Array();
           // // let arrTypeList_event = new Array();
@@ -1105,9 +1084,6 @@
               .then(response => {
                 if (response.body.code === 0) {
                   if (JSON.stringify(response.body.data[0].RelatedEvent) !== "{}") {
-                    // // console.log('if(JSON.stringify(response.body.data[0].RelatedEvent) == "{}")')
-                    // // console.log(JSON.stringify(response.body.data[0].RelatedEvent) !== "{}")
-                    // // console.log(response)
                     eventRes = response.body.data[0].RelatedEvent;
                     let eventList = [];
                     let sList = arrList;
@@ -1225,7 +1201,6 @@
                     nodes.map(ite => {
                       ite.img = (ite.img) ? ite.img : ''
                       ite.loaded = true
-                      // console.log(ite.title)
                       ite.name = (ite.name) ? ite.name : ((ite.title + "").substring(0, 19) + '...')
                       return ite
                     })
@@ -1343,7 +1318,6 @@
         };
       },
       gongzhiEnitiy() {
-        // // console.log(this.selectionId)
         var mthis = this
         if (this.selectionId.length > 1) {
           this.expandFlag_gongzhi = 'knowledge_gongzhi'
@@ -1374,7 +1348,6 @@
         }
       },
       gongzhiEvent() {
-        // // console.log(this.selectionId)
         this.expandFlag_gongzhi = 'event_gongzhi'
         var mthis = this
         mthis.spinShow = true;
@@ -1404,7 +1377,6 @@
         }
       },
       gongzhiDoc() {
-        // // console.log(this.selectionId)
         var mthis = this
         mthis.expandFlag_gongzhi = 'content_gongzhi'
         mthis.spinShow = true;
@@ -1435,11 +1407,7 @@
         }
       },
       exportImg() {
-        // // // console.log(this.netchart)
-        // // // console.log(this.netchart.exportData()) //可以通过这种方法获取到节点的坐标
         var mthis = this;
-        // // // // console.log('=================exportImg==================')
-        // // // // console.log(this.netchart.getNode("Q22368"))
         // let nodeObj = this.netchart.getNode("Q22368")
         // nodeObj.lineColor = 'rgba(51,255,255,0.5)';
         // nodeObj.backgroundStyle = {
@@ -1714,16 +1682,13 @@
                 }
                 var item;
                 while (stack.length) {
-                  // // console.log('================++++++++++++++++++')
                   item = stack.shift();
-                  // // console.log(item.order + '    ' + item.depth)
                   let nodeObj = mthis.netchart.getNode(item.id)
                   nodeObj['x'] = item.order * 200 + x0
                   nodeObj['y'] = item.depth * 300 + y0
                   arrids.push(item.id)
                   //如果该节点有子节点，继续添加进入栈底
                   if (item.children && item.children.length) {
-                    // // console.log(item.children.length)
                     stack = stack.concat(item.children);
                   }
                 }
@@ -1772,7 +1737,6 @@
                   }
                   // nodeObj['x'] = item.order * 200 + x0
                   // nodeObj['y'] = item.depth * 300 + y0
-                  // // console.log(nodeObj['x'] + ' , ' + nodeObj['y'])
                   arrids.push(item.id)
                   // mthis.netchart.lockNode(item.id)
                   //如果该节点有子节点，继续添加进入栈顶
@@ -1781,14 +1745,11 @@
                     // for (; len; len--) {
                     //     stack.unshift(item.children[len - 1]);
                     // }
-                    // // // console.log(item.children.length)
                     stack = item.children.concat(stack);
                   }
                 }
               };
-              // // // console.log('===============guan du=====================')
               // iterator1(response.body.data[0]);
-              // // console.log('===============shen du=====================')
               iterator2(response.body.data[0]);
               response.body.nodes.map(ite => {
                 mthis.netchart.lockNode(ite)
@@ -1817,13 +1778,8 @@
       },
       //截屏
       cutScreen() {
-        // // console.log('================')
-        // // console.log(this.netchart)
-        // // console.log(this.netchart.nodes())
-        // // console.log(this.netchart.links())
         // html2canvas(document.getElementById('netchart')).then(function(canvas) {
         //   var pageData = canvas.toDataURL('image/jpeg', 1.0);
-        //   // // // console.log(pageData)
         //   var saveFile = function(data, filename){
         //       var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
         //       save_link.href = data;
@@ -1862,16 +1818,13 @@
         // Canvas2Image.saveAsPNG(document.querySelector('#netchart'),300,200);
         // var oCanvas = document.getElementById("netchart");
         // Canvas2Image.saveAsPNG(document.querySelector("#netchart"), 100, 100);
-        // // console.log(this.selectionId)
         // for(let i = 0;i<this.selectionId.length;i++){
         //   this.netchart.hideNode(this.selectionId[i])
         // }
         // let arrayNode = new Array()
         // for (let v of this.selectionIdByTypeData.eventIds) {
-        //   // // console.log(v);  
         //   arrayNode.push(this.netchart.getNode(v))
         // };
-        // // console.log(arrayNode)
         // var obj = {};
         // var i = 0;
         // for (i = 0; i < arrayNode.length; i++) {
@@ -1886,10 +1839,8 @@
         // }
         // for (var key in obj) //遍历这个对象
         // {
-        //   // console.log(key + "这个字母出现了" + obj[key] + "次");
         // }
         // this.changNetchartMode('h')
-        console.log(this.netchart.nodes())
         this.netchart.expandNode(this.selectionId[0])
       },
       //保存工作集
@@ -2031,7 +1982,6 @@
           // let netChartLogJson = JSON.parse(netChartLog).data;
           let ids = [];
           for (let num = 0; num < this.selectionId.length; num++) {
-            // // // console.log(typeof(mthis.selectionId[0]))
             if (typeof mthis.selectionId[0] === "string") {
               if (mthis.netchart.getNode(mthis.selectionId[num]).isNode) {
                 mthis.netchart.removeData({
@@ -2606,8 +2556,6 @@
               // 具体类型节点样式
               node.shadowColor = ''
               node.shadowBlur = 0
-              console.log('------------------')
-              console.log(node)
               if (node.userLock) {
                 node.items = [{
                   image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
@@ -2626,7 +2574,7 @@
                   }
                 }]
                 // node.items = [{text:"Locked", px:0.5, py:-0.5}]
-                
+
               // } else if (node.autoLock) {
 
               } else {
@@ -2941,11 +2889,8 @@
             // onTripleClick(event) - 当用户三次点击图表时调用的函数。用于自定义函数调用。
             onPointerDrag: function(event) {
               // mthis.changNetchartMode('s')
-              console.log('-----s----------')
-              console.log(event)
             },
             // onChartUpdate: function (event) {
-            //     // console.log('-------------------------------------------------->>>onChartUpdate')
             // },
             onSettingsChange: function(event) {},
             onRightClick: function(event) {
@@ -2955,8 +2900,6 @@
               // }
             },
             onError: function(event) {
-              // // // console.log('------error-------------')
-              // // // console.log(event)
             },
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
@@ -3070,8 +3013,6 @@
                   fromList: lf,
                   toList: lt
                 })
-                // console.log(eslect)
-                // console.log(lselect)
                 // let eslect = event.selection.filter(it => {
                 //   return it.isNode
                 // }).map(item => {
@@ -3125,7 +3066,6 @@
                   }).map(item => {
                     return item.id;
                   });
-                  // // console.log(mthis.selectionId)
                   let linksArr = [];
                   for (let n = 0; n < mthis.selectionId.length; n++) {
                     if (mthis.netchart.getNode(mthis.selectionId[n])) {
@@ -3168,15 +3108,9 @@
                   // let links = nodeArr.map(item=>{
                   //   return item.links
                   // })
-                  // // // // console.log('-----// // // console.log(nodeArr)-----')
-                  // // // // console.log(nodeArr)
-                  // // // // console.log(nodesId)
-                  // // // // console.log(links)
                   // let selectLinks =  links.filter(a=>{
                   //   return (util.ifInArr(nodesId,a.from)&& util.ifInArr(nodesId,a.to))
                   // })
-                  // // // // console.log(selectLinks)
-                  // // // // console.log('-----// // // console.log(nodeArr)-----')
                   for (let nu = 0; nu < event.selection.length; nu++) {
                     if (event.selection[nu].isNode) {
                       // mthis.netchart.lockNode(event.selection[nu].data.id)
@@ -3229,8 +3163,6 @@
                     "setSelectionIdByType",
                     mthis.selectionIdByTypeData
                   );
-                  // // // console.log('==========ssssss======================')
-                  // // // console.log(mthis.selectionId)
                   mthis.netchart.updateStyle(mthis.selectionId);
                   mthis.netchart.updateSettings();
                   mthis.netchart.updateSize();
@@ -3387,15 +3319,11 @@
       },
       atlastData: function() {
         var mthis = this;
-        // // // console.log('------------dao ru cao zuo------------------')
-        // // // console.log(this.atlastData)
         // layout: {
         //     // mode: 'hierarchy',
         //     mode: "radial",
         //     // mode: "static",
         //     // mode: "dynamic",
-        // // // console.log(mthis.netchart)
-        // // // console.log(mthis.netchart._impl.settings.layout.mode)
         // mthis.netchart._impl.settings.layout.mode = 'static'
         // mthis.netchart.replaceSettings({
         //   layout:{
@@ -3410,7 +3338,6 @@
         }, 200);
         // mthis.netchart.freezeLayout()
         // mthis.netchart.lockNode(mthis.atlastData.nodes.map(item=>{return item.id}))
-        // // // // console.log(mthis.netchart._impl.settings.layout.mode)
         // setTimeout(function(e) {
         //   // mthis.netchart.replaceSettings({
         //   //   layout:{
@@ -3454,8 +3381,6 @@
               pagesize: 30
             })
             .then(response => {
-              // // // console.log('=======response============')
-              // // // console.log(response)
               if (
                 response.body.code === 0 &&
                 response.body.data[0].nodeIds.length > 0
@@ -3472,8 +3397,6 @@
                         nodeIds: item.ids
                       })
                       .then(res => {
-                        // // // console.log('=======res============')
-                        // // // console.log(res)
                         if (res.body.code === 0) {
                           mthis.worksetData[0].data = res.body.data[0].nodes;
                         }
@@ -3578,7 +3501,6 @@
           */
         this.worksetType = "modify";
         this.worksetFlag = this.worksetFlag + 1;
-        // // // console.log(this.worksetData)
       },
       startTimer(v) {
         var mthis = this;
@@ -3605,7 +3527,6 @@
       },
       workSpaceAddData: function(obj) { //留扣，导入集合修改
         var mthis = this;
-        // console.log(obj)
         let arr = [];
         // let nodes = [];
         let res = [];
@@ -3745,8 +3666,6 @@
         mthis.netchart.updateSize();
       },
       geoToNetData: function() {
-        // console.log('-----------------------------')
-        // console.log(this.geoToNetData)
         // 调用查询接口，查询id对应数据
         // this.netchart.addData()
         var mthis = this;
@@ -3885,9 +3804,6 @@
         // 清空画布后添加节点
         // this.reloadNetData(va.data)
         // 不清空画布，直接添加节点
-        console.log('==================>>>')
-        console.log(mthis.netchart.getNodeDimensions(mthis.netchart.getNode(mthis.selectionId.pop())))
-        console.log(va.data)
         // let positionNode = mthis.netchart.getNodeDimensions(mthis.netchart.getNode(mthis.selectionId.pop()))
         mthis.addNetData(va.data);
         setTimeout(function() {
@@ -3911,9 +3827,6 @@
         // }, 200);
       },
       addNetNodes: function(va) {
-        // // // console.log('=======addNetNodes============================')
-        // // // console.log(this.addNetNodes)
-        // // // console.log(va)
         var mthis = this;
         if (mthis.$store.state.tmss === "net") {
           mthis.netchart.addData(va);
