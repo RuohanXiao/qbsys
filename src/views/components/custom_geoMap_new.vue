@@ -1255,13 +1255,13 @@ export default {
                         '-1':new Style({
                                 image: new Icon(({
                                     src: require('../../dist/assets/images/geo/orgNoSelected.png'),
-                                    opacity:0.98
+                                    opacity:1
                                 }))
                             }),
                         '0': new Style({
                                 image: new Icon(({
                                     src: require('../../dist/assets/images/geo/halfOrganization.png'),
-                                    opacity:0.99
+                                    opacity:1
                                 }))
                             }),
                         'multi':new Style({
@@ -1304,13 +1304,13 @@ export default {
                             }),
                         'multi':new Style({
                                     image : new CircleStyle({
-                                        radius : 3,
+                                        radius : 5,
                                         fill : new Fill({
                                             color : mthis.lifePointColor //'#33ffff'
                                         })
                                     }),
                                     stroke: new Stroke({
-                                        width: 3,
+                                        width: 5,
                                         color: mthis.lifePointColor
                                     }),
                                     fill: new Fill({
@@ -1322,13 +1322,13 @@ export default {
                         '-1':new Style({
                                 image: new Icon(({
                                     src: require('../../dist/assets/images/geo/orgNoSelected.png'),
-                                    opacity:0.98
+                                    opacity:1
                                 }))
                             }),
                         '0': new Style({
                                 image: new Icon(({
                                     src: require('../../dist/assets/images/geo/halfOrganization.png'),
-                                    opacity:0.99
+                                    opacity:1
                                 }))
                             }),
                         'multi':new Style({
@@ -1421,6 +1421,7 @@ export default {
                         }
                     }
                     if(selectFeatures.length > 0){
+                        debugger
                         for(let i = 0; i < selectFeatures.length; i++){
                             if(selectFeatures[i].getId().split('&')[0] === 'event'){
                                 //mthis.pointSelectedAnimation(selectFeatures[i],'pointMove');
@@ -2043,16 +2044,16 @@ export default {
             var promptType = ''
             var num = 0;
             if(type === 'Event'){
-                //url = 'http://10.60.1.141:5100/exploreEvent/'
-                url = 'http://localhost:5000/exploreEvent/'
+                url = 'http://10.60.1.141:5100/exploreEvent/'
+                //url = 'http://localhost:5000/exploreEvent/'
                 promptType = '事件数';
             } else if(type === 'Org'){
-                //url = 'http://10.60.1.141:5100/exploreOrg/'
-                url = 'http://localhost:5000/exploreOrg/'
+                url = 'http://10.60.1.141:5100/exploreOrg/'
+                //url = 'http://localhost:5000/exploreOrg/'
                 promptType = '组织机构数';
             } else if(type === 'GeoTar'){
-                //url = 'http://10.60.1.141:5100/exploreGeoTar/'
-                url = 'http://localhost:5000/exploreGeoTar/'
+                url = 'http://10.60.1.141:5100/exploreGeoTar/'
+                //url = 'http://localhost:5000/exploreGeoTar/'
                 promptType = '地理目标数';
             }
             mthis.geometrySelectedQBIds = [];
@@ -3252,8 +3253,8 @@ export default {
         setFeatureByIds(ids){
             var mthis = this;
             mthis.waiting();
-            mthis.$http.post("http://localhost:5000/getParamsByIds/", {
-            //mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
+            //mthis.$http.post("http://localhost:5000/getParamsByIds/", {
+            mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
                      "nodeIds": ids
                 }).then(response => {
                     var orgNum = 0;
@@ -3263,8 +3264,7 @@ export default {
                     var addFeatures_Event = [];
                     var eventGeoJson = response.body.data.Features;
                     var addfeatures = (new GeoJSON()).readFeatures(eventGeoJson);
-
-
+                    debugger
 
 
                     /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
@@ -3299,26 +3299,26 @@ export default {
                         var type = featureId.split('&')[0];
                         var num = feature.get("Params").length
                         if(type === 'event'){
-                            //addFeatures_Event.push(feature);
                             eventNum += num;
                         } else if(type === 'org'){
-                            //addFeatures_Org.push(feature)
                             orgNum += num;
                         }
+                        var params = feature.get('Params');
+                        params.forEach(function(param){
+                            var paramId = param.id;
+                            mthis.$set(mthis.QBIdsToFeatureIdList,paramId,featureId);
+                            var index = util.itemIndexInArr(paramId,mthis.geometrySelectedQBIds);
+                            if(index === -1){
+                                mthis.$data.geometrySelectedQBIds.push(paramId);
+                            }
+                        })
                     }
-                    /* mthis.addFeaturesToLayer(addFeatures_Org,'org');
-                    mthis.addFeaturesToLayer(addFeatures_Event,'event') */
+                    
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer')
-                    //if(orgNum > 0){
-                        mes.push('组织机构：' + orgNum + ' 处');
-                    //}
-                    //if(eventNum > 0){
-                        mes.push('事件：' + eventNum + ' 件');
-                    //}
-                    //if((eventNum + orgNum) > 0){
-                        var promess = '增加' + mes.join(' , ');
-                        mthis.Message(promess);
-                    //}
+                    mes.push('组织机构：' + orgNum + ' 处');
+                    mes.push('事件：' + eventNum + ' 件');
+                    var promess = '增加' + mes.join(' , ');
+                    mthis.Message(promess);
                     mthis.hide()
                 },function(res){
                     alert(res.status)
