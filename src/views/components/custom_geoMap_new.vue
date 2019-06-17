@@ -2096,9 +2096,9 @@ export default {
             var a = [];
             if(mthis.asynAddIdsCount === count){
                 a = allIds.concat(ids);
-                mthis.geometrySelectedQBIds = allIds;
+                mthis.geometrySelectedQBIds = a;
                 mthis.asynAddIdsCount = 1;
-                return null;
+                return a;
             } else {
                 a = allIds.concat(ids);
                 mthis.asynAddIdsCount++;
