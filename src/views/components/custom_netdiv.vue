@@ -2626,7 +2626,8 @@
                   }
                 }]
                 // node.items = [{text:"Locked", px:0.5, py:-0.5}]
-              } else if (node.autoLock) {
+                
+              // } else if (node.autoLock) {
 
               } else {
                 node.items = [];

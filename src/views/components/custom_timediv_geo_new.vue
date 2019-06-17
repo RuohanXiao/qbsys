@@ -210,40 +210,45 @@
           })
         }
       },
-      query() {
-        var mthis = this
-        this.boxSelEventIds.eventIds = [];
-        this.toGeoEventIds.eventIds = [];
-        this.toGeoEventIds.type = "notAnalysis";
-        this.boxSelEventIds.type = "notAnalysis";
-        let eventIds = util.getStorage("eventIds", mthis.selIdsArr)
-        for (var i in eventIds) {
-          for (var j of eventIds[i]) {
-            mthis.toGeoEventIds.eventIds.push("event&" + j)
-            mthis.boxSelEventIds.eventIds.push("event&" + j)
-          }
-        }
-        console.log(this.toGeoEventIds)
-        mthis.$store.commit('setGeoTimeCondition', this.toGeoEventIds)
-        // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
-        //         "selectedIds":this.geo_only_eventIds,
-        //         "startTime":this.selTimeArr[0],
-        //         "endTime":this.selTimeArr[1]
-        //     }).then(response =>{
-        //         if(response.body.code == 0){
-        //           this.boxSelEventIds.eventIds =[];
-        //           this.toGeoEventIds.eventIds = [];
-        //           this.toGeoEventIds.type = "notAnalysis" ; 
-        //           this.boxSelEventIds.type = "notAnalysis" ;
-        //           for(let i=0;i<response.body.data.eventIds.length;i++){
-        //             this.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
-        //             this.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
-        //           }
-        //           this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
-        //         }else{
-        //             
-        //         }
-        //     })
+      query(){
+            var mthis = this
+            this.boxSelEventIds.eventIds =[];
+            this.toGeoEventIds.eventIds = [];
+            this.toGeoEventIds.type = "notAnalysis" ; 
+            this.boxSelEventIds.type = "notAnalysis" ;
+            
+            let eventIds = util.getStorage("eventIds",mthis.selIdsArr)
+            for(var i in eventIds){
+              for(var j of eventIds[i]){
+                mthis.toGeoEventIds.eventIds.push(j)
+                mthis.boxSelEventIds.eventIds.push(j)
+              }
+            }
+            console.log(this.toGeoEventIds)
+            mthis.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
+            // this.$http.post(this.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+            //         "selectedIds":this.geo_only_eventIds,
+            //         "startTime":this.selTimeArr[0],
+            //         "endTime":this.selTimeArr[1]
+            //     }).then(response =>{
+            //         if(response.body.code == 0){
+            //           this.boxSelEventIds.eventIds =[];
+            //           this.toGeoEventIds.eventIds = [];
+            //           this.toGeoEventIds.type = "notAnalysis" ; 
+            //           this.boxSelEventIds.type = "notAnalysis" ;
+            //           for(let i=0;i<response.body.data.eventIds.length;i++){
+            //             this.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+            //             this.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+            //           }
+                      
+            //           this.$store.commit('setGeoTimeCondition',this.toGeoEventIds)
+                      
+            //         }else{
+            //             
+            //         }
+                    
+            //     })
+        
       },
       throttle(fn, delay, duration) {
         if (timer) {
@@ -629,6 +634,78 @@
                 // mthis.selectTime = true
               }
             }
+            
+          
+        })
+        
+        this.charts.dispatchAction({
+          type: "takeGlobalCursor",
+          key: "brush",
+          brushOption: {
+            brushType: "lineX"
+          }
+        });
+        this.charts.on('click', function(params) {
+          mthis.boxSelEventIds.eventIds= []
+          mthis.toGeoEventIds.eventIds = []
+          
+          params.event.event.stopPropagation();
+          mthis.timeTitle = params.name
+          let timeArr = []
+          mthis.isClick = true;
+          mthis.colorFlag = 1;
+          
+          timeArr.push(params.name)
+          timeArr.push(params.name)
+        //   mthis.$store.commit('setNetTimeCondition', timeArr)
+          mthis.clcikShowDiv = false;
+          mthis.boxSelShowDiv = false;
+          mthis.isBrush = [];
+          mthis.curInt = params.dataIndex;
+          mthis.option.dataZoom[0].start = mthis.echartsShowStart;
+          mthis.option.dataZoom[0].end = mthis.echartsShowEnd;
+          // mthis.option.series[0].itemStyle.normal.color = '#ccffff'
+          
+          mthis.charts.setOption(mthis.option)
+          let eventIds = util.getStorage("eventIds",params.dataIndex);
+          
+          mthis.toGeoEventIds.eventIds = eventIds;
+          mthis.boxSelEventIds.eventIds = eventIds;
+          /* for(let m=0;m<eventIds.length;m++){
+            mthis.toGeoEventIds.eventIds[m] = "event&" + eventIds[m]
+            mthis.boxSelEventIds.eventIds[m] = "event&" + eventIds[m]
+          } */
+          
+          mthis.toGeoEventIds.type = "notAnalysis" ;
+          mthis.boxSelEventIds.type = "notAnalysis" ;
+          mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds);
+          mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds);
+          // mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
+          //           "selectedIds":mthis.geo_only_eventIds,
+          //           "startTime":params.name,
+          //           "endTime":params.name
+          //       }).then(response =>{
+          //           if(response.body.code == 0){
+          //             mthis.boxSelEventIds.eventIds= []
+          //             mthis.toGeoEventIds.eventIds = []
+          //             mthis.toGeoEventIds.type = "notAnalysis" ; 
+          //             mthis.boxSelEventIds.type = "notAnalysis" ;
+          //             for(let i=0;i<response.body.data.eventIds.length;i++){
+          //               mthis.boxSelEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+          //               mthis.toGeoEventIds.eventIds[i] = "event&" + response.body.data.eventIds[i];
+          //             }
+                      
+          //             mthis.$store.commit('setGeoTimeCondition',mthis.toGeoEventIds);
+          //             mthis.$store.commit('setGeoTimeCondition',mthis.boxSelEventIds);
+          //           }else{
+          //             
+          //           }
+                    
+          //       })
+          mthis.charts.dispatchAction({
+            type: 'highlight',
+            // 可选，数据的 index
+            dataIndex: params.dataIndex
           })
           this.charts.dispatchAction({
             type: "takeGlobalCursor",
@@ -701,10 +778,12 @@
             mthis.clickEventIds.eventIds = []
             mthis.clickdivLeft = event.clientX + "px"
             mthis.clickdivTop = event.clientY + 'px'
-            let eventIds = util.getStorage("eventIds", params.dataIndex);
-            for (let m = 0; m < eventIds.length; m++) {
-              mthis.clickEventIds.eventIds[m] = "event&" + eventIds[m]
-            }
+            let eventIds = util.getStorage("eventIds",params.dataIndex);
+            /* for(let m=0;m<eventIds.length;m++){
+               mthis.clickEventIds.eventIds[m] = "event&" + eventIds[m]
+              
+            } */
+            mthis.clickEventIds.eventIds = eventIds;
             // mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
             //     "selectedIds":mthis.geo_only_eventIds,
             //     "startTime":clickTime,
@@ -837,12 +916,83 @@
           }
         }
       },
-      geo_onlyselected_param: function() {
-        var mthis = this
-        if (this.geo_onlyselected_param.length > 0) {
-          mthis.geo_only_eventIds = [];
-          for (let i = 0; i < this.geo_onlyselected_param.length; i++) {
-            mthis.geo_only_eventIds[i] = this.geo_onlyselected_param[i].split("&")[1]
+        geo_onlyselected_param:function(){
+          
+          var mthis = this
+         debugger
+          if(this.geo_onlyselected_param.length>0){
+             mthis.geo_only_eventIds = this.geo_onlyselected_param;
+
+            /* for(let i = 0;i<this.geo_onlyselected_param.length;i++){
+              mthis.geo_only_eventIds[i] = this.geo_onlyselected_param[i].split("&")[1]
+            } */
+            // for(let j=0;j<mthis.geo_only_eventIds.length;j++){
+            //   if(mthis.geo_only_eventIds[j].length<20){
+            //     mthis.geo_only_eventIds[j] = mthis.geo_only_eventIds[j] + "_d" +mthis.geo_only_eventIds[j]
+            //   }
+            // }
+            mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+                  "ids":mthis.geo_only_eventIds,
+                  
+                }).then(response =>{
+                  if(response.body.code === 0){
+                      if(response.body.data.time.length<100){
+                          let timeLen = response.body.data.time.length
+                          let dayCount = parseInt((100 - response.body.data.time.length) /2)
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("eventIds",localIds)
+                          // console.log('<100')
+                          // console.log(mthis.dataBySeries.date.length)
+                      }else{
+                        let dayCount = parseInt(response.body.data.time.length * 0.1)
+                       if(dayCount>0){
+                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                       
+                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                          preDateList.pop();
+                          aftDateList.shift();
+                          // console.log(preDateList.length)
+                          // console.log(aftDateList)
+                          let conCount = new Array(preDateList.length).fill('null');
+                          let conIds = new Array(preDateList.length).fill([]);
+                          let localIds = [];
+                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("eventIds",localIds)
+                      }else{
+                          mthis.dataBySeries.date = response.body.data.time;
+                          mthis.dataBySeries.num = response.body.data.count;
+                          mthis.dataBySeries.clickNum = [];
+                          mthis.loadEcharts(2);
+                          util.writeStorage("eventIds",response.body.data.ids)
+                       }
+                      }
+                       
+                       
+                  }else{
+                    // console.log("服务器error")
+                  }
+                })
+
           }
           // for(let j=0;j<mthis.geo_only_eventIds.length;j++){
           //   if(mthis.geo_only_eventIds[j].length<20){

@@ -235,6 +235,7 @@ export default {
                         mthis.$set(mthis.moreitemCount, name, moreItemcount)
                     })
                 })
+                mthis.HLIds = [];
             },
             immediate:true
         },

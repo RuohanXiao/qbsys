@@ -134,12 +134,12 @@ export default {
 
           },
           {'id':'separate'},
-          {
+          /* {
             'id':'heatMap_HSD',
             'name':'显示热力',
             'imgClass':'icon-hot',
             'isOpen':false
-          },
+          }, */
           {
             'id':'route_HSD',
             'name':'显示轨迹',

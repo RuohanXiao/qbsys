@@ -106,7 +106,7 @@
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['geo_selected_param', 'geo_onlyselected_param', 'singlePerson', 'viewHeight', 'contentStatisticsResult', 'viewHeight_20_geo', 'clickSelectedGeoIds','GeoStaticsHLItemIds']),
+    computed: mapState(['geo_selected_param', 'geo_onlyselected_param', 'geo_hastype_param', 'singlePerson', 'viewHeight', 'contentStatisticsResult', 'viewHeight_20_geo', 'clickSelectedGeoIds','GeoStaticsHLItemIds']),
     watch: {
       GeoStaticsHLItemIds:function(){
         var mthis = this;
@@ -165,11 +165,13 @@
       eventheightdiv: function() {
         this.eheight = this.eventheightdiv - 32 - 16 + 'px'
       },
-      geo_onlyselected_param: function() {
+      geo_hastype_param:function(){
         var mthis = this;
-        var OrgIds = [];
-        var EventIds = [];
-        mthis.geo_onlyselected_param.forEach(function(id) {
+        debugger
+        var OrgIds = mthis.geo_hastype_param.orgIds;
+        var EventIds = mthis.geo_hastype_param.eventIds;
+        var num = OrgIds.length + EventIds.length;
+        /* mthis.geo_hastype_param.forEach(function(id) {
           var index = id.indexOf('&');
           if (index === -1) {
             OrgIds.push(id);
@@ -182,8 +184,8 @@
               EventIds.push(Id);
             }
           }
-        })
-        if (mthis.geo_onlyselected_param.length > 0) {
+        }) */
+        if (num > 0) {
           if (OrgIds.length > 0) {
             var nodeOb = {};
             nodeOb.nodeIds = OrgIds;
@@ -220,14 +222,18 @@
           mthis.evetdata = [];
           mthis.evetdataFlag = false;
         }
+      },
+      geo_onlyselected_param: function() {
+        var mthis = this;
+        debugger
         if (mthis.geo_onlyselected_param.length > 1) {
-          var nodeIds = [];
-          for (let i = 0; i < OrgIds.length; i++) {
+          var nodeIds = mthis.geo_onlyselected_param;
+          /* for (let i = 0; i < OrgIds.length; i++) {
             nodeIds.push(OrgIds[i])
           }
           for (let i = 0; i < EventIds.length; i++) {
             nodeIds.push(EventIds[i])
-          }
+          } */
           mthis.spinShow = true;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
             'nodeIds': nodeIds,
@@ -372,9 +378,9 @@
       clickRightMenu(rightCilckArgu) {
         var mthis = this;
         var buttonId = rightCilckArgu.buttonId;
-        var oids = rightCilckArgu.nsIds;
-        var ids = []
-        for (let i = 0; i < oids.length; i++) {
+        //var oids = rightCilckArgu.nsIds;
+        var ids = rightCilckArgu.nsIds;
+        /* for (let i = 0; i < oids.length; i++) {
           let id = oids[i];
           let index = id.indexOf('&');
           if (index === -1) {
@@ -382,7 +388,7 @@
           } else {
             ids.push(id)
           }
-        }
+        } */
         if (buttonId === 'onlylookit') {
           mthis.$store.commit('setGeoStaticsOnlyLookSelectedIds', ids)
         } else if (buttonId === 'delete') {
