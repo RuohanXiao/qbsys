@@ -1,5 +1,5 @@
 <template>
-    <div id="topicAnaly" :style="{width:'100%'}">
+    <div :style="{width:'100%'}">
         
         <Row>
             <Col span="24" v-for="(item,index) in items" :key="index">
