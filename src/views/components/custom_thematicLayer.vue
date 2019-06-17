@@ -454,7 +454,8 @@ import util from '../../util/tools.js'
                 var mthis = this;
                 var queryWord = mthis.searchWord;
                 if(queryWord !== ''){
-                     mthis.$http.post("http://localhost:5000/searchthematic/", {
+                     //mthis.$http.post("http://localhost:5000/searchthematic/", {
+                    mthis.$http.post("http://10.60.1.141:5100/searchthematic/", {
                         queryWord: queryWord
                     }).then(response => {
                         if(response.body.code === 0){

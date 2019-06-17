@@ -1437,6 +1437,7 @@ export default {
                 });
                 mthis.selectClick.on('select', function(e) {
                     mthis.deleteSelectClickFeatures();
+                    debugger
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected;
                     var num = 0;
@@ -1455,7 +1456,7 @@ export default {
                             paramFeatures.forEach(function(feature){
                                 /* mthis.setFeatureStatus(feature,'die'); */
                                 feature.set('selectedNum',-1,false);
-                                mthis.geometrySelectedEventIds = [];
+                                mthis.geometrySelectedQBIds = [];
                             })
                         }
                     }
@@ -1472,7 +1473,7 @@ export default {
                             }
                         }
                         if(paramIds.length > 0){
-                            mthis.geometrySelectedEventIds = [];
+                            mthis.geometrySelectedQBIds = [];
                             var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
                             if(features.length > 0){
                                 features.forEach(function(item) {
@@ -1487,15 +1488,13 @@ export default {
                                     }
                                     if(isIN){
                                         item.get('Params').forEach(function(Iitem){
-                                            mthis.$set(mthis.geometrySelectedEventIds,num,Iitem.id);
+                                            mthis.$set(mthis.geometrySelectedQBIds,num,Iitem.id);
                                             num++;
                                         })
                                         var selectedNum = item.get('Params').length;
                                         item.set('selectedNum',selectedNum,false)
-                                        /* mthis.setFeatureStatus(item,'life'); */
                                     } else{
                                         item.set('selectedNum',-1,false)
-                                        /* mthis.setFeatureStatus(item,'die'); */
                                     }
                                 });
                             }
@@ -3313,7 +3312,7 @@ export default {
                             }
                         })
                     }
-                    
+                    mthis.qbMap.addFeatures(addfeatures,'heatmapLayer');
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer')
                     mes.push('组织机构：' + orgNum + ' 处');
                     mes.push('事件：' + eventNum + ' 件');
@@ -3475,6 +3474,7 @@ export default {
     watch:{
         displayHeatMap(){
             var mthis = this;
+            debugger
             var heatMapLayer = mthis.getLayerById('heatmapLayer');
             heatMapLayer.setVisible(mthis.displayHeatMap);    
         },
