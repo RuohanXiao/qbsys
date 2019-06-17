@@ -2359,9 +2359,6 @@ export default {
                 var geometry = feature.getGeometry();
                 
                 mthis.selectEventPointsByGeometry_test(geometry);
-                /* if(mthis.geometrySelectedEventIds.length === 0){
-                    mthis.$set(mthis.geometrySelectedEventIds,mthis.geometrySelectedEventIds.length,'geo没有选择到数据')  //为了解决使用geometry选择没有选择到数据时，对geometrySelectedEventIds的监视
-                } */
                 mthis.timeSelectedEventIds.length = 0;
                 mthis.staticsSelectedEventIds.length = 0;
                 mthis.routeMap.map.removeInteraction(draw);
