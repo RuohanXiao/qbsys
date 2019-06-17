@@ -29,11 +29,22 @@
       <div  v-show="showEchart">
           <div :id="main1Id" :style="{width:pwidth}"></div>
       </div>
-      
-      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '29px'}">
+      <div v-show="!showEchart" style="display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;">
+        <div>
+          <img src='http://10.60.1.140/assets/images/TimeLineProm.png' style="display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;">
+          <p style='color:#ccffff;font-size:14px;'>选中事件或文档可查看时间轴</p>
+        </div>
+      </div>
+      <!-- <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '29px'}">
         <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
         <p style='color:#ccffff;font-size:14px;'>选中事件或文档可查看时间轴</p>
-      </div>
+      </div> -->
     </div>
     </Col>
     <!-- <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft}" @mouseleave="clcikShowDiv=false" @click="toGeoAna(1)">选中分析</div>

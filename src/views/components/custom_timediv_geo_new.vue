@@ -29,10 +29,21 @@
           <div :id="main1Id" :style="{width:pwidth}"></div>
       </div>
       
-      <div v-show="!showEchart" :style="{position:'absolute',left: '50em',marginTop: '29px'}">
-        <img src='http://10.60.1.140/assets/images/TimeLineProm.png' :style="{marginLeft: '35px'}">
-        <p style='color:#ccffff;font-size:14px;'>选中事件可查看时间轴</p>
+     <div v-show="!showEchart" style="display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;">
+        <div>
+          <img src='http://10.60.1.140/assets/images/TimeLineProm.png' style="display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;">
+          <p style='color:#ccffff;font-size:14px;'>选中事件可查看时间轴</p>
+        </div>
       </div>
+
+
+      
     </div>
     </Col>
     <!-- <div v-show="clcikShowDiv" class="clcikShowDiv" :style="{left:clickdivLeft,top:clickdivTop}" @click="toGeoAna(1)">选中分析</div>
@@ -207,8 +218,8 @@
             let eventIds = util.getStorage("eventIds",mthis.selIdsArr)
             for(var i in eventIds){
               for(var j of eventIds[i]){
-                mthis.toGeoEventIds.eventIds.push(j)
-                mthis.boxSelEventIds.eventIds.push(j)
+                mthis.toGeoEventIds.eventIds.push("event&" + j)
+                mthis.boxSelEventIds.eventIds.push("event&" + j)
               }
             }
             console.log(this.toGeoEventIds)
@@ -700,12 +711,11 @@
           mthis.charts.setOption(mthis.option)
           let eventIds = util.getStorage("eventIds",params.dataIndex);
           
-          mthis.toGeoEventIds.eventIds = eventIds;
-          mthis.boxSelEventIds.eventIds = eventIds;
-          /* for(let m=0;m<eventIds.length;m++){
+          
+          for(let m=0;m<eventIds.length;m++){
             mthis.toGeoEventIds.eventIds[m] = "event&" + eventIds[m]
             mthis.boxSelEventIds.eventIds[m] = "event&" + eventIds[m]
-          } */
+          }
           
           mthis.toGeoEventIds.type = "notAnalysis" ;
           mthis.boxSelEventIds.type = "notAnalysis" ;
@@ -751,11 +761,10 @@
             mthis.clickdivLeft = event.clientX + "px"
             mthis.clickdivTop = event.clientY + 'px'
             let eventIds = util.getStorage("eventIds",params.dataIndex);
-            /* for(let m=0;m<eventIds.length;m++){
+            for(let m=0;m<eventIds.length;m++){
                mthis.clickEventIds.eventIds[m] = "event&" + eventIds[m]
               
-            } */
-            mthis.clickEventIds.eventIds = eventIds;
+            }
             // mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + '/time-2-event/',{
             //     "selectedIds":mthis.geo_only_eventIds,
             //     "startTime":clickTime,
@@ -911,13 +920,13 @@
         geo_onlyselected_param:function(){
           
           var mthis = this
-         debugger
+         
           if(this.geo_onlyselected_param.length>0){
-             mthis.geo_only_eventIds = this.geo_onlyselected_param;
+             mthis.geo_only_eventIds = [];
 
-            /* for(let i = 0;i<this.geo_onlyselected_param.length;i++){
+            for(let i = 0;i<this.geo_onlyselected_param.length;i++){
               mthis.geo_only_eventIds[i] = this.geo_onlyselected_param[i].split("&")[1]
-            } */
+            }
             // for(let j=0;j<mthis.geo_only_eventIds.length;j++){
             //   if(mthis.geo_only_eventIds[j].length<20){
             //     mthis.geo_only_eventIds[j] = mthis.geo_only_eventIds[j] + "_d" +mthis.geo_only_eventIds[j]
