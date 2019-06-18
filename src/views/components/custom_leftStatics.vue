@@ -186,7 +186,8 @@ export default {
                 "more":true
             },
             displayItem:{},
-            moreitemCount:{}
+            moreitemCount:{},
+            hdids:[]
         }
     },
     mounted(){
@@ -213,6 +214,10 @@ export default {
         }
     },
     watch:{
+        HLIds(){
+            var mthis = this;
+            mthis.hlids = mthis.HLIds;
+        },
         openPanelNames(){
             var mthis = this;
             mthis.mactiveNames = [];
@@ -235,17 +240,17 @@ export default {
                         mthis.$set(mthis.moreitemCount, name, moreItemcount)
                     })
                 })
-                mthis.HLIds = [];
+                mthis.hlids = [];
             },
             immediate:true
         },
-        HLIds:function(){
+        hlids:function(){
             var mthis = this;
             mthis.cancelAllClickEffect();
             var ids = [];
             var barIds = [];
-            for(let q = 0; q < mthis.HLIds.length; q++){
-                var id = mthis.HLIds[q];
+            for(let q = 0; q < mthis.hlids.length; q++){
+                var id = mthis.hlids[q];
                 var index = id.indexOf('&');
                 if(index === -1){
                     ids.push(id);
@@ -369,6 +374,7 @@ export default {
             /* if(el.style.backgroundColor ==='rgba(51, 255, 255, 0.2)'){
                 return;
             } */
+            debugger
             mthis.cancelAllClickEffect();
             mthis.gainAllClickEffect(el);
             mthis.$emit('staticsClick', ids)
