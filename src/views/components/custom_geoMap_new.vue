@@ -2027,6 +2027,7 @@ export default {
         },
         exploreQB(geometryArr,type){
             var mthis = this;
+            debugger
             var url = '';
             var promptType = ''
             var num = 0;
@@ -3250,6 +3251,7 @@ export default {
         setFeatureByIds(ids){
             var mthis = this;
             mthis.waiting();
+            mthis.cancelSelectQB();
             //mthis.$http.post("http://localhost:5000/getParamsByIds/", {
             mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
                      "nodeIds": ids
@@ -3261,34 +3263,7 @@ export default {
                     var addFeatures_Event = [];
                     var eventGeoJson = response.body.data.Features;
                     var addfeatures = (new GeoJSON()).readFeatures(eventGeoJson);
-
-
-                    /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
-                        var layerId = mthis.AllLayerList_conf[key].layerId;
-                        var existFeatures = mthis.getLayerById(layerId).getSource().getFeatures();
-                        for(let j = 0; j < existFeatures.length; j++){
-                            mthis.setFeatureStatus(existFeatures[j],'die');
-                        }
-                    })
-                    mthis.AnimationFun = {};
-                    for(let i = 0; i < addfeatures.length; i++){
-                        var feature = addfeatures[i];
-                        var params = feature.get('Params');
-                        //num += params.length;
-                        if(feature.getGeometry().getType() === 'MultiLineString'){
-                            
-                            mthis.startAnimation(feature)
-                        }
-                        
-                        mthis.mapAddFeature(feature);
-                    }
-                    // var promptMess = '增加' + promptType + ': ' + num;
-                    // mthis.Message(promptMess);
-                    mthis.hide(); */
-
-
-
-
+                    mthis.geometrySelectedQBIds = [];
                     for(let i = 0; i < addfeatures.length; i++){
                         var feature= addfeatures[i];
                         var featureId = feature.getId();
@@ -3309,7 +3284,7 @@ export default {
                             }
                         })
                     }
-                    /* mthis.qbMap.addFeatures(addfeatures,'heatmapLayer'); */
+
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer')
                     mes.push('组织机构：' + orgNum + ' 处');
                     mes.push('事件：' + eventNum + ' 件');
