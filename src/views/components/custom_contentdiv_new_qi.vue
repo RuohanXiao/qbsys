@@ -548,13 +548,13 @@
                 {
                   name:'文档聚类',
                   id:'docCluster',
-                  iconName:'icon-kongjianfenxi',
+                  iconName:'icon-neirongfenxi',
                   disabled:true
                 },
                 {
                     name:'主题分析',
                     id:'topicClassification',
-                    iconName:'icon-kongjianfenxi',
+                    iconName:'icon-neirongfenxi',
                     openFunction:'opentopicClassif',
                     closeFunction:'closetopicClassif',
                     disabled:true,
@@ -589,17 +589,30 @@
                     ]
                 },
                 {
+                name:'机器翻译',
+                id:'maskinoversettelse',
+                iconName:'icon-neirongfenxi',
+                disabled:true
+                },
+                {
                 name:'倾向性分析',
                 id:'sentimentAnalysis',
-                iconName:'icon-kongjianfenxi',
+                iconName:'icon-neirongfenxi',
                 disabled:true
                 },
                 {
                 name:'文档摘要',
                 id:'docSummary',
-                iconName:'icon-kongjianfenxi',
+                iconName:'icon-neirongfenxi',
                 disabled:true
-                }
+                },
+                {
+                name:'获取更多',
+                id:'getMore',
+                iconName:'icon-neirongfenxi',
+                disabled:true
+                },
+
         ]
       };
     },
