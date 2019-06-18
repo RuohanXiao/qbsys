@@ -280,7 +280,7 @@
       <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
           :style="{display:'none'}">
           <div class='textTitle' v-for="(item,index) in list.docDatas" :style="{display:'flex',justifyContent:'space-around',marginBottom:'5px'}" >
-              <p class="itemTitle" :style="{color:'#fff'}" :title="item.title">{{item.title}}</p>
+              <p class="itemTitle"  :style="{color:'#ccffff'}" :title="item.title">{{item.title}}</p>
               <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px',width:'70px'}">{{item.time}}</p>
               <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)'}"></p>
               <p class="itemFrom" :style="{fontSize:'10px',color:'#ccffff',marginLeft:'7px',width:'70px' }" :title="item.from">{{item.from}}</p>
@@ -656,6 +656,13 @@
         
           mthis.options = [];
           mthis.charts = [];
+          mthis.topicDatas.map(item => {
+            item.docDatas.map(it =>{
+              it.time = util.transformPHPTime(it.time);
+              return it
+            })
+            return item
+          })
           for(let i=0;i<mthis.topicDatas.length;i++){
                 mthis.charts.push(i+'wordChart');
                 mthis.myWordCharts.push(i+'myChart');
@@ -1854,7 +1861,8 @@
               contentDiv.style.borderRight = '2px #366674 solid';
               var data = response.body.data;
               var translatedTitle = data.title_translate;
-              var translatedTime = util.transformPHPTimeMS(data.time);
+              var translatedTime = $('#contentsTime').html()
+              // var translatedTime = util.transformPHPTimeMS(data.time);
               var translatedText = data.text;
               var translatedHtml = /* "<div  id='translateContentInfo' class='scrollBarAble' style='height: 607px; overflow-y: scroll; width: 50%; border-right: 2px solid rgb(54, 102, 116);'>" */
                 "<h2 id='translateContentsTitle'class='contentInfoTitle'>" + translatedTitle +
