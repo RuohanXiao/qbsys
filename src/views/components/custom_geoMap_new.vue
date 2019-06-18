@@ -2058,6 +2058,7 @@ export default {
             }
             mthis.geometrySelectedQBIds = [];
             var num = geometryArr.length;
+            mthis.cancelSelectQB();
             for(let i = 0; i < num; i++){
                 mthis.waiting();
                 var geometry = geometryArr[i];

@@ -922,7 +922,7 @@
         geo_onlyselected_param:function(){
           
           var mthis = this
-         debugger
+         
           if(this.geo_onlyselected_param.length>0){
              mthis.geo_only_eventIds = [];
 
@@ -1010,13 +1010,13 @@
           
            if(type == "GeoStatics"){
               if(this.geo_selected_param.paramIds.length>0){
-                mthis.geoStatics_eventIds = this.geo_selected_param.paramIds
+                mthis.geoStatics_eventIds = mthis.geo_selected_param.paramIds
                   mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
                         "ids":mthis.geoStatics_eventIds,
                         
                       }).then(response =>{
                         if(response.body.code === 0){
-                            // mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
+                            mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
                             for(let i=0;i<response.body.data.time.length;i++){
                               let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
                               mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
