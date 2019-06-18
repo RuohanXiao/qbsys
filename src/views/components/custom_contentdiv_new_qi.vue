@@ -2612,10 +2612,11 @@
     color:#33ffff;
   }
   .ivu-dropdown-rel>a:hover .ivu-icon-ios-arrow-down:before{
-    content: url('../../dist/assets/images/keyownhover.png') !important;
+    content: url('http://10.60.1.140/assets/images/keyownhover.png') !important;
+    
   }
   .ivu-icon-ios-arrow-down:before {
-    content: url('../../dist/assets/images/keyown.png') !important;
+    content: url('http://10.60.1.140/assets/images/keyown.png') !important;
   }
   #topicAnaly .ivu-dropdown-item{
     padding-left:10px !important;
