@@ -656,13 +656,7 @@
         
           mthis.options = [];
           mthis.charts = [];
-          mthis.topicDatas.map(item => {
-            item.docDatas.map(it =>{
-              it.time = util.transformPHPTimeMS(it.time);
-              return it
-            })
-            return item
-          })
+          
           for(let i=0;i<mthis.topicDatas.length;i++){
                 mthis.charts.push(i+'wordChart');
                 mthis.myWordCharts.push(i+'myChart');
@@ -2221,7 +2215,15 @@
             word:val
           }).then(response =>{
             if(response.body.code ==0){
+              response.body.data.map(item => {
+                item.docDatas.map(it =>{
+                  it.time = util.transformPHPTimeMS(it.time);
+                  return it
+                })
+                return item
+              })
               mthis.topicDatas = response.body.data.concat(mthis.topicDatas)
+              
               console.log(mthis.topicDatas)
               let len = mthis.topicDatas.length;
               mthis.wordResize(len)
@@ -2275,6 +2277,13 @@
             if(response.body.code ==0){
               mthis.topicDatas = response.body.data
               console.log(mthis.topicDatas)
+              mthis.topicDatas.map(item => {
+                item.docDatas.map(it =>{
+                  it.time = util.transformPHPTimeMS(it.time);
+                  return it
+                })
+                return item
+              })
               let len = mthis.topicDatas.length;
               mthis.wordResize(len)
               mthis.ifResize = false
