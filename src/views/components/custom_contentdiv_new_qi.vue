@@ -206,7 +206,7 @@
               </DropdownMenu>
           </Dropdown>
           </div>
-          <div class="delB" @click='topicDatas=[]'>清空分析结果</div>
+          <div class="delB" @click='topicDatas=[]'>清空</div>
           
         </div>
         <div class="anaDoc" >
@@ -2937,7 +2937,7 @@
     overflow:hidden;
   }
   .delB{
-        width: 100px;
+        width: 50px;
         height: 26px;
         
         background-color:rgba(51,255,255,0.5) !important;
