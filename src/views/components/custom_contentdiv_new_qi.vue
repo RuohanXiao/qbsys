@@ -1215,8 +1215,8 @@
           case 'O' : mthis.dropPlace = '其他';mthis.option.series[0].name = '其他';break;
           default: mthis.dropPlace = '关键词';mthis.option.series[0].name = '关键词';break;
         }
-        mthis.changeBar = '词云'
-        mthis.ifTopic = false
+        // mthis.changeBar = '词云'
+        // mthis.ifTopic = false
         
         if(mthis.myWordCharts.length>0){
           for(let i=0;i<mthis.myWordCharts.length;i++){
