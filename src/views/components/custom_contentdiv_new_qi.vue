@@ -658,7 +658,7 @@
           mthis.charts = [];
           mthis.topicDatas.map(item => {
             item.docDatas.map(it =>{
-              it.time = util.transformPHPTime(it.time);
+              it.time = util.transformPHPTimeMS(it.time);
               return it
             })
             return item
