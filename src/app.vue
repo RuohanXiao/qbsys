@@ -77,10 +77,10 @@
         margin: 0 auto;
     }
     .lockShow{
-        background-image: url("./dist/assets/images/lockbefore.png")/* url("http://10.60.1.140/assets/images/lockbefore.png") */
+        background-image: url("http://10.60.1.140/assets/images/lockbefore.png")/* url("./dist/assets/images/lockbefore.png") *//* url("http://10.60.1.140/assets/images/lockbefore.png") */
     }
     .lockShow:hover{
-        background-image: url("./dist/assets/images/lockafter.png")/* url("http://10.60.1.140/assets/images/lockafter.png") */
+        background-image: url("http://10.60.1.140/assets/images/lockafter.png")/* url("./dist/assets/images/lockafter.png") *//* url("http://10.60.1.140/assets/images/lockafter.png") */
     }
 </style>
 <template>
