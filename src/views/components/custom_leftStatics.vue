@@ -374,7 +374,6 @@ export default {
             /* if(el.style.backgroundColor ==='rgba(51, 255, 255, 0.2)'){
                 return;
             } */
-            debugger
             mthis.cancelAllClickEffect();
             mthis.gainAllClickEffect(el);
             mthis.$emit('staticsClick', ids)
