@@ -68,6 +68,10 @@
       }
     },
     methods: {
+      custom_unique(arr){
+        const res = new Map();
+        return arr.filter((a) => !res.has(a.id) && res.set(a.id, 1))
+      },
       enterNetOption(a) {
         this.inputInfoNet = a.label
         this.setOption(a)
@@ -550,6 +554,11 @@
                     title:'历史搜索',
                     data:JSON.parse(sessionStorage.getItem('netSearchTemp'))
                   })
+                  console.log('storangestorangestorange')
+                  if(mthis.options1[0].data.length>0){
+                    mthis.options1[0].data = mthis.custom_unique(mthis.options1[0].data)
+                  }
+                  console.log(mthis.options1)
                   if (response.body.data.SearchEntity.length > 0) {
                     let optionList = new Object()
                     let optionListArr = new Array()
