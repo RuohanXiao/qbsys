@@ -206,7 +206,7 @@
               </DropdownMenu>
           </Dropdown>
           </div>
-          <div class="delB" @click='topicDatas=[]'>清空分析结果</div>
+          <div class="delB" @click='topicDatas=[]'>清空</div>
           
         </div>
         <div class="anaDoc" >
@@ -280,7 +280,7 @@
       <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
           :style="{display:'none'}">
           <div class='textTitle' v-for="(item,index) in list.docDatas" :style="{display:'flex',justifyContent:'space-around',marginBottom:'5px'}" >
-              <p class="itemTitle" :style="{color:'#fff'}" :title="item.title">{{item.title}}</p>
+              <p class="itemTitle"  :style="{color:'#ccffff'}" :title="item.title">{{item.title}}</p>
               <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px',width:'70px'}">{{item.time}}</p>
               <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)'}"></p>
               <p class="itemFrom" :style="{fontSize:'10px',color:'#ccffff',marginLeft:'7px',width:'70px' }" :title="item.from">{{item.from}}</p>
@@ -548,13 +548,13 @@
                 {
                   name:'文档聚类',
                   id:'docCluster',
-                  iconName:'icon-kongjianfenxi',
+                  iconName:'icon-neirongfenxi',
                   disabled:true
                 },
                 {
                     name:'主题分析',
                     id:'topicClassification',
-                    iconName:'icon-kongjianfenxi',
+                    iconName:'icon-neirongfenxi',
                     openFunction:'opentopicClassif',
                     closeFunction:'closetopicClassif',
                     disabled:true,
@@ -589,17 +589,30 @@
                     ]
                 },
                 {
+                name:'机器翻译',
+                id:'maskinoversettelse',
+                iconName:'icon-neirongfenxi',
+                disabled:true
+                },
+                {
                 name:'倾向性分析',
                 id:'sentimentAnalysis',
-                iconName:'icon-kongjianfenxi',
+                iconName:'icon-neirongfenxi',
                 disabled:true
                 },
                 {
                 name:'文档摘要',
                 id:'docSummary',
-                iconName:'icon-kongjianfenxi',
+                iconName:'icon-neirongfenxi',
                 disabled:true
-                }
+                },
+                {
+                name:'获取更多',
+                id:'getMore',
+                iconName:'icon-neirongfenxi',
+                disabled:true
+                },
+
         ]
       };
     },
@@ -643,6 +656,13 @@
         
           mthis.options = [];
           mthis.charts = [];
+          mthis.topicDatas.map(item => {
+            item.docDatas.map(it =>{
+              it.time = util.transformPHPTime(it.time);
+              return it
+            })
+            return item
+          })
           for(let i=0;i<mthis.topicDatas.length;i++){
                 mthis.charts.push(i+'wordChart');
                 mthis.myWordCharts.push(i+'myChart');
@@ -1841,7 +1861,8 @@
               contentDiv.style.borderRight = '2px #366674 solid';
               var data = response.body.data;
               var translatedTitle = data.title_translate;
-              var translatedTime = util.transformPHPTimeMS(data.time);
+              var translatedTime = $('#contentsTime').html()
+              // var translatedTime = util.transformPHPTimeMS(data.time);
               var translatedText = data.text;
               var translatedHtml = /* "<div  id='translateContentInfo' class='scrollBarAble' style='height: 607px; overflow-y: scroll; width: 50%; border-right: 2px solid rgb(54, 102, 116);'>" */
                 "<h2 id='translateContentsTitle'class='contentInfoTitle'>" + translatedTitle +
@@ -2599,10 +2620,11 @@
     color:#33ffff;
   }
   .ivu-dropdown-rel>a:hover .ivu-icon-ios-arrow-down:before{
-    content: url('../../dist/assets/images/keyownhover.png') !important;
+    content: url('http://10.60.1.140/assets/images/keyownhover.png') !important;
+    
   }
   .ivu-icon-ios-arrow-down:before {
-    content: url('../../dist/assets/images/keyown.png') !important;
+    content: url('http://10.60.1.140/assets/images/keyown.png') !important;
   }
   #topicAnaly .ivu-dropdown-item{
     padding-left:10px !important;
@@ -2937,7 +2959,7 @@
     overflow:hidden;
   }
   .delB{
-        width: 100px;
+        width: 50px;
         height: 26px;
         
         background-color:rgba(51,255,255,0.5) !important;

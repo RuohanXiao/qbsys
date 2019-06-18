@@ -268,12 +268,59 @@
           {
             name: '社区发现',
             id: 'community',
-            iconName: 'icon-kongjianfenxi',
+            iconName: 'icon-community',
             // openFunction:'communityDiscovery',
             // closeFunction:'disCommunityDiscovery',
             operatorSurface: [],
             disabled: false
+          },
+          {
+            name: '排序',
+            id: 'community',
+            iconName: 'icon-paixu--shijian',
+            // openFunction:'communityDiscovery',
+            // closeFunction:'disCommunityDiscovery',
+            operatorSurface: [],
+            disabled: true
+          },
+          {
+            name: '复杂扩展',
+            id: 'community',
+            iconName: 'icon-star1',
+            // openFunction:'communityDiscovery',
+            // closeFunction:'disCommunityDiscovery',
+            operatorSurface: [],
+            disabled: true
+          },
+          {
+            name: '高级路径',
+            id: 'community',
+            iconName: 'icon-route',
+            // openFunction:'communityDiscovery',
+            // closeFunction:'disCommunityDiscovery',
+            operatorSurface: [],
+            disabled: true
+          },
+          {
+            name: '频繁子图挖掘',
+            id: 'community',
+            iconName: 'icon-jutuan',
+            // openFunction:'communityDiscovery',
+            // closeFunction:'disCommunityDiscovery',
+            operatorSurface: [],
+            disabled: true
+          },
+          {
+            name: '获取更多',
+            id: 'community',
+            iconName: 'icon-store',
+            // openFunction:'communityDiscovery',
+            // closeFunction:'disCommunityDiscovery',
+            operatorSurface: [],
+            disabled: true
           }
+
+          
         ]
       };
     },
