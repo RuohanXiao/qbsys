@@ -1059,7 +1059,7 @@
       contentHeight: function() {
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75-1 + 'px';
-        mthis.ContentHeightList = mthis.$store.state.contentHeight - 75-1 + 22 + 'px';
+        mthis.ContentHeightList = mthis.$store.state.contentHeight - 75-2+ 22 + 'px';
         console.log(mthis.ContentHeightList)
       },
       ContentHeightList: function() {
@@ -2467,9 +2467,9 @@
     animation: all 1s;
     -webkit-animation: all 1s;
     /* transform:translate(5px,5px); */
-    -webkit-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
+    /* -webkit-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     -moz-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
-    box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
+    box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5); */
     background-color: rgba(51,255,255,0.2);
   }
   /* 角标折角 */
@@ -2618,7 +2618,18 @@
   .ivu-radio-wrapper-checked{
     color:rgba(51,255,255,1) !important;
   }
-    
+  .ivu-radio-inner{
+    background-color: rgba(51,255,255,0) !important;
+    border: 1px solid rgba(51,255,255,0.4) !important;
+  }
+  .ivu-radio-inner:after{
+    background-color:rgba(51,255,255,1) !important;
+    border: 1px solid rgba(51,255,255,1) !important;
+  }
+  .ivu-radio-inner:hover{
+    background-color: rgba(51,255,255,0) !important;
+    border: 1px solid rgba(51,255,255,1) !important;
+  }
   .ivu-radio-checked  .ivu-radio-inner:after{
     background-color:rgba(51,255,255,1) !important;
   }

@@ -821,15 +821,7 @@
       'split', 'split_net','splitWidth', 'tmss', 'selectNetNodes','selectionIdByType','netStaticsSelectedIds','netOnlyStaticsSelectedIds'
     ]),
     watch: {
-      /* tmss: function(){
-        var mthis = this;
-        if(mthis.tmss == 'geo'){
-          mthis.changHeightCount++;
-        }
-      }, */
-      // selectTime: function() {
-      //   netSelectTime
-      // },
+      
       'dataBySeries.date':{
        
         handler:function(newVal,oldVal){
