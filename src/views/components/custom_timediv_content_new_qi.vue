@@ -1,26 +1,27 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId" @click="hideDiv()">
-    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" 
+    <Icon class="icon iconfont icon-shijianzhou" :id="arrowDownId" :style="{lineHeight:'32px',position:'absolute',right: '20px',zIndex:99}" 
     @click="onchangHeightCount" v-show="showDocTime"></Icon>
-    <div :style="{height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
-      <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
-        <!-- <Col span="3"/> -->
-        <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'#ccffff',fontSize:'14px'}">时间轴&nbsp;&nbsp;{{timeTitle}}</span></Col>
-        <Col span="1"  class="bottom">
-        <!-- <Tooltip content="放大" placement="bottom">
-          <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+    <div :style="{height:'32px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
+      <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'32px',paddingLeft:'10px'}">
+        <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'32px',color:'#ccffff',fontSize:'14px'}">时间轴&nbsp;&nbsp;{{timeTitle}}</span></Col>
+        <Col span="1" class="bottom">
+        <!-- <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip> -->
         </Col>
         <Col span="1" class="bottom">
-        <Tooltip content="播放" placement="bottom">
-          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
-        </Tooltip>
+          <Tooltip content="播放" placement="bottom">
+            <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'32px'}"></Icon>
+          </Tooltip>
         </Col>
-        <Col span="1" class="bottom" />
-      </Row>
-      </Col>
-      </Row>
+        <Col span="1" class="bottom">
+        <!-- <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+        </Tooltip> -->
+        </Col>
+        </Row>
     </div>
     <div :style="{borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
@@ -728,7 +729,7 @@
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
       this.timepxdiv =
-        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -8+ "px";
         
       /* this.iconPosition = useHeight * 0.8 + "px"; */
 
@@ -912,7 +913,7 @@
           document.getElementById('timechartctrl_geo').style.display = "none";
           document.getElementById('main1_geo').style.display = "none";
           document.getElementById('timediv_geo').style.display = "none";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
+          // document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
           /* mthis.$store.commit('setChangenetpx',false); */
           
         } else {
@@ -923,7 +924,7 @@
           document.getElementById('timechartctrl_geo').style.display = "block";
           document.getElementById('main1_geo').style.display = "block";
           document.getElementById('timediv_geo').style.display = "block";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
+          // document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
             mthis.$store.commit('setGeoHeight',useHeight * 0.8)
         }
@@ -948,7 +949,7 @@
           document.getElementById('timechartctrl_net').style.display = "none";
           document.getElementById('main1_net').style.display = "none";
           document.getElementById('timediv_net').style.display = "none";
-          document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
+          // document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
           mthis.$store.commit('setChangenetpx',false);
           
         } else {
@@ -965,7 +966,7 @@
           document.getElementById('timechartctrl_net').style.display = "block";
           document.getElementById('main1_net').style.display = "block";
           document.getElementById('timediv_net').style.display = "block";
-          document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
+          // document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
             mthis.$store.commit('setNetHeight',useHeight * 0.8)
         }
@@ -992,7 +993,7 @@
           document.getElementById('timechartctrl_content').style.display = "none";
           document.getElementById('main1_content').style.display = "none";
           document.getElementById('timediv_content').style.display = "none";
-          document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
+          // document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
           /* mthis.$store.commit('setChangenetpx',false); */
           
         } else {
@@ -1009,7 +1010,7 @@
           document.getElementById('timechartctrl_content').style.display = "block";
           document.getElementById('main1_content').style.display = "block";
           document.getElementById('timediv_content').style.display = "block";
-          document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
+          // document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
             mthis.$store.commit('setContentHeight',useHeight * 0.8)
         }
@@ -1049,5 +1050,8 @@
   
   .trClass:hover{
     color:rgba(93, 240, 240, 1);
+  }
+  .icon-shijianzhou::before{
+    content:url('../../dist/assets/images/shijianzhou.png');
   }
 </style>

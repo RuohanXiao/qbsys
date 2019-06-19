@@ -1058,8 +1058,8 @@
       // },
       contentHeight: function() {
         var mthis = this;
-        mthis.ContentHeight = mthis.$store.state.contentHeight - 75 + 'px';
-        mthis.ContentHeightList = mthis.$store.state.contentHeight - 75 + 22 + 'px';
+        mthis.ContentHeight = mthis.$store.state.contentHeight - 75-1 + 'px';
+        mthis.ContentHeightList = mthis.$store.state.contentHeight - 75-1 + 22 + 'px';
         console.log(mthis.ContentHeightList)
       },
       ContentHeightList: function() {
@@ -2377,7 +2377,7 @@
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
-      mthis.ContentHeight = useHeight * 0.8 - 68 + "px";
+      mthis.ContentHeight = useHeight * 0.8 - 68-1 + "px";
       console.log(mthis.ContentHeight)
       
       // let divBox = document.getElementById('contentchart')
