@@ -759,12 +759,14 @@
                         "ids":ids,
                       }).then(response =>{
                         if(response.body.code === 0){
-                            mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
-                            for(let i=0;i<response.body.data.time.length;i++){
-                              let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
-                              mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
-                              
-                            }
+                            let casDate = response.body.data.time
+                            let casCount = response.body.data.count
+                            let indStart = mthis.dataBySeries.date.indexOf(casDate[0])
+                            let indEnd = mthis.dataBySeries.date.length - indStart - casCount.length
+                            
+                            let prevCount = new Array(indStart).fill(null)
+                            let aftCount = new Array(indEnd).fill(null)
+                            mthis.dataBySeries.clickNum = prevCount.concat(casCount).concat(aftCount)
                             
                             mthis.loadEcharts(3)
                         }else{

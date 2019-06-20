@@ -920,13 +920,14 @@
                   
               }).then(response =>{
                   if(response.body.code === 0){
-                      mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
-                      for(let i=0;i<response.body.data.time.length;i++){
-                        let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
-                        mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
-                        
-                      }
-                      
+                      let casDate = response.body.data.time
+                      let casCount = response.body.data.count
+                      let indStart = mthis.dataBySeries.date.indexOf(casDate[0])
+                      console.log(indStart)
+                      let indEnd = mthis.dataBySeries.date.length - indStart - casCount.length
+                      let prevCount = new Array(indStart).fill(null)
+                      let aftCount = new Array(indEnd).fill(null)
+                      mthis.dataBySeries.clickNum = prevCount.concat(casCount).concat(aftCount)
                       mthis.loadEcharts(3)
                   }else{
                     // console.log("服务器error")
@@ -1058,7 +1059,7 @@
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.netHeightCount % 2 === 0) {
           /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight - 40 + "px";
+          document.getElementById('arrowDown_net').style.top = useHeight - 40-5 + "px";
           mthis.$store.commit('setNetHeight', useHeight * 1)
           document.getElementById('timechartctrl_net').style.display = "none";
           document.getElementById('main1_net').style.display = "none";
