@@ -4,119 +4,7 @@
       <Spin size="large" fix v-if="spinShow"></Spin>
     </div>
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',border:'solid 1px #336666'}" id="net">
-      <div class="divStyle">
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasNode? 'button-div':'button-div-disable'" @click="newCanvans">
-            <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">清空</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('remove')">
-            <Icon class="icon iconfont icon-delete-point DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">删除</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('removeOther')">
-            <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">反选</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasNode? 'button-div': 'button-div-disable'" @click="triggerMethods('selectAll')">
-            <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">全选</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="openCreateGroupModal">
-            <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">创建集合</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="nailNode">
-            <Icon class="icon iconfont icon-nail-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">锁定</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="unnailNode">
-            <Icon class="icon iconfont icon-nail-copy-copy-copy DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">解锁</p>
-          </div>
-        </Tooltip>
-        <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('square')">
-            <Icon class="icon iconfont icon-grid DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">矩形</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('circleShape')">
-            <Icon class="icon iconfont icon-circle DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
-            <p class="img-content">环形</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('star')">
-            <Icon class="icon iconfont icon-star1 DVSL-bar-btn-new DVSL-bar-btn-back" align="center" size="26"></Icon>
-            <p class="img-content">星形</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="top" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('hierarchy')">
-            <Icon class="icon iconfont icon-expand DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">层级</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="top" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('jutuan')">
-            <Icon class="icon iconfont icon-jutuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">自动</p>
-          </div>
-        </Tooltip>
-        <!-- <div class="divSplitLine"></div>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('toGeo')">
-                <Icon class="icon iconfont icon-tuisongzhikongjian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                <p class="img-content">推送空间</p>
-              </div>
-            </Tooltip>
-            <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-              <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('toContent')">
-                <Icon class="icon iconfont icon-tuisongzhiwendang DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-                <p class="img-content">推送文档</p>
-              </div>
-            </Tooltip> -->
-        <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div class="button-div" @click="openCreatProjectModal('import')">
-            <Icon class="icon iconfont icon-daoru DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">导入图</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifSelectNode? 'button-div': 'button-div-disable'" @click="triggerMethods('openCreatProjectModalExpend')">
-            <Icon class="icon iconfont icon-daochu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">导出图</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasNode? 'button-div':'button-div-disable'" @click="cutScreen">
-            <Icon class="icon iconfont icon-cut DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">截屏</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasNode? 'button-div':'button-div-disable'" @click="fit">
-            <Icon class="icon iconfont icon-zhengchangshitu--quanping DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">适配</p>
-          </div>
-        </Tooltip>
-      </div>
+      <cusButton :buttonParamArr='buttonArr' :changeButton='changeButtonParam'  @buttonClick='exButton'></cusButton>
     </div>
     <div :style="{height:nh_50,borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div id="netchart" :style="{height:nh_50}"></div>
@@ -138,6 +26,7 @@
   import modalChart from "./custom_modal_add.vue";
   import worksetModal from "./custom_workSet_modal.vue";
   import workatlasModal from "./custom_workAtlas_modal.vue";
+  import cusButton from './custom_menuButton.vue'
   import {
     rightMenu
   } from '../../dist/assets/js/rightMenu.js'
@@ -159,6 +48,123 @@
     name: "App",
     data() {
       return {
+        buttonArr:[
+          {
+            'id':'clearAll_HD',
+            'name' :'清空',
+            'imgClass':'icon-qingchu',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'delete_HSD',
+            'name' :'删除',
+            'imgClass':'icon-delete-point',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'fanxuan_HD',
+            'name' :'反选',
+            'imgClass':'icon-fanxuan',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'selectAll_HD',
+            'name' :'全选',
+            'imgClass':'icon-quanxuan',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'addSet_HSD',
+            'name' :'创建集合',
+            'imgClass':'icon-add',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'lock_AT',
+            'name' :'锁定',
+            'imgClass':'icon-nail-copy',
+            'isUse':true,
+            'type':'default',
+          },
+          {
+            'id':'unLock_AT',
+            'name' :'解锁',
+            'imgClass':'icon-nail-copy-copy-copy',
+            'isUse':true,
+            'type':'default',
+          },
+          {'id':'separate'},
+          {
+            'id':'square_HSD',
+            'name' :'矩形',
+            'imgClass':'icon-grid',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'circle_HSD',
+            'name' :'环形',
+            'imgClass':'icon-circle',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'star_HSD',
+            'name' :'星形',
+            'imgClass':'icon-star1',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'hierarchy_HSD',
+            'name' :'层级',
+            'imgClass':'icon-expand',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'auto_HSD',
+            'name' :'自动',
+            'imgClass':'icon-jutuan',
+            'isUse':false,
+            'type':'default',
+          },
+          {'id':'separate'},
+          {
+            'id':'importPic_AT',
+            'name' :'导入图',
+            'imgClass':'icon-daoru',
+            'isUse':true,
+            'type':'default',
+          },
+          {
+            'id':'exportPic_HSD',
+            'name' :'导出图',
+            'imgClass':'icon-daochu',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'cutPic_HD',
+            'name' :'截屏',
+            'imgClass':'icon-cut',
+            'isUse':false,
+            'type':'default',
+          },
+          {
+            'id':'fitCanvas_HD',
+            'name' :'适配',
+            'imgClass':'icon-zhengchangshitu--quanping',
+            'isUse':false,
+            'type':'default',
+          }
+        ],
+        changeButtonParam:[],
         linkTemp: new Object(),
         prevKdown: null,
         prevKup: null,
@@ -329,9 +335,62 @@
       worksetModal,
       workatlasModal,
       Canvas2Image,
-      operatorHub
+      operatorHub,
+      cusButton
     },
     methods: {
+      exButton(obj){
+        var mthis = this;
+        var id = obj.currentTarget.id;
+        if(id == 'clearAll_HD'){
+          mthis.newCanvans()
+        }
+        if(id == 'delete_HSD'){
+          mthis.triggerMethods('remove')
+        }
+        if(id == 'fanxuan_HSD'){
+          mthis.triggerMethods('removeOther')
+        }
+        if(id == 'selectAll_HD'){
+          mthis.triggerMethods('selectAll')
+        }
+        if(id == 'addSet_HSD'){
+          mthis.openCreateGroupModal()
+        }
+        if(id == 'lock_AT'){
+          mthis.nailNode()
+        }
+        if(id == 'unLock_AT'){
+          mthis.unnailNode()
+        }
+        if(id == 'square_HSD'){
+          mthis.triggerMethods('square')
+        }
+        if(id == 'circle_HSD'){
+          mthis.triggerMethods('circleShape')
+        }
+        if(id == 'star_HSD'){
+          mthis.triggerMethods('star')
+        }
+        if(id == 'hierarchy_HSD'){
+          mthis.triggerMethods('hierarchy')
+        }
+        if(id == 'auto_HSD'){
+          mthis.triggerMethods('jutuan')
+        }
+        if(id == 'importPic_AT'){
+          mthis.openCreatProjectModal('import')
+        }
+        if(id == 'exportPic_HSD'){
+          mthis.triggerMethods('openCreatProjectModalExpend')
+        }
+        if(id == 'cutPic_HD'){
+          mthis.cutScreen()
+        }
+        if(id == 'fitCanvas_HD'){
+          mthis.fit()
+        }
+      },
       communityDiscovery() {
         alert(1)
       },
@@ -1063,6 +1122,11 @@
           nodes: [],
           links: []
         });
+        let allIds = this.netchart.nodes().map(item => {
+          return item.id
+        })
+        console.log(allIds)
+        console.log('newcanvas')
         this.$store.commit("setSearchNetResult", [{
           node: {
             nodes: []
@@ -1084,6 +1148,16 @@
         this.ifSelectTwoNode = false;
         this.ifSelectOnlyTwoNode = false;
         this.ifhasNode = false
+        // this.changeButtonParam = [
+        //   {
+        //     'id_suf':'HD',
+        //     'isUse':false
+        //   },
+        //   {
+        //     'id_suf':'HSD',
+        //     'isUse':false
+        //   }
+        // ]
         this.getStatistics();
       },
       // 事件拓展
@@ -2126,8 +2200,28 @@
         setTimeout(function() {
           if (mthis.netchart.nodes().length > 0) {
             mthis.ifhasNode = true
+            mthis.changeButtonParam = [
+              {
+                'id_suf':'HD',
+                'isUse':true
+              },
+              {
+                'id_suf':'HSD',
+                'isUse':false
+              }
+            ]
           } else {
             mthis.ifhasNode = false
+            mthis.changeButtonParam = [
+              {
+                'id_suf':'HD',
+                'isUse':false
+              },
+              {
+                'id_suf':'HSD',
+                'isUse':false
+              }
+            ]
           }
         }, 200);
       },
@@ -3097,6 +3191,9 @@
                 }
                 if (mthis.netchart.nodes().length > 0) {
                   mthis.ifhasNode = true
+                  // mthis.changeButtonParam = [
+
+                  // ]
                 } else {
                   mthis.ifhasNode = false
                 }
@@ -3354,11 +3451,59 @@
         this.netchart.updateStyle()
         this.netchart.updateSettings()
       },
-      selectionIdByTypeData: function() {
-        let lengthNum = this.selectionIdByTypeData.nodeIds.length + this.selectionIdByTypeData.eventIds.length + this.selectionIdByTypeData.contentIds.ids.length
-        this.ifSelectNode = (lengthNum > 0) ? true : false
-        this.ifSelectTwoNode = (lengthNum > 1) ? true : false
-        this.ifSelectOnlyTwoNode = (lengthNum === 2) ? true : false
+      // selectionIdByTypeData: function() {
+      //   let lengthNum = this.selectionIdByTypeData.nodeIds.length + this.selectionIdByTypeData.eventIds.length + this.selectionIdByTypeData.contentIds.ids.length
+      //   this.ifSelectNode = (lengthNum > 0) ? true : false
+      //   this.ifSelectTwoNode = (lengthNum > 1) ? true : false
+      //   this.ifSelectOnlyTwoNode = (lengthNum === 2) ? true : false
+      // },
+      selectionIdByTypeData:{
+        deep:true,
+        immediate: true,
+        handler(newVal,oldVal){
+          var mthis = this;
+          let lengthNum = mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.ids.length;
+          if(lengthNum >0){
+            mthis.changeButtonParam = [
+              {
+                'id_suf':'HD',
+                'isUse':true
+              },
+              {
+                'id_suf':'HSD',
+                'isUse':true
+              }
+            ]
+            if(lengthNum ==2){
+              mthis.ifSelectOnlyTwoNode = true
+            }
+            if(lengthNum >1){
+              mthis.ifSelectTwoNode = true
+            }
+          }else{
+            console.log('net ifNoseldata')
+            
+            if(mthis.netchart == null){
+              mthis.changeButtonParam = [
+                {
+                  'id_suf':'HD',
+                  'isUse':false
+                },
+                {
+                  'id_suf':'HSD',
+                  'isUse':false
+                }
+              ]
+            }else{
+              console.log('justTest')
+              let allIds = mthis.netchart.nodes().map(item => {
+                return item.id
+              })
+              console.log(allIds)
+            }
+            
+          }
+        }
       },
       updateStyleCounter: function() {
         this.netchart.updateStyle()

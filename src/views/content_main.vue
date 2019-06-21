@@ -18,7 +18,7 @@
 </template>
 <script>
   import "../dist/assets/styles/net_main.css";
-  import contentChartDiv from "./components/custom_contentdiv_new_qi";
+  import contentChartDiv from "./components/custom_contentdiv_new";
   import timeChartDiv from "./components/custom_timediv_content_new_qi";
   import eventChartDivContent from "./components/custom_eventdiv_content";
   import {
@@ -515,7 +515,7 @@
     flex-flow: row nowrap;
     height: 55px;
     padding-left: 10px;
-    border-top: 1px solid rgba(54, 102, 116, 0.5);
+    /* border-top: 1px solid rgba(54, 102, 116, 0.5); */
     /* border-right:1px solid rgba(54, 102, 116, 0.5);
         border-left:1px solid rgba(54, 102, 116, 0.5); */
   }
