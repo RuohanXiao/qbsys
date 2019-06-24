@@ -1,26 +1,25 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId" @click='hideDiv()'>
-    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" @click="onchangHeightCount"></Icon>
+    <Icon class="icon iconfont icon-shijianzhou" :id="arrowDownId" :style="{lineHeight:'30px',marginTop:'3px',position:'absolute',right: '20px',zIndex:99}" @click="onchangHeightCount"></Icon>
     <div :style="{height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
-      <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
-        <!-- <Col span="1" />
-        <Col span="20" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
-        <!-- <Col span="21" class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'rgba(51, 255, 255, 0.5)'}">{{timeTitle}}</span></Col> -->
+      <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'30px',paddingLeft:'10px'}">
         <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'#ccffff',fontSize:'14px'}">时间轴&nbsp;&nbsp;{{timeTitle}}</span></Col>
         <Col span="1" class="bottom">
-        <!-- <Tooltip content="放大" placement="bottom">
-          <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+        <!-- <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip> -->
         </Col>
         <Col span="1" class="bottom">
-        <Tooltip content="播放" placement="bottom">
-          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
-        </Tooltip>
+          <Tooltip content="播放" placement="bottom">
+            <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px'}"></Icon>
+          </Tooltip>
         </Col>
-        <Col span="1" class="bottom" />
-      </Row>
-      </Col>
+        <Col span="1" class="bottom">
+        <!-- <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+        </Tooltip> -->
+        </Col>
       </Row>
     </div>
     <div :style="{borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
@@ -822,15 +821,7 @@
       'split', 'split_net','splitWidth', 'tmss', 'selectNetNodes','selectionIdByType','netStaticsSelectedIds','netOnlyStaticsSelectedIds'
     ]),
     watch: {
-      /* tmss: function(){
-        var mthis = this;
-        if(mthis.tmss == 'geo'){
-          mthis.changHeightCount++;
-        }
-      }, */
-      // selectTime: function() {
-      //   netSelectTime
-      // },
+      
       'dataBySeries.date':{
        
         handler:function(newVal,oldVal){
@@ -929,13 +920,14 @@
                   
               }).then(response =>{
                   if(response.body.code === 0){
-                      mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
-                      for(let i=0;i<response.body.data.time.length;i++){
-                        let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
-                        mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
-                        
-                      }
-                      
+                      let casDate = response.body.data.time
+                      let casCount = response.body.data.count
+                      let indStart = mthis.dataBySeries.date.indexOf(casDate[0])
+                      console.log(indStart)
+                      let indEnd = mthis.dataBySeries.date.length - indStart - casCount.length
+                      let prevCount = new Array(indStart).fill(null)
+                      let aftCount = new Array(indEnd).fill(null)
+                      mthis.dataBySeries.clickNum = prevCount.concat(casCount).concat(aftCount)
                       mthis.loadEcharts(3)
                   }else{
                     // console.log("服务器error")
@@ -952,9 +944,11 @@
         var oneFlag = true
         // console.log(this.selectionIdByType)
         let allIds = []
+        console.log(this.selectionIdByType)
         if(this.selectionIdByType.eventIds.length>0 || this.selectionIdByType.contentIds.ids.length>0){
-         
+          
           allIds = mthis.selectionIdByType.eventIds.concat(this.selectionIdByType.contentIds.ids)
+          console.log(allIds)
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
             "ids":allIds
           }).then(response =>{
@@ -1065,22 +1059,22 @@
         let useHeight = document.documentElement.clientHeight - 64 - 20;
         if (mthis.netHeightCount % 2 === 0) {
           /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight - 40 + "px";
+          document.getElementById('arrowDown_net').style.top = useHeight - 40-5 + "px";
           mthis.$store.commit('setNetHeight', useHeight * 1)
           document.getElementById('timechartctrl_net').style.display = "none";
           document.getElementById('main1_net').style.display = "none";
           document.getElementById('timediv_net').style.display = "none";
-          document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
+          // document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
           mthis.$store.commit('setChangenetpx', false);
         } else {
           /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight * 0.8 - 3 + "px";
+          document.getElementById('arrowDown_net').style.top = useHeight * 0.8 -4 + "px";
          
           mthis.$store.commit('setChangenetpx', true);
           document.getElementById('timechartctrl_net').style.display = "block";
           document.getElementById('main1_net').style.display = "block";
           document.getElementById('timediv_net').style.display = "block";
-          document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
+          // document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
           mthis.$store.commit('setNetHeight', useHeight * 0.8)
         }
@@ -1114,5 +1108,8 @@
   }
   .trClass:hover{
     color:rgba(93, 240, 240, 1);
+  }
+  .icon-shijianzhou::before{
+    content:url('../../dist/assets/images/shijianzhou.png');
   }
 </style>

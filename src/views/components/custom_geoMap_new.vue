@@ -194,9 +194,10 @@ top: 232px;
         <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     </div> -->
     <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv' tabindex="1" @keydown="keyD" style="outline:none;">
-        <imgItemOpera :changeButton='changeButtonParam' @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
+        <!-- <imgItemOpera :changeButton='changeButtonParam' @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',border:'1px solid rgba(51,102,102,1)',borderBottom:'none'}"></imgItemOpera> -->
+        <imgItemOpera :buttonParamArr='buttonArr' :changeButton='changeButtonParam' @buttonClick='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',border:'1px solid rgba(51,102,102,1)',borderBottom:'none'}"></imgItemOpera>
         <div id='mapDIV'>
-            <div id='mainMap' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
+            <div id='mainMap' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,1)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
                 <transition name="prompt"><div v-if="promptflag" class='promptmessage'>{{promptMessage}}</div></transition>
                 <div class='heatMapFormDiv' v-if='legend' >
                     <div class='heatSettingName'>图例</div>
@@ -262,7 +263,7 @@ import '../../dist/assets/styles/geo/mapInit.css'
 
 import imgSlider from "./custom_imgSlider"
 import routeLegend from './custom_routeLegend'
-import imgItemOpera from './custom_mapOperaButtons'
+import imgItemOpera from './custom_menuButton.vue'
 import worksetModal from "./custom_workSet_modal.vue"
 import operatorHub from "./custom_operatorHub.vue"
 import thematicLayer from "./custom_thematicLayer.vue"
@@ -274,6 +275,131 @@ export default {
     data() {
       return {
         //isEventPointsSelected:false,
+        buttonArr:[
+            {
+            'id':'clearAll_HCD',
+            'name':'清空',
+            'imgClass':'icon-qingchu',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'rectangle_HD',
+            'name':'框选',
+            'imgClass':'icon-selection-box',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'selectAll_HD',
+            'name':'全选',
+            'imgClass':'icon-rectangle',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'invertSelection_HSD',
+            'name':'反选',
+            'imgClass':'icon-fanxuan',
+            'type' : 'default',
+            'isUse':false
+          }, 
+          {
+            'id':'delete_HSD',
+            'name':'删除',
+            'imgClass':'icon-delete-point',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'returnToAllPoints_HDD',
+            'name':'复位',
+            'imgClass':'icon-fuwei',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'createWorkSpace_HASD',
+            'name':'创建集合',
+            'imgClass':'icon-add',
+            'type' : 'default',
+            'isUse':false
+          },
+          {'id':'separate'},
+          {
+            'id':'RectangleExplore_AT',
+            'name':'矩形探索',
+            'imgClass':'icon-tansuo',
+            'type' : 'default',
+            'isUse':true
+          },
+          {
+            'id':'CircleExplore_AT',
+            'name':'圆形探索',
+            'imgClass':'icon-tansuo2',
+            'type' : 'default',
+            'isUse':true
+          },
+          {
+            'id':'customExplore_AT',
+            'name':'自定义探索',
+            'imgClass':'icon-tansuo1',
+            'type' : 'default',
+            'isUse':true
+          },
+          {
+            'id':'exploreLocationName_HL',
+            'name':'探索',
+            'imgClass':'icon-match-search',
+            'type' : 'default',
+            'isUse':false
+
+          },
+          {'id':'separate'},
+          /* {
+            'id':'heatMap_HSD',
+            'name':'显示热力',
+            'imgClass':'icon-hot',
+            'isUse':false
+          }, */
+          {
+            'id':'route_HSD',
+            'name':'显示轨迹',
+            'imgClass':'icon-route',
+            'type' : 'default',
+            'isUse':false
+          },
+          {'id':'separate'},
+          {
+            'id':'toNet_HSD',
+            'name':'推送网络',
+            'imgClass':'icon-tuisongzhiwangluo',
+            'type' : 'default',
+            'isUse':false
+          },
+          {'id':'separate'},
+          {
+            'id':'leadingInThematic_AT',
+            'name':'导入图',
+            'imgClass':'icon-daoru',
+            'type' : 'default',
+            'isUse':true
+          },
+          {
+            'id':'closeThematic_OT',
+            'name':'关闭图',
+            'imgClass':'icon-daochu',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'screenCapture_NT',
+            'name':'截屏',
+            'imgClass':'icon-cut',
+            'type' : 'default',
+            'isUse':false
+          },
+        ],
         a:null,
         radius:15,
         mapDivbuttonIds : ['location_AT','heatMap_HSD','route_HSD'],
@@ -390,7 +516,7 @@ export default {
                 {
                     name:'热力分析',
                     id:'heatMap',
-                    iconName:'icon-kongjianfenxi',
+                    iconName:'icon-star',
                     openFunction:'openHeat',
                     closeFunction:'closeHeat',
                     operatorSurface:[
@@ -420,32 +546,25 @@ export default {
                 {
                 name:'图层处理',
                 id:'layerHandle',
-                iconName:'icon-kongjianfenxi',
+                iconName:'icon-file',
                 disabled:true,
-                /* openFunction:'openThematicLayer',
-                closeFunction:'closeThematicLayer',
-                operatorSurface:[
-                      {
-                        name:'选择专题图层',
-                        id:'selectThematiclayer',
-                        type:'Select',
-                        attrName:'thematiclayerName', 
-                        excuteFunction:'selectThematiclayer',
-                        value:{
-                          options:[
-                              {
-                                  name:'中东个别国家什叶派与逊尼派分布',
-                                  value:'ThematicLayer:shiahandsunni'
-                              }
-                          ]
-                        }
-                      }
-                    ] */
                 },
                 {
                 name:'轨迹分析',
                 id:'locusAnalyse',
+                iconName:'icon-route',
+                disabled:true
+                },
+                {
+                name:'空间分析',
+                id:'spatialAnalyse',
                 iconName:'icon-kongjianfenxi',
+                disabled:true
+                },
+                {
+                name:'获取更多',
+                id:'getMore',
+                iconName:'icon-more',
                 disabled:true
                 }
         ],
@@ -510,6 +629,7 @@ export default {
         mapOperationClick(mapOperation){
             var mthis = this;
             var mapOperationId = mapOperation.currentTarget.id;
+            
             if(mapOperationId == 'location_AT'){
                 mthis.location_cilck();
             } else if(mapOperationId == 'heatMap_HSD'){
@@ -566,7 +686,6 @@ export default {
         },
         selectThematics(selectedThematics){
             var mthis = this;
-            // debugger
             for(let i = 0; i < selectedThematics.length; i++){
                 let thematic = selectedThematics[i];
                 let extent = thematic.extent;
@@ -1056,7 +1175,6 @@ export default {
         },
         rightClickOrg(){
             var mthis = this;
-            // debugger
             var areaIds= mthis.AreaIds;
             var geometryList = [];
             for(let i = 0; i < areaIds.length; i++){
@@ -1403,7 +1521,6 @@ export default {
                 mthis.qbMap.addInteraction(mthis.selectPointerMove);
                 mthis.qbMap.addInteraction(mthis.selectClick);
                 mthis.selectPointerMove.on('select', function(e) {
-                    // debugger
                     var selectFeatures = e.selected
                     var deselectFeatures = e.deselected
                     if(deselectFeatures.length > 0){
@@ -1421,7 +1538,6 @@ export default {
                         }
                     }
                     if(selectFeatures.length > 0){
-                        // debugger
                         for(let i = 0; i < selectFeatures.length; i++){
                             if(selectFeatures[i].getId().split('&')[0] === 'event'){
                                 //mthis.pointSelectedAnimation(selectFeatures[i],'pointMove');
@@ -1437,7 +1553,6 @@ export default {
                 });
                 mthis.selectClick.on('select', function(e) {
                     mthis.deleteSelectClickFeatures();
-                    // debugger
                     var selectFeatures = e.selected;
                     var deselectFeatures = e.deselected;
                     var num = 0;
@@ -2039,6 +2154,7 @@ export default {
         },
         exploreQB(geometryArr,type){
             var mthis = this;
+            debugger
             var url = '';
             var promptType = ''
             var num = 0;
@@ -2080,7 +2196,6 @@ export default {
                             Ids.push(id);
                         }
                     }
-                    // debugger
                     allIds = mthis.asynAddgeometrySelectedQBIds(Ids,allIds,num);
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer');
                     /* mthis.qbMap.addFeatures(addfeatures,'heatmapLayer'); */
@@ -2199,7 +2314,6 @@ export default {
         },
         changedrawType(object){
             var mthis = this
-            debugger
             var mapDiv = document.getElementById('mainMap')
             mapDiv.style.cursor = 'crosshair';
             mthis.qbMap.removeInteraction(mthis.draw);
@@ -2247,7 +2361,6 @@ export default {
         draw_polygon(draw) {
             var mthis = this
             /* draw.on('drawstart',function(){
-                debugger
                 mthis.removeSelectedPoints();
             }); */
             draw.on('drawend', function(obj) {
@@ -2365,7 +2478,6 @@ export default {
 
         boxSelectedQB(geometry){   
             var mthis = this
-            // debugger
             var num = 0;
             var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
             if(features.length !== 0){
@@ -2705,7 +2817,6 @@ export default {
         },
         weightFunction(feature){
             var mthis = this;
-            // debugger
             var we = feature.get('selectedNum') / mthis.maxEventsNum;
             var weight = we<0.5&&we>0?0.5:we;
             return weight
@@ -2812,7 +2923,6 @@ export default {
         },
         deletePoints(){
             var mthis = this;
-            // debugger
             var selectedIds = mthis.$store.state.geo_onlyselected_param;
             if(selectedIds.length > 0){
                 selectedIds.forEach(function(item){
@@ -3229,7 +3339,6 @@ export default {
         waiting(count){  
             var mthis = this;
             /* mthis.hide(); */
-            // debugger
             if(document.getElementById('WaitCover') === null){
                 var procbg = document.createElement("div"); //首先创建一个div    
                 procbg.setAttribute("id","WaitCover"); //定义该div的id    
@@ -3249,7 +3358,6 @@ export default {
     //取消遮罩    
         hide(count) {
             var mthis = this; 
-            // debugger
             var mybg = document.getElementById("WaitCover");
             if(mybg){
                 var num = 1
@@ -3270,6 +3378,7 @@ export default {
         setFeatureByIds(ids){
             var mthis = this;
             mthis.waiting();
+            mthis.cancelSelectQB();
             //mthis.$http.post("http://localhost:5000/getParamsByIds/", {
             mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
                      "nodeIds": ids
@@ -3281,35 +3390,7 @@ export default {
                     var addFeatures_Event = [];
                     var eventGeoJson = response.body.data.Features;
                     var addfeatures = (new GeoJSON()).readFeatures(eventGeoJson);
-                    // debugger
-
-
-                    /* Object.keys(mthis.AllLayerList_conf).forEach(function(key){
-                        var layerId = mthis.AllLayerList_conf[key].layerId;
-                        var existFeatures = mthis.getLayerById(layerId).getSource().getFeatures();
-                        for(let j = 0; j < existFeatures.length; j++){
-                            mthis.setFeatureStatus(existFeatures[j],'die');
-                        }
-                    })
-                    mthis.AnimationFun = {};
-                    for(let i = 0; i < addfeatures.length; i++){
-                        var feature = addfeatures[i];
-                        var params = feature.get('Params');
-                        //num += params.length;
-                        if(feature.getGeometry().getType() === 'MultiLineString'){
-                            
-                            mthis.startAnimation(feature)
-                        }
-                        
-                        mthis.mapAddFeature(feature);
-                    }
-                    // var promptMess = '增加' + promptType + ': ' + num;
-                    // mthis.Message(promptMess);
-                    mthis.hide(); */
-
-
-
-
+                    mthis.geometrySelectedQBIds = [];
                     for(let i = 0; i < addfeatures.length; i++){
                         var feature= addfeatures[i];
                         var featureId = feature.getId();
@@ -3330,7 +3411,7 @@ export default {
                             }
                         })
                     }
-                    /* mthis.qbMap.addFeatures(addfeatures,'heatmapLayer'); */
+
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer')
                     mes.push('组织机构：' + orgNum + ' 处');
                     mes.push('事件：' + eventNum + ' 件');
@@ -3348,11 +3429,11 @@ export default {
                 mthis.changeButtonParam=[
                         {
                             'id_suf':'HSD',
-                            'isOpen':false
+                            'isUse':false
                         },
                         {
                             'id_suf':'HD',
-                            'isOpen':false
+                            'isUse':false
                         }
                     ]
                 mthis.heatMapVisible = false;  //关闭热力设置按钮
@@ -3360,54 +3441,54 @@ export default {
                     mthis.changeButtonParam.push({
 
                             'id_suf':'HDD',
-                            'isOpen':false
+                            'isUse':false
                         })
                         
                 } else {
                     mthis.changeButtonParam.push({
                             'id_suf':'HDD',
-                            'isOpen':true
+                            'isUse':true
                         })
                 }
                 if(mthis.AreaIds.length == 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HL',
-                        'isOpen':false
+                        'isUse':false
                     })
                     mthis.changeButtonParam.push({
                         'id_suf':'HCD',
-                        'isOpen':false
+                        'isUse':false
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HL',
-                        'isOpen':true
+                        'isUse':true
                     })
                     mthis.changeButtonParam.push({
                         'id_suf':'HCD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 }
                 if(mthis.AreaIds.length > 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HASD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HASD',
-                        'isOpen':false
+                        'isUse':false
                     })
                 }
                 if(mthis.hasTheamatic){
                     mthis.changeButtonParam.push({
                         'id_suf':'OT',
-                        'isOpen':true
+                        'isUse':true
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'OT',
-                        'isOpen':false
+                        'isUse':false
                     })
                 }
 
@@ -3415,67 +3496,67 @@ export default {
                 mthis.changeButtonParam=[
                     {
                         'id_suf':'HD',
-                        'isOpen':true
+                        'isUse':true
                     },
                     {
                         'id_suf':'HCD',
-                        'isOpen':true
+                        'isUse':true
                     }
                 ]
                 if(mthis.HLIds.length > 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HSD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HSD',
-                        'isOpen':false
+                        'isUse':false
                     })
                     mthis.heatMapVisible = false;  //关闭热力设置按钮
                 }
                 if($.isEmptyObject(mthis.removeEventIdList)){
                     mthis.changeButtonParam.push({
                         'id_suf':'HDD',
-                        'isOpen':false
+                        'isUse':false
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HDD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 }
                 if(mthis.AreaIds.length == 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HL',
-                        'isOpen':false
+                        'isUse':false
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HL',
-                        'isOpen':true
+                        'isUse':true
                     })
                 }
                 if(mthis.AreaIds.length == 0 && mthis.SelectedIds.length ==0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HASD',
-                        'isOpen':false
+                        'isUse':false
                     })
                 } else{
                     mthis.changeButtonParam.push({
                         'id_suf':'HASD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 }
                 if(mthis.hasTheamatic){
                     mthis.changeButtonParam.push({
                         'id_suf':'OT',
-                        'isOpen':true
+                        'isUse':true
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'OT',
-                        'isOpen':false
+                        'isUse':false
                     })
                 }
             }
@@ -3492,7 +3573,6 @@ export default {
     watch:{
         displayHeatMap(){
             var mthis = this;
-            // debugger
             var heatMapLayer = mthis.getLayerById('heatmapLayer');
             heatMapLayer.setVisible(mthis.displayHeatMap);    
         },
@@ -3614,7 +3694,6 @@ export default {
         },
         netToGeoData:function(){
             var mthis = this;
-            // debugger
             var data = mthis.$store.state.netToGeoData;
             var ids = [];
             var keys = Object.keys(data);
@@ -3642,7 +3721,6 @@ export default {
         },
         geoStaticsOnlyLookSelectedIds(){
             var mthis = this;
-            // debugger
             var eventIds = [];
             var orgIds = [];
             var ids = mthis.geoStaticsOnlyLookSelectedIds;
@@ -3670,7 +3748,6 @@ export default {
         },
         geoStaticsSelectedIds:function(){
             var mthis = this;
-            // debugger
             mthis.halfSelectedIds = mthis.HLIds;
             var ids = [];
             var keys = Object.keys(mthis.geoStaticsSelectedIds);
@@ -3706,7 +3783,6 @@ export default {
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            // debugger
             mthis.HLIds = mthis.timeSelectedEventIds
             var selectedEventsParam = {
                 type:'GeoTime',
@@ -3716,7 +3792,6 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
-            // debugger
             var eventIds = [];
             var orgIds = [];
             mthis.HLIds = mthis.timeSelectedEventIdsOnly;
@@ -3743,7 +3818,6 @@ export default {
         },
         geometrySelectedQBIds:function(){
             var mthis = this;
-            // debugger
             var eventIds = [];
             var orgIds = [];
             mthis.HLIds = mthis.geometrySelectedQBIds;
@@ -3769,7 +3843,6 @@ export default {
         geoTimeCondition:{
             handler(newValue) {
                 var mthis = this;
-                // debugger
                 var type = mthis.geoTimeCondition.type;
                 var timeSelectedIds = mthis.geoTimeCondition.eventIds;
                 if(type === 'notAnalysis'){

@@ -1,93 +1,7 @@
 <template>
   <div id='demo' :style="{height:netheightdiv}" tabindex="1" @keydown="keyD" style="outline:none;">
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px',border:'solid 1px #336666'}">
-      <div class='divStyle'>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="removeAll">
-            <Icon class="icon iconfont icon-qingchu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">清空</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='fanxuan'>
-            <Icon class="icon iconfont icon-fanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">反选</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="selectAll">
-            <Icon class="icon iconfont icon-quanxuan DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">全选</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="deleteNode()"> 
-            <Icon class="icon iconfont icon-delete-name DVSL-bar-btn-new DVSL-bar-btn-back" size="26" ></Icon>
-            <p class="img-content">删除</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="openCreateGroupModal">
-            <Icon class="icon iconfont icon-add DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">创建集合</p>
-          </div>
-        </Tooltip>
-        <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='toContentDiv'>
-            <Icon class="icon iconfont icon-zhaiyaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">摘要图</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="toThumbnails">
-            <Icon class="icon iconfont icon-suolvetu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">缩略图</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='showAsList'>
-            <Icon class="icon iconfont icon-liebiaotu DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">列表图</p>
-          </div>
-        </Tooltip>
-        <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='orderTimeUp'>
-            <Icon class="icon iconfont icon-paixu--guanlian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">相关性排序</p>
-          </div>
-        </Tooltip>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click='orderTimeDown'>
-            <Icon class="icon iconfont icon-paixu--shijian DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">时间排序</p>
-          </div>
-        </Tooltip>
-        <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifShowDoc? 'button-div':'button-div-disable'" @click='contentTranslate'>
-            <Icon class="icon iconfont icon-translate2" size="26"></Icon>
-            <p class="img-content">翻译</p>
-          </div>
-        </Tooltip>
-        
-        <!-- <div class="divSplitLine"></div> -->
-        <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasSel? 'button-div':'button-div-disable'" @click="toNet">
-            <Icon class="icon iconfont icon-tuisongzhiwangluo  DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">推送网络</p>
-          </div>
-        </Tooltip>
-        <div class="divSplitLine"></div>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :delay="1000">
-          <div :class="ifhasDoc? 'button-div':'button-div-disable'" @click="cutScreen">
-            <Icon class="icon iconfont icon-cut DVSL-bar-btn-new DVSL-bar-btn-back" size="26"></Icon>
-            <p class="img-content">截屏</p>
-          </div>
-        </Tooltip>
-      </div>
+      <cusButton :buttonParamArr='buttonArr' :changeButton='changeButtonParam'  @buttonClick='exButton'></cusButton>
     </div>
     <div @mousedown='kuangxuan' @mousemove="kuangmove" @mouseup="kuangup"
     :style="{borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}" id='containerDiv'>
@@ -255,13 +169,8 @@
                     <p class='docAnaTitle' @click="showAllTitle(index,$event,2);closeShowTitle()">{{list.docDatas[0].title}}</p>
                     &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
                   </div>
-                      
-                        <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
-                      
-                      
-                  
-                  
-                  <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,2)"></Icon>
+                    <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
+                    <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,2)"></Icon>
                 </div>
               <div :id='index+"wordChart"'></div>
           </div>
@@ -306,6 +215,7 @@
   import worksetModal from "./custom_workSet_modal.vue";
   import echarts from 'echarts';
   import $ from "jquery";
+  import cusButton from './custom_menuButton.vue'
   import operatorHub from "./custom_operatorHub.vue"
   import {
     mapState,
@@ -323,6 +233,117 @@
     name: "App",
     data() {
       return {
+        changeButtonParam:[],
+        buttonArr:[
+            {
+                'id':'clearAll_HD',
+                'name':'清空',
+                'imgClass':'icon-qingchu',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {
+                'id':'fanxuan_HD',
+                'name':'反选',
+                'imgClass':'icon-fanxuan',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {
+                'id':'quanxuan_HD',
+                'name':'全选',
+                'imgClass':'icon-quanxuan',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {
+                'id':'delete_HSD',
+                'name':'删除',
+                'imgClass':'icon-delete-point',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {
+                'id':'addSet_HSD',
+                'name':'创建集合',
+                'imgClass':'icon-add',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {'id':'separate'},
+            {
+                'id':'contentShow_HD',
+                'name':'摘要图',
+                'imgClass':'icon-zhaiyaotu',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {
+                'id':'thumShow_HD',
+                'name':'缩略图',
+                'imgClass':'icon-suolvetu',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {
+                'id':'listShow_HD',
+                'name':'列表图',
+                'imgClass':'icon-liebiaotu',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {'id':'separate'},
+            {
+                'id':'defaultOrder_HD',
+                'name':'相关性排序',
+                'imgClass':'icon-paixu--guanlian',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {
+                'id':'timeOrder_HD',
+                'name':'时间排序',
+                'imgClass':'icon-paixu--shijian',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {'id':'separate'},
+            {
+                'id':'translate_TD',
+                'name':'翻译',
+                'imgClass':'icon-translate2',
+                'isUse':false,
+                'type':'state',
+                'status':'unFocus'
+            },
+            {
+                'id':'toNet_HSD',
+                'name':'推送网络',
+                'imgClass':'icon-tuisongzhiwangluo',
+                'isUse':false,
+                'type':'default',
+                
+            },
+            {'id':'separate'},
+            {
+                'id':'cutPic_HD',
+                'name':'截屏',
+                'imgClass':'icon-cut',
+                'isUse':false,
+                'type':'default',
+                
+            }
+        ],
         loadingCount:0,
         options:[],
         charts:[],
@@ -384,9 +405,9 @@
         
         changeBar:'词云',
         orderCount:0,
-        ifhasDoc:false,
+        
         ifhasSel:false,
-        ifShowDoc:false,
+        
         prevIfhasSel:false,
         isBru:false,
         bruIds:[],
@@ -428,9 +449,8 @@
         pageSize: 8,
         busy: true,
         watchSelectCounter: 0,
-        translateButton: false,
-        deleteButton:false,
-        analysisButton:false,
+        
+        
         spinShow: false,
         markedItem: false,
         ifInfo: false,
@@ -739,20 +759,56 @@
         handler(newVal,oldVal){
           var mthis = this
           if(mthis.prevItems.length>0){
-            mthis.ifhasDoc = true;
+            
+            
             let buttonItems = mthis.prevItems.filter(item => item.check)
             if(buttonItems.length>0){
               mthis.ifhasSel = true
+              mthis.changeButtonParam = [
+                {
+                    'id_suf':'HD',
+                    'isUse':true
+                },
+                {
+                    'id_suf':'HSD',
+                    'isUse':true
+                }
+            ]
               mthis.operatorConfig[1].disabled = false
             }else{
               mthis.ifhasSel = false
+              mthis.changeButtonParam = [
+                {
+                    'id_suf':'HD',
+                    'isUse':true
+                },
+                {
+                    'id_suf':'HSD',
+                    'isUse':false
+                }
+            ]
               mthis.operatorConfig[1].disabled = true
             }
             
           }else{
-            mthis.ifhasDoc = false
+
+            
             mthis.ifhasSel = false
-            mthis.ifShowDoc = false
+            
+            mthis.changeButtonParam = [
+                {
+                    'id_suf':'HD',
+                    'isUse':false
+                },
+                {
+                    'id_suf':'HSD',
+                    'isUse':false
+                },
+                {
+                    'id_suf':'TD',
+                    'isUse':false
+                }
+            ]
             mthis.operatorConfig[1].disabled = true
           }
         },
@@ -763,14 +819,37 @@
         var mthis = this;
         if(mthis.topicClassifStatus){
           mthis.showContentAna('keywords','group',mthis.$store.state.selectContentNodes[0].ids)
-          mthis.ifhasDoc = false
+          
           mthis.ifhasSel = false
-          // mthis.ifShowDoc = false
+          mthis.changeButtonParam = [
+              {
+                  'id_suf':'HD',
+                  'isUse':false
+              },
+              {
+                  'id_suf':'HSD',
+                  'isUse':false
+              },
+              {
+                  'id_suf':'TD',
+                  'isUse':false
+              }
+          ]
+          
         }else{
           mthis.contentAna = false
-          mthis.ifhasDoc = true
-          mthis.ifhasSel = true
           
+          mthis.ifhasSel = true
+          mthis.changeButtonParam = [
+              {
+                  'id_suf':'HD',
+                  'isUse':true
+              },
+              {
+                  'id_suf':'HSD',
+                  'isUse':true
+              }
+          ]
         }
         
       },
@@ -891,8 +970,8 @@
             mthis.$store.commit('setContent2time',[{
               ids:selectIds
             }])
-            // mthis.ifShowDoc = true
-            mthis.analysisButton = true
+            
+            
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
@@ -1075,10 +1154,55 @@
       }
     },
     components: {
-      InfiniteLoading,modalChart,worksetModal,operatorHub
+      InfiniteLoading,modalChart,worksetModal,operatorHub,cusButton
     },
     props: ['contentData'],
     methods: {
+        exButton(obj){
+            var mthis = this;
+            
+            var buttonId = obj.currentTarget.id;
+            if(buttonId == 'clearAll_HD'){
+                mthis.removeAll()
+            }
+            if(buttonId == 'fanxuan_HD'){
+                mthis.fanxuan()
+            }
+            if(buttonId == 'quanxuan_HD'){
+                mthis.selectAll()
+            }
+            if(buttonId == 'delete_HSD'){
+                mthis.deleteNode()
+            }
+            if(buttonId == 'addSet_HSD'){
+                mthis.openCreateGroupModal()
+            }
+            if(buttonId == 'contentShow_HD'){
+                mthis.toContentDiv()
+            }
+            if(buttonId == 'thumShow_HD'){
+                mthis.toThumbnails()
+            }
+            if(buttonId == 'listShow_HD'){
+                mthis.showAsList()
+            }
+            if(buttonId == 'defaultOrder_HD'){
+                mthis.orderTimeUp()
+            }
+            if(buttonId == 'timeOrder_HD'){
+                mthis.orderTimeDown()
+            }
+            if(buttonId == 'translate_TD'){
+                mthis.contentTranslate()
+            }
+            if(buttonId == 'toNet_HSD'){
+                mthis.toNet()
+            }
+            if(buttonId == 'cutPic_HD'){
+               
+            }
+
+        },
       cutScreen(){
         // 截屏事件
       },
@@ -1534,13 +1658,7 @@
           }else{
             ids.push(id)
           }
-          if(ids.length>0){
-            mthis.deleteButton = true
-            mthis.analysisButton = true
-          }else{
-            mthis.deleteButton = false
-            mthis.analysisButton = false
-          }
+          
           mthis.$store.commit('setSelectContentNodes', [{
             ids: ids
           }])
@@ -1647,8 +1765,7 @@
                 })
               );
        
-        mthis.deleteButton = true
-        mthis.analysisButton = true
+       
         mthis.$store.commit('setSelectContentNodes', [{
           ids: ids
         }])
@@ -1830,7 +1947,7 @@
       contentTranslate() {
         var mthis = this;
         
-        if(this.ifShowDoc){
+        
           var oldEle = document.getElementById('translatedDiv');
         if (oldEle !== null) {
           oldEle.parentElement.removeChild(oldEle);
@@ -1839,6 +1956,9 @@
           contentDiv.style.float = 'none';
           contentDiv.style.display = 'block';
           contentDiv.style.borderRight = 'none';
+          mthis.changeButtonParam[0].status = 'focus'
+          console.log(11111)
+          console.log(mthis.changeButtonParam)
           return
         }
         var contentId = document.getElementById('contentInfo').value;
@@ -1870,10 +1990,13 @@
               translatedDiv.innerHTML = translatedHtml;
               contentDiv.parentElement.appendChild(translatedDiv);
               $('#translatedDiv').addClass('scrollBarAble');
+              console.log(2222)
+              mthis.changeButtonParam[0].status = 'unFocus'
+              console.log(mthis.changeButtonParam)
             }) 
-            // this.translateButton = false
-        }
-        // this.translateButton = true
+            
+        
+        
         
       },
       orderTimeUp() {
@@ -2035,8 +2158,23 @@
       },
       hideContentDiv(flag){
         var mthis = this
-        mthis.ifhasDoc = true;
+        
         mthis.ifhasSel = mthis.prevIfhasSel;
+        mthis.changeButtonParam = [
+          {
+            'id_suf':'HD',
+            'isUse' : true
+          },
+          {
+            'id_suf':'HSD',
+            'isUse' : mthis.prevIfhasSel
+          },
+          {
+            'id_suf':'TD',
+            'isUse':false
+          }
+        ]
+        
         if(flag ==1){
           mthis.ifInfo = false
           mthis.$store.state.contentSelShowFlag = false
@@ -2048,9 +2186,6 @@
           if(!mthis.showThumb){
             mthis.toContentDiv()
           }
-        }else{
-          mthis.contentAna = false;
-          mthis.analysisButton = true
         }
         mthis.$store.commit('setShowDocTime',true)
         
@@ -2060,7 +2195,7 @@
         this.colLgNum = 4
         this.colSmnum = 8
         this.colMdNum = 6
-        this.ifShowDoc = false
+        
         this.showList = false
         this.showThumb = false
         this.ifInfo = false
@@ -2300,9 +2435,9 @@
       showContent(id,title) {
         clearTimeout(timerClick);
         var mthis = this
-        mthis.ifhasDoc = false;
+       
         mthis.prevIfhasSel = mthis.ifhasSel;
-        mthis.ifhasSel = false;
+        
         mthis.$store.state.contentSelShowFlag = true
         let selData = {}
         selData.id = [id];
@@ -2312,7 +2447,26 @@
         
         
         mthis.ifInfo = true
-        mthis.ifShowDoc = true
+        
+        mthis.changeButtonParam=[
+          {
+            'id_suf':'TD',
+            'isUse':true,
+            'type':'state',
+            'status':'focus'
+          },
+          {
+            'id_suf' :'HD',
+            'isUse':false
+          },
+          {
+            'id_suf' :'HSD',
+            'isUse':false
+          }
+        ]
+          
+          
+        
         //  mock.get("/getContentInfo",{id:id}).then(function(res) {
         //   // 获取文本数据
         //   document.getElementById('contents').innerHTML = res.data.contents

@@ -726,7 +726,7 @@
     flex-flow: row nowrap;
     height: 55px;
     padding-left: 10px;
-    border-top: 1px solid rgba(54, 102, 116, 0.5);
+    /* border-top: 1px solid rgba(54, 102, 116, 0.5); */
     /* border-right:1px solid rgba(54, 102, 116, 0.5);
                 border-left:1px solid rgba(54, 102, 116, 0.5); */
   }

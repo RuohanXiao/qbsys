@@ -1,7 +1,7 @@
 <style scoped>
     @import 'styles/common.css';
     .pith{
-        width: 100%;
+        width: 101%;
         height:100%;
         position: absolute;
         z-index: 10000;
@@ -77,10 +77,10 @@
         margin: 0 auto;
     }
     .lockShow{
-        background-image: url("./dist/assets/images/lockbefore.png")/* url("http://10.60.1.140/assets/images/lockbefore.png") */
+        background-image: url("http://10.60.1.140/assets/images/lockbefore.png")/* url("./dist/assets/images/lockbefore.png") *//* url("http://10.60.1.140/assets/images/lockbefore.png") */
     }
     .lockShow:hover{
-        background-image: url("./dist/assets/images/lockafter.png")/* url("http://10.60.1.140/assets/images/lockafter.png") */
+        background-image: url("http://10.60.1.140/assets/images/lockafter.png")/* url("./dist/assets/images/lockafter.png") *//* url("http://10.60.1.140/assets/images/lockafter.png") */
     }
 </style>
 <template>
@@ -93,21 +93,21 @@
             <div class='info'>
                 <div >
                     <div>
-                        <span>10,721,362</span><br>
+                        <span>93,001</span><br>
                         <span class="source">境外新闻媒体</span>
                     </div>
                     <div>
                         <img :src="require('./dist/assets/images/fenge.png')">
                     </div>
                     <div>
-                        <span>9,563,092</span><br>
+                        <span>42,723,699</span><br>
                         <span class="source">社交媒体</span>
                     </div>
                     <div>
                         <img :src="require('./dist/assets/images/fenge.png')">
                     </div>
                     <div>
-                        <span>11,242</span><br>
+                        <span>182,947</span><br>
                         <span class="source">专业文档</span>
                     </div>
                 </div>
