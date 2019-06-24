@@ -2492,14 +2492,14 @@
             // },
             gravity: {
               from: "node",
-              to: "node",
-              strength: 0.05
+              to: "cluster",
+              strength: 0.1
             },
             twoRingRadialLayout: true,
-            // layoutFreezeMinTimeout:300,
-            layoutFreezeTimeout: 10000,
-            // incrementalLayoutMaxTime:1000,
-            // initialLayoutMaxTime:1000,
+            layoutFreezeMinTimeout:100,
+            layoutFreezeTimeout: 5000,
+            incrementalLayoutMaxTime:5000,
+            initialLayoutMaxTime:5000,
             globalLayoutOnChanges: false,
             nodeSpacing: 50,
             rowSpacing: 100
@@ -2565,12 +2565,19 @@
             node: {
               // display: "image",
               display: "text",
+              // draggable: false,
               //节点外环大小
               lineWidth: 3,
               // lineColor: "rgba(204,255,255,0.5)",
               // fillColor: "rgba(51, 255, 255, 0.2)",
-              imageCropping: "letterbox"
+              imageCropping: "letterbox",
               // imageCropping: true
+              // nodeLabel:{
+              //   padding: 4,
+              //   borderRadius: 4,
+              //   textStyle:{font:"50px Arial", fillColor: "rgba(204,255,255,1)"}
+              //   // backgroundStyle:{fillColor:"rgba(234,180,4,0.7)"}
+              // }
             },
             // link:{
             //   fillColor:'red',
@@ -2594,13 +2601,15 @@
             selection: {
               // 选中样式
               fillColor: "rgba(51,255,255,0.1)",
-              lineWidth: 5
+              lineWidth: 5,
+              tolerance:5 //选中误差距离
             },
             nodeStyleFunction: function(node) {
               // node.labelStyle.maxWidth = 3
               // node.labelStyle.margin = 2
               // ---------------------------------------
               // 具体类型节点样式
+              node.labelStyle.textStyle.font = "16px MicrosoftYaHei";
               node.shadowColor = ''
               node.shadowBlur = 0
               if (node.userLock) {
@@ -2686,7 +2695,7 @@
                 node.display = "rectangle";
                 node.image = "http://10.60.1.140/assets/images/content_node.png";
                 node.backgroundStyle = {};
-                node.radius = 25;
+                node.radius = 20;
               } else if (node.data.entity_type === "other") {
                 if (node.selected) {
                   node.lineColor = mthis.selectLineColor;
@@ -2740,6 +2749,8 @@
                   node.shadowColor = "rgba(0,0,0,0)";
                   node.shadowBlur = 20;
                 }
+                
+                node.radius = 25;
                 node.display = "image";
                 //判断图片资源是否存在
                 if (
@@ -2936,6 +2947,7 @@
             // onTripleClick(event) - 当用户三次点击图表时调用的函数。用于自定义函数调用。
             onPointerDrag: function(event) {
               // mthis.changNetchartMode('s')
+              console.log(event)
             },
             // onChartUpdate: function (event) {
             // },
@@ -3244,7 +3256,8 @@
               autoZoomPositionElasticity: 50e-7
             },
             selection: {
-              lockNodesOnMove: false
+              // lockNodesOnMove: false
+              lockNodesOnMove: true
             }
           },
           theme: NetChart.themes.dark
@@ -3813,11 +3826,14 @@
         for (let i = 0; i < netchartnodes.length; i++) {
           allNodIds.push(netchartnodes[i].id);
           let no = mthis.netchart.getNode(netchartnodes[i].id)
-          no.hightLight = false;
           no.opacity = 0.35;
-          // no.draggable = false;
+          no.hightLight = false;
+         
         }
         if (mthis.netTimeCondition != null && mthis.netTimeCondition.length > 0) {
+          console.log( mthis.netchart)
+          console.log( mthis.netchart.getNodeDimensions())
+          // mthis.netchart.style.node.draggable = false;
           mthis.selectLineColor = '#009999'
           mthis.selectShadowColor = "#009999"
           mthis.hightlightLineColor = '#ccffff'
