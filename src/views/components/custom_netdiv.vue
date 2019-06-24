@@ -1159,6 +1159,10 @@
         //   }
         // ]
         this.getStatistics();
+        setTimeout(()=>{
+          console.log('-------------------')
+          console.log(this.netchart.nodes())
+        },200)
       },
       // 事件拓展
       expandNodeEvent() {
@@ -3458,9 +3462,11 @@
       //   this.ifSelectOnlyTwoNode = (lengthNum === 2) ? true : false
       // },
       selectionIdByTypeData:{
+        
         deep:true,
         immediate: true,
         handler(newVal,oldVal){
+          console.log('=======');
           var mthis = this;
           let lengthNum = mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.ids.length;
           if(lengthNum >0){
@@ -3481,7 +3487,6 @@
               mthis.ifSelectTwoNode = true
             }
           }else{
-            console.log('net ifNoseldata')
             
             if(mthis.netchart == null){
               mthis.changeButtonParam = [
@@ -3495,11 +3500,29 @@
                 }
               ]
             }else{
-              console.log('justTest')
-              let allIds = mthis.netchart.nodes().map(item => {
-                return item.id
-              })
-              console.log(allIds)
+              if(mthis.ifhasNode){
+                mthis.changeButtonParam = [
+                  {
+                    'id_suf':'HD',
+                    'isUse':true
+                  },
+                  {
+                    'id_suf':'HSD',
+                    'isUse':false
+                  }
+                ]
+              }else{
+                mthis.changeButtonParam = [
+                  {
+                    'id_suf':'HD',
+                    'isUse':false
+                  },
+                  {
+                    'id_suf':'HSD',
+                    'isUse':false
+                  }
+                ]
+              }
             }
             
           }

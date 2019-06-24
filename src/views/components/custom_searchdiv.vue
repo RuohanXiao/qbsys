@@ -241,7 +241,12 @@
               }
             })
           } else if (a.itemType === 'keywords') {
-            mthis.$store.commit('setSearchContentResult', a.value)
+            let seResult = {
+              time: new Date(),
+              val : a.value
+            }
+            // mthis.$store.commit('setSearchContentResult', a.value)
+            mthis.$store.commit('setSearchContentResult',seResult)
             mthis.$store.commit('setConditionContent', a.value)
             var query = a.value;
             mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/doc-statistics/?query=" + a.value, {

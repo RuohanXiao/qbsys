@@ -125,6 +125,7 @@
         </div>
         <div class="anaDoc" >
           <div :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}" v-show="ifTopic">
+          <!-- <transition-group name="topTran" tag='div' v-show="ifTopic" :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}"> -->
           <div class="topItem animaTopItem" 
           :style="{border:'1px solid #336666',order:0,width:topWidth,height:topHeight,display:'flex',flexDirection:'column',resize:'auto'}"
           v-for="(list,index) in topicDatas" :key="index" :id="index">
@@ -134,10 +135,7 @@
                 <p class='docAnaTitle' @click="showAllTitle(index,$event,1);closeShowTitle()">{{list.docDatas[0].title}}</p>
                 &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
               </div>
-              
-                <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
-              
-              
+              <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
               <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,1)"></Icon>
             </div>
             <div :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
@@ -152,6 +150,7 @@
             
             
           </div>
+          <!-- </transition-group> -->
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
           <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
@@ -336,7 +335,7 @@
             },
             {'id':'separate'},
             {
-                'id':'cutPic_HD',
+                'id':'cutPic_NT',
                 'name':'截屏',
                 'imgClass':'icon-cut',
                 'isUse':false,
@@ -647,10 +646,9 @@
       // options:function(){
       //   var mthis = this
       //   if(this.options.length>0){
-      //     console.log(mthis.topicDatas.length)
+     
          
-      //     console.log(mthis.myWordCharts)
-      //     console.log(mthis.charts)
+     
       //     setTimeout(function(){
       //       for(let j=0;j<mthis.topicDatas.length;j++){
       //             mthis.myWordCharts[j] = echarts.init(document.getElementById(mthis.charts[j]),'',{
@@ -659,8 +657,7 @@
       //             });
       //             mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
       //             mthis.myWordCharts[j].setOption(mthis.options[j]);
-      //             console.log(mthis.myWordCharts[j])
-      //             console.log(mthis.options[j].series[0].data)
+      //             
       //           }
       //     },300)
           
@@ -948,7 +945,7 @@
               })
               
             );
-            // console.log(1)
+            
             mthis.prevItems = mthis.deepClone(mthis.items)
             let selDocList = mthis.items.filter(item => item.check)
             selDocList = selDocList.map(item =>({
@@ -984,7 +981,7 @@
                 check:false
               })
             );
-            // console.log(2)
+            
             mthis.$store.commit('setSelectContentNodes', [{
               ids: []
             }])
@@ -1031,14 +1028,13 @@
       //   handler(newValue){
       //      var mthis = this
       //      if(mthis.contentTimeCondition.type == 'cancel'){
-      //         // console.log(3)
-      //         // console.log(mthis.prevItems)
+      //         
       //         mthis.items =  mthis.deepClone(mthis.prevItems)
       //       }
       //       if(mthis.contentTimeCondition.type == 'sel'){
               
       //         if(mthis.contentTimeCondition.ids.length ==0){
-      //           // console.log(4)
+      //          
       //           mthis.items = mthis.deepClone(mthis.prevItems)
       //         }
       //         if(mthis.contentTimeCondition.ids.length>0){
@@ -1064,14 +1060,13 @@
       // },
       
      
-      searchContentResult: function(va) {
+      'searchContentResult.time': function(va) {
         var mthis = this
         mthis.page = 1
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
-        // console.log('sousuosousuo')
-        // console.log(va)
-        mthis.content = va
+        
+        mthis.content = mthis.searchContentResult.val
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
             
@@ -1090,7 +1085,7 @@
                 check:false
               })
             );
-            // console.log(5)
+            
             mthis.prevItems = mthis.deepClone(mthis.items)
             
             if(response.body.data.length ==30){
@@ -1139,7 +1134,7 @@
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75-1 + 'px';
         mthis.ContentHeightList = mthis.$store.state.contentHeight - 75-2+ 22 + 'px';
-        console.log(mthis.ContentHeightList)
+     
       },
       ContentHeightList: function() {
         var mthis = this;
@@ -1198,7 +1193,7 @@
             if(buttonId == 'toNet_HSD'){
                 mthis.toNet()
             }
-            if(buttonId == 'cutPic_HD'){
+            if(buttonId == 'cutPic_NT'){
                
             }
 
@@ -1210,7 +1205,7 @@
       showAllTitle(index,e,flag){
         var mthis = this
         mthis.clearBubble(e)
-        console.log(mthis.openHub)
+        
         if(flag ==1){
             if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
             var pTitle = document.getElementById(index)
@@ -1276,8 +1271,7 @@
       },
       changeShow(newValue){
         var mthis = this
-        console.log(newValue)
-        console.log(typeof newValue)
+        
         if(newValue == '词云'){
           mthis.ifTopic = false;
           mthis.wordResize(document.getElementsByClassName('topItem').length);
@@ -1312,7 +1306,7 @@
           
       },
       changeDrop(name){
-        console.log(name)
+        
         var mthis = this;
         let dropItems = mthis.deepClone(mthis.topicDatas)
         mthis.topicDatas = [];
@@ -1364,51 +1358,32 @@
       },
       delTopData(index,flag){
         var mthis = this
+        // mthis.topicDatas.splice(index,1);
         if(flag ==1){
-            let wid = document.getElementById(index).style.width
-            // let Topstyle= document.getElementById(index).getAttribute('style');
-            $('#'+index).css('width',0)
-            $('#'+index).css('opacity',0)
-            // console.log(Topstyle)
-            // Topstyle[width] =0;
-            // Topstyle.opacity =0;
-            // document.getElementById(index).setAttribute('style',Topstyle);
-            // document.getElementById(index).setAttribute('style','opacity:0;width:0');
-            mthis.ifResize = true
-            setTimeout(()=>{
-              
-              $('#'+index).css('width',wid)
-              $('#'+index).css('opacity',1)
-              // document.getElementById(index).remove();
-              // let len = document.getElementsByClassName('topItem').length;
-              // document.getElementById(index+'word').remove();
-
-              // mthis.wordResize(len)
-              mthis.topicDatas.splice(index,1);
-              mthis.wordResize(mthis.topicDatas.length)
-              mthis.ifResize = false
-            },800)
-            
+          let wid = document.getElementById(index).style.width
+          $('#'+index).css('width',0)
+          $('#'+index).css('opacity',0)
+          mthis.ifResize = true
+          setTimeout(()=>{
+            $('#'+index).css('width',wid)
+            $('#'+index).css('opacity',1)
+            mthis.topicDatas.splice(index,1);
+            mthis.wordResize(mthis.topicDatas.length)
+            mthis.ifResize = false
+          },800)
         }else{
           let wid = document.getElementById(index+'word').style.width
-          
           $('#'+index+'word').css('width',0)
-            $('#'+index+'word').css('opacity',0)
-            mthis.ifResize = true
-            setTimeout(()=>{
-              $('#'+index+'word').css('width',wid)
-              $('#'+index+'word').css('opacity',1)
-              
-              mthis.topicDatas.splice(index,1);
-              mthis.wordResize(mthis.topicDatas.length)
-              mthis.ifResize = false
-            },800)
-            
+          $('#'+index+'word').css('opacity',0)
+          mthis.ifResize = true
+          setTimeout(()=>{
+            $('#'+index+'word').css('width',wid)
+            $('#'+index+'word').css('opacity',1)
+            mthis.topicDatas.splice(index,1);
+            mthis.wordResize(mthis.topicDatas.length)
+            mthis.ifResize = false
+          },800)
         }
-        
-        console.log(index)
-        
-        
       },
       toTop(index){
         var div = document.getElementById(index);
@@ -1623,7 +1598,7 @@
         //   mthis.$store.commit('setContent2time',[{
         //     ids:mthis.bruIds
         //   }])
-        //   console.log(mthis.bruIds)
+        
         //   let selDocList = mthis.items.filter(item => item.check)
         //   selDocList = selDocList.map(item =>({
         //             title: item.title,      
@@ -1902,7 +1877,8 @@
         this.$store.commit('setContent2time',[{
             ids:[]
           }])
-        this.$store.commit('setSelectContentNodes',[])
+        this.$store.commit('setSeletedDocAttrList',[])
+        // this.$store.commit('setSelectContentNodes',[])
       },
       alertNotice(titleStr, nodesc) {
         this.$Notice.open({
@@ -1957,8 +1933,7 @@
           contentDiv.style.display = 'block';
           contentDiv.style.borderRight = 'none';
           mthis.changeButtonParam[0].status = 'focus'
-          console.log(11111)
-          console.log(mthis.changeButtonParam)
+        
           return
         }
         var contentId = document.getElementById('contentInfo').value;
@@ -1990,9 +1965,9 @@
               translatedDiv.innerHTML = translatedHtml;
               contentDiv.parentElement.appendChild(translatedDiv);
               $('#translatedDiv').addClass('scrollBarAble');
-              console.log(2222)
+              
               mthis.changeButtonParam[0].status = 'unFocus'
-              console.log(mthis.changeButtonParam)
+              
             }) 
             
         
@@ -2134,7 +2109,7 @@
                 // $('.item-selected').removeClass('item-selected')
                 
                 mthis.items = mthis.items.concat(nowItems)
-                // console.log(7)
+                
                 mthis.prevItems = mthis.deepClone(mthis.items)
               } else {
                 
@@ -2261,7 +2236,7 @@
         var mthis = this;
         if(len>6){
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
-          console.log(mthis.itemWidth)
+         
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           mthis.topHeight = 330 + 'px'
           mthis.itemHeight = 300 + 'px'
@@ -2294,7 +2269,7 @@
          
         }else if(len ==6){
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
-          console.log(mthis.itemWidth)
+          
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
@@ -2359,7 +2334,7 @@
               })
               mthis.topicDatas = response.body.data.concat(mthis.topicDatas)
               
-              console.log(mthis.topicDatas)
+              
               let len = mthis.topicDatas.length;
               mthis.wordResize(len)
               mthis.ifResize = false
@@ -2411,7 +2386,7 @@
           }).then(response =>{
             if(response.body.code ==0){
               mthis.topicDatas = response.body.data
-              console.log(mthis.topicDatas)
+              
               mthis.topicDatas.map(item => {
                 item.docDatas.map(it =>{
                   it.time = util.transformPHPTimeMS(it.time);
@@ -2525,17 +2500,17 @@
     mounted() {
       var mthis = this
       mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 252 + 'px'
-      console.log(mthis.contentAnaWidth)
+      
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
-      console.log(wwWidth)
+      
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68-1 + "px";
-      console.log(mthis.ContentHeight)
+      
       
       // let divBox = document.getElementById('contentchart')
-      // console.log(window.getComputedStyle(divBox,null).width)
+      
 
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
         //   // 跳转过来的
@@ -2571,7 +2546,7 @@
           mthis.$store.commit('setContent2time',[{
             ids:mthis.bruIds
           }])
-          console.log(mthis.bruIds)
+         
           let selDocList = mthis.items.filter(item => item.check)
           selDocList = selDocList.map(item =>({
                     title: item.title,      
@@ -3179,4 +3154,19 @@
     /* .textTitle:hover{
       background-color: rgba(51, 255, 255, 0.2);
     } */
+    .topTran-item{
+      display: flex;
+      flex-flow:row wrap;
+      justify-content:space-around;
+      width:100%;
+      padding:5px 0px 0px 5px;
+    }
+    .topTran-enter-active, .topTran-leave-active {
+      transition: all 1s;
+    }
+    .topTran-enter, .topTran-leave-to
+    /* .list-leave-active for below version 2.1.8 */ {
+      opacity: 0;
+      transform: translateY(320px);
+    }
 </style>
