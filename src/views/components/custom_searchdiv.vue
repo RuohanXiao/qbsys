@@ -241,7 +241,12 @@
               }
             })
           } else if (a.itemType === 'keywords') {
-            mthis.$store.commit('setSearchContentResult', a.value)
+            let seResult = {
+              time: new Date(),
+              val : a.value
+            }
+            // mthis.$store.commit('setSearchContentResult', a.value)
+            mthis.$store.commit('setSearchContentResult',seResult)
             mthis.$store.commit('setConditionContent', a.value)
             var query = a.value;
             mthis.$http.get(mthis.$store.state.ipConfig.api_url + "/doc-statistics/?query=" + a.value, {
@@ -295,7 +300,6 @@
                     mthis.$store.commit('setGeoNoAreaDataGoInMap', noAreaIds);
                   }
                 }, function(error) {
-                  // console.log('请求/load-set-data/失败！')
                 })
             } else if (a.itemType === 'location') {
               mthis.$store.commit('setHLlocationIds', [a.id])
@@ -348,10 +352,6 @@
         }
       },
       show_default_image: function(event,ob) {
-        // console.log('------------------------------------>>>>>event<<<<<<<<<----------------------------')
-        // console.log(event)
-        // console.log(ob)
-        // event.target.src = "http://temp.im/600x600";
         if (ob.itemType === 'entity') {
             if (ob.type === 'administrative') {
               event.target.src = 'http://10.60.1.140/assets/images/searchAdmin.png'
@@ -378,7 +378,6 @@
           }
       },
       defaultImg1(mthis, type, img, itemType) {
-        // // console.log(subtype)
         var img = new Image();
         img.src = img
         img.onload = function() {
@@ -430,7 +429,6 @@
         });
       },
       defaultImgreturn(type, imgsrc, subtype) {
-        // // console.log(type, imgsrc, subtype)
         var mthis = this
           // var img = new Image();
           // img.src = imgsrc
@@ -463,15 +461,6 @@
             }
           }
           }
-
-
-          // mthis.getBase64(imgsrc)
-          // .then(function(base64){
-          //       // console.log(base64);//处理成功打印在控制台
-          // },function(err){
-          //       // console.log(err);//打印异常信息
-          // });          
-          
       },
       defaultImg(type, img, subtype) {
         if (img) {
@@ -532,8 +521,6 @@
       },
       searchInfoNet(query) {
         var mthis = this;
-        // console.log('============')
-        // console.log(JSON.parse(sessionStorage.getItem('netSearchTemp')).map(item=>{
 
         // }))
         mthis.timestamp = new Date().getTime()
@@ -554,18 +541,14 @@
                     title:'历史搜索',
                     data:JSON.parse(sessionStorage.getItem('netSearchTemp'))
                   })
-                  console.log('storangestorangestorange')
                   if(mthis.options1[0].data.length>0){
                     mthis.options1[0].data = mthis.custom_unique(mthis.options1[0].data)
                   }
-                  console.log(mthis.options1)
                   if (response.body.data.SearchEntity.length > 0) {
                     let optionList = new Object()
                     let optionListArr = new Array()
                     response.body.data.SearchEntity.map(item => {
                       // let imgtemp = mthis.defaultImgreturn(item.type, 'http://10.60.1.143/pic_lib/padded/' + item.id + '.png', 'entity');
-                      // // console.log('=================');
-                      // // console.log(imgtemp);
                       optionListArr.push({
                         "label": item.name,
                         "labelShort": (item.name.length > 14) ? (item.name.substring(0, 13) + '...') : item.name,
@@ -655,7 +638,6 @@
                     mthis.loading1 = false;
                     // mthis.options1 = mthis.optionsTemp
                     mthis.$forceUpdate()
-                    // console.log(mthis.options1)
                   },200)
                 } else {}
               })
@@ -826,7 +808,6 @@
         isRunUrl('http://10.60.1.143/pic_lib/padded/' + obj.id + '.png').then(function(data) {
           return 'http://10.60.1.143/pic_lib/padded/' + obj.id + '.png'
           // //处理resolve的代码
-          // // console.log("Promise被置为resolve", data);;
         }, function(data) {
           //处理reject的代码
           // console .log("程序被置为了reject",data);

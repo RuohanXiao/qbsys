@@ -117,7 +117,6 @@
     
     methods: {
       openModifyGroupModal(setId) {
-        // // // console.log(setId)
         this.$store.commit('setOpenWorkSetFlag',{
           id:setId,
           type:'modify',
@@ -223,9 +222,7 @@
                     "type": response.body.data.nodes[i].type
                   })
                 }
-                // // // console.log(optionListArr)
                 mthis.options1 = optionListArr;
-                // // // console.log(mthis.options1)
               })
           }, 200);
         } else {
@@ -264,7 +261,6 @@
         //   "label": "set",
         //   "type": "set"
         // }).then(response => {
-        //   // // // console.log(response)
         //   if (response.body.code === 0) {
         //     // alert('删除成功！')
         //      if (mthis.$store.state.tmss === 'net') {
@@ -291,8 +287,6 @@
         // })
       },
       modData(id) {
-        // // // console.log('modify');
-        // // // console.log(id);
         this.$store.commit('setWorkSpaceModal', {
           "id":id,
           "flag":true
@@ -355,7 +349,6 @@
           }
           
         }else if(tmss == 'content'){
-          // console.log(datas)
           let contentObj = {
             'type':'push',
             'ids':[]

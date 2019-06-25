@@ -202,7 +202,6 @@
             "pagesize": 30
           }).then(response => {
             mthis.items_gongzuoji = response.body.data
-            // console.log(response.body.data)
             mthis.spinRight = false
             mthis.$forceUpdate()
           })

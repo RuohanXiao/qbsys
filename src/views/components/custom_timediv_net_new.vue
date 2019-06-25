@@ -162,7 +162,6 @@
                       this.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
                       this.$store.commit('setNetTimeCondition', this.toNetEventIds)
                     }else{
-                      // console.log("服务器error")
                     }
                     
                 })
@@ -194,7 +193,6 @@
       },
       hideDiv(){
         if(this.isClick){
-          // console.log("gahsdvshgvuy")
           
           this.toNetPersEventIds.eventIds = []
           this.toNetEventIds.eventIds = []
@@ -468,8 +466,6 @@
         mthis.charts.setOption(mthis.option)
         
         this.charts.on('datazoom',function(params){
-          // console.log(params)
-          // console.log( typeof params.start)
           let haveV = typeof params.start
           if(haveV == Number){
             mthis.echartsShowStart = params.start
@@ -494,7 +490,6 @@
           // mthis.timeTitle = '请选择节点'
           if (params.batch[0].areas.length === 0) {
             if(mthis.isDataZoom){
-              // // console.log("lalalla")
               mthis.timeTitle = '时间轴'
              
               mthis.isBrush = []
@@ -541,7 +536,6 @@
                 //       mthis.boxSelEventIds.title = ""
                 //       mthis.$store.commit('setNetOnlyStaticsSelectedIds',mthis.boxSelEventIds)
                 //     }else{
-                //       // console.log("服务器error")
                 //     }
                     
                 // })
@@ -588,7 +582,6 @@
                     mthis.$store.commit('setNetOnlyStaticsSelectedIds',this.toNetPersEventIds)
                     mthis.$store.commit('setNetTimeCondition', this.toNetEventIds)
                   }else{
-                    // console.log("服务器error")
                   }
                 })
           mthis.charts.dispatchAction({
@@ -621,7 +614,6 @@
                   mthis.toNetEventIds.eventIds = response.body.data.eventIds
                   
                 }else{
-                  // console.log("服务器error")
                 }
                 
             })
@@ -746,7 +738,6 @@
               mthis.loadEcharts(2)
               
             }else{
-              // console.log("服务器error")
             }
             
           })
@@ -772,7 +763,6 @@
                       
                       mthis.loadEcharts(3)
                   }else{
-                    // console.log("服务器error")
                   }
               })
           }
@@ -799,7 +789,6 @@
               mthis.loadEcharts(2)
               
             }else{
-              // console.log("服务器error")
             }
             
           })

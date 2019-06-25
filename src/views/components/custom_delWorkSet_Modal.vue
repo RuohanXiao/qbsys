@@ -40,8 +40,6 @@ export default {
     ]),
     methods:{
         del(id){
-            // console.log(id)
-           
             var mthis = this
             let timestamp = new Date().getTime()
             mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/delete-set-data/', {
@@ -50,9 +48,7 @@ export default {
                 "label": "set",
                 "type": "set"
             }).then(response => {
-                // // // console.log(response)
                 if (response.body.code === 0) {
-                    // alert('删除成功！')
                     if (mthis.$store.state.tmss === 'net') {
                         mthis.$store.commit('setNetPromte', '删除成功！')
                     } else if (mthis.$store.state.tmss === 'geo') {
@@ -81,7 +77,6 @@ export default {
     watch:{
         delSetData: function() {
             if(!this.delSetData.flag) return;
-            // console.log(this.delSetData)
             var mthis = this;
             
             var setContent = document.getElementsByClassName('ivu-modal-content')[0]

@@ -194,9 +194,10 @@ top: 232px;
         <workset-modal :worksetData="worksetData" :type="worksetType" :flag="worksetFlag" :worksetInfo="worksetInfo" />
     </div> -->
     <div :style="{height:GeoHeight,width:geoWidth}" class='geoDiv' tabindex="1" @keydown="keyD" style="outline:none;">
-        <imgItemOpera :changeButton='changeButtonParam' @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)'}"></imgItemOpera>
+        <!-- <imgItemOpera :changeButton='changeButtonParam' @mapOperation='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',border:'1px solid rgba(51,102,102,1)',borderBottom:'none'}"></imgItemOpera> -->
+        <imgItemOpera :buttonParamArr='buttonArr' :changeButton='changeButtonParam' @buttonClick='mapOperationClick' :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',border:'1px solid rgba(51,102,102,1)',borderBottom:'none'}"></imgItemOpera>
         <div id='mapDIV'>
-            <div id='mainMap' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,0.5)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
+            <div id='mainMap' :style="{display:'block',height:mapHeight,width:'100%',backgroundColor:'black',borderColor: 'rgba(54,102,102,1)',borderWidth:'1px',borderStyle:'solid'}" >  <!-- ,height:'800px',width:'1300px'    '1px' 'solid' 'rgba(54,102,102,0.5)'-->
                 <transition name="prompt"><div v-if="promptflag" class='promptmessage'>{{promptMessage}}</div></transition>
                 <div class='heatMapFormDiv' v-if='legend' >
                     <div class='heatSettingName'>图例</div>
@@ -262,7 +263,7 @@ import '../../dist/assets/styles/geo/mapInit.css'
 
 import imgSlider from "./custom_imgSlider"
 import routeLegend from './custom_routeLegend'
-import imgItemOpera from './custom_mapOperaButtons'
+import imgItemOpera from './custom_menuButton.vue'
 import worksetModal from "./custom_workSet_modal.vue"
 import operatorHub from "./custom_operatorHub.vue"
 import thematicLayer from "./custom_thematicLayer.vue"
@@ -274,6 +275,131 @@ export default {
     data() {
       return {
         //isEventPointsSelected:false,
+        buttonArr:[
+            {
+            'id':'clearAll_HCD',
+            'name':'清空',
+            'imgClass':'icon-qingchu',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'rectangle_HD',
+            'name':'框选',
+            'imgClass':'icon-selection-box',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'selectAll_HD',
+            'name':'全选',
+            'imgClass':'icon-rectangle',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'invertSelection_HSD',
+            'name':'反选',
+            'imgClass':'icon-fanxuan',
+            'type' : 'default',
+            'isUse':false
+          }, 
+          {
+            'id':'delete_HSD',
+            'name':'删除',
+            'imgClass':'icon-delete-point',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'returnToAllPoints_HDD',
+            'name':'复位',
+            'imgClass':'icon-fuwei',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'createWorkSpace_HASD',
+            'name':'创建集合',
+            'imgClass':'icon-add',
+            'type' : 'default',
+            'isUse':false
+          },
+          {'id':'separate'},
+          {
+            'id':'RectangleExplore_AT',
+            'name':'矩形探索',
+            'imgClass':'icon-tansuo',
+            'type' : 'default',
+            'isUse':true
+          },
+          {
+            'id':'CircleExplore_AT',
+            'name':'圆形探索',
+            'imgClass':'icon-tansuo2',
+            'type' : 'default',
+            'isUse':true
+          },
+          {
+            'id':'customExplore_AT',
+            'name':'自定义探索',
+            'imgClass':'icon-tansuo1',
+            'type' : 'default',
+            'isUse':true
+          },
+          {
+            'id':'exploreLocationName_HL',
+            'name':'探索',
+            'imgClass':'icon-match-search',
+            'type' : 'default',
+            'isUse':false
+
+          },
+          {'id':'separate'},
+          /* {
+            'id':'heatMap_HSD',
+            'name':'显示热力',
+            'imgClass':'icon-hot',
+            'isUse':false
+          }, */
+          {
+            'id':'route_HSD',
+            'name':'显示轨迹',
+            'imgClass':'icon-route',
+            'type' : 'default',
+            'isUse':false
+          },
+          {'id':'separate'},
+          {
+            'id':'toNet_HSD',
+            'name':'推送网络',
+            'imgClass':'icon-tuisongzhiwangluo',
+            'type' : 'default',
+            'isUse':false
+          },
+          {'id':'separate'},
+          {
+            'id':'leadingInThematic_AT',
+            'name':'导入图',
+            'imgClass':'icon-daoru',
+            'type' : 'default',
+            'isUse':true
+          },
+          {
+            'id':'closeThematic_OT',
+            'name':'关闭图',
+            'imgClass':'icon-daochu',
+            'type' : 'default',
+            'isUse':false
+          },
+          {
+            'id':'screenCapture_NT',
+            'name':'截屏',
+            'imgClass':'icon-cut',
+            'type' : 'default',
+            'isUse':false
+          },
+        ],
         a:null,
         radius:15,
         mapDivbuttonIds : ['location_AT','heatMap_HSD','route_HSD'],
@@ -503,6 +629,7 @@ export default {
         mapOperationClick(mapOperation){
             var mthis = this;
             var mapOperationId = mapOperation.currentTarget.id;
+            
             if(mapOperationId == 'location_AT'){
                 mthis.location_cilck();
             } else if(mapOperationId == 'heatMap_HSD'){
@@ -2027,7 +2154,6 @@ export default {
         },
         exploreQB(geometryArr,type){
             var mthis = this;
-            debugger
             var url = '';
             var promptType = ''
             var num = 0;
@@ -3302,11 +3428,11 @@ export default {
                 mthis.changeButtonParam=[
                         {
                             'id_suf':'HSD',
-                            'isOpen':false
+                            'isUse':false
                         },
                         {
                             'id_suf':'HD',
-                            'isOpen':false
+                            'isUse':false
                         }
                     ]
                 mthis.heatMapVisible = false;  //关闭热力设置按钮
@@ -3314,54 +3440,54 @@ export default {
                     mthis.changeButtonParam.push({
 
                             'id_suf':'HDD',
-                            'isOpen':false
+                            'isUse':false
                         })
                         
                 } else {
                     mthis.changeButtonParam.push({
                             'id_suf':'HDD',
-                            'isOpen':true
+                            'isUse':true
                         })
                 }
                 if(mthis.AreaIds.length == 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HL',
-                        'isOpen':false
+                        'isUse':false
                     })
                     mthis.changeButtonParam.push({
                         'id_suf':'HCD',
-                        'isOpen':false
+                        'isUse':false
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HL',
-                        'isOpen':true
+                        'isUse':true
                     })
                     mthis.changeButtonParam.push({
                         'id_suf':'HCD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 }
                 if(mthis.AreaIds.length > 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HASD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HASD',
-                        'isOpen':false
+                        'isUse':false
                     })
                 }
                 if(mthis.hasTheamatic){
                     mthis.changeButtonParam.push({
                         'id_suf':'OT',
-                        'isOpen':true
+                        'isUse':true
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'OT',
-                        'isOpen':false
+                        'isUse':false
                     })
                 }
 
@@ -3369,67 +3495,67 @@ export default {
                 mthis.changeButtonParam=[
                     {
                         'id_suf':'HD',
-                        'isOpen':true
+                        'isUse':true
                     },
                     {
                         'id_suf':'HCD',
-                        'isOpen':true
+                        'isUse':true
                     }
                 ]
                 if(mthis.HLIds.length > 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HSD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HSD',
-                        'isOpen':false
+                        'isUse':false
                     })
                     mthis.heatMapVisible = false;  //关闭热力设置按钮
                 }
                 if($.isEmptyObject(mthis.removeEventIdList)){
                     mthis.changeButtonParam.push({
                         'id_suf':'HDD',
-                        'isOpen':false
+                        'isUse':false
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HDD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 }
                 if(mthis.AreaIds.length == 0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HL',
-                        'isOpen':false
+                        'isUse':false
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'HL',
-                        'isOpen':true
+                        'isUse':true
                     })
                 }
                 if(mthis.AreaIds.length == 0 && mthis.SelectedIds.length ==0){
                     mthis.changeButtonParam.push({
                         'id_suf':'HASD',
-                        'isOpen':false
+                        'isUse':false
                     })
                 } else{
                     mthis.changeButtonParam.push({
                         'id_suf':'HASD',
-                        'isOpen':true
+                        'isUse':true
                     })
                 }
                 if(mthis.hasTheamatic){
                     mthis.changeButtonParam.push({
                         'id_suf':'OT',
-                        'isOpen':true
+                        'isUse':true
                     })
                 } else {
                     mthis.changeButtonParam.push({
                         'id_suf':'OT',
-                        'isOpen':false
+                        'isUse':false
                     })
                 }
             }

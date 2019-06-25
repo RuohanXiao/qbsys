@@ -1,26 +1,27 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId" @click="hideDiv()">
-    <Icon class="icon iconfont icon-drop-up process-img DVSL-bar-btn rotate" :id="arrowDownId" size="18" :style="{lineHeight:'30px',position:'absolute',right: '20px',zIndex:99,transform:'rotate(180deg)'}" 
+    <Icon class="icon iconfont icon-shijianzhou" :id="arrowDownId" :style="{lineHeight:'32px',position:'absolute',right: '20px',zIndex:99}" 
     @click="onchangHeightCount" v-show="showDocTime"></Icon>
-    <div :style="{height:'30px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
-      <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'45px',paddingLeft:'10px'}">
-        <!-- <Col span="3"/> -->
-        <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'30px',color:'#ccffff',fontSize:'14px'}">时间轴&nbsp;&nbsp;{{timeTitle}}</span></Col>
-        <Col span="1"  class="bottom">
-        <!-- <Tooltip content="放大" placement="bottom">
-          <Icon class="icon iconfont icon-zoom-out1 process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomIn" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+    <div :style="{height:'32px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
+      <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'32px',paddingLeft:'10px'}">
+        <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'32px',color:'#ccffff',fontSize:'14px'}">时间轴&nbsp;&nbsp;{{timeTitle}}</span></Col>
+        <Col span="1" class="bottom">
+        <!-- <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
         </Tooltip> -->
         </Col>
         <Col span="1" class="bottom">
-        <Tooltip content="播放" placement="bottom">
-          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
-        </Tooltip>
+          <Tooltip content="播放" placement="bottom">
+            <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'32px'}"></Icon>
+          </Tooltip>
         </Col>
-        <Col span="1" class="bottom" />
-      </Row>
-      </Col>
-      </Row>
+        <Col span="1" class="bottom">
+        <!-- <Tooltip content="播放" placement="bottom">
+          <Icon class="icon iconfont icon-bofang process-img DVSL-bar-btn DVSL-bar-btn-back" @click="timeZoomOut" size="18" :style="{lineHeight:'30px',marginTop:'3px'}"></Icon>
+        </Tooltip> -->
+        </Col>
+        </Row>
     </div>
     <div :style="{borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)',margin:'0 10px 0 10px',backgroundColor:'rgba(0,0,0,0.5)',height: timepxdiv}" :id="timedivId">
       <!-- <div id='barchart' :style="{height: timepxdiv,width:'300px'}"></div> -->
@@ -190,18 +191,14 @@
         var mthis = this
         let sendIds = []
         let docIds = util.getStorage("docIds",mthis.selIdsArr)
-        console.log(mthis.selIdsArr)
-        console.log(docIds)
         for(var i in docIds){
               for(var j of docIds[i]){
                 sendIds.push(j)
               }
             }
-        console.log(sendIds)
         mthis.sendDocIds.type = 'time'
         mthis.sendDocIds.ids = sendIds
         mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
-        // console.log(mthis.$store.state.contentTimeCondition)
       },
       throttle(fn,delay,duration){
         if(timer){
@@ -230,7 +227,6 @@
         if(flag==1){
           this.clcikShowDiv = false
           this.$store.commit('setContentTimeOnlySel',this.sendDocIds.ids)
-          // console.log("click")
         }else{
           this.$store.commit('setContentTimeOnlySel',this.sendDocIds.ids)
           this.boxSelShowDiv = false
@@ -239,7 +235,6 @@
             type:'brush',
             areas:[]
           })
-          // console.log('brush',this.isBrush)
           
         }
       },
@@ -386,6 +381,7 @@
               // realtime: false, //是否实时加载
               realtime: true, //是否实时加载
               show: true,
+              // zoomLock:true,
               textStyle: {
                 color: "#33ffff",
                 fontFamily: 'Microsoft YaHei'
@@ -417,7 +413,7 @@
               xAxisIndex: [0],
               // startValue: 10,
               // endValue: 20,
-              minValueSpan: 1,
+              minValueSpan: 20,
               handleIcon: "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
               handleSize: "80%",
               handleStyle: {
@@ -431,13 +427,13 @@
             },
             {
               type: "inside",
-              // start: 0,
-              // end: 10,
-              show: true,
+              start: 10,
+              end: 80,
+              // show: true,
               xAxisIndex: [0],
               // startValue: 0,
               // endValue: 5,
-              minValueSpan: 10
+              minSpan: 10
             }
           ],
               
@@ -447,11 +443,11 @@
             name: "文档",
             type: "bar",
             barGap:"-100%",
+            // barWidth:'2px',
+            barMaxWidth: '10px',
             // barWidth:'10px',
-            barMaxWidth: '30%',
-            barWidth:'10px',
-            barMinHeight: '1px',
-            barCategoryGap:'50%',
+            // barMinHeight: '1px',
+            // barCategoryGap:'50%',
             itemStyle: {
               color:function(param){
                   
@@ -488,27 +484,22 @@
               
               return 1;
             },
-            // data:mthis.dataBySeries.num
+            
             data: []
-          },
-              {
-                        type:'bar',
-                        // barWidth:'10px',
-                        barMaxWidth: '30%',
-                        barWidth:'10px',
-                        barMinHeight: '1px',
-                        barCategoryGap : '60%',
-                        data:mthis.dataBySeries.clickNum,
-                        itemStyle:{
-                            color:'#33cc99',
-                            barBorderRadius:[3,3,3,3],
-                            emphasis: {
-                              cursor: "pointer",
-                              barBorderRadius: [3, 3, 3, 3],
-                              color: '#27866a'},
-                        },
-                        data:[]
-                    }
+          },{
+            type:'bar',
+            barMaxWidth: '10px',
+            data:[],
+            itemStyle:{
+              color:'#33cc99',
+              barBorderRadius:[3,3,3,3],
+              emphasis: {
+                cursor: "pointer",
+                barBorderRadius: [3, 3, 3, 3],
+                color: '#27866a'},
+              },
+                        
+            }
           ],
         
         });
@@ -523,7 +514,6 @@
         
         mthis.charts.setOption(mthis.option)
         this.charts.on('datazoom',function(params){
-          // console.log(params)
           if(params.hasOwnProperty('start')){
             mthis.echartsShowStart = params.start
             mthis.echartsShowEnd = params.end
@@ -554,7 +544,6 @@
               
               mthis.sendDocIds.type = 'time'
               mthis.sendDocIds.ids = []
-              // console.log(mthis.sendDocIds)
               mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
               mthis.timeTitle = ''
               mthis.isBrush = []
@@ -626,7 +615,6 @@
           mthis.sendDocIds.type = 'time'
           mthis.sendDocIds.ids = docIds
           mthis.$store.commit('setContentTimeCondition',mthis.sendDocIds)
-          // console.log(docIds)
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -728,7 +716,7 @@
       this.timepx =
         (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 - 30 + "px";
       this.timepxdiv =
-        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
+        (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -8+ "px";
         
       /* this.iconPosition = useHeight * 0.8 + "px"; */
 
@@ -758,16 +746,17 @@
                         "ids":ids,
                       }).then(response =>{
                         if(response.body.code === 0){
-                            mthis.dataBySeries.clickNum = new Array(mthis.dataBySeries.date.length).fill(null)
-                            for(let i=0;i<response.body.data.time.length;i++){
-                              let index = mthis.dataBySeries.date.indexOf(response.body.data.time[i])
-                              mthis.dataBySeries.clickNum[index] = response.body.data.count[i];
-                              
-                            }
+                            let casDate = response.body.data.time
+                            let casCount = response.body.data.count
+                            let indStart = mthis.dataBySeries.date.indexOf(casDate[0])
+                            let indEnd = mthis.dataBySeries.date.length - indStart - casCount.length
+                            
+                            let prevCount = new Array(indStart).fill(null)
+                            let aftCount = new Array(indEnd).fill(null)
+                            mthis.dataBySeries.clickNum = prevCount.concat(casCount).concat(aftCount)
                             
                             mthis.loadEcharts(3)
                         }else{
-                          // console.log("服务器error")
                         }
                     })
                 }
@@ -823,8 +812,6 @@
                           mthis.dataBySeries.clickNum = [];
                           mthis.loadEcharts(2);
                           util.writeStorage("docIds",localIds)
-                          console.log('<100')
-                          console.log(mthis.dataBySeries.date.length)
                       }else{
                         let dayCount = parseInt(response.body.data.time.length * 0.1)
                        if(dayCount>0){
@@ -835,8 +822,6 @@
                           let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
                           preDateList.pop();
                           aftDateList.shift();
-                          // console.log(preDateList.length)
-                          // console.log(aftDateList)
                           let conCount = new Array(preDateList.length).fill('null');
                           let conIds = new Array(preDateList.length).fill([]);
                           let localIds = [];
@@ -856,7 +841,6 @@
                       }
                
               }else{
-                // console.log('服务器error')
               }
             })
         }
@@ -897,85 +881,7 @@
         
         this.pwidth = document.documentElement.clientWidth * this.$store.state.split - 20 + 'px'
       },
-      geoHeightCount: function() {
-        var mthis = this
-        
-        var tmss = mthis.$store.state.tmss;
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (mthis.geoHeightCount % 2 === 0) {
-          /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_geo').style.top = useHeight - 40 + "px";
-          //var timeDivHeight = parseInt(document.getElementById(mthis.timechartdivId).style.height)
-          //mthis.$store.commit('setGeoHeight',useHeight * 1)
-            mthis.$store.commit('setGeoHeight',useHeight * 1)
-
-          document.getElementById('timechartctrl_geo').style.display = "none";
-          document.getElementById('main1_geo').style.display = "none";
-          document.getElementById('timediv_geo').style.display = "none";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(0deg)";
-          /* mthis.$store.commit('setChangenetpx',false); */
-          
-        } else {
-          
-          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_geo').style.top = useHeight * 0.8 + "px";
-          /* mthis.$store.commit('setChangenetpx',true); */
-          document.getElementById('timechartctrl_geo').style.display = "block";
-          document.getElementById('main1_geo').style.display = "block";
-          document.getElementById('timediv_geo').style.display = "block";
-          document.getElementById('arrowDown_geo').style.transform = "rotate(180deg)";
-          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-            mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-        }
-        document.getElementById('arrowDown_geo').style.position = "absolute";
-        document.getElementById('arrowDown_geo').style.right = "20px";
-        
-        /* var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-       /*  document.getElementById('arrowDown_geo').style.top = netpxdiv; */
-        document.getElementById('arrowDown_geo').style.zIndex = 99;
-      },
-      netHeightCount: function() {
-        var mthis = this
-        
-        var tmss = mthis.$store.state.tmss;
-        let useHeight = document.documentElement.clientHeight - 64 - 20;
-        if (mthis.netHeightCount % 2 === 0) {
-          /* mthis.iconPosition = useHeight - 40 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight - 40 + "px";
-          
-            mthis.$store.commit('setNetHeight',useHeight * 1)
-
-          document.getElementById('timechartctrl_net').style.display = "none";
-          document.getElementById('main1_net').style.display = "none";
-          document.getElementById('timediv_net').style.display = "none";
-          document.getElementById('arrowDown_net').style.transform = "rotate(0deg)";
-          mthis.$store.commit('setChangenetpx',false);
-          
-        } else {
-          /* mthis.iconPosition = useHeight * 0.8 + "px"; */
-          document.getElementById('arrowDown_net').style.top = useHeight * 0.8 + "px";
-          // this.timepx =
-          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 -
-          //   30 +
-          //   "px";
-          // this.timepxdiv =
-          //   (document.documentElement.clientHeight * 1 - 64 - 70 - 30 - 20) * 0.2 + "px";
-          // mthis.$emit('changenetpx', true);
-          mthis.$store.commit('setChangenetpx',true);
-          document.getElementById('timechartctrl_net').style.display = "block";
-          document.getElementById('main1_net').style.display = "block";
-          document.getElementById('timediv_net').style.display = "block";
-          document.getElementById('arrowDown_net').style.transform = "rotate(180deg)";
-          //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
-            mthis.$store.commit('setNetHeight',useHeight * 0.8)
-        }
-        document.getElementById('arrowDown_net').style.position = "absolute";
-        document.getElementById('arrowDown_net').style.right = "20px";
-        
-/*         var netpxdiv = (document.documentElement.clientHeight * 1 - 64 - 70 - 45 - 20) * 0.8 + 55 + "px"; */
-        /* document.getElementById('arrowDown_net').style.top = netpxdiv; */
-        document.getElementById('arrowDown_net').style.zIndex = 99;
-      },
+      
       contentHeightCount: function() {
         var mthis = this
         
@@ -992,7 +898,7 @@
           document.getElementById('timechartctrl_content').style.display = "none";
           document.getElementById('main1_content').style.display = "none";
           document.getElementById('timediv_content').style.display = "none";
-          document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
+          // document.getElementById('arrowDown_content').style.transform = "rotate(0deg)";
           /* mthis.$store.commit('setChangenetpx',false); */
           
         } else {
@@ -1009,7 +915,7 @@
           document.getElementById('timechartctrl_content').style.display = "block";
           document.getElementById('main1_content').style.display = "block";
           document.getElementById('timediv_content').style.display = "block";
-          document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
+          // document.getElementById('arrowDown_content').style.transform = "rotate(180deg)";
           //mthis.$store.commit('setGeoHeight',useHeight * 0.8)
             mthis.$store.commit('setContentHeight',useHeight * 0.8)
         }
@@ -1049,5 +955,9 @@
   
   .trClass:hover{
     color:rgba(93, 240, 240, 1);
+  }
+  .icon-shijianzhou::before{
+    /* content:url('http://10.60.1.140/assets/images/shijianzhou.png'); */
+    content:url('../../dist/assets/images/shijianzhou.png');
   }
 </style>

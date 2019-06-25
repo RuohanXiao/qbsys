@@ -138,8 +138,6 @@
         }
       },
       changeDetailDiv(id, type, ob) {
-        // // console.log('-------------------ob')
-        // // console.log(ob)
         var mthis = this
         let arr = []
         arr.push(id)
@@ -167,8 +165,6 @@
           //   "NodeIds": arr,
           //   "TypeLabel": 'event'
           // }).then(response => {
-          //   // // // console.log('=============related event=============')
-          //   // // // console.log(response)
           // })
         }
         if (mthis.myMap.get(type) === 'document') {
@@ -196,7 +192,6 @@
     },
     watch: {
       eventdata: function() {
-        // console.log(this.eventdata)
         // ;
         var mthis = this
         if (typeof(mthis.eventdata) === "object" && mthis.eventdata.concat && mthis.eventdata.length > 0) {
@@ -239,8 +234,6 @@
               mthis.selectTag = detailId
               let result = mthis.eventdata[0]
               result.name = result.name.replace(/ /,'_')
-              // // console.log('**************')
-              // // console.log(mthis.eventdata[0])
               result.name = mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).name
               result.img = util.checkImgExists(result.img) ? (result.img) : mthis.myMap1.get(result.name.toLowerCase().replace(/-/, "_")).img
               result.entity_type='event'
@@ -255,7 +248,6 @@
               mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
                 "docIds": a
               }).then(response => {
-                // // console.log(response.body.data[0])
                 let result = new Object();
                 result = response.body.data[0]
                 result.entity_type = 'document'
@@ -263,17 +255,12 @@
                 result.name = response.body.data[0].title.substring(0, 19) + '...'
                 result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/content_node.png'
                 mthis.detailData = result
-                // // console.log('mthis.detailData')
-                // // console.log(mthis.detailData)
               })
             } else {
-              // // // console.log('未找到匹配的类型')
             }
             // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
           }, 200);
         } else {
-          // // // console.log('=======mthis.eventdata取值异常')
-          // // // console.log(mthis.eventdata)
         }
       }
     },

@@ -430,7 +430,6 @@
         var mthis = this
         this.$http.get(this.$store.state.ipConfig.api_url + '/context-time-count/?keyword=' + keyword).then(response => {
           if (response.body.code === 0) {
-            // console.log(response.body)
             mthis.dataBySeries.num = response.body.data.count
             mthis.dataBySeries.date = response.body.data.time
             mthis.option.series[0].data = response.body.data.count
