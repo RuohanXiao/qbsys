@@ -43,7 +43,7 @@
                     <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
                     <p class='nametext'>{{itemObj.name}}</p>
                     <div class='delItemDiv' @click="deletItem(itemObj.id,index)">
-                      <Icon type="icon iconfont icon-shanchu color515" :style="{padding:'20px 0px'}" size="40"></Icon>
+                      <Icon type="icon iconfont icon-shanchu color515" :style="{padding:'24px 0px'}" size="24"></Icon>
                     </div>
                   </Col>
                 </Row>

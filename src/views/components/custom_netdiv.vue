@@ -4,7 +4,7 @@
       <Spin size="large" fix v-if="spinShow"></Spin>
     </div>
     <div :style="{height:'55px',backgroundColor: 'rgba(51, 255, 255, 0.1)',margin:'0 10px 0 10px',border:'solid 1px #336666'}" id="net">
-      <cusButton :buttonParamArr='buttonArr' :changeButton='changeButtonParam'  @buttonClick='exButton'></cusButton>
+      <cusButton :buttonParamArr='buttonArr' :changeButton='changeButtonParam' @buttonClick='exButton'></cusButton>
     </div>
     <div :style="{height:nh_50,borderRight:'solid 1px #336666',borderLeft:'solid 1px #336666',borderBottom:'solid 1px #336666',margin:'0 10px',backgroundColor:'rgba(0,0,0,0.5)'}">
       <div id="netchart" :style="{height:nh_50}"></div>
@@ -48,123 +48,126 @@
     name: "App",
     data() {
       return {
-        buttonArr:[
-          {
-            'id':'clearAll_HD',
-            'name' :'清空',
-            'imgClass':'icon-qingchu',
-            'isUse':false,
-            'type':'default',
+        buttonArr: [{
+            'id': 'clearAll_HD',
+            'name': '清空',
+            'imgClass': 'icon-qingchu',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'delete_HSD',
-            'name' :'删除',
-            'imgClass':'icon-delete-point',
-            'isUse':false,
-            'type':'default',
+            'id': 'delete_HSD',
+            'name': '删除',
+            'imgClass': 'icon-delete-point',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'fanxuan_HD',
-            'name' :'反选',
-            'imgClass':'icon-fanxuan',
-            'isUse':false,
-            'type':'default',
+            'id': 'fanxuan_HD',
+            'name': '反选',
+            'imgClass': 'icon-fanxuan',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'selectAll_HD',
-            'name' :'全选',
-            'imgClass':'icon-quanxuan',
-            'isUse':false,
-            'type':'default',
+            'id': 'selectAll_HD',
+            'name': '全选',
+            'imgClass': 'icon-quanxuan',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'addSet_HSD',
-            'name' :'创建集合',
-            'imgClass':'icon-add',
-            'isUse':false,
-            'type':'default',
+            'id': 'addSet_HSD',
+            'name': '创建集合',
+            'imgClass': 'icon-add',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'lock_AT',
-            'name' :'锁定',
-            'imgClass':'icon-nail-copy',
-            'isUse':true,
-            'type':'default',
+            'id': 'lock_AT',
+            'name': '锁定',
+            'imgClass': 'icon-nail-copy',
+            'isUse': true,
+            'type': 'default',
           },
           {
-            'id':'unLock_AT',
-            'name' :'解锁',
-            'imgClass':'icon-nail-copy-copy-copy',
-            'isUse':true,
-            'type':'default',
-          },
-          {'id':'separate'},
-          {
-            'id':'square_HSD',
-            'name' :'矩形',
-            'imgClass':'icon-grid',
-            'isUse':false,
-            'type':'default',
+            'id': 'unLock_AT',
+            'name': '解锁',
+            'imgClass': 'icon-nail-copy-copy-copy',
+            'isUse': true,
+            'type': 'default',
           },
           {
-            'id':'circle_HSD',
-            'name' :'环形',
-            'imgClass':'icon-circle',
-            'isUse':false,
-            'type':'default',
+            'id': 'separate'
           },
           {
-            'id':'star_HSD',
-            'name' :'星形',
-            'imgClass':'icon-star1',
-            'isUse':false,
-            'type':'default',
+            'id': 'square_HSD',
+            'name': '矩形',
+            'imgClass': 'icon-grid',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'hierarchy_HSD',
-            'name' :'层级',
-            'imgClass':'icon-expand',
-            'isUse':false,
-            'type':'default',
+            'id': 'circle_HSD',
+            'name': '环形',
+            'imgClass': 'icon-circle',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'auto_HSD',
-            'name' :'自动',
-            'imgClass':'icon-jutuan',
-            'isUse':false,
-            'type':'default',
-          },
-          {'id':'separate'},
-          {
-            'id':'importPic_AT',
-            'name' :'导入图',
-            'imgClass':'icon-daoru',
-            'isUse':true,
-            'type':'default',
+            'id': 'star_HSD',
+            'name': '星形',
+            'imgClass': 'icon-star1',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'exportPic_HSD',
-            'name' :'导出图',
-            'imgClass':'icon-daochu',
-            'isUse':false,
-            'type':'default',
+            'id': 'hierarchy_HSD',
+            'name': '层级',
+            'imgClass': 'icon-expand',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'cutPic_HD',
-            'name' :'截屏',
-            'imgClass':'icon-cut',
-            'isUse':false,
-            'type':'default',
+            'id': 'auto_HSD',
+            'name': '自动',
+            'imgClass': 'icon-jutuan',
+            'isUse': false,
+            'type': 'default',
           },
           {
-            'id':'fitCanvas_HD',
-            'name' :'适配',
-            'imgClass':'icon-zhengchangshitu--quanping',
-            'isUse':false,
-            'type':'default',
+            'id': 'separate'
+          },
+          {
+            'id': 'importPic_AT',
+            'name': '导入图',
+            'imgClass': 'icon-daoru',
+            'isUse': true,
+            'type': 'default',
+          },
+          {
+            'id': 'exportPic_HSD',
+            'name': '导出图',
+            'imgClass': 'icon-daochu',
+            'isUse': false,
+            'type': 'default',
+          },
+          {
+            'id': 'cutPic_HD',
+            'name': '截屏',
+            'imgClass': 'icon-cut',
+            'isUse': false,
+            'type': 'default',
+          },
+          {
+            'id': 'fitCanvas_HD',
+            'name': '适配',
+            'imgClass': 'icon-zhengchangshitu--quanping',
+            'isUse': false,
+            'type': 'default',
           }
         ],
-        changeButtonParam:[],
+        changeButtonParam: [],
         linkTemp: new Object(),
         prevKdown: null,
         prevKup: null,
@@ -325,8 +328,6 @@
             operatorSurface: [],
             disabled: true
           }
-
-          
         ]
       };
     },
@@ -339,55 +340,56 @@
       cusButton
     },
     methods: {
-      exButton(obj){
+      // 按钮触发方法
+      exButton(obj) {
         var mthis = this;
         var id = obj.currentTarget.id;
-        if(id == 'clearAll_HD'){
+        if (id == 'clearAll_HD') {
           mthis.newCanvans()
         }
-        if(id == 'delete_HSD'){
+        if (id == 'delete_HSD') {
           mthis.triggerMethods('remove')
         }
-        if(id == 'fanxuan_HSD'){
+        if (id == 'fanxuan_HSD') {
           mthis.triggerMethods('removeOther')
         }
-        if(id == 'selectAll_HD'){
+        if (id == 'selectAll_HD') {
           mthis.triggerMethods('selectAll')
         }
-        if(id == 'addSet_HSD'){
+        if (id == 'addSet_HSD') {
           mthis.openCreateGroupModal()
         }
-        if(id == 'lock_AT'){
+        if (id == 'lock_AT') {
           mthis.nailNode()
         }
-        if(id == 'unLock_AT'){
+        if (id == 'unLock_AT') {
           mthis.unnailNode()
         }
-        if(id == 'square_HSD'){
+        if (id == 'square_HSD') {
           mthis.triggerMethods('square')
         }
-        if(id == 'circle_HSD'){
+        if (id == 'circle_HSD') {
           mthis.triggerMethods('circleShape')
         }
-        if(id == 'star_HSD'){
+        if (id == 'star_HSD') {
           mthis.triggerMethods('star')
         }
-        if(id == 'hierarchy_HSD'){
+        if (id == 'hierarchy_HSD') {
           mthis.triggerMethods('hierarchy')
         }
-        if(id == 'auto_HSD'){
+        if (id == 'auto_HSD') {
           mthis.triggerMethods('jutuan')
         }
-        if(id == 'importPic_AT'){
+        if (id == 'importPic_AT') {
           mthis.openCreatProjectModal('import')
         }
-        if(id == 'exportPic_HSD'){
+        if (id == 'exportPic_HSD') {
           mthis.triggerMethods('openCreatProjectModalExpend')
         }
-        if(id == 'cutPic_HD'){
+        if (id == 'cutPic_HD') {
           mthis.cutScreen()
         }
-        if(id == 'fitCanvas_HD'){
+        if (id == 'fitCanvas_HD') {
           mthis.fit()
         }
       },
@@ -482,8 +484,25 @@
         //         mode: 'dynamic'
         //       }
         //     })
-        this.netchart.updateSettings();
-        this.netchart.updateSize();
+        var mthis = this
+        // this.netchart.nodes().filter(item=>{
+        //   return item.userManualLock == false && item.userLock == true
+        // }).map(item=>{
+        //   mthis.netchart.unlockNode(item.id)
+        //   mthis.netchart.updateSettings();
+        //   mthis.netchart.updateSize();
+        //   return item
+        // })
+        mthis.selectionId.map(item=>{
+          console.log(mthis.netchart.getNode(item))
+          if (mthis.netchart.getNode(item).userManualLock== false||mthis.netchart.getNode(item).userManualLock== undefined){
+            mthis.netchart.unlockNode(item)
+            mthis.netchart.updateSettings();
+            mthis.netchart.updateSize();
+            return item
+          } 
+        })
+        // console.log(unPinNodeIds)
       },
       changeCenterNode(arr) {
         let mthis = this
@@ -583,8 +602,11 @@
             mthis.linkedNodes = []
           })
       },
+      // 锁定按钮方法
       nailNode() {
         for (let i = 0; i < this.selectionId.length; i++) {
+          this.netchart.getNode(this.selectionId[i]).userManualLock = true
+          console.log(this.netchart.getNode(this.selectionId[i]))
           this.netchart.lockNode(this.selectionId[i])
           // util.promisify(lockNode,[this.selectionId[i]],this.netchart).then(
           //   alert('bb')
@@ -592,15 +614,18 @@
           this.netchart.updateStyle(this.selectionId[i])
         }
       },
+      // 解锁按钮方法
       unnailNode() {
         for (let i = 0; i < this.selectionId.length; i++) {
           // util.promisify(unlockNode,[this.selectionId[i]],this.netchart).then(
           //   alert('aa')
           // )
+          this.netchart.getNode(this.selectionId[i]).userManualLock = false
           this.netchart.unlockNode(this.selectionId[i])
           this.netchart.updateStyle(this.selectionId[i])
         }
       },
+      // 全选
       selectAll() {
         if (this.netchart.nodes().length > 0) {
           this.netchart.selection(this.netchart.nodes().map(item => {
@@ -1627,16 +1652,18 @@
             // lock
             // mthis.netchart.unlockNode(mthis.selectionId[index].id);
             let no = mthis.netchart.getNode(this.selectionId[i]);
-            no.x = no1.x + Math.sin(ahd * i) * radius;
-            no.y = no1.y - radius + Math.cos(ahd * i) * radius;
-            // mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
-            //   Math.sin(ahd * index) * radius;
-            // mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] - radius +
-            //   Math.cos(ahd * index) * radius;
-            // 锁定位置
-            // lock
-            mthis.netchart.lockNode(mthis.selectionId[i]);
-            mthis.netchart.updateStyle(mthis.selectionId[i]);
+            if(!no.userManualLock){
+              no.x = no1.x + Math.sin(ahd * i) * radius;
+              no.y = no1.y - radius + Math.cos(ahd * i) * radius;
+              // mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
+              //   Math.sin(ahd * index) * radius;
+              // mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] - radius +
+              //   Math.cos(ahd * index) * radius;
+              // 锁定位置
+              // lock
+              mthis.netchart.lockNode(mthis.selectionId[i]);
+              mthis.netchart.updateStyle(mthis.selectionId[i]);
+            }
           }
           mthis.netchart.addFocusNode(no1.id);
         } else {
@@ -1652,12 +1679,14 @@
           let basePoint = this.selectionId[0];
           let no1 = mthis.netchart.getNode(this.selectionId[0]);
           for (let i = 0; i < this.selectionId.length; i++) {
-            let col = i % rowNum;
-            let row = parseInt(i / rowNum);
             let no = mthis.netchart.getNode(this.selectionId[i]);
-            no["x"] = no1["x"] + col * 150;
-            no["y"] = no1["y"] + row * 150;
-            mthis.netchart.lockNode(this.selectionId[i]);
+            if(!no.userManualLock){
+              let col = i % rowNum;
+              let row = parseInt(i / rowNum);
+              no["x"] = no1["x"] + col * 150;
+              no["y"] = no1["y"] + row * 150;
+              mthis.netchart.lockNode(this.selectionId[i]);
+            }
           }
           // mthis.changNetchartMode('s')
           mthis.netchart.scrollIntoView(
@@ -1739,22 +1768,24 @@
         // }
         if (mthis.selectionId.length > 0) {
           for (let i = 0; i < mthis.selectionId.length; i++) {
-            // 辐射布局
-            let circleNum = Math.floor(Math.log(i) / Math.log(3))
-            let avd = 360 / Math.pow(3, circleNum);
-            let ahd = avd * Math.PI / 360;
-            let radius = 150 * circleNum + 150
             let nodesInfo = mthis.netchart.getNode(mthis.selectionId[i])
-            let initInfo = mthis.netchart.getNode(mthis.selectionId[0])
-            initInfo['x'] = (initInfo['x']) ? (initInfo['x']) : (0)
-            initInfo['y'] = (initInfo['y']) ? (initInfo['y']) : (0)
-            nodesInfo["x"] = mthis.netchart.getNode(mthis.selectionId[0])["x"] +
-              Math.sin(ahd * i) * radius;
-            nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
-              Math.cos(ahd * i) * radius;
-            mthis.netchart.updateStyle(mthis.selectionId[i])
-            mthis.netchart.lockNode(mthis.selectionId[i]);
-            // mthis.changNetchartMode('s')
+            if(!nodesInfo.userManualLock){
+              // 辐射布局
+              let circleNum = Math.floor(Math.log(i) / Math.log(3))
+              let avd = 360 / Math.pow(3, circleNum);
+              let ahd = avd * Math.PI / 360;
+              let radius = 150 * circleNum + 150
+              let initInfo = mthis.netchart.getNode(mthis.selectionId[0])
+              initInfo['x'] = (initInfo['x']) ? (initInfo['x']) : (0)
+              initInfo['y'] = (initInfo['y']) ? (initInfo['y']) : (0)
+              nodesInfo["x"] = mthis.netchart.getNode(mthis.selectionId[0])["x"] +
+                Math.sin(ahd * i) * radius;
+              nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
+                Math.cos(ahd * i) * radius;
+              mthis.netchart.updateStyle(mthis.selectionId[i])
+              mthis.netchart.lockNode(mthis.selectionId[i]);
+              // mthis.changNetchartMode('s')
+            }
           }
         } else {
           // mthis.$Message.error('请选择节点进行矩形排列操作！')
@@ -2200,26 +2231,24 @@
         setTimeout(function() {
           if (mthis.netchart.nodes().length > 0) {
             mthis.ifhasNode = true
-            mthis.changeButtonParam = [
-              {
-                'id_suf':'HD',
-                'isUse':true
+            mthis.changeButtonParam = [{
+                'id_suf': 'HD',
+                'isUse': true
               },
               {
-                'id_suf':'HSD',
-                'isUse':false
+                'id_suf': 'HSD',
+                'isUse': false
               }
             ]
           } else {
             mthis.ifhasNode = false
-            mthis.changeButtonParam = [
-              {
-                'id_suf':'HD',
-                'isUse':false
+            mthis.changeButtonParam = [{
+                'id_suf': 'HD',
+                'isUse': false
               },
               {
-                'id_suf':'HSD',
-                'isUse':false
+                'id_suf': 'HSD',
+                'isUse': false
               }
             ]
           }
@@ -2590,10 +2619,10 @@
               strength: 0.1
             },
             twoRingRadialLayout: true,
-            layoutFreezeMinTimeout:100,
+            layoutFreezeMinTimeout: 100,
             layoutFreezeTimeout: 5000,
-            incrementalLayoutMaxTime:5000,
-            initialLayoutMaxTime:5000,
+            incrementalLayoutMaxTime: 5000,
+            initialLayoutMaxTime: 5000,
             globalLayoutOnChanges: false,
             nodeSpacing: 50,
             rowSpacing: 100
@@ -2646,6 +2675,7 @@
                 fillColor: "rgba(0,0,0,0)",
                 lineColor: "rgba(51, 255, 255, 0.4)"
               },
+              // scaleWithSize:true,
               aspectRatio: 1
             },
             // linkClasses: [
@@ -2696,7 +2726,7 @@
               // 选中样式
               fillColor: "rgba(51,255,255,0.1)",
               lineWidth: 5,
-              tolerance:5 //选中误差距离
+              tolerance: 5 //选中误差距离
             },
             nodeStyleFunction: function(node) {
               // node.labelStyle.maxWidth = 3
@@ -2706,30 +2736,54 @@
               node.labelStyle.textStyle.font = "16px MicrosoftYaHei";
               node.shadowColor = ''
               node.shadowBlur = 0
-              if (node.userLock) {
-                node.items = [{
-                  image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
-                  //    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
-                  // "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
-                  // "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
-                  // "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
-                  // "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
-                  // "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
-                  py: -0.8,
-                  px: 0.8,
-                  // scaleWithSize:true,
-                  maxWidth: 5,
-                  backgroundStyle: {
-                    fillColor: "transparent"
-                  }
-                }]
-                // node.items = [{text:"Locked", px:0.5, py:-0.5}]
+              if(node.userManualLock){
+                node.draggable = false;
+                // 手动锁定样式
+                  node.items = [{
+                    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
+                    //    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
+                    // "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
+                    // "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
+                    // "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
+                    // "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
+                    // "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
+                    py: -0.8,
+                    px: 0.8,
+                    // scaleWithSize:true,
+                    maxWidth: 5,
+                    backgroundStyle: {
+                      fillColor: "transparent"
+                    }
+                  }]
+                } else {
+                  node.items = [];
+                   node.draggable = true;
+                }
+              //   if (node.userLock) {
+              //     // 自动锁定样式
+                  
+              //     node.items = [{
+              //       image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
+              //       //    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
+              //       // "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
+              //       // "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
+              //       // "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
+              //       // "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
+              //       // "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
+              //       py: -0.8,
+              //       px: 0.8,
+              //       // scaleWithSize:true,
+              //       maxWidth: 5,
+              //       backgroundStyle: {
+              //         fillColor: "transparent"
+              //       }
+              //     }]
 
-              // } else if (node.autoLock) {
 
-              } else {
-                node.items = [];
-              }
+              //     // } else if (node.autoLock) {
+              // } else {
+              //   node.items = [];
+              // }
               if (node.data.entity_type === "event") {
                 if (node.selected) {
                   node.lineColor = mthis.selectLineColor;
@@ -2843,7 +2897,6 @@
                   node.shadowColor = "rgba(0,0,0,0)";
                   node.shadowBlur = 20;
                 }
-                
                 node.radius = 25;
                 node.display = "image";
                 //判断图片资源是否存在
@@ -3041,7 +3094,15 @@
             // onTripleClick(event) - 当用户三次点击图表时调用的函数。用于自定义函数调用。
             onPointerDrag: function(event) {
               // mthis.changNetchartMode('s')
-              console.log(event)
+              if (event.clickNode || event.clickLink) {
+                console.log('drag')
+                console.log(event)
+                event.nodes.map(item => {
+                  item.userLock = true
+                })
+              } else {
+                console.log('drag---------------')
+              }
             },
             // onChartUpdate: function (event) {
             // },
@@ -3052,8 +3113,7 @@
               mthis.rightMenuShow()
               // }
             },
-            onError: function(event) {
-            },
+            onError: function(event) {},
             onClick: function(event) {
               if (event.clickNode || event.clickLink) {
                 mthis.$store.commit("setTabSelectNet", "mubiaoxiangqingNet");
@@ -3083,8 +3143,7 @@
                   return item.id
                 })
                 mthis.linkTemp = new Object();
-                
-                mthis.$store.commit('setNetSwitch',++mthis.$store.state.netSwitch)
+                mthis.$store.commit('setNetSwitch', ++mthis.$store.state.netSwitch)
                 mthis.$store.commit("setSelectNetNodes", [{
                   ids: mthis.selectionId
                 }]);
@@ -3204,7 +3263,6 @@
                 if (mthis.netchart.nodes().length > 0) {
                   mthis.ifhasNode = true
                   // mthis.changeButtonParam = [
-
                   // ]
                 } else {
                   mthis.ifhasNode = false
@@ -3353,7 +3411,7 @@
               autoZoomPositionElasticity: 50e-7
             },
             selection: {
-              // lockNodesOnMove: false
+              // 拖拽锁定
               lockNodesOnMove: true
             }
           },
@@ -3419,12 +3477,10 @@
         //     .then(response => {
         //       if(response.body.code === 0) {
         //         for(let num = 0; num<response.body.data[0].group.length;num++){
-                  
         //         }
         //       }
         //     })
         // }
-
         //  mthis.operatorConfig[0].operatorSurface.push({
         //   name: '社区发现',
         //   id: 'community',
@@ -3432,7 +3488,7 @@
         //   excuteFunction: 'setGroup',
         //   value: mthis.linkTemp
         // })
-        mthis.operatorConfig[0].operatorSurface=new Array({
+        mthis.operatorConfig[0].operatorSurface = new Array({
           name: '分析结果',
           id: 'community',
           type: 'group',
@@ -3470,51 +3526,47 @@
       //   this.ifSelectTwoNode = (lengthNum > 1) ? true : false
       //   this.ifSelectOnlyTwoNode = (lengthNum === 2) ? true : false
       // },
-      selectionIdByTypeData:{
-        deep:true,
+      selectionIdByTypeData: {
+        deep: true,
         immediate: true,
-        handler(newVal,oldVal){
+        handler(newVal, oldVal) {
           var mthis = this;
           let lengthNum = mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.ids.length;
-          if(lengthNum >0){
-            mthis.changeButtonParam = [
-              {
-                'id_suf':'HD',
-                'isUse':true
+          if (lengthNum > 0) {
+            mthis.changeButtonParam = [{
+                'id_suf': 'HD',
+                'isUse': true
               },
               {
-                'id_suf':'HSD',
-                'isUse':true
+                'id_suf': 'HSD',
+                'isUse': true
               }
             ]
-            if(lengthNum ==2){
+            if (lengthNum == 2) {
               mthis.ifSelectOnlyTwoNode = true
             }
-            if(lengthNum >1){
+            if (lengthNum > 1) {
               mthis.ifSelectTwoNode = true
             }
-          }else{
+          } else {
             console.log('net ifNoseldata')
-            
-            if(mthis.netchart == null){
-              mthis.changeButtonParam = [
-                {
-                  'id_suf':'HD',
-                  'isUse':false
+            if (mthis.netchart == null) {
+              mthis.changeButtonParam = [{
+                  'id_suf': 'HD',
+                  'isUse': false
                 },
                 {
-                  'id_suf':'HSD',
-                  'isUse':false
+                  'id_suf': 'HSD',
+                  'isUse': false
                 }
               ]
-            }else{
+            } else {
               console.log('justTest')
               let allIds = mthis.netchart.nodes().map(item => {
                 return item.id
               })
               console.log(allIds)
             }
-            
           }
         }
       },
@@ -3973,11 +4025,10 @@
           let no = mthis.netchart.getNode(netchartnodes[i].id)
           no.opacity = 0.35;
           no.hightLight = false;
-         
         }
         if (mthis.netTimeCondition != null && mthis.netTimeCondition.length > 0) {
-          console.log( mthis.netchart)
-          console.log( mthis.netchart.getNodeDimensions())
+          console.log(mthis.netchart)
+          console.log(mthis.netchart.getNodeDimensions())
           // mthis.netchart.style.node.draggable = false;
           mthis.selectLineColor = '#009999'
           mthis.selectShadowColor = "#009999"
