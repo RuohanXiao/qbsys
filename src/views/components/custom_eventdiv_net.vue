@@ -162,7 +162,8 @@
               .post(mthis.$store.state.ipConfig.api_url + "/community/", {
                 from_ids: mthis.communityData.fromList,
                 to_ids: mthis.communityData.toList,
-                method: mthis.$store.state.methodType
+                method: mthis.$store.state.methodType,
+                num: mthis.communityData.numCount
               })
               .then(response => {
                 if (response.body.code === 0) {
@@ -208,7 +209,6 @@
                   response.body.data[i].entity_type = 'event'
                   response.body.data[i].name = response.body.data[i].event_subtype
                 }
-                // // // // console.log(util.hebing(mthis.evetdata,response.body.data))
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
                 mthis.evetdata = util.hebing(mthis.evetdata, response.body.data)
                 mthis.evetdataFlag = true
@@ -220,8 +220,6 @@
               // });
               let docOb = {}
               docOb.docIds = mthis.selectionIdByType.contentIds.ids
-              // console.log('docOb=============================')
-              // console.log(docOb)
               // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-info/', docOb).then(response => {
               //   // mthis.evetdataFlag = true
               //   // mthis.evetdata = response.body.data[0].nodes
@@ -234,7 +232,6 @@
                   response.body.data[i].name = response.body.data[i].title
                 }
                 // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-                // // // // console.log(util.hebing(mthis.evetdata,response.body.data))
                 mthis.evetdata = util.hebing(mthis.evetdata, response.body.data)
                 mthis.evetdataFlag = true
               })
@@ -246,8 +243,6 @@
           mthis.evetdata = []
           mthis.evetdataFlag = false
         }
-        // console.log('-------------------evetdata-----------------')
-        // console.log(mthis.evetdata)
       },
       singlePerson: function() {
         this.single = this.singlePerson
@@ -310,7 +305,6 @@
     },
     methods: {
       highLightNodes(mt, nodeIds) {
-        console.log(mt)
         this.$store.commit('setNetStaticsSelectedIds', nodeIds);
       },
       clickRightMenu(rightCilckArgu) {
@@ -339,7 +333,6 @@
       },
       clickLeftStatics(staticsClick) {
         var mthis = this;
-        // // // // console.log(staticsClick)
         mthis.$store.commit('setNetStaticsSelectedIds', staticsClick);
       },
       hightLight(id) {},

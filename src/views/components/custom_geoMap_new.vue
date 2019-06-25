@@ -2154,7 +2154,6 @@ export default {
         },
         exploreQB(geometryArr,type){
             var mthis = this;
-            debugger
             var url = '';
             var promptType = ''
             var num = 0;

@@ -144,8 +144,6 @@
     },
     watch: {
       worksetData:function(){
-        // // // console.log('---------------------------this.worksetInfo')
-        // // // console.log(this.worksetInfo)
         
       },
       worksetInfo:function(){
@@ -221,9 +219,7 @@
             "type": "human"
           }
         }).then(response => {
-          // // // console.log(response)
           if (response.body.code === 0) {
-            // alert('修改成功！')
             if (mthis.$store.state.tmss === 'net') {
             mthis.$store.commit('setNetPromte', '修改成功！')
           } else if (mthis.$store.state.tmss === 'geo') {
@@ -397,7 +393,6 @@
         ]
       },
       addDataToTemp(item) {
-        // // // console.log(this.worksetData)
         var mthis = this
         let arr = []
         if (mthis.myMap.get(item.type) === 'entity') {
@@ -510,7 +505,6 @@
                 // let optionWordArr = []
                 let optionList = {}
                 let optionListArr = []
-                // // // console.log(response.body)
                 // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
                 for (let i = 0; i < response.body.data.nodes.length; i++) {
                   // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
@@ -524,9 +518,7 @@
                     "type": response.body.data.nodes[i].type
                   })
                 }
-                // // // console.log(optionListArr)
                 mthis.options1 = optionListArr;
-                // // // console.log(mthis.options1)
               })
           }, 200);
         } else {
@@ -556,7 +548,6 @@
         })
         $('.touxiangImg').click(function(item) {
           //  this.data
-          // // // console.log(item.target.parentNode.id)
           // item.filter(function (obj) {
           //   return obj.id!==item.target.id
           // })

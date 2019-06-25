@@ -191,18 +191,14 @@
         var mthis = this
         let sendIds = []
         let docIds = util.getStorage("docIds",mthis.selIdsArr)
-        console.log(mthis.selIdsArr)
-        console.log(docIds)
         for(var i in docIds){
               for(var j of docIds[i]){
                 sendIds.push(j)
               }
             }
-        console.log(sendIds)
         mthis.sendDocIds.type = 'time'
         mthis.sendDocIds.ids = sendIds
         mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
-        // console.log(mthis.$store.state.contentTimeCondition)
       },
       throttle(fn,delay,duration){
         if(timer){
@@ -231,7 +227,6 @@
         if(flag==1){
           this.clcikShowDiv = false
           this.$store.commit('setContentTimeOnlySel',this.sendDocIds.ids)
-          // console.log("click")
         }else{
           this.$store.commit('setContentTimeOnlySel',this.sendDocIds.ids)
           this.boxSelShowDiv = false
@@ -240,7 +235,6 @@
             type:'brush',
             areas:[]
           })
-          // console.log('brush',this.isBrush)
           
         }
       },
@@ -520,7 +514,6 @@
         
         mthis.charts.setOption(mthis.option)
         this.charts.on('datazoom',function(params){
-          // console.log(params)
           if(params.hasOwnProperty('start')){
             mthis.echartsShowStart = params.start
             mthis.echartsShowEnd = params.end
@@ -551,7 +544,6 @@
               
               mthis.sendDocIds.type = 'time'
               mthis.sendDocIds.ids = []
-              // console.log(mthis.sendDocIds)
               mthis.$store.commit('setContentTimeCondition', mthis.sendDocIds)
               mthis.timeTitle = ''
               mthis.isBrush = []
@@ -623,7 +615,6 @@
           mthis.sendDocIds.type = 'time'
           mthis.sendDocIds.ids = docIds
           mthis.$store.commit('setContentTimeCondition',mthis.sendDocIds)
-          // console.log(docIds)
           mthis.charts.dispatchAction({
             type: 'highlight',
             // 可选，数据的 index
@@ -766,7 +757,6 @@
                             
                             mthis.loadEcharts(3)
                         }else{
-                          // console.log("服务器error")
                         }
                     })
                 }
@@ -822,8 +812,6 @@
                           mthis.dataBySeries.clickNum = [];
                           mthis.loadEcharts(2);
                           util.writeStorage("docIds",localIds)
-                          console.log('<100')
-                          console.log(mthis.dataBySeries.date.length)
                       }else{
                         let dayCount = parseInt(response.body.data.time.length * 0.1)
                        if(dayCount>0){
@@ -834,8 +822,6 @@
                           let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
                           preDateList.pop();
                           aftDateList.shift();
-                          // console.log(preDateList.length)
-                          // console.log(aftDateList)
                           let conCount = new Array(preDateList.length).fill('null');
                           let conIds = new Array(preDateList.length).fill([]);
                           let localIds = [];
@@ -855,7 +841,6 @@
                       }
                
               }else{
-                // console.log('服务器error')
               }
             })
         }

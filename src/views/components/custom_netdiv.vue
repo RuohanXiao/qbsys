@@ -494,7 +494,6 @@
         //   return item
         // })
         mthis.selectionId.map(item=>{
-          console.log(mthis.netchart.getNode(item))
           if (mthis.netchart.getNode(item).userManualLock== false||mthis.netchart.getNode(item).userManualLock== undefined){
             mthis.netchart.unlockNode(item)
             mthis.netchart.updateSettings();
@@ -502,7 +501,6 @@
             return item
           } 
         })
-        // console.log(unPinNodeIds)
       },
       changeCenterNode(arr) {
         let mthis = this
@@ -606,7 +604,6 @@
       nailNode() {
         for (let i = 0; i < this.selectionId.length; i++) {
           this.netchart.getNode(this.selectionId[i]).userManualLock = true
-          console.log(this.netchart.getNode(this.selectionId[i]))
           this.netchart.lockNode(this.selectionId[i])
           // util.promisify(lockNode,[this.selectionId[i]],this.netchart).then(
           //   alert('bb')
@@ -1150,8 +1147,6 @@
         let allIds = this.netchart.nodes().map(item => {
           return item.id
         })
-        console.log(allIds)
-        console.log('newcanvas')
         this.$store.commit("setSearchNetResult", [{
           node: {
             nodes: []
@@ -1185,8 +1180,6 @@
         // ]
         this.getStatistics();
         setTimeout(()=>{
-          console.log('-------------------')
-          console.log(this.netchart.nodes())
         },200)
       },
       // 事件拓展
@@ -3099,13 +3092,10 @@
             onPointerDrag: function(event) {
               // mthis.changNetchartMode('s')
               if (event.clickNode || event.clickLink) {
-                console.log('drag')
-                console.log(event)
                 event.nodes.map(item => {
                   item.userLock = true
                 })
               } else {
-                console.log('drag---------------')
               }
             },
             // onChartUpdate: function (event) {
@@ -3215,6 +3205,7 @@
                 })
                 let lf = new Array()
                 let lt = new Array()
+                let num = new Array()
                 let eslect = new Array()
                 mthis.linkTemp = new Object()
                 for (let i = 0; i < event.selection.length; i++) {
@@ -3223,11 +3214,13 @@
                   } else if (event.selection[i].isLink) {
                     lf.push(event.selection[i].from.id)
                     lt.push(event.selection[i].to.id)
+                    num.push(event.selection[i].num)
                   } else {}
                 }
                 mthis.linkTemp = new Object({
                   fromList: lf,
-                  toList: lt
+                  toList: lt,
+                  numCount: num
                 })
                 // let eslect = event.selection.filter(it => {
                 //   return it.isNode
@@ -3535,7 +3528,6 @@
         deep:true,
         immediate: true,
         handler(newVal,oldVal){
-          console.log('=======');
           var mthis = this;
           let lengthNum = mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.ids.length;
           if (lengthNum > 0) {
@@ -4052,8 +4044,6 @@
           no.hightLight = false;
         }
         if (mthis.netTimeCondition != null && mthis.netTimeCondition.length > 0) {
-          console.log(mthis.netchart)
-          console.log(mthis.netchart.getNodeDimensions())
           // mthis.netchart.style.node.draggable = false;
           mthis.selectLineColor = '#009999'
           mthis.selectShadowColor = "#009999"

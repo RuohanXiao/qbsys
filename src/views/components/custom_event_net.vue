@@ -121,8 +121,6 @@
         },[]);
       },
       defaultImg(type, img, subtype) {
-        // // console.log('==================')
-        // // console.log(util.checkImgExists(img))
         if(img){
         var mthis = this
         if (mthis.eventdata[0]) {
@@ -187,8 +185,6 @@
           //   "NodeIds": arr,
           //   "TypeLabel": 'event'
           // }).then(response => {
-          //   // // // console.log('=============related event=============')
-          //   // // // console.log(response)
           // })
         }
         if (mthis.myMap.get(type) === 'document') {
@@ -283,7 +279,6 @@
                 mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
                   "docIds": a
                 }).then(response => {
-                  // // console.log(response.body.data[0])
                   let result = new Object();
                   result = response.body.data[0]
                   result.entity_type = 'document'
@@ -291,18 +286,13 @@
                   result.name = response.body.data[0].title.substring(0, 19) + '...'
                   result.img = util.checkImgExists(result.img) ? (result.img) : 'http://10.60.1.140/assets/images/content_node.png'
                   mthis.detailData = result
-                  // // console.log('mthis.detailData')
-                  // // console.log(mthis.detailData)
                 })
               } else {
-                // // // console.log('未找到匹配的类型')
               }
             }
             // mthis.changeDetailDiv(detailId,mthis.eventdata.entity_type,mthis.eventdata)
           }, 200);
         } else {
-          // // // console.log('=======mthis.eventdata取值异常')
-          // // // console.log(mthis.eventdata)
         }
         
         mthis.nowSelData =mthis.arrayUnique(mthis.eventdata,'id')
@@ -361,17 +351,11 @@
       var eventType = ob1.getElementsByTagName("event2chinese");
       this.myMapevent = new Map();
       for (let items of eventType) {
-        // // console.log('-----mymapevent------')
-        // // console.log(items)
-        // // console.log(items.getElementsByTagName("eventType")[0].textContent)
-        // // console.log(items.getElementsByTagName("eventCHType")[0].textContent)
         this.myMapevent.set(items.getElementsByTagName("eventType")[0].textContent, {
           name: items.getElementsByTagName("eventCHType")[0].textContent
         });
       }
       this.nowSelData = this.eventdata;
-      // // console.log(this.eventdata)
-      // // console.log(this.nowSelData)
       
     }
   }
