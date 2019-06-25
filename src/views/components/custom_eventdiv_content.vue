@@ -143,7 +143,6 @@
             immediate: true
       },
       // selectionIdByType: function() {
-      //   // // // // console.log(this.selectionIdByType)
       //   var mthis = this;
       //   mthis.evetdataFlag = false
       //   if (mthis.selectContentNodes[0].ids.length > 0) {
@@ -181,7 +180,6 @@
       //             response.body.data[i].entity_type = 'event'
       //             response.body.data[i].name = response.body.data[i].event_subtype
       //           }
-      //           // // // // console.log(util.hebing(mthis.evetdata,response.body.data))
       //           // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
       //           mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
       //           mthis.evetdataFlag = true
@@ -205,7 +203,6 @@
       //             response.body.data[i].name = response.body.data[i].title
       //           }
       //           // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
-      //           // // // // console.log(util.hebing(mthis.evetdata,response.body.data))
       //           mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
       //           mthis.evetdataFlag = true
       //         })
@@ -240,7 +237,6 @@
       // selectContentNodes: function() {
       //   var mthis = this;
       //   if(mthis.selectContentNodes[0].ids.length > 0 ){
-      //     // // console.log(mthis.selectContentNodes)
       //     mthis.evetdata = mthis.selectContentNodes[0].ids
       //   }
       //   if(mthis.selectContentNodes[0].ids.length > 1){
@@ -264,7 +260,6 @@
       selectContentNodes: function() {
         var mthis = this;
         mthis.evetdataFlag = false
-        // console.log(this.selectContentNodes)
         
         if (mthis.selectContentNodes[0].ids.length > 0) {
           // 新增防抖功能
@@ -272,9 +267,7 @@
           mthis.timer = setTimeout(function() {
               let docOb = {}
               docOb.docIds = mthis.selectContentNodes[0].ids
-              // console.log(mthis.selectContentNodes)
                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
-                 // console.log(response.body)
                 for(let i = 0; i < response.body.data.length;i++){
                   response.body.data[i].entity_type = 'document'
                   response.body.data[i].name = response.body.data[i].title
@@ -358,7 +351,6 @@
           type:'static',
           ids:staticsClick
         };
-        // // // // console.log(staticsClick)
         mthis.$store.commit('setContentTimeCondition',param);
         mthis.$store.commit('setDocAnaSelIds',param.ids)
       },

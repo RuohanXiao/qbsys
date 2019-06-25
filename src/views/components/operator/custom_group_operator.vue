@@ -71,20 +71,17 @@
     props: ['Params'],
     methods: {
       change(status) {
-        console.log(status)
         this.switch1 = !this.switch1
         this.$store.commit('setGroupFlag', this.switch1)
         this.$store.commit("setTabSelectNet", "analysisResults");
       },
       change1(e) {
-        console.log(e)
         this.switch1 = !this.switch1
         e.target.innerText = (this.switch1)?'运行算子':'运行算子'
         this.$store.commit('setGroupFlag', this.switch1)
         this.$store.commit("setTabSelectNet", "analysisResults");
       },
       methodChange(e){
-        console.log(e);
         this.switch1 = false
         this.$store.commit('setMethodType', e)
         this.$store.commit('setGroupFlag', this.switch1)
@@ -102,13 +99,10 @@
         this.$store.commit("setTabSelectNet", "analysisResults");
       },
       // switch1(){
-      //   console.log(this.switch1)
       //   this.$store.commit('setGroupFlag', this.switch1)
       //   this.$store.commit("setTabSelectNet", "analysisResults");
       // },
       Params() {
-        console.log('====================params')
-        console.log(this.Params)
       }
     },
     computed: mapState(['netSwitch'])

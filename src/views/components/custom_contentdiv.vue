@@ -380,16 +380,12 @@
         for (let m = 0; m < selectList.length; m++) {
           this.selectArr.push(selectList[m].id)
         }
-        // // // console.log('==============++++++++++==============')
-        // // // console.log(this.selectArr)
         this.$store.commit('setSelectContentNodes', [{
           ids: this.selectArr
         }])
       },
       netToContentData: function() {
         var mthis = this
-        // alert('文档接受到了')
-        // // // // console.log(this.netToContentData)
         mthis.items = []
         let contentIds = this.netToContentData.contentIds
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', {
@@ -759,14 +755,12 @@
       },
       jiazai(){
         var mthis= this
-        // // console.log($('#jiazaiDiv').offset())
         if (timer) {
           clearTimeout(timer)
         }
         timer = setTimeout(function() {
           while($('#jiazaiDiv').offset().top < 1000){
             mthis.handleReachBottom()
-            // // console.log('===============')
             break;
           }
         }, 500);
@@ -870,7 +864,6 @@
       window.divLength = 0;
       this.initSelectBox('#contentchart')
       
-      // // // console.log($('#jiazaiDiv').offset())
       // window.addEventListener('scroll', this.handleScroll)
     }
   };

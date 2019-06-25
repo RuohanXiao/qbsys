@@ -182,7 +182,6 @@
       //       mthis.widKeyCount = mthis.widKeyCount - 1;
       //       widPrevU = e.code
       //     }
-      //   // console.log('widkeyup',mthis.widKeyCount)
         
       // };
       

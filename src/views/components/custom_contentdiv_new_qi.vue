@@ -627,10 +627,6 @@
       // options:function(){
       //   var mthis = this
       //   if(this.options.length>0){
-      //     console.log(mthis.topicDatas.length)
-         
-      //     console.log(mthis.myWordCharts)
-      //     console.log(mthis.charts)
       //     setTimeout(function(){
       //       for(let j=0;j<mthis.topicDatas.length;j++){
       //             mthis.myWordCharts[j] = echarts.init(document.getElementById(mthis.charts[j]),'',{
@@ -639,8 +635,6 @@
       //             });
       //             mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
       //             mthis.myWordCharts[j].setOption(mthis.options[j]);
-      //             console.log(mthis.myWordCharts[j])
-      //             console.log(mthis.options[j].series[0].data)
       //           }
       //     },300)
           
@@ -869,7 +863,6 @@
               })
               
             );
-            // console.log(1)
             mthis.prevItems = mthis.deepClone(mthis.items)
             let selDocList = mthis.items.filter(item => item.check)
             selDocList = selDocList.map(item =>({
@@ -905,7 +898,6 @@
                 check:false
               })
             );
-            // console.log(2)
             mthis.$store.commit('setSelectContentNodes', [{
               ids: []
             }])
@@ -952,14 +944,11 @@
       //   handler(newValue){
       //      var mthis = this
       //      if(mthis.contentTimeCondition.type == 'cancel'){
-      //         // console.log(3)
-      //         // console.log(mthis.prevItems)
       //         mthis.items =  mthis.deepClone(mthis.prevItems)
       //       }
       //       if(mthis.contentTimeCondition.type == 'sel'){
               
       //         if(mthis.contentTimeCondition.ids.length ==0){
-      //           // console.log(4)
       //           mthis.items = mthis.deepClone(mthis.prevItems)
       //         }
       //         if(mthis.contentTimeCondition.ids.length>0){
@@ -990,8 +979,6 @@
         mthis.page = 1
         // if(mthis.$store.state.tmss === 'content') {
         // if(va[0].label.split('搜索:').length > 1) {
-        // console.log('sousuosousuo')
-        // console.log(va)
         mthis.content = va
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
@@ -1011,7 +998,6 @@
                 check:false
               })
             );
-            // console.log(5)
             mthis.prevItems = mthis.deepClone(mthis.items)
             
             if(response.body.data.length ==30){
@@ -1060,7 +1046,6 @@
         var mthis = this;
         mthis.ContentHeight = mthis.$store.state.contentHeight - 75-1 + 'px';
         mthis.ContentHeightList = mthis.$store.state.contentHeight - 75-2+ 22 + 'px';
-        console.log(mthis.ContentHeightList)
       },
       ContentHeightList: function() {
         var mthis = this;
@@ -1086,7 +1071,6 @@
       showAllTitle(index,e,flag){
         var mthis = this
         mthis.clearBubble(e)
-        console.log(mthis.openHub)
         if(flag ==1){
             if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
             var pTitle = document.getElementById(index)
@@ -1152,8 +1136,6 @@
       },
       changeShow(newValue){
         var mthis = this
-        console.log(newValue)
-        console.log(typeof newValue)
         if(newValue == '词云'){
           mthis.ifTopic = false;
           mthis.wordResize(document.getElementsByClassName('topItem').length);
@@ -1188,7 +1170,6 @@
           
       },
       changeDrop(name){
-        console.log(name)
         var mthis = this;
         let dropItems = mthis.deepClone(mthis.topicDatas)
         mthis.topicDatas = [];
@@ -1245,7 +1226,6 @@
             // let Topstyle= document.getElementById(index).getAttribute('style');
             $('#'+index).css('width',0)
             $('#'+index).css('opacity',0)
-            // console.log(Topstyle)
             // Topstyle[width] =0;
             // Topstyle.opacity =0;
             // document.getElementById(index).setAttribute('style',Topstyle);
@@ -1281,10 +1261,6 @@
             },800)
             
         }
-        
-        console.log(index)
-        
-        
       },
       toTop(index){
         var div = document.getElementById(index);
@@ -1499,7 +1475,6 @@
         //   mthis.$store.commit('setContent2time',[{
         //     ids:mthis.bruIds
         //   }])
-        //   console.log(mthis.bruIds)
         //   let selDocList = mthis.items.filter(item => item.check)
         //   selDocList = selDocList.map(item =>({
         //             title: item.title,      
@@ -2011,7 +1986,6 @@
                 // $('.item-selected').removeClass('item-selected')
                 
                 mthis.items = mthis.items.concat(nowItems)
-                // console.log(7)
                 mthis.prevItems = mthis.deepClone(mthis.items)
               } else {
                 
@@ -2126,7 +2100,6 @@
         var mthis = this;
         if(len>6){
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
-          console.log(mthis.itemWidth)
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           mthis.topHeight = 330 + 'px'
           mthis.itemHeight = 300 + 'px'
@@ -2159,7 +2132,6 @@
          
         }else if(len ==6){
           mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
-          console.log(mthis.itemWidth)
           mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
           // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
           // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
@@ -2223,8 +2195,6 @@
                 return item
               })
               mthis.topicDatas = response.body.data.concat(mthis.topicDatas)
-              
-              console.log(mthis.topicDatas)
               let len = mthis.topicDatas.length;
               mthis.wordResize(len)
               mthis.ifResize = false
@@ -2276,7 +2246,6 @@
           }).then(response =>{
             if(response.body.code ==0){
               mthis.topicDatas = response.body.data
-              console.log(mthis.topicDatas)
               mthis.topicDatas.map(item => {
                 item.docDatas.map(it =>{
                   it.time = util.transformPHPTimeMS(it.time);
@@ -2371,18 +2340,12 @@
     mounted() {
       var mthis = this
       mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 252 + 'px'
-      console.log(mthis.contentAnaWidth)
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
-      console.log(wwWidth)
       let useHeight = document.documentElement.clientHeight - 64 - 20;
       // mthis.netheight = useHeight * 0.8 - 55 + "px";
       mthis.netheightdiv = useHeight * 0.8 + "px";
       mthis.ContentHeight = useHeight * 0.8 - 68-1 + "px";
-      console.log(mthis.ContentHeight)
-      
       // let divBox = document.getElementById('contentchart')
-      // console.log(window.getComputedStyle(divBox,null).width)
-
       // if(mthis.$route.query.content !== undefined && mthis.$route.query.content!==null && mthis.$route.query.content !== ''){
         //   // 跳转过来的
       //   mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query='+ mthis.$route.query.content).then(response => {
@@ -2417,7 +2380,6 @@
           mthis.$store.commit('setContent2time',[{
             ids:mthis.bruIds
           }])
-          console.log(mthis.bruIds)
           let selDocList = mthis.items.filter(item => item.check)
           selDocList = selDocList.map(item =>({
                     title: item.title,      

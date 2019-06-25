@@ -133,8 +133,6 @@
       },
       workatlastData: function() {
         var mthis = this
-        // // // console.log('=============================change data=======================')
-        // // // console.log(this.workatlastData)
         // setTimeout(function() {
         // mthis.workatlastChart.reloadData() 
         mthis.initChart()
@@ -354,7 +352,6 @@
       },
       createSet() {
         var mthis = this
-        // // // console.log(mthis.workatlastChart.exportData())
         let timestamp = new Date().getTime()
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/index-project-data/', {
           "timestamp": timestamp,
@@ -412,12 +409,10 @@
         }]
       },
       addDataToTemp(item) {
-        // // // console.log(item)
         this.workatlastChart.replaceData(item.data)
       },
       delDataToTemp(item) {
         var mthis = this
-        // console.log(item)
         let time = new Date().getTime()
         mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/delete-set-data/', {
           "timestamp": time,
@@ -466,8 +461,6 @@
               "page": 1,
               "pagesize": 30
             }).then(response => {
-              // // // console.log('=======response111============')
-              // // // console.log(response)
               if (response.body.code === 0) {
                 if (time = response.body.timestamp) {
                   mthis.options1 = response.body.data;
@@ -502,7 +495,6 @@
         })
         $('.touxiangImg').click(function(item) {
           //  this.data
-          // // // console.log(item.target.parentNode.id)
           // item.filter(function (obj) {
           //   return obj.id!==item.target.id
           // })
