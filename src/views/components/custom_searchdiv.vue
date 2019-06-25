@@ -1134,6 +1134,27 @@
     font-family: "微软雅黑" !important;
     font-size: 14px !important;
   }
+  .ivu-icon-ios-close-circle{
+    
+    /* transform: rotate(0deg) !important; */
+  }
+  .ivu-select-arrow{
+    transform: none !important;
+    top: 35% !important;
+  }
+   .ivu-select-visible .ivu-icon-ios-close-circle::before{
+    
+    opacity: 1 !important;
+    
+    
+  }
+  .ivu-select-default .ivu-icon-ios-close-circle::before{
+    content:url('http://10.60.1.140/assets/images/search-clear.png') !important;
+    /* content:url('../../dist/assets/images/search-clear.png') !important; */
+    opacity: 0.2;
+   
+  }
+  
   /* #queryInput:focus>.inputDiv+.imgDiv .process-img {
                                                       color: red;
                                                     } */

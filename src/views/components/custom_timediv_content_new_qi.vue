@@ -33,7 +33,7 @@
     justify-content: center;
     align-items: center;
     height: 100%;"> 
-      <div >
+      <div :style="{opacity:0.5}">
         <img src='http://10.60.1.140/assets/images/TimeLineProm.png' style="display: flex;
     justify-content: center;
     align-items: center;
@@ -433,13 +433,13 @@
             },
             {
               type: "inside",
-              start: 10,
+              start: 20,
               end: 80,
               // show: true,
               xAxisIndex: [0],
               // startValue: 0,
               // endValue: 5,
-              minSpan: 10
+              minSpan: 20
             }
           ],
               
@@ -972,7 +972,7 @@
     color:rgba(93, 240, 240, 1);
   }
   .icon-shijianzhou::before{
-    /* content:url('http://10.60.1.140/assets/images/shijianzhou.png'); */
-    content:url('../../dist/assets/images/shijianzhou.png');
+    content:url('http://10.60.1.140/assets/images/shijianzhou.png');
+   
   }
 </style>

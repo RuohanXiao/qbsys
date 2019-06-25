@@ -26,7 +26,7 @@
                   @dblclick="showContent(item.id,item.title)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
                   @mouseenter="addHover" @mouseleave="removeHover">
                       <img :src='item.img' class="picsize" :class="(item.check)?'item-selected':''" >
-                      <p class='nametext' ref='docP'>{{item.title}}</p>
+                      <p class='nametext'>{{item.title}}</p>
                    
                   </div>
                 <!-- </div> -->
@@ -41,7 +41,6 @@
                   <div v-show='!showThumb' class="contentItem">
                     <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 hoverStyle" :style="{padding:'0 !important'}" size="35" @click="selectThis(item.id)"></Icon>
                     <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
-                  
                   </div>
                 </div>
                 </Col>

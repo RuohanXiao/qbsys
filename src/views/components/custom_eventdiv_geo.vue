@@ -22,7 +22,7 @@
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
-                <p class="selectP">请选择两个以上节点，查看数据透视</p>
+                <p class="selectP" :style="{padding:'0px 20px'}">请选择两个以上节点，查看数据透视</p>
               </div>
             </div>
           </Tab-pane>

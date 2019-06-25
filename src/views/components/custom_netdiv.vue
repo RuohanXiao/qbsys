@@ -348,7 +348,7 @@
         if(id == 'delete_HSD'){
           mthis.triggerMethods('remove')
         }
-        if(id == 'fanxuan_HSD'){
+        if(id == 'fanxuan_HD'){
           mthis.triggerMethods('removeOther')
         }
         if(id == 'selectAll_HD'){
