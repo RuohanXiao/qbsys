@@ -719,9 +719,9 @@ export default {
                 mthis.heatMapVisible = false;
                 heatMapLayer.setVisible(false);
             } else {
-                 button.className = 'button-div-click';
-                 mthis.heatMapVisible = true;
-                 heatMapLayer.setVisible(true);
+                button.className = 'button-div-click';
+                mthis.heatMapVisible = true;
+                heatMapLayer.setVisible(true);
             }   
         },
         mapAddFeature(feature){

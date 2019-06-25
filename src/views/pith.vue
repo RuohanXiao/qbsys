@@ -1,5 +1,4 @@
 <style scoped>
-    @import 'styles/common.css';
     .pith{
         width: 101%;
         height:100%;
@@ -84,19 +83,44 @@
     }
 </style>
 <template>
-    <div>
-        <pith v-if="pithShow" @pithShowStatus="clickLock"></pith>
-        <router-view></router-view>
+    <div class='pith'>
+        <div class='logo'>
+            <div class="imgLogoDiv"><img :src="require('../dist/assets/images/goinlogo.png')"/></div>
+            <div class="desc">新一代人机协同智能分析引擎</div>
+        </div>
+        <div class='info'>
+            <div >
+                <div>
+                    <span>93,001</span><br>
+                    <span class="source">境外新闻媒体</span>
+                </div>
+                <div>
+                    <img :src="require('../dist/assets/images/fenge.png')">
+                </div>
+                <div>
+                    <span>42,723,699</span><br>
+                    <span class="source">社交媒体</span>
+                </div>
+                <div>
+                    <img :src="require('../dist/assets/images/fenge.png')">
+                </div>
+                <div>
+                    <span>182,947</span><br>
+                    <span class="source">专业文档</span>
+                </div>
+            </div>
+        </div>
+        <div class='lock'>
+            <div class="lockShow" @click="openLock"></div>
+        </div>
     </div>
 </template>
 <script>
 
     // import store from './store'
-    import pith from "./views/pith"
     export default {
         data () {
             return {
-                pithShow:true
             }
         },
         // store,
@@ -107,13 +131,10 @@
 
         },
         methods: {
-            clickLock(pithShowStatus){
+            openLock(){
                 var mthis = this;
-                mthis.pithShow = pithShowStatus;
+                mthis.$emit('pithShowStatus',false)
             }
-        },
-        components: {
-            pith
-        },
+        }
     }
 </script>
