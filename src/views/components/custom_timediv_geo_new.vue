@@ -423,8 +423,8 @@
           },
           dataZoom: [{
               type: "slider",
-              start: 10,
-              end: 80,
+              start: 15,
+              end: 75,
               height:20,
               top:'bottom',
               // realtime: false, //是否实时加载
@@ -462,7 +462,7 @@
               xAxisIndex: [0],
               // startValue: 10,
               // endValue: 20,
-              minValueSpan: 10,
+              minValueSpan: 20,
               handleIcon: "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
               handleSize: "80%",
               handleStyle: {
@@ -482,18 +482,17 @@
               xAxisIndex: [0],
               // startValue: 0,
               // endValue: 5,
-              minValueSpan: 10
+              minValueSpan: 20
             }
           ],
         series: [{
             name: "全部",
             type: "bar",
             barGap:"-100%",
+            // barWidth:'2px',
+            barMaxWidth: "10px",
             // barWidth:'10px',
-            barMaxWidth: "60px",
-            barWidth:'10px',
-            // barMinHeight: '1px',
-            barCategoryGap:'20px',
+            
             itemStyle: {
               // 柱形图默认颜色
               // normal: {
@@ -550,24 +549,18 @@
             data: []
           },
           {
-                    type:'bar',
-                    // barWidth:'10px',
-                    barMaxWidth: '60px',
-                    barWidth:'10px',
-                    barMinHeight: '1px',
-                    barCategoryGap : '60%',
-                    data:mthis.dataBySeries.clickNum,
-                    itemStyle:{
-                        // color:'#33ddff',
-                        color:'#33cc99',
-                        barBorderRadius:[3,3,3,3],
-                        emphasis: {
-                          cursor: "pointer",
-                          barBorderRadius: [3, 3, 3, 3],
-                          color: '#27866a'},
-                    },
-                    data:[]
-                }],
+            type:'bar',
+            barMaxWidth: '10px',
+            data:[],
+            itemStyle:{
+              color:'#33cc99',
+              barBorderRadius:[3,3,3,3],
+              emphasis: {
+                cursor: "pointer",
+                barBorderRadius: [3, 3, 3, 3],
+                color: '#27866a'},
+              },
+          }],
         
         });
         mthis.charts = echarts.init(document.getElementById(mthis.main1Id), "", {
@@ -1128,6 +1121,7 @@
     color:rgba(93, 240, 240, 1);
   }
   .icon-shijianzhou::before{
+    /* content:url('http://10.60.1.140/assets/images/shijianzhou.png'); */
     content:url('../../dist/assets/images/shijianzhou.png');
   }
 </style>
