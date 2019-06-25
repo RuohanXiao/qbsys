@@ -3530,19 +3530,12 @@
       //   this.ifSelectTwoNode = (lengthNum > 1) ? true : false
       //   this.ifSelectOnlyTwoNode = (lengthNum === 2) ? true : false
       // },
-<<<<<<< HEAD
-      selectionIdByTypeData: {
-        deep: true,
-        immediate: true,
-        handler(newVal, oldVal) {
-=======
       selectionIdByTypeData:{
         
         deep:true,
         immediate: true,
         handler(newVal,oldVal){
           console.log('=======');
->>>>>>> bb4f893d52c37ef631cf38dea518642111b94ac0
           var mthis = this;
           let lengthNum = mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.ids.length;
           if (lengthNum > 0) {
@@ -3561,14 +3554,6 @@
             if (lengthNum > 1) {
               mthis.ifSelectTwoNode = true
             }
-<<<<<<< HEAD
-          } else {
-            console.log('net ifNoseldata')
-            if (mthis.netchart == null) {
-              mthis.changeButtonParam = [{
-                  'id_suf': 'HD',
-                  'isUse': false
-=======
           }else{
             
             if(mthis.netchart == null){
@@ -3576,21 +3561,12 @@
                 {
                   'id_suf':'HD',
                   'isUse':false
->>>>>>> bb4f893d52c37ef631cf38dea518642111b94ac0
                 },
                 {
                   'id_suf': 'HSD',
                   'isUse': false
                 }
               ]
-<<<<<<< HEAD
-            } else {
-              console.log('justTest')
-              let allIds = mthis.netchart.nodes().map(item => {
-                return item.id
-              })
-              console.log(allIds)
-=======
             }else{
               if(mthis.ifhasNode){
                 mthis.changeButtonParam = [
@@ -3615,7 +3591,6 @@
                   }
                 ]
               }
->>>>>>> bb4f893d52c37ef631cf38dea518642111b94ac0
             }
           }
         }
