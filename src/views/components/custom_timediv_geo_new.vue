@@ -36,7 +36,7 @@
       justify-content: center;
       align-items: center;
       height: 100%;">
-        <div>
+        <div :style="{opacity:0.5}">
           <img src='http://10.60.1.140/assets/images/TimeLineProm.png' style="display: flex;
       justify-content: center;
       align-items: center;
@@ -422,8 +422,8 @@
           },
           dataZoom: [{
               type: "slider",
-              start: 15,
-              end: 75,
+              start: 25,
+              end: 65,
               height:20,
               top:'bottom',
               // realtime: false, //是否实时加载
@@ -1113,7 +1113,7 @@
     color:rgba(93, 240, 240, 1);
   }
   .icon-shijianzhou::before{
-    /* content:url('http://10.60.1.140/assets/images/shijianzhou.png'); */
-    content:url('../../dist/assets/images/shijianzhou.png');
+    content:url('http://10.60.1.140/assets/images/shijianzhou.png');
+    
   }
 </style>

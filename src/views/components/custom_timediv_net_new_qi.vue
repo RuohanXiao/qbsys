@@ -32,7 +32,7 @@
       justify-content: center;
       align-items: center;
       height: 100%;">
-        <div>
+        <div :style="{opacity:0.5}">
           <img src='http://10.60.1.140/assets/images/TimeLineProm.png' style="display: flex;
       justify-content: center;
       align-items: center;
@@ -394,8 +394,8 @@
           },
           dataZoom: [{
               type: "slider",
-              start: 10,
-              end: 80,
+              start: 25,
+              end: 65,
               height:20,
               top:'bottom',
               // realtime: false, //是否实时加载
