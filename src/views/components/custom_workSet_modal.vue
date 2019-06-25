@@ -40,7 +40,7 @@
               <div class="type-content">
                 <Row type="flex" justify="start">
                   <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" v-for='itemObj in item.data'>
-                    <Avatar class="circle-img touxiangImg" icon="ios-person" :id='itemObj.id' :src='itemObj.img' :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)'}" />
+                    <img class="circle-img touxiangImg" :id='itemObj.id' :src='itemObj.img' @error="show_default_image($event,itemObj)"  :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)',borderRadius:'50%'}" />
                     <p class='nametext'>{{itemObj.name}}</p>
                     <div class='delItemDiv' @click="deletItem(itemObj.id,index)">
                       <Icon type="icon iconfont icon-shanchu color515" :style="{padding:'24px 0px'}" size="24"></Icon>
@@ -144,6 +144,8 @@
     },
     watch: {
       worksetData:function(){
+        console.log('---------')
+        console.log(this.worksetData)
         
       },
       worksetInfo:function(){
@@ -166,6 +168,28 @@
       }
     },
     methods: {
+      show_default_image: function(event,ob) {
+            if (ob.entity_type === 'administrative') {
+              event.target.src = 'http://10.60.1.140/assets/images/location.png'
+            } else if (ob.entity_type === 'human') {
+              event.target.src = 'http://10.60.1.140/assets/images/People.png'
+            } else if (ob.entity_type === 'organization') {
+              event.target.src = 'http://10.60.1.140/assets/images/organization.png'
+            } else if (ob.entity_type === 'weapon') {
+              event.target.src = 'http://10.60.1.140/assets/images/weapon.png'
+            } else if (ob.entity_type === 'project') {
+              event.target.src = 'http://10.60.1.140/assets/images/image.png'
+            } else if (ob.entity_type === 'geographic_entity') {
+              event.target.src = 'http://10.60.1.140/assets/images/location.png'
+            }else if (ob.entity_entity_type === 'event') {
+              // event.target.src =  mthis.myMap.get(subtype).img
+              event.target.src = 'http://10.60.1.140/assets/images/event.png'
+            } else if (ob.entity_type === 'document') {
+              event.target.src = 'http://10.60.1.140/assets/images/content_node.png'
+            } else {
+              event.target.src = 'http://10.60.1.140/assets/images/other.png'
+            }
+      },
       deletItem(id,index){
         // alert(id+ '   '+index)
         this.worksetData[index].data = this.worksetData[index].data.filter(item => {

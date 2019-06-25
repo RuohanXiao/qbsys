@@ -2664,6 +2664,8 @@
               }
             },
             linkLabel: {
+              scaleWithZoom:true,
+              scaleWithSize:true,
               textStyle: {
                 fillColor: "#006666"
               },
@@ -3040,7 +3042,7 @@
                   text: link.data.type,
                   // padding: 2,
                   // scaleWithZoom: true,
-                  scaleWithZoom: false,
+                  // scaleWithZoom: false,
                   textStyle: {
                     font: "10px MicrosoftYaHei",
                     fillColor: "#669999"
@@ -3058,7 +3060,7 @@
                   text: link.data.type,
                   // padding: 2,
                   // scaleWithZoom: true,
-                  scaleWithZoom: false,
+                  // scaleWithZoom: false,
                   textStyle: {
                     font: "10px MicrosoftYaHei",
                     fillColor: "#669999"
@@ -3897,8 +3899,8 @@
           mthis.netchart.selection(util.unique(arr));
           setTimeout(function() {
             mthis.square();
+            mthis.netchart.scrollIntoView(arr);
           }, 500);
-          mthis.netchart.scrollIntoView(arr);
           mthis.netchart.updateSettings()
           mthis.spinShow = false;
         }, 500);
@@ -4019,12 +4021,12 @@
         //   mthis.netchart.scrollIntoView(contentIdsArry)
         // })
         mthis.netchart.addData(mthis.contentToNetData)
-        mthis.netchart.scrollIntoView(contentIdsArry);
         contentIdsArry.map(it => {
           mthis.netchart.lockNode(it);
           return it
         })
         setTimeout(() => {
+          mthis.netchart.scrollIntoView(contentIdsArry);
           mthis.netchart.selection(contentIdsArry);
         }, 200);
         setTimeout(() => {
