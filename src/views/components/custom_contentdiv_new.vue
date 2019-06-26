@@ -1022,41 +1022,7 @@
 
             }
       },
-      // contentTimeCondition:{
-      //   deep:true,
-      //   handler(newValue){
-      //      var mthis = this
-      //      if(mthis.contentTimeCondition.type == 'cancel'){
-      //         
-      //         mthis.items =  mthis.deepClone(mthis.prevItems)
-      //       }
-      //       if(mthis.contentTimeCondition.type == 'sel'){
-              
-      //         if(mthis.contentTimeCondition.ids.length ==0){
-      //          
-      //           mthis.items = mthis.deepClone(mthis.prevItems)
-      //         }
-      //         if(mthis.contentTimeCondition.ids.length>0){
-      //           let items = []
-      //           for(var i of mthis.contentTimeCondition.ids){
-      //             for(var j in mthis.prevItems){
-      //               if(i == mthis.prevItems[j].id){
-      //                 items.push(mthis.deepClone(mthis.prevItems[j]))
-      //                 }
-      //               }
-      //             }
-      //           for(var m=0;m<items.length;m++){
-      //             items[m].check = false
-      //           }
-      //           mthis.items = mthis.deepClone(items)
-               
-              
-      //         }
-      //       }
-      //       }
-            
-            
-      // },
+      
       
      
       'searchContentResult.time': function(va) {
@@ -1068,11 +1034,6 @@
         mthis.content = mthis.searchContentResult.val
         mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=1&query=' + mthis.content).then(response => {
           if (response.body.data.length > 0) {
-            
-            
-            $('.item-selected').removeClass('item-selected')
-            
-            // mthis.items = response.body.data
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
                 i_sn: item.i_sn, 
@@ -1084,7 +1045,6 @@
                 check:false
               })
             );
-            
             mthis.prevItems = mthis.deepClone(mthis.items)
             
             if(response.body.data.length ==30){
@@ -1774,19 +1734,15 @@
       
       deleteNode(){
         var mthis = this
-        if(this.deleteButton){
-          mthis.items =  mthis.items.filter(item => item.check == false)
-          mthis.prevItems = mthis.deepClone(mthis.items)
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: []
-          }])
-          mthis.$store.commit('setContent2time',[{
-            ids:[]
-          }])
-          mthis.$store.commit('setSeletedDocAttrList',[])
-        }else{
-          mthis.setMessage("请选择至少一篇文章")
-        }
+        mthis.items =  mthis.items.filter(item => item.check == false)
+        mthis.prevItems = mthis.deepClone(mthis.items)
+        mthis.$store.commit('setSelectContentNodes', [{
+          ids: []
+        }])
+        mthis.$store.commit('setContent2time',[{
+          ids:[]
+        }])
+        mthis.$store.commit('setSeletedDocAttrList',[])
         
       },
 
@@ -2016,7 +1972,7 @@
           if (mthis.contentTimeCondition.length === 2) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult.val+ '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
@@ -2030,7 +1986,7 @@
           } else if (mthis.contentTimeCondition.length === 1) {
             let stime = util.getTimestamp(mthis.contentTimeCondition[0])
             let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult.val + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
@@ -2042,7 +1998,7 @@
               resolve();
             })
           } else {
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
+            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult.val + mthis.order).then(response => {
               if (response.body.data.length > 0) {
                 
                 $('.item-selected').removeClass('item-selected')
@@ -2056,80 +2012,111 @@
           }
         });
       },
-      handleReachBottom() {
-        var mthis = this
-        mthis.page = mthis.page + 1
+      handleReachBottom(){
+        var mthis = this;
+        
+        mthis.page = mthis.page + 1;
         if(mthis.moreLoading){
-          return new Promise(resolve => {
-          if (mthis.contentTimeCondition.length === 2) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[1])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = mthis.items.concat(response.body.data)
-              } else {
-                mthis.alertNotice('无匹配数据10', true)
-              }
-              resolve();
-            })
-          } else if (mthis.contentTimeCondition.length === 1) {
-            let stime = util.getTimestamp(mthis.contentTimeCondition[0])
-            let etime = util.getTimestamp(mthis.contentTimeCondition[0])
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
-                
-                $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = mthis.items.concat(response.body.data)
-              } else {
-                mthis.alertNotice('无匹配数据11', true)
-              }
-              resolve();
-            })
-          } else {
-            let nowItems = []
-            mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult + mthis.order).then(response => {
-              if (response.body.data.length > 0) {
+          mthis.$http.get(mthis.$store.state.ipConfig.api_url+'/context-by-text/?page='+mthis.page+'&query='+mthis.searchContentResult.val+mthis.order).then(response =>{
+            if(response.body.code ==0 ){
+              if(response.body.data.length >0){
+                let nowItems = []
                 nowItems = response.body.data.map(item =>({
-                  title: item.title,      
-                  i_sn: item.i_sn, 
-                  id: item.id,
-                  text: item.description,
-                  time: item.time,
-                  from: item.from,     
-                  img: "http://10.60.1.140/assets/images/content_node.png",
-                  check:false
-                })
-              );
-              
-                // $('.item-selected').removeClass('item-selected')
-                
-                mthis.items = mthis.items.concat(nowItems)
-                
-                mthis.prevItems = mthis.deepClone(mthis.items)
-              } else {
-                
-                // $('.layer').show().delay(3000).fadeOut()
-                mthis.setMessage('文档已经全部加载')
-                mthis.moreLoading = false
-                
-                // mthis.alertNotice('已全部加载', true)
-                
+                    title: item.title,      
+                    i_sn: item.i_sn, 
+                    id: item.id,
+                    text: item.description,
+                    time: item.time,
+                    from: item.from,     
+                    img: "http://10.60.1.140/assets/images/content_node.png",
+                    check:false
+                  })
+                );
+                mthis.items = mthis.items.concat(nowItems);
+                mthis.prevItems = mthis.deepClone(mthis.items);
+                if(nowItems.length<30){
+                  mthis.moreLoading = false
+                  mthis.setMessage('文档已经全部加载')
+                }
               }
-              resolve();
-            })
-          }
-        });
-        this.watchSelectCounter++;
-
+            }
+          })
         }
-        // mthis.moreLoading = true
-        
-        
       },
+      // handleReachBottom() {
+      //   var mthis = this
+      //   mthis.page = mthis.page + 1
+      //   if(mthis.moreLoading){
+      //     return new Promise(resolve => {
+      //     if (mthis.contentTimeCondition.length === 2) {
+      //       let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+      //       let etime = util.getTimestamp(mthis.contentTimeCondition[1])
+      //       mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult.val + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+      //         if (response.body.data.length > 0) {
+                
+      //           $('.item-selected').removeClass('item-selected')
+                
+      //           mthis.items = mthis.items.concat(response.body.data)
+      //         } else {
+      //           mthis.alertNotice('无匹配数据10', true)
+      //         }
+      //         resolve();
+      //       })
+      //     } else if (mthis.contentTimeCondition.length === 1) {
+      //       let stime = util.getTimestamp(mthis.contentTimeCondition[0])
+      //       let etime = util.getTimestamp(mthis.contentTimeCondition[0])
+      //       mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult.val + '&timeStart=' + stime + '&timeEnd=' + etime + mthis.order).then(response => {
+      //         if (response.body.data.length > 0) {
+                
+      //           $('.item-selected').removeClass('item-selected')
+                
+      //           mthis.items = mthis.items.concat(response.body.data)
+      //         } else {
+      //           mthis.alertNotice('无匹配数据11', true)
+      //         }
+      //         resolve();
+      //       })
+      //     } else {
+      //       let nowItems = []
+      //       mthis.$http.get(this.$store.state.ipConfig.api_url + '/context-by-text/?page=' + this.page + '&query=' + mthis.searchContentResult.val + mthis.order).then(response => {
+      //         if (response.body.data.length > 0) {
+      //           nowItems = response.body.data.map(item =>({
+      //             title: item.title,      
+      //             i_sn: item.i_sn, 
+      //             id: item.id,
+      //             text: item.description,
+      //             time: item.time,
+      //             from: item.from,     
+      //             img: "http://10.60.1.140/assets/images/content_node.png",
+      //             check:false
+      //           })
+      //         );
+              
+      //           // $('.item-selected').removeClass('item-selected')
+                
+      //           mthis.items = mthis.items.concat(nowItems)
+                
+      //           mthis.prevItems = mthis.deepClone(mthis.items)
+      //         } else {
+                
+      //           // $('.layer').show().delay(3000).fadeOut()
+      //           mthis.setMessage('文档已经全部加载')
+      //           mthis.moreLoading = false
+                
+      //           // mthis.alertNotice('已全部加载', true)
+                
+      //         }
+      //         resolve();
+      //       })
+      //     }
+      //   });
+        
+
+      //   }
+      //   // mthis.moreLoading = true
+        
+        
+      // },
       hideContentDiv(flag){
         var mthis = this
         
