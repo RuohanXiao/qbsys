@@ -2015,18 +2015,22 @@ export default {
                         let params = feature.get('Params');
                         for(let j = 0; j < params.length; j++){
                             let param = params[j];
-                            /* let QBId = param.QBId;
+                            let QBId = param.QBId;
                             let ParamId = param.ParamId;
-                            mthis.ParamIdsToFeatureIdList[ParamId] = featureId; */
-                            let Id = param.id;
-                            mthis.ParamIdsToFeatureIdList[Id] = featureId;
-                            //mthis.geometrySelectedQBIds.push(id)
+                            mthis.ParamIdsToFeatureIdList[ParamId] = featureId;
+                            if(mthis.QBIdToParamIdsList[QBId] === undefined){
+                                mthis.QBIdToParamIdsList[QBId] = [ParamId];
+                            } else {
+                                let index = util.itemIndexInArr(ParamId,mthis.QBIdToParamIdsList[QBId]);
+                                if(index === -1){
+                                    mthis.QBIdToParamIdsList[QBId].push(ParamId)
+                                }
+                            }
                             Ids.push(id);
                         }
                     }
                     allIds = mthis.asynAddgeometrySelectedQBIds(Ids,allIds,num);
                     mthis.qbMap.addFeatures(addfeatures,'QBLayer');
-                    /* mthis.qbMap.addFeatures(addfeatures,'heatmapLayer'); */
                     mthis.hide(num);
                 },function(error){
                     alert("探索失败!");
