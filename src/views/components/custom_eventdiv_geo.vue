@@ -110,7 +110,6 @@
     watch: {
       GeoStaticsHLItemIds:function(){
         var mthis = this;
-        debugger
         mthis.hlids = mthis.GeoStaticsHLItemIds;
       },
       clickSelectedGeoIds: function() {
@@ -232,7 +231,6 @@
             nodeIds.push(EventIds[i])
           } */
           mthis.spinShow = true;
-          debugger
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
             'entityIds':OrgIds,
             'eventIds':EventIds,

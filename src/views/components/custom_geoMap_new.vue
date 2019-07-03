@@ -1566,7 +1566,6 @@ export default {
             var Ap = document.createElement('p');
             conLabel.appendChild(Ap);
             Ap.style = 'color:#ccffff;margin:0px;font-family: Arial;font-size: 10px;';
-            debugger
             var orgNum = feature.get('selectedNum');
             if(orgNum === 1){
                 var name = ''
@@ -1971,7 +1970,6 @@ export default {
                     'geometry':[geometry]
                 }).then(response => {
                     var Ids = [];
-                    debugger
                     var OrgGeojson = response.body.data.Features;
                     var addfeatures = (new GeoJSON()).readFeatures(OrgGeojson);
                     for(let i = 0; i < addfeatures.length; i++){
@@ -2189,7 +2187,6 @@ export default {
                 mthis.removeSelectedPoints();
             }); */
             draw.on('drawend', function(obj) {
-                debugger
                 var feature = obj.feature;
                 var geometry = feature.getGeometry();
                 
@@ -2545,7 +2542,6 @@ export default {
         },
         deletePoints(){
             var mthis = this;
-            debugger
             var selectedParamsIds = GSF.QBIdsToParamIds(mthis.$store.state.geo_onlyselected_param,mthis.QBIdToParamIdsList);
             if(selectedParamsIds.length > 0){
                 selectedParamsIds.forEach(function(paramId){
@@ -2591,7 +2587,6 @@ export default {
         */
         invertSelection(){
             var mthis = this
-            debugger
             var keys = Object.keys(mthis.ParamIdsToFeatureIdList);
             var HLIds = GSF.QBIdsToParamIds(mthis.$store.state.geo_onlyselected_param,mthis.QBIdToParamIdsList);
             var noSelectedIds = [];
@@ -3264,7 +3259,6 @@ export default {
         },
         HLIds:function(){
             var mthis = this;
-            debugger
             if(mthis.qbMap){
                 mthis.setFeatureStatusByIds(mthis.HLIds);
                 mthis.isOperateButtonsHLOrDim();
@@ -3274,7 +3268,6 @@ export default {
         
         geoStaticsSelectedIds:function(){
             var mthis = this;
-            debugger
             mthis.halfSelectedIds = mthis.HLIds;
             var QBIds = [];
             var keys = Object.keys(mthis.geoStaticsSelectedIds);
@@ -3305,7 +3298,6 @@ export default {
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            debugger
             var timeSelectedParamIds = mthis.timeSelectedEventIds;//GSF.QBIdsToParamIds(mthis.timeSelectedEventIds,mthis.QBIdToParamIdsList);
             mthis.HLIds = timeSelectedParamIds
             var selectedEventsParam = {
@@ -3316,7 +3308,6 @@ export default {
         },
         geoStaticsOnlyLookSelectedIds(){
             var mthis = this;
-            debugger
             var selectedQBids = [];
             var ids = GSF.QBIdsToParamIds(mthis.geoStaticsOnlyLookSelectedIds,mthis.QBIdToParamIdsList);
             var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
@@ -3330,7 +3321,6 @@ export default {
         },
         timeSelectedEventIdsOnly:function(){
             var mthis = this;
-            debugger
             var selectedQBids = [];
             var paramIds = mthis.timeSelectedEventIdsOnly;//GSF.QBIdsToParamIds(mthis.timeSelectedEventIdsOnly,mthis.QBIdToParamIdsList);
             var features = mthis.qbMap.getLayer('QBLayer').getSource().getFeatures();
@@ -3344,7 +3334,6 @@ export default {
         },
         geometrySelectedParamIds:function(){
             var mthis = this;
-            debugger
             var selectedQBids = [];
             mthis.HLIds = mthis.geometrySelectedParamIds;
             mthis.SelectedIds = mthis.geometrySelectedParamIds;
@@ -3357,7 +3346,6 @@ export default {
         geoTimeCondition:{
             handler(newValue) {
                 var mthis = this;
-                debugger
                 var type = mthis.geoTimeCondition.type;
                 var timeSelectedIds = GSF.QBIdsToParamIds(mthis.geoTimeCondition.eventIds,mthis.QBIdToParamIdsList);
                 if(type === 'notAnalysis'){

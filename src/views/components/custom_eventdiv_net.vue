@@ -244,7 +244,6 @@
           mthis.evetdata = []
           mthis.evetdataFlag = false
         }
-        debugger
         var entityIds = mthis.selectionIdByType.nodeIds;
         var eventIds = mthis.selectionIdByType.eventIds;
         var docIds = mthis.selectionIdByType.contentIds.ids;
