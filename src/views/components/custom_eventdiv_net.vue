@@ -31,6 +31,9 @@
               <div class='groupStyle' v-if='$store.state.methodType=="community"' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">第{{index+1}}社区 ({{gitem.length}}) </div>
               <div class='groupStyle' v-if='$store.state.methodType=="labelprop"' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">标签传播{{index+1}} ({{gitem.length}}) </div>
               <div class='groupStyle' v-if='$store.state.methodType=="cc"' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">弱连通分量{{index+1}} ({{gitem.length}}) </div>
+              <div class='groupStyle' v-if='$store.state.methodType=="louvain"' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">鲁汶{{index+1}} ({{gitem.length}}) </div>
+
+              
               <!-- <Collapse simple class='scrollBarAble'>
                 <panel class='groupStyle' v-for='(gitem,index) in groupItems' @click="highLightNodes($event,gitem)">
                   <span>第{{index+1}}社区 (共{{gitem.length}}个节点)</span>
@@ -167,7 +170,9 @@
               })
               .then(response => {
                 if (response.body.code === 0) {
+                  console.log(response.body.data[0].groups)
                   mthis.groupItems = response.body.data[0].groups
+                  console.log(mthis.groupItems)
                 }
               })
           }

@@ -42,13 +42,10 @@ export default {
             }
         },
         divClick(obj){
-            
-            var mthis = this;
-            
             if(obj.currentTarget.className == 'button-div-disable'){
                 return
             }else{
-                mthis.$emit('buttonClick',obj)
+                this.$emit('buttonClick',obj)
             }
         }
     },

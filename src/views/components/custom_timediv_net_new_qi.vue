@@ -175,7 +175,9 @@
       getDate(datestr){
         var temp = datestr.split('-');
         var date = new Date(temp[0], temp[1] - 1, temp[2]);
-    		return date;
+        return date;
+       
+        
       },
       formatEveryDay(start, end){
         var mthis = this;
@@ -837,6 +839,9 @@
             // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
             // mthis.loadEcharts(2)
             if(response.body.code === 0){
+              if(response.body.data.time.length ==0){
+                return
+              }
               if(response.body.data.time.length<100){
                           let timeLen = response.body.data.time.length
                           let dayCount = parseInt((100 - response.body.data.time.length) /2)
@@ -928,6 +933,9 @@
             "ids":allIds
           }).then(response =>{
             if(response.body.code ==0){
+              if(response.body.data.time.length ==0){
+                return
+              }
               if(response.body.data.time.length<100){
                           let timeLen = response.body.data.time.length
                           let dayCount = parseInt((100 - response.body.data.time.length) /2)

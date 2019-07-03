@@ -202,8 +202,9 @@ var store = new Vuex.Store({
         workSpaceAddData: {},
         // 配置ip
         ipConfig: {
-            // api_url:'http://10.60.1.140:5001', //部署服务器api地址
-            api_url: 'http://10.60.1.141:5100', //真实数据部署服务器api地址
+            api_url: 'http://10.60.1.140:5001', //部署服务器api地址
+            // api_url: 'http://10.60.1.141:5200', //真实数据部署服务器api地址
+            // api_url: 'http://10.60.1.141:5100', //真实数据部署服务器api地址
             // api_url:'http://10.60.1.140:5100', //真实数据部署服务器api地址
             api_search: 'http://10.60.1.140:5001', //查询接口采用原地址
             api_test_url: 'http://10.60.1.141:5001', // 测试服务器api地址
