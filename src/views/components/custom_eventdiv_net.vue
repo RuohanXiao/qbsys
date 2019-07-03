@@ -348,8 +348,33 @@
           'type': '',
           'ids': oids
         }
+        var netStaticsIdsByType = {};
         if (buttonId === 'onlylookit') {
+          var entityIds = [];
+          var eventIds = [];
+          var contentIds = [];
+          if (staticsClick.length > 0){
+            var index_entity = util.itemIndexInArr(staticsClick[0],mthis.selectionIdByType.nodeIds);
+            var index_event = util.itemIndexInArr(staticsClick[0],mthis.selectionIdByType.eventIds);
+            var index_content = util.itemIndexInArr(staticsClick[0],mthis.selectionIdByType.contentIds.ids);
+            if(index_entity !== -1){
+              entityIds = staticsClick
+            }
+            if(index_event !== -1){
+              eventIds = staticsClick
+            }
+            if(index_content !== -1){
+              contentIds = staticsClick
+            }
+          }
+          netStaticsIdsByType = {
+              "entityIds":entityIds,
+              "eventIds":eventIds,
+              "contentIds":contentIds,
+              'type': ''
+          }
           mthis.$store.commit('setNetOnlyStaticsSelectedIds', params)
+          mthis.$store.commit('setNetOnlyStaticsIdsByType', netStaticsIdsByType)
         } else if (buttonId === 'delete') {
           alert('请期待...')
         }
@@ -360,6 +385,7 @@
         var entityIds = [];
         var eventIds = [];
         var contentIds = [];
+        var netStaticsIdsByType = {};
         if (staticsClick.length > 0){
           var index_entity = util.itemIndexInArr(staticsClick[0],mthis.selectionIdByType.nodeIds);
           var index_event = util.itemIndexInArr(staticsClick[0],mthis.selectionIdByType.eventIds);
@@ -374,7 +400,7 @@
             contentIds = staticsClick
           }
         }
-        var netStaticsIdsByType = {
+        netStaticsIdsByType = {
             "entityIds":entityIds,
             "eventIds":eventIds,
             "contentIds":contentIds

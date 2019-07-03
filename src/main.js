@@ -320,6 +320,12 @@ var store = new Vuex.Store({
             "eventIds":[],
             "contentIds":[]
         },
+        netOnlyStaticsIdsByType:{
+            "entityIds":[],
+            "eventIds":[],
+            "contentIds":[],
+            "type":""
+        },
         contentHeight: 0,
         contentDivHeight: 0,
         contentData: null,
@@ -478,6 +484,9 @@ var store = new Vuex.Store({
             // openthematicLayer: false
     },
     mutations: {
+        setNetOnlyStaticsIdsByType(state,val){
+            state.netOnlyStaticsIdsByType = val
+        },
         setNetStaticsIdsByType(state,val){
             state.netStaticsIdsByType = val
         },
