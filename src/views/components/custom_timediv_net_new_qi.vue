@@ -804,7 +804,8 @@
       })
     },
     computed: mapState([
-      'split', 'split_net','splitWidth', 'tmss', 'selectNetNodes','selectionIdByType','netStaticsSelectedIds','netOnlyStaticsSelectedIds'
+      'split', 'split_net','splitWidth', 'tmss', 'selectNetNodes','selectionIdByType',
+      'netStaticsSelectedIds','netOnlyStaticsSelectedIds','netStaticsIdsByType','netOnlyStaticsIdsByType'
     ]),
     watch: {
       
@@ -821,101 +822,187 @@
         }
 
       },
-      
-      netOnlyStaticsSelectedIds:function(){
-        var mthis = this
-        
-        if(this.netOnlyStaticsSelectedIds.ids.length>0){
-          // mthis.$store.commit('setNetStaticsSelectedIds',[])
-          
-          
-          mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "ids":mthis.netOnlyStaticsSelectedIds.ids,
-            
-          }).then(response => {
-            // mthis.dataBySeries.date = ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31','2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28']
-            // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
-            // mthis.loadEcharts(2)
-            if(response.body.code === 0){
-              if(response.body.data.time.length<100){
-                          let timeLen = response.body.data.time.length
-                          let dayCount = parseInt((100 - response.body.data.time.length) /2)
-                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
-                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
-                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
-                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
-                          preDateList.pop();
-                          aftDateList.shift();
-                          
-                          let conCount = new Array(preDateList.length).fill('null');
-                          let conIds = new Array(preDateList.length).fill([]);
-                          let localIds = [];
-                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
-                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
-                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
-                          mthis.dataBySeries.clickNum = [];
-                          mthis.loadEcharts(2);
-                          util.writeStorage("allIds",localIds)
-                      }else{
-                        let dayCount = parseInt(response.body.data.time.length * 0.1)
-                       if(dayCount>0){
-                          let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
-                       
-                          let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
-                          let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
-                          let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
-                          preDateList.pop();
-                          aftDateList.shift();
-                          let conCount = new Array(preDateList.length).fill('null');
-                          let conIds = new Array(preDateList.length).fill([]);
-                          let localIds = [];
-                          mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
-                          mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
-                          localIds = conIds.concat(response.body.data.ids).concat(conIds);
-                          mthis.dataBySeries.clickNum = [];
-                          mthis.loadEcharts(2);
-                          util.writeStorage("allIds",localIds)
-                      }else{
-                          mthis.dataBySeries.date = response.body.data.time;
-                          mthis.dataBySeries.num = response.body.data.count;
-                          mthis.dataBySeries.clickNum = [];
-                          mthis.loadEcharts(2);
-                          util.writeStorage("allIds",response.body.data.ids)
-                       }
+      netStaticsIdsByType:{
+        deep:true,
+        handler(){
+          var mthis = this;
+          if(mthis.netStaticsIdsByType.eventIds.length==0 && mthis.netStaticsIdsByType.contentIds.length==0){
+            mthis.dataBySeries.clickNum = []
+          }else{
+            mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+              "eventIds":mthis.netStaticsIdsByType.eventIds,
+              "docIds":mthis.netStaticsIdsByType.contentIds
+            }).then(response =>{
+              if(response.body.code ==0){
+                let casDate = response.body.data.time
+                let casCount = response.body.data.count
+                let indStart = mthis.dataBySeries.date.indexOf(casDate[0])
+                let indEnd = mthis.dataBySeries.date.length - indStart - casCount.length
+                let prevCount = new Array(indStart).fill(null)
+                let aftCount = new Array(indEnd).fill(null)
+                mthis.dataBySeries.clickNum = prevCount.concat(casCount).concat(aftCount)
+                mthis.loadEcharts(3)
+              }else{
+                console.log('接口报错')
+              }
+            })
+          }
+        }
+      },
+      netOnlyStaticsIdsByType:{
+        deep:true,
+        handler(){
+          var mthis = this
+          if(mthis.netOnlyStaticsIdsByType.eventIds.length>0 || mthis.netOnlyStaticsIdsByType.contentIds.length>0){
+            mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time",{
+              "eventIds":mthis.netOnlyStaticsIdsByType.eventIds,
+              "docIds":mthis.netOnlyStaticsIdsByType.contentIds
+            }).then(response =>{
+              if(response.body.code === 0){
+                if(response.body.data.time.length<100){
+                  let timeLen = response.body.data.time.length
+                  let dayCount = parseInt((100 - response.body.data.time.length) /2)
+                  let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                  let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                  let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                  let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                  preDateList.pop();
+                  aftDateList.shift();
+                  let conCount = new Array(preDateList.length).fill('null');
+                  let conIds = new Array(preDateList.length).fill([]);
+                  let localIds = [];
+                  mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                  mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                  localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                  mthis.dataBySeries.clickNum = [];
+                  mthis.loadEcharts(2);
+                  util.writeStorage("allIds",localIds)
+                }else{
+                  let dayCount = parseInt(response.body.data.time.length * 0.1)
+                  if(dayCount>0){
+                    let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                    let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+                    let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+                    let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+                    preDateList.pop();
+                    aftDateList.shift();
+                    let conCount = new Array(preDateList.length).fill('null');
+                    let conIds = new Array(preDateList.length).fill([]);
+                    let localIds = [];
+                    mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+                    mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+                    localIds = conIds.concat(response.body.data.ids).concat(conIds);
+                    mthis.dataBySeries.clickNum = [];
+                    mthis.loadEcharts(2);
+                    util.writeStorage("allIds",localIds)
+                  }else{
+                    mthis.dataBySeries.date = response.body.data.time;
+                    mthis.dataBySeries.num = response.body.data.count;
+                    mthis.dataBySeries.clickNum = [];
+                    mthis.loadEcharts(2);
+                    util.writeStorage("allIds",response.body.data.ids)
                       }
-            }else{
-            }
+                    }
+              }else{
+              }
+            })
+          }
+        }
+      },
+      // netOnlyStaticsSelectedIds:function(){
+      //   var mthis = this
+        
+      //   if(this.netOnlyStaticsSelectedIds.ids.length>0){
+      //     // mthis.$store.commit('setNetStaticsSelectedIds',[])
+          
+          
+      //     mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+      //       "ids":mthis.netOnlyStaticsSelectedIds.ids,
             
-          })
+      //     }).then(response => {
+      //       // mthis.dataBySeries.date = ['2019-01-01', '2019-01-02', '2019-01-03', '2019-01-04', '2019-01-05', '2019-01-06', '2019-01-07', '2019-01-08', '2019-01-09', '2019-01-10', '2019-01-11', '2019-01-12', '2019-01-13', '2019-01-14', '2019-01-15', '2019-01-16', '2019-01-17', '2019-01-18','2019-01-19', '2019-01-20', '2019-01-21', '2019-01-22', '2019-01-23', '2019-01-24', '2019-01-25', '2019-01-26', '2019-01-27', '2019-01-28',  '2019-01-29', '2019-01-30', '2019-01-31','2019-02-01', '2019-02-02', '2019-02-03', '2019-02-04', '2019-02-05', '2019-02-06', '2019-02-07', '2019-02-08', '2019-02-09', '2019-02-10', '2019-02-11', '2019-02-12', '2019-02-13', '2019-02-14', '2019-02-15', '2019-02-16', '2019-02-17', '2019-02-18','2019-02-19', '2019-02-20', '2019-02-21', '2019-02-22', '2019-02-23', '2019-02-24', '2019-02-25', '2019-02-26', '2019-02-27', '2019-02-28']
+      //       // mthis.dataBySeries.num = [10,2,3,2,4,12,3,6,24,3,12,12,43,2,13,15,56,33,32,23,22,3,,,43,56,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,,6,23,15,6,,,23,3,,44,21,12,51,67,2,10,24,3,12,12,43,2,1,]
+      //       // mthis.loadEcharts(2)
+      //       if(response.body.code === 0){
+      //         if(response.body.data.time.length<100){
+      //                     let timeLen = response.body.data.time.length
+      //                     let dayCount = parseInt((100 - response.body.data.time.length) /2)
+      //                     let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+      //                     let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+      //                     let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+      //                     let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+      //                     preDateList.pop();
+      //                     aftDateList.shift();
+                          
+      //                     let conCount = new Array(preDateList.length).fill('null');
+      //                     let conIds = new Array(preDateList.length).fill([]);
+      //                     let localIds = [];
+      //                     mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+      //                     mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+      //                     localIds = conIds.concat(response.body.data.ids).concat(conIds);
+      //                     mthis.dataBySeries.clickNum = [];
+      //                     mthis.loadEcharts(2);
+      //                     util.writeStorage("allIds",localIds)
+      //                 }else{
+      //                   let dayCount = parseInt(response.body.data.time.length * 0.1)
+      //                  if(dayCount>0){
+      //                     let startT = mthis.getDateStr(response.body.data.time[0],-dayCount);
+                       
+      //                     let endT = mthis.getDateStr(response.body.data.time[response.body.data.time.length-1],dayCount);
+      //                     let preDateList = mthis.formatEveryDay(startT,response.body.data.time[0]);
+      //                     let aftDateList = mthis.formatEveryDay(response.body.data.time[response.body.data.time.length-1],endT);
+      //                     preDateList.pop();
+      //                     aftDateList.shift();
+      //                     let conCount = new Array(preDateList.length).fill('null');
+      //                     let conIds = new Array(preDateList.length).fill([]);
+      //                     let localIds = [];
+      //                     mthis.dataBySeries.date= preDateList.concat(response.body.data.time).concat(aftDateList);
+      //                     mthis.dataBySeries.num = conCount.concat(response.body.data.count).concat(conCount);
+      //                     localIds = conIds.concat(response.body.data.ids).concat(conIds);
+      //                     mthis.dataBySeries.clickNum = [];
+      //                     mthis.loadEcharts(2);
+      //                     util.writeStorage("allIds",localIds)
+      //                 }else{
+      //                     mthis.dataBySeries.date = response.body.data.time;
+      //                     mthis.dataBySeries.num = response.body.data.count;
+      //                     mthis.dataBySeries.clickNum = [];
+      //                     mthis.loadEcharts(2);
+      //                     util.writeStorage("allIds",response.body.data.ids)
+      //                  }
+      //                 }
+      //       }else{
+      //       }
+            
+      //     })
           
            
-        }
+      //   }
         
-      },
-      netStaticsSelectedIds:function(){
-          var mthis = this
-          if(this.netStaticsSelectedIds.length>0){
-              mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                  "ids":mthis.netStaticsSelectedIds,
+      // },
+      // netStaticsSelectedIds:function(){
+      //     var mthis = this
+      //     if(this.netStaticsSelectedIds.length>0){
+      //         mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
+      //             "ids":mthis.netStaticsSelectedIds,
                   
-              }).then(response =>{
-                  if(response.body.code === 0){
-                      let casDate = response.body.data.time
-                      let casCount = response.body.data.count
-                      let indStart = mthis.dataBySeries.date.indexOf(casDate[0])
-                      let indEnd = mthis.dataBySeries.date.length - indStart - casCount.length
-                      let prevCount = new Array(indStart).fill(null)
-                      let aftCount = new Array(indEnd).fill(null)
-                      mthis.dataBySeries.clickNum = prevCount.concat(casCount).concat(aftCount)
-                      mthis.loadEcharts(3)
-                  }else{
-                  }
-              })
-          }
-          if(this.netStaticsSelectedIds.length == 0){
-            mthis.dataBySeries.clickNum = []
-          }
-      },
+      //         }).then(response =>{
+      //             if(response.body.code === 0){
+      //                 let casDate = response.body.data.time
+      //                 let casCount = response.body.data.count
+      //                 let indStart = mthis.dataBySeries.date.indexOf(casDate[0])
+      //                 let indEnd = mthis.dataBySeries.date.length - indStart - casCount.length
+      //                 let prevCount = new Array(indStart).fill(null)
+      //                 let aftCount = new Array(indEnd).fill(null)
+      //                 mthis.dataBySeries.clickNum = prevCount.concat(casCount).concat(aftCount)
+      //                 mthis.loadEcharts(3)
+      //             }else{
+      //             }
+      //         })
+      //     }
+      //     if(this.netStaticsSelectedIds.length == 0){
+      //       mthis.dataBySeries.clickNum = []
+      //     }
+      // },
 
       selectionIdByType:function(){
         var mthis = this
