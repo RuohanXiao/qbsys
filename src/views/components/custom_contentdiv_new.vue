@@ -742,7 +742,7 @@
               },
               {
                 'id_suf':'PCD',
-                'isUse':true
+                'isUse':false
               },
               {
                 'id_suf':'PTD',
@@ -754,7 +754,27 @@
           mthis.contentAna = false
           
           mthis.ifhasSel = true
+          console.log(mthis.showThumb)
           if(mthis.showThumb){
+            mthis.changeButtonParam = [
+              {
+                  'id_suf':'HD',
+                  'isUse':true
+              },
+              {
+                  'id_suf':'HSD',
+                  'isUse':true
+              },
+              {
+                'id_suf':'PCD',
+                'isUse':true
+              },
+              {
+                'id_suf':'PTD',
+                'isUse':false
+              }
+            ]
+          }else{
             mthis.changeButtonParam = [
               {
                   'id_suf':'HD',
@@ -769,23 +789,8 @@
                 'isUse':false
               },
               {
-                'id_suf':'PTD',
-                'isUse':true
-              }
-            ]
-          }else{
-            mthis.changeButtonParam = [
-              {
-                  'id_suf':'HD',
-                  'isUse':true
-              },
-              {
-                  'id_suf':'HSD',
-                  'isUse':true
-              },
-              {
                   'id_suf':'PTD',
-                  'isUse':false
+                  'isUse':true
               },
             ]
           }
@@ -846,7 +851,7 @@
         
       },
       watchSelectCounter: function() {
-        
+        this.prevItems = this.deepClone(this.items)
         let selectList = this.items.filter(item => item.check == 'sel')
         let seleArr = []
         for(let m = 0;m<selectList.length;m++){
