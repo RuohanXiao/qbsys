@@ -1594,23 +1594,6 @@ export default {
             var overlayId = mthis.setOverlay(feature.getGeometry().flatCoordinates,ovdiv,overlayId,'top-left');
             mthis.qbMap.map.addOverlay(overlayId);
         },
-        returnSelectedEventIds(Data){
-            var mthis = this;
-            var EventIds = [];
-            Data.forEach(function(item){
-                EventIds.push(item.EventId);
-            })
-            var selectedParam = {
-                'type':'mapView',
-                eventId:EventIds
-            };
-            mthis.$store.commit('setGeoSelectedParam',selectedParam);
-        },
-        setEventsLayerAndSource(features){
-            var mthis = this
-            
-
-        },
         pointSelectedAnimation(feat,listenerKey){
             var mthis = this;
                 var feature = feat;
@@ -3289,20 +3272,34 @@ export default {
         },
         staticsSelectedEventIds:function(){
             var mthis = this;
+            debugger
+            var selectedHastypeParam = mthis.discQBType(mthis.staticsSelectedEventIds);
+            var selectedQBids = selectedHastypeParam.eventIds.concat(selectedHastypeParam.orgIds)
             var selectedEventsParam = {
                 type:'GeoStatics',
-                paramIds:mthis.staticsSelectedEventIds
+                paramIds:selectedQBids
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
             mthis.HLIds = mthis.staticsSelectedEventIds
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            var timeSelectedParamIds = mthis.timeSelectedEventIds;//GSF.QBIdsToParamIds(mthis.timeSelectedEventIds,mthis.QBIdToParamIdsList);
-            mthis.HLIds = timeSelectedParamIds
+            debugger
+            mthis.HLIds = mthis.timeSelectedEventIds;//GSF.QBIdsToParamIds(mthis.timeSelectedEventIds,mthis.QBIdToParamIdsList);
+            // var ids = [];
+            // for(let i = 0; i < mthis.timeSelectedEventIds.length; i++){
+            //     let oid = mthis.timeSelectedEventIds[i];
+            //     let id = oid.split('#')[0];
+            //     let index = util.itemIndexInArr(id,ids);
+            //     if(index === -1){
+            //         ids.push(id)
+            //     }
+            // }
+            var selectedHastypeParam = mthis.discQBType(mthis.timeSelectedEventIds);
+            var selectedQBids = selectedHastypeParam.eventIds.concat(selectedHastypeParam.orgIds)
             var selectedEventsParam = {
                 type:'GeoTime',
-                paramIds:mthis.timeSelectedEventIds
+                paramIds:selectedQBids
             };
             mthis.$store.commit('setGeoSelectedParam',selectedEventsParam); 
         },
