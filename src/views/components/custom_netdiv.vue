@@ -646,6 +646,7 @@
         for (let i = 0; i < this.selectionId.length; i++) {
           this.netchart.getNode(this.selectionId[i]).userManualLock = true
           this.netchart.lockNode(this.selectionId[i])
+          
           // util.promisify(lockNode,[this.selectionId[i]],this.netchart).then(
           //   alert('bb')
           // )
@@ -3758,11 +3759,21 @@
                 clearTimeout(timer);
               }
               timer = setTimeout(function() {
+                if(event.selection.filter(item=>{
+                  return item.userManualLock
+                }).length>0){
+                  event.selection.map(it=>{
+                    it.draggable = false;
+                    return it
+                  })
+                } else {
+                   event.selection.map(it=>{
+                    it.draggable = true;
+                    return it
+                  })
+                }
                 if(mthis.selectionHightFlag){
                   mthis.selectionHightFlag = false
-                  let ids = mthis.netchart.nodes().map(item => {
-                    return item.id
-                  })
                   mthis.netchart.updateStyle(ids);
                   // mthis.netchart.updateSettings();
                   // mthis.netchart.updateSize();
