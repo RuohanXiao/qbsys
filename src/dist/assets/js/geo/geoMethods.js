@@ -10,7 +10,7 @@ export default {
         var params = feature.get('Params');
         for(let i = 0; i < params.length; i++){
             let param = params[i];
-            let id = param.id;
+            let id = param.ParamId;
             ids.push(id);
         }
     },
@@ -96,26 +96,20 @@ export default {
             }
         }
     },
-    /*设置给定features的高亮和半高亮状态
-    *@method setFeaturesHalfOrHL
-    *@param{Array}HLIds 高亮的QBParam的id的集合
-    *@param{Array}features QBParam所在的所有feature的集合
-    *@param{Object}QBIdsToFeatureIdList QBParam的id与其所在feature的字典
+    /*将geo模块画布之外流通QBId转换为画布之内流通的ParamId
+    *@method QBIdsToParamIds
+    *@param{Array} QBIds 事件和组织机构Ids
+    *@param{Object} QBIdToParamIdsList  事件和组织机构Ids对应ParamIds的字典
     */
-   /* getFeaturesByIds(ids){
-        var HLFeatureNumList = {};
-        this.getAllFeaturesNumByIds(HLIds,QBIdsToFeatureIdList,HLFeatureNumList);
-        for(let i = 0; i < features.length; i++){
-            let feature = features[i];
-            let id = feature.getId();
-            if(HLFeatureNumList[id] === undefined){
-                feature.set('selectedNum',0,false);
-            } else {
-                let num = HLFeatureNumList[id];
-                feature.set('selectedNum',num,false);
-            }
+    QBIdsToParamIds(QBIds,QBIdToParamIdsList){
+        var allParamIds = [];
+        for(let i = 0; i < QBIds.length; i++){
+            let qbId = QBIds[i];
+            let paramIds = QBIdToParamIdsList[qbId];
+            allParamIds = allParamIds.concat(paramIds)
         }
-    } */
+        return allParamIds;
+    }
 }
 
 

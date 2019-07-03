@@ -233,30 +233,6 @@
         this.tabSelectNet = 'mubiaoxiangqingContent'
       },
 
-      
-      // selectContentNodes: function() {
-      //   var mthis = this;
-      //   if(mthis.selectContentNodes[0].ids.length > 0 ){
-      //     mthis.evetdata = mthis.selectContentNodes[0].ids
-      //   }
-      //   if(mthis.selectContentNodes[0].ids.length > 1){
-      //     //调用统计接口
-      //     mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
-      //     'nodeIds': mthis.selectContentNodes[0].ids
-      //     }).then(response => {
-      //         mthis.staticsDatas = response.body.data;
-      //     })
-      //     // 调用详情接口
-      //     mthis.$http.post('http://10.60.1.140:5100/graph-attr/', {
-      //     'nodeIds': mthis.selectContentNodes[0].ids
-      //     }).then(response => {
-      //       mthis.staticsDatas = response.body.data;
-      //     })
-      //   } else {
-      //     mthis.staticsDatas = [];
-      //   }
-          
-      // }
       selectContentNodes: function() {
         var mthis = this;
         mthis.evetdataFlag = false
@@ -287,31 +263,12 @@
           //调用统计接口
           mthis.spinShow = true;
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
-          'nodeIds': mthis.selectContentNodes[0].ids,
+          'entityIds': [],
+          'eventIds':[],
+          'docIds':mthis.selectContentNodes[0].ids,
           'type':'document'
           }).then(response => {
               mthis.staticsDatas = response.body.data;
-              mthis.openPanelNames = [];
-              if(!mthis.staticsDatas){
-                  return;
-              }
-              mthis.staticsDatas.forEach(function(item){
-                  item.subStatisticsAttr.forEach(function(Iitem){
-                      var thirdLevel = Iitem.specificStaticsAttr
-                      var itemCount = thirdLevel.length;
-                      var moreItemcount = itemCount>5?itemCount-5:0;
-                      var morethirdIds = 0;
-                      if(itemCount>5){
-                          for(let i = 5; i < itemCount; i++){
-                              var tItem = thirdLevel[i];
-                              var count = tItem.count;
-                              morethirdIds += count;
-                          }
-                      }
-                      mthis.openPanelNames.push(Iitem.secondLevelId);
-                  })
-              })
-
               mthis.spinShow = false;
           })
         }

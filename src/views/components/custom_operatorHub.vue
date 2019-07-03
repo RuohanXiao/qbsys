@@ -134,7 +134,7 @@
 
 <template>
   <div :class="pickdown?'openHub':'closeHub'" id='operatorHub'>
-    <div class='Hubimg pick' @click="clickHub"></div>  <!-- pickdown = !pickdown -->
+    <div class='Hubimg pick' @click="clickHub"  @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'></div>  <!-- pickdown = !pickdown -->
     <Drawer class="drawer" placement="left" width="240" :mask="false"   :closable="false" v-model="pickdown" :inner="true" :transfer="false">
       <div slot='header' class="header">
         <Row class="hubName" v-if='header.isHub' type="flex" justify="center" align="middle">
@@ -143,7 +143,7 @@
         <Row v-else class="operHeaderName" type="flex" justify="center" align="middle">
               <Col span="24">
                 <span>{{header.operatorName}}</span>
-                <img class='cancelImg' src="http://10.60.1.140/assets/images/back.png" @click="cancelOperator" />
+                <img class='cancelImg' src="http://10.60.1.140/assets/images/back.png" @click="cancelOperator" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble' />
               </Col>
               <!-- <Col span="9"><img :src="require('../../dist/assets/images/back.png')" @click="cancelOperator" /></Col> -->
         </Row>
@@ -179,14 +179,27 @@ import operator from "./custom_operator.vue"
         },
         props:['operatorConfig'],
         methods:{
-          clickHub(){
+          clearBubble(e) {
+            if (e.stopPropagation) {
+              e.stopPropagation();
+              } else {
+                e.cancelBubble = true;
+              }
+              if (e.preventDefault) {
+                  e.preventDefault();
+                } else {
+                  e.returnValue = false;
+                }
+          },
+          clickHub(e){
             var mthis = this;
+            mthis.clearBubble(e)
             mthis.pickdown = !mthis.pickdown;
-            mthis.$emit('isOpen',mthis.pickdown)
+            mthis.$emit('isOpen',mthis.pickdown,e)
           },
           selectOperator(name){
             var mthis = this;
-            
+            // mthis.clearBubble(e)
             var params = [];
             var operName = '';
             var openFunction = '';
@@ -215,8 +228,10 @@ import operator from "./custom_operator.vue"
             mthis.header.isHub = false;
             mthis.header.operatorName = operName;
           },
-          cancelOperator(){
+          cancelOperator(e){
+            
             var mthis = this;
+            mthis.clearBubble(e)
             var closeFunction = mthis.header.closeFunction;
             if(closeFunction !== ''){
               mthis.$store.dispatch(closeFunction);

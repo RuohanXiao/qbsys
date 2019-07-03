@@ -1,7 +1,7 @@
 <template>
     <div class='divStyle'>
-        <Tooltip placement="bottom" content="（Ctrl+A）" :disabled='!buttonParam.isOpen' :delay="1000" v-for="buttonParam in buttonParamArr" v-if="buttonParam.id != 'separate'">
-            <div  :id='buttonParam.id' :class="statusclass(buttonParam)" @click="divClick">
+        <Tooltip placement="bottom" content="（Ctrl+A）" :disabled='!buttonParam.isOpen' :delay="1000" v-for="(buttonParam,index) in buttonParamArr" v-if="buttonParam.id != 'separate'">
+            <div  :id='buttonParam.id' :class="statusclass(buttonParam)" @click="divClick($event,index)">
             <Icon :class="'icon iconfont '+buttonParam.imgClass+' DVSL-bar-btn-new DVSL-bar-btn-back'" size="26"></Icon>
             <p>{{buttonParam.name}}</p>
             </div>
@@ -41,11 +41,22 @@ export default {
                 return 'button-div'
             }
         },
-        divClick(obj){
+        divClick(obj,index){
+            
+            var mthis = this;
+            
             if(obj.currentTarget.className == 'button-div-disable'){
                 return
             }else{
-                this.$emit('buttonClick',obj)
+                mthis.$emit('buttonClick',obj);
+                if(obj.currentTarget.id == 'thumShow_PTD'){
+                    mthis.buttonParamArr[index].isUse = false;
+                    mthis.buttonParamArr[index-1].isUse = true;
+                }
+                if(obj.currentTarget.id == 'contentShow_PCD'){
+                    mthis.buttonParamArr[index].isUse = false;
+                    mthis.buttonParamArr[index+1].isUse = true
+                }
             }
         }
     },

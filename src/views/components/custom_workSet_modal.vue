@@ -21,10 +21,11 @@
             </div>
             <div class='scrollBarAble' style='margin-bottom: 20px;height: 39vh;'>
               <div class='resList '>
-                <div class='resli' v-for='op in options1' style="padding:'10px auto';line-height:4vh;">
-                  <p>{{op.name}}
-                    <Icon class="icon iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" :style="{float: 'right',lineHeight: '4vh',height: '4vh'}" size="20" @click="addDataToTemp(op)" />
+                <div class='resli' v-for='op in options1' :style="{padding:'10px auto',lineHeight:'4vh',display:'flex',justifyContent: 'space-between'}">
+                  <p class="resliTitle">
+                    {{op.name}}
                   </p>
+                    <Icon class="icon iconfont icon-tianjia DVSL-bar-btn DVSL-bar-btn-back lineH20" :style="{lineHeight: '4vh',height: '4vh'}" size="20" @click="addDataToTemp(op)" />
                 </div>
               </div>
             </div>
@@ -40,7 +41,7 @@
               <div class="type-content">
                 <Row type="flex" justify="start">
                   <Col :sm="2" align="start" style="align-items: center;text-align: center;padding:10px 0px;" v-for='itemObj in item.data'>
-                    <img class="circle-img touxiangImg" :id='itemObj.id' :src='itemObj.img' @error="show_default_image($event,itemObj)"  :style="{width:'50px',height:'50px',background:'rgba(51, 255, 255, 0.3)',borderRadius:'50%'}" />
+                    <img class="touxiangImg" :id='itemObj.id' :src='itemObj.img' @error="show_default_image($event,itemObj)"  :class="[item.type== 'document'?'docImg':'notDocImg']" />
                     <p class='nametext'>{{itemObj.name}}</p>
                     <div class='delItemDiv' @click="deletItem(itemObj.id,index)">
                       <Icon type="icon iconfont icon-shanchu color515" :style="{padding:'24px 0px'}" size="24"></Icon>
@@ -169,6 +170,7 @@
     },
     methods: {
       show_default_image: function(event,ob) {
+            alert(ob.entity_type)
             if (ob.entity_type === 'administrative') {
               event.target.src = 'http://10.60.1.140/assets/images/location.png'
             } else if (ob.entity_type === 'human') {
@@ -192,6 +194,7 @@
       },
       deletItem(id,index){
         // alert(id+ '   '+index)
+      
         this.worksetData[index].data = this.worksetData[index].data.filter(item => {
           return item.id !== id
         })
@@ -880,6 +883,18 @@
   .touxiangImg {
     background-color: #003333
   }
+  .docImg{
+    width:50px;
+    height:50px;
+    background:rgba(51, 255, 255, 0.3);
+    
+  }
+  .notDocImg{
+    width:50px;
+    height:50px;
+    background:rgba(51, 255, 255, 0.3);
+    border-radius:50%;
+  }
 </style>
 <style>
   #md>.ivu-modal-wrap>.ivu-modal>.ivu-modal-content>.ivu-modal-close {
@@ -971,6 +986,16 @@
   }
   .delItemDiv:hover{
     opacity: 1;
+  }
+  .resliTitle{
+    max-width: 80%;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    line-height: 4vh;
+    height: 4vh;
+    /* width:200px;
+    max-width: 200px; */
   }
 </style>
 
