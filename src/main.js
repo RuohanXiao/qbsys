@@ -315,6 +315,11 @@ var store = new Vuex.Store({
         geoStaticsOnlyLookSelectedIds: [],
         netModalDetailData: {},
         netModalDetailNodeId: '',
+        netStaticsIdsByType:{
+            "entityIds":[],
+            "eventIds":[],
+            "contentIds":[]
+        },
         contentHeight: 0,
         contentDivHeight: 0,
         contentData: null,
@@ -473,6 +478,9 @@ var store = new Vuex.Store({
             // openthematicLayer: false
     },
     mutations: {
+        setNetStaticsIdsByType(state,val){
+            state.netStaticsIdsByType = val
+        },
         setWordsSpeechParams(state,val){
             state.wordsSpeech = val
         },

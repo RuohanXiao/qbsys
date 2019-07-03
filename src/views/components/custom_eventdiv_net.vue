@@ -356,7 +356,32 @@
       },
       clickLeftStatics(staticsClick) {
         var mthis = this;
+        debugger
+        var entityIds = [];
+        var eventIds = [];
+        var contentIds = [];
+        if (staticsClick.length > 0){
+          var index_entity = util.itemIndexInArr(staticsClick[0],mthis.selectionIdByType.nodeIds);
+          var index_event = util.itemIndexInArr(staticsClick[0],mthis.selectionIdByType.eventIds);
+          var index_content = util.itemIndexInArr(staticsClick[0],mthis.selectionIdByType.contentIds.ids);
+          if(index_entity !== -1){
+            entityIds = staticsClick
+          }
+          if(index_event !== -1){
+            eventIds = staticsClick
+          }
+          if(index_content !== -1){
+            contentIds = staticsClick
+          }
+        }
+        var netStaticsIdsByType = {
+            "entityIds":entityIds,
+            "eventIds":eventIds,
+            "contentIds":contentIds
+        }
+        // selectionIdByType
         mthis.$store.commit('setNetStaticsSelectedIds', staticsClick);
+        mthis.$store.commit('setNetStaticsIdsByType', netStaticsIdsByType);
       },
       hightLight(id) {},
       changTab(a) {

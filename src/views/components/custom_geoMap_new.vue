@@ -3361,48 +3361,6 @@ export default {
     　　　　 deep: true,
             immediate: true
         },
-        /* timeCondition:function(){
-            var mthis = this;
-            var ids = [];
-            var HLIds = [];
-            var idsIsAllIds = false;
-            //var allEventIds = [];
-            if(mthis.geometrySelectedParamIds.length === 0 && mthis.staticsSelectedEventIds.length === 0){
-                //全量
-                ids = mthis.getallEventIdsFromallEventIdsToFeaturesIds();
-                idsIsAllIds = true;
-            } else if(mthis.geometrySelectedParamIds.length !== 0 && (mthis.geometrySelectedParamIds.length <= mthis.staticsSelectedEventIds.length || mthis.staticsSelectedEventIds.length === 0)){
-                //view
-                ids = mthis.geometrySelectedParamIds;
-            } else{
-                //statics
-                ids = mthis.staticsSelectedEventIds;
-            }
-            ids.forEach(function(item){
-                var OId = mthis.getOIdFromId(item);
-                var featureId = mthis.ParamIdsToFeatureIdList[OId].featureId;
-                var feature = mthis.getLayerById('eventsPointsLayer').getSource().getFeatureById(featureId);
-                var eventTime = '';
-                var featrueEvents = feature.get('Params');
-                if(idsIsAllIds){  //判断ids是否是全量，如果是全量的话，则说明是第一步选择，所有的点先变成die的状态
-                    mthis.setFeatureStatus(feature,'die');
-                } else {
-                    mthis.setFeatureStatus(feature,'halflife');
-                }
-                for(let i = 0; i < featrueEvents.length; i++){
-                    if(item === featrueEvents[i].id){
-                        eventTime = featrueEvents[i].time;
-                        break;
-                    }
-                }
-                if(eventTime !== '' && util.getTimestamp(eventTime) >= mthis.timeCondition[0] && util.getTimestamp(eventTime) <= mthis.timeCondition[1]){
-                    HLIds.push(item);
-                } else {
-                }
-            })
-            mthis.timeSelectedEventIds = HLIds;
-                
-        }, */
         tmss:function(){
             var mthis = this
             if(mthis.tmss == 'geo'){
