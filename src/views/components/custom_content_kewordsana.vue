@@ -122,18 +122,8 @@ export default {
             handler(){
                 var mthis = this
                 console.log(this.wordsSpeech)
-                // let idList = mthis.$store.state.selectContentNodes[0].ids
-                // mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-top/',{
-                //     ids:idList,
-                //     typeLabel:'group',
-                //     word:mthis.$store.state.wordsSpeech.value
-                // }).then((response) =>{
-                //     if(response.body.code ==0){
-                //     mthis.showWords = response.body.data[0].topDatas;
-                //     mthis.option.series[0].name = mthis.$store.state.wordsSpeech.label
-                //     mthis.loadEcharts(6)
-                //     }
-                // })
+                mthis.loadEcharts(2,mthis.wordsSpeech)
+                
             }
         },
         initWord:function(){
@@ -245,6 +235,8 @@ export default {
             }
             if(flag == 2){
                 // 改变文字词性
+                mthis.option.series[0].name = param.label;
+                mthis.charts.setOption(mthis.option)
             }
             if(flag ==3){
                 // 改变文字大小
