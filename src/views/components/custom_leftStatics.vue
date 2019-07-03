@@ -229,16 +229,18 @@ export default {
             handler:function(val){
                 var mthis = this;
                 mthis.staticsDatas.forEach(function(item,Index){
-                    item.subStatisticsAttr.forEach(function(Iitem,index){
-                        var thirdLevel = Iitem.specificStaticsAttr
-                        var itemCount = thirdLevel.length;
-                        var moreItemcount = itemCount>5?itemCount-5:0;
-                        var morethirdIds = 0;
-                        //var name_ = Iitem.secondLevelId;
-                        var name = Index + '_' + index;
-                        mthis.$set(mthis.displayItem, name, false)
-                        mthis.$set(mthis.moreitemCount, name, moreItemcount)
-                    })
+                    if(item.subStatisticsAttr.length > 0){
+                        item.subStatisticsAttr.forEach(function(Iitem,index){
+                            var thirdLevel = Iitem.specificStaticsAttr
+                            var itemCount = thirdLevel.length;
+                            var moreItemcount = itemCount>5?itemCount-5:0;
+                            var morethirdIds = 0;
+                            //var name_ = Iitem.secondLevelId;
+                            var name = Index + '_' + index;
+                            mthis.$set(mthis.displayItem, name, false)
+                            mthis.$set(mthis.moreitemCount, name, moreItemcount)
+                        })
+                    }
                 })
                 mthis.hlids = [];
             },
