@@ -169,6 +169,9 @@ import VueResource from 'vue-resource'
 // import infiniteScroll from 'v-infinite-scroll'
 import InfiniteLoading from 'vue-infinite-loading';
 import util from './util/tools.js'
+// import './mock/index.js'
+// import axios from 'axios'
+// Vue.prototype.$axios = axios
 Vue.use(InfiniteLoading);
 Vue.use(VueResource);
 //   Vue.component(Select.name, Select)
@@ -419,8 +422,7 @@ var store = new Vuex.Store({
         contentPromte: '',
         netPromte: '',
         geoPromte: '',
-        // 词云图开时间轴按钮消失
-        showDocTime: true,
+        
         // 删除集合
         delSetData: {
             flag: false,
@@ -438,8 +440,14 @@ var store = new Vuex.Store({
         displayHeatMap: false,
         topicClassifIds: [],
         topicSelIds: [],
-        ifSinDocAna: 0,
-        ifMulDocAna: 0,
+        //词云分析词性选择
+        wordsSpeech:{},
+        //词云分析旋转角度
+        wordsAngel:[],
+        //词云分析fontsize
+        wordsSize:[],
+        // //词云分析词云单词数量
+        wordsNum:null,
         seletedDocAttrList: [
             // {
             // title:'Venezuelan oil chief blames fire on opposition',
@@ -465,6 +473,19 @@ var store = new Vuex.Store({
             // openthematicLayer: false
     },
     mutations: {
+        setWordsSpeechParams(state,val){
+            state.wordsSpeech = val
+        },
+        setWordSizeParams(state,val){
+            state.wordsSize = val
+        },
+        setWordAngleParams(state,val){
+            state.wordsAngel = val
+        },
+        setWordNumParams(state,val){
+            state.wordsNum = val
+        },
+        
         setMethodType(state, val) {
             state.methodType = val
         },
@@ -489,9 +510,7 @@ var store = new Vuex.Store({
         setDelSetData(state, val) {
             state.delSetData = val
         },
-        setShowDocTime(state, val) {
-            state.showDocTime = val
-        },
+        
         setContentTimeOnlySel(state, val) {
             state.contentTimeOnlySel = val
         },
@@ -772,12 +791,8 @@ var store = new Vuex.Store({
         addDocIdsToList(state, id) {
             state.topicClassifIds.push(id);
         },
-        exSinDocAna(state) {
-            state.ifSinDocAna++;
-        },
-        exMulDocAna(state) {
-            state.ifMulDocAna++;
-        },
+        
+        
         removeDocIdsToList(state, id) {
             var index = util.itemIndexInArr(id, state.topicClassifIds);
             if (index !== -1) {
@@ -850,6 +865,18 @@ var store = new Vuex.Store({
         }
     },
     actions: {
+        setWordsSpeech(context,value){
+            context.commit('setWordsSpeechParams',value)
+        },
+        setWordSize(context,value){
+            context.commit('setWordSizeParams',value)
+        },
+        setWordAngle(context,value){
+            context.commit('setWordAngleParams',value)
+        },
+        setWordNum(context,value){
+            context.commit('setWordNumParams',value)
+        },
         setGroup(context, value) {
             context.commit('setGroupParams', value);
         },

@@ -931,8 +931,10 @@
             //     mthis.geo_only_eventIds[j] = mthis.geo_only_eventIds[j] + "_d" +mthis.geo_only_eventIds[j]
             //   }
             // }
+            console.log(mthis.geo_only_eventIds)
             mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                  "ids":mthis.geo_only_eventIds,
+                  "eventIds":mthis.geo_only_eventIds,
+                  "docIds":[]
                   
                 }).then(response =>{
                   if(response.body.code === 0){
@@ -1001,9 +1003,10 @@
            if(type == "GeoStatics"){
               if(this.geo_selected_param.paramIds.length>0){
                 mthis.geoStatics_eventIds = mthis.geo_selected_param.paramIds
+                
                   mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                        "ids":mthis.geoStatics_eventIds,
-                        
+                        "eventIds":mthis.geoStatics_eventIds,
+                        "docIds":[]
                       }).then(response =>{
                         if(response.body.code === 0){
                            let casDate = response.body.data.time

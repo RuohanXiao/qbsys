@@ -14,9 +14,12 @@
     <div class="operatorDiv">
         <Row v-for="item in operatorData" type="flex" justify="center" id="asssss">
             <groupOperator v-if="item.type === 'group'" :Params='item' @param="setParam"></groupOperator>
+            <sliderUnreal v-if="item.type === 'SliderUn'" :sliderParams='item' @param="setParam"></sliderUnreal>
             <sliderOperator v-if="item.type === 'Slider'" :sliderParams='item' @param="setParam"></sliderOperator>
             <docBar v-if="item.type === 'docBar'" :Params='item' @param="setParam"></docBar>
             <selectOperator v-if="item.type === 'Select'" :Params='item' @param="setParam"></selectOperator>
+            <inputRange v-if="item.type === 'InputRange'" :Params='item' @param="setParam"></inputRange>
+            <inputOperator v-if="item.type === 'Input'" :Params='item' @param="setParam"></inputOperator>
             <topicClassifi v-if="item.type === 'topicClassification'"></topicClassifi>
         </Row>
     </div>
@@ -26,7 +29,10 @@ import groupOperator from "./operator/custom_group_operator.vue"
 import sliderOperator from "./operator/custom_slider_operator.vue"
 import docBar from "./operator/custom_docBar_operator.vue"
 import selectOperator from "./operator/custom_select_operator.vue"
-import topicClassifi from "./operator/custom_topicClassifi.vue"
+import topicClassifi from "./operator/custom_topicClassifi_new.vue"
+import inputRange from "./operator/custom_inputRange_operator.vue"
+import inputOperator from "./operator/custom_Input_oprator.vue"
+import sliderUnreal from './operator/custom_sliderUnrealtime.operator.vue'
     export default {
         data () {
             return {
@@ -113,7 +119,10 @@ import topicClassifi from "./operator/custom_topicClassifi.vue"
           selectOperator,
           topicClassifi,
           groupOperator,
-          selectOperator
+          selectOperator,
+          inputRange,
+          inputOperator,
+          sliderUnreal
         }
     }
 </script>

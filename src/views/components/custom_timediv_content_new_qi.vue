@@ -2,7 +2,7 @@
   <!--为echarts准备一个具备大小的容器dom-->
   <div :id="timechartdivId" @click="hideDiv()">
     <Icon class="icon iconfont icon-shijianzhou" :id="arrowDownId" :style="{lineHeight:'32px',position:'absolute',right: '20px',zIndex:99}" 
-    @click="onchangHeightCount" v-show="showDocTime"></Icon>
+    @click="onchangHeightCount"></Icon>
     <div :style="{height:'32px',margin:'0 10px 0 10px',borderRight:'1px solid rgb(51, 102, 102)',borderLeft:'1px solid rgb(51, 102, 102)',borderBottom:'1px solid rgb(51, 102, 102)'}" :id="timechartctrlId">
       <Row type="flex" justify="space-between" class="code-row-bg" :style="{height:'32px',paddingLeft:'10px'}">
         <Col span="21"  class="bottom" :style="{textAlign:'left'}"><span :style="{lineHeight:'32px',color:'#ccffff',fontSize:'14px'}">时间轴&nbsp;&nbsp;{{timeTitle}}</span></Col>
@@ -732,7 +732,7 @@
       })
     },
     computed:mapState ([
-      'split','splitWidth','tmss','conditionContent','content2time','showDocTime','split_content','contentTimeCondition'
+      'split','splitWidth','tmss','conditionContent','content2time','split_content','contentTimeCondition'
     ]),
     watch: {
       contentTimeCondition:{
@@ -743,7 +743,8 @@
                   let ids = mthis.contentTimeCondition.ids;
                   if(ids.length>0){
                     mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-                        "ids":ids,
+                        "eventIds":[],
+                        "docIds":ids
                       }).then(response =>{
                         if(response.body.code === 0){
                             let casDate = response.body.data.time
@@ -790,7 +791,9 @@
         var mthis = this;
         if(this.content2time[0].ids.length>0){
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "ids":mthis.content2time[0].ids
+            "eventIds":[],
+            "docIds":mthis.content2time[0].ids
+           
           }).then(response =>{
               if(response.body.code ==0){
                 if(response.body.data.time.length<100){
