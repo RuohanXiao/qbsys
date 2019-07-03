@@ -386,7 +386,7 @@
       },
       clickLeftStatics(staticsClick) {
         var mthis = this;
-        debugger
+        // debugger
         var entityIds = [];
         var eventIds = [];
         var contentIds = [];
