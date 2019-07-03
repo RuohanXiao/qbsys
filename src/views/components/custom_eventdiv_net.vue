@@ -18,7 +18,7 @@
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>Loading</div>
             </Spin>
-            <left-statics :staticsDatas='staticsDatas' :openPanelNames='openPanelNames' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'net' && staticsDatas.length > 0"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' :HLIds='hlids' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'net' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -112,6 +112,7 @@
         staticsIds: [],
         single: false,
         resArr: [],
+        hlids:[],
         rightClickConf: [{
             'name': '只选中它',
             'id': 'onlylookit',
@@ -140,12 +141,12 @@
     //     return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
     //   }
     // },
-    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType', 'groupFlag', 'communityData']),
+    computed: mapState(['selectNetNodes', 'singlePerson', 'viewHeight_20', 'dataStatisticsEvent', 'contentStatisticsResult', 'viewHeight_30', 'selectionIdByType', 'groupFlag', 'communityData','netStaticsSelectedIds']),
     watch: {
-      // contentStatisticsResult:function(){
-      //   var mthis = this;
-      //   mthis.contentStatisticsdata = mthis.contentStatisticsResult.data;
-      // },
+      netStaticsSelectedIds:function(){
+        var mthis = this;
+        mthis.hlids = mthis.netStaticsSelectedIds;
+      },
       communityData: function() {
       },
       groupFlag: function() {
@@ -243,6 +244,28 @@
           mthis.evetdata = []
           mthis.evetdataFlag = false
         }
+        debugger
+        var entityIds = mthis.selectionIdByType.nodeIds;
+        var eventIds = mthis.selectionIdByType.eventIds;
+        var docIds = mthis.selectionIdByType.contentIds.ids;
+        var num = entityIds.length + eventIds.length + docIds.length;
+        if (num > 1) {
+          // mthis.spinShow = true;
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
+            'entityIds': entityIds,
+            'eventIds':eventIds,
+            'docIds':docIds,
+            'type': 'net'
+          }).then(response => {
+            mthis.staticsDatas = response.body.data;
+
+            mthis.spinShow = false;
+          })
+        } else {
+          mthis.spinShow = false;
+          mthis.staticsDatas = [];
+        }
+        
       },
       singlePerson: function() {
         this.single = this.singlePerson
@@ -261,46 +284,47 @@
         this.selectTime = true
         this.tabSelectNetValue = 'mubiaoxiangqingNet'
       },
+      
       selectNetNodes: function() {
         var mthis = this;
-        if (mthis.selectNetNodes[0].ids.length > 1) {
-          mthis.spinShow = true;
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
-            'nodeIds': mthis.selectNetNodes[0].ids,
-            'type': 'net'
-          }).then(response => {
-            mthis.staticsDatas = response.body.data;
-            mthis.openPanelNames = [];
-            if (!mthis.staticsDatas) {
-              return;
-            }
-            //mthis.staticsdatas = mthis.staticsDatas;
-            mthis.staticsDatas.forEach(function(item) {
-              item.subStatisticsAttr.forEach(function(Iitem) {
-                /* var thirdLevel = Iitem.specificStaticsAttr
-                var itemCount = thirdLevel.length;
-                var moreItemcount = itemCount>5?itemCount-5:0;
-                var morethirdIds = 0;
-                if(itemCount>5){
-                    for(let i = 5; i < itemCount; i++){
-                        var tItem = thirdLevel[i];
-                        var count = tItem.count;
-                        morethirdIds += count;
-                    }
-                } */
-                mthis.openPanelNames.push(Iitem.secondLevelId);
-              })
-            })
-            mthis.spinShow = false;
-            //mthis.$data.staticsDatas.splice(0,0,response.body.data);
-            /* response.body.data.forEach(function(item,index){
-            mthis.$set(mthis.staticsDatas,index,item)
-            }) */
-          })
-        } else {
-          mthis.spinShow = false;
-          mthis.staticsDatas = [];
-        }
+      //   if (mthis.selectNetNodes[0].ids.length > 1) {
+      //     mthis.spinShow = true;
+      //     mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
+      //       'nodeIds': mthis.selectNetNodes[0].ids,
+      //       'type': 'net'
+      //     }).then(response => {
+      //       mthis.staticsDatas = response.body.data;
+      //       mthis.openPanelNames = [];
+      //       if (!mthis.staticsDatas) {
+      //         return;
+      //       }
+      //       //mthis.staticsdatas = mthis.staticsDatas;
+      //       mthis.staticsDatas.forEach(function(item) {
+      //         item.subStatisticsAttr.forEach(function(Iitem) {
+      //           /* var thirdLevel = Iitem.specificStaticsAttr
+      //           var itemCount = thirdLevel.length;
+      //           var moreItemcount = itemCount>5?itemCount-5:0;
+      //           var morethirdIds = 0;
+      //           if(itemCount>5){
+      //               for(let i = 5; i < itemCount; i++){
+      //                   var tItem = thirdLevel[i];
+      //                   var count = tItem.count;
+      //                   morethirdIds += count;
+      //               }
+      //           } */
+      //           mthis.openPanelNames.push(Iitem.secondLevelId);
+      //         })
+      //       })
+      //       mthis.spinShow = false;
+      //       //mthis.$data.staticsDatas.splice(0,0,response.body.data);
+      //       /* response.body.data.forEach(function(item,index){
+      //       mthis.$set(mthis.staticsDatas,index,item)
+      //       }) */
+      //     })
+      //   } else {
+      //     mthis.spinShow = false;
+      //     mthis.staticsDatas = [];
+      //   }
       }
     },
     methods: {

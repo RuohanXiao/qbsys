@@ -321,6 +321,7 @@
           }
           this.$store.commit('setWorkSpaceAddData', dataobj)
         } else if(tmss === 'geo'){
+          debugger
           var noAreaIds = [];
           var areaIds = [];
           for(let i = 0; i < datas.length; i++){

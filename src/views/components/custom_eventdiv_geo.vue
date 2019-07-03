@@ -18,7 +18,7 @@
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>Loading</div>
             </Spin>
-            <left-statics :staticsDatas='staticsDatas' :openPanelNames='openPanelNames' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' :HLIds='hlids' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
+            <left-statics :staticsDatas='staticsDatas' @staticsClick='clickLeftStatics' :rightMenuConf='rightClickConf' :HLIds='hlids' @rightCilckArgu='clickRightMenu' v-if=" $store.state.tmss === 'geo' && staticsDatas.length > 0"></left-statics>
             <div v-else :style="{height:eventItemHeight,minHeight:eventItemHeight,display:'flex',alignItems:'center',justifyContent:'center',flexWrap:'wrap'}">
               <div :style="{display: 'flex',width: '100%',flexWrap:'inherit',justifyContent:'center'}">
                 <img src="../../dist/assets/images/need_mulselect.png" :style="{maxWidth:'4vw',width:'auto',height:'auto',maxHeight:'4vh'}" />
@@ -110,6 +110,7 @@
     watch: {
       GeoStaticsHLItemIds:function(){
         var mthis = this;
+        debugger
         mthis.hlids = mthis.GeoStaticsHLItemIds;
       },
       clickSelectedGeoIds: function() {
@@ -220,6 +221,32 @@
         } else {
           mthis.evetdata = [];
           mthis.evetdataFlag = false;
+        }
+
+        if (num > 1) {
+          var nodeIds = mthis.geo_onlyselected_param;
+          /* for (let i = 0; i < OrgIds.length; i++) {
+            nodeIds.push(OrgIds[i])
+          }
+          for (let i = 0; i < EventIds.length; i++) {
+            nodeIds.push(EventIds[i])
+          } */
+          mthis.spinShow = true;
+          debugger
+          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/graph-attr/', {
+            'entityIds':OrgIds,
+            'eventIds':EventIds,
+            'type': 'geo'
+          }).then(response => {
+            mthis.staticsDatas = response.body.data;
+
+            mthis.spinShow = false;
+
+
+          })
+        } else {
+          mthis.staticsDatas = [];
+          mthis.spinShow = false;
         }
       },
       geo_onlyselected_param: function() {
