@@ -56,6 +56,16 @@
             'type': 'default',
           },
           {
+            // 'id': 'simplify_TD',
+            'id': 'simplify_HD',
+            'name': '简化',
+            'imgClass': 'icon-qingchu',
+            'isUse': false,
+            'type': 'state',
+            // 'status':'unFocus'
+            'status': 'Focus'
+          },
+          {
             'id': 'delete_HSD',
             'name': '删除',
             'imgClass': 'icon-delete-point',
@@ -222,6 +232,16 @@
         nh: 0,
         pathHoverFlag: false,
         modal_loading: false,
+        selectionHightLightId: [],
+        selectionHightLightIdByTypeData: {
+          nodeIds: [],
+          eventIds: [],
+          contentIds: {
+            'type': 'push',
+            'ids': []
+          }
+        },
+        selectionHightFlag: false,
         selectionId: [],
         selectionIdByTypeData: {
           nodeIds: [],
@@ -257,6 +277,8 @@
         linkedNodeFlag: false,
         linkedNodesType: '',
         linkedNodes: [],
+        //简化显示
+        simplifyShowFlag: false,
         operatorConfig: [
           // {
           //   name:'文档聚类',
@@ -349,10 +371,16 @@
         if (id == 'clearAll_HD') {
           mthis.newCanvans()
         }
+        if (id == 'simplify_HD') {
+          mthis.simplifyShow()
+          mthis.netchart.updateStyle();
+          mthis.netchart.updateSettings();
+          mthis.netchart.updateSize();
+        }
         if (id == 'delete_HSD') {
           mthis.triggerMethods('remove')
         }
-        if(id == 'fanxuan_HD'){
+        if (id == 'fanxuan_HD') {
           mthis.triggerMethods('removeOther')
         }
         if (id == 'selectAll_HD') {
@@ -394,6 +422,10 @@
         if (id == 'fitCanvas_HD') {
           mthis.fit()
         }
+      },
+      // 简化显示
+      simplifyShow() {
+        this.simplifyShowFlag = !this.simplifyShowFlag
       },
       communityDiscovery() {
         alert(1)
@@ -495,14 +527,21 @@
         //   mthis.netchart.updateSize();
         //   return item
         // })
-        mthis.selectionId.map(item=>{
-          if (mthis.netchart.getNode(item).userManualLock== false||mthis.netchart.getNode(item).userManualLock== undefined){
+        mthis.selectionId.map(item => {
+          if (mthis.netchart.getNode(item).userManualLock == false || mthis.netchart.getNode(item).userManualLock == undefined) {
             mthis.netchart.unlockNode(item)
             mthis.netchart.updateSettings();
             mthis.netchart.updateSize();
             return item
-          } 
+          }
         })
+        setTimeout(function(){
+          mthis.netchart.scrollIntoView(mthis.selectionId);
+          mthis.netchart.updateStyle(mthis.selectionId);
+          mthis.netchart.updateSettings();
+          mthis.netchart.updateSize();
+          mthis.updateStyleCounter++
+        },200)
       },
       changeCenterNode(arr) {
         let mthis = this
@@ -810,8 +849,30 @@
           },
           time: ""
         }];
+          // let links = mthis.netchart.links()
+          // let linksArr = new Array
+          // let nodeArr = new Array
+          // links.map(item => {
+          //   if (
+          //     mthis.selectionId.indexOf(item.from.id) > -1 &&
+          //     mthis.selectionId.indexOf(item.to.id) > -1
+          //   ) {
+          //     linksArr.push(item)
+          //     return item.id;
+          //   } else {
+          //     return "";
+          //   }
+          // });
+          // for (let n = 0; n < mthis.selectionId.length; n++) {
+          //       nodeArr.push(mthis.netchart.getNode(mthis.selectionId[n]))
+          //   }
         setTimeout(() => {
+            // let ddata = {
+            //   "links":linksArr,
+            //   "nodes":nodeArr
+            // }
           let ddata = mthis.netchart.exportData();
+          console.log(ddata)
           mthis.workatlastData = [{
             title: "",
             des: "",
@@ -1149,13 +1210,13 @@
         let allIds = this.netchart.nodes().map(item => {
           return item.id
         })
-        this.$store.commit("setSearchNetResult", [{
-          node: {
-            nodes: []
-          },
-          id: "",
-          name: ""
-        }]);
+        // this.$store.commit("setSearchNetResult", [{
+        //   node: {
+        //     nodes: []
+        //   },
+        //   id: "",
+        //   name: ""
+        // }]);
         this.selectionId = [];
         this.selectionIdByTypeData = new Object({
           nodeIds: [],
@@ -1165,7 +1226,10 @@
             'ids': []
           }
         });
-        this.$store.commit("setSelectionIdByType", this.selectionIdByTypeData)
+        this.$store.commit("setSelectionIdByType", this.selectionIdByTypeData);
+        this.$store.commit("setSelectNetNodes", [{
+                  ids:  []
+                }]);
         this.ifSelectNode = false;
         this.ifSelectTwoNode = false;
         this.ifSelectOnlyTwoNode = false;
@@ -1181,8 +1245,7 @@
         //   }
         // ]
         this.getStatistics();
-        setTimeout(()=>{
-        },200)
+        setTimeout(() => {}, 200)
       },
       // 事件拓展
       expandNodeEvent() {
@@ -1651,7 +1714,7 @@
             // lock
             // mthis.netchart.unlockNode(mthis.selectionId[index].id);
             let no = mthis.netchart.getNode(this.selectionId[i]);
-            if(!no.userManualLock){
+            if (!no.userManualLock) {
               no.x = no1.x + Math.sin(ahd * i) * radius;
               no.y = no1.y - radius + Math.cos(ahd * i) * radius;
               // mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
@@ -1664,7 +1727,8 @@
               mthis.netchart.updateStyle(mthis.selectionId[i]);
             }
           }
-          mthis.netchart.addFocusNode(no1.id);
+          mthis.netchart.scrollIntoView(this.selectionId);
+          mthis.updateStyleCounter++
         } else {
           // mthis.$Message.error('请选择节点进行矩形排列操作！')
           this.setMessage("请选择节点进行环型排列操作！");
@@ -1672,6 +1736,8 @@
       },
       //矩形布局
       square() {
+        console.log(this.selectionHightLightId)
+        console.log(this.selectionId)
         if (this.selectionId.length > 0) {
           var mthis = this;
           let rowNum = Math.ceil(Math.sqrt(this.selectionId.length));
@@ -1679,7 +1745,7 @@
           let no1 = mthis.netchart.getNode(this.selectionId[0]);
           for (let i = 0; i < this.selectionId.length; i++) {
             let no = mthis.netchart.getNode(this.selectionId[i]);
-            if(!no.userManualLock){
+            if (!no.userManualLock) {
               let col = i % rowNum;
               let row = parseInt(i / rowNum);
               no["x"] = no1["x"] + col * 150;
@@ -1688,15 +1754,11 @@
             }
           }
           // mthis.changNetchartMode('s')
-          mthis.netchart.scrollIntoView(
-            mthis.selectionId.map(item => {
-              mthis.netchart.lockNode(item.id);
-              return item.id;
-            })
-          );
+          mthis.netchart.scrollIntoView(mthis.selectionId);
           mthis.netchart.updateStyle(this.selectionId);
           mthis.netchart.updateSettings();
           mthis.netchart.updateSize();
+          mthis.updateStyleCounter++
         } else {
           this.setMessage("请选择节点进行矩形排列操作！");
         }
@@ -1768,7 +1830,7 @@
         if (mthis.selectionId.length > 0) {
           for (let i = 0; i < mthis.selectionId.length; i++) {
             let nodesInfo = mthis.netchart.getNode(mthis.selectionId[i])
-            if(!nodesInfo.userManualLock){
+            if (!nodesInfo.userManualLock) {
               // 辐射布局
               let circleNum = Math.floor(Math.log(i) / Math.log(3))
               let avd = 360 / Math.pow(3, circleNum);
@@ -1786,6 +1848,11 @@
               // mthis.changNetchartMode('s')
             }
           }
+          mthis.netchart.scrollIntoView(mthis.selectionId);
+          mthis.netchart.updateStyle(mthis.selectionId);
+          mthis.netchart.updateSettings();
+          mthis.netchart.updateSize();
+          mthis.updateStyleCounter++
         } else {
           // mthis.$Message.error('请选择节点进行矩形排列操作！')
           this.setMessage("请选择节点进行星型排列操作！");
@@ -1802,7 +1869,9 @@
         var mthis = this;
         if (mthis.selectionId.length > 0) {
           var mthis = this;
-          let nodesIDS = mthis.netchart.nodes().map(item => {
+          let nodesIDS = mthis.netchart.nodes().filter(it => {
+            return !(it.userManualLock)
+          }).map(item => {
             return item.id
           })
           let rootIds = (typeof mthis.selectionId[0] === 'string') ? (mthis.selectionId) : (mthis.selectionId.map(it => {
@@ -1907,10 +1976,12 @@
                 return ite
               })
             }
+            mthis.netchart.scrollIntoView(nodesIDS);
+            mthis.netchart.updateStyle(nodesIDS);
+            mthis.netchart.updateSettings();
+            mthis.netchart.updateSize();
+            mthis.updateStyleCounter++
           });
-          mthis.netchart.updateStyle(nodesIDS);
-          mthis.netchart.updateSettings();
-          mthis.netchart.updateSize();
         } else {
           this.setMessage("请选择节点进行层级排列操作！");
         }
@@ -2288,6 +2359,7 @@
         }
         setTimeout(function() {
           mthis.netchart.scrollIntoView(ar);
+          mthis.updateStyleCounter++
           mthis.netchart.selection(ar);
         }, 200);
         mthis.fit();
@@ -3065,7 +3137,7 @@
               strength: 0.1
             },
             twoRingRadialLayout: true,
-            layoutFreezeMinTimeout: 100,
+            layoutFreezeMinTimeout: 1000,
             layoutFreezeTimeout: 5000,
             incrementalLayoutMaxTime: 5000,
             initialLayoutMaxTime: 5000,
@@ -3113,8 +3185,8 @@
               }
             },
             linkLabel: {
-              scaleWithZoom:true,
-              scaleWithSize:true,
+              scaleWithZoom: false,
+              scaleWithSize: false,
               textStyle: {
                 fillColor: "#006666"
               },
@@ -3184,32 +3256,31 @@
               node.labelStyle.textStyle.font = "16px MicrosoftYaHei";
               node.shadowColor = ''
               node.shadowBlur = 0
-              if(node.userManualLock){
+              if (node.userManualLock) {
                 node.draggable = false;
                 // 手动锁定样式
-                  node.items = [{
-                    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
-                    //    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
-                    // "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
-                    // "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
-                    // "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
-                    // "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
-                    // "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
-                    py: -0.8,
-                    px: 0.8,
-                    // scaleWithSize:true,
-                    maxWidth: 5,
-                    backgroundStyle: {
-                      fillColor: "transparent"
-                    }
-                  }]
-                } else {
-                  node.items = [];
-                   node.draggable = true;
-                }
+                node.items = [{
+                  image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
+                  //    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
+                  // "AAAaVBMVEVMaXFTU1NFRUX///////9FRUVNTU3+/v5KS0pERERHSEc6Ojr////+/v7///+" +
+                  // "Tk5OOjo5FRUVCQkJISUg/Pz9LTEs6Ojo8PTxOT07///8zNDM1NjU3NzdRUVExMjE6OzpHR" +
+                  // "0dJSUlTU1PLhCxuAAAAEXRSTlMAAQFJSpeX5OXl5eXm5uf19ZpgTxEAAABcSURBVHjaTcc" +
+                  // "FDoBAEEPR4i7DsoLL/Q8JAyzwkib9sGb89P3yxTBorW2MY8v4KqWy5sZJRAkxXIQQ6Tk8p" +
+                  // "JSxxMUNCMYYMK+o1xCYJrC82yoHwP5UV+Lll5EP6wAJEwV+kJe3nwAAAABJRU5ErkJggg==",
+                  py: -0.8,
+                  px: 0.8,
+                  // scaleWithSize:true,
+                  maxWidth: 5,
+                  backgroundStyle: {
+                    fillColor: "transparent"
+                  }
+                }]
+              } else {
+                node.items = [];
+                node.draggable = true;
+              }
               //   if (node.userLock) {
               //     // 自动锁定样式
-                  
               //     node.items = [{
               //       image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
               //       //    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROA" +
@@ -3226,157 +3297,180 @@
               //         fillColor: "transparent"
               //       }
               //     }]
-
-
               //     // } else if (node.autoLock) {
               // } else {
               //   node.items = [];
               // }
-              if (node.data.entity_type === "event") {
-                if (node.selected) {
-                  node.lineColor = mthis.selectLineColor;
-                  node.shadowBlur = 25;
-                  node.shadowColor = mthis.selectShadowColor;
-                  node.lineWidth = 3;
-                  if (node.hightLight) {
-                    node.lineColor = mthis.hightlightLineColor;
-                    node.shadowBlur = 20;
-                    node.shadowColor = mthis.hightlightShadowColor;
-                    node.lineWidth = 3;
-                  }
-                } else if (node.hovered) {
-                  node.lineWidth = 3;
-                  node.shadowColor = "#009999";
-                  node.shadowBlur = 20;
-                  node.lineColor = "#009999";
-                } else {
-                  node.lineColor = "#006666";
-                  node.lineWidth = 3;
-                  node.shadowColor = "rgba(0,0,0,0)";
-                  node.shadowBlur = 20;
-                }
-                node.fillColor = "#003333";
+              if (mthis.simplifyShowFlag) {
+                node.radius = 10;
                 node.display = "text";
-                node.radius = 15;
-                node.borderRadius = 5;
-                let mapItem = mthis.myMap.get(node.data.event_subtype)
-                node.image = mapItem ? mapItem.img : "http://10.60.1.140/assets/images/event.png";
-              } else if (node.data.entity_type === "content" || node.data.entity_type === "document") {
-                if (node.selected) {
-                  node.lineColor = mthis.selectLineColor;
-                  node.shadowColor = mthis.selectShadowColor;
-                  node.shadowBlur = 25;
-                  node.lineWidth = 5;
-                  node.fillColor = "#003333";
-                  if (node.hightLight) {
-                    node.fillColor = "#003333";
-                    node.lineColor = mthis.hightlightLineColor
-                    node.shadowBlur = 20;
-                    node.shadowColor = mthis.hightlightDocShadowColor;
-                    node.lineWidth = 5;
-                  }
-                } else if (node.hovered) {
-                  node.lineWidth = 5;
-                  node.shadowColor = "#009999";
-                  node.shadowBlur = 20;
-                  node.fillColor = "#003333";
-                  node.lineColor = "#009999";
-                } else {
-                  node.fillColor = "rgba(0,0,0,0)";
-                  node.lineColor = "rgba(0,0,0,0)";
-                  node.lineWidth = 5;
-                  node.shadowColor = "rgba(0,0,0,0)";
-                  node.shadowBlur = 20;
-                }
-                node.display = "rectangle";
-                node.image = "http://10.60.1.140/assets/images/content_node.png";
-                node.backgroundStyle = {};
-                node.radius = 20;
-              } else if (node.data.entity_type === "other") {
-                if (node.selected) {
-                  node.lineColor = mthis.selectLineColor;
-                  node.shadowColor = mthis.selectShadowColor;
-                  node.shadowBlur = 25;
-                  node.lineWidth = 5;
-                  if (node.hightLight) {
-                    node.lineColor = mthis.hightlightLineColor;
-                    node.shadowBlur = 20;
-                    node.shadowColor = mthis.hightlightShadowColor;
-                  }
-                } else if (node.hovered) {
-                  node.lineWidth = 5;
-                  node.shadowColor = "#009999";
-                  node.shadowBlur = 20;
-                  node.lineColor = "#009999";
-                } else {
-                  node.lineColor = "#006666";
-                  node.lineWidth = 5;
-                  node.shadowColor = "rgba(0,0,0,0)";
-                  node.shadowBlur = 20;
-                }
-                node.radius = 25;
-                node.fillColor = "#003333";
-                node.display = "image";
-                node.image = "http://10.60.1.140/assets/images/other.png";
-              } else {
-                if (node.selected) {
+                node.image = null;
+                if (node.selected || node.listenSelected) {
+                // if (node.listenSelected) {
                   node.lineColor = mthis.selectLineColor
                   node.fillColor = "#003333";
-                  node.shadowColor = mthis.selectShadowColor;
-                  node.shadowBlur = 25;
-                  node.lineWidth = 5;
+                  node.lineWidth = 2;
                   if (node.hightLight) {
                     node.fillColor = "#003333";
                     node.lineColor = mthis.hightlightLineColor;
-                    node.shadowBlur = 20;
-                    node.shadowColor = mthis.hightlightDocShadowColor;
-                    node.lineWidth = 3;
+                    node.lineWidth = 2;
                   }
                 } else if (node.hovered) {
-                  node.lineWidth = 3;
-                  node.shadowColor = "#009999";
-                  node.shadowBlur = 20;
+                  node.lineWidth = 2;
                   node.fillColor = "#003333";
                   node.lineColor = "#009999";
                 } else {
                   node.fillColor = "#003333";
                   node.lineColor = "#006666";
-                  node.lineWidth = 3;
-                  node.shadowColor = "rgba(0,0,0,0)";
-                  node.shadowBlur = 20;
+                  node.lineWidth = 2;
                 }
-                node.radius = 25;
-                node.display = "image";
-                //判断图片资源是否存在
-                if (
-                  util.checkImgExists(
-                    "http://10.60.1.143/pic_lib/padded/" + node.id + ".png"
-                  )
-                ) {
-                  node.image =
-                    "http://10.60.1.143/pic_lib/padded/" + node.id + ".png";
-                } else {
-                  if (node.data.entity_type === 'administrative') {
-                    node.image = 'http://10.60.1.140/assets/images/location.png'
-                  } else if (node.data.entity_type === 'human') {
-                    node.image = 'http://10.60.1.140/assets/images/People.png'
-                  } else if (node.data.entity_type === 'organization') {
-                    node.image = 'http://10.60.1.140/assets/images/organization.png'
-                  } else if (node.data.entity_type === 'weapon') {
-                    node.image = 'http://10.60.1.140/assets/images/weapon.png'
-                  } else if (node.data.entity_type === 'geographic_entity') {
-                    node.image = 'http://10.60.1.140/assets/images/other.png'
-                  } else if (node.data.entity_type === 'project') {
-                    node.image = 'http://10.60.1.140/assets/images/other.png'
+              } else {
+                if (node.data.entity_type === "event") {
+                  if (node.selected || node.listenSelected) {
+                    node.lineColor = mthis.selectLineColor;
+                    node.shadowBlur = 25;
+                    node.shadowColor = mthis.selectShadowColor;
+                    node.lineWidth = 3;
+                    if (node.hightLight) {
+                      node.lineColor = mthis.hightlightLineColor;
+                      node.shadowBlur = 20;
+                      node.shadowColor = mthis.hightlightShadowColor;
+                      node.lineWidth = 3;
+                    }
+                  } else if (node.hovered) {
+                    node.lineWidth = 3;
+                    node.shadowColor = "#009999";
+                    node.shadowBlur = 20;
+                    node.lineColor = "#009999";
                   } else {
-                    node.image = 'http://10.60.1.140/assets/images/other.png'
+                    node.lineColor = "#006666";
+                    node.lineWidth = 3;
+                    node.shadowColor = "rgba(0,0,0,0)";
+                    node.shadowBlur = 20;
                   }
-                  node.lineWidth = 3;
-                  // node.image =
-                  //   "http://10.60.1.140/assets/images/" +
-                  //   node.data.entity_type +
-                  //   ".png";
-                  // node.image = './src/dist/assets/images/' + node.data.entity_type + '.png';
+                  node.fillColor = "#003333";
+                  node.display = "text";
+                  node.radius = 15;
+                  node.borderRadius = '20px';
+                  let mapItem = mthis.myMap.get(node.data.event_subtype)
+                  node.image = mapItem ? mapItem.img : "http://10.60.1.140/assets/images/event.png";
+                } else if (node.data.entity_type === "content" || node.data.entity_type === "document") {
+                  if (node.selected || node.listenSelected) {
+                    node.lineColor = mthis.selectLineColor;
+                    node.shadowColor = mthis.selectShadowColor;
+                    node.shadowBlur = 25;
+                    node.lineWidth = 5;
+                    node.fillColor = "#003333";
+                    if (node.hightLight) {
+                      node.fillColor = "#003333";
+                      node.lineColor = mthis.hightlightLineColor
+                      node.shadowBlur = 20;
+                      node.shadowColor = mthis.hightlightDocShadowColor;
+                      node.lineWidth = 5;
+                    }
+                  } else if (node.hovered) {
+                    node.lineWidth = 5;
+                    node.shadowColor = "#009999";
+                    node.shadowBlur = 20;
+                    node.fillColor = "#003333";
+                    node.lineColor = "#009999";
+                  } else {
+                    node.fillColor = "rgba(0,0,0,0)";
+                    node.lineColor = "rgba(0,0,0,0)";
+                    node.lineWidth = 5;
+                    node.shadowColor = "rgba(0,0,0,0)";
+                    node.shadowBlur = 20;
+                  }
+                  node.display = "rectangle";
+                  node.image = "http://10.60.1.140/assets/images/content_node.png";
+                  node.backgroundStyle = {};
+                  node.radius = 20;
+                } else if (node.data.entity_type === "other") {
+                  if (node.selected || node.listenSelected) {
+                    node.lineColor = mthis.selectLineColor;
+                    node.shadowColor = mthis.selectShadowColor;
+                    node.shadowBlur = 25;
+                    node.lineWidth = 5;
+                    if (node.hightLight) {
+                      node.lineColor = mthis.hightlightLineColor;
+                      node.shadowBlur = 20;
+                      node.shadowColor = mthis.hightlightShadowColor;
+                    }
+                  } else if (node.hovered) {
+                    node.lineWidth = 5;
+                    node.shadowColor = "#009999";
+                    node.shadowBlur = 20;
+                    node.lineColor = "#009999";
+                  } else {
+                    node.lineColor = "#006666";
+                    node.lineWidth = 5;
+                    node.shadowColor = "rgba(0,0,0,0)";
+                    node.shadowBlur = 20;
+                  }
+                  node.radius = 25;
+                  node.fillColor = "#003333";
+                  node.display = "image";
+                  node.image = "http://10.60.1.140/assets/images/other.png";
+                } else {
+                  if (node.selected || node.listenSelected) {
+                    node.lineColor = mthis.selectLineColor
+                    node.fillColor = "#003333";
+                    node.shadowColor = mthis.selectShadowColor;
+                    node.shadowBlur = 25;
+                    node.lineWidth = 5;
+                    if (node.hightLight) {
+                      node.fillColor = "#003333";
+                      node.lineColor = mthis.hightlightLineColor;
+                      node.shadowBlur = 20;
+                      node.shadowColor = mthis.hightlightDocShadowColor;
+                      node.lineWidth = 3;
+                    }
+                  } else if (node.hovered) {
+                    node.lineWidth = 3;
+                    node.shadowColor = "#009999";
+                    node.shadowBlur = 20;
+                    node.fillColor = "#003333";
+                    node.lineColor = "#009999";
+                  } else {
+                    node.fillColor = "#003333";
+                    node.lineColor = "#006666";
+                    node.lineWidth = 3;
+                    node.shadowColor = "rgba(0,0,0,0)";
+                    node.shadowBlur = 20;
+                  }
+                  node.radius = 25;
+                  node.display = "image";
+                  //判断图片资源是否存在
+                  if (
+                    util.checkImgExists(
+                      "http://10.60.1.143/pic_lib/padded/" + node.id + ".png"
+                    )
+                  ) {
+                    node.image =
+                      "http://10.60.1.143/pic_lib/padded/" + node.id + ".png";
+                  } else {
+                    if (node.data.entity_type === 'administrative') {
+                      node.image = 'http://10.60.1.140/assets/images/location.png'
+                    } else if (node.data.entity_type === 'human') {
+                      node.image = 'http://10.60.1.140/assets/images/People.png'
+                    } else if (node.data.entity_type === 'organization') {
+                      node.image = 'http://10.60.1.140/assets/images/organization.png'
+                    } else if (node.data.entity_type === 'weapon') {
+                      node.image = 'http://10.60.1.140/assets/images/weapon.png'
+                    } else if (node.data.entity_type === 'geographic_entity') {
+                      node.image = 'http://10.60.1.140/assets/images/other.png'
+                    } else if (node.data.entity_type === 'project') {
+                      node.image = 'http://10.60.1.140/assets/images/other.png'
+                    } else {
+                      node.image = 'http://10.60.1.140/assets/images/other.png'
+                    }
+                    node.lineWidth = 3;
+                    // node.image =
+                    //   "http://10.60.1.140/assets/images/" +
+                    //   node.data.entity_type +
+                    //   ".png";
+                    // node.image = './src/dist/assets/images/' + node.data.entity_type + '.png';
+                  }
                 }
               }
               node.cursor = "pointer";
@@ -3470,7 +3564,7 @@
                 link.items = [{
                   // Default item places just as the regular label.
                   // rotateWithLink: true,
-                  scaleWithZoom: false,
+                  // scaleWithZoom: false,
                   // align: "center",
                   text: link.data.num + '',
                   // imageSlicing: [0, 0, 20, 20],
@@ -3546,8 +3640,7 @@
                 event.nodes.map(item => {
                   item.userLock = true
                 })
-              } else {
-              }
+              } else {}
             },
             // onChartUpdate: function (event) {
             // },
@@ -3590,8 +3683,10 @@
                   }
                 });
                 mthis.netchart.nodes().map(item => {
+                  item.selected = false;
                   item.opacity = 1;
                   mthis.netchart.updateStyle(item.id)
+                  mthis.updateStyleCounter++;
                   return item.id
                 })
                 mthis.linkTemp = new Object();
@@ -3603,12 +3698,20 @@
                   "setSelectionIdByType",
                   mthis.selectionIdByTypeData
                 );
-                mthis.updateStyleCounter++;
               }
+              mthis.updateStyleCounter++;
               // event.preventDefault();
             },
-            // onPointerMove: function(event) {
-            // },
+            onPointerMove: function(event) {
+              event.selection.map(item => {
+                if (item.isNode && item.opacity == 1) {
+                  item.draggable = true
+                } else {
+                  item.draggable = false
+                }
+                return item
+              })
+            },
             onDoubleClick: function(event) {
               let nodeList = event.selection.filter(function(x) {
                 return x.isNode;
@@ -3655,192 +3758,219 @@
                 clearTimeout(timer);
               }
               timer = setTimeout(function() {
-                mthis.fromTemp = new Array()
-                mthis.netchart.nodes().map(item => {
-                  item.opacity = 1;
-                  mthis.netchart.updateStyle(item.id)
-                  return item.id
-                })
-                let lf = new Array()
-                let lt = new Array()
-                let num = new Array()
-                let eslect = new Array()
-                mthis.linkTemp = new Object()
-                for (let i = 0; i < event.selection.length; i++) {
-                  if (event.selection[i].isNode) {
-                    eslect.push(event.selection[i].id)
-                  } else if (event.selection[i].isLink) {
-                    lf.push(event.selection[i].from.id)
-                    lt.push(event.selection[i].to.id)
-                    num.push(event.selection[i].num)
-                  } else {}
-                }
-                mthis.linkTemp = new Object({
-                  fromList: lf,
-                  toList: lt,
-                  numCount: num
-                })
-                // let eslect = event.selection.filter(it => {
-                //   return it.isNode
-                // }).map(item => {
-                //   return item.id;
-                // });
-                // let lselect = event.selection.filter(it => {
-                //   return it.isLink
-                // }).map(item => {
-                //   mthis.fromTemp.push(item.from)
-                //   mthis.toTemp.push(item.to)
-                //   return {
-                //     fromList:mthis.fromTemp,
-                //     toList:mthis.toTemp
-                //   };
-                // });
-                if (mthis.linkedNodeFlag && eslect.length > 0) {
-                  //链向标&&选中节点
-                  mthis.readyToLink(eslect)
-                }
-                //   selectLineColor:'#ccffff',
-                // selectShadowColor:'#33ffff',
-                // hightlightLineColor:'#009999',
-                // hightlightShadowColor:"#009999",
-                // hightlightDocShadowColor:"#33ffff",
-                mthis.selectLineColor = '#ccffff'
-                mthis.hightlightLineColor = '#009999'
-                mthis.selectShadowColor = "#33ffff"
-                mthis.hightlightShadowColor = '#009999'
-                let netchartnodes = mthis.netchart.nodes()
-                for (let i = 0; i < netchartnodes.length; i++) {
-                  let no = mthis.netchart.getNode(netchartnodes[i].id)
-                  no.hightLight = false;
-                  // no.draggable = false;
-                  mthis.netchart.updateStyle(netchartnodes[i].id)
-                }
-                if (mthis.netchart.nodes().length > 0) {
-                  mthis.ifhasNode = true
-                  // mthis.changeButtonParam = [
-                  // ]
-                } else {
-                  mthis.ifhasNode = false
-                }
-                if (event.selection.length > 0) {
-                  // mthis.operatorConfig[0].disable=true;
-                  mthis.ifhasNode = true
-                  let selectN = {
-                    nodes: event.selection.map(item => {
-                      return item.data;
-                    })
-                  };
-                  mthis.selectionId = event.selection.filter(it => {
-                    return it.isNode
-                  }).map(item => {
-                    return item.id;
-                  });
-                  let linksArr = [];
-                  for (let n = 0; n < mthis.selectionId.length; n++) {
-                    if (mthis.netchart.getNode(mthis.selectionId[n])) {
-                      linksArr.push(
-                        mthis.netchart.getNode(mthis.selectionId[n]).links.map(item => {
-                          if (
-                            mthis.selectionId.indexOf(item.from.id) > -1 &&
-                            mthis.selectionId.indexOf(item.to.id) > -1
-                          ) {
-                            return item.id;
-                          } else {
-                            return "";
-                          }
-                        })
-                      );
-                    }
+                if(mthis.selectionHightFlag){
+                  mthis.selectionHightFlag = false
+                  let ids = mthis.netchart.nodes().map(item => {
+                    return item.id
+                  })
+                  mthis.netchart.updateStyle(ids);
+                  // mthis.netchart.updateSettings();
+                  // mthis.netchart.updateSize();
+                 
+                } else{
+                  mthis.fromTemp = new Array()
+                  let ids = mthis.netchart.nodes().map(item => {
+                    item.opacity = 1;
+                    // listenSelected主要用于标记样式
+                    item.listenSelected = false;
+                    return item.id
+                  })
+                  mthis.netchart.updateStyle(ids)
+                  let lf = new Array()
+                  let lt = new Array()
+                  let num = new Array()
+                  let eslect = new Array()
+                  mthis.linkTemp = new Object()
+                  for (let i = 0; i < event.selection.length; i++) {
+                    if (event.selection[i].isNode) {
+                      eslect.push(event.selection[i].id)
+                      event.selection[i].listenSelected = true
+                    } else if (event.selection[i].isLink) {
+                      lf.push(event.selection[i].from.id)
+                      lt.push(event.selection[i].to.id)
+                      num.push((event.selection[i].num !== undefined && event.selection[i].num !== null && event.selection[i].num !== '') ? event.selection[i].num : 0)
+                    } else {}
                   }
-                  let c = [];
-                  for (let nn = 0; nn < linksArr.length; nn++) {
-                    c = c.concat(linksArr[nn]);
+                  mthis.linkTemp = new Object({
+                    fromList: lf,
+                    toList: lt,
+                    numCount: num
+                  })
+                  // let eslect = event.selection.filter(it => {
+                  //   return it.isNode
+                  // }).map(item => {
+                  //   return item.id;
+                  // });
+                  // let lselect = event.selection.filter(it => {
+                  //   return it.isLink
+                  // }).map(item => {
+                  //   mthis.fromTemp.push(item.from)
+                  //   mthis.toTemp.push(item.to)
+                  //   return {
+                  //     fromList:mthis.fromTemp,
+                  //     toList:mthis.toTemp
+                  //   };
+                  // });
+                  if (mthis.linkedNodeFlag && eslect.length > 0) {
+                    //链向标&&选中节点
+                    mthis.readyToLink(eslect)
                   }
-                  let uniquec = util.unique(c);
-                  mthis.netchart.selection(uniquec.concat(mthis.selectionId));
-                  // 有选中节点或者link
-                  mthis.selectionId = mthis.selectionId;
-                  mthis.selectionIdByTypeData = {
-                    nodeIds: [],
-                    eventIds: [],
-                    contentIds: {
-                      'type': 'push',
-                      'ids': []
-                    }
-                  };
-                  // let nodeArr = event.selection.filter(item=>{
-                  //   return item.isNode
-                  // })
-                  // let nodesId = nodeArr.map(a=>{
-                  //   return a.id
-                  // })
-                  // let links = nodeArr.map(item=>{
-                  //   return item.links
-                  // })
-                  // let selectLinks =  links.filter(a=>{
-                  //   return (util.ifInArr(nodesId,a.from)&& util.ifInArr(nodesId,a.to))
-                  // })
-                  for (let nu = 0; nu < event.selection.length; nu++) {
-                    if (event.selection[nu].isNode) {
-                      // mthis.netchart.lockNode(event.selection[nu].data.id)
-                      //有三种情况，实体，事件，文档
-                      if (event.selection[nu].data.entity_type === "content" || event.selection[nu].data.entity_type === "document") {
-                        mthis.selectionIdByTypeData.contentIds.ids.push(
-                          event.selection[nu].data.id
-                        );
-                      } else if (
-                        event.selection[nu].data.entity_type === "event"
-                      ) {
-                        mthis.selectionIdByTypeData.eventIds.push(
-                          event.selection[nu].data.id
-                        );
-                      } else {
-                        mthis.selectionIdByTypeData.nodeIds.push(
-                          event.selection[nu].data.id
-                        );
+                  //   selectLineColor:'#ccffff',
+                  // selectShadowColor:'#33ffff',
+                  // hightlightLineColor:'#009999',
+                  // hightlightShadowColor:"#009999",
+                  // hightlightDocShadowColor:"#33ffff",
+                  mthis.selectLineColor = '#ccffff'
+                  mthis.hightlightLineColor = '#009999'
+                  mthis.selectShadowColor = "#33ffff"
+                  mthis.hightlightShadowColor = '#009999'
+                  let netchartnodes = mthis.netchart.nodes()
+                  for (let i = 0; i < netchartnodes.length; i++) {
+                    let no = mthis.netchart.getNode(netchartnodes[i].id)
+                    no.hightLight = false;
+                    // no.draggable = false;
+                    mthis.netchart.updateStyle(netchartnodes[i].id)
+                  }
+                  if (mthis.netchart.nodes().length > 0) {
+                    mthis.ifhasNode = true
+                    // mthis.changeButtonParam = [
+                    // ]
+                  } else {
+                    mthis.ifhasNode = false
+                  }
+                  if (event.selection.length > 0) {
+                    // mthis.operatorConfig[0].disable=true;
+                    mthis.ifhasNode = true
+                    let selectN = {
+                      nodes: event.selection.map(item => {
+                        return item.data;
+                      })
+                    };
+                    mthis.selectionHightLightId = event.selection.filter(it => {
+                      return it.isNode
+                    }).map(item => {
+                      return item.id;
+                    });
+                    mthis.selectionId = mthis.selectionHightLightId
+                    let uniquec = new Array();
+                    if (mthis.simplifyShowFlag) {
+                      let linksArr = [];
+                      for (let n = 0; n < mthis.selectionId.length; n++) {
+                        if (mthis.netchart.getNode(mthis.selectionId[n])) {
+                          linksArr.push(
+                            mthis.netchart.getNode(mthis.selectionId[n]).links.map(item => {
+                              if (
+                                mthis.selectionId.indexOf(item.from.id) > -1 &&
+                                mthis.selectionId.indexOf(item.to.id) > -1
+                              ) {
+                                return item.id;
+                              } else {
+                                return "";
+                              }
+                            })
+                          );
+                        }
                       }
-                      // } else if (event.selection[nu].isLink) {
-                      //   if (event.selection[nu].data.class === 'event') {
-                      //     mthis.selectionIdByTypeData.eventIds.push(event.selection[nu].data.id)
-                      //   }
+                      let c = [];
+                      for (let nn = 0; nn < linksArr.length; nn++) {
+                        c = c.concat(linksArr[nn]);
+                      }
+                      uniquec = util.unique(c);
                     }
+                    // 有选中节点或者link
+                    mthis.selectionIdByTypeData = {
+                      nodeIds: [],
+                      eventIds: [],
+                      contentIds: {
+                        'type': 'push',
+                        'ids': []
+                      }
+                    };
+                    mthis.selectionHightLightIdByTypeData = {
+                      nodeIds: [],
+                      eventIds: [],
+                      contentIds: {
+                        'type': 'push',
+                        'ids': []
+                      }
+                    };
+                    // let nodeArr = event.selection.filter(item=>{
+                    //   return item.isNode
+                    // })
+                    // let nodesId = nodeArr.map(a=>{
+                    //   return a.id
+                    // })
+                    // let links = nodeArr.map(item=>{
+                    //   return item.links
+                    // })
+                    // let selectLinks =  links.filter(a=>{
+                    //   return (util.ifInArr(nodesId,a.from)&& util.ifInArr(nodesId,a.to))
+                    // })
+                    for (let nu = 0; nu < event.selection.length; nu++) {
+                      if (event.selection[nu].isNode) {
+                        // mthis.netchart.lockNode(event.selection[nu].data.id)
+                        //有三种情况，实体，事件，文档
+                        if (event.selection[nu].data.entity_type === "content" || event.selection[nu].data.entity_type === "document") {
+                          mthis.selectionIdByTypeData.contentIds.ids.push(
+                            event.selection[nu].data.id
+                          );
+                        } else if (
+                          event.selection[nu].data.entity_type === "event"
+                        ) {
+                          mthis.selectionIdByTypeData.eventIds.push(
+                            event.selection[nu].data.id
+                          );
+                        } else {
+                          mthis.selectionIdByTypeData.nodeIds.push(
+                            event.selection[nu].data.id
+                          );
+                        }
+                        // } else if (event.selection[nu].isLink) {
+                        //   if (event.selection[nu].data.class === 'event') {
+                        //     mthis.selectionIdByTypeData.eventIds.push(event.selection[nu].data.id)
+                        //   }
+                      }
+                    }
+                    mthis.netchart.selection(uniquec.concat(mthis.selectionId));
+                    mthis.$store.commit("setSelectNetNodes", [{
+                      ids: mthis.selectionId
+                    }]);
+                    mthis.$store.commit(
+                      "setSelectionIdByType",
+                      mthis.selectionIdByTypeData
+                    );
+                    mthis.$store.commit(
+                      "setSinglePerson", !(mthis.selectionId.length > 1)
+                    );
+                  } else {
+                    mthis.selectionId = [];
+                    mthis.selectionHightLightIdByTypeData = mthis.selectionIdByTypeData = {
+                      nodeIds: [],
+                      eventIds: [],
+                      contentIds: {
+                        'type': 'push',
+                        'ids': []
+                      }
+                    };
+                    mthis.$store.commit("setSelectNetNodes", [{
+                      ids: mthis.selectionId
+                    }]);
+                    mthis.$store.commit(
+                      "setSelectionIdByType",
+                      mthis.selectionIdByTypeData
+                    );
+                    // mthis.netchart.updateStyle(mthis.selectionId);
+                    mthis.netchart.updateStyle();
+                    mthis.netchart.updateSettings();
+                    mthis.netchart.updateSize();
+                    mthis.ifSelectNode = false;
+                    mthis.ifSelectTwoNode = false;
+                    mthis.ifSelectOnlyTwoNode = false;
+                    mthis.selectItem = null;
+                    // mthis.changNetchartMode('s')
                   }
-                  mthis.$store.commit("setSelectNetNodes", [{
-                    ids: mthis.selectionId
-                  }]);
-                  mthis.$store.commit(
-                    "setSelectionIdByType",
-                    mthis.selectionIdByTypeData
-                  );
-                  mthis.$store.commit(
-                    "setSinglePerson", !(mthis.selectionId.length > 1)
-                  );
-                } else {
-                  mthis.selectionId = [];
-                  mthis.selectionIdByTypeData = {
-                    nodeIds: [],
-                    eventIds: [],
-                    contentIds: {
-                      'type': 'push',
-                      'ids': []
-                    }
-                  };
-                  mthis.$store.commit("setSelectNetNodes", [{
-                    ids: mthis.selectionId
-                  }]);
-                  mthis.$store.commit(
-                    "setSelectionIdByType",
-                    mthis.selectionIdByTypeData
-                  );
-                  mthis.netchart.updateStyle(mthis.selectionId);
-                  mthis.netchart.updateSettings();
-                  mthis.netchart.updateSize();
-                  mthis.ifSelectNode = false;
-                  mthis.ifSelectTwoNode = false;
-                  mthis.ifSelectOnlyTwoNode = false;
-                  mthis.selectItem = null;
-                  // mthis.changNetchartMode('s')
                 }
+                 mthis.updateStyleCounter++;
               }, 200);
               if (mthis.netchart.exportData()) {
                 mthis.workatlastData[0].data = mthis.netchart.exportData();
@@ -3971,9 +4101,11 @@
         }
       },
       netOnlyStaticsSelectedIds: function() {
-        this.netchart.selection(this.netOnlyStaticsSelectedIds.ids)
-        this.netchart.updateStyle()
-        this.netchart.updateSettings()
+        this.selectionHightFlag = false;
+
+        this.netchart.selection(this.netOnlyStaticsSelectedIds.ids);
+        this.netchart.updateStyle(this.netOnlyStaticsSelectedIds.ids);
+        this.updateStyleCounter++;
       },
       // selectionIdByTypeData: function() {
       //   let lengthNum = this.selectionIdByTypeData.nodeIds.length + this.selectionIdByTypeData.eventIds.length + this.selectionIdByTypeData.contentIds.ids.length
@@ -3981,11 +4113,10 @@
       //   this.ifSelectTwoNode = (lengthNum > 1) ? true : false
       //   this.ifSelectOnlyTwoNode = (lengthNum === 2) ? true : false
       // },
-      selectionIdByTypeData:{
-        
-        deep:true,
+      selectionIdByTypeData: {
+        deep: true,
         immediate: true,
-        handler(newVal,oldVal){
+        handler(newVal, oldVal) {
           var mthis = this;
           let lengthNum = mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.ids.length;
           if (lengthNum > 0) {
@@ -4021,27 +4152,25 @@
                   'isUse': false
                 }
               ]
-            }else{
-              if(mthis.ifhasNode){
-                mthis.changeButtonParam = [
-                  {
-                    'id_suf':'HD',
-                    'isUse':true
+            } else {
+              if (mthis.ifhasNode) {
+                mthis.changeButtonParam = [{
+                    'id_suf': 'HD',
+                    'isUse': true
                   },
                   {
-                    'id_suf':'HSD',
-                    'isUse':false
+                    'id_suf': 'HSD',
+                    'isUse': false
                   }
                 ]
-              }else{
-                mthis.changeButtonParam = [
-                  {
-                    'id_suf':'HD',
-                    'isUse':false
+              } else {
+                mthis.changeButtonParam = [{
+                    'id_suf': 'HD',
+                    'isUse': false
                   },
                   {
-                    'id_suf':'HSD',
-                    'isUse':false
+                    'id_suf': 'HSD',
+                    'isUse': false
                   }
                 ]
               }
@@ -4052,6 +4181,7 @@
       updateStyleCounter: function() {
         this.netchart.updateStyle()
         this.netchart.updateSettings()
+        this.netchart.updateSize();
       },
       atlastData: function() {
         var mthis = this;
@@ -4360,6 +4490,7 @@
           setTimeout(function() {
             mthis.square();
             mthis.netchart.scrollIntoView(arr);
+            mthis.updateStyleCounter++
           }, 500);
           mthis.netchart.updateSettings()
           mthis.spinShow = false;
@@ -4381,8 +4512,14 @@
           let no = mthis.netchart.getNode(netchartnodes[i].id)
           no.hightLight = false;
           no.opacity = 0.35;
+          // no.draggable = false;
+          no.selectionLock = true;
+          mthis.netchart.updateStyle(netchartnodes[i].id);
+          mthis.selectionId = mthis.netStaticsSelectedIds;
         }
         if (mthis.netStaticsSelectedIds.length > 0) {
+          mthis.selectionHightFlag = true
+          mthis.netchart.selection(mthis.netStaticsSelectedIds)
           mthis.selectLineColor = '#009999'
           mthis.selectShadowColor = "#009999"
           mthis.hightlightLineColor = '#ccffff'
@@ -4394,10 +4531,11 @@
             arr.push(mthis.netStaticsSelectedIds[i]);
             no.opacity = 1;
             no.hightLight = true;
+            // no.draggable = true;
+            no.selectionLock = false;
             mthis.netchart.updateStyle(mthis.netStaticsSelectedIds[i])
           }
-        }
-        mthis.netchart.updateStyle(allNodIds);
+        } else {}
         mthis.netchart.updateSettings();
         mthis.netchart.updateSize();
       },
@@ -4446,6 +4584,13 @@
                   links: []
                 });
                 // mthis.changNetchartMode('r')
+
+
+                mthis.netchart.scrollIntoView(dataids);
+                mthis.netchart.updateStyle(dataids);
+                mthis.netchart.updateSettings();
+                mthis.netchart.updateSize();
+                mthis.updateStyleCounter++
               } else {
                 mthis.setMessage("/event-detail/接口异常");
               }
@@ -4487,10 +4632,16 @@
         })
         setTimeout(() => {
           mthis.netchart.scrollIntoView(contentIdsArry);
+          mthis.updateStyleCounter++
           mthis.netchart.selection(contentIdsArry);
         }, 200);
         setTimeout(() => {
           mthis.square();
+          mthis.netchart.scrollIntoView(contentIdsArry);
+          mthis.netchart.updateStyle(contentIdsArry);
+          mthis.netchart.updateSettings();
+          mthis.netchart.updateSize();
+          mthis.updateStyleCounter++
           mthis.spinShow = false;
         }, 500);
       },
@@ -4534,6 +4685,7 @@
       },
       searchNetResult: function(va) {
         var mthis = this;
+        mthis.updateStyleCounter++;
         va.data.type = va.data.entity_type;
         va.data.image = va.data.img;
         va.data.images = va.data.img;
@@ -4545,10 +4697,12 @@
         setTimeout(function() {
           let arr = new Array(va.data.id);
           mthis.netchart.clearFocus()
+          mthis.selectionHightFlag = false;
           mthis.netchart.selection(arr);
           mthis.netchart.addFocusNode(va.data.id)
           mthis.netchart.scrollIntoView(arr);
           mthis.netchart.updateSettings()
+          mthis.updateStyleCounter++;
           // mthis.changNetchartMode('r')
           // alert(8)
           // mthis.netchart.selection(util.unique(arr))
@@ -4561,6 +4715,7 @@
         // setTimeout(() => {
         //   this.netchart.selection(va.data.id)
         // }, 200);
+        
       },
       addNetNodes: function(va) {
         var mthis = this;

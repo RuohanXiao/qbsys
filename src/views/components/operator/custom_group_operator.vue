@@ -47,6 +47,7 @@
         <Radio label="community">社区发现</Radio>
         <Radio label="labelprop">标签传播</Radio>
         <Radio label="cc">弱连通分量</Radio>
+        <Radio label="louvain">鲁汶</Radio>
     </RadioGroup>
   </div>
   <!-- <div><p>运行算子</p></div> -->

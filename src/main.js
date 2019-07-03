@@ -205,7 +205,8 @@ var store = new Vuex.Store({
         workSpaceAddData: {},
         // 配置ip
         ipConfig: {
-            // api_url:'http://10.60.1.140:5001', //部署服务器api地址
+            // api_url: 'http://10.60.1.140:5001', //部署服务器api地址
+            // api_url: 'http://10.60.1.141:5200', //真实数据部署服务器api地址
             api_url: 'http://10.60.1.141:5100', //真实数据部署服务器api地址
             // api_url:'http://10.60.1.140:5100', //真实数据部署服务器api地址
             api_search: 'http://10.60.1.140:5001', //查询接口采用原地址
@@ -315,16 +316,16 @@ var store = new Vuex.Store({
         geoStaticsOnlyLookSelectedIds: [],
         netModalDetailData: {},
         netModalDetailNodeId: '',
-        netStaticsIdsByType:{
-            "entityIds":[],
-            "eventIds":[],
-            "contentIds":[]
+        netStaticsIdsByType: {
+            "entityIds": [],
+            "eventIds": [],
+            "contentIds": []
         },
-        netOnlyStaticsIdsByType:{
-            "entityIds":[],
-            "eventIds":[],
-            "contentIds":[],
-            "type":""
+        netOnlyStaticsIdsByType: {
+            "entityIds": [],
+            "eventIds": [],
+            "contentIds": [],
+            "type": ""
         },
         contentHeight: 0,
         contentDivHeight: 0,
@@ -433,7 +434,7 @@ var store = new Vuex.Store({
         contentPromte: '',
         netPromte: '',
         geoPromte: '',
-        
+
         // 删除集合
         delSetData: {
             flag: false,
@@ -452,13 +453,13 @@ var store = new Vuex.Store({
         topicClassifIds: [],
         topicSelIds: [],
         //词云分析词性选择
-        wordsSpeech:{},
+        wordsSpeech: {},
         //词云分析旋转角度
-        wordsAngel:[],
+        wordsAngel: [],
         //词云分析fontsize
-        wordsSize:[],
+        wordsSize: [],
         // //词云分析词云单词数量
-        wordsNum:null,
+        wordsNum: null,
         seletedDocAttrList: [
             // {
             // title:'Venezuelan oil chief blames fire on opposition',
@@ -484,25 +485,25 @@ var store = new Vuex.Store({
             // openthematicLayer: false
     },
     mutations: {
-        setNetOnlyStaticsIdsByType(state,val){
+        setNetOnlyStaticsIdsByType(state, val) {
             state.netOnlyStaticsIdsByType = val
         },
-        setNetStaticsIdsByType(state,val){
+        setNetStaticsIdsByType(state, val) {
             state.netStaticsIdsByType = val
         },
-        setWordsSpeechParams(state,val){
+        setWordsSpeechParams(state, val) {
             state.wordsSpeech = val
         },
-        setWordSizeParams(state,val){
+        setWordSizeParams(state, val) {
             state.wordsSize = val
         },
-        setWordAngleParams(state,val){
+        setWordAngleParams(state, val) {
             state.wordsAngel = val
         },
-        setWordNumParams(state,val){
+        setWordNumParams(state, val) {
             state.wordsNum = val
         },
-        
+
         setMethodType(state, val) {
             state.methodType = val
         },
@@ -527,7 +528,7 @@ var store = new Vuex.Store({
         setDelSetData(state, val) {
             state.delSetData = val
         },
-        
+
         setContentTimeOnlySel(state, val) {
             state.contentTimeOnlySel = val
         },
@@ -808,8 +809,8 @@ var store = new Vuex.Store({
         addDocIdsToList(state, id) {
             state.topicClassifIds.push(id);
         },
-        
-        
+
+
         removeDocIdsToList(state, id) {
             var index = util.itemIndexInArr(id, state.topicClassifIds);
             if (index !== -1) {
@@ -882,17 +883,17 @@ var store = new Vuex.Store({
         }
     },
     actions: {
-        setWordsSpeech(context,value){
-            context.commit('setWordsSpeechParams',value)
+        setWordsSpeech(context, value) {
+            context.commit('setWordsSpeechParams', value)
         },
-        setWordSize(context,value){
-            context.commit('setWordSizeParams',value)
+        setWordSize(context, value) {
+            context.commit('setWordSizeParams', value)
         },
-        setWordAngle(context,value){
-            context.commit('setWordAngleParams',value)
+        setWordAngle(context, value) {
+            context.commit('setWordAngleParams', value)
         },
-        setWordNum(context,value){
-            context.commit('setWordNumParams',value)
+        setWordNum(context, value) {
+            context.commit('setWordNumParams', value)
         },
         setGroup(context, value) {
             context.commit('setGroupParams', value);

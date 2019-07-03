@@ -175,7 +175,9 @@
       getDate(datestr){
         var temp = datestr.split('-');
         var date = new Date(temp[0], temp[1] - 1, temp[2]);
-    		return date;
+        return date;
+       
+        
       },
       formatEveryDay(start, end){
         var mthis = this;
@@ -1017,6 +1019,9 @@
             "docIds":mthis.selectionIdByType.contentIds.ids
           }).then(response =>{
             if(response.body.code ==0){
+              if(response.body.data.time.length ==0){
+                return
+              }
               if(response.body.data.time.length<100){
                           let timeLen = response.body.data.time.length
                           let dayCount = parseInt((100 - response.body.data.time.length) /2)

@@ -63,6 +63,7 @@
   export default {
     data() {
       return {
+        myMap: new Map(),
         showFlag: false,
         lightIconFlag: false,
         loading: false,
@@ -116,7 +117,20 @@
     },
     mounted() {
       var mthis = this
-      mthis.workatlastChart = mthis.$store.getters.netData
+      mthis.workatlastChart = mthis.$store.getters.netData;
+      var ob = configer.loadxmlDoc(
+        mthis.$store.state.ipConfig.xml_url + "/dictionary.xml"
+      );
+      var eventNames = ob.getElementsByTagName("eventNames");
+      mthis.myMap = new Map();
+      for (let eventNameitem of eventNames) {
+        for (let items of eventNameitem.children) {
+          mthis.myMap.set(items.getElementsByTagName("ename")[0].textContent, {
+            name: items.getElementsByTagName("chname")[0].textContent,
+            img: items.getElementsByTagName("img")[0].textContent
+          });
+        }
+      }
       mthis.initChart()
     },
     watch: {
@@ -239,7 +253,9 @@
                 node.display = 'text'
                 node.radius = 15
                 node.borderRadius = 300
-                node.image = 'http://10.60.1.140/assets/images/content_node.png'
+                let mapItem = mthis.myMap.get(node.data.event_subtype)
+                node.image = mapItem ? mapItem.img : "http://10.60.1.140/assets/images/event.png";
+                // node.image = 'http://10.60.1.140/assets/images/content_node.png'
               } else if (node.data.entity_type === 'content') {
                 node.display = 'rectangle'
                 node.image = 'http://10.60.1.140/assets/images/content_node.png'
@@ -249,7 +265,22 @@
                 if (util.checkImgExists("http://10.60.1.143/pic_lib/padded/" + node.id + ".png")) {
                   node.image = "http://10.60.1.143/pic_lib/padded/" + node.id + ".png"
                 } else {
-                  node.image = 'http://10.60.1.140/assets/images/' + node.data.entity_type + '.png';
+                  // node.image = 'http://10.60.1.140/assets/images/' + node.data.entity_type + '.png';
+                   if (node.data.entity_type === 'administrative') {
+                      node.image = 'http://10.60.1.140/assets/images/location.png'
+                    } else if (node.data.entity_type === 'human') {
+                      node.image = 'http://10.60.1.140/assets/images/People.png'
+                    } else if (node.data.entity_type === 'organization') {
+                      node.image = 'http://10.60.1.140/assets/images/organization.png'
+                    } else if (node.data.entity_type === 'weapon') {
+                      node.image = 'http://10.60.1.140/assets/images/weapon.png'
+                    } else if (node.data.entity_type === 'geographic_entity') {
+                      node.image = 'http://10.60.1.140/assets/images/other.png'
+                    } else if (node.data.entity_type === 'project') {
+                      node.image = 'http://10.60.1.140/assets/images/other.png'
+                    } else {
+                      node.image = 'http://10.60.1.140/assets/images/other.png'
+                    }
                 }
               }
               node.cursor = "pointer";
