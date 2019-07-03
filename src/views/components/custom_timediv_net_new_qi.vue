@@ -920,12 +920,13 @@
       selectionIdByType:function(){
         var mthis = this
         var oneFlag = true
-        let allIds = []
+        
         if(this.selectionIdByType.eventIds.length>0 || this.selectionIdByType.contentIds.ids.length>0){
           
-          allIds = mthis.selectionIdByType.eventIds.concat(this.selectionIdByType.contentIds.ids)
+          
           mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
-            "ids":allIds
+            "eventIds":mthis.selectionIdByType.eventIds,
+            "docIds":mthis.selectionIdByType.contentIds.ids
           }).then(response =>{
             if(response.body.code ==0){
               if(response.body.data.time.length<100){

@@ -20,18 +20,18 @@
              >
               <Row type="flex" justify="start">
 
-                <Col :sm="colSmnum" :lg="colLgNum" :md='colMdNum' align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
+                <Col :sm="colSmnum" :lg="colLgNum" :md='colMdNum' :offset='colOfset' align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
                 <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}"> -->
-                  <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id" @click='toSelIds(index,item.check,item.id,$event)' 
+                  <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id+'thum'" @click='toSelIds(index,item.check,item.id,$event)' 
                   @dblclick="showContent(item.id,item.title)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
                   @mouseenter="addHover" @mouseleave="removeHover">
-                      <img :src='item.img' class="picsize" :class="(item.check)?'item-selected':''" >
+                      <img :src='item.img' class="picsize" :class="statusClass(item.check)" >
                       <p class='nametext'>{{item.title}}</p>
                    
                   </div>
                 <!-- </div> -->
                 <div>
-                  <div v-show='!showThumb' class="contentDiv fileDiv select-item" :class="(item.check)?'item-selected':''" :id="item.id" :title="item.title" 
+                  <div v-show='!showThumb' class="contentDiv fileDiv select-item" :class="statusClass(item.check)" :id="item.id" :title="item.title" 
                   @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click='toSelIds(index,item.check,item.id,$event)' 
                   @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'>
                     <p class="contentTitle">{{item.title}}</p>
@@ -72,128 +72,14 @@
         </div>
       </div>
       <!-- 列表图 -->
-      <div id="barList">
+      <!-- <div id="barList">
         <div v-show="showList" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}">
           <Table  border :columns="columns3" :data="data4" style="margin-top:10px;margin-left:5em;margin-right:5em" height="400"></Table>
         </div>
-      </div>
+      </div> -->
       <!-- 词云分析图 -->
-      <div>
-      <!-- <div :style="{minWidth:leftMenu}"></div> -->
-      <div>
-
-     
-      <div id="topicAnaly" v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'250px'}">
-        <div :style="{position:'absolute',height:ContentHeight,zIndex: 98,width:'100%'}" v-if="ifResize">
-          <Spin size="large" fix v-if="ifResize">
-                <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
-                <div>Loading</div>
-              </Spin>
-        </div>
-        <div class="docMenu" id="topMenuall" :style="{display:'flex',paddingRight: '5px',height:'50px',justifyContent: 'flex-end',alignItems: 'center'}">
-          <RadioGroup v-model="changeBar" @on-change='changeShow'>
-            <Radio label="词云"></Radio>
-            <Radio label="排序"></Radio>
-          </RadioGroup>
-          <div :style="{marginLeft:'10px'}">
-            <Dropdown  @on-click='changeDrop'>
-              <a href="javascript:void(0)">
-                 {{dropPlace}}
-                <Icon type="ios-arrow-down"></Icon>
-                
-                <!-- <span>&#xe62c;</span> -->
-              </a>
-              <!-- <Icon class="icon iconfont icon-drop-dropdown"></Icon>   -->
-              <DropdownMenu slot="list">
-                  <DropdownItem name='keywords'>关键词</DropdownItem>
-                  <DropdownItem name='PER'>人名</DropdownItem>
-                  <DropdownItem name='LOC'>地名</DropdownItem>
-                  <DropdownItem name='ORG'>机构名</DropdownItem>
-                  <DropdownItem name='N'>名词</DropdownItem>
-                  <DropdownItem name='V'>动词</DropdownItem>
-                  <DropdownItem name='J'>形容词</DropdownItem>
-                  <DropdownItem name='R'>副词</DropdownItem>
-                  <DropdownItem name='P'>代词</DropdownItem>
-                  <DropdownItem name='C'>连词</DropdownItem>
-                  <DropdownItem name='O'>其他</DropdownItem>
-              </DropdownMenu>
-          </Dropdown>
-          </div>
-          <div class="delB" @click='topicDatas=[]'>清空</div>
-          
-        </div>
-        <div class="anaDoc" >
-          <div :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}" v-show="ifTopic">
-          <!-- <transition-group name="topTran" tag='div' v-show="ifTopic" :style="{display:'flex',flexFlow:'row wrap',justifyContent:'space-around',width:'100%',padding:'5px 0px 0px 5px'}"> -->
-          <div class="topItem animaTopItem" 
-          :style="{border:'1px solid #336666',order:0,width:topWidth,height:topHeight,display:'flex',flexDirection:'column',resize:'auto'}"
-          v-for="(list,index) in topicDatas" :key="index" :id="index">
-            <div class="itemHeader" 
-            :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
-              <div :style="{width:'70%',display:'flex',flexWrap:'nowrap'}" class="headerTitle">
-                <p class='docAnaTitle' @click="showAllTitle(index,$event,1);closeShowTitle()">{{list.docDatas[0].title}}</p>
-                &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
-              </div>
-              <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
-              <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,1)"></Icon>
-            </div>
-            <div :style="{height:itemHeight,display:'flex',flexDirection:'column',fleWrap:'wrap',justifyContent:'space-around'}">
-              <div class="topicItem" 
-              :style="{display:'flex',justifyContent:'space-around',padding:'0px 1.25em 0px 1.25em',color:'#fff'}" 
-              v-for="(item,ind) in list.topDatas_10" :key="ind">
-                <p :class="ind<3 ? 'bigNumber' : 'number'">{{ind+1}}</p>
-                <p :style="{fontSize:'12px',flex:'1',paddingLeft:'1.25em',maxWidth: '80%',overflow: 'hidden',textOverflow: 'ellipsis',whiteSpace: 'nowrap'}">{{item.name}}</p>
-                <p :style="{fontSize:'12px'}">{{item.value}}</p>
-              </div>
-            </div>
-            
-            
-          </div>
-          <!-- </transition-group> -->
-          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
-          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
-          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
-          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
-          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
-          <div class="itemEmpty" :style="{width:topWidth,height:'0px',visibility: 'hidden'}"></div>
-          </div>
-          <div  v-show="!ifTopic" :style="{display:'flex',flexWrap:'wrap',justifyContent:'space-around'}" id='testWord'>
-              <div class="topWord animaTopItem"
-              :style="{border:'1px solid #336666',order:0,width:itemWidth,height:topHeight,display:'flex',flexDirection:'column',marginBottom:'10px'}"
-          v-for="(list,index) in topicDatas" :id="index+'word'">
-              <div class="itemHeader" 
-                :style="{display:'flex',flexFlow:'row nowrap',borderBottom:'1px solid #336666',height:'30px',alignItems:'center',justifyContent:'space-around'}">
-                 <div :style="{width:'70%',display:'flex',flexWrap:'nowrap'}" class="headerTitle">
-                    <p class='docAnaTitle' @click="showAllTitle(index,$event,2);closeShowTitle()">{{list.docDatas[0].title}}</p>
-                    &nbsp;&nbsp;<span>({{list.docDatas.length}})</span>
-                  </div>
-                    <Icon class="icon iconfont icon-zhiding process-img DVSL-bar-btn" size="16" @click="toTop(index)"></Icon>
-                    <Icon class="icon iconfont icon-delete2 process-img DVSL-bar-btn" size="12" @click="delTopData(index,2)"></Icon>
-                </div>
-              <div :id='index+"wordChart"'></div>
-          </div>
-          <div class="itemEmpty" :style="{width:itemWidth,height:'0px',visibility: 'hidden'}"></div>
-          <div class="itemEmpty" :style="{width:itemWidth,height:'0px',visibility: 'hidden'}"></div>
-          
-          </div>
-          
-        </div>
-        
-        
-      </div>
-      
-      </div>
-      <div v-if="ifRenderAllTitle">
-      <div v-for="(list,ind) in topicDatas" :key="ind" class="allTitle" 
-          :style="{display:'none'}">
-          <div class='textTitle' v-for="(item,index) in list.docDatas" :style="{display:'flex',justifyContent:'space-around',marginBottom:'5px'}" >
-              <p class="itemTitle"  :style="{color:'#ccffff'}" :title="item.title">{{item.title}}</p>
-              <p :style="{fontSize:'10px',color:'#ccffff',marginLeft:'5px',width:'70px'}">{{item.time}}</p>
-              <p :style="{width: '2px',height:'18px',backgroundColor: 'rgba(51, 255, 255, 0.2)'}"></p>
-              <p class="itemFrom" :style="{fontSize:'10px',color:'#ccffff',marginLeft:'7px',width:'70px' }" :title="item.from">{{item.from}}</p>
-          </div>
-        </div>
-        </div>
+      <div id='wordAna' v-show="contentAna" :style="{width:contentAnaWidth,height:ContentHeightList,overflowY:'scroll',position:'relative',left:'250px'}">
+        <word-ana :docNum='selDocNum' :initWord='contentAna'></word-ana>
       </div>
     </div>
     
@@ -215,6 +101,7 @@
   import $ from "jquery";
   import cusButton from './custom_menuButton.vue'
   import operatorHub from "./custom_operatorHub.vue"
+  import wordAna from "./custom_content_kewordsana.vue"
   import {
     mapState,
     mapMutations
@@ -231,6 +118,7 @@
     name: "App",
     data() {
       return {
+        selDocNum:0,
         changeButtonParam:[],
         buttonArr:[
             {
@@ -275,7 +163,7 @@
             },
             {'id':'separate'},
             {
-                'id':'contentShow_HD',
+                'id':'contentShow_PCD',
                 'name':'摘要图',
                 'imgClass':'icon-zhaiyaotu',
                 'isUse':false,
@@ -283,21 +171,21 @@
                 
             },
             {
-                'id':'thumShow_HD',
+                'id':'thumShow_PTD',
                 'name':'缩略图',
                 'imgClass':'icon-suolvetu',
                 'isUse':false,
                 'type':'default',
                 
             },
-            {
-                'id':'listShow_HD',
-                'name':'列表图',
-                'imgClass':'icon-liebiaotu',
-                'isUse':false,
-                'type':'default',
+            // {
+            //     'id':'listShow_HD',
+            //     'name':'列表图',
+            //     'imgClass':'icon-liebiaotu',
+            //     'isUse':false,
+            //     'type':'default',
                 
-            },
+            // },
             {'id':'separate'},
             {
                 'id':'defaultOrder_HD',
@@ -372,7 +260,7 @@
  			        sizeRange: [14, 24],
  			        rotationRange: [0, 0],
               textPadding: 0,
-               
+              
  			        autoSize: {
  			            enable: true,
  			            minSize: 14
@@ -424,9 +312,10 @@
         mouseStartX:0,
         mouseStartY:0,
         mouseOn:false,
-        colLgNum:4,
+        colOfset:0,
+        colLgNum:3,
         colMdNum:6,
-        colSmnum:8,
+        colSmnum:4,
         selDocItems:{},
         worksetData: [],
         worksetType: "",
@@ -460,7 +349,7 @@
         netheightout: 0,
         flag: true,
         modal01: false,
-        showThumb:false,
+        showThumb:true,
         thumbDocIds:[],
         eventData: null,
         items: [],
@@ -472,96 +361,6 @@
         moreLoading: false,
         selectArr: [],
         
-        columns3: [{
-            title: 'Title',
-            key: 'title',
-            width: 100,
-            fixed: 'left',
-            render:(h,params)=>{
-              let texts = '';
-              texts = params.row.title.substring(0,10) + '....';
-              let strTitle = '';
-              strTitle = params.row.title;
-              return h(
-                "tooltip",
-                {
-                  props:{
-                    placement:"bottom",
-                    transfer:true,
-                    marginLeft:'-30px',
-                    cursor:'pointer'
-                  }
-                },
-                [
-                  texts,
-                  h(
-                    "span",
-                    {
-                      slot:"content",
-                      style:{whiteSpace: "normal", wordBreak: "break-all" }
-                    },
-                    strTitle
-                  )
-                ]
-              )
-            }
-           
-          },
-          {
-            title: 'Time',
-            key: 'time',
-            width: 150,
-            fixed:'left',
-            sortable: true
-          },
-          {
-            title: 'I_sn',
-            key: 'i_sn',
-            width: 150,
-            fixed:'left',
-          },
-          {
-            title: 'Text',
-            key: 'text',
-            
-          },
-          {
-            title: 'Entity',
-            key: 'entity',
-            width: 100,
-            fixed:'right'
-          },
-          
-        ],
-        data4: [{
-            title: 'John Brown',
-            time: 18,
-            i_sn:'england',
-            text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
-            entity: 'Trump',
-          },
-          {
-           title: 'John Brown',
-           time: 18,
-           i_sn:'england',
-            text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
-            entity: 'Trump',
-          },
-          {
-            title: 'John Brown',
-            time: 18,
-            i_sn:'england',
-            text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
-            entity: 'Trump',
-          },
-          {
-            title: 'John Brown',
-            time: 18,
-            i_sn:'england',
-            text: "Taiwan's president, Tsai Ing-wen, at a ceremony marking the Lunar New Year on Feb. 4 in Taipei. (Taiwan Presidential Office/EPA-EFE) (Taiwan Presidential Office/Han Handout/EPA-EFE/REX/Shutterstock) As Taiwan prepares for a presidential election less than a year from now, it looks increasingly likely that the island democracy risks replaying its traditional role as a flash point in U.S.-China relations. On Feb. 7, a group of four Republican senators called on House Speaker Nancy Pelosi (D-Calif.) to invite Taiwan’s president, Tsai Ing-wen, to address a joint session of Congress — a move that would enrage Beijing. Hard-line Chinese analysts have issued a report advocating that Beijing take a page from American policy in Venezuela and recognize as Taiwan’s next president any candidate who supports unification. In Taiwan, a group of uncompromising independence activists are lobbying their government to “create [an] independent state and advance towards being a normal country” next year. Beijing has warned that any formal declaration of independence by Taiwan would result in war. These maneuvers are occurring against a backdrop of a deteriorating relationship between the Trump administration and Beijing, and as China’s president, Xi Jinping, seems anxious for movement on Taiwan. Beijing has always claimed that Taiwan is part of China and has never dropped its threat to use force to “unite the motherland.” For its part, the United States’ one-China policy acknowledges Beijing’s position that there is only one China, but Washington has never taken a position on whether Taiwan belongs to the People’s Republic of China. What’s more, under the Taiwan Relations Act, signed in 1979, the United States is legally obligated to provide for Taiwan’s defense. For decades, Chinese officials privately argued that with time and Chinese economic growth Taiwan would have no choice but to accept China’s embrace. Now Chinese analysts are far more pessimistic. First, there had been an assumption in some circles that China’s political system would evolve into a more liberal one, making a confederation with China a palpable option for many on Taiwan. But instead, China today is more repressive than at any time since the 1989 crackdown on pro-democracy protests around Tiananmen Square. Second, many Taiwanese have been turned off by China’s handling of Hong Kong, which they see as a harbinger of things to come in Taiwan should China take control. China absorbed the former British colony in 1997, promising — under the slogan “one country, two systems” — to let it maintain its unique economic system for 50 years and pledging to allow more democracy. Twenty-two years into Chinese rule and Beijing has not significantly expanded democracy in Hong Kong and has begun to meddle openly in the internal affairs of the territory. Finally, after almost 30 years of democratization in Taiwan, many Taiwanese have discovered a unique identity and have no interest in unifying with Beijing. In 1992, when democracy just began in Taiwan, only 20 percent of the respondents to an annual poll held by Taiwan’s National Chengchi University called themselves “Taiwanese only.” In 2018, more than 50 percent did so. And those who identified solely as Chinese dropped from a quarter of those asked in 1992 to less than 3 percent last year. Faced with these trends, Xi has apparently decided that saber rattling is better than a soft touch. On Jan. 2, in his first major speech on Taiwan since taking over the leadership of the Communist Party in 2012, he warned that the Taiwan “problem” could not be put off for another generation and threatened the island with attack. He also demanded that any talks between Taiwan and China must be carried out with both sides acknowledging that the ultimate goal would be unification. Xi’s speech prompted a rarely seen show of political unity in Taiwan. Both President Tsai, who represents the independence-leaning Democratic Progressive Party, and the main opposition party, the Kuomintang, rejected Xi’s demands. Xi’s tougher line has garnered support among hard-liners in China. In a report given to me by a prominent hard-liner who requested anonymity, one group suggested somewhat implausibly that should China decide to attack Taiwan, it could persuade Russia, North Korea and Iran to join the fight. The report also advocated launching an economic embargo on Taiwan by first drawing up a list of Taiwanese independence supporters and blocking them from doing business in China. The Financial Times recently reported that officials from China’s Taiwan Affairs Council have been calling in mainland-based Taiwanese business executives and Taiwanese students for discussions on Taiwan’s fate. Taiwanese who participated in these sessions described them as a way to gauge the political reliability of Taiwanese living in China. The hard-liners’ report called on the Chinese government to find a leader on Taiwan willing to accept Chinese rule recognize him or her, as the United States has with Venezuela’s opposition leader Juan Guaidó. This type of extremism has echoes in Taiwan, where independence activists are chafing at Tsai’s moderate stance. Following defeats for the Democratic Progressive Party in local elections in November, independence advocates, led by Kuo Pei-hung, chairman of pro-independence Formosa TV, established an organization called the Formosa Alliance to push independence and organize a referendum on the topic. Back in Washington, support for Taiwan is at its highest since the passing of the Taiwan Relations Act in 1979. Former diplomat Richard C. Bush, now at the Brookings Institution, predicted that inviting Taiwan’s president to Congress would inflame Beijing. Others are less alarmed. Regardless, Taiwan, which has lain dormant for years as an issue between the United States and China, is back. Readmoore:",
-            entity: 'Trump',
-          }
-        ],
         operatorConfig:[
                 {
                   name:'文档聚类',
@@ -570,40 +369,104 @@
                   disabled:true
                 },
                 {
-                    name:'主题分析',
+                    name:'关键词分析',
                     id:'topicClassification',
                     iconName:'icon-neirongfenxi',
                     openFunction:'opentopicClassif',
                     closeFunction:'closetopicClassif',
-                    disabled:true,
+                    disabled:false,
                     operatorSurface:[
                       {
-                        operatorType:'topicClassification',
-                          /* operatorType:'dynamic',
-                          dynamicAttr:'seletedDocAttrList',
-                          paramCompare:{
-                            'id':'id',
-                            'title':'title',
-                            'time':'time',
-                            'from':'from'
-                          },
-                          dispose:{
-                            type:'docBar',
-                            excuteFunction:'changeOperatorDocIds',
-                            attrName:'id',
-                            rightMenuConfig:[{
-                                'name': '单个文档分析',
-                                'iconClassName': 'icon-ren',
-                                'excuteFunction':'singleDocAnaly'
-                              },
-                              {
-                                'name': '合并分析',
-                                'iconClassName': 'icon-ren',
-                                'excuteFunction':'multiDocAnaly'
-                              }
-                            ]
-                          } */
+                        name:'文字词性',
+                        id:'wordsSpeech',
+                        type:'Select',
+                        attrName:'wordsSppech',
+                        excuteFunction:'setWordsSpeech',
+                        value:{
+                          options:[
+                            {
+                                value:'keywords',
+                                label:'关键词'
+                            },
+                            {
+                                value:'PER',
+                                label:'人名'
+                            },
+                            {
+                                value:'LOC',
+                                label:'地名'
+                            },
+                            {
+                                value:'ORG',
+                                label:'机构名'
+                            },
+                            {
+                                value:'N',
+                                label:'名词'
+                            },
+                            {
+                                value:'V',
+                                label:'动词'
+                            },
+                            {
+                                value:'J',
+                                label:'形容词'
+                            },
+                            {
+                                value:'R',
+                                label:'副词'
+                            },
+                            {
+                                value:'P',
+                                label:'代词'
+                            },
+                            {
+                                value:'C',
+                                label:'连词'
+                            },
+                            {
+                                value:'O',
+                                label:'其他'
+                            }
+                          ]
+                        }
                       },
+                      {
+                        name:'文字大小',
+                        id:'wordsSize',
+                        type:'SliderUn',
+                        attrName:'wordsSize',
+                        excuteFunction:'setWordSize',
+                        value:{
+                            extent:[10,28],
+                            defaultValue:18
+                        }
+                      },
+                      {
+                        name:'显示角度',
+                        id:'wordAngle',
+                        type:'InputRange',
+                        attrName:'wordAngle',
+                        excuteFunction:'setWordAngle',
+                        value:{
+                          extent:[0,360],
+                          defaultValue:[0,0],
+                          step:5
+                        }
+                      },
+                      {
+                        name:'显示数量',
+                        id:'wordNum',
+                        type:'Input',
+                        attrName:'wordNum',
+                        excuteFunction:'setWordNum',
+                        value:{
+                          defaultValue:50,
+                          extent:[1,100]
+                        }
+                      }
+                    
+
                     ]
                 },
                 {
@@ -636,121 +499,101 @@
     },
     computed: mapState([
       'searchContentResult', 'contentHeight', 'contentTimeCondition', 'netToContentData','contentKeyboards','contentPromte','contentTimeOnlySel','selectContentNodes','topicClassifStatus',
-      'ifSinDocAna','ifMulDocAna'
+      
       ]),
 
    
     watch: {
       
-      // options:function(){
-      //   var mthis = this
-      //   if(this.options.length>0){
-     
-         
-     
-      //     setTimeout(function(){
-      //       for(let j=0;j<mthis.topicDatas.length;j++){
+      
+      // topicDatas:function(){
+        
+      //   this.$nextTick(function(){
+      //     var mthis = this
+      //     mthis.ifRenderAllTitle = true
+      //     mthis.myWordCharts = [];
+        
+      //     mthis.options = [];
+      //     mthis.charts = [];
+          
+      //     for(let i=0;i<mthis.topicDatas.length;i++){
+      //           mthis.charts.push(i+'wordChart');
+      //           mthis.myWordCharts.push(i+'myChart');
+      //           mthis.options.push(mthis.option);
+      //         }
+              
+      //          for(let j=0;j<mthis.myWordCharts.length;j++){
+      //             mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
+                    
       //             mthis.myWordCharts[j] = echarts.init(document.getElementById(mthis.charts[j]),'',{
       //               width:mthis.itemWidth,
       //               height:mthis.itemHeight
       //             });
-      //             mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
       //             mthis.myWordCharts[j].setOption(mthis.options[j]);
-      //             
-      //           }
-      //     },300)
-          
-      //   }
-        
-      // },
-      topicDatas:function(){
-        
-        this.$nextTick(function(){
-          var mthis = this
-          mthis.ifRenderAllTitle = true
-          mthis.myWordCharts = [];
-        
-          mthis.options = [];
-          mthis.charts = [];
-          
-          for(let i=0;i<mthis.topicDatas.length;i++){
-                mthis.charts.push(i+'wordChart');
-                mthis.myWordCharts.push(i+'myChart');
-                mthis.options.push(mthis.option);
-              }
-              
-               for(let j=0;j<mthis.myWordCharts.length;j++){
-                  mthis.options[j].series[0].data = mthis.topicDatas[j].topDatas;
-                    
-                  mthis.myWordCharts[j] = echarts.init(document.getElementById(mthis.charts[j]),'',{
-                    width:mthis.itemWidth,
-                    height:mthis.itemHeight
-                  });
-                  mthis.myWordCharts[j].setOption(mthis.options[j]);
                   
-                }
-            mthis.wordResize(mthis.topicDatas.length)
-        })
-      },
+      //           }
+      //       mthis.wordResize(mthis.topicDatas.length)
+      //   })
+      // },
       
-      ifSinDocAna:function(){
-        var mthis = this
-        let name = mthis.dropPlace;
-        let val = '';
-        switch(name){
-          case '人名' : val = 'PER';break;
-          case '地名' : val = 'PER';break;
-          case '机构名' : val='ORG'; break;
-          case '名词' : val='N';break;
-          case '动词' : val = 'V';break;
-          case '形容词' : val = 'J';break;
-          case '副词' : val = 'R';break;
-          case '代词' : val = 'P';break;
-          case '连词' : val = 'C';break;
-          case '关键词' : val = 'keywords';break;
+      // ifSinDocAna:function(){
+      //   var mthis = this
+      //   let name = mthis.dropPlace;
+      //   let val = '';
+      //   switch(name){
+      //     case '人名' : val = 'PER';break;
+      //     case '地名' : val = 'PER';break;
+      //     case '机构名' : val='ORG'; break;
+      //     case '名词' : val='N';break;
+      //     case '动词' : val = 'V';break;
+      //     case '形容词' : val = 'J';break;
+      //     case '副词' : val = 'R';break;
+      //     case '代词' : val = 'P';break;
+      //     case '连词' : val = 'C';break;
+      //     case '关键词' : val = 'keywords';break;
           
-          case '其他' : val = 'O';break;
-          default: val = 'keywords';break;
-        }
-        if(this.ifSinDocAna){
-          let ids = mthis.$store.state.topicSelIds
-          mthis.$store.commit('setTopicSelIds',[])
-          mthis.getDocAna(val,'single',ids);
+      //     case '其他' : val = 'O';break;
+      //     default: val = 'keywords';break;
+      //   }
+      //   if(this.ifSinDocAna){
+      //     let ids = mthis.$store.state.topicSelIds
+      //     mthis.$store.commit('setTopicSelIds',[])
+      //     mthis.getDocAna(val,'single',ids);
           
           
         
-        }
-      },
-      ifMulDocAna:function(){
-        var mthis = this
-        if(this.ifMulDocAna){
-          let name = mthis.dropPlace;
-          let val = '';
-          switch(name){
-            case '人名' : val = 'PER';break;
-            case '地名' : val = 'PER';break;
-            case '机构名' : val='ORG'; break;
-            case '名词' : val='N';break;
-            case '动词' : val = 'V';break;
-            case '形容词' : val = 'J';break;
-            case '副词' : val = 'R';break;
-            case '代词' : val = 'P';break;
-            case '连词' : val = 'C';break;
-            case '关键词' : val = 'keywords';break;
+      //   }
+      // },
+      // ifMulDocAna:function(){
+      //   var mthis = this
+      //   if(this.ifMulDocAna){
+      //     let name = mthis.dropPlace;
+      //     let val = '';
+      //     switch(name){
+      //       case '人名' : val = 'PER';break;
+      //       case '地名' : val = 'PER';break;
+      //       case '机构名' : val='ORG'; break;
+      //       case '名词' : val='N';break;
+      //       case '动词' : val = 'V';break;
+      //       case '形容词' : val = 'J';break;
+      //       case '副词' : val = 'R';break;
+      //       case '代词' : val = 'P';break;
+      //       case '连词' : val = 'C';break;
+      //       case '关键词' : val = 'keywords';break;
             
-            case '其他' : val = 'O';break;
-            default: val = 'keywords';break;
-          }
-          if(this.ifMulDocAna){
-          let ids = mthis.$store.state.topicSelIds
-          mthis.$store.commit('setTopicSelIds',[])
-          mthis.getDocAna(val,'group',ids);
+      //       case '其他' : val = 'O';break;
+      //       default: val = 'keywords';break;
+      //     }
+      //     if(this.ifMulDocAna){
+      //     let ids = mthis.$store.state.topicSelIds
+      //     mthis.$store.commit('setTopicSelIds',[])
+      //     mthis.getDocAna(val,'group',ids);
           
           
         
-        }
-        }
-      },
+      //   }
+      //   }
+      // },
       prevItems:{
         handler(newVal,oldVal){
           var mthis = this
@@ -759,31 +602,91 @@
             
             let buttonItems = mthis.prevItems.filter(item => item.check)
             if(buttonItems.length>0){
-              mthis.ifhasSel = true
-              mthis.changeButtonParam = [
-                {
-                    'id_suf':'HD',
+              mthis.ifhasSel = true;
+              if(mthis.showThumb){
+                mthis.changeButtonParam = [
+                  {
+                      'id_suf':'HD',
+                      'isUse':true
+                  },
+                  {
+                      'id_suf':'HSD',
+                      'isUse':true
+                  },
+                  {
+                    'id_suf':'PCD',
                     'isUse':true
-                },
-                {
-                    'id_suf':'HSD',
+                  },
+                  {
+                    'id_suf':'PTD',
+                    'isUse':false
+                  }
+                ]
+              }else{
+                mthis.changeButtonParam = [
+                  {
+                      'id_suf':'HD',
+                      'isUse':true
+                  },
+                  {
+                      'id_suf':'HSD',
+                      'isUse':true
+                  },
+                  {
+                    'id_suf':'PCD',
+                    'isUse':false
+                  },
+                  {
+                    'id_suf':'PTD',
                     'isUse':true
-                }
-            ]
-              mthis.operatorConfig[1].disabled = false
+                  }
+                ]
+              }
+              
+              // mthis.operatorConfig[1].disabled = false
             }else{
               mthis.ifhasSel = false
-              mthis.changeButtonParam = [
-                {
-                    'id_suf':'HD',
+              if(mthis.showThumb){
+                mthis.changeButtonParam = [
+                  {
+                      'id_suf':'HD',
+                      'isUse':true
+                  },
+                  {
+                      'id_suf':'HSD',
+                      'isUse':false
+                  },
+                  {
+                    'id_suf':'PCD',
                     'isUse':true
-                },
-                {
-                    'id_suf':'HSD',
+                  },
+                  {
+                    'id_suf':'PTD',
                     'isUse':false
-                }
-            ]
-              mthis.operatorConfig[1].disabled = true
+                  }
+                ]
+              }else{
+                mthis.changeButtonParam = [
+                  {
+                      'id_suf':'HD',
+                      'isUse':true
+                  },
+                  {
+                      'id_suf':'HSD',
+                      'isUse':false
+                  },
+                  {
+                    'id_suf':'PCD',
+                    'isUse':false
+                  },
+                  {
+                    'id_suf':'PTD',
+                    'isUse':true
+                  }
+                ]
+              }
+              
+              // mthis.operatorConfig[1].disabled = true
             }
             
           }else{
@@ -803,9 +706,17 @@
                 {
                     'id_suf':'TD',
                     'isUse':false
+                },
+                {
+                  'id_suf':'PCD',
+                  'isUse':false
+                },
+                {
+                  'id_suf':'PTD',
+                  'isUse':false
                 }
             ]
-            mthis.operatorConfig[1].disabled = true
+            // mthis.operatorConfig[1].disabled = true
           }
         },
         deep:true,
@@ -814,8 +725,11 @@
       topicClassifStatus:function(){
         var mthis = this;
         if(mthis.topicClassifStatus){
-          mthis.showContentAna('keywords','group',mthis.$store.state.selectContentNodes[0].ids)
           
+          
+          mthis.contentAna = true
+          mthis.selDocNum = mthis.$store.state.seletedDocAttrList.length;
+          // mthis.$store.commit('setShowWordsAna',true)
           mthis.ifhasSel = false
           mthis.changeButtonParam = [
               {
@@ -827,8 +741,12 @@
                   'isUse':false
               },
               {
-                  'id_suf':'TD',
-                  'isUse':false
+                'id_suf':'PCD',
+                'isUse':true
+              },
+              {
+                'id_suf':'PTD',
+                'isUse':false
               }
           ]
           
@@ -836,7 +754,8 @@
           mthis.contentAna = false
           
           mthis.ifhasSel = true
-          mthis.changeButtonParam = [
+          if(mthis.showThumb){
+            mthis.changeButtonParam = [
               {
                   'id_suf':'HD',
                   'isUse':true
@@ -844,24 +763,57 @@
               {
                   'id_suf':'HSD',
                   'isUse':true
+              },
+              {
+                'id_suf':'PCD',
+                'isUse':false
+              },
+              {
+                'id_suf':'PTD',
+                'isUse':true
               }
-          ]
+            ]
+          }else{
+            mthis.changeButtonParam = [
+              {
+                  'id_suf':'HD',
+                  'isUse':true
+              },
+              {
+                  'id_suf':'HSD',
+                  'isUse':true
+              },
+              {
+                  'id_suf':'PTD',
+                  'isUse':false
+              },
+            ]
+          }
+          
         }
         
       },
       contentTimeOnlySel:function(){
         var mthis = this
-        let items = []
-        for(var i of mthis.contentTimeOnlySel){
-            for(var j in mthis.prevItems){
-                if(i == mthis.prevItems[j].id){
-                    items.push(mthis.deepClone(mthis.prevItems[j]))
-                    }
-                  }
-                }
-            
-         mthis.items = mthis.deepClone(items)
-         mthis.selectAll()
+        if(mthis.contentAna) return;
+        // let items = []
+        // for(var i of mthis.contentTimeOnlySel){
+        //     for(var j in mthis.prevItems){
+        //         if(i == mthis.prevItems[j].id){
+        //             items.push(mthis.deepClone(mthis.prevItems[j]))
+        //             }
+        //           }
+        //         }
+
+         mthis.items.forEach(function(item){
+           if(item.check == 'half-sel'){
+             item.check = 'sel'
+           }
+         })
+         mthis.watchSelectCounter++;
+         mthis.prevItems = mthis.deepClone(mthis.items)
+        //  mthis.items = mthis.deepClone(items)
+        //  mthis.selectAll()
       },
       contentPromte:function(){
         this.setMessage(this.contentPromte)
@@ -895,23 +847,28 @@
       },
       watchSelectCounter: function() {
         
+        let selectList = this.items.filter(item => item.check == 'sel')
+        let seleArr = []
+        for(let m = 0;m<selectList.length;m++){
+          seleArr.push(selectList[m].id)
+        }
+        this.$store.commit('setSelectContentNodes', [{
+          ids: seleArr
+        }])
+        this.$store.commit('setContent2time',[{
+          ids:seleArr
+        }])
+        let selDocList = [];
+        selDocList = selectList.map(item =>({
+          title: item.title,      
+          id: item.id,
+          time: item.time,
+          from: item.from,
+          check:false     
+          })
+        );
+        this.$store.commit('setSeletedDocAttrList',selDocList)
         
-        // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-        
-        // let selectList = $('.fileDiv').filter('.contentDiv').filter('.item-selected')
-        // if(selectList.length >0){
-        //   this.deleteButton = true
-        // }else{
-        //   this.deleteButton = false
-        // }
-        // this.selectArr = []
-        // for (let m = 0; m < selectList.length; m++) {
-        //   this.selectArr.push(selectList[m].id)
-        // }
-        
-        // this.$store.commit('setSelectContentNodes', [{
-        //   ids: this.selectArr
-        // }])
         
       },
       netToContentData: function() {
@@ -940,34 +897,19 @@
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
-                check:true
+                check:'sel'
               })
               
             );
-            
             mthis.prevItems = mthis.deepClone(mthis.items)
-            let selDocList = mthis.items.filter(item => item.check)
-            selDocList = selDocList.map(item =>({
-                      title: item.title,      
-                      id: item.id,
-                      time: item.time,
-                      from: item.from,
-                      check:false     
-                    })
-                  );
-            mthis.$store.commit('setSeletedDocAttrList',selDocList)
+            mthis.watchSelectCounter++;
             
-            for(let i=0;i<mthis.items.length;i++){
-              selectIds.push(mthis.items[i].id)
-            }
-            mthis.$store.commit('setSelectContentNodes', [{
-              ids: selectIds
-            }])
-            mthis.$store.commit('setContent2time',[{
-              ids:selectIds
-            }])
+           
             
             
+            
+            // mthis.ifShowDoc = true
+           
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
@@ -977,10 +919,9 @@
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
-                check:false
+                check:'def'
               })
             );
-            
             mthis.$store.commit('setSelectContentNodes', [{
               ids: []
             }])
@@ -1003,23 +944,33 @@
       },
       'contentTimeCondition.ids':function(){
             var mthis = this;
+            if(mthis.contentAna) return;
             if(mthis.contentTimeCondition.ids.length ==0){
               mthis.items =  mthis.deepClone(mthis.prevItems)
             }else if(mthis.contentTimeCondition.ids.length>0){
               
-              let items = []
-                for(var i of mthis.contentTimeCondition.ids){
-                  for(var j in mthis.prevItems){
-                    if(i == mthis.prevItems[j].id){
-                      items.push(mthis.deepClone(mthis.prevItems[j]))
-                      }
-                    }
+              let index = []
+              mthis.items.forEach(function(item){
+                item.check = 'def'
+              })
+              for(var i of mthis.contentTimeCondition.ids){
+                for(var j in mthis.items){
+                  if(i == mthis.items[j].id){
+                    mthis.items[j].check = 'half-sel'
+                    index.push(j)
                   }
-                for(var m=0;m<items.length;m++){
-                  items[m].check = false
                 }
-                mthis.items = mthis.deepClone(items)
-
+              }
+              let firItem = Math.min.apply(null, index);
+              let firstIds = null;
+              if(mthis.showThumb){
+                firstIds = mthis.items[firItem].id+'thum'
+              }else{
+                firstIds = mthis.items[firItem].id
+              }
+              
+              $('#'+firstIds)[0].scrollIntoView(true);
+              
             }
       },
       
@@ -1042,26 +993,16 @@
                 time: item.time,
                 from: item.from,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
-                check:false
+                check:'def'
               })
             );
             mthis.prevItems = mthis.deepClone(mthis.items)
             
-            if(response.body.data.length ==30){
+            if(response.body.data.length ==48){
               mthis.moreLoading = true
             }
            
-            // mthis.data4 = []
-            // for(let i=0;i<mthis.items.length;i++){
-            //   let itemList = {};
-            //   itemList.title = mthis.items[i].title
-            //   itemList.time = mthis.items[i].time.substring(0,10)
-            //   itemList.text = mthis.items[i].text
-            //   itemList.id = mthis.items[i].id
-            //   itemList.i_sn = mthis.items[i].i_sn
-            //   itemList.entity = mthis.content
-            //   mthis.data4.push(itemList)
-            // }
+            
             
             $('<div class="select-box-dashed"></div>').remove();
             // mthis.showMore = true
@@ -1108,10 +1049,21 @@
       }
     },
     components: {
-      InfiniteLoading,modalChart,worksetModal,operatorHub,cusButton
+      InfiniteLoading,modalChart,worksetModal,operatorHub,cusButton,wordAna
     },
     props: ['contentData'],
     methods: {
+        statusClass(check){
+          if(check == 'def'){
+            return 'defContent'
+          }
+          if(check == 'sel'){
+            return 'item-selected'
+          }
+          if(check == 'half-sel'){
+            return 'half-select'
+          }
+        },
         exButton(obj){
             var mthis = this;
             
@@ -1131,10 +1083,11 @@
             if(buttonId == 'addSet_HSD'){
                 mthis.openCreateGroupModal()
             }
-            if(buttonId == 'contentShow_HD'){
-                mthis.toContentDiv()
+            if(buttonId == 'contentShow_PCD'){
+                mthis.toContentDiv();
+                
             }
-            if(buttonId == 'thumShow_HD'){
+            if(buttonId == 'thumShow_PTD'){
                 mthis.toThumbnails()
             }
             if(buttonId == 'listShow_HD'){
@@ -1161,202 +1114,28 @@
         // 截屏事件
       },
      
-      showAllTitle(index,e,flag){
-        var mthis = this
-        mthis.clearBubble(e)
-        
-        if(flag ==1){
-            if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
-            var pTitle = document.getElementById(index)
-            if(!mthis.openHub){
-              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+260 + 'px';
-            }else{
-              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft + 10 + 'px';
-              
-            }
-            
-            document.getElementsByClassName('allTitle')[index].style.display = 'block'
-            
-            document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20+65 + 'px';
-            mthis.showAllDocCount = mthis.showAllDocCount + 1;
-          }else{
-            document.getElementsByClassName('allTitle')[index].style.display = 'none';
-            mthis.showAllDocCount = mthis.showAllDocCount - 1;
-          }
-        }else{
-          if(document.getElementsByClassName('allTitle')[index].style.display == 'none'){
-            var pTitle = document.getElementById(index+'word')
-            if(!mthis.openHub){
-              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft+250 + 'px';
-            }else{
-              document.getElementsByClassName('allTitle')[index].style.left = pTitle.offsetLeft + 'px';
-              
-            }
-            
-            document.getElementsByClassName('allTitle')[index].style.display = 'block'
-            
-            document.getElementsByClassName('allTitle')[index].style.top = pTitle.offsetTop + 20+65 + 'px';
-            mthis.showAllDocCount = mthis.showAllDocCount + 1;
-          }else{
-            document.getElementsByClassName('allTitle')[index].style.display = 'none';
-            mthis.showAllDocCount = mthis.showAllDocCount - 1;
-          }
-        }
-        
-        
-      },
-      closeShowTitle(){
-        
-      },
+     
       clickHub(isOpen){
         var mthis = this;
         if(!mthis.contentAna) return;
-        var topicAnalyDiv = document.getElementById('topicAnaly');
         
-        if(isOpen){
+        
+        // if(isOpen){
           
-          topicAnalyDiv.style.left = '240px';
-          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 252 + 'px';
-          mthis.wordResize(document.getElementsByClassName('topItem').length)
-          mthis.openHub = false
-        }else{
+        //   topicAnalyDiv.style.left = '240px';
+        //   mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 262 + 'px';
           
-          topicAnalyDiv.style.left = '0px';
-          mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20  + 'px';
-          mthis.wordResize(document.getElementsByClassName('topItem').length)
-          mthis.openHub = true
-        }
-        
-      },
-      changeShow(newValue){
-        var mthis = this
-        
-        if(newValue == '词云'){
-          mthis.ifTopic = false;
-          mthis.wordResize(document.getElementsByClassName('topItem').length);
-        }else{
-          mthis.ifTopic = true;
-          mthis.wordResize(document.getElementsByClassName('topItem').length);
-        }
-      },
-      getDropDatas(ids,name,len){
-        var mthis = this;
-        
-        let type = ''
-        if(ids.length>0){
-          type = 'group'
-        }else{
-          type = 'single'
-        }
-        mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-top/',{
-            ids:ids,
-            typeLabel:type,
-            word:name
-          }).then(response =>{
-            if(response.body.code ==0){
-              mthis.topicDatas = mthis.topicDatas.concat(response.body.data);
-              mthis.loadingCount ++;
-              if(mthis.loadingCount == len){
-                mthis.ifResize = false
-                mthis.loadingCount = 0
-              }
-            }
-          })
+        //   mthis.openHub = false
+        // }else{
           
-      },
-      changeDrop(name){
-        
-        var mthis = this;
-        let dropItems = mthis.deepClone(mthis.topicDatas)
-        mthis.topicDatas = [];
-        mthis.options = [];
-        mthis.charts = [];
-        switch(name){
-          case 'PER' : mthis.dropPlace = '人名';mthis.option.series[0].name = '人名';break;
-          case 'LOC' : mthis.dropPlace = '地名';mthis.option.series[0].name = '地名';break;
-          case 'ORG' : mthis.dropPlace = '机构名';mthis.option.series[0].name = '机构名';break;
-          case 'N' : mthis.dropPlace = '名词'; mthis.option.series[0].name = '名词';break;
-          case 'V' : mthis.dropPlace = '动词';mthis.option.series[0].name = '动词';break;
-          case 'J' : mthis.dropPlace = '形容词'; mthis.option.series[0].name = '形容词';break;
-          case 'R' : mthis.dropPlace = '副词';mthis.option.series[0].name = '副词';break;
-          case 'P' : mthis.dropPlace = '代词';mthis.option.series[0].name = '代词';break;
-          case 'C' : mthis.dropPlace = '连词';mthis.option.series[0].name = '连词';break;
-          case 'keywords' : mthis.dropPlace = '关键词';mthis.option.series[0].name = '关键词';break;
           
-          case 'O' : mthis.dropPlace = '其他';mthis.option.series[0].name = '其他';break;
-          default: mthis.dropPlace = '关键词';mthis.option.series[0].name = '关键词';break;
-        }
-        // mthis.changeBar = '词云'
-        // mthis.ifTopic = false
-        
-        if(mthis.myWordCharts.length>0){
-          for(let i=0;i<mthis.myWordCharts.length;i++){
-            mthis.myWordCharts[i].clear()
-          }
-        }
-        mthis.myWordCharts = [];
-        let leng = dropItems.length;
-        mthis.ifResize = true
-        
-        for(let m=0;m<leng;m++){
-          mthis.getDropDatas(dropItems[m].ids,name,leng)
-        }
-        
-        // let type = '';
-        // let ids = []
-        // if(mthis.topicDatas.length==1){
-        //   type = 'group';
-        //   ids = mthis.topicDatas[0].ids
-        // }else if(mthis.topicDatas.length>1){
-        //   type = 'single';
-        //   for(let i=0;i<mthis.topicDatas.length;i++){
-        //     ids.push(mthis.topicDatas[i].ids[0])
-        //   }
+        //   mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 30  + 'px';
+          
+        //   mthis.openHub = true
         // }
-        // mthis.showContentAna(name,type,ids)
-      },
-      delTopData(index,flag){
-        var mthis = this
-        // mthis.topicDatas.splice(index,1);
-        if(flag ==1){
-          let wid = document.getElementById(index).style.width
-          $('#'+index).css('width',0)
-          $('#'+index).css('opacity',0)
-          mthis.ifResize = true
-          setTimeout(()=>{
-            $('#'+index).css('width',wid)
-            $('#'+index).css('opacity',1)
-            mthis.topicDatas.splice(index,1);
-            mthis.wordResize(mthis.topicDatas.length)
-            mthis.ifResize = false
-          },800)
-        }else{
-          let wid = document.getElementById(index+'word').style.width
-          $('#'+index+'word').css('width',0)
-          $('#'+index+'word').css('opacity',0)
-          mthis.ifResize = true
-          setTimeout(()=>{
-            $('#'+index+'word').css('width',wid)
-            $('#'+index+'word').css('opacity',1)
-            mthis.topicDatas.splice(index,1);
-            mthis.wordResize(mthis.topicDatas.length)
-            mthis.ifResize = false
-          },800)
-        }
-      },
-      toTop(index){
-        var div = document.getElementById(index);
-        var divWord = document.getElementById(index+'word');
-        this.orderCount = this.orderCount -1;
-        div.style.order = this.orderCount ;
-        divWord.style.order = this.orderCount ;
-        
-        $('#topicAnaly').animate({scrollTop:0},500)
-        
-        
-        
         
       },
+     
       deepClone(obj){
         let _obj = JSON.stringify(obj);
         let objClone = JSON.parse(_obj);
@@ -1445,6 +1224,7 @@
       kuangxuan(e){
         
         if(!this.showThumb) return;
+        if(this.contentAna) return;
         if (e.buttons !== 1 || e.which !== 1) return;
         
         this.isSel = true;
@@ -1520,7 +1300,7 @@
                     if($(selDivList[i]).find('img').hasClass("item-selected")){
                       continue
                     }else{
-                      mthis.items[i].check = true
+                      mthis.items[i].check = 'sel'
                       mthis.bruIds.push(mthis.items[i].id)
                       
                     }
@@ -1529,7 +1309,7 @@
                   }else{
                     
                     if($(selDivList[i]).find('img').hasClass("item-selected")){
-                      mthis.items[i].check = false
+                      mthis.items[i].check = 'def'
                       let idx = mthis.bruIds.indexOf(mthis.items[i].id)
                       mthis.bruIds.splice(idx,1)
                     }
@@ -1582,33 +1362,13 @@
         var mthis = this;
         
         timerClick = setTimeout(function(){
-          check = !check;
-          mthis.items[index].check = check;
-          mthis.prevItems = mthis.deepClone(mthis.items)
-          var ids = mthis.selectContentNodes[0].ids
-          if(ids.indexOf(id)>-1){
-            let index = ids.indexOf(id)
-            ids.splice(index,1)
-          }else{
-            ids.push(id)
+          if(check == 'def' || check == 'half-sel'){
+            mthis.items[index].check = 'sel'
           }
-          
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: ids
-          }])
-          mthis.$store.commit('setContent2time',[{
-            ids:ids
-          }])
-          let selDocList = mthis.items.filter(item => item.check)
-          selDocList = selDocList.map(item =>({
-                    title: item.title,      
-                    id: item.id,
-                    time: item.time,
-                    from: item.from,
-                    check:false    
-                  })
-                );
-          mthis.$store.commit('setSeletedDocAttrList',selDocList)
+          if(check == 'sel'){
+            mthis.items[index].check = 'def'
+          }
+          mthis.watchSelectCounter++;
         },300)
         
         
@@ -1638,7 +1398,7 @@
         ];
         let contentIds = [];
         let checkItems = [];
-        checkItems = mthis.items.filter(item => item.check)
+        checkItems = mthis.items.filter(item => item.check == 'sel')
         if(checkItems.length ==0){
           mthis.setMessage('请至少选择一篇文章')
           return
@@ -1683,30 +1443,32 @@
         let ids = []
         for(let i=0;i<mthis.items.length;i++){
           ids.push(mthis.items[i].id)
-          if(!mthis.items[i].check){
-            mthis.items[i].check = true
-          }else{
+          if(mthis.items[i].check == 'sel'){
             continue
+           
+          }else{
+             mthis.items[i].check = 'sel'
           }
         }
-        let selDocList = mthis.items.filter(item => item.check)
-        selDocList = selDocList.map(item =>({
-                  title: item.title,      
-                  id: item.id,
-                  time: item.time,
-                  from: item.from,
-                  check:false     
-                })
-              );
+        mthis.watchSelectCounter++;
+        // let selDocList = mthis.items.filter(item => item.check == 'sel')
+        // selDocList = selDocList.map(item =>({
+        //           title: item.title,      
+        //           id: item.id,
+        //           time: item.time,
+        //           from: item.from,
+        //           check:false     
+        //         })
+        //       );
        
        
-        mthis.$store.commit('setSelectContentNodes', [{
-          ids: ids
-        }])
-        mthis.$store.commit('setContent2time',[{
-            ids:ids
-          }])
-        mthis.$store.commit('setSeletedDocAttrList',selDocList)
+        // mthis.$store.commit('setSelectContentNodes', [{
+        //   ids: ids
+        // }])
+        // mthis.$store.commit('setContent2time',[{
+        //     ids:ids
+        //   }])
+        // mthis.$store.commit('setSeletedDocAttrList',selDocList)
           
         mthis.prevItems = mthis.deepClone(mthis.items)
         // let disselectDom = $('.contentDiv:not(.item-selected)')
@@ -1715,26 +1477,26 @@
         
       },
       rightMenu(e){
-        var mthis = this
+        // var mthis = this
         
-        let that = e.target
-        if(that.tagName == "P"){
-          that = that.parentNode
-        }else{
-          that = that
-        }
+        // let that = e.target
+        // if(that.tagName == "P"){
+        //   that = that.parentNode
+        // }else{
+        //   that = that
+        // }
         
-        if($(that).hasClass('item-selected')){
-          return true
-        }else{
-          $(that).addClass('item-selected')
-          mthis.watchSelectCounter++;
-        }
+        // if($(that).hasClass('item-selected')){
+        //   return true
+        // }else{
+        //   $(that).addClass('item-selected')
+        //   mthis.watchSelectCounter++;
+        // }
       },
       
       deleteNode(){
         var mthis = this
-        mthis.items =  mthis.items.filter(item => item.check == false)
+        mthis.items =  mthis.items.filter(item => item.check == 'def')
         mthis.prevItems = mthis.deepClone(mthis.items)
         mthis.$store.commit('setSelectContentNodes', [{
           ids: []
@@ -1861,16 +1623,12 @@
         })
         this.$store.commit('changeTMSS', 'net')
       },
-      showAsList() {
-        
-        
-        this.showList = true
-        
-      },
+      
       toThumbnails(){
         this.showList = false
         this.showThumb = true
         this.colLgNum = 3
+        // this.colOfset = 1
         this.colSmnum = 6
         this.colMdNum= 4
        
@@ -2029,12 +1787,12 @@
                     time: item.time,
                     from: item.from,     
                     img: "http://10.60.1.140/assets/images/content_node.png",
-                    check:false
+                    check:'def'
                   })
                 );
                 mthis.items = mthis.items.concat(nowItems);
                 mthis.prevItems = mthis.deepClone(mthis.items);
-                if(nowItems.length<30){
+                if(nowItems.length<48){
                   mthis.moreLoading = false
                   mthis.setMessage('文档已经全部加载')
                 }
@@ -2121,20 +1879,6 @@
         var mthis = this
         
         mthis.ifhasSel = mthis.prevIfhasSel;
-        mthis.changeButtonParam = [
-          {
-            'id_suf':'HD',
-            'isUse' : true
-          },
-          {
-            'id_suf':'HSD',
-            'isUse' : mthis.prevIfhasSel
-          },
-          {
-            'id_suf':'TD',
-            'isUse':false
-          }
-        ]
         
         if(flag ==1){
           mthis.ifInfo = false
@@ -2146,6 +1890,29 @@
           mthis.$store.commit('setContentSelData',selData)
           if(!mthis.showThumb){
             mthis.toContentDiv()
+            mthis.changeButtonParam = [
+              {
+                'id_suf':'HD',
+                'isUse' : true
+              },
+              {
+                'id_suf':'HSD',
+                'isUse' : mthis.prevIfhasSel
+              },
+              {
+                'id_suf':'TD',
+                'isUse':false
+              },
+              {
+                'id_suf':'PTD',
+                'isUse':true
+              },
+              {
+                'id_suf':'PCD',
+                'isUse':false
+              }
+            ]
+        
           }
         }
         mthis.$store.commit('setShowDocTime',true)
@@ -2218,181 +1985,9 @@
           // });
         }
       },
-      wordResize(len){
-        var mthis = this;
-        if(len>6){
-          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
-         
-          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
-          mthis.topHeight = 330 + 'px'
-          mthis.itemHeight = 300 + 'px'
-          
-          for(let j=0;j<mthis.myWordCharts.length;j++){
-            mthis.myWordCharts[j].resize(
-              {
-              width:mthis.itemWidth,
-              height:mthis.itemHeight
-            }
-            )
-         
-        }
-        }else if(len>1 && len <6){
-          mthis.topWidth = (100 / (len+0.165)).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
-          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
-          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          mthis.topHeight = 330 + 'px'
-          mthis.itemHeight = 300 + 'px'
-          
-          for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize(
-            {
-            width:mthis.itemWidth,
-            height:mthis.itemHeight
-          }
-          )
-          }
-         
-        }else if(len ==6){
-          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 2.1) + 'px';
-          
-          mthis.topWidth = (100 / 6.165).toString().match(/^\d+(?:\.\d{0,2})?/) + '%'
-          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          mthis.topHeight = 330 + 'px'
-          mthis.itemHeight = 300 + 'px'
-          for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize(
-            {
-            width:mthis.itemWidth,
-            height:mthis.itemHeight
-          }
-          )
-          }
-          
-        }else if(len==1){
-          mthis.topWidth = (100 / 1.1).toString().match(/^\d+(?:\.\d{0,2})?/) + '%';
-          mthis.itemWidth = (parseInt(mthis.contentAnaWidth.split('px')[0]) / 1.1) + 'px';
-          // mthis.itemHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          // mthis.topHeight = (parseInt(mthis.ContentHeightList.split('px')[0]) -40) + 'px';
-          mthis.topHeight = 330 + 'px'
-          mthis.itemHeight = 300 + 'px'
-          for(let j=0;j<mthis.myWordCharts.length;j++){
-          mthis.myWordCharts[j].resize(
-            {
-            width:mthis.itemWidth,
-            height:mthis.itemHeight
-          }
-          )
-          }
-          
-        }
-        
-      },
-      getDocAna(val,type,ids){
-        var mthis = this;
-        mthis.ifRenderAllTitle= false
-        mthis.changeBar = '词云'
-        mthis.ifTopic = false
-        mthis.ifResize = true
-        mthis.option.series[0].name = mthis.dropPlace
-        if(mthis.myWordCharts.length>0){
-          for(let i=0;i<mthis.myWordCharts.length;i++){
-            mthis.myWordCharts[i].clear()
-          }
-        }
-        mthis.myWordCharts = [];
-        mthis.options = []
-        mthis.charts = []
-        return new Promise(resolve =>{
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-top/',{
-            ids:ids,
-            typeLabel:type,
-            word:val
-          }).then(response =>{
-            if(response.body.code ==0){
-              response.body.data.map(item => {
-                item.docDatas.map(it =>{
-                  it.time = util.transformPHPTimeMS(it.time);
-                  return it
-                })
-                return item
-              })
-              mthis.topicDatas = response.body.data.concat(mthis.topicDatas)
-              
-              
-              let len = mthis.topicDatas.length;
-              mthis.wordResize(len)
-              mthis.ifResize = false
-            }
-          })
-        }).then(()=>{
-          
-          
-          
-        })
-        
-      },
-      showContentAna(val,type,ids){
-        var mthis = this
-        mthis.ifRenderAllTitle= false
-        mthis.contentAna = true
-        mthis.changeBar = '词云'
-        mthis.ifTopic = false;
-        mthis.ifResize = true
-        switch(val){
-          case 'PER' : mthis.option.series[0].name = '人名';break;
-          case 'LOC' : mthis.option.series[0].name = '地名';break;
-          case 'ORG' : mthis.option.series[0].name = '机构名';break;
-          case 'N' : mthis.option.series[0].name = '名词';break;
-          case 'V' : mthis.option.series[0].name = '动词';break;
-          case 'J' : mthis.option.series[0].name = '形容词';break;
-          case 'R' : mthis.option.series[0].name = '副词';break;
-          case 'P' : mthis.option.series[0].name = '代词';break;
-          case 'C' : mthis.option.series[0].name = '连词';break;
-          case 'keywords' : mthis.option.series[0].name = '关键词';break;
-          
-          case 'O' : mthis.option.series[0].name = '其他';break;
-          default:mthis.option.series[0].name = '关键词';break;
-        }
-        if(mthis.myWordCharts.length>0){
-          for(let i=0;i<mthis.myWordCharts.length;i++){
-            mthis.myWordCharts[i].clear()
-          }
-        }
-        mthis.myWordCharts = [];
-        
-        mthis.options = [];
-        mthis.charts = []
-        return new Promise(resolve =>{
-          mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-top/',{
-            ids:ids,
-            typeLabel:type,
-            word:val
-          }).then(response =>{
-            if(response.body.code ==0){
-              mthis.topicDatas = response.body.data
-              
-              mthis.topicDatas.map(item => {
-                item.docDatas.map(it =>{
-                  it.time = util.transformPHPTimeMS(it.time);
-                  return it
-                })
-                return item
-              })
-              let len = mthis.topicDatas.length;
-              mthis.wordResize(len)
-              mthis.ifResize = false
-            }
-          })
-        }).then(()=>{
-          
-          
-          
-        })
-        
-        
-      },
+      
+      
+      
       showContent(id,title) {
         clearTimeout(timerClick);
         var mthis = this
@@ -2422,6 +2017,14 @@
           },
           {
             'id_suf' :'HSD',
+            'isUse':false
+          },
+          {
+            'id_suf':'PCD',
+            'isUse':false
+          },
+          {
+            'id_suf':'PTD',
             'isUse':false
           }
         ]
@@ -2485,7 +2088,7 @@
     },
     mounted() {
       var mthis = this
-      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 252 + 'px'
+      mthis.contentAnaWidth = document.documentElement.clientWidth * this.$store.state.split - 20 - 262 + 'px'
       
       let wwWidth = document.documentElement.clientWidth * this.$store.state.split - 20
       
@@ -2509,47 +2112,50 @@
       window.px = "";
       window.py = "";
       window.divLength = 0;
-      document.onclick = function(){
-        if(!mthis.showAllDocCount) return;
-        $('.allTitle').css('display','none');
-      }
+      // document.onclick = function(){
+      //   if(!mthis.showAllDocCount) return;
+      //   $('.allTitle').css('display','none');
+      // }
       document.onmouseup = function(e){
         if(!mthis.showThumb) return;
-        mthis.isSel = false;
-        
-        
-        var selDiv = document.getElementById('selectDiv');
-        var selOutDiv = document.getElementById('selOutDiv');
-        selOutDiv.style.display = 'none';
-        selDiv.style.display = 'none';
-        
-        if(mthis.isBru){
-          mthis.bruIds= util.unique(mthis.bruIds);
-          
-          mthis.$store.commit('setSelectContentNodes', [{
-            ids: mthis.bruIds
-          }])
-          mthis.$store.commit('setContent2time',[{
-            ids:mthis.bruIds
-          }])
-         
-          let selDocList = mthis.items.filter(item => item.check)
-          selDocList = selDocList.map(item =>({
-                    title: item.title,      
-                    id: item.id,
-                    time: item.time,
-                    from: item.from,
-                    check:false     
-                  })
-                );
-          mthis.$store.commit('setSeletedDocAttrList',selDocList)
-          mthis.isBru = false;
+        if(mthis.contentAna) return;
+        if(mthis.isSel){
+           mthis.isSel = false;
+            var selDiv = document.getElementById('selectDiv');
+            var selOutDiv = document.getElementById('selOutDiv');
+            selOutDiv.style.display = 'none';
+            selDiv.style.display = 'none';
+            
+            if(mthis.isBru){
+              mthis.bruIds= util.unique(mthis.bruIds);
+              
+              mthis.$store.commit('setSelectContentNodes', [{
+                ids: mthis.bruIds
+              }])
+              mthis.$store.commit('setContent2time',[{
+                ids:mthis.bruIds
+              }])
+            
+              let selDocList = mthis.items.filter(item => item.check == 'sel')
+              console.log(selDocList)
+              selDocList = selDocList.map(item =>({
+                        title: item.title,      
+                        id: item.id,
+                        time: item.time,
+                        from: item.from,
+                        check:false     
+                      })
+                    );
+              mthis.$store.commit('setSeletedDocAttrList',selDocList)
+              mthis.isBru = false;
+            }
+            
+            $('#selectDiv').remove();
+            $('#selOutDiv').remove();
+            mthis.clearBubble(e)
+            $('#contentchart').off('mousemove');
         }
-        
-        $('#selectDiv').remove();
-        $('#selOutDiv').remove();
-        mthis.clearBubble(e)
-        $('#contentchart').off('mousemove');
+       
       }
       
     }
@@ -2566,7 +2172,7 @@
   .contentDiv {
     max-height: 255px;
     padding: 5px 15px 5px 15px;
-    overflow: hidden;
+    /* overflow: hidden; */
     background: rgba(51, 255, 255, 0.1);
     margin: 10px;
     /* 右角标 */
@@ -2586,6 +2192,12 @@
     -moz-box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5);
     box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5); */
     background-color: rgba(51,255,255,0.2);
+  }
+  .half-select{
+    background-color: rgba(51,255,255,0.3);
+  }
+  .defContent{
+    background-color: rgba(51,255,255,0.1);
   }
   /* 角标折角 */
   /* .contentDiv ::before {

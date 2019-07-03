@@ -1,11 +1,16 @@
 <style>
+    .selOper .ivu-select-single .ivu-select-selection {
+        height: 32px;
+        position: relative;
+        background-color:rgba(51,255,255,0.15) !important;
+    }
 </style>
 
 <template>
-    <Col span="20">
-        <div>{{Params.name+":"}}</div>
-        <Select v-model="value" style="width:200px" @on-change="changeValue">
-            <Option v-for="item in layerNames" :value="item.value" :key="item.value">{{ item.name }}</Option>
+    <Col span="20" class="selOper">
+        <div :style="{marginBottom:'10px'}">{{Params.name+":"}}</div>
+        <Select v-model="value" label-in-value style="width:200px;height:40px;" @on-change="changeValue">
+            <Option v-for="item in layerNames" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
     </Col>
 </template>
@@ -13,18 +18,19 @@
     export default {
         data () {
             return {
-                value:''
+                value:[]
             }
         },
         props:['Params'],
         methods:{
-            changeValue(){
+            changeValue(selParams){
               var mthis = this;
               
+              console.log(selParams)
               
               var param = {
                   attrName:mthis.Params.attrName,
-                  value:mthis.value,
+                  value:selParams,
               }
               if(mthis.Params.excuteFunction !== undefined){
                   param.excuteFunction = mthis.Params.excuteFunction
