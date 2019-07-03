@@ -857,7 +857,8 @@
         handler(){
           var mthis = this
           if(mthis.netOnlyStaticsIdsByType.eventIds.length>0 || mthis.netOnlyStaticsIdsByType.contentIds.length>0){
-            mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time",{
+            
+            mthis.$http.post(mthis.$store.state.ipConfig.api_event_test_url + "/event-2-time/",{
               "eventIds":mthis.netOnlyStaticsIdsByType.eventIds,
               "docIds":mthis.netOnlyStaticsIdsByType.contentIds
             }).then(response =>{

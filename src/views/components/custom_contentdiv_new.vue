@@ -39,7 +39,7 @@
                     <p class="contentTime">{{item.time}}&nbsp;&nbsp;&nbsp;{{item.from}}</p>
                   </div>
                   <div v-show='!showThumb' class="contentItem">
-                    <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 hoverStyle" :style="{padding:'0 !important'}" size="35" @click="selectThis(item.id)"></Icon>
+                    <Icon class="icon iconfont icon-triangle-up DVSL-bar-btn-back deg180 color255-back zindex99 hoverStyle" :style="{padding:'0 !important'}" size="35" @click='toSelIds(index,item.check,item.id,$event)'></Icon>
                     <Icon class="icon iconfont icon-right DVSL-bar-btn-back color255" :style="{padding:'0 !important'}" size="15"></Icon>
                   </div>
                 </div>
@@ -1531,39 +1531,39 @@
       }, 1000);
     },
 
-      selectThis(id) {
-        var mthis = this
-        let index = 0;
-        let selIds = mthis.selectContentNodes[0].ids;
-        for(let i=0;i<mthis.items.length;i++){
-          if(mthis.items[i].id == id){
-            index = i;
-            if(mthis.items[i].check == false){
-              selIds.push(id)
-              mthis.items[i].check = true
-              mthis.$store.commit('setSelectContentNodes', [{
-                ids: selIds
-              }])
-              mthis.$store.commit('setContent2time',[{
-                ids:[]
-              }])
-            }else{
+      // selectThis(id) {
+      //   var mthis = this
+      //   let index = 0;
+      //   let selIds = mthis.selectContentNodes[0].ids;
+      //   for(let i=0;i<mthis.items.length;i++){
+      //     if(mthis.items[i].id == id){
+      //       index = i;
+      //       if(mthis.items[i].check == false){
+      //         selIds.push(id)
+      //         mthis.items[i].check = true
+      //         mthis.$store.commit('setSelectContentNodes', [{
+      //           ids: selIds
+      //         }])
+      //         mthis.$store.commit('setContent2time',[{
+      //           ids:[]
+      //         }])
+      //       }else{
               
-            }
-          }
-        }
-        let selDocList = mthis.items.filter(item => item.check)
-        selDocList = selDocList.map(item =>({
-                  title: item.title,      
-                  id: item.id,
-                  time: item.time,
-                  from: item.from,
-                  check:false     
-                })
-              );
-        mthis.$store.commit('setSeletedDocAttrList',selDocList)
-        mthis.prevItems = mthis.deepClone(mthis.items)
-      },
+      //       }
+      //     }
+      //   }
+      //   let selDocList = mthis.items.filter(item => item.check)
+      //   selDocList = selDocList.map(item =>({
+      //             title: item.title,      
+      //             id: item.id,
+      //             time: item.time,
+      //             from: item.from,
+      //             check:false     
+      //           })
+      //         );
+      //   mthis.$store.commit('setSeletedDocAttrList',selDocList)
+      //   mthis.prevItems = mthis.deepClone(mthis.items)
+      // },
       fanxuan() {
         // document.getElementsByClassName("box");
         var mthis = this
@@ -2212,6 +2212,7 @@
     box-shadow: -5px 5px 10px -4px rgba(81, 85, 85, 0.5); */
     background-color: rgba(51,255,255,0.2);
   }
+  
   .half-select{
     background-color: rgba(51,255,255,0.3) !important;
   }
@@ -2456,6 +2457,7 @@
     opacity: 1;
     color: #ccffff;
   }
+  
   .select-box-container {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -2653,7 +2655,7 @@
     max-width:70px;
     margin-left: 3em;
   }
-  
+ 
   .imgHover{
     /* background-color:rgba(51, 255, 255, 1); */
     cursor:pointer;

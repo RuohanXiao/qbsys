@@ -3272,7 +3272,7 @@ export default {
         },
         staticsSelectedEventIds:function(){
             var mthis = this;
-            debugger
+            // debugger
             var selectedHastypeParam = mthis.discQBType(mthis.staticsSelectedEventIds);
             var selectedQBids = selectedHastypeParam.eventIds.concat(selectedHastypeParam.orgIds)
             var selectedEventsParam = {
@@ -3284,7 +3284,7 @@ export default {
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            debugger
+            // debugger
             mthis.HLIds = mthis.timeSelectedEventIds;//GSF.QBIdsToParamIds(mthis.timeSelectedEventIds,mthis.QBIdToParamIdsList);
             // var ids = [];
             // for(let i = 0; i < mthis.timeSelectedEventIds.length; i++){
