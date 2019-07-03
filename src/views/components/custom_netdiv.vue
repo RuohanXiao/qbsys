@@ -1710,14 +1710,15 @@
           //每一个BOX对应的弧度;
           let ahd = (avd * Math.PI) / 180;
           let no1 = mthis.netchart.getNode(this.selectionId[0]);
+          let cnum = 0;
           for (let i = 0; i < mthis.selectionId.length; i++) {
             //解锁位置
             // lock
             // mthis.netchart.unlockNode(mthis.selectionId[index].id);
             let no = mthis.netchart.getNode(this.selectionId[i]);
             if (!no.userManualLock) {
-              no.x = no1.x + Math.sin(ahd * i) * radius;
-              no.y = no1.y - radius + Math.cos(ahd * i) * radius;
+              no.x = no1.x + Math.sin(ahd * cnum) * radius;
+              no.y = no1.y - radius + Math.cos(ahd * cnum) * radius;
               // mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
               //   Math.sin(ahd * index) * radius;
               // mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] - radius +
@@ -1726,6 +1727,7 @@
               // lock
               mthis.netchart.lockNode(mthis.selectionId[i]);
               mthis.netchart.updateStyle(mthis.selectionId[i]);
+              cnum++;
             }
           }
           mthis.netchart.scrollIntoView(this.selectionId);
@@ -1744,14 +1746,16 @@
           let rowNum = Math.ceil(Math.sqrt(this.selectionId.length));
           let basePoint = this.selectionId[0];
           let no1 = mthis.netchart.getNode(this.selectionId[0]);
+          let sqnum = 0;
           for (let i = 0; i < this.selectionId.length; i++) {
             let no = mthis.netchart.getNode(this.selectionId[i]);
             if (!no.userManualLock) {
-              let col = i % rowNum;
-              let row = parseInt(i / rowNum);
+              let col = sqnum % rowNum;
+              let row = parseInt(sqnum / rowNum);
               no["x"] = no1["x"] + col * 150;
               no["y"] = no1["y"] + row * 150;
               mthis.netchart.lockNode(this.selectionId[i]);
+              sqnum ++;
             }
           }
           // mthis.changNetchartMode('s')
@@ -1829,11 +1833,12 @@
         //     this.setMessage("请选择节点进行矩形排列操作！");
         // }
         if (mthis.selectionId.length > 0) {
+          let snum = 0
           for (let i = 0; i < mthis.selectionId.length; i++) {
             let nodesInfo = mthis.netchart.getNode(mthis.selectionId[i])
             if (!nodesInfo.userManualLock) {
               // 辐射布局
-              let circleNum = Math.floor(Math.log(i) / Math.log(3))
+              let circleNum = Math.floor(Math.log(snum) / Math.log(3))
               let avd = 360 / Math.pow(3, circleNum);
               let ahd = avd * Math.PI / 360;
               let radius = 150 * circleNum + 150
@@ -1841,18 +1846,17 @@
               initInfo['x'] = (initInfo['x']) ? (initInfo['x']) : (0)
               initInfo['y'] = (initInfo['y']) ? (initInfo['y']) : (0)
               nodesInfo["x"] = mthis.netchart.getNode(mthis.selectionId[0])["x"] +
-                Math.sin(ahd * i) * radius;
+                Math.sin(ahd * snum) * radius;
               nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
-                Math.cos(ahd * i) * radius;
+                Math.cos(ahd * snum) * radius;
               mthis.netchart.updateStyle(mthis.selectionId[i])
               mthis.netchart.lockNode(mthis.selectionId[i]);
+              snum++;
               // mthis.changNetchartMode('s')
             }
           }
           mthis.netchart.scrollIntoView(mthis.selectionId);
           mthis.netchart.updateStyle(mthis.selectionId);
-          mthis.netchart.updateSettings();
-          mthis.netchart.updateSize();
           mthis.updateStyleCounter++
         } else {
           // mthis.$Message.error('请选择节点进行矩形排列操作！')
@@ -3704,14 +3708,14 @@
               // event.preventDefault();
             },
             onPointerMove: function(event) {
-              event.selection.map(item => {
-                if (item.isNode && item.opacity == 1) {
-                  item.draggable = true
-                } else {
-                  item.draggable = false
-                }
-                return item
-              })
+              // event.selection.map(item => {
+              //   if (item.isNode && item.opacity == 1) {
+              //     item.draggable = true
+              //   } else {
+              //     item.draggable = false
+              //   }
+              //   return item
+              // })
             },
             onDoubleClick: function(event) {
               let nodeList = event.selection.filter(function(x) {
@@ -3758,26 +3762,30 @@
               if (timer) {
                 clearTimeout(timer);
               }
+              
               timer = setTimeout(function() {
                 if(event.selection.filter(item=>{
                   return item.userManualLock
                 }).length>0){
+                  console.log('包含锁定节点')
                   event.selection.map(it=>{
                     it.draggable = false;
+                    mthis.netchart.updateStyle(it.id)
                     return it
                   })
                 } else {
+                  console.log('不包含锁定节点')
                    event.selection.map(it=>{
                     it.draggable = true;
+                    mthis.netchart.updateStyle(it.id)
                     return it
                   })
                 }
+                mthis.updateStyleCounter++;
+                console.log(event.selection)
                 if(mthis.selectionHightFlag){
                   mthis.selectionHightFlag = false
                   mthis.netchart.updateStyle(ids);
-                  // mthis.netchart.updateSettings();
-                  // mthis.netchart.updateSize();
-                 
                 } else{
                   mthis.fromTemp = new Array()
                   let ids = mthis.netchart.nodes().map(item => {
