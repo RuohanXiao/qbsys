@@ -153,8 +153,8 @@
         // dataZoom不影响框选效果
         isDataZoom:false,
         isClick:false,
-        echartsShowStart:0,
-        echartsShowEnd:100,
+        echartsShowStart:25,
+        echartsShowEnd:65,
         curInt:null,
         colorFlag:0,
         selIdsArr:[]
@@ -813,13 +813,9 @@
           mthis.timeTitle = '';
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
-          // if(mthis.dataBySeries.date.length>10000){
-          //   mthis.option.series[0].barWidth = '5px';
-          //   mthis.option.dataZoom[0].start = 0
-          //   mthis.option.dataZoom[0].end = 30
-          // }
-          // mthis.option.dataZoom[0].start = 0;
-          // mthis.option.dataZoom[0].end = 100;
+          
+          mthis.option.dataZoom[0].start = 25;
+          mthis.option.dataZoom[0].end = 65;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           // mthis.option.series[0].itemStyle.normal.color = '#33cc99'
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;

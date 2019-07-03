@@ -127,8 +127,8 @@
         isBrush:[],
         isDataZoom:false,
         isClick:false,
-        echartsShowStart:0,
-        echartsShowEnd:100,
+        echartsShowStart:10,
+        echartsShowEnd:80,
         curInt:null,
         colorFlag:0,
         selIdsArr:[],
@@ -663,6 +663,8 @@
           mthis.option.xAxis.data = mthis.dataBySeries.date;
           mthis.option.xAxis.boundaryGap = true;
           // mthis.option.series[0].data = mthis.dataBySeries.num;
+          mthis.option.dataZoom[0].start = 10;
+          mthis.option.dataZoom[0].end = 80;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
           mthis.colorFlag = 0;

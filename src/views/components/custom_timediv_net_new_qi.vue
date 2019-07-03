@@ -154,8 +154,8 @@
         isDataZoom:false,
         isDataZoom:false,
         isClick:false,
-        echartsShowStart:0,
-        echartsShowEnd:100,
+        echartsShowStart:25,
+        echartsShowEnd:65,
         curInt:null,
         colorFlag:0,
         selIdsArr:[],
@@ -716,7 +716,8 @@
           // mthis.timeTitle = '时间轴';
           mthis.resize();
           mthis.option.xAxis.data = mthis.dataBySeries.date;
-         
+          mthis.option.dataZoom[0].start = 25;
+          mthis.option.dataZoom[0].end = 65;
           mthis.option.series[0].data = mthis.dataBySeries.num;
           mthis.option.series[1].data = mthis.dataBySeries.clickNum;
           mthis.colorFlag =0;

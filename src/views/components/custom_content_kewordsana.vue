@@ -119,12 +119,13 @@ export default {
             // 词性选择
             deep:true,
             
-            handler(){
+            handler(newVal){
                 var mthis = this
+                console.log(this.wordsSpeech)
                 let keyW = mthis.wordsSpeech.value
                 mthis.showWords = mthis.allWords[keyW]
-                console.log(this.wordsSpeech)
-                debugger
+                
+                
                 mthis.loadEcharts(2,mthis.wordsSpeech)
                 
             }
@@ -135,7 +136,7 @@ export default {
             if(this.initWord){
                 mock.get('/getWords').then(function(res){
                     console.log(res)
-                    mthis.showWords = res.data.data.keyWors
+                    mthis.showWords = res.data.data.keywords
                     mthis.allWords = mthis.deepClone(res.data.data)
                     mthis.loadEcharts(6,null)
                 })
@@ -235,6 +236,11 @@ export default {
                 });
                 
                 mthis.charts.setOption(mthis.option)
+                this.charts.on('click',function(param){
+                    console.log(param)
+                    
+                    
+                })
             }
             if(flag == 2){
                 // 改变文字词性
