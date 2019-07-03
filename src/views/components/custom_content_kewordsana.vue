@@ -121,7 +121,10 @@ export default {
             
             handler(){
                 var mthis = this
+                let keyW = mthis.wordsSpeech.value
+                mthis.showWords = mthis.allWords[keyW]
                 console.log(this.wordsSpeech)
+                debugger
                 mthis.loadEcharts(2,mthis.wordsSpeech)
                 
             }
@@ -236,6 +239,7 @@ export default {
             if(flag == 2){
                 // 改变文字词性
                 mthis.option.series[0].name = param.label;
+                mthis.option.series[0].data = mthis.showWords;
                 mthis.charts.setOption(mthis.option)
             }
             if(flag ==3){
@@ -250,6 +254,7 @@ export default {
             if(flag == 4){
                 // 改变文字旋转角度
                 mthis.option.series[0].rotationRange =param;
+                
                 mthis.charts.setOption(mthis.option)
             }
             if(flag == 5){

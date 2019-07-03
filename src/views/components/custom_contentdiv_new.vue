@@ -25,7 +25,7 @@
                   <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id+'thum'" @click='toSelIds(index,item.check,item.id,$event)' 
                   @dblclick="showContent(item.id,item.title)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
                   @mouseenter="addHover" @mouseleave="removeHover">
-                      <img :src='item.img' class="picsize" :class="statusClass(item.check)" >
+                      <img :src='item.img' class="picsize" :class="statusClass(item.check)">
                       <p class='nametext'>{{item.title}}</p>
                    
                   </div>
@@ -600,7 +600,7 @@
           if(mthis.prevItems.length>0){
             
             
-            let buttonItems = mthis.prevItems.filter(item => item.check)
+            let buttonItems = mthis.prevItems.filter(item => item.check =='sel')
             if(buttonItems.length>0){
               mthis.ifhasSel = true;
               if(mthis.showThumb){
@@ -754,7 +754,7 @@
           mthis.contentAna = false
           
           mthis.ifhasSel = true
-          console.log(mthis.showThumb)
+         
           if(mthis.showThumb){
             mthis.changeButtonParam = [
               {
@@ -1059,7 +1059,11 @@
     props: ['contentData'],
     methods: {
         statusClass(check){
+          var mthis = this
           if(check == 'def'){
+            if(mthis.showThumb){
+              return 
+            }
             return 'defContent'
           }
           if(check == 'sel'){
@@ -1120,8 +1124,10 @@
       },
      
      
-      clickHub(isOpen){
+      clickHub(isOpen,e){
         var mthis = this;
+        mthis.clearBubble(e)
+        
         if(!mthis.contentAna) return;
         
         
@@ -1953,13 +1959,16 @@
         // document.getElementById('contentsTime').innerHTML = ''
       },
       jiazai(){
+        
         var mthis= this
        
         if (timer) {
           clearTimeout(timer)
         }
         timer = setTimeout(function() {
-          while($('#jiazaiDiv').offset().top < 1000){
+          
+          while($('#jiazaiDiv').offset().top < 800){
+            
             mthis.handleReachBottom()
             
             break;
@@ -2121,9 +2130,12 @@
       //   if(!mthis.showAllDocCount) return;
       //   $('.allTitle').css('display','none');
       // }
+      // console.log(document.getElementById('content'))
       document.onmouseup = function(e){
+        
         if(!mthis.showThumb) return;
         if(mthis.contentAna) return;
+        if(mthis.$store.state.tmss !== 'content') return;
         if(mthis.isSel){
            mthis.isSel = false;
             var selDiv = document.getElementById('selectDiv');
@@ -2142,7 +2154,7 @@
               }])
             
               let selDocList = mthis.items.filter(item => item.check == 'sel')
-              console.log(selDocList)
+             
               selDocList = selDocList.map(item =>({
                         title: item.title,      
                         id: item.id,
@@ -2159,6 +2171,8 @@
             $('#selOutDiv').remove();
             mthis.clearBubble(e)
             $('#contentchart').off('mousemove');
+        }else{
+          return
         }
        
       }
@@ -2199,7 +2213,7 @@
     background-color: rgba(51,255,255,0.2);
   }
   .half-select{
-    background-color: rgba(51,255,255,0.3);
+    background-color: rgba(51,255,255,0.3) !important;
   }
   .defContent{
     background-color: rgba(51,255,255,0.1);
@@ -2471,7 +2485,7 @@
   .item-selected {
     animation: all 1s;
     -webkit-animation: all 1s;
-    background-color: rgba(51, 255, 255, 0.4);
+    background-color: rgba(51, 255, 255, 0.4) !important;
     /* background-color: pink; */
     border: 1px solid rgba(51, 255, 255, 0.5);
   }
