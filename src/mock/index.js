@@ -1992,7 +1992,7 @@ if (isMock) {
         resolve([200,{
           code:0,
           data:{
-            keyWors:[
+            keywords:[
               {name:'lerem',value:10},
               {name:'lernie',value:8},
               {name:'cdsge',value:9},

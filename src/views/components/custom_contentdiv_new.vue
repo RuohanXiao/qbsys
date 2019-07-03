@@ -1616,7 +1616,7 @@
       },
       toNet() {
         
-        let selectList = this.items.filter(item => item.check)
+        let selectList = this.items.filter(item => item.check == 'sel')
         
         let infos = []
         for (let m = 0; m < selectList.length; m++) {
@@ -2145,25 +2145,25 @@
             
             if(mthis.isBru){
               mthis.bruIds= util.unique(mthis.bruIds);
-              
-              mthis.$store.commit('setSelectContentNodes', [{
-                ids: mthis.bruIds
-              }])
-              mthis.$store.commit('setContent2time',[{
-                ids:mthis.bruIds
-              }])
+              mthis.watchSelectCounter ++;
+              // mthis.$store.commit('setSelectContentNodes', [{
+              //   ids: mthis.bruIds
+              // }])
+              // mthis.$store.commit('setContent2time',[{
+              //   ids:mthis.bruIds
+              // }])
             
-              let selDocList = mthis.items.filter(item => item.check == 'sel')
+              // let selDocList = mthis.items.filter(item => item.check == 'sel')
              
-              selDocList = selDocList.map(item =>({
-                        title: item.title,      
-                        id: item.id,
-                        time: item.time,
-                        from: item.from,
-                        check:false     
-                      })
-                    );
-              mthis.$store.commit('setSeletedDocAttrList',selDocList)
+              // selDocList = selDocList.map(item =>({
+              //           title: item.title,      
+              //           id: item.id,
+              //           time: item.time,
+              //           from: item.from,
+              //           check:false     
+              //         })
+              //       );
+              // mthis.$store.commit('setSeletedDocAttrList',selDocList)
               mthis.isBru = false;
             }
             
