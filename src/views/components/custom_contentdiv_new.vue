@@ -23,7 +23,7 @@
                 <Col :sm="colSmnum" :lg="colLgNum" :md='colMdNum' :offset='colOfset' align="middle" class-name="outCol" v-for="(item,index) in items" :key="index">
                 <!-- <div v-show="showThumb" :style="{height:ContentHeightList,overflowY:'scroll',width:'100%'}"> -->
                   <div v-show="showThumb" style="text-align: center;padding:10px 0px;margin:5px 10px;width:150px;" class="docThunmsItem" :title="item.title"  :id="item.id+'thum'" @click='toSelIds(index,item.check,item.id,$event)' 
-                  @dblclick="showContent(item.id,item.title)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
+                  @dblclick="showcontentDoc(item)" @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'
                   @mouseenter="addHover" @mouseleave="removeHover">
                       <img :src='item.img' class="picsize" :class="statusClass(item.check)">
                       <p class='nametext'>{{item.title}}</p>
@@ -32,7 +32,7 @@
                 <!-- </div> -->
                 <div>
                   <div v-show='!showThumb' class="contentDiv fileDiv select-item" :class="statusClass(item.check)" :id="item.id" :title="item.title" 
-                  @dblclick="showContent(item.id,item.title)" @contextmenu.prevent="rightMenu" @click='toSelIds(index,item.check,item.id,$event)' 
+                  @dblclick="showcontentDoc(item)" @contextmenu.prevent="rightMenu" @click='toSelIds(index,item.check,item.id,$event)' 
                   @mousedown='clearBubble' @mouseup='clearBubble' @mousemove='clearBubble'>
                     <p class="contentTitle">{{item.title}}</p>
                     <p class="contentText">{{item.text.substring(0,34)}}</p>
@@ -438,8 +438,8 @@
                         attrName:'wordsSize',
                         excuteFunction:'setWordSize',
                         value:{
-                            extent:[10,28],
-                            defaultValue:18
+                            extent:[10,32],
+                            defaultValue:12
                         }
                       },
                       {
@@ -896,11 +896,11 @@
           if(mthis.netToContentData.contentIds.type == 'push'){
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
-                i_sn: item.i_sn, 
+                i_sn: item.channel, 
                 id: item.id,
                 text: item.description,
-                time: item.time,
-                from: item.from,     
+                time: item.publish_time,
+                from: item.site_name,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
                 check:'sel'
               })
@@ -918,11 +918,11 @@
           }else if(mthis.netToContentData.contentIds.type == 'search'){
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
-                i_sn: item.i_sn, 
+                i_sn: item.channel, 
                 id: item.id,
                 text: item.description,
-                time: item.time,
-                from: item.from,     
+                time: item.publish_time,
+                from: item.site_name,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
                 check:'def'
               })
@@ -992,11 +992,11 @@
           if (response.body.data.length > 0) {
             mthis.items = response.body.data.map(item =>({
                 title: item.title,      
-                i_sn: item.i_sn, 
+                i_sn: item.channel, 
                 id: item.id,
                 text: item.description,
-                time: item.time,
-                from: item.from,     
+                time: item.publish_time,
+                from: item.site_name,     
                 img: "http://10.60.1.140/assets/images/content_node.png",
                 check:'def'
               })
@@ -1792,11 +1792,11 @@
                 let nowItems = []
                 nowItems = response.body.data.map(item =>({
                     title: item.title,      
-                    i_sn: item.i_sn, 
+                    i_sn: item.channel, 
                     id: item.id,
                     text: item.description,
-                    time: item.time,
-                    from: item.from,     
+                    time: item.publish_time,
+                    from: item.site_name,     
                     img: "http://10.60.1.140/assets/images/content_node.png",
                     check:'def'
                   })
@@ -1926,7 +1926,7 @@
         
           }
         }
-        mthis.$store.commit('setShowDocTime',true)
+        // mthis.$store.commit('setShowDocTime',true)
         
       },
       toContentDiv() {
@@ -2000,7 +2000,51 @@
         }
       },
       
-      
+      showcontentDoc(item){
+        clearTimeout(timerClick);
+        var mthis = this
+        mthis.prevIfhasSel = mthis.ifhasSel;
+        mthis.$store.state.contentSelShowFlag = true
+        let selData = {}
+        selData.id = [item.id];
+        
+        selData.title = item.title
+        
+        mthis.$store.commit('setContentSelData',selData)
+        
+        
+        mthis.ifInfo = true
+        
+        mthis.changeButtonParam=[
+          {
+            'id_suf':'TD',
+            'isUse':true,
+            'type':'state',
+            'status':'focus'
+          },
+          {
+            'id_suf' :'HD',
+            'isUse':false
+          },
+          {
+            'id_suf' :'HSD',
+            'isUse':false
+          },
+          {
+            'id_suf':'PCD',
+            'isUse':false
+          },
+          {
+            'id_suf':'PTD',
+            'isUse':false
+          }
+        ]
+        document.getElementById('contentInfo').value = item.id;
+        var text = item.text.replace(/(\r\n)|(\n)/g, '<br>');
+        document.getElementById('contents').innerHTML = text
+        document.getElementById('contentsTitle').innerHTML = item.title
+        document.getElementById('contentsTime').innerHTML = item.from + ((item.from !== '' && item.from.site_name !== undefined) ? '  |  ' : '') + item.time
+      },
       
       showContent(id,title) {
         clearTimeout(timerClick);
@@ -2055,10 +2099,10 @@
           // mthis.printer(response.body.data[0].text, 'contents', 'pointer')
          
           document.getElementById('contentInfo').value = response.body.data[0].id;
-          var text = response.body.data[0].description.replace(/(\r\n)|(\n)/g, '<br>');
+          var text = response.body.data[0].content.replace(/(\r\n)|(\n)/g, '<br>');
           document.getElementById('contents').innerHTML = text
           document.getElementById('contentsTitle').innerHTML = response.body.data[0].title
-          document.getElementById('contentsTime').innerHTML = response.body.data[0].from + ((response.body.data[0].from !== '' && response.body.data[0].from !== undefined) ? '  |  ' : '') + response.body.data[0].time
+          document.getElementById('contentsTime').innerHTML = response.body.data[0].site_name + ((response.body.data[0].site_name !== '' && response.body.data[0].site_name !== undefined) ? '  |  ' : '') + response.body.data[0].time
           // mthis.dataexpand = response.body.data
           // mthis.singlePerson = (opt[1]>1)?false:true
         })
