@@ -1,6 +1,6 @@
 <template>
   <div :style="{height:eDivH}">
-    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}" v-if="myMap.get(detailData.entity_type) === 'event'">
+    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}" v-if="myMap.get(detailData.Entity_type) === 'event'">
       <Row type="flex" justify="center">
         <!-- 头像 + 名字 div -->
         <Col span="8" align="center" :style="{display:'flex',flexFlow:'row nowarp',justifyContent:'center'}">
@@ -20,7 +20,7 @@
         </Col>
       </Row>
     </div>
-    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}" v-if="myMap.get(detailData.entity_type) === 'document'">
+    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}" v-if="myMap.get(detailData.Entity_type) === 'document'">
       <Row type="flex" justify="center">
         <!-- 头像 + 名字 div -->
         <Col span="8" align="center" :style="{display:'flex',flexFlow:'row nowarp',justifyContent:'center'}">
@@ -40,7 +40,7 @@
         </Col>
       </Row>
     </div>
-    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}" v-if="myMap.get(detailData.entity_type) === 'entity'">
+    <div :style="{height:'60px',margin: '5px 0px 0 0',paddingBottom: '10px',borderBottom: '1px solid rgba(51,255,255,0.2)'}" v-if="myMap.get(detailData.Entity_type) === 'entity'">
       <Row type="flex" justify="center">
         <!-- 头像 + 名字 div -->
         <Col span="8" align="center" :style="{display:'flex',flexFlow:'row nowarp',justifyContent:'center'}">
@@ -61,25 +61,25 @@
       </Row>
     </div>
     <div class='scrollBarAble' :style="{height:entDivH}">
-      <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'event'">
+      <div class="ediv" v-if="myMap.get(detailData.Entity_type) === 'event'">
       </div>
-      <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'entity'">
+      <div class="ediv" v-if="myMap.get(detailData.Entity_type) === 'entity'">
         <!-- 实体属性 -->
         <div class="e-title">
           <div class="e-title-d"></div>
           <p class="e-title-p">实体属性</p>
         </div>
-        <div class="e-content shuxingDiv" v-if="detailData.entity_type === 'human'">
+        <div class="e-content shuxingDiv" v-if="detailData.Entity_type === 'human'">
           <div class="e-content-d">
             <p class="e-content-p w8em">全名</p>
-            <p class="e-content-p">{{detailData.chinese_name}}</p>
+            <p class="e-content-p">{{detailData.Chinese_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d" v-if='detailData.entity_name'>
+          <div class="e-content-d" v-if='detailData.Entity_name'>
             <p class="e-content-p w8em">母语名</p>
-            <p class="e-content-p">{{detailData.entity_name}}</p>
+            <p class="e-content-p">{{detailData.Entity_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
@@ -204,7 +204,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content shuxingDiv" v-if="detailData.entity_type === 'organization'">
+        <div class="e-content shuxingDiv" v-if="detailData.Entity_type === 'organization'">
           <div class="e-content-d" v-if='detailData.description'>
             <p class="e-content-p w8em">描述</p>
             <p class="e-content-p">{{detailData.description}}</p>
@@ -283,7 +283,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content shuxingDiv" v-if="detailData.entity_type === 'administrative'">
+        <div class="e-content shuxingDiv" v-if="detailData.Entity_type === 'administrative'">
           <div class="e-content-d" v-if='detailData.location_map'>
             <p class="e-content-p w8em">地图</p>
             <p class="e-content-p">{{detailData.location_map}}</p>
@@ -467,7 +467,7 @@
             </div>
           </div>
         </div>
-        <div class="e-content shuxingDiv" v-if="detailData.entity_type === 'weapon'">
+        <div class="e-content shuxingDiv" v-if="detailData.Entity_type === 'weapon'">
           <div class="e-content-d" v-if='detailData.description'>
             <p class="e-content-p w8em">描述</p>
             <p class="e-content-p">{{detailData.description}}</p>
@@ -547,23 +547,23 @@
           </div>
         </div>
       </div>
-      <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'event'">
+      <div class="ediv" v-if="myMap.get(detailData.Entity_type) === 'event'">
         <!-- 实体属性 -->
         <div class="e-title">
           <div class="e-title-d"></div>
           <p class="e-title-p">事件属性</p>
         </div>
-        <div class="e-content" v-if='detailData.chinese_name'>
+        <div class="e-content" v-if='detailData.Chinese_name'>
           <div class="e-content-d">
             <p class="e-content-p w8em">全名</p>
-            <p class="e-content-p">{{detailData.chinese_name}}</p>
+            <p class="e-content-p">{{detailData.Chinese_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-tianjia" size='small'></Button>
             </div>
           </div>
-          <div class="e-content-d" v-if='detailData.entity_name'>
+          <div class="e-content-d" v-if='detailData.Entity_name'>
             <p class="e-content-p w8em">母语名</p>
-            <p class="e-content-p">{{detailData.entity_name}}</p>
+            <p class="e-content-p">{{detailData.Entity_name}}</p>
             <div class="buttonD">
               <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" size='small'></Button>
             </div>
@@ -689,7 +689,7 @@
           </div>
         </div>
       </div>
-      <div class="ediv" v-if="myMap.get(detailData.entity_type) === 'document'">
+      <div class="ediv" v-if="myMap.get(detailData.Entity_type) === 'document'">
         <div class="e-title">
           <div class="e-title-d"></div>
           <p class="e-title-p">文档属性</p>
@@ -745,7 +745,7 @@
       </div>
       <div class="xiangguanshitiDiv">
         <!-- <div  v-for='entityItem in xiangguanEntity'> -->
-        <div class="e-content" v-if="detailData.entity_type === 'human'">
+        <div class="e-content" v-if="detailData.Entity_type === 'human'">
           <div class="e-content-d-dis" v-if='xiangguanEntity.member_of&&xiangguanEntity.member_of.length'>
             <p class="e-content-p w8em">组织</p>
             <div class='w100'>
@@ -847,7 +847,7 @@
           </div>
         </div>
       </div>
-      <div class="e-content" v-if="detailData.entity_type === 'organization'">
+      <div class="e-content" v-if="detailData.Entity_type === 'organization'">
         <div class="e-content-d-dis" v-if='xiangguanEntity.founded_by&&xiangguanEntity.founded_by.length'>
           <p class="e-content-p w8em">创办者</p>
           <div class='w100'>
@@ -915,7 +915,7 @@
           </div>
         </div>
       </div>
-      <div class="e-content" v-if="detailData.entity_type === 'administrative'">
+      <div class="e-content" v-if="detailData.Entity_type === 'administrative'">
         <div class="e-content-d-dis" v-if='xiangguanEntity.head_of_state&&xiangguanEntity.head_of_state.length'>
           <p class="e-content-p w8em">国家元首</p>
           <div class='w100'>
@@ -1049,7 +1049,7 @@
           </div>
         </div>
       </div>
-      <div class="e-content" v-if="detailData.entity_type === 'weapon'">
+      <div class="e-content" v-if="detailData.Entity_type === 'weapon'">
         <div class="e-content-d-dis" v-if='xiangguanEntity.country_of_origin&&xiangguanEntity.country_of_origin.length'>
           <p class="e-content-p w8em">原产国</p>
           <div class='w100'>
@@ -1222,12 +1222,12 @@
           <p class="e-title-p">当前选择({{evetdata.length}})</p>
         </div>
         <div class="e-content" v-if="evetdata.length == undefined" :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" @click="changeDetailDiv(evetdata.id,evetdata.entity_type)">
+          <div class="e-content-d pointIcon" @click="changeDetailDiv(evetdata.id,evetdata.Entity_type)">
             <p class="e-content-p">{{evetdata.name}}</p>
           </div>
         </div>
         <div class="scrollBarAble e-content" v-else :style="{height:selectHeight, backgroundColor: 'rgba(0, 0, 0, 0.05)'}">
-          <div class="e-content-d pointIcon" v-for="(item,index) in evetdata" @click="changeDetailDiv(item.id,item.entity_type)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
+          <div class="e-content-d pointIcon" v-for="(item,index) in evetdata" @click="changeDetailDiv(item.id,item.Entity_type)" :id='item.id' :class="(selectTag===item.id)?'selectedTag':''">
             <p class="e-content-p">{{item.name}}</p>
           </div>
         </div>
@@ -1320,8 +1320,8 @@
             }
             let arr = []
             if (mthis.evetdata[0] !== undefined) {
-              if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'entity') {
-                // if(mthis.evetdata[0].entity_type ==='human'||mthis.evetdata[0].entity_type==='administrative'||mthis.evetdata[0].entity_type==='organization'||mthis.evetdata[0].entity_type==='weapon') {
+              if (mthis.myMap.get(mthis.evetdata[0].Entity_type) === 'entity') {
+                // if(mthis.evetdata[0].Entity_type ==='human'||mthis.evetdata[0].Entity_type==='administrative'||mthis.evetdata[0].Entity_type==='organization'||mthis.evetdata[0].Entity_type==='weapon') {
                 // let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
                 let detailId = (mthis.evetdata[0].id)
                 mthis.selectTag = detailId
@@ -1333,7 +1333,7 @@
                 }).then(response => {
                   mthis.detailData = response.body.data[0]
                 })
-              } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'event') {
+              } else if (mthis.myMap.get(mthis.evetdata[0].Entity_type) === 'event') {
                 let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
                 mthis.selectTag = detailId
                 let detailType = 'event';
@@ -1346,15 +1346,15 @@
                 }).then(response => {
                   if (response.body.code === 0) {
                     mthis.detailData = response.body.data[0]
-                    mthis.detailData.entity_type = 'event'
+                    mthis.detailData.Entity_type = 'event'
                   } else {
                     alert('/event-detail/接口异常')
                   }
                 })
-              } else if (mthis.myMap.get(mthis.evetdata[0].entity_type) === 'document') {
+              } else if (mthis.myMap.get(mthis.evetdata[0].Entity_type) === 'document') {
                 let detailId = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id);
                 mthis.selectTag = detailId
-                let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].entity_type) : (mthis.evetdata.entity_type);
+                let detailType = (mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].Entity_type) : (mthis.evetdata.Entity_type);
                 let a = []
                 a.push(detailId)
                 // mthis.detailData = {}
@@ -1362,10 +1362,10 @@
                   "docIds": a
                 }).then(response => {
                   mthis.detailData = response.body.data[0]
-                  mthis.detailData.entity_type = 'document'
+                  mthis.detailData.Entity_type = 'document'
                 })
               }
-              mthis.xiangguan((mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id), mthis.myMap.get(mthis.evetdata[0].entity_type))
+              mthis.xiangguan((mthis.evetdata.length !== undefined) ? (mthis.evetdata[0].id) : (mthis.evetdata.id), mthis.myMap.get(mthis.evetdata[0].Entity_type))
             }
           }, 200);
         }
@@ -1387,7 +1387,7 @@
                 nodesItem.push({
                   id: response.body.data[n].id,
                   img: 'http://10.60.1.140/assets/images/content_node.png',
-                  entity_type: 'content',
+                  Entity_type: 'content',
                   name: [...response.body.data[n].title].length > 20 ? response.body.data[n].title.substring(0, 19) + '...' : response.body.data[n].title,
                   loaded: true
                 })
@@ -1426,7 +1426,7 @@
               eventsItem.push({
                 id: response.body.data[n].id,
                 img: mthis.myMap1.get(response.body.data[n].event_subtype.toLowerCase().replace(/-/, "_")).img,
-                entity_type: 'event',
+                Entity_type: 'event',
                 name: response.body.data[n].event_subtype,
                 loaded: true
               })
@@ -1596,7 +1596,7 @@
             let res = response.body.data[0]
             res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/other.png'
             this.detailData = res
-            this.detailData.entity_type = 'event'
+            this.detailData.Entity_type = 'event'
           })
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
             "NodeIds": arr,
@@ -1611,7 +1611,7 @@
             let res = response.body.data[0]
             res.img = (util.checkImgExists(response.body.data[0].img)) ? response.body.data[0].img : 'http://10.60.1.140/assets/images/other.png'
             this.detailData = res
-            mthis.detailData.entity_type = 'document'
+            mthis.detailData.Entity_type = 'document'
           })
           mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/related-DocAndEvent/', {
             "NodeIds": arr,

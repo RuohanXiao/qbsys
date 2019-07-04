@@ -1622,7 +1622,7 @@
         for (let m = 0; m < selectList.length; m++) {
           infos.push({
             id: selectList[m].id,
-            entity_type: 'content',
+            Entity_type: 'content',
             img: '',
             name: [...selectList[m].title].length > 20 ? selectList[m].title.substring(0, 19) + '...' : selectList[m].title,
             label: selectList[m].title,

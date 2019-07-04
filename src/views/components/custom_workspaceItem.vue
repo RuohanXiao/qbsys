@@ -212,7 +212,7 @@
                 // // // console.log(response.body)
                 // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
                 for (let i = 0; i < response.body.data.nodes.length; i++) {
-                  // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
+                  // let name  = (response.body.data[0].nodes[i].Chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].Chinese_name
                   optionListArr.push({
                     // "label": name,
                     "label": response.body.data.nodes[i].name,

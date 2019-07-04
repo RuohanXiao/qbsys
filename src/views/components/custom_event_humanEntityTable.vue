@@ -6,17 +6,17 @@
         <div slot="content" class="tableLine">
           <!-- <div class="econtent">
                   <p class="econtentp w8em">全名</p>
-                  <p class="econtentp">{{tableData.chinese_name}}</p>
+                  <p class="econtentp">{{tableData.Chinese_name}}</p>
                 </div> -->
           <div class="econtent allowWrap">
-            <div v-if="typeof(tableData.chinese_name) !== 'object'" :style="{display:'flex'}">
+            <div v-if="typeof(tableData.Chinese_name) !== 'object'" :style="{display:'flex'}">
               <p class="econtentp w8em">全名</p>
-              <p class="econtentp">{{tableData.chinese_name}}</p>
+              <p class="econtentp">{{tableData.Chinese_name}}</p>
               <div class="eButton">
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.chinese_name_ids,'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chinese_name) === 'object'&&index<5" v-for="(it,index) in tableData.chinese_name">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.Chinese_name) === 'object'&&index<5" v-for="(it,index) in tableData.Chinese_name">
               <p class="econtentp w8em" v-if="index==0">全名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{it}}</p>
@@ -24,10 +24,10 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.chinese_name_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chinese_name) === 'object'&&tableData.chinese_name.length>5&&displayMore['chinese_name']" @click="clickMore('chinese_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.Chinese_name) === 'object'&&tableData.Chinese_name.length>5&&displayMore['Chinese_name']" @click="clickMore('Chinese_name')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chinese_name) === 'object'&&index>=5&&!displayMore['chinese_name']" v-for="(occ,index) in tableData.chinese_name">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.Chinese_name) === 'object'&&index>=5&&!displayMore['Chinese_name']" v-for="(occ,index) in tableData.Chinese_name">
               <p class="econtentp w8em" v-if="index==0">全名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
@@ -35,23 +35,23 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.occupation_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.chinese_name) === 'object'&&tableData.chinese_name.length>5&&!displayMore['chinese_name']" @click="clickCutOut('chinese_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.Chinese_name) === 'object'&&tableData.Chinese_name.length>5&&!displayMore['Chinese_name']" @click="clickCutOut('Chinese_name')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
-          <!-- <div class="econtent" v-if='tableData.entity_name'>
+          <!-- <div class="econtent" v-if='tableData.Entity_name'>
                   <p class="econtentp w8em">母语名</p>
-                  <p class="econtentp">{{tableData.entity_name}}</p>
+                  <p class="econtentp">{{tableData.Entity_name}}</p>
                 </div> -->
-          <div class="econtent allowWrap" v-if='tableData.entity_name'>
-            <div v-if="typeof(tableData.entity_name) !== 'object'" :style="{display:'flex'}">
+          <div class="econtent allowWrap" v-if='tableData.Entity_name'>
+            <div v-if="typeof(tableData.Entity_name) !== 'object'" :style="{display:'flex'}">
               <p class="econtentp w8em">母语名</p>
-              <p class="econtentp">{{tableData.entity_name}}</p>
+              <p class="econtentp">{{tableData.Entity_name}}</p>
               <div class="eButton">
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.entity_name_ids,'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.entity_name) === 'object'&&index<5" v-for="(it,index) in tableData.entity_name">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.Entity_name) === 'object'&&index<5" v-for="(it,index) in tableData.Entity_name">
               <p class="econtentp w8em" v-if="index==0">母语名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{it}}</p>
@@ -59,10 +59,10 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.entity_name_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.entity_name) === 'object'&&tableData.entity_name.length>5&&displayMore['entity_name']" @click="clickMore('entity_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.Entity_name) === 'object'&&tableData.Entity_name.length>5&&displayMore['Entity_name']" @click="clickMore('Entity_name')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.entity_name) === 'object'&&index>=5&&!displayMore['entity_name']" v-for="(occ,index) in tableData.entity_name">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.Entity_name) === 'object'&&index>=5&&!displayMore['Entity_name']" v-for="(occ,index) in tableData.Entity_name">
               <p class="econtentp w8em" v-if="index==0">母语名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
@@ -70,7 +70,7 @@
                 <!-- <Button class='bstyle' shape="circle" icon="icon iconfont icon-match-search" @click="addSingleNodeToCanvans(tableData.occupation_ids[index],'entity','')" size='small'></Button> -->
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.entity_name) === 'object'&&tableData.entity_name.length>5&&!displayMore['entity_name']" @click="clickCutOut('entity_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.Entity_name) === 'object'&&tableData.Entity_name.length>5&&!displayMore['Entity_name']" @click="clickCutOut('Entity_name')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div>
@@ -801,8 +801,8 @@
         myMap: new Map(),
         myMap1: new Map(),
         displayMore: {
-          'chinese_name': true,
-          'entity_name': true,
+          'Chinese_name': true,
+          'Entity_name': true,
           'nickname': true,
           'date_of_birth': true,
           'date_of_death': true,
@@ -839,7 +839,7 @@
                 return item.id
               }),
               // "NodeTypes": mthis.tableData.map(item => {
-              //   return item.entity_type
+              //   return item.Entity_type
               // }),
               "TypeLabel": "all"
             }).then(response => {
@@ -964,7 +964,7 @@
                 nodes.push({
                   id: response.body.data[i].id,
                   img: img,
-                  entity_type: 'event',
+                  Entity_type: 'event',
                   name: name,
                   loaded: true
                 })
@@ -998,7 +998,7 @@
                 nodes.push({
                   id: response.body.data[i].id,
                   img: 'http://10.60.1.140/assets/images/content_node.png',
-                  entity_type: 'content',
+                  Entity_type: 'content',
                   name: response.body.data[i].title,
                   label: response.body.data[i].title.substring(0, 19) + '...',
                   loaded: true
