@@ -249,14 +249,14 @@
                 node.shadowColor = "rgba(0,0,0,0)";
                 node.shadowBlur = 20;
               }
-              if (node.data.entity_type === 'event') {
+              if (node.data.Entity_type === 'event') {
                 node.display = 'text'
                 node.radius = 15
                 node.borderRadius = 300
                 let mapItem = mthis.myMap.get(node.data.event_subtype)
                 node.image = mapItem ? mapItem.img : "http://10.60.1.140/assets/images/event.png";
                 // node.image = 'http://10.60.1.140/assets/images/content_node.png'
-              } else if (node.data.entity_type === 'content') {
+              } else if (node.data.Entity_type === 'content') {
                 node.display = 'rectangle'
                 node.image = 'http://10.60.1.140/assets/images/content_node.png'
                 node.backgroundStyle = {}
@@ -265,18 +265,18 @@
                 if (util.checkImgExists("http://10.60.1.143/pic_lib/padded/" + node.id + ".png")) {
                   node.image = "http://10.60.1.143/pic_lib/padded/" + node.id + ".png"
                 } else {
-                  // node.image = 'http://10.60.1.140/assets/images/' + node.data.entity_type + '.png';
-                   if (node.data.entity_type === 'administrative') {
+                  // node.image = 'http://10.60.1.140/assets/images/' + node.data.Entity_type + '.png';
+                   if (node.data.Entity_type === 'administrative') {
                       node.image = 'http://10.60.1.140/assets/images/location.png'
-                    } else if (node.data.entity_type === 'human') {
+                    } else if (node.data.Entity_type === 'human') {
                       node.image = 'http://10.60.1.140/assets/images/People.png'
-                    } else if (node.data.entity_type === 'organization') {
+                    } else if (node.data.Entity_type === 'organization') {
                       node.image = 'http://10.60.1.140/assets/images/organization.png'
-                    } else if (node.data.entity_type === 'weapon') {
+                    } else if (node.data.Entity_type === 'weapon') {
                       node.image = 'http://10.60.1.140/assets/images/weapon.png'
-                    } else if (node.data.entity_type === 'geographic_entity') {
+                    } else if (node.data.Entity_type === 'geographic_entity') {
                       node.image = 'http://10.60.1.140/assets/images/other.png'
-                    } else if (node.data.entity_type === 'project') {
+                    } else if (node.data.Entity_type === 'project') {
                       node.image = 'http://10.60.1.140/assets/images/other.png'
                     } else {
                       node.image = 'http://10.60.1.140/assets/images/other.png'

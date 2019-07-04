@@ -265,8 +265,8 @@
         ifSelectNode: false,
         ifSelectTwoNode: false,
         ifSelectOnlyTwoNode: false,
-        ifSelectOnlyOneNode:false,
-        ifhasSelNode:false,
+        ifSelectOnlyOneNode: false,
+        ifhasSelNode: false,
         // 节点形状
         stepTimer: null,
         expandTimer: null,
@@ -535,13 +535,13 @@
             return item
           }
         })
-        setTimeout(function(){
+        setTimeout(function() {
           mthis.netchart.scrollIntoView(mthis.selectionId);
           mthis.netchart.updateStyle(mthis.selectionId);
           mthis.netchart.updateSettings();
           mthis.netchart.updateSize();
           mthis.updateStyleCounter++
-        },200)
+        }, 200)
       },
       changeCenterNode(arr) {
         let mthis = this
@@ -622,10 +622,10 @@
             if (response.body.code == 0) {
               // mthis.changNetchartMode('r')
               response.body.data.nodes.map(item => {
-                if (item.entity_type === 'document') {
+                if (item.Entity_type === 'document') {
                   item.name = item.title.substring(0, 19) + '...'
                 }
-                if (item.entity_type === 'event') {
+                if (item.Entity_type === 'event') {
                   sitem.name = item.event_subtype
                 }
               })
@@ -806,10 +806,10 @@
                 if (response.body.data.nodes.length > 0) {
                   // mthis.changNetchartMode('r') //  mthis.changNetchartMode('d')
                   response.body.data.nodes.map(item => {
-                    if (item.entity_type === 'document') {
+                    if (item.Entity_type === 'document') {
                       item.name = item.title.substring(0, 19) + '...'
                     }
-                    if (item.entity_type === 'event') {
+                    if (item.Entity_type === 'event') {
                       item.name = item.event_subtype
                     }
                   })
@@ -849,28 +849,28 @@
           },
           time: ""
         }];
-          // let links = mthis.netchart.links()
-          // let linksArr = new Array
-          // let nodeArr = new Array
-          // links.map(item => {
-          //   if (
-          //     mthis.selectionId.indexOf(item.from.id) > -1 &&
-          //     mthis.selectionId.indexOf(item.to.id) > -1
-          //   ) {
-          //     linksArr.push(item)
-          //     return item.id;
-          //   } else {
-          //     return "";
-          //   }
-          // });
-          // for (let n = 0; n < mthis.selectionId.length; n++) {
-          //       nodeArr.push(mthis.netchart.getNode(mthis.selectionId[n]))
-          //   }
+        // let links = mthis.netchart.links()
+        // let linksArr = new Array
+        // let nodeArr = new Array
+        // links.map(item => {
+        //   if (
+        //     mthis.selectionId.indexOf(item.from.id) > -1 &&
+        //     mthis.selectionId.indexOf(item.to.id) > -1
+        //   ) {
+        //     linksArr.push(item)
+        //     return item.id;
+        //   } else {
+        //     return "";
+        //   }
+        // });
+        // for (let n = 0; n < mthis.selectionId.length; n++) {
+        //       nodeArr.push(mthis.netchart.getNode(mthis.selectionId[n]))
+        //   }
         setTimeout(() => {
-            // let ddata = {
-            //   "links":linksArr,
-            //   "nodes":nodeArr
-            // }
+          // let ddata = {
+          //   "links":linksArr,
+          //   "nodes":nodeArr
+          // }
           let ddata = mthis.netchart.exportData();
           console.log(ddata)
           mthis.workatlastData = [{
@@ -1228,8 +1228,8 @@
         });
         this.$store.commit("setSelectionIdByType", this.selectionIdByTypeData);
         this.$store.commit("setSelectNetNodes", [{
-                  ids:  []
-                }]);
+          ids: []
+        }]);
         this.ifSelectNode = false;
         this.ifSelectTwoNode = false;
         this.ifSelectOnlyTwoNode = false;
@@ -1709,14 +1709,15 @@
           //每一个BOX对应的弧度;
           let ahd = (avd * Math.PI) / 180;
           let no1 = mthis.netchart.getNode(this.selectionId[0]);
+          let cnum = 0;
           for (let i = 0; i < mthis.selectionId.length; i++) {
             //解锁位置
             // lock
             // mthis.netchart.unlockNode(mthis.selectionId[index].id);
             let no = mthis.netchart.getNode(this.selectionId[i]);
             if (!no.userManualLock) {
-              no.x = no1.x + Math.sin(ahd * i) * radius;
-              no.y = no1.y - radius + Math.cos(ahd * i) * radius;
+              no.x = no1.x + Math.sin(ahd * cnum) * radius;
+              no.y = no1.y - radius + Math.cos(ahd * cnum) * radius;
               // mthis.selectionId[index]["x"] = mthis.selectionId[0]["x"] +
               //   Math.sin(ahd * index) * radius;
               // mthis.selectionId[index]["y"] = mthis.selectionId[0]["y"] - radius +
@@ -1725,6 +1726,7 @@
               // lock
               mthis.netchart.lockNode(mthis.selectionId[i]);
               mthis.netchart.updateStyle(mthis.selectionId[i]);
+              cnum++;
             }
           }
           mthis.netchart.scrollIntoView(this.selectionId);
@@ -1743,14 +1745,16 @@
           let rowNum = Math.ceil(Math.sqrt(this.selectionId.length));
           let basePoint = this.selectionId[0];
           let no1 = mthis.netchart.getNode(this.selectionId[0]);
+          let sqnum = 0;
           for (let i = 0; i < this.selectionId.length; i++) {
             let no = mthis.netchart.getNode(this.selectionId[i]);
             if (!no.userManualLock) {
-              let col = i % rowNum;
-              let row = parseInt(i / rowNum);
+              let col = sqnum % rowNum;
+              let row = parseInt(sqnum / rowNum);
               no["x"] = no1["x"] + col * 150;
               no["y"] = no1["y"] + row * 150;
               mthis.netchart.lockNode(this.selectionId[i]);
+              sqnum++;
             }
           }
           // mthis.changNetchartMode('s')
@@ -1828,11 +1832,12 @@
         //     this.setMessage("请选择节点进行矩形排列操作！");
         // }
         if (mthis.selectionId.length > 0) {
+          let snum = 0
           for (let i = 0; i < mthis.selectionId.length; i++) {
             let nodesInfo = mthis.netchart.getNode(mthis.selectionId[i])
             if (!nodesInfo.userManualLock) {
               // 辐射布局
-              let circleNum = Math.floor(Math.log(i) / Math.log(3))
+              let circleNum = Math.floor(Math.log(snum) / Math.log(3))
               let avd = 360 / Math.pow(3, circleNum);
               let ahd = avd * Math.PI / 360;
               let radius = 150 * circleNum + 150
@@ -1840,18 +1845,17 @@
               initInfo['x'] = (initInfo['x']) ? (initInfo['x']) : (0)
               initInfo['y'] = (initInfo['y']) ? (initInfo['y']) : (0)
               nodesInfo["x"] = mthis.netchart.getNode(mthis.selectionId[0])["x"] +
-                Math.sin(ahd * i) * radius;
+                Math.sin(ahd * snum) * radius;
               nodesInfo["y"] = mthis.netchart.getNode(mthis.selectionId[0])["y"] +
-                Math.cos(ahd * i) * radius;
+                Math.cos(ahd * snum) * radius;
               mthis.netchart.updateStyle(mthis.selectionId[i])
               mthis.netchart.lockNode(mthis.selectionId[i]);
+              snum++;
               // mthis.changNetchartMode('s')
             }
           }
           mthis.netchart.scrollIntoView(mthis.selectionId);
           mthis.netchart.updateStyle(mthis.selectionId);
-          mthis.netchart.updateSettings();
-          mthis.netchart.updateSize();
           mthis.updateStyleCounter++
         } else {
           // mthis.$Message.error('请选择节点进行矩形排列操作！')
@@ -2360,7 +2364,7 @@
         setTimeout(function() {
           mthis.netchart.scrollIntoView(ar);
           mthis.updateStyleCounter++
-          mthis.netchart.selection(ar);
+            mthis.netchart.selection(ar);
         }, 200);
         mthis.fit();
         mthis.getStatistics();
@@ -2388,9 +2392,8 @@
         ovdiv.id = 'ringRightMenu';
         let lengthNum = mthis.selectionIdByTypeData.nodeIds.length + mthis.selectionIdByTypeData.eventIds.length + mthis.selectionIdByTypeData.contentIds.ids.length;
         var config = [];
-        if(lengthNum>0){
-          if(lengthNum ==1){
-            
+        if (lengthNum > 0) {
+          if (lengthNum == 1) {
             config = [{
                 'Id': 1,
                 'parentId': 0,
@@ -2607,16 +2610,234 @@
                 'icon': 'quanbu.png',
                 'disicon': 'quanbu_disable.png'
               }
-            ] 
+            ]
           }
-          if(lengthNum>1){
-            
+          if (lengthNum > 1) {
             config = [{
+                'Id': 1,
+                'parentId': 0,
+                'name': '链向',
+                'hasLeaf': true,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': '',
+                'icon': 'lianxiang.png',
+                'disicon': 'lianxiang_disable.png'
+              },
+              {
+                'Id': 2,
+                'parentId': 0,
+                'name': '聚合',
+                'hasLeaf': false,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("juhe")',
+                'icon': 'juhe.png',
+                'disicon': 'juhe_disable.png'
+              }, {
+                'Id': 3,
+                'parentId': 0,
+                'name': '暂无',
+                'disable': true,
+                'hasLeaf': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.noItemInRightMenu',
+                'icon': 'noclick.png',
+                'disicon': 'noclick_disable.png'
+              },
+              {
+                'Id': 4,
+                'parentId': 0,
+                'name': '删除',
+                'hasLeaf': false,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("remove")',
+                'icon': 'shanchu.png',
+                'disicon': 'shanchu_disable.png'
+              }, {
+                'Id': 5,
+                'parentId': 0,
+                'disable': false,
+                'name': '推送',
+                'hasLeaf': true,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': '',
+                'icon': 'tuisong.png',
+                'disicon': 'tuisong_disable.png'
+              }, {
+                'Id': 6,
+                'parentId': 0,
+                'name': '路径',
+                'disable': false,
+                'hasLeaf': true,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': '',
+                'icon': 'lujing.png',
+                'disicon': 'lujing_disable.png'
+              }, {
+                'Id': 7,
+                'parentId': 0,
+                'name': '共指',
+                'disable': false,
+                'hasLeaf': true,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': '',
+                'icon': 'gongzhi.png',
+                'disicon': 'gongzhi_disable.png'
+              },
+              {
+                'Id': 8,
+                'parentId': 0,
+                'disable': false,
+                'name': '关联',
+                'hasLeaf': true,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': '',
+                'icon': 'guanlian.png',
+                'disicon': 'guanlian_disable.png'
+              },
+              {
+                'Id': 801,
+                'parentId': 8,
+                'name': '实体',
+                'hasLeaf': false,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("expandNodeKnowledge")',
+                'icon': 'guanlianshiti.png',
+                'disicon': 'guanlianshiti_disable.png'
+              },
+              {
+                'Id': 802,
+                'parentId': 8,
+                'name': '事件',
+                'hasLeaf': false,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("expandNodeEvent")',
+                'icon': 'guanlianshijian.png',
+                'disicon': 'guanlianshijian_disable.png'
+              },
+              {
+                'Id': 803,
+                'parentId': 8,
+                'name': '文档',
+                'hasLeaf': false,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("expandNodeContent")',
+                'icon': 'guanlianwendang.png',
+                'disicon': 'guanlianwendang_disable.png'
+              },
+              {
+                'Id': 701,
+                'parentId': 7,
+                'name': '实体',
+                'hasLeaf': false,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("gongzhiEnitiy")',
+                'icon': 'gongzhishiti.png',
+                'disicon': 'gongzhishiti_disable.png'
+              },
+              {
+                'Id': 702,
+                'parentId': 7,
+                'name': '事件',
+                'hasLeaf': false,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("gongzhiEvent")',
+                'icon': 'gongzhishijian.png',
+                'disicon': 'gongzhishijian_disable.png'
+              },
+              {
+                'Id': 703,
+                'parentId': 7,
+                'name': '文档',
+                'disable': false,
+                'hasLeaf': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("gongzhiDoc")',
+                'icon': 'gongzhiwendang.png',
+                'disicon': 'gongzhiwendang_disable.png'
+              },
+              {
+                'Id': 601,
+                'parentId': 6,
+                'name': '关系',
+                'disable': false,
+                'hasLeaf': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("showModalStepKnowledge")',
+                'icon': 'zhishilujing.png',
+                'disicon': 'zhishilujing_disable.png'
+              },
+              {
+                'Id': 602,
+                'parentId': 6,
+                'name': '所有',
+                'disable': false,
+                'hasLeaf': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("showModalStepAll")',
+                'icon': 'quanbu.png',
+                'disicon': 'quanbu_disable.png'
+              },
+              {
+                'Id': 501,
+                'parentId': 5,
+                'name': '地图',
+                'hasLeaf': false,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("toGeo")',
+                'icon': 'guanlianshiti.png',
+                'disicon': 'guanlianshiti_disable.png'
+              },
+              {
+                'Id': 502,
+                'parentId': 5,
+                'name': '文档',
+                'hasLeaf': false,
+                'disable': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("toContent")',
+                'icon': 'guanlianshijian.png',
+                'disicon': 'guanlianshijian_disable.png'
+              },
+              {
+                'Id': 101,
+                'parentId': 1,
+                'name': '关系',
+                'disable': false,
+                'hasLeaf': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("linkedKnowlage")',
+                'icon': 'zhishilianxiang.png',
+                'disicon': 'zhishilianxiang_disable.png'
+              },
+              {
+                'Id': 102,
+                'parentId': 1,
+                'name': '所有',
+                'disable': false,
+                'hasLeaf': false,
+                'color': "rgba(0,51,51,0.98)",
+                'backcall': 'mthis.triggerMethods("linkedKnowlageAll")',
+                'icon': 'quanbu.png',
+                'disicon': 'quanbu_disable.png'
+              }
+            ]
+          }
+        } else {
+          config = [{
               'Id': 1,
               'parentId': 0,
               'name': '链向',
               'hasLeaf': true,
-              'disable': false,
+              'disable': true,
               'color': "rgba(0,51,51,0.98)",
               'backcall': '',
               'icon': 'lianxiang.png',
@@ -2626,8 +2847,8 @@
               'Id': 2,
               'parentId': 0,
               'name': '聚合',
-              'hasLeaf': false,
-              'disable': false,
+              'hasLeaf': true,
+              'disable': true,
               'color': "rgba(0,51,51,0.98)",
               'backcall': 'mthis.triggerMethods("juhe")',
               'icon': 'juhe.png',
@@ -2647,8 +2868,8 @@
               'Id': 4,
               'parentId': 0,
               'name': '删除',
-              'hasLeaf': false,
-              'disable': false,
+              'hasLeaf': true,
+              'disable': true,
               'color': "rgba(0,51,51,0.98)",
               'backcall': 'mthis.triggerMethods("remove")',
               'icon': 'shanchu.png',
@@ -2656,7 +2877,7 @@
             }, {
               'Id': 5,
               'parentId': 0,
-              'disable': false,
+              'disable': true,
               'name': '推送',
               'hasLeaf': true,
               'color': "rgba(0,51,51,0.98)",
@@ -2667,7 +2888,7 @@
               'Id': 6,
               'parentId': 0,
               'name': '路径',
-              'disable': false,
+              'disable': true,
               'hasLeaf': true,
               'color': "rgba(0,51,51,0.98)",
               'backcall': '',
@@ -2677,7 +2898,7 @@
               'Id': 7,
               'parentId': 0,
               'name': '共指',
-              'disable': false,
+              'disable': true,
               'hasLeaf': true,
               'color': "rgba(0,51,51,0.98)",
               'backcall': '',
@@ -2687,7 +2908,7 @@
             {
               'Id': 8,
               'parentId': 0,
-              'disable': false,
+              'disable': true,
               'name': '关联',
               'hasLeaf': true,
               'color': "rgba(0,51,51,0.98)",
@@ -2700,7 +2921,7 @@
               'parentId': 8,
               'name': '实体',
               'hasLeaf': false,
-              'disable': false,
+              'disable': true,
               'color': "rgba(0,51,51,0.98)",
               'backcall': 'mthis.triggerMethods("expandNodeKnowledge")',
               'icon': 'guanlianshiti.png',
@@ -2711,7 +2932,7 @@
               'parentId': 8,
               'name': '事件',
               'hasLeaf': false,
-              'disable': false,
+              'disable': true,
               'color': "rgba(0,51,51,0.98)",
               'backcall': 'mthis.triggerMethods("expandNodeEvent")',
               'icon': 'guanlianshijian.png',
@@ -2722,7 +2943,7 @@
               'parentId': 8,
               'name': '文档',
               'hasLeaf': false,
-              'disable': false,
+              'disable': true,
               'color': "rgba(0,51,51,0.98)",
               'backcall': 'mthis.triggerMethods("expandNodeContent")',
               'icon': 'guanlianwendang.png',
@@ -2828,227 +3049,7 @@
               'disicon': 'quanbu_disable.png'
             }
           ]
-          }
-        }else{
-          config =[{
-                'Id': 1,
-                'parentId': 0,
-                'name': '链向',
-                'hasLeaf': true,
-                'disable': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': '',
-                'icon': 'lianxiang.png',
-                'disicon': 'lianxiang_disable.png'
-              },
-              {
-                'Id': 2,
-                'parentId': 0,
-                'name': '聚合',
-                'hasLeaf': true,
-                'disable': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("juhe")',
-                'icon': 'juhe.png',
-                'disicon': 'juhe_disable.png'
-              }, {
-                'Id': 3,
-                'parentId': 0,
-                'name': '暂无',
-                'disable': true,
-                'hasLeaf': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.noItemInRightMenu',
-                'icon': 'noclick.png',
-                'disicon': 'noclick_disable.png'
-              },
-              {
-                'Id': 4,
-                'parentId': 0,
-                'name': '删除',
-                'hasLeaf': true,
-                'disable': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("remove")',
-                'icon': 'shanchu.png',
-                'disicon': 'shanchu_disable.png'
-              }, {
-                'Id': 5,
-                'parentId': 0,
-                'disable': true,
-                'name': '推送',
-                'hasLeaf': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': '',
-                'icon': 'tuisong.png',
-                'disicon': 'tuisong_disable.png'
-              }, {
-                'Id': 6,
-                'parentId': 0,
-                'name': '路径',
-                'disable': true,
-                'hasLeaf': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': '',
-                'icon': 'lujing.png',
-                'disicon': 'lujing_disable.png'
-              }, {
-                'Id': 7,
-                'parentId': 0,
-                'name': '共指',
-                'disable': true,
-                'hasLeaf': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': '',
-                'icon': 'gongzhi.png',
-                'disicon': 'gongzhi_disable.png'
-              },
-              {
-                'Id': 8,
-                'parentId': 0,
-                'disable': true,
-                'name': '关联',
-                'hasLeaf': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': '',
-                'icon': 'guanlian.png',
-                'disicon': 'guanlian_disable.png'
-              },
-              {
-                'Id': 801,
-                'parentId': 8,
-                'name': '实体',
-                'hasLeaf': false,
-                'disable': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("expandNodeKnowledge")',
-                'icon': 'guanlianshiti.png',
-                'disicon': 'guanlianshiti_disable.png'
-              },
-              {
-                'Id': 802,
-                'parentId': 8,
-                'name': '事件',
-                'hasLeaf': false,
-                'disable': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("expandNodeEvent")',
-                'icon': 'guanlianshijian.png',
-                'disicon': 'guanlianshijian_disable.png'
-              },
-              {
-                'Id': 803,
-                'parentId': 8,
-                'name': '文档',
-                'hasLeaf': false,
-                'disable': true,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("expandNodeContent")',
-                'icon': 'guanlianwendang.png',
-                'disicon': 'guanlianwendang_disable.png'
-              },
-              {
-                'Id': 701,
-                'parentId': 7,
-                'name': '实体',
-                'hasLeaf': false,
-                'disable': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("gongzhiEnitiy")',
-                'icon': 'gongzhishiti.png',
-                'disicon': 'gongzhishiti_disable.png'
-              },
-              {
-                'Id': 702,
-                'parentId': 7,
-                'name': '事件',
-                'hasLeaf': false,
-                'disable': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("gongzhiEvent")',
-                'icon': 'gongzhishijian.png',
-                'disicon': 'gongzhishijian_disable.png'
-              },
-              {
-                'Id': 703,
-                'parentId': 7,
-                'name': '文档',
-                'disable': false,
-                'hasLeaf': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("gongzhiDoc")',
-                'icon': 'gongzhiwendang.png',
-                'disicon': 'gongzhiwendang_disable.png'
-              },
-              {
-                'Id': 601,
-                'parentId': 6,
-                'name': '关系',
-                'disable': false,
-                'hasLeaf': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("showModalStepKnowledge")',
-                'icon': 'zhishilujing.png',
-                'disicon': 'zhishilujing_disable.png'
-              },
-              {
-                'Id': 602,
-                'parentId': 6,
-                'name': '所有',
-                'disable': false,
-                'hasLeaf': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("showModalStepAll")',
-                'icon': 'quanbu.png',
-                'disicon': 'quanbu_disable.png'
-              },
-              {
-                'Id': 501,
-                'parentId': 5,
-                'name': '地图',
-                'hasLeaf': false,
-                'disable': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("toGeo")',
-                'icon': 'guanlianshiti.png',
-                'disicon': 'guanlianshiti_disable.png'
-              },
-              {
-                'Id': 502,
-                'parentId': 5,
-                'name': '文档',
-                'hasLeaf': false,
-                'disable': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("toContent")',
-                'icon': 'guanlianshijian.png',
-                'disicon': 'guanlianshijian_disable.png'
-              },
-              {
-                'Id': 101,
-                'parentId': 1,
-                'name': '关系',
-                'disable': false,
-                'hasLeaf': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("linkedKnowlage")',
-                'icon': 'zhishilianxiang.png',
-                'disicon': 'zhishilianxiang_disable.png'
-              },
-              {
-                'Id': 102,
-                'parentId': 1,
-                'name': '所有',
-                'disable': false,
-                'hasLeaf': false,
-                'color': "rgba(0,51,51,0.98)",
-                'backcall': 'mthis.triggerMethods("linkedKnowlageAll")',
-                'icon': 'quanbu.png',
-                'disicon': 'quanbu_disable.png'
-              }
-            ]  
         }
-        
         var routeMap = new rightMenu(this, ovdiv, config);
         document.getElementById('netchart').appendChild(ovdiv)
         document.getElementById('ringRightMenu').oncontextmenu = function(e) {
@@ -3171,6 +3172,8 @@
             //   }],
             // },
             // NetChart.settings.style.dragSelection 通过该属性可以设置框选颜色和背景等属性
+            // 拖拽框样式
+            // dragSelection:{},
             nodeLabel: {
               maxWidth: 10,
               // textOverflow:ellipsis,
@@ -3257,7 +3260,7 @@
               node.shadowColor = ''
               node.shadowBlur = 0
               if (node.userManualLock) {
-                node.draggable = false;
+                // node.draggable = false;
                 // 手动锁定样式
                 node.items = [{
                   image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB60lEQVQ4T32TP2gTcRTHP7+7oKA5G2iFqqgHgh3qkCbtoIvpXndFKAlKiIvWBukiteKopc3o1DrU4OBQOuniZW4vOaFLFSWotA4iiYn/oJef3KXX5C5X3/j+fN5739/7CcJsPZ5CqGeRMu6GhbBQWlUSlVIwXfgclbiOrS4BqVAwGKh2hhGr6sU7ADORRrIAInZA8Z5b1hDcJVledodzvW5npRJWPK8/ZvDQCXIfcjTsZgeitkacSdqA9YSBEJfDOj8/9Yzzg8Ns//jMvS8zbP1+56UZjJrjgrZgb8KK5/Q5Jvon9kONP3VyH291INIeF7i7C0c415JakunT0zR3GyS1UR/XNEsUN5cwLmy2/UJmBBuJRRB3vMx87DbXzk32DFQsFphfuw8X++HSgKdFoQfAp19ka1fJZmb3ISVjlfzLG5DWA2BZ6FnByRiqn+HJ8ALa0RjRaB9b7y2uf03DkYgf4K4QEFFTo6wMrfBwZpKm+pOnj15hbhjk1Qe9AFfEwDNmj99kZ7XMGq/dXbUX39F2ImxPHfN3l7LEWDnVdUiqBfQ5GvC2BldOdgq+/YWBw92AOqod7xySE2o/56IL+b/VEXLKf8pegXPSu8ryQVeJM3aklQ7/TN1dHWEVRUey952xaLWqjFlGcLh/YLaxYaYxrS8AAAAASUVORK5CYII=",
@@ -3277,7 +3280,7 @@
                 }]
               } else {
                 node.items = [];
-                node.draggable = true;
+                // node.draggable = true;
               }
               //   if (node.userLock) {
               //     // 自动锁定样式
@@ -3306,7 +3309,7 @@
                 node.display = "text";
                 node.image = null;
                 if (node.selected || node.listenSelected) {
-                // if (node.listenSelected) {
+                  // if (node.listenSelected) {
                   node.lineColor = mthis.selectLineColor
                   node.fillColor = "#003333";
                   node.lineWidth = 2;
@@ -3325,7 +3328,7 @@
                   node.lineWidth = 2;
                 }
               } else {
-                if (node.data.entity_type === "event") {
+                if (node.data.Entity_type === "event") {
                   if (node.selected || node.listenSelected) {
                     node.lineColor = mthis.selectLineColor;
                     node.shadowBlur = 25;
@@ -3354,7 +3357,7 @@
                   node.borderRadius = '20px';
                   let mapItem = mthis.myMap.get(node.data.event_subtype)
                   node.image = mapItem ? mapItem.img : "http://10.60.1.140/assets/images/event.png";
-                } else if (node.data.entity_type === "content" || node.data.entity_type === "document") {
+                } else if (node.data.Entity_type === "content" || node.data.Entity_type === "document") {
                   if (node.selected || node.listenSelected) {
                     node.lineColor = mthis.selectLineColor;
                     node.shadowColor = mthis.selectShadowColor;
@@ -3385,7 +3388,7 @@
                   node.image = "http://10.60.1.140/assets/images/content_node.png";
                   node.backgroundStyle = {};
                   node.radius = 20;
-                } else if (node.data.entity_type === "other") {
+                } else if (node.data.Entity_type === "other") {
                   if (node.selected || node.listenSelected) {
                     node.lineColor = mthis.selectLineColor;
                     node.shadowColor = mthis.selectShadowColor;
@@ -3449,17 +3452,17 @@
                     node.image =
                       "http://10.60.1.143/pic_lib/padded/" + node.id + ".png";
                   } else {
-                    if (node.data.entity_type === 'administrative') {
+                    if (node.data.Entity_type === 'administrative') {
                       node.image = 'http://10.60.1.140/assets/images/location.png'
-                    } else if (node.data.entity_type === 'human') {
+                    } else if (node.data.Entity_type === 'human') {
                       node.image = 'http://10.60.1.140/assets/images/People.png'
-                    } else if (node.data.entity_type === 'organization') {
+                    } else if (node.data.Entity_type === 'organization') {
                       node.image = 'http://10.60.1.140/assets/images/organization.png'
-                    } else if (node.data.entity_type === 'weapon') {
+                    } else if (node.data.Entity_type === 'weapon') {
                       node.image = 'http://10.60.1.140/assets/images/weapon.png'
-                    } else if (node.data.entity_type === 'geographic_entity') {
+                    } else if (node.data.Entity_type === 'geographic_entity') {
                       node.image = 'http://10.60.1.140/assets/images/other.png'
-                    } else if (node.data.entity_type === 'project') {
+                    } else if (node.data.Entity_type === 'project') {
                       node.image = 'http://10.60.1.140/assets/images/other.png'
                     } else {
                       node.image = 'http://10.60.1.140/assets/images/other.png'
@@ -3467,9 +3470,9 @@
                     node.lineWidth = 3;
                     // node.image =
                     //   "http://10.60.1.140/assets/images/" +
-                    //   node.data.entity_type +
+                    //   node.data.Entity_type +
                     //   ".png";
-                    // node.image = './src/dist/assets/images/' + node.data.entity_type + '.png';
+                    // node.image = './src/dist/assets/images/' + node.data.Entity_type + '.png';
                   }
                 }
               }
@@ -3634,6 +3637,64 @@
             // onPointerUp(event) - 调用指针的函数。
             // onSettingsChange(event) - 更改设置时调用的函数。
             // onTripleClick(event) - 当用户三次点击图表时调用的函数。用于自定义函数调用。
+            onPointerDown: function(event) {
+              if (event.clickNode && event.selection.length>0){
+                  if(util.ifInArr(event.clickNode.id, event.selection.map(item => {
+                    return item.id
+                  }))) {
+                    console.log('------1------')
+                  // event.clickNode.draggable = false
+                  if (event.selection.filter(item => {
+                    return item.userManualLock
+                  }).length > 0) {
+                  console.log('包含锁定节点')
+                  event.selection.map(it => {
+                    it.draggable = false;
+                    mthis.netchart.updateStyle(it.id)
+                    return it
+                  })
+                } else {
+                  console.log('不包含锁定节点')
+                  event.selection.map(it => {
+                    it.draggable = true;
+                    mthis.netchart.updateStyle(it.id)
+                    return it
+                  })
+                }
+                } else {
+                  console.log('------2------')
+                  if (event.clickNode.userManualLock ||event.clickNode.opacity<1 ) {
+                    event.clickNode.draggable = false
+                  } else {
+                    event.clickNode.draggable = true
+                  }
+                }
+              } else{
+                console.log('------3------')
+              }
+              mthis.updateStyleCounter++;
+              // if (event.clickNode || event.clickLink) {
+              //   if (event.selection.filter(item => {
+              //       return item.userManualLock
+              //     }).length > 0) {
+              //     console.log('包含锁定节点')
+              //     event.selection.map(it => {
+              //       it.draggable = false;
+              //       mthis.netchart.updateStyle(it.id)
+              //       return it
+              //     })
+              //   } else {
+              //     console.log('不包含锁定节点')
+              //     event.selection.map(it => {
+              //       it.draggable = true;
+              //       mthis.netchart.updateStyle(it.id)
+              //       return it
+              //     })
+              //   }
+                
+              //   mthis.updateStyleCounter++;
+              // }
+            },
             onPointerDrag: function(event) {
               // mthis.changNetchartMode('s')
               if (event.clickNode || event.clickLink) {
@@ -3642,20 +3703,18 @@
                 })
               } else {}
             },
-            // onChartUpdate: function (event) {
-            // },
-            onSettingsChange: function(event) {},
+            onSettingsChange: function(event) {
+              console.log('=============chart updated=====================')
+            },
             onRightClick: function(event) {
               event.preventDefault();
               // if (mthis.selectionId > 0) {
-                console.log(event.nodes.length)
-                if(event.nodes.length){
-                  mthis.rightMenuShow()
-                }else{
-                  mthis.setMessage('请先选择节点')
-                }
-              
-              
+              console.log(event.nodes.length)
+              if (event.nodes.length) {
+                mthis.rightMenuShow()
+              } else {
+                mthis.setMessage('请先选择节点')
+              }
               // }
             },
             onError: function(event) {},
@@ -3703,14 +3762,14 @@
               // event.preventDefault();
             },
             onPointerMove: function(event) {
-              event.selection.map(item => {
-                if (item.isNode && item.opacity == 1) {
-                  item.draggable = true
-                } else {
-                  item.draggable = false
-                }
-                return item
-              })
+              // event.selection.map(item => {
+              //   if (item.isNode && item.opacity == 1) {
+              //     item.draggable = true
+              //   } else {
+              //     item.draggable = false
+              //   }
+              //   return item
+              // })
             },
             onDoubleClick: function(event) {
               let nodeList = event.selection.filter(function(x) {
@@ -3758,16 +3817,51 @@
                 clearTimeout(timer);
               }
               timer = setTimeout(function() {
-                if(mthis.selectionHightFlag){
+                console.log(event.selection)
+                if (mthis.selectionHightFlag) {
                   mthis.selectionHightFlag = false
-                  let ids = mthis.netchart.nodes().map(item => {
-                    return item.id
-                  })
-                  mthis.netchart.updateStyle(ids);
-                  // mthis.netchart.updateSettings();
-                  // mthis.netchart.updateSize();
-                 
-                } else{
+                  if (event.selection.filter(item => {
+                      return item.userManualLock
+                    }).length > 0) {
+                    console.log('包含锁定节点')
+                    event.selection.map(it => {
+                      it.draggable = false;
+                      mthis.netchart.updateStyle(it.id)
+                      return it
+                    })
+                  } else {
+                    console.log('不包含锁定节点')
+                    event.selection.map(it => {
+                      if (it.isNode && it.opacity == 1) {
+                        it.draggable = true
+                      } else {
+                        it.draggable = false
+                      }
+                      mthis.netchart.updateStyle(it.id)
+                      return it
+                    })
+                  }
+                  mthis.updateStyleCounter++;
+                } else {
+                  console.log(mthis.netchart)
+                  if (event.selection.filter(item => {
+                      return item.userManualLock
+                    }).length > 0) {
+                    console.log('包含锁定节点')
+                    event.selection.map(it => {
+                      it.draggable = false;
+                      mthis.netchart.updateStyle(it.id)
+                      return it
+                    })
+                  } else {
+                    console.log('不包含锁定节点')
+                    event.selection.map(it => {
+                      it.draggable = true;
+                      mthis.netchart.updateStyle(it.id)
+                      return it
+                    })
+                  }
+                  mthis.updateStyleCounter++;
                   mthis.fromTemp = new Array()
                   let ids = mthis.netchart.nodes().map(item => {
                     item.opacity = 1;
@@ -3910,12 +4004,12 @@
                       if (event.selection[nu].isNode) {
                         // mthis.netchart.lockNode(event.selection[nu].data.id)
                         //有三种情况，实体，事件，文档
-                        if (event.selection[nu].data.entity_type === "content" || event.selection[nu].data.entity_type === "document") {
+                        if (event.selection[nu].data.Entity_type === "content" || event.selection[nu].data.Entity_type === "document") {
                           mthis.selectionIdByTypeData.contentIds.ids.push(
                             event.selection[nu].data.id
                           );
                         } else if (
-                          event.selection[nu].data.entity_type === "event"
+                          event.selection[nu].data.Entity_type === "event"
                         ) {
                           mthis.selectionIdByTypeData.eventIds.push(
                             event.selection[nu].data.id
@@ -3970,7 +4064,7 @@
                     // mthis.changNetchartMode('s')
                   }
                 }
-                 mthis.updateStyleCounter++;
+                mthis.updateStyleCounter++;
               }, 200);
               if (mthis.netchart.exportData()) {
                 mthis.workatlastData[0].data = mthis.netchart.exportData();
@@ -4102,7 +4196,6 @@
       },
       netOnlyStaticsSelectedIds: function() {
         this.selectionHightFlag = false;
-
         this.netchart.selection(this.netOnlyStaticsSelectedIds.ids);
         this.netchart.updateStyle(this.netOnlyStaticsSelectedIds.ids);
         this.updateStyleCounter++;
@@ -4130,7 +4223,7 @@
                 'isUse': true
               }
             ]
-            if(lengthNum ==1){
+            if (lengthNum == 1) {
               mthis.ifSelectOnlyOneNode = true
             }
             if (lengthNum == 2) {
@@ -4139,13 +4232,12 @@
             if (lengthNum > 1) {
               mthis.ifSelectTwoNode = true
             }
-          }else{
+          } else {
             mthis.ifhasSelNode = false
-            if(mthis.netchart == null){
-              mthis.changeButtonParam = [
-                {
-                  'id_suf':'HD',
-                  'isUse':false
+            if (mthis.netchart == null) {
+              mthis.changeButtonParam = [{
+                  'id_suf': 'HD',
+                  'isUse': false
                 },
                 {
                   'id_suf': 'HSD',
@@ -4407,7 +4499,7 @@
               if (response.body.code === 0) {
                 let nodes = response.body.data[0].nodes;
                 nodes.map(item => {
-                  item.type = item.entity_type;
+                  item.type = item.Entity_type;
                   item.imageCropping = true;
                   arr.push(item.id)
                   return item;
@@ -4438,7 +4530,7 @@
                   nodes.push({
                     id: res.body.data[i].id,
                     img: img,
-                    entity_type: "event",
+                    Entity_type: "event",
                     name: name,
                     loaded: true
                   });
@@ -4468,7 +4560,7 @@
                   nodes.push({
                     id: item.id,
                     img: item.img,
-                    entity_type: "document",
+                    Entity_type: "document",
                     name: item.name,
                     loaded: true
                   });
@@ -4574,7 +4666,7 @@
                   nodes.push({
                     id: res.body.data[i].id,
                     img: img,
-                    entity_type: "event",
+                    Entity_type: "event",
                     name: name,
                     loaded: true
                   });
@@ -4584,8 +4676,6 @@
                   links: []
                 });
                 // mthis.changNetchartMode('r')
-
-
                 mthis.netchart.scrollIntoView(dataids);
                 mthis.netchart.updateStyle(dataids);
                 mthis.netchart.updateSettings();
@@ -4633,7 +4723,7 @@
         setTimeout(() => {
           mthis.netchart.scrollIntoView(contentIdsArry);
           mthis.updateStyleCounter++
-          mthis.netchart.selection(contentIdsArry);
+            mthis.netchart.selection(contentIdsArry);
         }, 200);
         setTimeout(() => {
           mthis.square();
@@ -4642,7 +4732,7 @@
           mthis.netchart.updateSettings();
           mthis.netchart.updateSize();
           mthis.updateStyleCounter++
-          mthis.spinShow = false;
+            mthis.spinShow = false;
         }, 500);
       },
       netTimeCondition: function() {
@@ -4686,7 +4776,7 @@
       searchNetResult: function(va) {
         var mthis = this;
         mthis.updateStyleCounter++;
-        va.data.type = va.data.entity_type;
+        va.data.type = va.data.Entity_type;
         va.data.image = va.data.img;
         va.data.images = va.data.img;
         // 清空画布后添加节点
@@ -4715,7 +4805,6 @@
         // setTimeout(() => {
         //   this.netchart.selection(va.data.id)
         // }, 200);
-        
       },
       addNetNodes: function(va) {
         var mthis = this;

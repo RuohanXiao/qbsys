@@ -170,23 +170,23 @@
     },
     methods: {
       show_default_image: function(event,ob) {
-            alert(ob.entity_type)
-            if (ob.entity_type === 'administrative') {
+            alert(ob.Entity_type)
+            if (ob.Entity_type === 'administrative') {
               event.target.src = 'http://10.60.1.140/assets/images/location.png'
-            } else if (ob.entity_type === 'human') {
+            } else if (ob.Entity_type === 'human') {
               event.target.src = 'http://10.60.1.140/assets/images/People.png'
-            } else if (ob.entity_type === 'organization') {
+            } else if (ob.Entity_type === 'organization') {
               event.target.src = 'http://10.60.1.140/assets/images/organization.png'
-            } else if (ob.entity_type === 'weapon') {
+            } else if (ob.Entity_type === 'weapon') {
               event.target.src = 'http://10.60.1.140/assets/images/weapon.png'
-            } else if (ob.entity_type === 'project') {
+            } else if (ob.Entity_type === 'project') {
               event.target.src = 'http://10.60.1.140/assets/images/image.png'
-            } else if (ob.entity_type === 'geographic_entity') {
+            } else if (ob.Entity_type === 'geographic_entity') {
               event.target.src = 'http://10.60.1.140/assets/images/location.png'
             }else if (ob.entity_entity_type === 'event') {
               // event.target.src =  mthis.myMap.get(subtype).img
               event.target.src = 'http://10.60.1.140/assets/images/event.png'
-            } else if (ob.entity_type === 'document') {
+            } else if (ob.Entity_type === 'document') {
               event.target.src = 'http://10.60.1.140/assets/images/content_node.png'
             } else {
               event.target.src = 'http://10.60.1.140/assets/images/other.png'
@@ -534,7 +534,7 @@
                 let optionListArr = []
                 // optionWordArr.push({"label":'文档搜索-\''+query+'\'',"value":'搜索:'+query,"img":'',"type":'content'})
                 for (let i = 0; i < response.body.data.nodes.length; i++) {
-                  // let name  = (response.body.data[0].nodes[i].chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].chinese_name
+                  // let name  = (response.body.data[0].nodes[i].Chinese_name == '') ? response.body.data[0].nodes[i].name : response.body.data[0].nodes[i].Chinese_name
                   optionListArr.push({
                     // "label": name,
                     "label": response.body.data.nodes[i].name,

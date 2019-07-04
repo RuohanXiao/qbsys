@@ -176,8 +176,8 @@
       //           // mthis.evetdata = response.body.data[0].nodes
       //           for(let i = 0; i < response.body.data.length;i++){
       //             response.body.data[i].id = response.body.data[i].doc_id
-      //             // response.body.data[i].entity_type = response.body.data[i].event_type
-      //             response.body.data[i].entity_type = 'event'
+      //             // response.body.data[i].Entity_type = response.body.data[i].event_type
+      //             response.body.data[i].Entity_type = 'event'
       //             response.body.data[i].name = response.body.data[i].event_subtype
       //           }
       //           // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
@@ -199,7 +199,7 @@
       //           // mthis.evetdataFlag = true
       //           // mthis.evetdata = response.body.data[0].nodes
       //           for(let i = 0; i < response.body.data.length;i++){
-      //             response.body.data[i].entity_type = 'document'
+      //             response.body.data[i].Entity_type = 'document'
       //             response.body.data[i].name = response.body.data[i].title
       //           }
       //           // mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)
@@ -245,7 +245,7 @@
               docOb.docIds = mthis.selectContentNodes[0].ids
                mthis.$http.post(mthis.$store.state.ipConfig.api_url + '/doc-detail/', docOb).then(response => {
                 for(let i = 0; i < response.body.data.length;i++){
-                  response.body.data[i].entity_type = 'document'
+                  response.body.data[i].Entity_type = 'document'
                   response.body.data[i].name = response.body.data[i].title
                 }
                 mthis.evetdata = util.hebing(mthis.evetdata,response.body.data)

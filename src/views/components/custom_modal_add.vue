@@ -35,13 +35,13 @@
             <Avatar class="circle-img" v-else :src="targetData.img" :style="{width:'50px',height:'50px'}" />
           </div>
           <div class='addTarget'>
-            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.entity_type =='geographic_entity'" ></entityDetailsTableHuman>
+            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.Entity_type =='geographic_entity'" ></entityDetailsTableHuman>
             
-            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.entity_type =='project'" ></entityDetailsTableHuman>
+            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.Entity_type =='project'" ></entityDetailsTableHuman>
             
-            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.entity_type =='human'" ></entityDetailsTableHuman>
-            <entityDetailsTableAdministrative :Entitydetail="targetData" v-if="targetData.entity_type =='administrative'"></entityDetailsTableAdministrative>
-            <entityDetailsTableOrganization :Entitydetail="targetData" v-if="targetData.entity_type =='organization'"></entityDetailsTableOrganization>
+            <entityDetailsTableHuman :Entitydetail="targetData" v-if="targetData.Entity_type =='human'" ></entityDetailsTableHuman>
+            <entityDetailsTableAdministrative :Entitydetail="targetData" v-if="targetData.Entity_type =='administrative'"></entityDetailsTableAdministrative>
+            <entityDetailsTableOrganization :Entitydetail="targetData" v-if="targetData.Entity_type =='organization'"></entityDetailsTableOrganization>
           </div>
         </div>
         <div>
@@ -166,8 +166,8 @@
         this.$store.commit('setAddNetNodes', {
           nodes: [{
             'id': this.targetData.id,
-            'type': this.targetData.entity_type,
-            'name': this.targetData.chinese_name,
+            'type': this.targetData.Entity_type,
+            'name': this.targetData.Chinese_name,
             'img': this.targetData.img,
             'loaded': true
           }]
