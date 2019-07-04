@@ -8,11 +8,11 @@
           <Avatar class="circle-img" v-if="ishasValue(Entitydetail.img)" :src="Entitydetail.img" :style="{position: 'absolute',width:'50px',height:'50px',right:'50px'}" />
         </div>
         <div class='entity_detail'>
-          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='human'" ></entityDetailsTableHuman>
-          <entityDetailsTableAdministrative :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='administrative'"></entityDetailsTableAdministrative>
-          <entityDetailsTableOrganization :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='organization'"></entityDetailsTableOrganization>
-          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='geographic_entity'" ></entityDetailsTableHuman>
-          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.entity_type =='project'" ></entityDetailsTableHuman>
+          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.Entity_type =='human'" ></entityDetailsTableHuman>
+          <entityDetailsTableAdministrative :Entitydetail="Entitydetail" v-if="Entitydetail.Entity_type =='administrative'"></entityDetailsTableAdministrative>
+          <entityDetailsTableOrganization :Entitydetail="Entitydetail" v-if="Entitydetail.Entity_type =='organization'"></entityDetailsTableOrganization>
+          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.Entity_type =='geographic_entity'" ></entityDetailsTableHuman>
+          <entityDetailsTableHuman :Entitydetail="Entitydetail" v-if="Entitydetail.Entity_type =='project'" ></entityDetailsTableHuman>
 
         </div>
     </div>

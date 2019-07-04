@@ -16,17 +16,17 @@
               <div class="eButton">
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(communityData.chinese_name) === 'object'&&communityData.chinese_name.length>5&&displayMore['chinese_name']" @click="clickMore('chinese_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(communityData.Chinese_name) === 'object'&&communityData.Chinese_name.length>5&&displayMore['Chinese_name']" @click="clickMore('Chinese_name')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(communityData.chinese_name) === 'object'&&index>=5&&!displayMore['chinese_name']" v-for="(occ,index) in communityData.chinese_name">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(communityData.Chinese_name) === 'object'&&index>=5&&!displayMore['Chinese_name']" v-for="(occ,index) in communityData.Chinese_name">
               <p class="econtentp w8em" v-if="index==0">全名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
               <div class="eButton">
               </div>
             </div>
-            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(communityData.chinese_name) === 'object'&&communityData.chinese_name.length>5&&!displayMore['chinese_name']" @click="clickCutOut('chinese_name')">
+            <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(communityData.Chinese_name) === 'object'&&communityData.Chinese_name.length>5&&!displayMore['Chinese_name']" @click="clickCutOut('Chinese_name')">
               <p class="econtentp w8em moreP">收起</p>
             </div>
           </div> -->

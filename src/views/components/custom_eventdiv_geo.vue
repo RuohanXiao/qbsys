@@ -144,7 +144,7 @@
               var eventDs = [];
               for (var i = 0; i < EventDetail.length; i++) {
                 var eventD = {};
-                eventD.entity_type = 'event';
+                eventD.Entity_type = 'event';
                 eventD.id = EventDetail[i].id;
                 eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
                 eventD.loaded = true;
@@ -203,7 +203,7 @@
               var eventDs = [];
               for (var i = 0; i < EventDetail.length; i++) {
                 var eventD = {};
-                eventD.entity_type = 'event';
+                eventD.Entity_type = 'event';
                 eventD.id = EventDetail[i].id;
                 eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
                 eventD.loaded = true;
@@ -327,7 +327,7 @@
                 var eventDs = [];
                 for (var i = 0; i < EventDetail.length; i++) {
                   var eventD = {};
-                  eventD.entity_type = 'event';
+                  eventD.Entity_type = 'event';
                   eventD.id = EventDetail[i].id;
                   eventD.img = mthis.$store.state.ipConfig.xml_url + '/images/event.png';
                   eventD.loaded = true;

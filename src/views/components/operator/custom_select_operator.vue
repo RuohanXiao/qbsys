@@ -40,15 +40,6 @@
           
         },
         watch:{
-            /*Value:{
-                handler: function() {
-                    var mthis = this;
-                    
-                    mthis.value = mthis.Value;
-                },
-                immediate: true
-                
-            } */
         },
         computed:{
             layerNames:{
@@ -56,7 +47,6 @@
                     var mthis = this;
                     var options = mthis.Params.value.options;
                     if(options === undefined){
-                        /* return [0,100]; */
                         alert('算子库options设置错误！')
                     }  else {
                         return options;

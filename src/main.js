@@ -384,7 +384,10 @@ var store = new Vuex.Store({
             eventId: []
         },
         geo_onlyselected_param: [],
-        geo_hastype_param: {},
+        geo_hastype_param: {
+            "eventIds":[],
+            "orgIds":[]
+        },
         content_selected_param: {
             type: '',
             params: {}

@@ -545,7 +545,7 @@
                 return item.id
               }),
               // "NodeTypes": mthis.tableData.map(item => {
-              //   return item.entity_type
+              //   return item.Entity_type
               // }),
               "TypeLabel": "all"
             }).then(response => {
@@ -666,7 +666,7 @@
                 nodes.push({
                   id: response.body.data[i].id,
                   img: img,
-                  entity_type: 'event',
+                  Entity_type: 'event',
                   name: name,
                   loaded: true
                 })
@@ -700,7 +700,7 @@
                 nodes.push({
                   id: response.body.data[i].id,
                   img: 'http://10.60.1.140/assets/images/content_node.png',
-                  entity_type: 'content',
+                  Entity_type: 'content',
                   name: response.body.data[i].title,
                   label: response.body.data[i].title.substring(0, 19) + '...',
                   loaded: true
@@ -738,7 +738,7 @@
                 "NodeIds": mthis.tableData.map(item => {
                   return item.id
                 }),
-                // "NodeTypes":mthis.tableData.map(item=>{return item.entity_type}),
+                // "NodeTypes":mthis.tableData.map(item=>{return item.Entity_type}),
                 "TypeLabel": "all"
               }).then(response => {
               })
