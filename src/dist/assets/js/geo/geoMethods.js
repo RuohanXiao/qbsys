@@ -109,7 +109,29 @@ export default {
             allParamIds = allParamIds.concat(paramIds)
         }
         return allParamIds;
-    }
+    },
+    /*从feature中读取热力属性，如果HeatAttrs未曾含有该属性，则添加进去
+    *@method addHeatAttrs
+    *@param{Object} feature 
+    *@param{Array} HeatAttrs  存储map中的QB包含的热力属性种类
+    */
+    addHeatAttrs(Param,HeatAttrs){
+        var heatAttr = Param.heatAttr;
+        var keys = Object.keys(heatAttr);
+        if(keys !== undefined && keys.length > 0){
+            for(let i = 0; i < keys.length; i++){
+                let HA = keys[i];
+                if(HA in HeatAttrs){
+                    if(HeatAttrs[HA] < heatAttr[HA]){
+                        HeatAttrs[HA] = heatAttr[HA]
+                    }
+                } else {
+                    HeatAttrs[HA] = heatAttr[HA]
+                }
+
+            }
+        }
+    },
 }
 
 

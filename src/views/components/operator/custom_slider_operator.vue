@@ -4,7 +4,7 @@
 <template>
     <Col span="20">
         <div>{{sliderParams.name+":"}}</div>
-        <Slider v-model="value"  :min="extent[0]" :max="extent[1]" @on-blur="changeValue"></Slider>
+        <Slider v-model="value"  :min="extent[0]" :max="extent[1]" :active-change='true' @on-input="changeValue"></Slider>
     </Col>
 </template>
 <script>
@@ -19,7 +19,7 @@
             changeValue(){
               var mthis = this;
               
-              
+              debugger
               var param = {
                   attrName:mthis.sliderParams.attrName,
                   value:mthis.value,

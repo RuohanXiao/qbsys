@@ -4,7 +4,7 @@
 <template>
     <Col span="20">
         <div>{{sliderParams.name+":"}}</div>
-        <Slider v-model="value"  :min="extent[0]" :active-change='false' :max="extent[1]" @on-blur="a" @on-change="changeValue"></Slider>
+        <Slider v-model="value"  :min="extent[0]" :active-change='false' :max="extent[1]" @on-change="changeValue"></Slider>
     </Col>
 </template>
 <script>
@@ -16,7 +16,6 @@
         },
         props:['sliderParams'],
         methods:{
-            a(){},
             changeValue(){
               var mthis = this;
               
