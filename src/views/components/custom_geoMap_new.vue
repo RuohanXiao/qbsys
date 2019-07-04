@@ -225,6 +225,7 @@ import {getThirdPoint} from '../../dist/assets/js/geo/geometryType/Arc.js'
 import util from '../../util/tools.js'
 import {rightMenu} from '../../dist/assets/js/rightMenu.js'
 import GSF from "../../dist/assets/js/geo/geoMethods.js"
+// import {GISOperator} from "../../dist/assets/js/geo/operatio.js"
 
 import VectorSource from 'ol/source/Vector'
 import VectorLayer from 'ol/layer/Vector'
@@ -487,6 +488,7 @@ export default {
         pointClickListenerKey:null,
         eventGeoJson:null,
         qbstyles:{},
+        // operatorConfig:GISOperator(),
         operatorConfig:[
                 {
                     name:'热力分析',
@@ -495,6 +497,18 @@ export default {
                     openFunction:'openHeat',
                     closeFunction:'closeHeat',
                     operatorSurface:[
+                      {
+                        name:'选择热力属性',
+                        id:'heatAttr',
+                        type:'Select',
+                        attrName:'AttrName', 
+                        excuteFunction:'setHeatMapAttr',
+                        value:{
+                          options:{
+                              
+                          }
+                        }
+                      },
                       {
                         name:'半径大小',
                         id:'heatRadius',
@@ -715,18 +729,10 @@ export default {
                 }
             ];
             var orgIds = [];
+            var eventIds = [];
+            var areaIds = [];
             var eventIds = mthis.geo_hastype_param.eventIds;
-            var areaIds = mthis.geo_hastype_param.orgIds;
-            /* for(let i = 0; i < mthis.SelectedIds.length; i++){
-                let id = mthis.SelectedIds[i];
-                let type = id.split('&')[0];
-                let oid = id.split('&')[1];
-                if(type === 'event'){
-                    eventIds.push(oid);
-                } else {
-                    orgIds.push(oid);
-                }
-            } */
+            var orgIds = mthis.geo_hastype_param.orgIds;
             for(let i = 0; i < mthis.AreaIds.length; i++){
                 let id = mthis.AreaIds[i];
                 areaIds.push(id);
@@ -1928,19 +1934,19 @@ export default {
             var num = 0;
             var allIds = [];
             if(type === 'Event'){
-                //url = 'http://10.60.1.141:5100/exploreEvent/'
+                url = 'http://10.60.1.141:5100/exploreEvent/'
                 //url = 'http://localhost:5000/exploreEvent/'
-                url = 'http://10.130.9.135:5001/exploreEvent/'
+                //url = 'http://10.130.9.135:5001/exploreEvent/'
                 promptType = '事件数';
             } else if(type === 'Org'){
-                //url = 'http://10.60.1.141:5100/exploreOrg/'
+                url = 'http://10.60.1.141:5100/exploreOrg/'
                 //url = 'http://localhost:5000/exploreOrg/'
-                url = 'http://10.130.9.135:5001/exploreOrg/'
+                //url = 'http://10.130.9.135:5001/exploreOrg/'
                 promptType = '组织机构数';
             } else if(type === 'GeoTar'){
-                //url = 'http://10.60.1.141:5100/exploreGeoTar/'
+                url = 'http://10.60.1.141:5100/exploreGeoTar/'
                 //url = 'http://localhost:5000/exploreGeoTar/'
-                url = 'http://10.130.9.135:5001/exploreGeoTar/'
+                //url = 'http://10.130.9.135:5001/exploreGeoTar/'
                 promptType = '地理目标数';
             }
             mthis.geometrySelectedParamIds = [];
@@ -2913,8 +2919,8 @@ export default {
             var mthis = this;
             mthis.waiting();
             mthis.cancelSelectQB();
-            // mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
-            mthis.$http.post("http://10.130.9.135:5001/param-exploration/", {
+            mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
+            //mthis.$http.post("http://10.130.9.135:5001/param-exploration/", {
                      "nodeIds": ids
                 }).then(response => {
                     var orgNum = 0;
@@ -3164,13 +3170,15 @@ export default {
                 var id = ids[i].split('_')[0];
                 var featureTypes;
                 var filter;
-                if(type === 'province'){
-                    featureTypes = ["world_states_provinces_postgis"]
-                    filter = new EqualTo('objectid',id);
-                } else {
-                    featureTypes = ["world_states_countries_postgis"]
-                    filter = new EqualTo('id',id);
-                }
+                featureTypes = [type]
+                filter = new EqualTo('id',id);
+                // if(type === 'province'){
+                //     featureTypes = ["province_osm"]
+                //     filter = new EqualTo('wikidata',id);
+                // } else {
+                //     featureTypes = ["country_osm"]
+                //     filter = new EqualTo('wikidata',id);
+                // }
                 mthis.getWfsData(featureTypes,filter);
             }
 
@@ -3192,8 +3200,8 @@ export default {
             var mthis = this;
             var ids = mthis.geoWorkSetData_area;
             //var 
-            var featureTypes_c = ["world_states_countries_postgis"];
-            var featureTypes_p = ["world_states_provinces_postgis"];
+            var featureTypes_c = ["country"];
+            var featureTypes_p = ["province"];
             var filters_c = [];
             var filters_p = [];
             var proIds = [];
@@ -3208,7 +3216,7 @@ export default {
                     filters_c.push(filter);
                 } else {
                     //proIds
-                    let filter = new EqualTo('objectid',id);
+                    let filter = new EqualTo('id',id);
                     filters_p.push(filter);
                 }
             }
@@ -3272,7 +3280,6 @@ export default {
         },
         staticsSelectedEventIds:function(){
             var mthis = this;
-            debugger
             var selectedHastypeParam = mthis.discQBType(mthis.staticsSelectedEventIds);
             var selectedQBids = selectedHastypeParam.eventIds.concat(selectedHastypeParam.orgIds)
             var selectedEventsParam = {
@@ -3284,7 +3291,6 @@ export default {
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            debugger
             mthis.HLIds = mthis.timeSelectedEventIds;//GSF.QBIdsToParamIds(mthis.timeSelectedEventIds,mthis.QBIdToParamIdsList);
             // var ids = [];
             // for(let i = 0; i < mthis.timeSelectedEventIds.length; i++){

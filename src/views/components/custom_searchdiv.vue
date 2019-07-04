@@ -89,6 +89,7 @@
       },
       setOption(a) {
         var mthis = this;
+        debugger
         if (this.$store.state.tmss === 'net') {
           mthis.sessionStorageTemp.push(a)
           util.writeStorage('netSearchTemp',mthis.sessionStorageTemp)
