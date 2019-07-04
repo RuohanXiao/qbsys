@@ -1,5 +1,6 @@
 <template>
-    <div :style="{display:'flex',flexWrap:'wrap',flexDirection:'row-reverse'}" @click="hideDoc">
+    <div :style="{display:'flex',flexWrap:'wrap',flexDirection:'row-reverse'}" 
+    @click="hideDoc" tabindex="1" @keydown="keyD" @keyup="keyU" style="outline:none;">
         
         <div class='docTitle' @click="showDoc">
             <img src=http://10.60.1.140/assets/images/content_node.png 
@@ -35,7 +36,7 @@
                 </div>
             </div>
         </div>
-        <div :id="main1Id" :style="{marginTop:'30px'}"></div>
+        <div :id="main1Id" :style="{marginTop:'30px'}" ></div>
         
     </div>
 </template>
@@ -54,6 +55,7 @@ export default {
             main1Id:'wordC',
             // docNum:234,
             ifShowDoc:false,
+
             docDatas:[],
             prevDocDatas:[],
             showWords:[],
@@ -62,7 +64,15 @@ export default {
             allWords:{},
             show:true,
             rangeAngle:[],
-            
+            // 用于控制词云颜色
+            colorFlag:0,
+            // 用于改变某个词云
+            dataInt:null,
+            // 用于word-doc的请求IDList
+            sendWordIds:[],
+            ctrlFlag:false,
+            sWord:[],
+            prevColorList:[]
         }
     },
     props:['docNum','initWord'],
@@ -70,6 +80,16 @@ export default {
     watch:{
         docNum:function(){
             this.docNumber = this.docNum
+        },
+        docDatas:{
+            deep:true,
+            handler(){
+                var mthis = this;
+                mthis.sendWordIds=[]
+                mthis.docDatas.forEach(item =>{
+                    mthis.sendWordIds.push(item.id)
+                })
+            }
         },
         'contentTimeCondition.ids':function(){
             var mthis = this
@@ -182,7 +202,46 @@ export default {
             } else {
               e.returnValue = false;
             }
-          },
+        },
+        keyD(e){
+            this.clearBubble(e)
+            var mthis = this;
+            if(e.ctrlKey){
+                mthis.ctrlFlag = true
+                console.log("keydown")
+            }
+            
+        },
+        keyU(e){
+            this.clearBubble(e)
+            var mthis = this;
+            
+            if(e.keyCode==17){
+                mthis.ctrlFlag = false
+                console.log("keyup")
+            }
+        },
+        getWordsDoc(word,speech){
+            mthis.$http.post(mthis.$store.state.ipConfig.api_url +"/word-doc/",{
+                "idList":mthis.sendWordIds,
+                "word":word,
+                "speech":speech
+            }).then(response =>{
+                if(response.body.code == 0){
+                    let items = []
+                    mthis.changeNum(response.body.data.ids.length)
+                    for(var i of response.body.data.ids){
+                        for(var j in mthis.prevDocDatas){
+                            if(i == mthis.prevDocDatas[j].id){
+                                // mthis.prevDocDatas[j].check = true
+                                items.push(mthis.deepClone(mthis.prevDocDatas[j]))
+                            }
+                        }
+                    }
+                    mthis.docDatas = mthis.deepClone(items)
+                }
+            })
+        },
         loadEcharts(flag,param){
             var mthis = this;
             if(flag ==1){
@@ -203,7 +262,7 @@ export default {
                             name:'关键词',
                             type:'wordCloud',
                             shape: 'circle',
-                            sizeRange: [18, 26],
+                            sizeRange: [18, 32],
                             rotationRange: [0, 0],
                             textPadding: 0,
                             autoSize:{
@@ -212,9 +271,39 @@ export default {
                             },
                             textStyle:{
                                 normal:{
-                                    color:function(){
-                                        var colorList = ['#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff']
-                                        return colorList[Math.floor(Math.random()*6)]
+                                    color:function(params){
+                                        var colorList = ['#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff','#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff'
+                                        ,'#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff','#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff',
+                                        '#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff','#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff','#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff'
+                                        ,'#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff','#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff'
+                                        ,'#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff','#99ffff','#339999','#ccffff','#33cccc','#00cccc','#33ffff']
+                                        var colorListSingle = []
+                                        var colorListMore = []
+                                        // var prevColorList = []
+                                        if(mthis.colorFlag ==0){
+                                            // 初始化
+                                            return colorList[params.dataIndex]
+                                        }else if(mthis.colorFlag ==1){
+                                            // 单选
+                                            colorListSingle = colorList.slice(0)
+                                            colorListSingle[mthis.dataInt] = "#C1232B"
+                                            mthis.prevColorList = colorListSingle.slice(0)
+                                            // console.log(prevColorList)
+                                            return colorListSingle[params.dataIndex]
+                                        }else if(mthis.colorFlag ==2){
+                                            // 多选
+                                            
+                                            colorListMore = mthis.prevColorList.slice(0)
+                                            // console.log(colorListMore)
+                                            colorListMore[mthis.dataInt] = "#C1232B"
+                                            // console.log(colorListMore)
+                                            mthis.prevColorList = colorListMore.slice(0)
+                                            // console.log(prevColorList)
+                                            return colorListMore[params.dataIndex]
+                                        }
+                                        
+                                        
+                                        
                                     }
                                 },
                                 emphasis:{
@@ -237,9 +326,25 @@ export default {
                 
                 mthis.charts.setOption(mthis.option)
                 this.charts.on('click',function(param){
-                    console.log(param)
                     
+                    let speech = param.seriesName
+                    mthis.dataInt = param.dataIndex
                     
+                    if(mthis.ctrlFlag){
+                        // mthis.dataInt = param.dataIndex
+                        mthis.colorFlag = 2
+                        mthis.sWord.push(param.name)
+                    }else{
+                        mthis.sWord = []
+                        mthis.sWord.push(param.name)
+                        // mthis.dataInt = param.dataIndex
+                        mthis.colorFlag = 1
+                        
+                    }
+                    
+                    mthis.charts.setOption(mthis.option)
+                    mthis.changeNum(12)
+                    console.log(mthis.sWord)
                 })
             }
             if(flag == 2){
