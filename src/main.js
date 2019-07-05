@@ -384,7 +384,10 @@ var store = new Vuex.Store({
             eventId: []
         },
         geo_onlyselected_param: [],
-        geo_hastype_param: {},
+        geo_hastype_param: {
+            "eventIds":[],
+            "orgIds":[]
+        },
         content_selected_param: {
             type: '',
             params: {}
@@ -449,6 +452,7 @@ var store = new Vuex.Store({
         },
         heatMapRadius: 20,
         heatMapBlur: 20,
+        HeatMapAttr:'',
         displayHeatMap: false,
         topicClassifIds: [],
         topicSelIds: [],
@@ -480,11 +484,15 @@ var store = new Vuex.Store({
         thematicLayerName: [],
         openthematicLayer: false,
         netSwitch: 0,
-        methodType: 'community'
+        methodType: 'community',
+        GeoOperatorConfig:[],
             // thematicLayerName: [],
             // openthematicLayer: false
     },
     mutations: {
+        setGeoOperatorConfig(state, val){
+            state.GeoOperatorConfig = val
+        },
         setNetOnlyStaticsIdsByType(state, val) {
             state.netOnlyStaticsIdsByType = val
         },
@@ -800,6 +808,9 @@ var store = new Vuex.Store({
         newHeatMapBlur(state, val) {
             state.heatMapBlur = val;
         },
+        newHeatMapAttr(state, val){
+            state.HeatMapAttr = val;
+        },
         openHeatMap(state) {
             state.displayHeatMap = true;
         },
@@ -903,6 +914,10 @@ var store = new Vuex.Store({
         },
         setHeatMapBlur(context, blur) {
             context.commit('newHeatMapBlur', blur);
+        },
+        setHeatMapAttr(context, attr) {
+            debugger
+            context.commit('newHeatMapAttr', attr.value);
         },
         openHeat(context) {
             context.commit('openHeatMap');

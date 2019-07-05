@@ -225,6 +225,7 @@ import {getThirdPoint} from '../../dist/assets/js/geo/geometryType/Arc.js'
 import util from '../../util/tools.js'
 import {rightMenu} from '../../dist/assets/js/rightMenu.js'
 import GSF from "../../dist/assets/js/geo/geoMethods.js"
+import {GISOperator} from "../../dist/assets/js/geo/operator.js"
 
 import VectorSource from 'ol/source/Vector'
 import VectorLayer from 'ol/layer/Vector'
@@ -487,68 +488,84 @@ export default {
         pointClickListenerKey:null,
         eventGeoJson:null,
         qbstyles:{},
-        operatorConfig:[
-                {
-                    name:'热力分析',
-                    id:'heatMap',
-                    iconName:'icon-star',
-                    openFunction:'openHeat',
-                    closeFunction:'closeHeat',
-                    operatorSurface:[
-                      {
-                        name:'半径大小',
-                        id:'heatRadius',
-                        type:'Slider',
-                        attrName:'radius', 
-                        excuteFunction:'setHeatMapRadius',
-                        value:{
-                          extent:[1,50],
-                          defaultValue:20
-                        }
-                      },{
-                        name:'热力模糊度',
-                        id:'heatBlur',
-                        type:'Slider',
-                        attrName:'blur',
-                        excuteFunction:'setHeatMapBlur',
-                        value:{
-                          extent:[1,50],
-                          defaultValue:20
-                        }
-                      }
-                    ]
-                },
-                {
-                name:'图层处理',
-                id:'layerHandle',
-                iconName:'icon-file',
-                disabled:true,
-                },
-                {
-                name:'轨迹分析',
-                id:'locusAnalyse',
-                iconName:'icon-route',
-                disabled:true
-                },
-                {
-                name:'空间分析',
-                id:'spatialAnalyse',
-                iconName:'icon-kongjianfenxi',
-                disabled:true
-                },
-                {
-                name:'获取更多',
-                id:'getMore',
-                iconName:'icon-more',
-                disabled:true
-                }
-        ],
+        operatorConfig:[],
+        operator:null,
+        heatAttrs:{},
+        // operatorConfig:[
+        //         {
+        //             name:'热力分析',
+        //             id:'heatMap',
+        //             iconName:'icon-star',
+        //             openFunction:'openHeat',
+        //             closeFunction:'closeHeat',
+        //             operatorSurface:[
+        //               {
+        //                 name:'选择热力属性',
+        //                 id:'heatAttr',
+        //                 type:'Select',
+        //                 attrName:'AttrName', 
+        //                 excuteFunction:'setHeatMapAttr',
+        //                 value:{
+        //                   options:{
+                              
+        //                   }
+        //                 }
+        //               },
+        //               {
+        //                 name:'半径大小',
+        //                 id:'heatRadius',
+        //                 type:'Slider',
+        //                 attrName:'radius', 
+        //                 excuteFunction:'setHeatMapRadius',
+        //                 value:{
+        //                   extent:[1,50],
+        //                   defaultValue:20
+        //                 }
+        //               },{
+        //                 name:'热力模糊度',
+        //                 id:'heatBlur',
+        //                 type:'Slider',
+        //                 attrName:'blur',
+        //                 excuteFunction:'setHeatMapBlur',
+        //                 value:{
+        //                   extent:[1,50],
+        //                   defaultValue:20
+        //                 }
+        //               }
+        //             ]
+        //         },
+        //         {
+        //         name:'图层处理',
+        //         id:'layerHandle',
+        //         iconName:'icon-file',
+        //         disabled:true,
+        //         },
+        //         {
+        //         name:'轨迹分析',
+        //         id:'locusAnalyse',
+        //         iconName:'icon-route',
+        //         disabled:true
+        //         },
+        //         {
+        //         name:'空间分析',
+        //         id:'spatialAnalyse',
+        //         iconName:'icon-kongjianfenxi',
+        //         disabled:true
+        //         },
+        //         {
+        //         name:'获取更多',
+        //         id:'getMore',
+        //         iconName:'icon-more',
+        //         disabled:true
+        //         }
+        // ],
         legend:false,
         legendURL:[],
         openThematicModal:false,
         hasTheamatic:false,
         asynwaitCount:1,
-        asynAddIdsCount:1,   
+        asynAddIdsCount:1,  
+        
         } 
     },
     mounted() {
@@ -715,18 +732,10 @@ export default {
                 }
             ];
             var orgIds = [];
+            var eventIds = [];
+            var areaIds = [];
             var eventIds = mthis.geo_hastype_param.eventIds;
-            var areaIds = mthis.geo_hastype_param.orgIds;
-            /* for(let i = 0; i < mthis.SelectedIds.length; i++){
-                let id = mthis.SelectedIds[i];
-                let type = id.split('&')[0];
-                let oid = id.split('&')[1];
-                if(type === 'event'){
-                    eventIds.push(oid);
-                } else {
-                    orgIds.push(oid);
-                }
-            } */
+            var orgIds = mthis.geo_hastype_param.orgIds;
             for(let i = 0; i < mthis.AreaIds.length; i++){
                 let id = mthis.AreaIds[i];
                 areaIds.push(id);
@@ -1296,6 +1305,9 @@ export default {
                                 })
                     }
                 }
+                debugger
+                mthis.operator = new GISOperator()
+                mthis.operatorConfig = mthis.operator.getConfig()
                 var HLAreaStyle = new Style({
                     fill: new Fill({ //矢量图层填充颜色，以及透明度
                         color: 'rgba(51, 255, 255, 0.3)'
@@ -1849,6 +1861,10 @@ export default {
         },
         drawExplore(object){
             var mthis = this
+            // mthis.operator.setSurfaceValue('heatMap','heatAttr',{options:[{
+            //                             label:'aaa',
+            //                             value:'aaaa'
+            //                         }]})
             var mapDiv = document.getElementById('mainMap')
             mapDiv.style.cursor = 'crosshair';
             //矢量图层是用来渲染矢量数据的图层类型，在OpenLayers里，它是可以定制的，可以控制它的透明度，颜色，以及加载在上面的要素形状等。
@@ -1923,24 +1939,26 @@ export default {
         },
         exploreQB(geometryArr,type){
             var mthis = this;
+            debugger
             var url = '';
             var promptType = ''
             var num = 0;
             var allIds = [];
+            var heatAttrs = {};
             if(type === 'Event'){
-                //url = 'http://10.60.1.141:5100/exploreEvent/'
+                url = 'http://10.60.1.141:5100/exploreEvent/'
                 //url = 'http://localhost:5000/exploreEvent/'
-                url = 'http://10.130.9.135:5001/exploreEvent/'
+                //url = 'http://10.130.9.135:5001/exploreEvent/'
                 promptType = '事件数';
             } else if(type === 'Org'){
-                //url = 'http://10.60.1.141:5100/exploreOrg/'
+                url = 'http://10.60.1.141:5100/exploreOrg/'
                 //url = 'http://localhost:5000/exploreOrg/'
-                url = 'http://10.130.9.135:5001/exploreOrg/'
+                //url = 'http://10.130.9.135:5001/exploreOrg/'
                 promptType = '组织机构数';
             } else if(type === 'GeoTar'){
-                //url = 'http://10.60.1.141:5100/exploreGeoTar/'
+                url = 'http://10.60.1.141:5100/exploreGeoTar/'
                 //url = 'http://localhost:5000/exploreGeoTar/'
-                url = 'http://10.130.9.135:5001/exploreGeoTar/'
+                //url = 'http://10.130.9.135:5001/exploreGeoTar/'
                 promptType = '地理目标数';
             }
             mthis.geometrySelectedParamIds = [];
@@ -1966,6 +1984,7 @@ export default {
                                 let param = params[j];
                                 let QBId = param.QBId;
                                 let ParamId = param.ParamId;
+                                GSF.addHeatAttrs(param,heatAttrs);
                                 if(mthis.ParamIdsToFeatureIdList[ParamId] !== undefined){  //判断param是否存在于原来的地图中
 
                                 } else {
@@ -1989,6 +2008,7 @@ export default {
                                 let param = params[j];
                                 let QBId = param.QBId;
                                 let ParamId = param.ParamId;
+                                GSF.addHeatAttrs(param,heatAttrs);
                                 mthis.ParamIdsToFeatureIdList[ParamId] = featureId;
                                 if(mthis.QBIdToParamIdsList[QBId] === undefined){
                                     mthis.QBIdToParamIdsList[QBId] = [ParamId];
@@ -2003,7 +2023,7 @@ export default {
                             source.addFeature(feature);
                         }
                     }
-                    allIds = mthis.asynAddgeometrySelectedParamIds(Ids,allIds,num);
+                    allIds = mthis.asynAddgeometrySelectedParamIds(Ids,allIds,heatAttrs,num);
                     /* mthis.qbMap.addFeatures(addfeatures,'QBLayer'); */
                     mthis.hide(num);
                 },function(error){
@@ -2012,13 +2032,14 @@ export default {
                 })
             }
         },
-        asynAddgeometrySelectedParamIds(ids,allIds,count){
+        asynAddgeometrySelectedParamIds(ids,allIds,heatAttrs,count){
             var mthis = this;
             /* var allIds = []; */
             var a = [];
             if(mthis.asynAddIdsCount === count){
                 a = allIds.concat(ids);
                 mthis.geometrySelectedParamIds = a;
+                mthis.heatAttrs = heatAttrs;
                 mthis.asynAddIdsCount = 1;
                 return a;
             } else {
@@ -2419,7 +2440,27 @@ export default {
         },
         weightFunction(feature){
             var mthis = this;
-            var we = feature.get('selectedNum') / mthis.maxEventsNum;
+            debugger
+            var Num = 0;
+            var attrKey = mthis.HeatMapAttr===''?"频次":mthis.HeatMapAttr;
+            var maxEventsNum = attrKey==='频次'?mthis.maxEventsNum:mthis.heatAttrs[attrKey];
+            if(attrKey !== '频次'){
+                var params = feature.get('Params');
+                for(let i = 0; i < params.length; i++){
+                    var param = params[i];
+                    var paramId = param.ParamId;
+                    var index = util.itemIndexInArr(paramId,mthis.HLIds)
+                    if(index !== -1){
+                        var heatAttr = param.heatAttr;
+                        if(heatAttr[attrKey] !== undefined){
+                            Num += parseInt(heatAttr[attrKey])
+                        }
+                    }
+                }
+            } else {
+                Num = feature.get('selectedNum')
+            }
+            var we = Num / maxEventsNum;
             var weight = we<0.5&&we>0?0.5:we;
             return weight
         },
@@ -2913,8 +2954,8 @@ export default {
             var mthis = this;
             mthis.waiting();
             mthis.cancelSelectQB();
-            // mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
-            mthis.$http.post("http://10.130.9.135:5001/param-exploration/", {
+            mthis.$http.post("http://10.60.1.141:5100/param-exploration/", {
+            //mthis.$http.post("http://10.130.9.135:5001/param-exploration/", {
                      "nodeIds": ids
                 }).then(response => {
                     var orgNum = 0;
@@ -3126,13 +3167,49 @@ export default {
         },
 
     },
+    // computed:{
+    //     localComputed () { /* ... */ },
+    //     ...mapState ({'tmss':"tmss",'split':"",'split_geo':"",'geoHeight':"geoHeight",'geoTimeCondition':"geoTimeCondition",'geo_selected_param':"geo_selected_param",
+    //     'geo_hastype_param':"geo_hastype_param",'netToGeoData':"netToGeoData",'searchGeoEventResult':"searchGeoEventResult",'searchGeoEntityResult':"searchGeoEntityResult",
+    //         'HLlocationIds':"HLlocationIds",'geoStaticsSelectedIds':"geoStaticsSelectedIds",'geoStaticsOnlyLookSelectedIds':"geoStaticsOnlyLookSelectedIds",
+    //         'geoNoAreaDataGoInMap':"geoNoAreaDataGoInMap",'geoWorkSetData_area':"geoWorkSetData_area",'geoPromte':"geoPromte",
+    //         'heatMapRadius':"heatMapRadius",'heatMapBlur':"heatMapBlur",'displayHeatMap':"displayHeatMap"})
+    // },
     computed:mapState ([
-      'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','geo_hastype_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
-      'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte',
-      'heatMapRadius','heatMapBlur','displayHeatMap'
-    ]),
+            'tmss','split','split_geo','geoHeight','geoTimeCondition','geo_selected_param','geo_hastype_param','netToGeoData','searchGeoEventResult','searchGeoEntityResult',
+            'HLlocationIds','geoStaticsSelectedIds','geoStaticsOnlyLookSelectedIds','geoNoAreaDataGoInMap','geoWorkSetData_area','geoPromte',
+            'heatMapRadius','heatMapBlur','displayHeatMap','HeatMapAttr'
+            ]),
+
     
     watch:{
+        HeatMapAttr:{},
+        heatAttrs:{
+            handler(newValue) {
+                var mthis = this;
+                if(mthis.operator !== null){
+                    var options = [{
+                        label:"频次",
+                        value:"频次"
+                    }];
+                    var value = {};
+                    var keys = Object.keys(mthis.heatAttrs);
+                    for(let i = 0; i < keys.length; i++){
+                        options.push({
+                            label:keys[i],
+                            value:keys[i]
+                        })
+                    }
+                    var value = {
+                        options:options,
+                        defaultValue:options[0].value
+                    }
+                    mthis.operator.setSurfaceValue('heatMap','heatAttr',value)
+                }
+    　　　　 },
+    　　　　 deep: true,
+            immediate: true
+        },
         displayHeatMap(){
             var mthis = this;
             var heatMapLayer = mthis.getLayerById('heatmapLayer');
@@ -3164,13 +3241,15 @@ export default {
                 var id = ids[i].split('_')[0];
                 var featureTypes;
                 var filter;
-                if(type === 'province'){
-                    featureTypes = ["world_states_provinces_postgis"]
-                    filter = new EqualTo('objectid',id);
-                } else {
-                    featureTypes = ["world_states_countries_postgis"]
-                    filter = new EqualTo('id',id);
-                }
+                featureTypes = [type]
+                filter = new EqualTo('id',id);
+                // if(type === 'province'){
+                //     featureTypes = ["province_osm"]
+                //     filter = new EqualTo('wikidata',id);
+                // } else {
+                //     featureTypes = ["country_osm"]
+                //     filter = new EqualTo('wikidata',id);
+                // }
                 mthis.getWfsData(featureTypes,filter);
             }
 
@@ -3192,8 +3271,8 @@ export default {
             var mthis = this;
             var ids = mthis.geoWorkSetData_area;
             //var 
-            var featureTypes_c = ["world_states_countries_postgis"];
-            var featureTypes_p = ["world_states_provinces_postgis"];
+            var featureTypes_c = ["country"];
+            var featureTypes_p = ["province"];
             var filters_c = [];
             var filters_p = [];
             var proIds = [];
@@ -3208,7 +3287,7 @@ export default {
                     filters_c.push(filter);
                 } else {
                     //proIds
-                    let filter = new EqualTo('objectid',id);
+                    let filter = new EqualTo('id',id);
                     filters_p.push(filter);
                 }
             }
@@ -3272,7 +3351,6 @@ export default {
         },
         staticsSelectedEventIds:function(){
             var mthis = this;
-            // debugger
             var selectedHastypeParam = mthis.discQBType(mthis.staticsSelectedEventIds);
             var selectedQBids = selectedHastypeParam.eventIds.concat(selectedHastypeParam.orgIds)
             var selectedEventsParam = {
@@ -3284,7 +3362,6 @@ export default {
         },
         timeSelectedEventIds:function(){
             var mthis = this;
-            // debugger
             mthis.HLIds = mthis.timeSelectedEventIds;//GSF.QBIdsToParamIds(mthis.timeSelectedEventIds,mthis.QBIdToParamIdsList);
             // var ids = [];
             // for(let i = 0; i < mthis.timeSelectedEventIds.length; i++){

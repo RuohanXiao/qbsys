@@ -9,7 +9,7 @@
 <template>
     <Col span="20" class="selOper">
         <div :style="{marginBottom:'10px'}">{{Params.name+":"}}</div>
-        <Select v-model="value" label-in-value style="width:200px;height:40px;" @on-change="changeValue">
+        <Select v-model="defaultValue" label-in-value style="width:200px;height:40px;" @on-change="changeValue">
             <Option v-for="item in layerNames" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
     </Col>
@@ -18,7 +18,6 @@
     export default {
         data () {
             return {
-                value:[]
             }
         },
         props:['Params'],
@@ -40,23 +39,25 @@
           
         },
         watch:{
-            /*Value:{
-                handler: function() {
-                    var mthis = this;
-                    
-                    mthis.value = mthis.Value;
-                },
-                immediate: true
-                
-            } */
         },
         computed:{
+            defaultValue:{
+                get(){
+                    var mthis = this;
+                    var defaultV = mthis.Params.value.defaultValue;
+                    if(defaultV !== undefined){
+                        return defaultV
+                    } else{
+                        return ''
+                    }
+                },
+                set(){}
+            },
             layerNames:{
                 get(){
                     var mthis = this;
                     var options = mthis.Params.value.options;
                     if(options === undefined){
-                        /* return [0,100]; */
                         alert('算子库options设置错误！')
                     }  else {
                         return options;
