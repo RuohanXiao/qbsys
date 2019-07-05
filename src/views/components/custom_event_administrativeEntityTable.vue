@@ -3,9 +3,9 @@
     <Collapse simple v-model="value1" id='nodeAttr' :style="{height:entDivH}" class='scrollBarAble'>
       <panel name="1">
         <span>实体属性</span>
-        <Button class='buttonOK' @click='pipei'>匹配</Button>
+        <Button class='buttonOK' @click='pipei()'>匹配</Button>
         <div slot="content" class="tableLine">
-          <div class="econtent allowWrap" v-if='tableData.location_map' @click="addPiPei('location_map_ids',$event)">
+          <div class="econtent allowWrap" v-if='tableData.location_map' @click="addPiPei('location_map_ids',$event,tableData.location_map)">
             <div v-if="typeof(tableData.location_map) !== 'object'" :style="{display:'flex',width:'100%'}">
               <p class="econtentp w8em">地图</p>
               <p class="econtentp">{{tableData.location_map}}</p>
@@ -13,7 +13,7 @@
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-right" size='small'></Button>
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.location_map ) === 'object'&&index<5" v-for="(item,index) in tableData.location_map" @click="addPiPei('location_map_ids',$event)">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.location_map ) === 'object'&&index<5" v-for="(item,index) in tableData.location_map" @click="addPiPei('location_map_ids',$event,tableData.location_map)">
               <p class="econtentp w8em" v-if="index==0">地图</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp" :title="item">{{item}}</p>
@@ -24,7 +24,7 @@
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.location_map ) === 'object'&&tableData.location_map.length>5&&displayMore['location_map']" @click="clickMore('location_map')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.location_map) === 'object'&&index>=5&&!displayMore['location_map']" v-for="(occ,index) in tableData.location_map" @click="addPiPei('location_map_ids',$event)">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.location_map) === 'object'&&index>=5&&!displayMore['location_map']" v-for="(occ,index) in tableData.location_map" @click="addPiPei('location_map_ids',$event,tableData.location_map)">
               <p class="econtentp w8em" v-if="index==0">地图</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
@@ -37,14 +37,14 @@
             </div>
           </div>
           <div class="econtent allowWrap" v-if='tableData.image'>
-            <div v-if="typeof(tableData.image) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('image_ids',$event)">
+            <div v-if="typeof(tableData.image) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('image_ids',$event,tableData.image)">
               <p class="econtentp w8em">地标</p>
               <p class="econtentp" :title="tableData.image">{{tableData.image}}</p>
               <div class="eButtonPiPei">
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-right" size='small'></Button>
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.image ) === 'object'&&index<5" v-for="(item,index) in tableData.image" @click="addPiPei('image_ids',$event)">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.image ) === 'object'&&index<5" v-for="(item,index) in tableData.image" @click="addPiPei('image_ids',$event,tableData.image)">
               <p class="econtentp w8em" v-if="index==0">地标</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp" :title="item">{{item}}</p>
@@ -55,7 +55,7 @@
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.image ) === 'object'&&tableData.image.length>5&&displayMore['image']" @click="clickMore('image')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.image) === 'object'&&index>=5&&!displayMore['image']" v-for="(occ,index) in tableData.image" @click="addPiPei('image_ids',$event)">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.image) === 'object'&&index>=5&&!displayMore['image']" v-for="(occ,index) in tableData.image" @click="addPiPei('image_ids',$event,tableData.image)">
               <p class="econtentp w8em" v-if="index==0">地标</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
@@ -68,14 +68,14 @@
             </div>
           </div>
           <div class="econtent allowWrap" v-if='tableData.description'>
-            <div v-if="typeof(tableData.description) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('description_ids',$event)">
+            <div v-if="typeof(tableData.description) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('description_ids',$event,tableData.description)">
               <p class="econtentp w8em">描述</p>
               <p class="econtentp">{{tableData.description}}</p>
               <div class="eButtonPiPei">
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-right" size='small'></Button>
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.description ) === 'object'&&index<5" v-for="(item,index) in tableData.description" @click="addPiPei('description_ids',$event)">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.description ) === 'object'&&index<5" v-for="(item,index) in tableData.description" @click="addPiPei('description_ids',$event,tableData.description)">
               <p class="econtentp w8em" v-if="index==0">描述</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp" :title="item">{{item}}</p>
@@ -86,7 +86,7 @@
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.description) === 'object'&&tableData.description.length>5&&displayMore['description']" @click="clickMore('description')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('description_ids',$event)" v-if="typeof(tableData.description) === 'object'&&index>=5&&!displayMore['description']" v-for="(occ,index) in tableData.description">
+            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('description_ids',$event,tableData.description)" v-if="typeof(tableData.description) === 'object'&&index>=5&&!displayMore['description']" v-for="(occ,index) in tableData.description">
               <p class="econtentp w8em" v-if="index==0">描述</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
@@ -99,14 +99,14 @@
             </div>
           </div>
           <div class="econtent allowWrap" v-if='tableData.official_name'>
-            <div v-if="typeof(tableData.official_name) !== 'object'" @click="addPiPei('official_name_ids',$event)" :style="{display:'flex',width:'100%'}">
+            <div v-if="typeof(tableData.official_name) !== 'object'" @click="addPiPei('official_name_ids',$event,tableData.official_name)" :style="{display:'flex',width:'100%'}">
               <p class="econtentp w8em">全名</p>
               <p class="econtentp">{{tableData.official_name}}</p>
               <div class="eButtonPiPei">
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-right" size='small'></Button>
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.official_name ) === 'object'&&index<5" v-for="(item,index) in tableData.official_name" @click="addPiPei('official_name_ids',$event)">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.official_name ) === 'object'&&index<5" v-for="(item,index) in tableData.official_name" @click="addPiPei('official_name_ids',$event,tableData.official_name)">
               <p class="econtentp w8em" v-if="index==0">全名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp" :title="item">{{item}}</p>
@@ -117,7 +117,7 @@
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.official_name) === 'object'&&tableData.official_name.length>5&&displayMore['official_name']" @click="clickMore('official_name')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.official_name) === 'object'&&index>=5&&!displayMore['official_name']" v-for="(occ,index) in tableData.official_name" @click="addPiPei('official_name_ids',$event)">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.official_name) === 'object'&&index>=5&&!displayMore['official_name']" v-for="(occ,index) in tableData.official_name" @click="addPiPei('official_name_ids',$event,tableData.official_name)">
               <p class="econtentp w8em" v-if="index==0">全名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
@@ -130,14 +130,14 @@
             </div>
           </div>
           <div class="econtent allowWrap" v-if='tableData.name_in_native_language'>
-            <div v-if="typeof(tableData.name_in_native_language) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('name_in_native_language_ids',$event)">
+            <div v-if="typeof(tableData.name_in_native_language) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('name_in_native_language_ids',$event,name_in_native_language_ids)">
               <p class="econtentp w8em">母语名</p>
               <p class="econtentp">{{tableData.name_in_native_language}}</p>
               <div class="eButtonPiPei">
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-right" size='small'></Button>
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.name_in_native_language ) === 'object'&&index<5" v-for="(item,index) in tableData.name_in_native_language" @click="addPiPei('name_in_native_language_ids',$event)">
+            <div :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.name_in_native_language ) === 'object'&&index<5" v-for="(item,index) in tableData.name_in_native_language" @click="addPiPei('name_in_native_language_ids',$event,name_in_native_language_ids)">
               <p class="econtentp w8em" v-if="index==0">母语名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp" :title="item">{{item}}</p>
@@ -148,7 +148,7 @@
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.name_in_native_language_ids) === 'object'&&tableData.name_in_native_language.length>5&&displayMore['name_in_native_language']" @click="clickMore('name_in_native_language')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('name_in_native_language_ids',$event)" v-if="typeof(tableData.name_in_native_language) === 'object'&&index>=5&&!displayMore['name_in_native_language']" v-for="(occ,index) in tableData.name_in_native_language">
+            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('name_in_native_language_ids',$event,name_in_native_language_ids)" v-if="typeof(tableData.name_in_native_language) === 'object'&&index>=5&&!displayMore['name_in_native_language']" v-for="(occ,index) in tableData.name_in_native_language">
               <p class="econtentp w8em" v-if="index==0">母语名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
@@ -161,14 +161,14 @@
             </div>
           </div>
           <div class="econtent allowWrap" v-if='tableData.replaces'>
-            <div v-if="typeof(tableData.replaces) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('replaces_ids',$event)">
+            <div v-if="typeof(tableData.replaces) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('replaces_ids',$event,replaces)">
               <p class="econtentp w8em">曾用名</p>
               <p class="econtentp">{{tableData.replaces}}</p>
               <div class="eButtonPiPei">
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-right" size='small'></Button>
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('replaces_ids',$event)" v-if="typeof(tableData.replaces ) === 'object'&&index<5" v-for="(item,index) in tableData.replaces">
+            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('replaces_ids',$event,replaces)" v-if="typeof(tableData.replaces ) === 'object'&&index<5" v-for="(item,index) in tableData.replaces">
               <p class="econtentp w8em" v-if="index==0">曾用名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp" :title="item">{{item}}</p>
@@ -179,7 +179,7 @@
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="typeof(tableData.replaces) === 'object'&&tableData.replaces.length>5&&displayMore['replaces']" @click="clickMore('replaces')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('replaces_ids',$event)" v-if="typeof(tableData.replaces) === 'object'&&index>=5&&!displayMore['replaces']" v-for="(occ,index) in tableData.replaces">
+            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('replaces_ids',$event,replaces)" v-if="typeof(tableData.replaces) === 'object'&&index>=5&&!displayMore['replaces']" v-for="(occ,index) in tableData.replaces">
               <p class="econtentp w8em" v-if="index==0">曾用名</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
@@ -316,14 +316,14 @@
             </div>
           </div>
           <div class="econtent allowWrap" v-if='tableData.capital'>
-            <div v-if="typeof(tableData.capital) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('capital_ids',$event)">
+            <div v-if="typeof(tableData.capital) !== 'object'" :style="{display:'flex',width:'100%'}" @click="addPiPei('capital_ids',$event,tableData.capital)">
               <p class="econtentp w8em">首府</p>
               <p class="econtentp">{{tableData.capital}}</p>
               <div class="eButtonPiPei">
                 <Button class='bstyle' shape="circle" icon="icon iconfont icon-right" size='small'></Button>
               </div>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('capital_ids',$event)" v-if="typeof(tableData.capital ) === 'object'&&index<5" v-for="(item,index) in tableData.capital">
+            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('capital_ids',$event,tableData.capital[index])" v-if="typeof(tableData.capital ) === 'object'&&index<5" v-for="(item,index) in tableData.capital">
               <p class="econtentp w8em" v-if="index==0">首府</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp" :title="item">{{item}}</p>
@@ -334,7 +334,7 @@
             <div class="moreDiv" :style="{display:'flex',width:'100%  '}" v-if="tableData.capital.length>5&&displayMore['capital']" @click="clickMore('capital')">
               <p class="econtentp w8em moreP">更多</p>
             </div>
-            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('capital_ids',$event)" v-if="typeof(tableData.capital) === 'object'&&index>=5&&!displayMore['capital']" v-for="(occ,index) in tableData.capital">
+            <div :style="{display:'flex',width:'100%  '}" @click="addPiPei('capital_ids',$event,tableData.capital)" v-if="typeof(tableData.capital) === 'object'&&index>=5&&!displayMore['capital']" v-for="(occ,index) in tableData.capital">
               <p class="econtentp w8em" v-if="index==0">首府</p>
               <p class="econtentp w8em" v-else>&nbsp;</p>
               <p class="econtentp">{{occ}}</p>
@@ -1230,6 +1230,7 @@
         </div>
       </panel>
     </Collapse>
+    <pipei-modal :flag="modalFlag" :modalData="modaldata"></pipei-modal>
   </div>
 </template>
 
@@ -1240,9 +1241,12 @@
   } from 'vuex'
   import util from '../../util/tools.js'
   import configer from '../../util/configContrl.js'
+  import pipeiModal from './custom_pipei_modal';
   export default {
     data() {
       return {
+        modalFlag:false,
+        modaldata:new Object(),
         spinWaiting: false,
         value1: ['1', '2', '3', '4'],
         ctrls: new Array(),
@@ -1420,10 +1424,13 @@
     // },
     methods: {
       pipei() {
-        console.log($('.light'))
+        // console.log($('.light').parent())
+        this.modalFlag=true
       },
-      addPiPei(name, targetObj) {
-        console.log(targetObj.target.parentNode.lastChild.classList)
+      addPiPei(name, targetObj,val) {
+        console.log(name)
+        console.log(targetObj)
+        console.log(val)
         targetObj.target.parentNode.lastChild.classList.toggle('light');
       },
       more(index) {
@@ -1521,6 +1528,9 @@
           })
         }
       }
+    },
+    components: {
+      pipeiModal
     },
     computed: {},
     watch: {
